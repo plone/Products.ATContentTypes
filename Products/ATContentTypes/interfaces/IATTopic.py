@@ -18,7 +18,7 @@
 #
 """Topic and criterion interface
 
-$Id: IATTopic.py,v 1.7 2004/07/13 13:12:55 dreamcatcher Exp $
+$Id: IATTopic.py,v 1.7.4.1 2004/11/24 19:42:08 ctheune Exp $
 """
 __author__  = 'Christian Heimes'
 __docformat__ = 'restructuredtext'
@@ -81,6 +81,9 @@ class IATTopic(IATContentType):
     def listAvailableFields():
         """Return a list of available fields for new criteria.
         """
+
+    def listSortFields():
+        """Return a list of available fields for sorting."""
 
     def listSubtopics():
         """Return a list of our subtopics.

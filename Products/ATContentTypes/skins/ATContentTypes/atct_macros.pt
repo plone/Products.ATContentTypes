@@ -28,7 +28,7 @@
                />
       </td>         
       
-      <td style="padding: 0.5em;" tal:content="criterion/Field" />
+      <td style="padding: 0.5em;" i18n:translate="" tal:content="criterion/Field" />
       
       <td style="padding: 0.5em;">
 

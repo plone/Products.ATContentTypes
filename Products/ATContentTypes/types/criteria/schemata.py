@@ -16,7 +16,7 @@
 ##############################################################################
 """
 
-$Id: schemata.py,v 1.8.4.1 2004/11/24 16:58:38 ctheune Exp $
+$Id: schemata.py,v 1.8.4.2 2004/11/24 19:42:09 ctheune Exp $
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -39,7 +39,7 @@ DateOptions = DisplayList((
                   , (  str(31*3), '3 Months' )
                   , (  str(31*6), '6 Months' )
                   , (   str(365), '1 Year'   )
-                  , ( str(365*2), '2 years'  )
+                  , ( str(365*2), '2 Years'  )
     ))
 
 CompareOperations = DisplayList((

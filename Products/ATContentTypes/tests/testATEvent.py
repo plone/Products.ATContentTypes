@@ -2,7 +2,7 @@
 
 Use this file as a skeleton for your own tests
 
-$Id: testATEvent.py,v 1.12.4.1 2004/10/31 14:37:52 tiran Exp $
+$Id: testATEvent.py,v 1.12.4.2 2004/11/24 19:42:08 ctheune Exp $
 """
 
 __author__ = 'Christian Heimes'
@@ -12,6 +12,7 @@ import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
+from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests.common import *
 from Products.ATContentTypes.Permissions import ChangeEvents
 from Products.ATContentTypes.utils import DT2dt
