@@ -50,7 +50,7 @@
       <form tal:attributes="action string:${request/URL1}/transformImage">
 	    <select name="method" 
 		        tal:attributes="tabindex tabindex/next">
-          <option disabled value="" i18n:translate="">Select method</option>
+          <option disabled="disabled" value="" i18n:translate="">Select method</option>
           <option tal:repeat="trans transforms" 
                   i18n:translate=""
                   tal:attributes="value trans/value"
