@@ -30,6 +30,7 @@ from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
 from Products.ATContentTypes.config import _ATCT_UNIT_TEST_MODE
+from AccessControl import Unauthorized
 
 from Products.ATContentTypes.lib import constraintypes
 from Products.ATContentTypes.interfaces import IConstrainTypes
@@ -77,10 +78,10 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(self.af.getImmediatelyAddableTypes(),
                                 ('Folder',))
         
-        self.assertRaises(ValueError, self.af.invokeFactory, 'Document', 'a')
+        self.assertRaises(Unauthorized, self.af.invokeFactory, 'Document', 'a')
         try:
             self.af.invokeFactory('Image', 'image', title="death")
-        except ValueError:
+        except Unauthorized:
             self.fail()
         
     def test_disabled(self):
@@ -98,7 +99,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         try:
             self.af.invokeFactory('Document', 'whatever', title='life')
             self.af.invokeFactory('Image', 'image', title="more life")
-        except ValueError:
+        except Unauthorized:
             self.fail()
             
         # Make sure immediately-addable are all types if we are disabled
@@ -126,10 +127,10 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(inner.getRawImmediatelyAddableTypes(),
                                 ('Document',))
         
-        self.assertRaises(ValueError, inner.invokeFactory, 'Event', 'a')
+        self.assertRaises(Unauthorized, inner.invokeFactory, 'Event', 'a')
         try:
             inner.invokeFactory('Image', 'whatever', title='life')
-        except ValueError:
+        except Unauthorized:
             self.fail()
         
         # Make sure immediately-addable are inherited
@@ -169,13 +170,13 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         
         # Fail - we didn't acquire this, really, since we can't acquire
         # from parent folder of different type
-        self.assertRaises(ValueError, inner.invokeFactory, 'CMF Folder', 'a')
+        self.assertRaises(Unauthorized, inner.invokeFactory, 'CMF Folder', 'a')
         self.failIf('CMF Folder' in inner.getLocallyAllowedTypes())
         try:
             # Will be OK, since we've got global defaults since we can't
             # acquire from parent with different type
             inner.invokeFactory('News Item', 'whatever', title='life')
-        except ValueError:
+        except Unauthorized:
             self.fail()
         
         # Make sure immediately-addable are set to default

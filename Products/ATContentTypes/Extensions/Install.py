@@ -117,19 +117,19 @@ def install(self, reinstall):
     
     # step 8: register switch methods to toggle old plonetypes on/off
     # BBB remove these two dummy methods
-    manage_addExternalMethod(self,'switchATCT2CMF',
-        'DUMMY: Set reenable CMF type',
-        PROJECTNAME+'.Install',
-        'dummyExternalMethod')
-    manage_addExternalMethod(self,'switchCMF2ATCT',
-        'DUMMY: Set ATCT as default content types ',
-        PROJECTNAME+'.Install',
-        'dummyExternalMethod')
-
-    manage_addExternalMethod(self,'migrateFromCMFtoATCT',
-        'Migrate from CMFDefault types to ATContentTypes',
-        PROJECTNAME+'.migrateFromCMF',
-        'migrate')
+    #manage_addExternalMethod(self,'switchATCT2CMF',
+    #    'DUMMY: Set reenable CMF type',
+    #    PROJECTNAME+'.Install',
+    #    'dummyExternalMethod')
+    #manage_addExternalMethod(self,'switchCMF2ATCT',
+    #    'DUMMY: Set ATCT as default content types ',
+    #    PROJECTNAME+'.Install',
+    #    'dummyExternalMethod')
+    #
+    #manage_addExternalMethod(self,'migrateFromCMFtoATCT',
+    #    'Migrate from CMFDefault types to ATContentTypes',
+    #    PROJECTNAME+'.migrateFromCMF',
+    #    'migrate')
 
     # step 9: changing workflow
     if not reinstall:

@@ -24,6 +24,7 @@ __author__  = 'Jens Klein <jens.klein@jensquadrat.de>'
 __docformat__ = 'plaintext'
 
 from AccessControl import ClassSecurityInfo
+from AccessControl import Unauthorized
 from Globals import InitializeClass
 from Acquisition import aq_parent
 
@@ -249,7 +250,7 @@ class ConstrainTypesMixin:
                                                 RESPONSE=None, *args, **kw)
             
         if not type_name in [fti.getId() for fti in self.allowedContentTypes()]:
-            raise ValueError('Disallowed subobject type: %s' % type_name)
+            raise Unauthorized('Disallowed subobject type: %s' % type_name)
 
         pt = getToolByName( self, 'portal_types' )
         args = (type_name, self, id, RESPONSE) + args
