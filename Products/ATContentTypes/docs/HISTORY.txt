@@ -1,6 +1,10 @@
 1.0-devel
 ======================
 
+ * prepare ATFolder for use with TemplateMixin, use generic /view instead of 
+   /folder_listing as default and immediate view.
+   [yenzenz]
+
  * Changed the way ConstrainTypes gets mixed in: Now ATCT is always subclassing
    folders from the ConstrainTypes class and the schema is always in the folder
    schema. Before this change ppl couldn't rely on the api. When the feature

@@ -51,8 +51,8 @@ class ATFolder(ATCTOrderedFolder):
     meta_type      = 'ATFolder'
     portal_type    = 'ATFolder'
     archetype_name = 'Folder'
-    immediate_view = 'folder_listing'
-    default_view   = 'folder_listing'
+    immediate_view = 'view'
+    default_view   = 'view'
     suppl_views    = ()
     _atct_newTypeFor     = ('Folder', 'Plone Folder')
     typeDescription= ''
