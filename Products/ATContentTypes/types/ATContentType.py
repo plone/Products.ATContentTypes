@@ -65,7 +65,11 @@ from Products.ATContentTypes import Permissions as ATCTPermissions
 from Products.Archetypes.debug import _default_logger
 from Products.Archetypes.debug import _zlogger
 
-from Products.CMFPlone.interfaces.Translatable import ITranslatable
+# BBB CMFPlone 2.0.x
+try:
+    from Products.CMFPlone.interfaces.Translatable import ITranslatable
+except ImportError:
+    from Products.PloneLanguageTool.interfaces import ITranslatable
 
 from Products.ATContentTypes.config import CHAR_MAPPING
 from Products.ATContentTypes.config import GOOD_CHARS

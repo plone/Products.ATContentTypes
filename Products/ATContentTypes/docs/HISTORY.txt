@@ -1,6 +1,9 @@
 1.0-devel
 ======================
 
+ * Restored Plone 2.0.x compatibility.
+   [dtremea]
+
  * Don't show PloneSite, TempFolder and criteria in constrain types list.
    [tiran]
 
@@ -21,7 +24,7 @@
    [tiran]
 
  * Fixed [ 1114696 ] use correct mimetype for reStructuredText and [ 1122135 ]
-   ATCT edit not preserving text type selection, not ATCT bug be renaming 
+   ATCT edit not preserving text type selection, not ATCT bug be renaming
    text/restructured to text/x-rst.
    [tiran]
 
@@ -30,7 +33,7 @@
    [tiran]
 
  * Moved external storage based variants for ATFile and ATImage to a seperate
-   module. They won't make it in the official trunk unless the storage is 
+   module. They won't make it in the official trunk unless the storage is
    working well and the types are tested.
    [tiran]
 
@@ -75,7 +78,7 @@
  * Migrating filter content types, allowed content types and allow
    discussion from cmf fti to atct fti.
    [tiran]
- 
+
  * Updated requirements to CMFQuickinstaller 1.5/cvs,
    [tiran]
 
@@ -130,7 +133,7 @@
    for tests.
    [tiran]
 
- * prepare ATFolder for use with TemplateMixin, use generic /view instead of 
+ * prepare ATFolder for use with TemplateMixin, use generic /view instead of
    /folder_listing as default and immediate view.
    [yenzenz]
 
@@ -213,23 +216,23 @@
 
  * Cleaned up the migration suite a little bit and enhanced the doc strings.
    [tiran]
-   
+
  * Replaces the globalAllow hack by createTypeByName which doesn't make
    security checks like "is the type implicitly or explicitly addable in the
    folder". It shares the same codebase as the function from PloneUtilities
    I once wrote to unfuck the create member area method.
    [tiran]
-   
+
  * Better traceback support inside the migration suite.
    [tiran]
-   
+
  * Added knob to toggle the installation of LinguaPlone in ATCT install.
    [tiran]
-   
+
  * Added explicit portal type name to all ATCT types.
    [tiran]
-   
- * Renamed newTypeFor to _actc_newTypeFor. The former name was confusing 
+
+ * Renamed newTypeFor to _actc_newTypeFor. The former name was confusing
    people.
    [tiran]
 
@@ -244,9 +247,10 @@
    [tiran]
 
  * Ported atct_topic_view icon fix from HEAD.
+   [tiran]
 
  * Don't create ATDocuments when uploading .pdf and .doc files
-  [batlogg]
+   [batlogg]
 
  * Resurrected warning message when we hit a broken object in the folder
    migration.
@@ -256,6 +260,7 @@
    [panjunyong]
 
  * Update requirements to the soon to release AT 1.3.2 version and svn.
+   [tiran]
 
  * Added update_data and manage_edit compat. methods to ATFile and ATImage.
    [tiran]
@@ -294,7 +299,7 @@
    AccessContentsInfo permission.
    [tesdal]
 
- * Removed support of Python 2.1 and 2.2 from INSTALL.txt. Some code like 
+ * Removed support of Python 2.1 and 2.2 from INSTALL.txt. Some code like
    migration requires new features of Python 2.3 like generators.
    [tiran]
 
@@ -321,7 +326,7 @@
 
  * Sorting criterion lists (by their translations)
    [ctheune]
- 
+
  * Added german translation
    [ctheune]
 
