@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Changed permission of ATNewsItem.EditableBody() to ModifyPortalContent.
+   [tiran]
+
  * Added some tabs to the ZMI view of the portal_atct tool: Overview, rescale
    migrate and recatalog. The usage of the external methods is deprecated in
    favor of the tool.

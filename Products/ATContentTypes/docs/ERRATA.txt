@@ -24,3 +24,11 @@ Features like the photo album view for folders doesn't work under Plone 2.0.x
 because the browserDefault method of plone utilities doesn't know how to handle
 folders with template mixin.
 This issue is fixed in CMFPlone 2.1
+
+Permission error when viewing news (the portal news tab)
+--------------------------------------------------------
+
+The news template tries to access EditableBody which is a protected method.
+Replace the news template with with 
+http://svn.plone.org/plone/CMFPlone/branches/2.1/skins/plone_templates/news.pt
+The issue is fixed in CMFPlone 2.1

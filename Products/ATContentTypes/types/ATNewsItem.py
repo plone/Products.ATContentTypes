@@ -135,11 +135,6 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
 
     security = ClassSecurityInfo()
 
-    # plone news template requires the View permission but
-    # would be better ModifyPortalContent
-    # BBB will be changed in the future. Don't rely on it!
-    security.declareProtected(CMFCorePermissions.View, 'EditableBody')
-
     security.declareProtected(CMFCorePermissions.View, 'tag')
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
