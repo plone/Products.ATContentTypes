@@ -17,7 +17,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-$Id: toolbox.py,v 1.17.4.1 2004/11/01 14:55:45 tiran Exp $
+$Id: toolbox.py,v 1.17.4.2 2004/12/13 15:30:50 tiran Exp $
 """
 
 __author__  = 'Jens Klein, Christian Heimes'
@@ -166,7 +166,10 @@ def _fixLargePloneFolder(self):
     # probably because of the hard coded and false portal type in Plone :|
     # Members._getPortalTypeName() returns ATBTreeFolder instead of
     # Large Plone Folder
-    self.Members._setPortalTypeName(ATFolder.ATBTreeFolder.newTypeFor[0])
+    mt = getToolByName(self, 'portal_membership')
+    members = mt.getMembersFolder()
+    if members is not None:
+        members._setPortalTypeName(ATFolder.ATBTreeFolder.newTypeFor[0])
 
 def switchCMF2ATCT(self, skip_rename=False):
     if isSwitchedToATCT(self):

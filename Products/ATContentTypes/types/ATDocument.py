@@ -18,7 +18,7 @@
 #
 """
 
-$Id: ATDocument.py,v 1.34.4.1 2004/11/30 15:19:08 ctheune Exp $
+$Id: ATDocument.py,v 1.34.4.2 2004/12/13 15:30:54 tiran Exp $
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -85,15 +85,16 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         """
         return self.getText()
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent,
-                              'EditableBody')
+    # XXX plone news template requires the View permission but
+    # would be better ModifyPortalContent
+    security.declareProtected(CMFCorePermissions.View, 'EditableBody')
     def EditableBody(self):
         """CMF compatibility method
         """
         return self.getRawText()
 
     security.declareProtected(CMFCorePermissions.ModifyPortalContent,
-                              'EditableBody')
+                              'setFormat')
     def setFormat(self, value):
         """CMF compatibility method
         

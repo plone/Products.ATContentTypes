@@ -1,5 +1,66 @@
-0.2.0-rc4 - unreleased
+0.2.0-rc5 - unreleased
 ======================
+
+ * Fixed [ 1080729 ] Wrong permissions for ATDocument.EditableText / setFormat
+   [tiran]
+
+ * Use StdoutStringIO in migration to be more verbose
+
+ * Fixed atct_topcic_view: Make sure there is an object before referencing
+   attributes. This can typically happen if there are problems with the
+   AccessContentsInfo permission.
+   [tesdal]
+
+ * Removed support of Python 2.1 and 2.2 from INSTALL.txt. Some code like 
+   migration requires new features of Python 2.3 like generators.
+   [tiran]
+
+ * Added note to INSTALL.txt that ATCT will soon drop support for Zope < 2.7.2.
+   [tiran]
+
+
+0.2.0-rc4 - 2004-11-30
+======================
+
+ * ATTopic: Adding the criterion type to the generated id, so you can sort and
+   filter on the same field.
+   [ctheuni]
+
+ * Fixed unit tests to work without (and hopefully with too) runner again
+   [ctheuni]
+
+ * Added feature that doesn't show users non-sortable criterions in the form
+   [ctheuni]
+
+ * Added feature that removes double or stupid criterions (allowedRolesAndUsers,
+   id/getId)
+   [ctheuni]
+
+ * Sorting criterion lists (by their translations)
+   [ctheuni]
+ 
+ * Added german translation
+   [ctheuni]
+
+ * More i18n support in the templates
+   [ctheuni]
+
+ * Fixed _very_ annoying problem with bad ids. this should be bullet proof.
+   [ctheuni]
+
+ * Extended german translations
+   [ctheuni]
+
+ * Fixed ATDocument to not kill uploaded files on the submission of an empty
+   text area
+   [ctheuni]
+
+ * Fixed small bug in id protection
+   [ctheuni]
+
+ * Fixed the case where the portal doesn't has a 'Members' folder or
+   when it has another name.
+   [dtremea]
 
  * Fixed [ 1055347 ] id problems when member preferences are set to not display
    and [ 1055348 ] ATCTFile id problems with portal_factory in ATCTFileContent.
