@@ -20,7 +20,7 @@
 """This module contains a mixin-class and a schema snippet to constrain
 which types can be added in a folder-instance
 
-$Id: ConstrainTypesMixin.py,v 1.9.4.1 2005/02/14 07:24:38 panjunyong Exp $
+$Id: ConstrainTypesMixin.py,v 1.9.4.2 2005/02/14 08:59:06 tiran Exp $
 """
 __author__  = 'Jens Klein <jens.klein@jensquadrat.de>'
 __docformat__ = 'plaintext'
@@ -44,14 +44,11 @@ from Products.Archetypes.public import DisplayList
 from Products.ATContentTypes.interfaces.IConstrainTypes import IConstrainTypes
 from Products.ATContentTypes.config import CONSTRAIN_TYPES_MIXIN_PERMISSION
 
-CONSTRAIN_TYPES_SCHEMATA = 'Constrain Types'
-
 ConstrainTypesMixinSchema = Schema((
     BooleanField('enableConstrainMixin',
         default=False,
         languageIndependent=True,
         write_permissions=CONSTRAIN_TYPES_MIXIN_PERMISSION,
-        schemata=CONSTRAIN_TYPES_SCHEMATA,
         widget=BooleanWidget(
             label='Overwrite allowed types',
             visible = {'edit': 'visible', 'view': 'hidden'},
@@ -66,7 +63,6 @@ ConstrainTypesMixinSchema = Schema((
         languageIndependent=True,
         default_method='_globalAddableTypeIds',
         write_permissions=CONSTRAIN_TYPES_MIXIN_PERMISSION,
-        schemata=CONSTRAIN_TYPES_SCHEMATA,
         widget=MultiSelectionWidget(
             size=10,
             label='Set allowed types',
