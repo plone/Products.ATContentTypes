@@ -4,7 +4,7 @@ version     = '1.0.devel'
 # (major, minor, patchlevel, release info) where release info is:
 # -99 for alpha, -49 for beta, -19 for rc and 0 for final
 # increment the release info number by one e.g. -98 for alpha2
-numversion  = (0, 3, 0, -199)
+numversion  = (1, 0, 0, -199)
 
 license     = 'GPL, ZPL'
 copyright   = '''(c) 2003-2005 AT Content Types development team'''

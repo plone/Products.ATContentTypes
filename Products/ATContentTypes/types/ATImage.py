@@ -24,14 +24,8 @@ were taken from CMFPhoto.
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
-
 from cgi import escape
-
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import registerType
-else:
-    from Products.Archetypes.public import registerType
+from urllib2 import URLError
 
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
@@ -375,10 +369,6 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
         """
-        if not kwargs.has_key('longdesc'):
-            longdesc = self.getLongDescription()
-            if longdesc:
-                 kwargs['longdesc'] = escape(longdesc, 1)
         return self.getField('image').tag(self, **kwargs)
     
     def __str__(self):
@@ -410,38 +400,4 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
             self.setTitle(title)
         self.reindexObject()
 
-registerType(ATImage, PROJECTNAME)
-
-
-class ATExtImage(ATImage):
-    """An Archetypes derived version of CMFDefault's Image with
-    external storage
-    """
-
-    schema         =  ATExtImageSchema
-
-    content_icon   = 'image_icon.gif'
-    meta_type      = 'ATExtImage'
-    archetype_name = 'AT Ext Image'
-    newTypeFor     = ''
-    assocMimetypes = ()
-    assocFileExt   = ()
-
-    security       = ClassSecurityInfo()
-
-    security.declareProtected(CMFCorePermissions.View, 'getImage')
-    def getImage(self, **kwargs):
-        """Return the image with proper content type
-        """
-        field  = self.getField('image')
-        image  = field.get(self, **kwargs)
-        ct     = self.getContentType()
-        parent = aq_parent(self)
-        i      = Image(self.getId(), self.Title(), image, ct)
-        return i.__of__(parent)
-
-# XXX external storage based types are currently disabled due the lack of time
-# and support for ext storage. Neither MrTopf nor I have time to work on ext
-# storage.
-#if HAS_EXT_STORAGE:
-#    registerType(ATExtImage, PROJECTNAME)
+registerATCT(ATImage, PROJECTNAME)

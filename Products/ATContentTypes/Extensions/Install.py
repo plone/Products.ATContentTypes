@@ -32,16 +32,22 @@ from Products.ExternalMethod.ExternalMethod import manage_addExternalMethod
 from Acquisition import aq_base
 
 from Products.Archetypes.interfaces.base import IBaseFolder
-from Products.ATContentTypes.interfaces.IATTopic import IATTopic, IATTopicCriterion
-from Products.ATContentTypes.interfaces.IATContentType import IATContentType
-from Products.ATContentTypes.interfaces.IATFile import IATFile
+from Products.ATContentTypes.interfaces import IATTopic
+from Products.ATContentTypes.interfaces import IATTopicCriterion
+from Products.ATContentTypes.interfaces import IATContentType
+from Products.ATContentTypes.interfaces import IATFile
 
-from Products.ATContentTypes.config import *
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import WORKFLOW_FOLDER
+from Products.ATContentTypes.config import WORKFLOW_TOPIC
+from Products.ATContentTypes.config import WORKFLOW_CRITERIA
+from Products.ATContentTypes.config import WORKFLOW_DEFAULT
+from Products.ATContentTypes.config import INSTALL_LINGUA_PLONE
+from Products.ATContentTypes.config import GLOBALS
+from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.Extensions.utils import setupMimeTypes
 from Products.ATContentTypes.Extensions.utils import registerTemplates
 from Products.ATContentTypes.Extensions.utils import registerActionIcons
-from Products.ATContentTypes.Extensions.toolbox import switchATCT2CMF
-from Products.ATContentTypes.Extensions.toolbox import isSwitchedToATCT
 
 def install(self, reinstall):
     out = StringIO()
@@ -114,20 +120,7 @@ def install(self, reinstall):
         PROJECTNAME+'.Install',
         'dummyExternalMethod')
 
-    print >> out, 'Successfully installed %s' % PROJECTNAME
-
-    # register switch methods to toggle old plonetypes on/off
-    portal=getToolByName(self,'portal_url').getPortalObject()
-    manage_addExternalMethod(portal,'switchATCT2CMF',
-        'Set reenable CMF type',
-        PROJECTNAME+'.toolbox',
-        'switchATCT2CMF')
-    manage_addExternalMethod(portal,'switchCMF2ATCT',
-        'Set ATCT as default content types',
-        PROJECTNAME+'.toolbox',
-        'switchCMF2ATCT')
-
-    manage_addExternalMethod(portal,'migrateFromCMFtoATCT',
+    manage_addExternalMethod(self,'migrateFromCMFtoATCT',
         'Migrate from CMFDefault types to ATContentTypes',
         PROJECTNAME+'.migrateFromCMF',
         'migrate')
@@ -140,14 +133,6 @@ def install(self, reinstall):
     print >>out, 'Content Type Registry setup'
     old = ('link', 'news', 'document', 'file', 'image')
     setupMimeTypes(self, typeInfo, old=old, moveDown=(IATFile,), out=out)
-
-    # bind templates for TemplateMixin
-    registerTemplates(self, typeInfo, out)
-    
-    # register action icons
-    registerActionIcons(self, typeInfo, out)
-
-    removeApplicationXPython(self, out)
     
     # step 11: add additional action icons
     print >>out, 'Adding additional action icons'
@@ -158,11 +143,13 @@ def install(self, reinstall):
 
 def uninstall(self, reinstall):
     out = StringIO()
-    classes=listTypes(PROJECTNAME)
+    tool = installTool(self, out)
+    qi = getToolByName(self, 'portal_quickinstaller')
 
-    # switch back before uninstalling
-    if isSwitchedToATCT(self):
-        switchATCT2CMF(self)
+    # replace ATCT types with CMF types if uninstalling
+    if not reinstall:
+        assert tool.isCMFdisabled()
+        tool.enableCMFTypes()
 
     # remove external methods for toggling between old and new types
     # leave it for clean up

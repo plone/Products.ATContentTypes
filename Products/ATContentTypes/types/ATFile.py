@@ -192,43 +192,4 @@ class ATFile(ATCTFileContent):
         if file is not None:
             self.setFile(file)
 
-registerType(ATFile, PROJECTNAME)
-
-
-class ATExtFile(ATFile):
-    """
-    """
-
-    schema         =  ATExtFileSchema
-
-    content_icon   = 'file_icon.gif'
-    meta_type      = 'ATExtFile'
-    archetype_name = 'AT Ext File'
-    newTypeFor     = ''
-    assocMimetypes = ()
-    assocFileExt   = ()
-
-    security       = ClassSecurityInfo()
-
-    security.declareProtected(CMFCorePermissions.View, 'getFile')
-    def getFile(self, **kwargs):
-        """return the file with proper content type"""
-        #REQUEST=kwargs.get('REQUEST',self.REQUEST)
-        #RESPONSE=kwargs.get('RESPONSE', REQUEST.RESPONSE)
-        field  = self.getField('file')
-        file   = field.get(self, **kwargs)
-        ct     = self.getContentType()
-        parent = aq_parent(self)
-        f      = File(self.getId(), self.Title(), file, ct)
-        return f.__of__(parent)
-
-    # make it directly viewable when entering the objects URL
-    security.declareProtected(CMFCorePermissions.View, 'index_html')
-    def index_html(self, REQUEST, RESPONSE):
-        self.getFile(REQUEST=REQUEST, RESPONSE=RESPONSE).index_html(REQUEST, RESPONSE)
-
-# XXX external storage based types are currently disabled due the lack of time
-# and support for ext storage. Neither MrTopf nor I have time to work on ext
-# storage.
-#if HAS_EXT_STORAGE:
-#    registerType(ATExtFile, PROJECTNAME)
+registerATCT(ATFile, PROJECTNAME)

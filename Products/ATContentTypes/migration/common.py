@@ -45,7 +45,7 @@ class StdoutStringIO(StringIO):
     def write(self, s):
         print >> sys.stdout, str(s),
         StringIO.write(self, s)
-
+        
 ## LinguaPlone addon?
 try:
     from Products.LinguaPlone.public import registerType

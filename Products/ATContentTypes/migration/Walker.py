@@ -78,37 +78,7 @@ class Walker:
         :rtype: list of objects
         """
         raise NotImplementedError
-
-    def enableGlobalAddable(self):
-        """Set implicitly addable to true
-
-        XXX This is a required hack :/
-        """
-        ttool = getToolByName(self.portal, 'portal_types')
-
-        tt_ids = ttool.objectIds()
-        toType = self.toType
-        fromType = self.fromType
-        __traceback_info__ = (self, toType, toType in tt_ids,
-                              fromType, fromType in tt_ids,
-                              self.migrator, ttool.objectIds(),
-                             )
-        ftiTo = ttool.getTypeInfo(toType)
-        ftiFrom = ttool.getTypeInfo(fromType)
-        self.toGlobalAllow = ftiTo.globalAllow()
-        self.fromGlobalAllow = ftiFrom.globalAllow()
-        ftiTo.global_allow = 1
-        ftiFrom.global_allow = 1
-
-    def resetGlobalAddable(self):
-        """
-        """
-        ttool = getToolByName(self.portal, 'portal_types')
-        ftiTo = ttool.getTypeInfo(self.toType)
-        ftiFrom = ttool.getTypeInfo(self.fromType)
-        ftiTo.global_allow = self.toGlobalAllow
-        ftiFrom.global_allow = self.fromGlobalAllow
-
+ 
     def migrate(self, objs, **kwargs):
         """Migrates the objects in the ist objs
         """
@@ -129,10 +99,9 @@ class Walker:
                 get_transaction().abort()
 
                 # printing exception
-                exc = sys.exc_info()
-                out=StdoutStringIO()
-                traceback.print_tb(exc[2], limit=None, file=out)
-                tb = '%s\n%s\n' % (err, out.getvalue())
+                out = StdoutStringIO()
+                traceback.print_exc(limit=None, file=out)
+                tb = out.getvalue()
 
                 error = MigrationError(obj, migrator, tb)
                 msg = str(error)
@@ -189,6 +158,8 @@ class CatalogWalker(Walker):
 
         for brain in brains:
             obj = brain.getObject()
+            try: state = obj._p_changed
+            except: state = 0
             if obj is not None:
                 yield obj
                 # safe my butt
@@ -244,6 +215,8 @@ class CatalogWalkerWithLevel(Walker):
 
         for brain in toConvert:
             obj = brain.getObject()
+            try: state = obj._p_changed
+            except: state = 0
             if obj is not None:
                 yield obj
                 # safe my butt

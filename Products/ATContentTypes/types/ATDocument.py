@@ -108,9 +108,8 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         """
         return self.getText()
 
-    # XXX plone news template requires the View permission but
-    # would be better ModifyPortalContent
-    security.declareProtected(CMFCorePermissions.View, 'EditableBody')
+
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'EditableBody')
     def EditableBody(self):
         """CMF compatibility method
         """
@@ -141,8 +140,6 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
 
         * hook into mxTidy an replace the value with the tidied value
         """
-        if not value:   # XXX somehow submitting an empty textarea overwrites file uploads because empty strings end up here
-            return
         field = self.getField('text')
         # XXX this is ugly
         # When an object is initialized the first time we have to 

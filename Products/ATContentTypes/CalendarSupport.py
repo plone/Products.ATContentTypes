@@ -113,7 +113,6 @@ class CalendarSupportMixin:
     actions = ({
         'id'          : 'ics',
         'name'        : 'iCalendar',
-        # XXX 'action'      : 'python: "%s/ics_view" % object_url.replace("http://", "webcal://")',
         'action'      : 'string:${object_url}/ics_view',
         'permissions' : (CMFCorePermissions.View, ),
         'category'    : 'document_actions',

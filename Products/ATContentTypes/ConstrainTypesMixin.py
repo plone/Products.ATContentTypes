@@ -63,39 +63,45 @@ enableDisplayList = IntDisplayList((
     #(ACQUIRE, 'acquire from parent'),
     ))
 
-CONSTRAIN_TYPES_SCHEMATA = 'Constrain Types'
-
 ConstrainTypesMixinSchema = Schema((
-    BooleanField('enableConstrainMixin',
-        default=False,
-        languageIndependent=True,
-        write_permissions=CONSTRAIN_TYPES_MIXIN_PERMISSION,
-        schemata=CONSTRAIN_TYPES_SCHEMATA,
-        widget=BooleanWidget(
-            label='Overwrite allowed types',
-            visible = {'edit': 'visible', 'view': 'hidden'},
-            label_msgid='label_enable_constrain_allowed_types',
-            description='',
-            description_msgid='description_enable_constrain_allowed_types',
-            i18n_domain='plone')
+    IntegerField('enableConstrainMixin',
+        required = True,
+        #default = ACQUIRE,
+        default = DISABLED,
+        vocabulary = enableDisplayList,
+        enforceVocabulary = True,
+        languageIndependent = True,
+        write_permissions = ATCTPermissions.ModifyConstrainTypes,
+        widget = SelectionWidget(
+            label = 'Overwrite allowed types',
+            label_msgid = 'label_enable_constrain_allowed_types',
+            description = '',
+            description_msgid = 'description_enable_constrain_allowed_types',
+            i18n_domain = 'plone',
+            visible = {'view' : 'hidden',
+                       'edit' : ENABLE_CONSTRAIN_TYPES_MIXIN and 'visible' or 'hidden'
+                      },
+            )
         ),
     LinesField('locallyAllowedTypes',
-        vocabulary='vocabularyPossibleTypes',
-        enforceVocabulary=True,
-        languageIndependent=True,
-        default_method='_globalAddableTypeIds',
-        write_permissions=CONSTRAIN_TYPES_MIXIN_PERMISSION,
-        schemata=CONSTRAIN_TYPES_SCHEMATA,
-        widget=MultiSelectionWidget(
-            size=10,
-            label='Set allowed types',
-            visible = {'edit': 'visible', 'view': 'hidden'},
-            label_msgid='label_constrain_allowed_types',
-            description='Select one or more types, that should be allowed to '
-                        'add inside this folder and its subfolders. Choose '
-                        'nothing will allow all types.',
-            description_msgid='description_constrain_allowed_types',
-            i18n_domain='plone')
+        vocabulary = '_ct_vocabularyPossibleTypes',
+        enforceVocabulary = True,
+        languageIndependent = True,
+        default_method = '_ct_globalAddableTypeIds',
+        write_permissions = ATCTPermissions.ModifyConstrainTypes,
+        widget = MultiSelectionWidget(
+            size = 10,
+            label = 'Set allowed types',
+            label_msgid = 'label_constrain_allowed_types',
+            description = 'Select one or more types, that should be allowed to '
+                          'add inside this folder and its subfolders. Choose '
+                          'nothing will allow all types.',
+            description_msgid = 'description_constrain_allowed_types',
+            i18n_domain = 'plone',
+            visible = {'view' : 'hidden',
+                      'edit' : ENABLE_CONSTRAIN_TYPES_MIXIN and 'visible' or 'hidden'
+                      },
+            )
         ),
     ))
 

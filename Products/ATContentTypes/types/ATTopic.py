@@ -109,11 +109,6 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
     ))
 ATTopicSchema.addField(relatedItemsField)
 
-# A couple of fields just don't make sense to sort (for a user),
-# some are just doubles.
-IGNORED_FIELDS = ['Date', 'allowedRolesAndUsers', 'getId', 'in_reply_to',
-    'meta_type', 'portal_type']
-
 class ATTopic(ATCTFolder):
     """A topic folder"""
 
@@ -390,7 +385,7 @@ class ATTopic(ATCTFolder):
         """Add a new search criterion.
         """
         newid = 'crit__%s_%s' % (field, criterion_type)
-        ct    = CriterionRegistry[criterion_type]
+        ct    = _criterionRegistry[criterion_type]
         crit  = ct(newid, field)
 
         self._setObject( newid, crit )

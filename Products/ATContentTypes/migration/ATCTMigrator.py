@@ -208,20 +208,9 @@ def migrateAll(portal):
         w = CatalogWalker(migrator, catalog)
         out.append(w.go(**kwargs))
     for migrator in folderMigrators:
-        out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.fromType, migrator.toType))
-        depth=2
-        while 1:
-            # loop around until we got 'em all :]
-            w = CatalogWalkerWithLevel(migrator, catalog, depth)
-            try:
-                o=w.go()
-            except StopWalking:
-                depth=2
-                out.append(w.getOutput())
-                break
-            else:
-                out.append(o)
-                depth+=1
+        #out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.src_portal_type, migrator.dst_portal_type))
+        out.append('*** Migrating %s to %s ***' % (migrator.src_portal_type, migrator.dst_portal_type))
+        useLevelWalker(portal, migrator, out=out, **kwargs)
                 
     #out.append('\nCommitting full transaction')
     #get_transaction().commit()
@@ -230,7 +219,8 @@ def migrateAll(portal):
     wf = getToolByName(catalog, 'portal_workflow')
     LOG('starting wf migration')
     count = wf.updateRoleMappings()
-    out.append('\n\n*** Workflow: %d object(s) updated. ***\n' % count)
+    #out.append('\n\n*** Workflow: %d object(s) updated. ***\n' % count)
+    out.append('Workflow: %d object(s) updated.' % count)
     
     #out.append('\nCommitting full transaction')
     #get_transaction().commit()
@@ -239,6 +229,6 @@ def migrateAll(portal):
     LOG('starting catalog update')
     ct = getToolByName(catalog, 'portal_catalog')
     ct.refreshCatalog(clear=1)
-    out.append('Portal catalog was updated')
+    out.append('Portal catalog updated.')
 
     return '\n'.join(out)

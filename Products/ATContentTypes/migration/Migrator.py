@@ -311,6 +311,14 @@ class BaseMigrator:
         Must be implemented by the real Migrator
         """
         raise NotImplementedError
+    
+    def rollback(self):
+        """Roles the migration back
+        
+        * Removes the migrated object
+        * Puts the old object back in place
+        """
+        raise NotImplementedError
 
 class BaseCMFMigrator(BaseMigrator):
     """Base migrator for CMF objects
@@ -399,7 +407,23 @@ class ItemMigrationMixin:
         """Reorder the new object in its parent
         """
         if IOrderedContainer.isImplementedBy(self.parent):
-            self.parent.moveObject(self.new_id,self.parent.getObjectPosition(self.old_id))
+            self._position = self.parent.getObjectPosition(self.old_id)
+            self.parent.moveObject(self.new_id, self._position)
+            
+    def rollback(self):
+        """Roles the migration back
+        """
+        if getattr(self, '_removed', False):
+            raise RuntimeError, "Can't rollback after the old object is removed"
+        ids = self.parent.objectIds()
+        if self.old_id not in ids:
+            # the backup isn't there - nothing to do
+            return
+        if self.new_id in ids:
+            self.parent.manage_delObjects([self.new_id,])
+        unrestricted_rename(self.parent, self.old_id, self.orig_id)
+        if hasattr(self, '_position'):
+            self.parent.moveObject(self.orig_id, self._position)
 
 class FolderMigrationMixin(ItemMigrationMixin):
     """Migrates a folderish object
@@ -414,22 +438,28 @@ class FolderMigrationMixin(ItemMigrationMixin):
 
         It seems to work for me very well :)
         """
-        #for obj in self.old.objectValues():
-        #    if isinstance(obj, BrokenClass):
-        #        log('WARNING: Loosing BrokenObject in %s' % \
-        #            self.old.absolute_url(1))
-        #        continue
-        #    id = obj.getId()
-        #    self.new._setObject(id, aq_base(obj), set_owner=0)
-        
         orderAble = IOrderedContainer.isImplementedBy(self.old)
         orderMap = {}
 
         # using objectIds() should be safe with BrokenObjects
         for id in self.old.objectIds():
             obj = getattr(self.old.aq_inner.aq_explicit, id)
+            # Broken object support. Maybe we are able to migrate them?
+            if isinstance(obj, BrokenClass):
+                log('WARNING: BrokenObject in %s' % \
+                    self.old.absolute_url(1))
+                #continue
+            
             if orderAble:
-                orderMap[id] = self.old.getObjectPosition(id)
+                try:
+                    orderMap[id] = self.old.getObjectPosition(id)
+                except AttributeError:
+                    out = StringIO()
+                    t, e, tb = sys.exc_info()
+                    traceback.print_exc(tb, out)
+                    msg = "Broken OrderSupport::\n %s\n %s\n %s\n" %( t, e,  out.getvalue())
+                    LOG(msg)
+                    orderAble=0
             self.new._setObject(id, aq_base(obj), set_owner=0)
         
         # reorder items

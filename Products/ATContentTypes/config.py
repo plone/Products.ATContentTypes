@@ -66,11 +66,7 @@ ENABLE_TEMPLATE_MIXIN = True
 
 ## use ConstrainedMixin?
 ## if enabled you can constrain allowed types on an ATCT Folder
-ENABLE_CONSTRAIN_TYPES_MIXIN = False
-CONSTRAIN_TYPES_MIXIN_PERMISSION = CMFCorePermissions.ManagePortal
-
-## Document History view permission
-HISTORY_VIEW_PERMISSION = CMFCorePermissions.ReviewPortalContent
+ENABLE_CONSTRAIN_TYPES_MIXIN = True
 
 ## maximum upload size for ATImage and ATFile in MB. 0 is infinitiv
 MAX_FILE_SIZE = 0.0
