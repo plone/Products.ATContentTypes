@@ -59,10 +59,15 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
             meta_types[mt] = 1
         return meta_types.keys()
         
-    def _getCMFportaltypes(self):
+    def _getCMFportaltypes(self, metatype=None):
         """Get all portal types registered by CMF core products + CMFPlone for types
         """
-        return [fti.getId() for fti in self._getCMFftis()]
+        if metatype is None:
+            return [fti.getId() for fti in self._getCMFftis()]
+        else:
+            return [fti.getId() for fti in self._getCMFftis()
+                    if aq_base(fti).content_meta_type == metatype
+                   ]
 
     def _removeCMFtypesFromCatalog(self, count=False):
         """Removes all types registered CMF core products + CMFPLone from the catalog

@@ -46,6 +46,9 @@ class TestTool(ArchetypesTestCase.ArcheSiteTestCase):
         'Image', 'Large Plone Folder', 'Link', 'News Item', 'Plone Site',
         'Topic'])
         
+        pt = t._getCMFportaltypes(metatype="Portal Topic")
+        self.failUnlessEqual(pt, ['Topic'])
+        
     def test_uncatalogcmf(self):
         t = self.tool
         cat = self.portal.portal_catalog
