@@ -9,16 +9,22 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.ftests import atctftestcase
 
 tests = []
 
-class TestATTopicFunctional(atcttestcase.ATCTFuncionalTestCase):
+class TestATTopicFunctional(atctftestcase.ATCTIntegrationTestCase):
 
     def afterSetUp(self):
         # adding topics is restricted
         self.setRoles(['Manager', 'Member',])
-        atcttestcase.ATCTFuncionalTestCase.afterSetUp(self)
+        atctftestcase.ATCTIntegrationTestCase.afterSetUp(self)
+        
+    def test_templatemixin_view_without_view(self):
+        # template mixin magic should work
+        # XXX more tests?
+        response = self.publish('%s/' % self.obj_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) #
     
     portal_type = 'ATTopic'
     views = ('atct_topic_view', 'criterion_edit_form', 'atct_topic_subtopics')

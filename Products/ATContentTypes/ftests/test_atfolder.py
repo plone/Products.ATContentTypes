@@ -13,19 +13,18 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.ftests import atctftestcase
 
 tests = []
 
-class TestATFolderFunctional(atcttestcase.ATCTFuncionalTestCase):
+class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
     
     portal_type = 'ATFolder'
     views = ('folder_listing', 'folder_contents', )
 
-    def test_templatemixin_view(self):
+    def test_templatemixin_view_without_view(self):
         # template mixin magic should work
         # XXX more tests?
-        # XXX special case: view doesn't work
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) #
 
@@ -33,7 +32,7 @@ tests.append(TestATFolderFunctional)
 
 from Products.ATContentTypes.config import ATCT_PORTAL_TYPE
 
-class TestATBTreeFolderFunctional(atcttestcase.ATCTFuncionalTestCase):
+class TestATBTreeFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
 
     portal_type = ATCT_PORTAL_TYPE('ATBTreeFolder')
     views = ('folder_listing', 'folder_contents', )
@@ -42,7 +41,7 @@ class TestATBTreeFolderFunctional(atcttestcase.ATCTFuncionalTestCase):
         # enable global allow for BTree Folder
         fti = getattr(self.portal.portal_types, self.portal_type)
         fti.manage_changeProperties(global_allow=1)
-        atcttestcase.ATCTFuncionalTestCase.afterSetUp(self)
+        atctftestcase.ATCTIntegrationTestCase.afterSetUp(self)
 
     def test_templatemixin_view_without_view(self):
         # template mixin magic should work

@@ -1,6 +1,10 @@
 1.0-devel
 ======================
 
+ * FTests: install kupu and epoz when available. Moved function test suite to
+   ftests/.
+   [tiran]
+
  * Fixed [ 1157812 ] ival/vcal action icons not available
    [tiran]
 

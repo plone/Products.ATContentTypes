@@ -9,11 +9,11 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.ftests import atctftestcase
 
 tests = []
 
-class TestATEventFunctional(atcttestcase.ATCTFuncionalTestCase):
+class TestATEventFunctional(atctftestcase.ATCTIntegrationTestCase):
     
     portal_type = 'ATEvent'
     views = ('event_view', 'vcs_view', 'ics_view', )
