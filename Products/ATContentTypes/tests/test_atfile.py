@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
 #  Copyright (c) 2003-2005 AT Content Types development team
@@ -26,6 +27,7 @@ import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
+import unittest
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
@@ -183,6 +185,15 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
 
 tests.append(TestATFileFields)
+
+class TestCleanupFilename(unittest.TestCase):
+
+    def test_cleanup_filename(self):
+        from Products.ATContentTypes.types.ATContentType import cleanupFilename
+        text = 'Νίκος Τζάνος'
+        self.assertEquals(cleanupFilename(text, 'utf-8'), 'Nikos_Tzanos')
+
+tests.append(TestCleanupFilename)
 
 
 if __name__ == '__main__':
