@@ -42,7 +42,7 @@ from Products.ATContentTypes.types.ATContentType import translateMimetypeAlias
 from Products.ATContentTypes.Extensions.toolbox import _fixLargePloneFolder
 
 class DocumentMigrator(CMFItemMigrator):
-    fromType = ATDocument.ATDocument._atct_newTypeFor[0]
+    fromType = ATDocument.ATDocument._atct_newTypeFor['portal_type']
     toType   = ATDocument.ATDocument.portal_type
     map = {'text' : 'setText'}
 
@@ -52,7 +52,7 @@ class DocumentMigrator(CMFItemMigrator):
         self.new.setContentType(translateMimetypeAlias(oldFormat))
 
 class EventMigrator(CMFItemMigrator):
-    fromType = ATEvent.ATEvent._atct_newTypeFor[0]
+    fromType = ATEvent.ATEvent._atct_newTypeFor['portal_type']
     toType   = ATEvent.ATEvent.portal_type
     map = {
             'location'      : 'setLocation',
@@ -79,7 +79,7 @@ class EventMigrator(CMFItemMigrator):
 
 
 class FileMigrator(CMFItemMigrator):
-    fromType = ATFile.ATFile._atct_newTypeFor[0]
+    fromType = ATFile.ATFile._atct_newTypeFor['portal_type']
     toType   = ATFile.ATFile.portal_type
     # mapped in custom()
     # map = { 'file' : 'setFile' }
@@ -90,7 +90,7 @@ class FileMigrator(CMFItemMigrator):
         self.new.setFile(file, mimetype = ctype)
 
 class ImageMigrator(CMFItemMigrator):
-    fromType = ATImage.ATImage._atct_newTypeFor[0]
+    fromType = ATImage.ATImage._atct_newTypeFor['portal_type']
     toType   = ATImage.ATImage.portal_type
     # mapped in custom()
     # map = {'image':'setImage'}
@@ -103,29 +103,29 @@ class ImageMigrator(CMFItemMigrator):
         self.new.setImage(image, mimetype = ctype)
 
 class LinkMigrator(CMFItemMigrator):
-    fromType = ATLink.ATLink._atct_newTypeFor[0]
+    fromType = ATLink.ATLink._atct_newTypeFor['portal_type']
     toType   = ATLink.ATLink.portal_type
     map = {'remote_url' : 'setRemoteUrl'}
 
 class FavoriteMigrator(LinkMigrator):
-    fromType = ATFavorite.ATFavorite._atct_newTypeFor[0]
+    fromType = ATFavorite.ATFavorite._atct_newTypeFor['portal_type']
     toType   = ATFavorite.ATFavorite.portal_type
     # see LinkMigrator
     # map = {'remote_url' : 'setRemoteUrl'}
 
 class NewsItemMigrator(DocumentMigrator):
-    fromType = ATNewsItem.ATNewsItem._atct_newTypeFor[0]
+    fromType = ATNewsItem.ATNewsItem._atct_newTypeFor['portal_type']
     toType   = ATNewsItem.ATNewsItem.portal_type
     # see DocumentMigrator
     map = {'text' : 'setText'}
 
 class FolderMigrator(CMFFolderMigrator):
-    fromType = ATFolder.ATFolder._atct_newTypeFor[0]
+    fromType = ATFolder.ATFolder._atct_newTypeFor['portal_type']
     toType   = ATFolder.ATFolder.portal_type
     map = {}
 
 class LargeFolderMigrator(CMFFolderMigrator):
-    fromType = ATFolder.ATBTreeFolder._atct_newTypeFor[0]
+    fromType = ATFolder.ATBTreeFolder._atct_newTypeFor['portal_type']
     toType   = ATFolder.ATBTreeFolder.portal_type
     # no other attributes to migrate
     map = {}

@@ -75,7 +75,7 @@ class ATFavorite(ATCTContent):
     global_allow   = True
     filter_content_types  = True
     allowed_content_types = ()
-    _atct_newTypeFor = ('Favorite', 'Favorite')
+    _atct_newTypeFor = {'portal_type' : 'Favorite', 'meta_type' : 'Favorite'}
     typeDescription = ''
     typeDescMsgId  = ''
     assocMimetypes = ()

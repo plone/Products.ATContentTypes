@@ -116,7 +116,7 @@ class ATTopic(ATCTFolder):
     immediate_view = 'atct_topic_view'
     default_view   = 'atct_topic_view'
     suppl_views    = ()
-    _atct_newTypeFor     = ('Topic', 'Portal Topic')
+    _atct_newTypeFor = {'portal_type' : 'Topic', 'meta_type' : 'Portal Topic'}
     typeDescription= ("A topic is a pre-defined search, showing all "
                       "items matching\n criteria you specify. "
                       "Topics may also contain sub-topics.")

@@ -1,8 +1,4 @@
-"""Skeleton ATContentTypes tests
-
-Use this file as a skeleton for your own tests
-
-
+"""
 """
 
 __author__ = 'Christian Heimes'
@@ -25,13 +21,13 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         
     def test_cmfftis(self):
         t = self.tool
-        ftis = t._getCMFftis()
+        ftis = t._getCMFFtis()
         self.failUnless(isinstance(ftis, list))
         self.failUnlessEqual(len(ftis), 10)
         
-    def test_cmfmetadata(self):
+    def test_cmfmetatypes(self):
         t = self.tool
-        mt = t._getCMFmetatypes()
+        mt = t._getCMFMetaTypes()
         expected = ['Document', 'Favorite', 'Large Plone Folder',
         'Link', 'News Item', 'Plone Folder', 'Plone Site', 'Portal File',
         'Portal Image', 'Portal Topic']
@@ -41,7 +37,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         
     def test_cmfportaltypes(self):
         t = self.tool
-        pt = t._getCMFportaltypes()
+        pt = t._getCMFPortalTypes()
         expected = ['CMF Document', 'CMF Favorite', 'CMF File',
         'CMF Folder', 'CMF Image', 'CMF Large Plone Folder', 'CMF Link',
         'CMF News Item', 'CMF Topic', 'Plone Site', ]
@@ -49,14 +45,14 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         expected.sort()
         self.failUnlessEqual(pt, expected)
         
-        pt = t._getCMFportaltypes(metatype="Portal Topic")
+        pt = t._getCMFPortalTypes(metatype="Portal Topic")
         self.failUnlessEqual(pt, ['CMF Topic'])
         
     def test_uncatalogcmf(self):
         t = self.tool
         cat = self.portal.portal_catalog
-        mt = t._getCMFmetatypes()
-        pt = t._getCMFportaltypes()
+        mt = t._getCMFMetaTypes()
+        pt = t._getCMFPortalTypes()
         
         count, time, cttime = t._removeCMFtypesFromCatalog(count=True)
         
@@ -69,8 +65,8 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
     def test_catalogcmf(self):
         t = self.tool
         cat = self.portal.portal_catalog
-        mt = t._getCMFmetatypes()
-        pt = t._getCMFportaltypes()
+        mt = t._getCMFMetaTypes()
+        pt = t._getCMFPortalTypes()
         
         # XXX add a cmf based object before cataloging
 
@@ -81,6 +77,11 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         
         brains = cat(portal_type=pt)
         #self.failUnless(len(brains) > 0)
+        
+    def test_recatalogCMFTypes(self):
+        # just to make sure it is callable
+        t = self.tool
+        t.recatalogCMFTypes()
 
 tests.append(TestTool)
 

@@ -105,6 +105,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         m(unittest=1)
         get_transaction().commit(1)
 
+        self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
         migrated = getattr(self.folder, id)
 
         self.compareAfterMigration(migrated, mod=mod, created=created)

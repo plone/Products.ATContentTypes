@@ -62,6 +62,12 @@ from Products.Archetypes.TemplateMixin import TemplateMixin
 from Products.Archetypes.debug import _default_logger
 from Products.Archetypes.debug import _zlogger
 
+# BBB remove import from PloneLanguageTool later
+try:
+    from Products.CMFPlone.interfaces.Translatable import ITranslatable
+except ImportError:
+    from Products.PloneLanguageTool.interfaces import ITranslatable
+
 from Products.ATContentTypes.config import CHAR_MAPPING
 from Products.ATContentTypes.config import GOOD_CHARS
 from Products.ATContentTypes.config import MIME_ALIAS
@@ -73,6 +79,16 @@ from Products.ATContentTypes.types.schemata import ATContentTypeSchema
 
 DEBUG = True
 
+# XXX this should go into LinguaPlone!
+translate_actions = ({
+    'id'          : 'translate',
+    'name'        : 'Translate',
+    'action'      : 'string:${object_url}/translate_item',
+    'permissions' : (CMFCorePermissions.ModifyPortalContent, ),
+    'condition'   : 'not: object/isCanonical',
+    },
+    )
+
 def registerATCT(class_, project):
     """Registers an ATContentTypes based type
     
@@ -80,6 +96,10 @@ def registerATCT(class_, project):
     """
     assert IATContentType.isImplementedByInstancesOf(class_)
     class_.portal_type = ATCT_PORTAL_TYPE(class_.portal_type)
+    
+    # XXX this should go into LinguaPlone!
+    if ITranslatable.isImplementedByInstancesOf(class_):
+        class_.actions = updateActions(class_, translate_actions)
         
     registerType(class_, project)
 
@@ -129,14 +149,14 @@ class ATCTMixin(TemplateMixin):
     archetype_name = 'AT Content Type'
     immediate_view = 'base_view'
     suppl_views    = ()
-    _atct_newTypeFor     = ()
+    _atct_newTypeFor = {'portal_type' : None, 'meta_type' : None}
     typeDescription= ''
     typeDescMsgId  = ''
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()
 
-    __implements__ = (IATContentType, )
+    __implements__ = (IATContentType, TemplateMixin.__implements__)
 
     security       = ClassSecurityInfo()
 
@@ -222,7 +242,7 @@ class ATCTContent(ATCTMixin, BaseContent):
     """Base class for non folderish AT Content Types"""
 
     __implements__ = (BaseContent.__implements__,
-                      IATContentType)
+                      ATCTMixin.__implements__)
 
     security       = ClassSecurityInfo()
     actions = updateActions(ATCTMixin,

@@ -57,6 +57,7 @@ from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.DirectoryView import registerDirectory
 
 # import all content types, migration and validators
+import Products.ATContentTypes.Extensions.Install
 import Products.ATContentTypes.Validators
 import Products.ATContentTypes.content
 import Products.ATContentTypes.migration

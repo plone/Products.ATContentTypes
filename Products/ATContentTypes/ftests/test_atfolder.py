@@ -31,9 +31,11 @@ class TestATFolderFunctional(atcttestcase.ATCTFuncionalTestCase):
 
 tests.append(TestATFolderFunctional)
 
+from Products.ATContentTypes.config import ATCT_PORTAL_TYPE
+
 class TestATBTreeFolderFunctional(atcttestcase.ATCTFuncionalTestCase):
 
-    portal_type = 'ATBTreeFolder'
+    portal_type = ATCT_PORTAL_TYPE('ATBTreeFolder')
     views = ('folder_listing', 'folder_contents', )
 
     def afterSetUp(self):

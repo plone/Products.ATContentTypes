@@ -84,7 +84,7 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
     default_view   = 'document_view'
     immediate_view = 'document_view'
     suppl_views    = ()
-    _atct_newTypeFor     = ('Document', 'Document')
+    _atct_newTypeFor = {'portal_type' : 'Document', 'meta_type' : 'Document'}
     typeDescription= 'Fill in the details of this document.'
     typeDescMsgId  = 'description_edit_document'
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)

@@ -88,7 +88,8 @@ class TestSiteATFavorite(atcttestcase.ATCTTypeTestCase):
         m = FavoriteMigrator(old)
         m(unittest=1)
 
-        migrated = getattr(self.portal, id)
+        self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
+        migrated = getattr(self.folder, id)
 
         self.compareAfterMigration(migrated, mod=mod, created=created)
         self.compareDC(migrated, title=title, description=description)

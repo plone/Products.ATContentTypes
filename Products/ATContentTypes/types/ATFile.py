@@ -84,7 +84,7 @@ class ATFile(ATCTFileContent):
     immediate_view = 'file_view'
     default_view   = 'file_view'
     suppl_views    = ()
-    _atct_newTypeFor     = ('File', 'Portal File')
+    _atct_newTypeFor = {'portal_type' : 'File', 'meta_type' : 'Portal File'}
     typeDescription= "Add the relevant details of the file to be added in the form below,\n" \
                      "select the file with the 'Browse' button, and press 'Save'."
     typeDescMsgId  = 'description_edit_file'
@@ -207,7 +207,7 @@ class ATExtFile(ATFile):
     portal_type    = 'ATATExtFile'
     meta_type      = 'ATExtFile'
     archetype_name = 'AT Ext File'
-    _atct_newTypeFor     = ''
+    _atct_newTypeFor = None
     assocMimetypes = ()
     assocFileExt   = ()
 

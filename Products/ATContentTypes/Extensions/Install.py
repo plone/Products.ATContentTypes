@@ -18,7 +18,6 @@
 #
 """
 
-
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -45,19 +44,30 @@ from Products.ATContentTypes.config import WORKFLOW_CRITERIA
 from Products.ATContentTypes.config import WORKFLOW_DEFAULT
 from Products.ATContentTypes.config import INSTALL_LINGUA_PLONE
 from Products.ATContentTypes.config import GLOBALS
+from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.Extensions.utils import setupMimeTypes
 from Products.ATContentTypes.Extensions.utils import registerTemplates
-from Products.ATContentTypes.Extensions.toolbox import disableCMFTypes
-from Products.ATContentTypes.Extensions.toolbox import enableCMFTypes
+#from Products.ATContentTypes.Extensions.toolbox import disableCMFTypes
+#from Products.ATContentTypes.Extensions.toolbox import enableCMFTypes
 
 def install(self):
     out = StringIO()
+
+    qi = getToolByName(self, 'portal_quickinstaller')
+    
+    # install tool
+    tool = getattr(self.aq_explicit, TOOLNAME, None)
+    if tool is None:
+        addTool = self.manage_addProduct['ATContentTypes'].manage_addTool
+        addTool('ATCT Tool')
+        tool = getattr(self.aq_explicit, TOOLNAME)
     
     # step 1: Rename and move away to old CMF types
-    disableCMFTypes(self)
+    tool.disableCMFTypes()
+    #disableCMFTypes(self)
     
     # step 2: Install dependency products 
-    qi = getToolByName(self, 'portal_quickinstaller')
+    
     installable = [ prod['id'] for prod in qi.listInstallableProducts() ]
     installed = [ prod['id'] for prod in qi.listInstalledProducts() ]
     
@@ -80,17 +90,17 @@ def install(self):
     print >> out, 'Successfully installed %s' % PROJECTNAME
 
     # register switch methods to toggle old plonetypes on/off
-    portal=getToolByName(self,'portal_url').getPortalObject()
-    manage_addExternalMethod(portal,'switchATCT2CMF',
+    
+    manage_addExternalMethod(self,'switchATCT2CMF',
         'Set reenable CMF type',
         PROJECTNAME+'.toolbox',
         'switchATCT2CMF')
-    manage_addExternalMethod(portal,'switchCMF2ATCT',
+    manage_addExternalMethod(self,'switchCMF2ATCT',
         'Set ATCT as default content types',
         PROJECTNAME+'.toolbox',
         'switchCMF2ATCT')
 
-    manage_addExternalMethod(portal,'migrateFromCMFtoATCT',
+    manage_addExternalMethod(self,'migrateFromCMFtoATCT',
         'Migrate from CMFDefault types to ATContentTypes',
         PROJECTNAME+'.migrateFromCMF',
         'migrate')
@@ -100,15 +110,11 @@ def install(self):
     #    PROJECTNAME+'.migrateFromCPT',
     #    'migrate')
 
-    manage_addExternalMethod(portal,'recreateATImageScales',
-        '',
-        PROJECTNAME+'.toolbox',
-        'recreateATImageScales')
+    #manage_addExternalMethod(portal,'recreateATImageScales',
+    #    '',
+    #    PROJECTNAME+'.toolbox',
+    #    'recreateATImageScales')
         
-    # install tool
-    addTool = self.manage_addProduct['ATContentTypes'].manage_addTool
-    addTool('ATCT Tool')
-
     # changing workflow
     setupWorkflows(self, typeInfo, out)
 
@@ -117,7 +123,7 @@ def install(self):
     setupMimeTypes(self, typeInfo, old=old, moveDown=(IATFile,), out=out)
 
     # bind templates for TemplateMixin
-    registerTemplates(self, typeInfo, out)
+    #registerTemplates(self, typeInfo, out)
     
     return out.getvalue()
 
@@ -126,16 +132,15 @@ def uninstall(self):
     classes=listTypes(PROJECTNAME)
 
     # switch back before uninstalling
-    if isSwitchedToATCT(self):
-        switchATCT2CMF(self)
+    #if isSwitchedToATCT(self):
+    #    switchATCT2CMF(self)
 
     # remove external methods for toggling between old and new types
-    portal=getToolByName(self,'portal_url').getPortalObject()
     for script in ('switch_old_plone_types_on', 'switch_old_plone_types_off',
      'migrateFromCMFtoATCT', 'migrateFromCPTtoATCT', 'recreateATImageScales',
      'switchATCT2CMF', 'switchCMF2ATCT', ):
-        if hasattr(aq_base(portal), script):
-            portal.manage_delObjects(ids=[script,])
+        if hasattr(aq_base(self), script):
+            self.manage_delObjects(ids=[script,])
 
     return out.getvalue()
 

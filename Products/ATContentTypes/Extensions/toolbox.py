@@ -154,25 +154,7 @@ def enableCMFTypes(self, skip_rename=False):
     return out.getvalue()
 
 
-def _changePortalType(cat, old, new):
-    """
-    """
-    brains = cat(portal_type = old)
-    for brain in brains:
-        obj = brain.getObject()
-        if not obj:
-            continue
-        try:
-            state = object._p_changed
-        except:
-            state = 0
-        __traceback_info__ = (obj, getattr(obj, '__class__', 'no class'),
-                              getattr(obj, 'meta_type', 'no metatype'),
-                              old, new)
-        obj._setPortalTypeName(new)
-        obj.reindexObject(idxs=['portal_type', 'Type', 'meta_type', ])
-        if state is None:
-            obj._p_deativate()
+
 
 def _fixLargePloneFolder(self):
     # XXX why do I need this hack?
@@ -182,7 +164,7 @@ def _fixLargePloneFolder(self):
     mt = getToolByName(self, 'portal_membership')
     members = mt.getMembersFolder()
     if members is not None:
-        members._setPortalTypeName(ATFolder.ATBTreeFolder._atct_newTypeFor[0])
+        members._setPortalTypeName('Large Plone Folder')
 
 def _switchToATCT(portal, pt, cat, reg, klass, out, skip_rename=False):
     """

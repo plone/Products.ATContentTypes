@@ -214,7 +214,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin):
     default_view   = 'event_view'
     immediate_view = 'event_view'
     suppl_views    = ()
-    _atct_newTypeFor     = ('Event', 'CMF Event')
+    _atct_newTypeFor = {'portal_type' : 'Event', 'meta_type' : 'CMF Event'}
     typeDescription= 'Fill in the details of the event you want to add.'
     typeDescMsgId  = 'description_edit_event'
     assocMimetypes = ()

@@ -54,7 +54,7 @@ class ATFolder(ATCTOrderedFolder):
     immediate_view = 'view'
     default_view   = 'view'
     suppl_views    = ()
-    _atct_newTypeFor     = ('Folder', 'Plone Folder')
+    _atct_newTypeFor = {'portal_type' : 'Folder', 'meta_type' : 'Plone Folder'}
     typeDescription= ''
     typeDescMsgId  = ''
     assocMimetypes = ()
@@ -91,7 +91,8 @@ class ATBTreeFolder(ATCTBTreeFolder):
     default_view   = 'folder_listing'
     suppl_views    = ()
     global_allow   = False
-    _atct_newTypeFor     = ('Large Plone Folder', 'Large Plone Folder')
+    _atct_newTypeFor = {'portal_type' : 'Large Plone Folder',
+                        'meta_type' : 'Large Plone Folder'}
     TypeDescription= ''
     assocMimetypes = ()
     assocFileExt   = ()

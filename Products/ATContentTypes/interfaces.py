@@ -272,3 +272,7 @@ class IATTopicSearchCriterion(IATTopicCriterion):
 class IATTopicSortCriterion(IATTopicCriterion):
     """Interface for criteria used for sorting
     """
+
+class IATCTTool(Interface):
+    """
+    """

@@ -1,6 +1,10 @@
 1.0-devel
 ======================
 
+ * Added translate tab when LinguaPlone is available at installation or
+   reinstallation time.
+   [tiran]
+
  * Added mini scale with 200x200.
    [tiran]
 

@@ -33,6 +33,7 @@ from Products.Archetypes.public import *
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.Archetypes.tests.test_baseschema import BaseSchemaTest
+from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests.utils import EmptyValidator
@@ -40,6 +41,11 @@ from Products.ATContentTypes.tests.utils import idValidator
 from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
+# BBB remove import from PloneLanguageTool later
+try:
+    from Products.CMFPlone.interfaces.Translatable import ITranslatable
+except ImportError:
+    from Products.PloneLanguageTool.interfaces import ITranslatable
 
 from Products.ATContentTypes.config import ATCT_PORTAL_TYPE
 
@@ -126,6 +132,13 @@ class ATCTTypeTestCase(ATSiteTestCase):
         self.failUnless(IReferenceable.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(IBaseContent, self._ATCT))
         self.failUnless(verifyObject(IReferenceable, self._ATCT))
+        
+    def test_implementsTranslateable(self):
+        # lingua plone is adding the ITranslatable interface to all types
+        if not HAS_LINGUA_PLONE:
+            return
+        self.failUnless(ITranslatable.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(ITranslatable, self._ATCT))       
 
     def compareDC(self, first, second=None, **kwargs):
         """
@@ -424,7 +437,40 @@ class ATCTFuncionalTestCase(ATFunctionalSiteTestCase):
     def test_workflow_view(self):
         # workflow tab should work
         response = self.publish('%s/content_status_history' % self.obj_path, self.basic_auth)
-        self.assertStatusEqual(response.getStatus(), 200) # OK    
+        self.assertStatusEqual(response.getStatus(), 200) # OK
+        
+    def test_linguaplone_views(self):
+        if not HAS_LINGUA_PLONE:
+            return
+        
+        response = self.publish('%s/translate_item' % self.obj_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) # OK
+        response = self.publish('%s/manage_translations_form' % self.obj_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) # OK
+
+    def test_linguaplone_create_translation(self):
+        if not HAS_LINGUA_PLONE:
+            return
+        
+        # create translation creates a new object
+        response = self.publish('%s/createTranslation?language=de&set_language=de' 
+                                 % self.obj_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 302) # Redirect to edit
+
+        # omit ?portal_status_message=...
+        body = response.getBody().split('?')[0]
+        
+        self.failUnless(body.startswith(self.folder_url))
+        self.failUnless(body.endswith('/translate_item'))
+
+        # Perform the redirect
+        form_path = body[len(self.app.REQUEST.SERVER_URL):]
+        response = self.publish(form_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) # OK
+        
+        translated_id = "%s-de" % self.obj_id
+        self.failUnless(translated_id in self.folder.objectIds(),
+                        self.folder.objectIds())
     
     def test_additional_view(self):
         # additional views:
