@@ -1,6 +1,10 @@
 0.2.0-rc5 - unreleased
 ======================
 
+ * Use a seperate schemata for ConstrainTypesMixin. We may have many mixins.
+   This way, we can avoid a long edit form when edit folder properties.
+   [panjunyong]
+
  * Fixed a bug in the migration walker. Empty folders aren't skipped any more.
    [panjunyong]
 
