@@ -111,7 +111,7 @@ class ATCTMixin(TemplateMixin):
     archetype_name = 'AT Content Type'
     immediate_view = 'base_view'
     suppl_views    = ()
-    newTypeFor     = ()
+    _atct_newTypeFor     = ()
     typeDescription= ''
     typeDescMsgId  = ''
     assocMimetypes = ()

@@ -46,11 +46,12 @@ class ATFolder(ATCTOrderedFolder):
 
     content_icon   = 'folder_icon.gif'
     meta_type      = 'ATFolder'
+    portal_type    = 'ATFolder'
     archetype_name = 'AT Folder'
     immediate_view = 'folder_listing'
     default_view   = 'folder_listing'
     suppl_views    = ()
-    newTypeFor     = ('Folder', 'Plone Folder')
+    _atct_newTypeFor     = ('Folder', 'Plone Folder')
     typeDescription= ''
     typeDescMsgId  = ''
     assocMimetypes = ()
@@ -82,12 +83,13 @@ class ATBTreeFolder(ATCTBTreeFolder):
 
     content_icon   = 'folder_icon.gif'
     meta_type      = 'ATBTreeFolder'
+    portal_type    = 'ATBTreeFolder'
     archetype_name = 'AT BTree Folder'
     immediate_view = 'folder_listing'
     default_view   = 'folder_listing'
     suppl_views    = ()
     global_allow   = 0
-    newTypeFor     = ('Large Plone Folder', 'Large Plone Folder')
+    _atct_newTypeFor     = ('Large Plone Folder', 'Large Plone Folder')
     TypeDescription= ''
     assocMimetypes = ()
     assocFileExt   = ()

@@ -20,6 +20,10 @@ are permitted provided that the following conditions are met:
 
 """
 
+import warnings
+warnings.warn("CPT Migrator isn't maintained any more and will be removed in "
+              "the next release of ATContentTypes", DeprecationWarning)
+
 from common import *
 from Walker import CatalogWalker, CatalogWalkerWithLevel, StopWalking
 from Migrator import CMFItemMigrator, CMFFolderMigrator

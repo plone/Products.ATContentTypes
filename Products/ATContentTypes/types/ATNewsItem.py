@@ -46,11 +46,12 @@ class ATNewsItem(ATDocument):
 
     content_icon   = 'newsitem_icon.gif'
     meta_type      = 'ATNewsItem'
+    portal_type    = 'ATNewsItem'
     archetype_name = 'AT News Item'
     immediate_view = 'newsitem_view'
     default_view   = 'newsitem_view'
     suppl_views    = ()
-    newTypeFor     = ('News Item', 'News Item')
+    _atct_newTypeFor     = ('News Item', 'News Item')
     typeDescription= ("A news item is a small piece of news that "
                       "is published \non the front page. "
                       "Add the relevant details below, and press 'Save'.")

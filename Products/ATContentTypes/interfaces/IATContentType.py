@@ -32,7 +32,7 @@ class IATContentType(Interface):
     default_view = Attribute('''Default view template - used for TemplateMixin''')
     suppl_views = Attribute('''Supplementary views - used for TemplateMixin''')
 
-    newTypeFor = Attribute('''Used to get the meta type of the original implementation''')
+    _atct_newTypeFor = Attribute('''Used to get the meta type of the original implementation''')
 
     typeDescription = Attribute('''A short description used for the edit screen''')
     typeDescMsgId = Attribute('''The i18n msgid of the type description''')

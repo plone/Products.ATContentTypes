@@ -21,39 +21,29 @@ are permitted provided that the following conditions are met:
 
 """
 
-from common import *
-from Walker import CatalogWalker, CatalogWalkerWithLevel, StopWalking
-from Migrator import CMFItemMigrator, CMFFolderMigrator
+from Products.ATContentTypes.migration.common import *
+from Products.ATContentTypes.migration.Walker import CatalogWalker
+from Products.ATContentTypes.migration.Walker import CatalogWalkerWithLevel
+from Products.ATContentTypes.migration.Walker import StopWalking
+from Products.ATContentTypes.migration.Migrator import CMFItemMigrator
+from Products.ATContentTypes.migration.Migrator import CMFFolderMigrator
 from Products.CMFCore.utils import getToolByName
 from Acquisition import aq_parent
 
-from Products.ATContentTypes.types import ATDocument, ATEvent, \
-    ATFavorite, ATFile, ATFolder, ATImage, ATLink, ATNewsItem
+from Products.ATContentTypes.types import ATDocument
+from Products.ATContentTypes.types import ATEvent
+from Products.ATContentTypes.types import ATFavorite
+from Products.ATContentTypes.types import ATFile
+from Products.ATContentTypes.types import ATFolder
+from Products.ATContentTypes.types import ATImage
+from Products.ATContentTypes.types import ATLink
+from Products.ATContentTypes.types import ATNewsItem
 from Products.ATContentTypes.types.ATContentType import translateMimetypeAlias
 from Products.ATContentTypes.Extensions.toolbox import _fixLargePloneFolder
 
-##def isPloneFolder(obj, ob=None):
-##    if ob:
-##        # called as instance method
-##        obj = ob
-##    # We can't use the type information because they are FU for the members folder!
-##    mtobj = getattr(obj, 'meta_type', None)
-##    mtp   = getattr(aq_parent(obj), 'meta_type', None)
-##    return mtobj == 'Plone Folder' and mtp != 'Plone Folder'
-##
-##def isLargePloneFolder(obj, ob=None):
-##    if ob:
-##        # called as instance method
-##        obj = ob
-##    # We can't use the type information because they are FU for the members folder!
-##    mtobj = getattr(obj, 'meta_type', None)
-##    mtp   = getattr(aq_parent(obj), 'meta_type', None)
-##    return mtobj == 'Large Plone Folder' and mtp != 'Large Plone Folder'
-
-
 class DocumentMigrator(CMFItemMigrator):
-    fromType = ATDocument.ATDocument.newTypeFor[0]
-    toType   = ATDocument.ATDocument.__name__
+    fromType = ATDocument.ATDocument._atct_newTypeFor[0]
+    toType   = ATDocument.ATDocument.portal_type
     map = {'text' : 'setText'}
 
     def custom(self):
@@ -62,8 +52,8 @@ class DocumentMigrator(CMFItemMigrator):
         self.new.setContentType(translateMimetypeAlias(oldFormat))
 
 class EventMigrator(CMFItemMigrator):
-    fromType = ATEvent.ATEvent.newTypeFor[0]
-    toType   = ATEvent.ATEvent.__name__
+    fromType = ATEvent.ATEvent._atct_newTypeFor[0]
+    toType   = ATEvent.ATEvent.portal_type
     map = {
             'location'      : 'setLocation',
             'Subject'       : 'setEventType',
@@ -89,8 +79,8 @@ class EventMigrator(CMFItemMigrator):
 
 
 class FileMigrator(CMFItemMigrator):
-    fromType = ATFile.ATFile.newTypeFor[0]
-    toType   = ATFile.ATFile.__name__
+    fromType = ATFile.ATFile._atct_newTypeFor[0]
+    toType   = ATFile.ATFile.portal_type
     # mapped in custom()
     # map = { 'file' : 'setFile' }
 
@@ -100,8 +90,8 @@ class FileMigrator(CMFItemMigrator):
         self.new.setFile(file, mimetype = ctype)
 
 class ImageMigrator(CMFItemMigrator):
-    fromType = ATImage.ATImage.newTypeFor[0]
-    toType   = ATImage.ATImage.__name__
+    fromType = ATImage.ATImage._atct_newTypeFor[0]
+    toType   = ATImage.ATImage.portal_type
     # mapped in custom()
     # map = {'image':'setImage'}
 
@@ -113,32 +103,30 @@ class ImageMigrator(CMFItemMigrator):
         self.new.setImage(image, mimetype = ctype)
 
 class LinkMigrator(CMFItemMigrator):
-    fromType = ATLink.ATLink.newTypeFor[0]
-    toType   = ATLink.ATLink.__name__
+    fromType = ATLink.ATLink._atct_newTypeFor[0]
+    toType   = ATLink.ATLink.portal_type
     map = {'remote_url' : 'setRemoteUrl'}
 
 class FavoriteMigrator(LinkMigrator):
-    fromType = ATFavorite.ATFavorite.newTypeFor[0]
-    toType   = ATFavorite.ATFavorite.__name__
+    fromType = ATFavorite.ATFavorite._atct_newTypeFor[0]
+    toType   = ATFavorite.ATFavorite.portal_type
     # see LinkMigrator
     # map = {'remote_url' : 'setRemoteUrl'}
 
 class NewsItemMigrator(DocumentMigrator):
-    fromType = ATNewsItem.ATNewsItem.newTypeFor[0]
-    toType   = ATNewsItem.ATNewsItem.__name__
+    fromType = ATNewsItem.ATNewsItem._atct_newTypeFor[0]
+    toType   = ATNewsItem.ATNewsItem.portal_type
     # see DocumentMigrator
     map = {'text' : 'setText'}
 
 class FolderMigrator(CMFFolderMigrator):
-    fromType = ATFolder.ATFolder.newTypeFor[0]
-    toType   = ATFolder.ATFolder.__name__
-    # XXX checkMethod = isPloneFolder
-    # no other attributes to migrate
+    fromType = ATFolder.ATFolder._atct_newTypeFor[0]
+    toType   = ATFolder.ATFolder.portal_type
     map = {}
 
 class LargeFolderMigrator(CMFFolderMigrator):
-    fromType = ATFolder.ATBTreeFolder.newTypeFor[0]
-    toType   = ATFolder.ATBTreeFolder.__name__
+    fromType = ATFolder.ATBTreeFolder._atct_newTypeFor[0]
+    toType   = ATFolder.ATBTreeFolder.portal_type
     # no other attributes to migrate
     map = {}
 
@@ -150,14 +138,21 @@ folderMigrators = ( FolderMigrator, LargeFolderMigrator)
 
 def migrateAll(portal):
     # first fix Members folder
+    kwargs = {}
     _fixLargePloneFolder(portal)
     catalog = getToolByName(portal, 'portal_catalog')
+    pprop = getToolByName(portal, 'portal_properties')
+    try:
+        kwargs['default_language'] = pprop.aq_explicit.site_properties.default_language
+    except (AttributeError, KeyError):
+        kwargs['default_language'] = 'en'
+        
     out = []
     out.append('Migration: ')
     for migrator in migrators:
         out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.fromType, migrator.toType))
         w = CatalogWalker(migrator, catalog)
-        out.append(w.go())
+        out.append(w.go(**kwargs))
     for migrator in folderMigrators:
         out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.fromType, migrator.toType))
         depth=2
@@ -165,7 +160,7 @@ def migrateAll(portal):
             # loop around until we got 'em all :]
             w = CatalogWalkerWithLevel(migrator, catalog, depth)
             try:
-                o=w.go()
+                o=w.go(**kwargs)
             except StopWalking:
                 depth=2
                 out.append(w.getOutput())

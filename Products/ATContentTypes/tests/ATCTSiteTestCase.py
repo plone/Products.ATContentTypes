@@ -53,7 +53,7 @@ class ATCTSiteTestCase(ArchetypesTestCase.ArcheSiteTestCase):
         newSecurityManager(None, user)
 
         self._ATCT = self._createType(self.portal, self.portal_type, 'ATCT')
-        self._cmf = self._createType(self.portal, self.klass.newTypeFor[0], 'cmf')
+        self._cmf = self._createType(self.portal, self.klass._atct_newTypeFor[0], 'cmf')
 
     def _createType(self, context, portal_type, id):
         """Helper method to create a new type 

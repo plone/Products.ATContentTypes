@@ -17,52 +17,53 @@ are permitted provided that the following conditions are met:
  * Neither the name of the author nor the names of its contributors may be used
    to endorse or promote products derived from this software without specific
    prior written permission.
-
-
 """
 
 from copy import copy
 
 from Products.CMFCore.utils import getToolByName
-from Acquisition import aq_base, aq_parent
+from Acquisition import aq_base
+from Acquisition import aq_parent
+from Acquisition import aq_inner
 from DateTime import DateTime
 from Persistence import PersistentMapping
 from OFS.Uninstalled import BrokenClass
 from OFS.IOrderSupport import IOrderedContainer
 
-from common import *
+from Products.ATContentTypes.migration.common import *
+from Products.ATContentTypes.migration.common import _createObjectByType
 
-_marker=[]
+_marker = []
 
-fieldList = [
-    # (accessor, mutator, field),
-    ('Title', 'setTitle',                    ''),
-    ('Creator', '',                          ''),
-    ('Subject','setSubject',                 'subject'),
-    ('Description','setDescription',         'description'),
-    ('Publisher', '',                        ''),
-    ('Contributors','setContributors',       'contributors'),
-    ('Date', '',                             ''),
-    ('CreationDate', '',                     ''),
-    ('EffectiveDate','setEffectiveDate',     'effectiveDate'),
-    ('ExpirationDate','setExpirationDate',   'expirationDate'),
-    ('ModificationDate', '',                 ''),
-    ('Type', '',                             ''),
-    ('Format', 'setFormat',                  ''),
-    ('Identifier', '',                       ''),
-    ('Language','setLanguage',               'language'),
-    ('Rights','setRights',                   'rights'),
+# Dublin Core mapping
+# accessor, mutator, fieldname
+DC_MAPPING = (
+    ('Title', 'setTitle',                   None),
+    ('Creator', None,                         None),
+    ('Subject', 'setSubject',               'subject'),
+    ('Description', 'setDescription',       'description'),
+    ('Publisher', None,                       None),
+    ('Contributors', 'setContributors',     'contributors'),
+    ('Date', None,                            None),
+    ('CreationDate', None,                    None),
+    ('EffectiveDate', 'setEffectiveDate',   'effectiveDate'),
+    ('ExpirationDate', 'setExpirationDate', 'expirationDate'),
+    ('ModificationDate', None,                None),
+    ('Type', None,                            None),
+    ('Format', 'setFormat',                 None),
+    ('Identifier', None,                      None),
+    ('Language', 'setLanguage',             'language'),
+    ('Rights', 'setRights',                 'rights'),
 
     # allowDiscussion is not part of the official DC metadata set
     #('allowDiscussion','isDiscussable','allowDiscussion'),
-  ]
+  )
 
-metadataList = []
-for accessor, mutator, field in fieldList:
+# Mapping used from DC migration
+METADATA_MAPPING = []
+for accessor, mutator, field in DC_MAPPING:
     if accessor and mutator:
-        metadataList.append((accessor, mutator))
-
-
+        METADATA_MAPPING.append((accessor, mutator))
 
 def copyPermMap(old):
     """bullet proof copy
@@ -74,46 +75,55 @@ def copyPermMap(old):
         new[k] = v
     return new
 
-def getTypeOf(obj):
-    """returns the type info of a wrapper object or None
-    """
-    ttool = getToolByName(obj, 'portal_types')
-    tinfo = ttool.getTypeInfo(obj)
-    if tinfo:
-        return tinfo.getId()
-
 class BaseMigrator:
     """Migrates an object to the new type
 
-    Base class
+    The base class has the following attributes:
+    
+     * fromType
+       The portal type name the migration is migrating *from*
+     * toType
+       The portal type name the migration is migrating *to*
+     * map
+       A dict which maps old attributes/function names to new
+     * subtransaction
+       Commit a subtransaction after X migrations
+     * old
+       The old object which has to be migrated
+     * new
+       The new object created by the migration 
+     * parent
+       The folder where the old objects lives
+     * orig_id
+       The id of the old objet before migration
+     * old_id
+       The id of the old object while migrating
+     * new_id
+       The id of the new object while and after the migration
+     * kwargs
+       A dict of additional keyword arguments applied to the migrator  
     """
     fromType = ''
     toType   = ''
     map      = {}
 
-    subtransaction = 30
+    subtransaction = 100
 
     def __init__(self, obj, **kwargs):
-        self.old = obj
+        self.old = aq_inner(obj)
         self.orig_id = self.old.getId()
-
         self.old_id = '%s_MIGRATION_' % self.orig_id
-
         self.new = None
         self.new_id = self.orig_id
-
         self.parent = aq_parent(self.old)
-        
         self.kwargs = kwargs
 
         # safe id generation
         while hasattr(aq_base(self.parent), self.old_id):
             self.old_id+='X'
 
-        #print "Migrating %s from %s to %s" % (obj.absolute_url(1), self.fromType, self.toType)
-
     def getMigrationMethods(self):
-        """
+        """Calculates a nested list of callables used to migrate the old object
         """
         beforeChange = []
         methods      = []
@@ -294,11 +304,15 @@ class BaseCMFMigrator(BaseMigrator):
         """
         # doesn't work!
         # shure? works for me
-        for accessor, mutator in metadataList:
+        for accessor, mutator in METADATA_MAPPING:
             oldAcc = getattr(self.old, accessor)
             newMut = getattr(self.new, mutator)
             #newAcc = getattr(self.new, accessor)
-            newMut(oldAcc())
+            oldValue = oldAcc()
+            if accessor is 'Language' and not oldValue:
+                # fix empty values in Language DC data set
+                oldValue = self.kwargs.get('default_language', 'en')
+            newMut(oldValue)
 
     def migrate_workflow(self):
         """migrate the workflow state
@@ -352,11 +366,8 @@ class ItemMigrationMixin:
     def createNew(self):
         """Create the new object
         """
-        ttool = getToolByName(self.parent, 'portal_types')
-        typeInfo = ttool.getTypeInfo(self.toType)
-        typeInfo.constructInstance(self.parent, self.new_id)
-
-        self.new = getattr(self.parent, self.new_id)
+        _createObjectByType(self.toType, self.parent, self.new_id)
+        self.new = getattr(aq_inner(self.parent).aq_explicit, self.new_id)
 
     def remove(self):
         """Removes the old item
@@ -404,9 +415,9 @@ class FolderMigrationMixin(ItemMigrationMixin):
                 self.new.moveObjectToPosition(id, pos)
 
 class CMFItemMigrator(ItemMigrationMixin, BaseCMFMigrator):
-    """
+    """Migrator for items implementing the CMF API
     """
 
 class CMFFolderMigrator(FolderMigrationMixin, BaseCMFMigrator):
-    """
+    """Migrator from folderish items implementing the CMF API
     """

@@ -1,6 +1,28 @@
 0.2.0-rc5 - unreleased
 ======================
 
+ * Cleaned up the migration suite a little bit and enhanced the doc strings.
+   [tiran]
+   
+ * Replaces the globalAllow hack by createTypeByName which doesn't make
+   security checks like "is the type implicitly or explicitly addable in the
+   folder". It shares the same codebase as the function from PloneUtilities
+   I once wrote to unfuck the create member area method.
+   [tiran]
+   
+ * Better traceback support inside the migration suite.
+   [tiran]
+   
+ * Added knob to toggle the installation of LinguaPlone in ATCT install.
+   [tiran]
+   
+ * Added explicit portal type name to all ATCT types.
+   [tiran]
+   
+ * Renamed newTypeFor to _actc_newTypeFor. The former name was confusing 
+   people.
+   [tiran]
+
  * Added feature to access the name of the last editor through IHistoryAware.
    [ctheune]
 

@@ -52,11 +52,12 @@ class ATImage(ATCTFileContent):
 
     content_icon   = 'image_icon.gif'
     meta_type      = 'ATImage'
+    portal_type    = 'ATImage'
     archetype_name = 'AT Image'
     immediate_view = 'image_view'
     default_view   = 'image_view'
     suppl_views    = ()
-    newTypeFor     = ('Image', 'Portal Image')
+    _atct_newTypeFor     = ('Image', 'Portal Image')
     typeDescription= ("Using this form, you can enter details about the image, \n"
                       "and upload an image if required.")
     typeDescMsgId  = 'description_edit_image'
@@ -121,8 +122,9 @@ class ATExtImage(ATImage):
 
     content_icon   = 'image_icon.gif'
     meta_type      = 'ATExtImage'
+    portal_type    = 'ATExtImage'
     archetype_name = 'AT Ext Image'
-    newTypeFor     = ''
+    _atct_newTypeFor     = ''
     assocMimetypes = ()
     assocFileExt   = ()
 

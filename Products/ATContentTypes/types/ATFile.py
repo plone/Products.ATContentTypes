@@ -51,11 +51,12 @@ class ATFile(ATCTFileContent):
 
     content_icon   = 'file_icon.gif'
     meta_type      = 'ATFile'
+    portal_type    = 'ATFile'
     archetype_name = 'AT File'
     immediate_view = 'file_view'
     default_view   = 'file_view'
     suppl_views    = ()
-    newTypeFor     = ('File', 'Portal File')
+    _atct_newTypeFor     = ('File', 'Portal File')
     typeDescription= "Add the relevant details of the file to be added in the form below,\n" \
                      "select the file with the 'Browse' button, and press 'Save'."
     typeDescMsgId  = 'description_edit_file'
@@ -175,9 +176,10 @@ class ATExtFile(ATFile):
     schema         =  ATExtFileSchema
 
     content_icon   = 'file_icon.gif'
+    portal_type    = 'ATExtFile'
     meta_type      = 'ATExtFile'
     archetype_name = 'AT Ext File'
-    newTypeFor     = ''
+    _atct_newTypeFor     = ''
     assocMimetypes = ()
     assocFileExt   = ()
 

@@ -1,5 +1,8 @@
-from common import *
-import sys, traceback
+from Products.ATContentTypes.migration.common import LOG
+from Products.ATContentTypes.migration.common import HAS_LINGUA_PLONE
+from Products.ATContentTypes.migration.common import StdoutStringIO
+import sys
+import traceback
 from Products.CMFCore.utils import getToolByName
 from Acquisition import aq_parent
 
@@ -7,10 +10,10 @@ class StopWalking(Exception):
     pass
 
 class MigrationError(RuntimeError):
-    def __init__(self, obj, migrator, tb):
+    def __init__(self, obj, migrator, traceback):
         self.fromType = migrator.fromType
         self.toType = migrator.toType
-        self.tb = tb
+        self.tb = traceback
         if hasattr(obj, 'absolute_url'):
             self.id = obj.absolute_url(1)
         else:
@@ -39,11 +42,7 @@ class Walker:
         :return: migration notes
         :rtype: list of strings
         """
-        self.enableGlobalAddable()
-        try:
-            self.migrate(self.walk(**kwargs), **kwargs)
-        finally:
-            self.resetGlobalAddable()
+        self.migrate(self.walk(**kwargs), **kwargs)
         return self.getOutput()
 
     __call__ = go
@@ -55,37 +54,7 @@ class Walker:
         :rtype: list of objects
         """
         raise NotImplementedError
-
-    def enableGlobalAddable(self):
-        """Set implicitly addable to true
-
-        XXX This is a required hack :/
-        """
-        ttool = getToolByName(self.portal, 'portal_types')
-
-        tt_ids = ttool.objectIds()
-        toType = self.toType
-        fromType = self.fromType
-        __traceback_info__ = (self, toType, toType in tt_ids,
-                              fromType, fromType in tt_ids,
-                              self.migrator, ttool.objectIds(),
-                             )
-        ftiTo = ttool.getTypeInfo(toType)
-        ftiFrom = ttool.getTypeInfo(fromType)
-        self.toGlobalAllow = ftiTo.globalAllow()
-        self.fromGlobalAllow = ftiFrom.globalAllow()
-        ftiTo.global_allow = 1
-        ftiFrom.global_allow = 1
-
-    def resetGlobalAddable(self):
-        """
-        """
-        ttool = getToolByName(self.portal, 'portal_types')
-        ftiTo = ttool.getTypeInfo(self.toType)
-        ftiFrom = ttool.getTypeInfo(self.fromType)
-        ftiTo.global_allow = self.toGlobalAllow
-        ftiFrom.global_allow = self.fromGlobalAllow
-
+ 
     def migrate(self, objs, **kwargs):
         """Migrates the objects in the ist objs
         """
@@ -95,21 +64,20 @@ class Walker:
                              self.fromType, self.toType, ))
             LOG(msg)
             self.out.append(msg)
-            #print msg
 
             migrator = self.migrator(obj, **kwargs)
             try:
                 # run the migration
                 migrator.migrate()
-            except Exception, err: # except all!
+                #raise ValueError, "MyError"
+            except: # except all!
                 # aborting transaction
                 get_transaction().abort()
 
                 # printing exception
-                exc = sys.exc_info()
-                out=StdoutStringIO()
-                traceback.print_tb(exc[2], limit=None, file=out)
-                tb = '%s\n%s\n' % (err, out.getvalue())
+                out = StdoutStringIO()
+                traceback.print_exc(limit=None, file=out)
+                tb = out.getvalue()
 
                 error = MigrationError(obj, migrator, tb)
                 msg = str(error)

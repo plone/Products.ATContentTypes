@@ -42,6 +42,12 @@ from Products.ATContentTypes.Extensions.toolbox import switchATCT2CMF, isSwitche
 
 def install(self):
     out = StringIO()
+    
+    if INSTALL_LINGUA_PLONE:
+        qi = getToolByName(self, 'portal_quickinstaller')
+        installable = [ d['id'] for d in qi.listInstallableProducts() ]
+        if 'LinguaPlone' in installable:
+            qi.installProduct('LinguaPlone')
 
     typeInfo = listTypes(PROJECTNAME)
     installTypes(self, out,

@@ -74,7 +74,7 @@ def _switchToATCT(portal, pt, cat, reg, klass, out, skip_rename=False):
     """
     """
     atId = klass.__name__
-    id = klass.newTypeFor[0]
+    id = klass._atct_newTypeFor[0]
     bakId = 'CMF %s' % id
 
     title = klass.archetype_name[3:]
@@ -109,7 +109,7 @@ def _switchToCMF(portal, pt, cat, reg, klass, out):
     """
     """
     atId = klass.__name__
-    id = klass.newTypeFor[0]
+    id = klass._atct_newTypeFor[0]
     bakId = 'CMF %s' % id
 
     atTitle = klass.archetype_name
@@ -169,7 +169,7 @@ def _fixLargePloneFolder(self):
     mt = getToolByName(self, 'portal_membership')
     members = mt.getMembersFolder()
     if members is not None:
-        members._setPortalTypeName(ATFolder.ATBTreeFolder.newTypeFor[0])
+        members._setPortalTypeName(ATFolder.ATBTreeFolder._atct_newTypeFor[0])
 
 def switchCMF2ATCT(self, skip_rename=False):
     if isSwitchedToATCT(self):

@@ -58,11 +58,12 @@ class ATTopic(ATCTFolder):
 
     content_icon   = 'topic_icon.gif'
     meta_type      = 'ATTopic'
+    portal_type    = 'ATTopic'
     archetype_name = 'AT Topic'
     immediate_view = 'atct_topic_view'
     default_view   = 'atct_topic_view'
     suppl_views    = ()
-    newTypeFor     = ('Topic', 'Portal Topic')
+    _atct_newTypeFor     = ('Topic', 'Portal Topic')
     typeDescription= ("A topic is a pre-defined search, showing all "
                       "items matching\n criteria you specify. "
                       "Topics may also contain sub-topics.")

@@ -51,11 +51,12 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
 
     content_icon   = 'document_icon.gif'
     meta_type      = 'ATDocument'
+    portal_type    = 'ATDocument'
     archetype_name = 'AT Document'
     default_view   = 'document_view'
     immediate_view = 'document_view'
     suppl_views    = ()
-    newTypeFor     = ('Document', 'Document')
+    _atct_newTypeFor     = ('Document', 'Document')
     typeDescription= 'Fill in the details of this document.'
     typeDescMsgId  = 'description_edit_document'
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
