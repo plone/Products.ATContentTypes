@@ -131,7 +131,7 @@ class ATTopic(ATCTFolder):
     cmf_edit_kws   = ()
 
     filter_content_types  = 1
-    allowed_content_types = ()
+    allowed_content_types = ('Topic',)
 
     use_folder_tabs = 0
 
@@ -161,7 +161,7 @@ class ATTopic(ATCTFolder):
         {
         'id'          : 'subtopics',
         'name'        : 'Subtopics',
-        'action'      : 'string:${folder_url}/topic_subtopics_form',
+        'action'      : 'string:${folder_url}/atct_topic_subtopics',
         'permissions' : (ChangeTopics,)
         },
        )
