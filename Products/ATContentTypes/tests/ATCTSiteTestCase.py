@@ -3,7 +3,7 @@
 
 For tests that needs a plone portal including archetypes and portal transforms
 
-$Id: ATCTSiteTestCase.py,v 1.12.4.3 2004/12/13 15:30:53 tiran Exp $
+$Id: ATCTSiteTestCase.py,v 1.12.4.4 2004/12/15 16:48:38 tiran Exp $
 """
 
 __author__ = 'Christian Heimes'
@@ -56,15 +56,16 @@ class ATCTSiteTestCase(ArchetypesTestCase.ArcheSiteTestCase):
         user = self.getManagerUser()
         newSecurityManager(None, user)
 
-        ttool = getToolByName(self._portal, 'portal_types')
-        atctFTI = ttool.getTypeInfo(self.portal_type)
-        cmfFTI = ttool.getTypeInfo(self.klass.newTypeFor[0])
+        self._ATCT = self._createType(self._portal, self.portal_type, 'ATCT')
+        self._cmf = self._createType(self._portal, self.klass.newTypeFor[0], 'cmf')
 
-        atctFTI.constructInstance(self._portal, 'ATCT')
-        self._ATCT = getattr(self._portal, 'ATCT')
-
-        cmfFTI.constructInstance(self._portal, 'cmf')
-        self._cmf = getattr(self._portal, 'cmf')
+    def _createType(self, context, portal_type, id):
+        """Helper method to create a new type 
+        """
+        ttool = getToolByName(context, 'portal_types')
+        fti = ttool.getTypeInfo(portal_type)
+        fti.constructInstance(context, id)
+        return getattr(context.aq_inner.aq_explicit, id)
 
     def test_dcEdit(self):
         #if not hasattr(self, '_cmf') or not hasattr(self, '_ATCT'):

@@ -2,7 +2,7 @@
 
 Use this file as a skeleton for your own tests
 
-$Id: testATNewsItem.py,v 1.9.4.2 2004/11/24 19:42:08 ctheune Exp $
+$Id: testATNewsItem.py,v 1.9.4.3 2004/12/15 16:48:39 tiran Exp $
 """
 
 __author__ = 'Christian Heimes'
@@ -124,7 +124,7 @@ class TestATNewsItemFields(ATCTFieldTestCase):
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
         self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
-        self.failUnless(field.default_content_type == 'text/restructured',
+        self.failUnless(field.default_content_type == 'text/html',
                         'Value is %s' % field.default_content_type)
         self.failUnless(field.default_output_type == 'text/html',
                         'Value is %s' % field.default_output_type)

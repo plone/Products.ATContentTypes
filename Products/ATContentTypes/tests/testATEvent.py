@@ -2,7 +2,7 @@
 
 Use this file as a skeleton for your own tests
 
-$Id: testATEvent.py,v 1.12.4.2 2004/11/24 19:42:08 ctheune Exp $
+$Id: testATEvent.py,v 1.12.4.3 2004/12/15 16:48:38 tiran Exp $
 """
 
 __author__ = 'Christian Heimes'
@@ -153,6 +153,32 @@ class TestSiteATEvent(ATCTSiteTestCase):
         self.failUnless(migrated.getAttendees() == (),
                         'attendees mismatch: %s / %s' %
                         (migrated.getAttendees(), ()))
+
+    def test_cmp(self):
+        e1 = self._ATCT
+        e2 = self._createType(self._portal, self.portal_type, 'e2')
+        day29 = DateTime('2004-12-29 0:00:00')
+        day30 = DateTime('2004-12-30 0:00:00')
+        day31 = DateTime('2004-12-31 0:00:00')
+        
+        e1.edit(startDate = day29, endDate=day30, title='event')
+        e2.edit(startDate = day29, endDate=day30, title='event')
+        self.failUnlessEqual(cmp(e1, e2), 0)
+    
+        # start date
+        e1.edit(startDate = day29, endDate=day30, title='event')
+        e2.edit(startDate = day30, endDate=day31, title='event')
+        self.failUnlessEqual(cmp(e1, e2), -1) # e1 < e2
+
+        # duration
+        e1.edit(startDate = day29, endDate=day30, title='event')
+        e2.edit(startDate = day29, endDate=day31, title='event')
+        self.failUnlessEqual(cmp(e1, e2), -1)  # e1 < e2
+    
+        # title
+        e1.edit(startDate = day29, endDate=day30, title='event')
+        e2.edit(startDate = day29, endDate=day30, title='evenz')
+        self.failUnlessEqual(cmp(e1, e2), -1)  # e1 < e2
 
     def beforeTearDown(self):
         del self._ATCT
