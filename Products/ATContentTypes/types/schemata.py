@@ -83,7 +83,7 @@ urlUploadField = StringField('urlUpload',
             label_msgid = "label_upload_url",
             i18n_domain = "plone",
             visible={'view' : 'hidden',
-                     'edit' : 'visible'},
+                     'edit' : 'hidden'},
             ),
         )
 

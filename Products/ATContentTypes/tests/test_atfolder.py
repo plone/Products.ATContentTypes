@@ -136,7 +136,7 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
     portal_type = 'Large Plone Folder'
     cmf_portal_type = 'CMF Large Plone Folder'
     cmf_klass = LargePloneFolder
-    title = 'BTree Folder'
+    title = 'Large Folder'
     meta_type = 'ATBTreeFolder'
     icon = 'folder_icon.gif'
 

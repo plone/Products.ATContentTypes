@@ -3,7 +3,7 @@
 
 <body>
 <h1>ATContentTypes - Developer report tools: XXX/TODO/BBB comments</h1>
-<p>Generated on Tue, 15 Mar 2005 16:24:04 CET</p>
+<p>Generated on Tue, 15 Mar 2005 18:12:28 CET</p>
 <hr>
 <h3>Summary</h3>
 <p>
@@ -14,7 +14,7 @@
 <ol><li><b>File: Archetypes/Extensions/Install.py:117</b><br/><pre>    # BBB remove these two dummy methods
     manage_addExternalMethod(self,'switchATCT2CMF',
         'DUMMY: Set reenable CMF type',
-        PROJECTNAME+'install',
+        PROJECTNAME+'.install',
 </pre></li><li><b>File: Archetypes/migration/ATCTMigrator.py:92</b><br/><pre>    # XXX can't handle nested topics
     map = {'acquireCriteria' : 'setAcquireCriteria'}
 
@@ -120,8 +120,8 @@ translate_actions = ({
 </pre></li><li><b>File: Archetypes/types/ATEvent.py:192</b><br/><pre>                # XXX disabled for now, see
                 # https://sourceforge.net/tracker/index.php?func=detail&aid=974102&group_id=55262&atid=645337
                 #validators = ('isInternationalPhoneNumber',),
-                widget = StringWidget(
-</pre></li><li><b>File: Archetypes/types/ATEvent.py:383</b><br/><pre>            # XXX come up with a nice cmp for types
+                validators= (),
+</pre></li><li><b>File: Archetypes/types/ATEvent.py:384</b><br/><pre>            # XXX come up with a nice cmp for types
             return cmp(self.Title(), other)
 
     def __hash__(self):

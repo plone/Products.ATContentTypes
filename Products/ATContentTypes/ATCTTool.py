@@ -1,4 +1,3 @@
-from StringIO import StringIO
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
 #  Copyright (c) 2003-2005 AT Content Types development team
@@ -19,6 +18,7 @@ from StringIO import StringIO
 #
 """
 """
+from StringIO import StringIO
 import time
 
 from OFS.SimpleItem import SimpleItem
@@ -38,6 +38,7 @@ from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATCTTool
 from Products.ATContentTypes.config import TOOLNAME
+from Products.ATContentTypes.migration.ATCTMigrator import migrateAll
 
 CMF_PRODUCTS = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFCalendar')
 ATCT_PRODUCTS = ('ATContentTypes', )
@@ -219,6 +220,17 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
             if docp == 'ATContentTypes':
                 return True
         return False
+
+    def migrateToATCT(self, portal_types=None):
+        """Migrate CMF types to ATCT types
+        """
+        if portal_types is not None:
+            # XXX not impelemented
+            raise NotImplementedError, "Migrating a subset of types is not implemented"
+        if isinstance(portal_types, basestring):
+            portal_types = (portal_types,)
+        portal = getToolByName(self, 'portal_url').getPortalObject()
+        return migrateAll(portal)
 
     # ************************************************************************
     # private methods
