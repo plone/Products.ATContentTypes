@@ -25,9 +25,15 @@ class TestATFolderFunctional(atcttestcase.ATCTFuncionalTestCase):
 tests.append(TestATFolderFunctional)
 
 class TestATBTreeFolderFunctional(atcttestcase.ATCTFuncionalTestCase):
-    
+
     portal_type = 'ATBTreeFolder'
     views = ('folder_listing', 'folder_contents', )
+
+    def afterSetUp(self):
+        # enable global allow for BTree Folder
+        fti = getattr(self.portal.portal_types, self.portal_type)
+        fti.manage_changeProperties(global_allow=1)
+        atcttestcase.ATCTFuncionalTestCase.afterSetUp(self)
 
 tests.append(TestATBTreeFolderFunctional)
 

@@ -18,6 +18,11 @@ class TestATDocumentFunctional(atcttestcase.ATCTFuncionalTestCase):
     portal_type = 'ATDocument'
     views = ('document_view', )
 
+    def test_atct_history_view(self):
+        # atct history view is restricted, we have to log in as portal ownr
+        response = self.publish('%s/atct_history' % self.obj_path, self.owner_auth)
+        self.assertEqual(response.getStatus(), 200) # OK
+
 tests.append(TestATDocumentFunctional)
 
 if __name__ == '__main__':

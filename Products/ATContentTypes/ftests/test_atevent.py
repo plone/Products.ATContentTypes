@@ -16,7 +16,7 @@ tests = []
 class TestATEventFunctional(atcttestcase.ATCTFuncionalTestCase):
     
     portal_type = 'ATEvent'
-    views = ('event_view', )
+    views = ('event_view', 'vcs_view', 'ics_view', )
 
 tests.append(TestATEventFunctional)
 

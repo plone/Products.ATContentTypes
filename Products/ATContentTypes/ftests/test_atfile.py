@@ -16,7 +16,7 @@ tests = []
 class TestATFileFunctional(atcttestcase.ATCTFuncionalTestCase):
     
     portal_type = 'ATFile'
-    views = ('file_view', )
+    views = ('file_view', 'download', )
 
 tests.append(TestATFileFunctional)
 
