@@ -24,7 +24,7 @@ DO NOT CHANGE THIS FILE!
 All changes will be overwritten by the next release. Use a customconfig instead.
 See customconfig.py.example
 
-$Id: config.py,v 1.34.4.1 2004/12/13 17:13:03 ctheune Exp $
+$Id: config.py,v 1.34.4.2 2004/12/13 18:11:36 ctheune Exp $
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -88,7 +88,7 @@ MAX_FILE_SIZE = 0.0
 MAX_IMAGE_SIZE = 0.0
 
 ## Default content type for ATDocument and ATNewsItem
- ATDOCUMENT_CONTENT_TYPE = 'text/html'        # html
+ATDOCUMENT_CONTENT_TYPE = 'text/html'        # html
 
 ###############################################################################
 ## private options

@@ -1,6 +1,8 @@
 0.2.0-rc5 - unreleased
 ======================
 
+ * Made HTML the default content type for documents (and news items).
+
  * Fixed [ 1080729 ] Wrong permissions for ATDocument.EditableText / setFormat
    [tiran]
 
@@ -24,39 +26,39 @@
 
  * ATTopic: Adding the criterion type to the generated id, so you can sort and
    filter on the same field.
-   [ctheuni]
+   [ctheune]
 
  * Fixed unit tests to work without (and hopefully with too) runner again
-   [ctheuni]
+   [ctheune]
 
  * Added feature that doesn't show users non-sortable criterions in the form
-   [ctheuni]
+   [ctheune]
 
  * Added feature that removes double or stupid criterions (allowedRolesAndUsers,
    id/getId)
-   [ctheuni]
+   [ctheune]
 
  * Sorting criterion lists (by their translations)
-   [ctheuni]
+   [ctheune]
  
  * Added german translation
-   [ctheuni]
+   [ctheune]
 
  * More i18n support in the templates
-   [ctheuni]
+   [ctheune]
 
  * Fixed _very_ annoying problem with bad ids. this should be bullet proof.
-   [ctheuni]
+   [ctheune]
 
  * Extended german translations
-   [ctheuni]
+   [ctheune]
 
  * Fixed ATDocument to not kill uploaded files on the submission of an empty
    text area
-   [ctheuni]
+   [ctheune]
 
  * Fixed small bug in id protection
-   [ctheuni]
+   [ctheune]
 
  * Fixed the case where the portal doesn't has a 'Members' folder or
    when it has another name.
