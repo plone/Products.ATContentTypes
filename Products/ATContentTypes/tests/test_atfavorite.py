@@ -39,7 +39,9 @@ from Products.ATContentTypes.types.ATFavorite import ATFavorite
 from Products.ATContentTypes.types.ATFavorite import ATFavoriteSchema
 from Products.ATContentTypes.tests.utils import TidyHTMLValidator
 from Products.ATContentTypes.migration.ATCTMigrator import FavoriteMigrator
+from Products.ATContentTypes.interfaces import IATFavorite
 from Products.CMFDefault.Favorite import Favorite
+from Interface.Verify import verifyObject
 
 URL='/test/url'
 
@@ -58,12 +60,17 @@ tests = []
 class TestSiteATFavorite(atcttestcase.ATCTTypeTestCase):
 
     klass = ATFavorite
-    portal_type = 'ATFavorite'
+    portal_type = 'Favorite'
     cmf_portal_type = 'CMF Favorite'
     cmf_klass = Favorite
     title = 'Favorite'
     meta_type = 'ATFavorite'
     icon = 'favorite_icon.gif'
+
+    def test_implementsATFavorite(self):
+        iface = IATFavorite
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         old = self._cmf

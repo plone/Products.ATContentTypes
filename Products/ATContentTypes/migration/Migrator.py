@@ -80,10 +80,14 @@ class BaseMigrator:
 
     The base class has the following attributes:
     
-     * fromType
+     * src_portal_type
        The portal type name the migration is migrating *from*
-     * toType
+     * src_portal_type
+       The meta type of the src object
+     * dst_portal_type
        The portal type name the migration is migrating *to*
+     * dst_portal_type
+       The meta type of the dst object
      * map
        A dict which maps old attributes/function names to new
      * subtransaction
@@ -103,19 +107,26 @@ class BaseMigrator:
      * kwargs
        A dict of additional keyword arguments applied to the migrator  
     """
-    fromType = ''
-    toType   = ''
+    src_portal_type = None
+    src_meta_type = None
+    dst_portal_type = None
+    dst_meta_type = None
     map      = {}
 
     subtransaction = 100
 
-    def __init__(self, obj, **kwargs):
+    def __init__(self, obj, src_portal_type = None, dst_portal_type = None,
+                 **kwargs):
         self.old = aq_inner(obj)
         self.orig_id = self.old.getId()
         self.old_id = '%s_MIGRATION_' % self.orig_id
         self.new = None
         self.new_id = self.orig_id
         self.parent = aq_parent(self.old)
+        if src_portal_type is not None:
+            self.src_portal_type = src_portal_type
+        if dst_portal_type is not None:
+            self.dst_portal_type = dst_portal_type
         self.kwargs = kwargs
 
         # safe id generation
@@ -294,6 +305,14 @@ class BaseMigrator:
         Must be implemented by the real Migrator
         """
         raise NotImplementedError
+    
+    def rollback(self):
+        """Roles the migration back
+        
+        * Removes the migrated object
+        * Puts the old object back in place
+        """
+        raise NotImplementedError
 
 class BaseCMFMigrator(BaseMigrator):
     """Base migrator for CMF objects
@@ -355,6 +374,7 @@ class BaseCMFMigrator(BaseMigrator):
 class ItemMigrationMixin:
     """Migrates a non folderish object
     """
+    isFolderish = False
 
     def renameOld(self):
         """Renames the old object
@@ -367,12 +387,13 @@ class ItemMigrationMixin:
     def createNew(self):
         """Create the new object
         """
-        _createObjectByType(self.toType, self.parent, self.new_id)
+        _createObjectByType(self.dst_portal_type, self.parent, self.new_id)
         self.new = getattr(aq_inner(self.parent).aq_explicit, self.new_id)
 
     def remove(self):
         """Removes the old item
         """
+        self._removed = True
         if REMOVE_OLD:
             self.parent.manage_delObjects([self.old_id])
 
@@ -380,11 +401,28 @@ class ItemMigrationMixin:
         """Reorder the new object in its parent
         """
         if IOrderedContainer.isImplementedBy(self.parent):
-            self.parent.moveObject(self.new_id,self.parent.getObjectPosition(self.old_id))
+            self._position = self.parent.getObjectPosition(self.old_id)
+            self.parent.moveObject(self.new_id, self._position)
+            
+    def rollback(self):
+        """Roles the migration back
+        """
+        if getattr(self, '_removed', False):
+            raise RuntimeError, "Can't rollback after the old object is removed"
+        ids = self.parent.objectIds()
+        if self.old_id not in ids:
+            # the backup isn't there - nothing to do
+            return
+        if self.new_id in ids:
+            self.parent.manage_delObjects([self.new_id,])
+        unrestricted_rename(self.parent, self.old_id, self.orig_id)
+        if hasattr(self, '_position'):
+            self.parent.moveObject(self.orig_id, self._position)
 
 class FolderMigrationMixin(ItemMigrationMixin):
     """Migrates a folderish object
     """
+    isFolderish = True
 
     def migrate_children(self):
         """Copy childish objects from the old folder to the new one

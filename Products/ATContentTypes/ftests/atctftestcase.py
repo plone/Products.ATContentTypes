@@ -44,8 +44,6 @@ from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
 
-from Products.ATContentTypes.config import ATCT_PORTAL_TYPE
-
 class ATCTIntegrationTestCase(ATFunctionalSiteTestCase):
     """Integration tests for view and edit templates
     """
@@ -54,7 +52,6 @@ class ATCTIntegrationTestCase(ATFunctionalSiteTestCase):
     views = ()
 
     def afterSetUp(self):
-        self.portal_type = ATCT_PORTAL_TYPE(self.portal_type)
         # Put dummy sdm and dummy SESSION object into REQUEST
         request = self.app.REQUEST
         self.app._setObject('session_data_manager', DummySessionDataManager())

@@ -41,7 +41,8 @@ from Products.ATContentTypes.migration.ATCTMigrator import TopicMigrator
 from Products.CMFTopic.Topic import Topic
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.migration.ATCTMigrator import CRIT_MAP, REV_CRIT_MAP
-
+from Products.ATContentTypes.interfaces import IATTopic
+from Interface.Verify import verifyObject
 
 ACQUIRE  = True
 LIMIT    = False
@@ -154,12 +155,17 @@ tests = []
 class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
 
     klass = ATTopic
-    portal_type = 'ATTopic'
+    portal_type = 'Topic'
     cmf_portal_type = 'CMF Topic'
     cmf_klass = Topic
     title = 'Topic'
     meta_type = 'ATTopic'
     icon = 'topic_icon.gif'
+
+    def test_implementsATTopic(self):
+        iface = IATTopic
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_Empty( self ):
         topic = self._ATCT

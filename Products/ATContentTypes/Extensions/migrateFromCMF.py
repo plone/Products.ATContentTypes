@@ -24,21 +24,6 @@ __author__  = 'Christian Heimes'
 __docformat__ = 'restructuredtext'
 
 from Products.ATContentTypes.migration.ATCTMigrator import migrateAll
-#from Products.ATContentTypes.Extensions.toolbox import switchATCT2CMF
-#from Products.ATContentTypes.Extensions.toolbox import switchCMF2ATCT
-#from Products.ATContentTypes.Extensions.toolbox import isSwitchedToATCT
 
 def migrate(self):
     return migrateAll(self)
-    # XXX clean up
-    #if isSwitchedToATCT(self):
-    #    switched = 1
-    #    switchATCT2CMF(self)
-    #    get_transaction().commit(1)
-    #else:
-    #    switched = 0
-    #try:
-    #    return migrateAll(self)
-    #finally:
-    #    if switched:
-    #        switchCMF2ATCT(self)

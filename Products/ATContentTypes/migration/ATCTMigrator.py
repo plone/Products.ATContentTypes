@@ -17,14 +17,13 @@ are permitted provided that the following conditions are met:
  * Neither the name of the author nor the names of its contributors may be used
    to endorse or promote products derived from this software without specific
    prior written permission.
-
-
 """
 
-from Products.ATContentTypes.migration.common import *
+from Products.ATContentTypes.migration.common import registerATCTMigrator
+from Products.ATContentTypes.migration.common import LOG
 from Products.ATContentTypes.migration.Walker import CatalogWalker
 from Products.ATContentTypes.migration.Walker import CatalogWalkerWithLevel
-from Products.ATContentTypes.migration.Walker import StopWalking
+from Products.ATContentTypes.migration.Walker import useLevelWalker
 from Products.ATContentTypes.migration.Migrator import CMFItemMigrator
 from Products.ATContentTypes.migration.Migrator import CMFFolderMigrator
 from Products.CMFCore.utils import getToolByName
@@ -40,7 +39,7 @@ from Products.ATContentTypes.types import ATLink
 from Products.ATContentTypes.types import ATNewsItem
 from Products.ATContentTypes.types import ATTopic
 from Products.ATContentTypes.types.ATContentType import translateMimetypeAlias
-from Products.ATContentTypes.Extensions.toolbox import _fixLargePloneFolder
+# XXX from Products.ATContentTypes.Extensions.toolbox import _fixLargePloneFolder
 
 CRIT_MAP = {'Integer Criterion': 'ATSimpleIntCriterion',
                 'String Criterion': 'ATSimpleStringCriterion',
@@ -51,8 +50,7 @@ CRIT_MAP = {'Integer Criterion': 'ATSimpleIntCriterion',
 REV_CRIT_MAP = dict([[v,k] for k,v in CRIT_MAP.items()])
 
 class DocumentMigrator(CMFItemMigrator):
-    fromType = ATDocument.ATDocument._atct_newTypeFor['portal_type']
-    toType   = ATDocument.ATDocument.portal_type
+    walker = CatalogWalker
     map = {'text' : 'setText'}
 
     def custom(self):
@@ -60,9 +58,10 @@ class DocumentMigrator(CMFItemMigrator):
         # Need to convert between old mimetype and new
         self.new.setContentType(translateMimetypeAlias(oldFormat))
 
+registerATCTMigrator(DocumentMigrator, ATDocument.ATDocument)
+
 class EventMigrator(CMFItemMigrator):
-    fromType = ATEvent.ATEvent._atct_newTypeFor['portal_type']
-    toType   = ATEvent.ATEvent.portal_type
+    walker = CatalogWalker
     map = {
             'location'      : 'setLocation',
             'Subject'       : 'setEventType',
@@ -86,10 +85,11 @@ class EventMigrator(CMFItemMigrator):
         self.new.setStartDate(sdate)
         self.new.setEndDate(edate)
 
+registerATCTMigrator(EventMigrator, ATEvent.ATEvent)
+
 class TopicMigrator(CMFItemMigrator):
+    walker = CatalogWalker
     # XXX can't handle nested topics
-    fromType = ATTopic.ATTopic._atct_newTypeFor['portal_type']
-    toType   = ATTopic.ATTopic.portal_type
     map = {'acquireCriteria' : 'setAcquireCriteria'}
 
     def custom(self):
@@ -119,9 +119,10 @@ class TopicMigrator(CMFItemMigrator):
                     raise AttributeError, 'Int Criteria for topic %s has invalid value %s'%(old_crit.title_or_id(), old_val)
                 new_crit.setDirection(old_crit.direction)
 
+registerATCTMigrator(TopicMigrator, ATTopic.ATTopic)
+
 class FileMigrator(CMFItemMigrator):
-    fromType = ATFile.ATFile._atct_newTypeFor['portal_type']
-    toType   = ATFile.ATFile.portal_type
+    walker = CatalogWalker
     # mapped in custom()
     # map = { 'file' : 'setFile' }
 
@@ -130,9 +131,10 @@ class FileMigrator(CMFItemMigrator):
         file = str(self.old)
         self.new.setFile(file, mimetype = ctype)
 
+registerATCTMigrator(FileMigrator, ATFile.ATFile)
+
 class ImageMigrator(CMFItemMigrator):
-    fromType = ATImage.ATImage._atct_newTypeFor['portal_type']
-    toType   = ATImage.ATImage.portal_type
+    walker = CatalogWalker
     # mapped in custom()
     # map = {'image':'setImage'}
 
@@ -143,33 +145,41 @@ class ImageMigrator(CMFItemMigrator):
         image = self.old.data
         self.new.setImage(image, mimetype = ctype)
 
+registerATCTMigrator(ImageMigrator, ATImage.ATImage)
+
 class LinkMigrator(CMFItemMigrator):
-    fromType = ATLink.ATLink._atct_newTypeFor['portal_type']
-    toType   = ATLink.ATLink.portal_type
+    walker = CatalogWalker
     map = {'remote_url' : 'setRemoteUrl'}
 
+registerATCTMigrator(LinkMigrator, ATLink.ATLink)
+
 class FavoriteMigrator(LinkMigrator):
-    fromType = ATFavorite.ATFavorite._atct_newTypeFor['portal_type']
-    toType   = ATFavorite.ATFavorite.portal_type
+    walker = CatalogWalker
     # see LinkMigrator
     # map = {'remote_url' : 'setRemoteUrl'}
+    pass
+
+registerATCTMigrator(FavoriteMigrator, ATFavorite.ATFavorite)
 
 class NewsItemMigrator(DocumentMigrator):
-    fromType = ATNewsItem.ATNewsItem._atct_newTypeFor['portal_type']
-    toType   = ATNewsItem.ATNewsItem.portal_type
+    walker = CatalogWalker
     # see DocumentMigrator
     map = {'text' : 'setText'}
 
+registerATCTMigrator(NewsItemMigrator, ATNewsItem.ATNewsItem)
+
 class FolderMigrator(CMFFolderMigrator):
-    fromType = ATFolder.ATFolder._atct_newTypeFor['portal_type']
-    toType   = ATFolder.ATFolder.portal_type
+    walker = CatalogWalkerWithLevel
     map = {}
 
+registerATCTMigrator(FolderMigrator, ATFolder.ATFolder)
+
 class LargeFolderMigrator(CMFFolderMigrator):
-    fromType = ATFolder.ATBTreeFolder._atct_newTypeFor['portal_type']
-    toType   = ATFolder.ATBTreeFolder.portal_type
+    walker = CatalogWalkerWithLevel
     # no other attributes to migrate
     map = {}
+
+registerATCTMigrator(LargeFolderMigrator, ATFolder.ATBTreeFolder)
 
 migrators = (DocumentMigrator, EventMigrator, FavoriteMigrator, FileMigrator,
              ImageMigrator, LinkMigrator, NewsItemMigrator,
@@ -181,7 +191,7 @@ folderMigrators = ( FolderMigrator, LargeFolderMigrator)
 def migrateAll(portal):
     # first fix Members folder
     kwargs = {}
-    _fixLargePloneFolder(portal)
+    #XXX _fixLargePloneFolder(portal)
     catalog = getToolByName(portal, 'portal_catalog')
     pprop = getToolByName(portal, 'portal_properties')
     try:
@@ -190,28 +200,15 @@ def migrateAll(portal):
         kwargs['default_language'] = 'en'
         
     out = []
-    #out.append('Migration: ')
     for migrator in migrators:
-        #out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.fromType, migrator.toType))
-        out.append('*** Migrating %s to %s ***' % (migrator.fromType, migrator.toType))
+        #out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.src_portal_type, migrator.dst_portal_type))
+        out.append('*** Migrating %s to %s ***' % (migrator.src_portal_type, migrator.dst_portal_type))
         w = CatalogWalker(migrator, catalog)
         out.append(w.go(**kwargs))
     for migrator in folderMigrators:
-        #out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.fromType, migrator.toType))
-        out.append('*** Migrating %s to %s ***' % (migrator.fromType, migrator.toType))
-        depth=2
-        while 1:
-            # loop around until we got 'em all :]
-            w = CatalogWalkerWithLevel(migrator, catalog, depth)
-            try:
-                o=w.go(**kwargs)
-            except StopWalking:
-                depth=2
-                out.append(w.getOutput())
-                break
-            else:
-                out.append(o)
-                depth+=1
+        #out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.src_portal_type, migrator.dst_portal_type))
+        out.append('*** Migrating %s to %s ***' % (migrator.src_portal_type, migrator.dst_portal_type))
+        useLevelWalker(portal, migrator, out=out, **kwargs)
                 
     #out.append('\nCommitting full transaction')
     #get_transaction().commit()

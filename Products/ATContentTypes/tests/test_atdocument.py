@@ -41,6 +41,8 @@ from Products.ATContentTypes.tests.utils import TidyHTMLValidator
 from Products.ATContentTypes.migration.ATCTMigrator import DocumentMigrator
 from Products.CMFDefault.Document import Document
 from Products.ATContentTypes.interfaces import IHistoryAware
+from Products.ATContentTypes.interfaces import ITextContent
+from Products.ATContentTypes.interfaces import IATDocument
 from Interface.Verify import verifyObject
 
 example_stx = """
@@ -77,7 +79,7 @@ tests = []
 class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
 
     klass = ATDocument
-    portal_type = 'ATDocument'
+    portal_type = 'Document'
     cmf_portal_type = 'CMF Document'
     cmf_klass = Document
     title = 'Document'
@@ -85,8 +87,19 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
     icon = 'document_icon.gif'
 
     def test_doesImplementHistoryAware(self):
-        self.failUnless(IHistoryAware.isImplementedBy(self._ATCT))
-        self.failUnless(verifyObject(IHistoryAware, self._ATCT))    
+        iface = IHistoryAware
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
+        
+    def test_implementsTextContent(self):
+        iface = ITextContent
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
+
+    def test_implementsATDocument(self):
+        iface = IATDocument
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         old = self._cmf

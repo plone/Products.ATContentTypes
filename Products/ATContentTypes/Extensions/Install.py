@@ -48,8 +48,6 @@ from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.Extensions.utils import setupMimeTypes
 from Products.ATContentTypes.Extensions.utils import registerTemplates
 from Products.ATContentTypes.Extensions.utils import registerActionIcons
-#from Products.ATContentTypes.Extensions.toolbox import disableCMFTypes
-#from Products.ATContentTypes.Extensions.toolbox import enableCMFTypes
 
 def install(self, reinstall):
     out = StringIO()
@@ -117,10 +115,10 @@ def install(self, reinstall):
     
     # step 8: register switch methods to toggle old plonetypes on/off
     # XXX remove this dummy methods
-    manage_addExternalMethod(self,'switchATCT2CMF',
-        'Set reenable CMF type',
-        PROJECTNAME+'.toolbox',
-        'switchATCT2CMF')
+    #manage_addExternalMethod(self,'switchATCT2CMF',
+    #    'Set reenable CMF type',
+    #    PROJECTNAME+'.toolbox',
+    #    'switchATCT2CMF')
     manage_addExternalMethod(self,'switchCMF2ATCT',
         'Set ATCT as default content types',
         PROJECTNAME+'.toolbox',

@@ -40,15 +40,14 @@ from Products.Archetypes.Extensions.utils import installTypes
 from AccessControl.SecurityManagement import newSecurityManager
 from Testing.ZopeTestCase import user_name as default_user
 
-from Products.ATContentTypes.config import ATCT_PORTAL_TYPE
 
 tests = []
 
 class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
-    folder_type = ATCT_PORTAL_TYPE('ATFolder')
-    image_type = ATCT_PORTAL_TYPE('ATImage')
-    document_type = ATCT_PORTAL_TYPE('ATDocument')
-    file_type = ATCT_PORTAL_TYPE('ATFile')
+    folder_type = 'Folder'
+    image_type = 'Image'
+    document_type = 'Document'
+    file_type = 'File'
 
     def afterSetUp(self):
         atcttestcase.ATCTSiteTestCase.afterSetUp(self)
@@ -81,14 +80,14 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         af.setLocallyAllowedTypes([])
         possible_types_ids = [fti.id for fti in af._ct_getPossibleTypes()]
         self.failIf(self.image_type not in possible_types_ids,
-                    'ATImage not available to be filtered!')
+                    'Image not available to be filtered!')
         allowed_ids = [fti.id for fti in af.allowedContentTypes()]
         self.failIf(self.image_type not in allowed_ids,
-                    'ATImage not available to add!')
+                    'Image not available to add!')
         af.invokeFactory(self.image_type, id='anATImage')
         afi = af.anATImage # will bail if invokeFactory didn't work
         self.failIf(self.document_type not in possible_types_ids,
-                    'ATDocument not available to add!')
+                    'Document not available to add!')
         af.invokeFactory(self.document_type, id='anATDocument')
         afd = af.anATDocument # will bail if invokeFactory didn't work
 

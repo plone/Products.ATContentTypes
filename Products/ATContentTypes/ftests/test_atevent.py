@@ -34,7 +34,7 @@ tests = []
 
 class TestATEventFunctional(atctftestcase.ATCTIntegrationTestCase):
     
-    portal_type = 'ATEvent'
+    portal_type = 'Event'
     views = ('event_view', 'vcs_view', 'ics_view', )
 
 tests.append(TestATEventFunctional)

@@ -1,6 +1,9 @@
 1.0-devel
 ======================
 
+ * Refactored huge parts of the migration suite. More later
+   [tiran]
+
  * Fixed [ 1026616 ] Actions aren't migrated. Actions are migrated from
    the cmf fti if an action with the id doesn't exist on the atct fti.
    [tiran]
@@ -21,7 +24,7 @@
    [tiran]
 
  * FTests: install kupu and epoz when available. Moved function test suite to
-   ftests/.
+   ftests/
    [tiran]
 
  * Fixed [ 1157812 ] ival/vcal action icons not available
@@ -123,7 +126,7 @@
    [tiran]
 
  * Removed old debian/ directory. I don't maintain it any more so there is no
-   reason in having it in the cvs
+   reason of having it in the cvs
    [tiran]
 
  * Removed QuotaSupport.py. It should never be in the official tree of ATCT

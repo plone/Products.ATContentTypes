@@ -34,7 +34,7 @@ tests = []
 
 class TestATNewsItemFunctional(atctftestcase.ATCTIntegrationTestCase):
     
-    portal_type = 'ATNewsItem'
+    portal_type = 'News Item'
     views = ('newsitem_view', )
 
     def test_atct_history_view(self):

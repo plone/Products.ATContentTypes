@@ -67,7 +67,6 @@ try:
 except ImportError:
     from Products.PloneLanguageTool.interfaces import ITranslatable
 
-from Products.ATContentTypes.config import ATCT_PORTAL_TYPE
 
 class ATCTSiteTestCase(ATSiteTestCase):
     pass
@@ -87,7 +86,6 @@ class ATCTTypeTestCase(ATSiteTestCase):
     icon = ''
 
     def afterSetUp(self):
-        self.portal_type = ATCT_PORTAL_TYPE(self.portal_type)
         self.setRoles(['Manager', 'Member'])
         self._ATCT = self._createType(self.folder, self.portal_type, 'ATCT')
         self._cmf = self._createType(self.folder, self.cmf_portal_type, 'cmf')

@@ -47,6 +47,7 @@ from Products.ATContentTypes.Permissions import ChangeEvents
 from Products.ATContentTypes.utils import DT2dt
 from DateTime import DateTime
 from Products.ATContentTypes.interfaces import ICalendarSupport
+from Products.ATContentTypes.interfaces import IATEvent
 from Interface.Verify import verifyObject
 
 LOCATION = 'my location'
@@ -90,7 +91,7 @@ tests = []
 class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
 
     klass = ATEvent
-    portal_type = 'ATEvent'
+    portal_type = 'Event'
     cmf_portal_type = 'CMF Event'
     cmf_klass = Event
     title = 'Event'
@@ -100,6 +101,11 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
     def test_doesImplementCalendarSupport(self):
         self.failUnless(ICalendarSupport.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(ICalendarSupport, self._ATCT))
+
+    def test_implementsATEvent(self):
+        iface = IATEvent
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         old = self._cmf

@@ -36,7 +36,7 @@ class IATContentType(ITemplateMixin, IBaseContent):
     default_view = Attribute('''Default view template - used for TemplateMixin''')
     suppl_views = Attribute('''Supplementary views - used for TemplateMixin''')
 
-    _atct_newTypeFor = Attribute('''Used to get the meta type of the original implementation''')
+    _atct_newTypeFor = Attribute('''XXX''')
 
     typeDescription = Attribute('''A short description used for the edit screen''')
     typeDescMsgId = Attribute('''The i18n msgid of the type description''')
@@ -63,9 +63,6 @@ class IATContentType(ITemplateMixin, IBaseContent):
         """Get the default layout used for TemplateMixin
         """
 
-class IATCTFileContent(IATContentType):
-    """ATCT content type containing a file
-    """
 
 class IConstrainTypes(Interface):
     """ConstrainTypes awareness marker interface
@@ -102,9 +99,57 @@ class ICalendarSupport(Interface):
     """Calendar import/export
     """
 
+class IImageContent(Interface):
+    """Interface for types containing an image
+    """
+
+    def getImage(**kwargs):
+        """
+        """
+
+    def setImage(value, **kwargs):
+        """
+        """
+        
+    def tag(**kwargs):
+        """
+        """
+
+class IFileContent(Interface):
+    """Interface for types containing a file
+    """
+
+    def getFile(**kwargs):
+        """
+        """
+
+    def setFile(value, **kwargs):
+        """
+        """
+
+class ITextContent(Interface):
+    """Interface for types containing text
+    """
+
+    def getText(**kwargs):
+        """
+        """
+
+    def setText(value, **kwargs):
+        """
+        """
+        
+    def CookedBody(stx_level='ignored'):
+        """
+        """
+
+    def EditableBody():
+        """
+        """
+
 # content types
 
-class IATDocument(IATContentType):
+class IATDocument(ITextContent):
     """AT Document marker interface
     """
 
@@ -116,7 +161,7 @@ class IATLink(IATContentType):
     """AT Link marker interface
     """
 
-class IATFile(IATContentType):
+class IATFile(IFileContent):
     """AT File marker interface
     """
 
@@ -128,7 +173,7 @@ class IATBTreeFolder(IATContentType):
     """AT BTree Folder marker interface
     """
 
-class IATImage(IATContentType):
+class IATImage(IImageContent):
     """AT Image marker Interface
     """
 
@@ -138,7 +183,7 @@ class IATLink(IATContentType):
 
 # second class content types
 
-class IATNewsItem(IATDocument):
+class IATNewsItem(IATDocument, IImageContent):
     """AT News Item marker interface
     """
 

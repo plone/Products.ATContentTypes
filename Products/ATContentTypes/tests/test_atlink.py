@@ -45,7 +45,9 @@ from Products.ATContentTypes.types.ATLink import ATLink
 from Products.ATContentTypes.types.ATLink import ATLinkSchema
 from Products.ATContentTypes.migration.ATCTMigrator import LinkMigrator
 from Products.ATContentTypes.tests.utils import RequiredURLValidator
+from Products.ATContentTypes.interfaces import IATLink
 from Products.CMFDefault.Link import Link
+from Interface.Verify import verifyObject
 
 URL='http://www.example.org/'
 
@@ -64,12 +66,17 @@ tests = []
 class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
 
     klass = ATLink
-    portal_type = 'ATLink'
+    portal_type = 'Link'
     cmf_portal_type = 'CMF Link'
     cmf_klass = Link
     title = 'Link'
     meta_type = 'ATLink'
     icon = 'link_icon.gif'
+
+    def test_implementsATLink(self):
+        iface = IATLink
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
 
     def testLink(self):
         obj = self._ATCT

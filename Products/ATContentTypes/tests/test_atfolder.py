@@ -45,6 +45,8 @@ from Products.CMFPlone.LargePloneFolder import LargePloneFolder
 from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
 from Products.CMFPlone.interfaces.OrderedContainer import IOrderedContainer
 from Products.ATContentTypes.interfaces import IConstrainTypes
+from Products.ATContentTypes.interfaces import IATFolder
+from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Interface.Verify import verifyObject
 
 def editCMF(obj):
@@ -67,7 +69,7 @@ class FolderTestMixin:
 class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     klass = ATFolder
-    portal_type = 'ATFolder'
+    portal_type = 'Folder'
     cmf_portal_type = 'CMF Folder'
     cmf_klass = PloneFolder
     title = 'Folder'
@@ -79,6 +81,16 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         self.failUnless(IOrderedContainer.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(IZopeOrderedContainer, self._ATCT))  
         self.failUnless(verifyObject(IOrderedContainer, self._ATCT))  
+
+    def test_implementsATFolder(self):
+        iface = IATFolder
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
+
+    def test_implementsConstrainTypes(self):
+        iface = IConstrainTypes
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         old = self._cmf
@@ -120,12 +132,22 @@ tests.append(TestSiteATFolder)
 class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     klass = ATBTreeFolder
-    portal_type = 'ATBTreeFolder'
+    portal_type = 'Large Plone Folder'
     cmf_portal_type = 'CMF Large Plone Folder'
     cmf_klass = LargePloneFolder
     title = 'BTree Folder'
     meta_type = 'ATBTreeFolder'
     icon = 'folder_icon.gif'
+
+    def test_implementsATBTreeFolder(self):
+        iface = IATBTreeFolder
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
+
+    def test_implementsConstrainTypes(self):
+        iface = IConstrainTypes
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         old = self._cmf

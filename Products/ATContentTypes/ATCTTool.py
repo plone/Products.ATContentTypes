@@ -35,7 +35,7 @@ from Products.CMFCore import CMFCorePermissions
 from Products.Archetypes import listTypes
 
 from Products.ATContentTypes.interfaces import IATContentType
-from Products.ATContentTypes.interfaces import IATImage
+from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATCTTool
 from Products.ATContentTypes.config import TOOLNAME
 
@@ -102,7 +102,11 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
         brains = catalog(portal_type = portal_type)
         for brain in brains:
             obj = brain.getObject()
-            if not obj: continue
+            if not obj:
+                continue
+            
+            if not IImageContent.isImplementedBy(obj):
+                continue
 
             try: state = object._p_changed
             except: state = 0
@@ -151,10 +155,10 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
             if not ntf or not ntf.get('portal_type'):
                 # no old portal type given
                 continue
-            cmf_pt = ntf.get('portal_type')
-            cmf_bak_pt = 'CMF %s' % cmf_pt
-            self._changePortalTypeName(cmf_pt, cmf_bak_pt, global_allow=False)
-            result.append('Renamed %s to %s' % (cmf_pt, cmf_bak_pt))
+            cmf_orig_pt = klass.portal_type
+            cmf_bak_pt = ntf.get('portal_type')
+            self._changePortalTypeName(cmf_orig_pt, cmf_bak_pt, global_allow=False)
+            result.append('Renamed %s to %s' % (cmf_orig_pt, cmf_bak_pt))
         return ''.join(result)
     
     def enableCMFTypes(self):
@@ -174,15 +178,15 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
             if not ntf or not ntf.get('portal_type'):
                 # no old portal type given
                 continue
-            cmf_pt = ntf.get('portal_type')
-            cmf_bak_pt = 'CMF %s' % cmf_pt
+            cmf_orig_pt = klass.portal_type
+            cmf_bak_pt = ntf.get('portal_type')
             # XXX backup?
             #atct_bak_pt = 'AT %s' % cmf_pt
             #self._changePortalTypeName(cmf_pt, atct_bak_pt, global_allow=False)
-            ttool.manage_delObjects(cmf_pt)
-            result.append('Removing ATCT: %s' % cmf_pt)
-            self._changePortalTypeName(cmf_bak_pt, cmf_pt, global_allow=False)
-            result.append('Renamed %s to %s' % (cmf_pt, cmf_bak_pt))
+            ttool.manage_delObjects(cmf_orig_pt)
+            result.append('Removing ATCT: %s' % cmf_orig_pt)
+            self._changePortalTypeName(cmf_bak_pt, cmf_orig_pt, global_allow=False)
+            result.append('Renamed %s to %s' % (cmf_bak_pt, cmf_orig_pt))
         return ''.join(result)
     
     def copyFTIFlags(self):
@@ -199,8 +203,8 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
             if not ntf or not ntf.get('portal_type'):
                 # no old portal type given
                 continue
-            atct_pt = ntf.get('portal_type')
-            cmf_bak_pt = 'CMF %s' % atct_pt
+            atct_pt = klass.portal_type
+            cmf_bak_pt = ntf.get('portal_type')
             self._copyFTIFlags(ptfrom=cmf_bak_pt, ptto=atct_pt)
     
     def isCMFdisabled(self):

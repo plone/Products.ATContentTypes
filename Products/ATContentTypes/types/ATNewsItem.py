@@ -112,13 +112,12 @@ class ATNewsItem(ATDocument):
 
     content_icon   = 'newsitem_icon.gif'
     meta_type      = 'ATNewsItem'
-    #portal_type    = 'News Item'
-    portal_type    = 'ATNewsItem'
+    portal_type    = 'News Item'
     archetype_name = 'News Item'
     immediate_view = 'newsitem_view'
     default_view   = 'newsitem_view'
     suppl_views    = ()
-    _atct_newTypeFor = {'portal_type' : 'News Item', 'meta_type' : 'News Item'}
+    _atct_newTypeFor = {'portal_type' : 'CMF News Item', 'meta_type' : 'News Item'}
     typeDescription= ("A news item is a small piece of news that "
                       "is published on the front page. "
                       "Add the relevant details below, and press 'Save'.")

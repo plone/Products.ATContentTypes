@@ -72,7 +72,6 @@ from Products.ATContentTypes.config import CHAR_MAPPING
 from Products.ATContentTypes.config import GOOD_CHARS
 from Products.ATContentTypes.config import MIME_ALIAS
 from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
-from Products.ATContentTypes.config import ATCT_PORTAL_TYPE
 from Products.ATContentTypes.ConstrainTypesMixin import ConstrainTypesMixin
 from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.types.schemata import ATContentTypeSchema
@@ -95,7 +94,6 @@ def registerATCT(class_, project):
     One reason to use it is to hide the lingua plone related magic.
     """
     assert IATContentType.isImplementedByInstancesOf(class_)
-    class_.portal_type = ATCT_PORTAL_TYPE(class_.portal_type)
     
     # XXX this should go into LinguaPlone!
     if ITranslatable.isImplementedByInstancesOf(class_):

@@ -133,3 +133,37 @@ def unrestricted_rename(self, id, new_id):
     #!#if REQUEST is not None:
     #!#    return self.manage_main(self, REQUEST, update_menu=1)
     return None
+
+class Registry(dict):
+    """Common registry
+    """
+    
+    def register(self, cls):
+        self[cls.__name__] = cls
+
+class MigratorRegistry(Registry):
+    """Migrator Registry
+    """
+    
+    def registerATCT(self, cls, for_cls):
+        """Special register method for ATCT based migrators
+        """
+        cls.src_portal_type = for_cls._atct_newTypeFor['portal_type']
+        cls.src_meta_type = for_cls._atct_newTypeFor['meta_type']
+        cls.dst_portal_type = for_cls.portal_type
+        cls.dst_meta_type = for_cls.meta_type
+        self.register(cls)
+
+class WalkerRegistry(Registry):
+    """Walker Registry
+    """
+    pass
+
+_migratorRegistry = MigratorRegistry()
+registerMigrator = _migratorRegistry.register
+registerATCTMigrator = _migratorRegistry.registerATCT
+listMigrators = _migratorRegistry.items
+
+_walkerRegistry = WalkerRegistry()
+registerWalker = _walkerRegistry.register
+listWalkers = _walkerRegistry.items

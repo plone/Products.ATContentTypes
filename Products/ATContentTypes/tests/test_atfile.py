@@ -38,7 +38,10 @@ import time
 from Products.ATContentTypes.types.ATFile import ATFile
 from Products.ATContentTypes.types.ATFile import ATFileSchema
 from Products.ATContentTypes.migration.ATCTMigrator import FileMigrator
+from Products.ATContentTypes.interfaces import IATFile
+from Products.ATContentTypes.interfaces import IFileContent
 from Products.CMFDefault.File import File
+from Interface.Verify import verifyObject
 
 file_text = """
 foooooo
@@ -58,12 +61,22 @@ tests = []
 class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
 
     klass = ATFile
-    portal_type = 'ATFile'
+    portal_type = 'File'
     cmf_portal_type = 'CMF File'
     cmf_klass = File
     title = 'File'
     meta_type = 'ATFile'
     icon = 'file_icon.gif'
+
+    def test_implementsFileContent(self):
+        iface = IFileContent
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
+
+    def test_implementsATFile(self):
+        iface = IATFile
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         old = self._cmf

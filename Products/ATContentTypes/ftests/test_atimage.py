@@ -34,7 +34,7 @@ tests = []
 
 class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
     
-    portal_type = 'ATImage'
+    portal_type = 'Image'
     views = ('image_view', 'download', )
 
 tests.append(TestATImageFunctional)

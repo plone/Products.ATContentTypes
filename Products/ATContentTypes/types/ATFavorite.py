@@ -66,7 +66,7 @@ class ATFavorite(ATCTContent):
 
     content_icon   = 'favorite_icon.gif'
     meta_type      = 'ATFavorite'
-    portal_type    = 'ATFavorite'
+    portal_type    = 'Favorite'
     archetype_name = 'Favorite'
     default_view   = 'favorite_view'
     immediate_view = 'favorite_view'
@@ -75,7 +75,7 @@ class ATFavorite(ATCTContent):
     global_allow   = True
     filter_content_types  = True
     allowed_content_types = ()
-    _atct_newTypeFor = {'portal_type' : 'Favorite', 'meta_type' : 'Favorite'}
+    _atct_newTypeFor = {'portal_type' : 'CMF Favorite', 'meta_type' : 'Favorite'}
     typeDescription = ''
     typeDescMsgId  = ''
     assocMimetypes = ()

@@ -34,7 +34,7 @@ tests = []
 
 class TestATFavoriteFunctional(atctftestcase.ATCTIntegrationTestCase):
     
-    portal_type = 'ATFavorite'
+    portal_type = 'Favorite'
     views = ('favorite_view', )
 
 tests.append(TestATFavoriteFunctional)

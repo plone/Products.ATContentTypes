@@ -34,7 +34,7 @@ tests = []
 
 class TestATFileFunctional(atctftestcase.ATCTIntegrationTestCase):
     
-    portal_type = 'ATFile'
+    portal_type = 'File'
     views = ('file_view', 'download', )
 
 tests.append(TestATFileFunctional)

@@ -209,12 +209,12 @@ class ATEvent(ATCTContent, CalendarSupportMixin):
 
     content_icon   = 'event_icon.gif'
     meta_type      = 'ATEvent'
-    portal_type    = 'ATEvent'
+    portal_type    = 'Event'
     archetype_name = 'Event'
     default_view   = 'event_view'
     immediate_view = 'event_view'
     suppl_views    = ()
-    _atct_newTypeFor = {'portal_type' : 'Event', 'meta_type' : 'CMF Event'}
+    _atct_newTypeFor = {'portal_type' : 'CMF Event', 'meta_type' : 'CMF Event'}
     typeDescription= 'Fill in the details of the event you want to add.'
     typeDescMsgId  = 'description_edit_event'
     assocMimetypes = ()

@@ -22,6 +22,7 @@ are permitted provided that the following conditions are met:
 from Products.ATContentTypes.migration.common import LOG
 from Products.ATContentTypes.migration.common import HAS_LINGUA_PLONE
 from Products.ATContentTypes.migration.common import StdoutStringIO
+from Products.ATContentTypes.migration.common import registerWalker
 import sys
 import traceback
 from Products.CMFCore.utils import getToolByName
@@ -32,8 +33,8 @@ class StopWalking(Exception):
 
 class MigrationError(RuntimeError):
     def __init__(self, obj, migrator, traceback):
-        self.fromType = migrator.fromType
-        self.toType = migrator.toType
+        self.src_portal_type = migrator.src_portal_type
+        self.dst_portal_type = migrator.dst_portal_type
         self.tb = traceback
         if hasattr(obj, 'absolute_url'):
             self.id = obj.absolute_url(1)
@@ -42,7 +43,7 @@ class MigrationError(RuntimeError):
 
     def __str__(self):
         return "MigrationError for obj %s (%s -> %s):\n" \
-               "%s" % (self.id, self.fromType, self.toType, self.tb)
+               "%s" % (self.id, self.src_portal_type, self.dst_portal_type, self.tb)
 
 class Walker:
     """Walks through the system and migrates every object it finds
@@ -51,8 +52,8 @@ class Walker:
     def __init__(self, migrator, portal):
         self.migrator = migrator
         self.portal = portal
-        self.fromType = self.migrator.fromType
-        self.toType = self.migrator.toType
+        self.src_portal_type = self.migrator.src_portal_type
+        self.dst_portal_type = self.migrator.dst_portal_type
         self.subtransaction = self.migrator.subtransaction
         self.out = []
 
@@ -82,7 +83,7 @@ class Walker:
         for obj in objs:
             msg=('Migrating %s from %s to %s ... ' %
                             ('/'.join(obj.getPhysicalPath()),
-                             self.fromType, self.toType, ))
+                             self.src_portal_type, self.dst_portal_type, ))
             LOG(msg)
             self.out.append(msg)
 
@@ -142,16 +143,16 @@ class CatalogWalker(Walker):
         :return: objects (with acquisition wrapper) that needs migration
         :rtype: generator
         """
-        LOG("fromType: " + str(self.fromType))
+        LOG("src_portal_type: " + str(self.src_portal_type))
         catalog = self.catalog
 
         if HAS_LINGUA_PLONE and 'Language' in catalog.indexes():
             # usage of Language is required for LinguaPlone
-            brains = catalog(portal_type = self.fromType,
+            brains = catalog(portal_type = self.src_portal_type,
                              Language = catalog.uniqueValuesFor('Language'),
                             )
         else:
-            brains = catalog(portal_type = self.fromType)
+            brains = catalog(portal_type = self.src_portal_type)
 
         for brain in brains:
             obj = brain.getObject()
@@ -159,6 +160,8 @@ class CatalogWalker(Walker):
                 yield obj
                 # XXX safe my butt
                 obj._p_deactivate()
+
+registerWalker(CatalogWalker)
 
 class CatalogWalkerWithLevel(Walker):
     """Walker using the catalog but only returning objects for a specific depth
@@ -183,16 +186,16 @@ class CatalogWalkerWithLevel(Walker):
                  % depth)
             raise StopWalking
         
-        LOG("fromType: %s, level %s" % (self.fromType, depth))
+        LOG("src_portal_type: %s, level %s" % (self.src_portal_type, depth))
         catalog = self.catalog
 
         if HAS_LINGUA_PLONE and 'Language' in catalog.indexes():
             # usage of Language is required for LinguaPlone
-            brains = catalog(portal_type = self.fromType,
+            brains = catalog(portal_type = self.src_portal_type,
                              Language = catalog.uniqueValuesFor('Language'),
                             )
         else:
-            brains = catalog(portal_type = self.fromType)
+            brains = catalog(portal_type = self.src_portal_type)
         
         if len(brains) == 0:
             # no objects left, stop iteration
@@ -214,7 +217,23 @@ class CatalogWalkerWithLevel(Walker):
                 obj._p_deactivate()
             else:
                 LOG("Stale brain found at %s" % brain.getPath())
-    
+
+registerWalker(CatalogWalkerWithLevel)    
+
+def useLevelWalker(context, migrator, out=[], depth=1, **kwargs):
+    catalog = getToolByName(context, 'portal_catalog')
+    while 1:
+        # loop around until we got 'em all :]
+        w = CatalogWalkerWithLevel(migrator, catalog, depth)
+        try:
+            o=w.go(**kwargs)
+        except StopWalking:
+            out.append(w.getOutput())
+            break
+        else:
+            out.append(o)
+            depth+=1
+    return out
 
 ##class RecursiveWalker(Walker):
 ##    """Walk recursivly through a directory stucture

@@ -45,7 +45,7 @@ class TestATTopicFunctional(atctftestcase.ATCTIntegrationTestCase):
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) #
     
-    portal_type = 'ATTopic'
+    portal_type = 'Topic'
     views = ('atct_topic_view', 'criterion_edit_form', 'atct_topic_subtopics')
 
 tests.append(TestATTopicFunctional)

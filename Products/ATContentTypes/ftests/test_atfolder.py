@@ -34,7 +34,7 @@ tests = []
 
 class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
     
-    portal_type = 'ATFolder'
+    portal_type = 'Folder'
     views = ('folder_listing', 'folder_contents', )
 
     def test_templatemixin_view_without_view(self):
@@ -45,12 +45,10 @@ class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
 
 tests.append(TestATFolderFunctional)
 
-from Products.ATContentTypes.config import ATCT_PORTAL_TYPE
-
 class TestATBTreeFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
 
-    portal_type = ATCT_PORTAL_TYPE('ATBTreeFolder')
     views = ('folder_listing', 'folder_contents', )
+    portal_type = 'Large Plone Folder'
 
     def afterSetUp(self):
         # enable global allow for BTree Folder

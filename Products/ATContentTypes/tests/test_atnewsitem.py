@@ -45,19 +45,38 @@ from Products.ATContentTypes.types.ATNewsItem import ATNewsItem
 from Products.ATContentTypes.types.ATNewsItem import ATNewsItemSchema
 from Products.ATContentTypes.tests.utils import TidyHTMLValidator
 from Products.ATContentTypes.migration.ATCTMigrator import NewsItemMigrator
+from Products.ATContentTypes.interfaces import ITextContent
+from Products.ATContentTypes.interfaces import IImageContent
+from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.CMFDefault.NewsItem import NewsItem
+from Interface.Verify import verifyObject
 
 tests = []
 
 class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
 
     klass = ATNewsItem
-    portal_type = 'ATNewsItem'
+    portal_type = 'News Item'
     cmf_portal_type = 'CMF News Item'
     cmf_klass = NewsItem
     title = 'News Item'
     meta_type = 'ATNewsItem'
     icon = 'newsitem_icon.gif'
+
+    def test_implementsTextContent(self):
+        iface = ITextContent
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
+
+    def test_implementsImageContent(self):
+        iface = IImageContent
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
+
+    def test_implementsATNewsItem(self):
+        iface = IATNewsItem
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         old = self._cmf

@@ -34,7 +34,7 @@ tests = []
 
 class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
     
-    portal_type = 'ATDocument'
+    portal_type = 'Document'
     views = ('document_view', )
 
     def test_atct_history_view(self):

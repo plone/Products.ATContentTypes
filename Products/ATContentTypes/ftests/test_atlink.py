@@ -34,7 +34,7 @@ tests = []
 
 class TestATLinkFunctional(atctftestcase.ATCTIntegrationTestCase):
     
-    portal_type = 'ATLink'
+    portal_type = 'Link'
     views = ('link_view', )
 
 tests.append(TestATLinkFunctional)

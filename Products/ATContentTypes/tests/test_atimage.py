@@ -38,7 +38,10 @@ import time
 from Products.ATContentTypes.types.ATImage import ATImage
 from Products.ATContentTypes.types.ATImage import ATImageSchema
 from Products.ATContentTypes.migration.ATCTMigrator import ImageMigrator
+from Products.ATContentTypes.interfaces import IImageContent
+from Products.ATContentTypes.interfaces import IATImage
 from Products.CMFDefault.Image import Image
+from Interface.Verify import verifyObject
 
 def editCMF(obj):
     dcEdit(obj)
@@ -51,12 +54,22 @@ tests = []
 class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
 
     klass = ATImage
-    portal_type = 'ATImage'
+    portal_type = 'Image'
     cmf_portal_type = 'CMF Image'
     cmf_klass = Image
     title = 'Image'
     meta_type = 'ATImage'
     icon = 'image_icon.gif'
+
+    def test_implementsImageContent(self):
+        iface = IImageContent
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
+
+    def test_implementsATImage(self):
+        iface = IATImage
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         old = self._cmf
