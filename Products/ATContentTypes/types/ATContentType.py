@@ -18,7 +18,6 @@
 #
 """
 
-
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -48,6 +47,7 @@ from Products.CMFCore.utils import getToolByName
 
 if HAS_PLONE2:
     from Products.CMFPlone.PloneFolder import ReplaceableWrapper
+    from webdav.NullResource import NullResource
 
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
@@ -481,13 +481,21 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
 
     security.declareProtected(CMFCorePermissions.View, 'index_html')
     def index_html(self):
-        """ Acquire if not present. """
-        if HAS_PLONE2:
-            _target = aq_parent(aq_inner(self)).aq_acquire('index_html')
-            return ReplaceableWrapper(aq_base(_target).__of__(self))
-        else:
-            OrderedBaseFolder.index_html(self)
-
+       """Special case index_html"""
+       if HAS_PLONE2:
+           # COPIED FROM CMFPLONE 2.1
+           request = getattr(self, 'REQUEST', None)
+           if request and request.has_key('REQUEST_METHOD'):
+               if (request.maybe_webdav_client and
+                   request['REQUEST_METHOD'] in  ['PUT']):
+                   # Very likely a WebDAV client trying to create something
+                   return ReplaceableWrapper(NullResource(self, 'index_html'))
+           # Acquire from parent
+           _target = aq_parent(aq_inner(self)).aq_acquire('index_html')
+           return ReplaceableWrapper(aq_base(_target).__of__(self))
+       else:
+           return OrderedBaseFolder.index_html(self)
+       
     index_html = ComputedAttribute(index_html, 1)
 
     def __browser_default__(self, request):
