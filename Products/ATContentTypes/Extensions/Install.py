@@ -72,14 +72,14 @@ def install(self):
 
     # register switch methods to toggle old plonetypes on/off
     portal=getToolByName(self,'portal_url').getPortalObject()
-#    manage_addExternalMethod(portal,'switchATCT2CMF',
-#        'Set reenable CMF type',
-#        PROJECTNAME+'.toolbox',
-#        'switchATCT2CMF')
-#    manage_addExternalMethod(portal,'switchCMF2ATCT',
-#        'Set ATCT as default content types',
-#        PROJECTNAME+'.toolbox',
-#        'switchCMF2ATCT')
+    manage_addExternalMethod(portal,'switchATCT2CMF',
+        'Set reenable CMF type',
+        PROJECTNAME+'.toolbox',
+        'switchATCT2CMF')
+    manage_addExternalMethod(portal,'switchCMF2ATCT',
+        'Set ATCT as default content types',
+        PROJECTNAME+'.toolbox',
+        'switchCMF2ATCT')
 
     manage_addExternalMethod(portal,'migrateFromCMFtoATCT',
         'Migrate from CMFDefault types to ATContentTypes',
