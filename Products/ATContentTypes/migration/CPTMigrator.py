@@ -2,7 +2,7 @@
 
 Migration system for the migration from CMFPloneTypes to ATContentTypes
 
-Copyright (c) 2004, Christian Heimes and contributors
+Copyright (c) 2004-2005, Christian Heimes and contributors
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,

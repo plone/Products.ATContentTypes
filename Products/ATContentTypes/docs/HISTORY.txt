@@ -1,6 +1,11 @@
 1.0-devel
 ======================
 
+ * Fixed default view of ATFolder. Pointing to view again makes a loop and
+   raises a hard to debug exception because TemplateMixin is trying to use
+   itself as default view which doesn't work.
+   [tiran]
+
  * FTests: install kupu and epoz when available. Moved function test suite to
    ftests/.
    [tiran]

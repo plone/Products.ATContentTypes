@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 """
 
 """
-__author__  = ''
+__author__  = 'Christian Heimes'
 __docformat__ = 'restructuredtext'
 
 
@@ -155,6 +155,9 @@ class ATCTMixin(TemplateMixin):
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()
+    
+    # XXX see SkinnedFolder.__call__
+    isDocTemp = False 
 
     __implements__ = (IATContentType, TemplateMixin.__implements__)
 

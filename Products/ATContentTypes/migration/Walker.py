@@ -1,3 +1,24 @@
+"""Walkers for Migration suite
+
+Migration system for the migration from CMFDefault/Event types to archetypes
+based CMFPloneTypes (http://sf.net/projects/collective/).
+
+Copyright (c) 2004-2005, Christian Heimes and contributors
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+ * Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+ * Neither the name of the author nor the names of its contributors may be used
+   to endorse or promote products derived from this software without specific
+   prior written permission.
+"""
+
 from Products.ATContentTypes.migration.common import LOG
 from Products.ATContentTypes.migration.common import HAS_LINGUA_PLONE
 from Products.ATContentTypes.migration.common import StdoutStringIO

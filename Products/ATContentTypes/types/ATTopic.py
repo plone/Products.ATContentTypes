@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -140,12 +140,12 @@ class ATTopic(ATCTFolder):
     security       = ClassSecurityInfo()
     actions = updateActions(ATCTFolder,
         (
-        {
-        'id'          : 'view',
-        'name'        : 'View',
-        'action'      : 'string:${folder_url}/',
-        'permissions' : (CMFCorePermissions.View,)
-        },
+        #{
+        #'id'          : 'view',
+        #'name'        : 'View',
+        #'action'      : 'string:${folder_url}/',
+        #'permissions' : (CMFCorePermissions.View,)
+        #},
         {
         'id'          : 'edit',
         'name'        : 'Edit',

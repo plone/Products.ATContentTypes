@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 #
 """ATCT ZConfig loader
 
-$Id: __init__.py,v 1.1.4.1 2005/03/01 18:09:45 tiran Exp $
+$Id: __init__.py,v 1.1.4.2 2005/03/09 21:47:57 tiran Exp $
 """
 __author__  = 'Christian Heimes'
 __docformat__ = 'restructuredtext'
