@@ -112,7 +112,7 @@ class HistoryAwareMixin:
         histories = self.getHistories(1)
         if not histories:
             return None
-        user = histories[0][3].strip()
+        user = histories[0][3].split(" ")[-1].strip()
         return  user
 
     security.declareProtected(HISTORY_VIEW_PERMISSION, 'getDocumentComparisons')
