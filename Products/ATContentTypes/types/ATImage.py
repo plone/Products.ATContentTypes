@@ -78,8 +78,6 @@ class ATImage(ATCTFileContent):
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
         """
-        if not kwargs.has_key('longdesc'):
-                kwargs['longdesc'] = ''
         return self.getField('image').tag(self, **kwargs)
 
     def __str__(self):
