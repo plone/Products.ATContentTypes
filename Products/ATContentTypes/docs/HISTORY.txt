@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Remove path of filename from ATFile's title when upload a file using MS IE.
+   [panjunyong]
+
  * Merged uiteam-plip73-sanitize-short-names from the old plone
    svn repos: diff https://svn.plone.org/svn/plone/ATContentTypes/branches/1.0@6168
    https://svn.plone.org/svn/plone/ATContentTypes/branches/uiteam-plip73-sanitize-short-names

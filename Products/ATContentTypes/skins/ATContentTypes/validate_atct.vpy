@@ -26,7 +26,7 @@ if pfield:
             filename = getattr(file, 'filename', None)
 
         if filename:
-            form['title'] = filename
+            form['title'] = filename.split('\\')[-1]
 ## eoXXX
 
 errors  = context.validate(REQUEST=request, errors=errors, data=1, metadata=0)
