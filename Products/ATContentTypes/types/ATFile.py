@@ -51,8 +51,8 @@ class ATFile(ATCTFileContent):
 
     content_icon   = 'file_icon.gif'
     meta_type      = 'ATFile'
-    portal_type    = 'ATFile'
-    archetype_name = 'AT File'
+    portal_type    = 'File'
+    archetype_name = 'File'
     immediate_view = 'file_view'
     default_view   = 'file_view'
     suppl_views    = ()

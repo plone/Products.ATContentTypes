@@ -1,0 +1,105 @@
+<mxtidy>
+    enable           yes
+    drop_font_tags   yes
+    drop_empty_paras yes
+    input_xml        no
+    output_xhtml     yes
+    quiet            yes
+    show_warnings    yes
+    indent_spaces    yes
+    word_2000        yes
+    wrap             72
+    tab_size         4
+    char_encoding    raw
+</mxtidy>
+
+<feature templatemixin>
+    enable yes
+    permission cmf.ModifyPortalContent
+</feature>
+
+<feature constrainmixin>
+    enable yes
+    permission cmf.ManagePortal
+</feature>
+
+<contenttype ATDocument>
+  add_permission cmf.AddPortalContent
+  <typedescription>
+    description foo
+    i18n_msgid  bar
+  </typedescription>
+</contenttype>
+
+<contenttype ATEvent>
+  add_permission cmf.AddPortalContent
+  <typedescription>
+    description foo
+    i18n_msgid  bar
+  </typedescription>
+</contenttype>
+
+<contenttype ATFavorite>
+  add_permission cmf.AddPortalContent
+  <typedescription>
+    description foo
+    i18n_msgid  bar
+  </typedescription>
+</contenttype>
+
+<contenttype ATFile>
+  add_permission cmf.AddPortalContent
+  <typedescription>
+    description foo
+    i18n_msgid  bar
+  </typedescription>
+</contenttype>
+
+<contenttype ATFolder>
+  add_permission cmf.AddPortalContent
+  <typedescription>
+    description foo
+    i18n_msgid  bar
+  </typedescription>
+</contenttype>
+
+<contenttype ATBTreeFolder>
+  add_permission cmf.AddPortalContent
+  <typedescription>
+    description foo
+    i18n_msgid  bar
+  </typedescription>
+</contenttype>
+
+<contenttype ATImage>
+  add_permission cmf.AddPortalContent
+  <typedescription>
+    description foo
+    i18n_msgid  bar
+  </typedescription>
+</contenttype>
+
+<contenttype ATLink>
+  add_permission cmf.AddPortalContent
+  <typedescription>
+    description foo
+    i18n_msgid  bar
+  </typedescription>
+</contenttype>
+
+<contenttype ATNewsItem>
+  add_permission cmf.AddPortalContent
+  <typedescription>
+    description foo
+    i18n_msgid  bar
+  </typedescription>
+</contenttype>
+
+<contenttype ATTopic>
+  add_permission Products.ATContentTypes.Permissions.AddTopics
+  <typedescription>
+    description foo
+    i18n_msgid  bar
+  </typedescription>
+</contenttype>
+

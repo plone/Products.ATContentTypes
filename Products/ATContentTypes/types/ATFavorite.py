@@ -50,17 +50,17 @@ class ATFavorite(ATCTContent):
 
     content_icon   = 'favorite_icon.gif'
     meta_type      = 'ATFavorite'
-    portal_type    = 'ATFavorite'
-    archetype_name = 'AT Favorite'
+    portal_type    = 'Favorite'
+    archetype_name = 'Favorite'
     default_view   = 'favorite_view'
     immediate_view = 'favorite_view'
     suppl_views    = ()
-    include_default_actions = 0
-    global_allow   = 1
-    filter_content_types  = 1
+    include_default_actions = False
+    global_allow   = True
+    filter_content_types  = True
     allowed_content_types = ()
-    _atct_newTypeFor     = ('Favorite', 'Favorite')
-    typeDescription= ''
+    _atct_newTypeFor = ('Favorite', 'Favorite')
+    typeDescription = ''
     typeDescMsgId  = ''
     assocMimetypes = ()
     assocFileExt   = ('fav', )

@@ -52,8 +52,8 @@ class ATEvent(ATCTContent, CalendarSupportMixin):
 
     content_icon   = 'event_icon.gif'
     meta_type      = 'ATEvent'
-    portal_type    = 'ATEvent'
-    archetype_name = 'AT Event'
+    portal_type    = 'Event'
+    archetype_name = 'Event'
     default_view   = 'event_view'
     immediate_view = 'event_view'
     suppl_views    = ()

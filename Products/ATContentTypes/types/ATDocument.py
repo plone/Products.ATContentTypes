@@ -51,8 +51,8 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
 
     content_icon   = 'document_icon.gif'
     meta_type      = 'ATDocument'
-    portal_type    = 'ATDocument'
-    archetype_name = 'AT Document'
+    portal_type    = 'Document'
+    archetype_name = 'Document'
     default_view   = 'document_view'
     immediate_view = 'document_view'
     suppl_views    = ()
@@ -73,9 +73,6 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
     actions = updateActions(ATCTContent,
                             HistoryAwareMixin.actions
                            )
-
-    # backward compat
-    text_format = 'text/plain'
 
     security.declareProtected(CMFCorePermissions.View, 'CookedBody')
     def CookedBody(self, stx_level='ignored'):

@@ -46,8 +46,8 @@ class ATNewsItem(ATDocument):
 
     content_icon   = 'newsitem_icon.gif'
     meta_type      = 'ATNewsItem'
-    portal_type    = 'ATNewsItem'
-    archetype_name = 'AT News Item'
+    portal_type    = 'News Item'
+    archetype_name = 'News Item'
     immediate_view = 'newsitem_view'
     default_view   = 'newsitem_view'
     suppl_views    = ()

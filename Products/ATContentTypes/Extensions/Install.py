@@ -38,11 +38,15 @@ from Products.ATContentTypes.interfaces.IATFile import IATFile
 
 from Products.ATContentTypes.config import *
 from Products.ATContentTypes.Extensions.utils import setupMimeTypes, registerTemplates
-from Products.ATContentTypes.Extensions.toolbox import switchATCT2CMF, isSwitchedToATCT
+from Products.ATContentTypes.Extensions.toolbox import disableCMFTypes, enableCMFTypes
 
 def install(self):
     out = StringIO()
     
+    # step 1: Rename and move away to old CMF types
+    disableCMFTypes(self)
+    
+    # step 2: Install LinguaPlone if available and enabled
     if INSTALL_LINGUA_PLONE:
         qi = getToolByName(self, 'portal_quickinstaller')
         installable = [ d['id'] for d in qi.listInstallableProducts() ]
@@ -60,14 +64,14 @@ def install(self):
 
     # register switch methods to toggle old plonetypes on/off
     portal=getToolByName(self,'portal_url').getPortalObject()
-    manage_addExternalMethod(portal,'switchATCT2CMF',
-        'Set reenable CMF type',
-        PROJECTNAME+'.toolbox',
-        'switchATCT2CMF')
-    manage_addExternalMethod(portal,'switchCMF2ATCT',
-        'Set ATCT as default content types',
-        PROJECTNAME+'.toolbox',
-        'switchCMF2ATCT')
+#    manage_addExternalMethod(portal,'switchATCT2CMF',
+#        'Set reenable CMF type',
+#        PROJECTNAME+'.toolbox',
+#        'switchATCT2CMF')
+#    manage_addExternalMethod(portal,'switchCMF2ATCT',
+#        'Set ATCT as default content types',
+#        PROJECTNAME+'.toolbox',
+#        'switchCMF2ATCT')
 
     manage_addExternalMethod(portal,'migrateFromCMFtoATCT',
         'Migrate from CMFDefault types to ATContentTypes',
@@ -93,12 +97,7 @@ def install(self):
 
     # bind templates for TemplateMixin
     registerTemplates(self, typeInfo, out)
-
-    removeApplicationXPython(self, out)
     
-    # for quota support
-    # addCatalog_get_size(self, out)
-
     return out.getvalue()
 
 def uninstall(self):
@@ -146,31 +145,3 @@ def setChainFor(portal_type, chain, wftool, out):
     if chain != '(Default)':
         # default is default :)
         wftool.setChainForPortalTypes((portal_type,), chain)
-
-def removeApplicationXPython(self, out):
-    """Fixed broken .py file extension in older version of PortalTransforms
-    """
-    mtr  = getToolByName(self, 'mimetypes_registry')
-    mimetypes = mtr.lookup('application/x-python')
-    if mimetypes:
-        for m in mimetypes:
-            mtr.unregister(m)
-        print >>out, 'Unregistering application/x-python from mimetypes_registry'
-    textpy = mtr.lookup('text/x-python')
-    mtr.register_extension('py', textpy)
-
-def addCatalog_get_size(self, out):
-    """Add get_size metadata to catalog
-    """
-    cat = getToolByName(self, 'portal_catalog')
-    try:
-        cat.addColumn('get_size', default_value=0)
-    except CatalogError:
-        print >>out, 'portal_catalog already has get_size metadata, recreate it'
-        # readd the get_size metadata to make sure it has default_value=0
-        cat.delColumn('get_size')
-        cat.addColumn('get_size', default_value=0)
-    else:
-        print >>out, 'Added get_size metadata to portal_catalog'
-    cat.refreshCatalog()
-    

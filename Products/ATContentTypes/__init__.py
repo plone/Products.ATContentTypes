@@ -66,6 +66,8 @@ ATCT_TYPES = tuple(
      not IATTopicCriterion.isImplementedByInstancesOf(at_type['klass'])]
     )
 
+import Products.ATContentTypes.configuration
+
 def initialize(context):
     # process our custom types
 

@@ -61,14 +61,128 @@ def recreateATImageScales(self, portal_type=('ATImage', 'Image')):
         obj = brain.getObject()
         if not obj:
             continue
+        
+        try:
+            state = object._p_changed
+        except:
+            state = 0
+
         if not IATImage.isImplementedBy(obj):
             continue
         field = obj.getField('image')
         if field:
             print >>out, 'Updating %s' % obj.absolute_url(1)
             field.createScales(obj)
+        if state is None: object._p_deactivate()
 
     return out.getvalue()
+
+def _disableCMFType(portal, pt, cat, reg, klass, out, skip_rename=False):
+    """
+    """
+    id = klass._atct_newTypeFor[0]
+    bakId = 'CMF %s' % id
+
+    # move away the disabled type (CMF -> backup)
+    pt.manage_renameObject(id, bakId)
+    pt[bakId].manage_changeProperties(global_allow=0)
+    _changePortalType(cat, id, bakId)
+    print >>out, '%s -> %s' % (id, bakId)
+
+    # reassociate the content type registry predicates with the portal_type
+    # XXXfixMimeTypes(portal, klass, id)
+
+    # adjust the content type registry
+    #XXXpreds = reg.listPredicates()
+    #for predid, pred in preds:
+    #    typ = pred[1]
+    #    if typ == atId:
+    #        reg.assignTypeName(predid, id)
+
+def _enableCMFType(portal, pt, cat, reg, klass, out):
+    """
+    """
+    id = klass._atct_newTypeFor[0]
+    bakId = 'CMF %s' % id
+
+    # rename to the new type (CMF -> original)
+    pt.manage_renameObject(bakId, id)
+    if id not in not_global_allow:
+        global_allow = 1
+    else:
+        global_allow = 0
+    pt[id].manage_changeProperties(global_allow=global_allow)
+    _changePortalType(cat, bakId, id)
+    print >>out, '%s -> %s: %i' % (bakId, id, global_allow)
+
+    # adjust the content type registry
+    # XXX preds = reg.listPredicates()
+    #for predid, pred in preds:
+    #    typ = pred[1]
+    #    if typ == id:
+    #        reg.assignTypeName(predid, bakId)
+
+def disableCMFTypes(self, skip_rename=False):
+    #if isSwitchedToATCT(self):
+    #    return "Error: Already switched"
+    pt = getToolByName(self, 'portal_types')
+    cat = getToolByName(self, 'portal_catalog')
+    reg = getToolByName(self, 'content_type_registry')
+    out = StringIO()
+    for klass in atct_klasses:
+        _disableCMFType(self, pt, cat, reg, klass, out, skip_rename=skip_rename)
+    _fixLargePloneFolder(self)
+    # XXX maybe we need to reindex only portal_type and meta_type
+    #objects are recataloged in switching method
+    #cat.refreshCatalog(clear=1)
+    return out.getvalue()
+
+
+def enableCMFTypes(self, skip_rename=False):
+    #if isSwitchedToATCT(self):
+    #    return "Error: Already switched"
+    pt = getToolByName(self, 'portal_types')
+    cat = getToolByName(self, 'portal_catalog')
+    reg = getToolByName(self, 'content_type_registry')
+    out = StringIO()
+    for klass in atct_klasses:
+        _enableCMFType(self, pt, cat, reg, klass, out, skip_rename=skip_rename)
+    _fixLargePloneFolder(self)
+    # XXX maybe we need to reindex only portal_type and meta_type
+    #objects are recataloged in switching method
+    #cat.refreshCatalog(clear=1)
+    return out.getvalue()
+
+
+def _changePortalType(cat, old, new):
+    """
+    """
+    brains = cat(portal_type = old)
+    for brain in brains:
+        obj = brain.getObject()
+        if not obj:
+            continue
+        try:
+            state = object._p_changed
+        except:
+            state = 0
+        __traceback_info__ = (obj, getattr(obj, '__class__', 'no class'),
+                              getattr(obj, 'meta_type', 'no metatype'),
+                              old, new)
+        obj._setPortalTypeName(new)
+        obj.reindexObject(idxs=['portal_type', 'Type', 'meta_type', ])
+        if state is None:
+            obj._p_deativate()
+
+def _fixLargePloneFolder(self):
+    # XXX why do I need this hack?
+    # probably because of the hard coded and false portal type in Plone :|
+    # Members._getPortalTypeName() returns ATBTreeFolder instead of
+    # Large Plone Folder
+    mt = getToolByName(self, 'portal_membership')
+    members = mt.getMembersFolder()
+    if members is not None:
+        members._setPortalTypeName(ATFolder.ATBTreeFolder._atct_newTypeFor[0])
 
 def _switchToATCT(portal, pt, cat, reg, klass, out, skip_rename=False):
     """
@@ -147,35 +261,12 @@ def _switchToCMF(portal, pt, cat, reg, klass, out):
         if typ == id:
             reg.assignTypeName(predid, bakId)
 
-def _changePortalType(cat, old, new):
-    """
-    """
-    brains = cat(portal_type = old)
-    for brain in brains:
-        obj = brain.getObject()
-        if not obj:
-            continue
-        __traceback_info__ = (obj, getattr(obj, '__class__', 'no class'),
-                              getattr(obj, 'meta_type', 'no metatype'),
-                              old, new)
-        obj._setPortalTypeName(new)
-        obj.reindexObject(idxs=['portal_type', 'Type', 'meta_type', ])
-
-def _fixLargePloneFolder(self):
-    # XXX why do I need this hack?
-    # probably because of the hard coded and false portal type in Plone :|
-    # Members._getPortalTypeName() returns ATBTreeFolder instead of
-    # Large Plone Folder
-    mt = getToolByName(self, 'portal_membership')
-    members = mt.getMembersFolder()
-    if members is not None:
-        members._setPortalTypeName(ATFolder.ATBTreeFolder._atct_newTypeFor[0])
 
 def switchCMF2ATCT(self, skip_rename=False):
     if isSwitchedToATCT(self):
         return "Error: Already switched"
-    pt = getToolByName(self,'portal_types')
-    cat = getToolByName(self,'portal_catalog')
+    pt = getToolByName(self, 'portal_types')
+    cat = getToolByName(self, 'portal_catalog')
     reg = getToolByName(self, 'content_type_registry')
     out = StringIO()
     for klass in atct_klasses:

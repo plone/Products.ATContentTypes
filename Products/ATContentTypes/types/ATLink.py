@@ -47,8 +47,8 @@ class ATLink(ATCTContent):
 
     content_icon   = 'link_icon.gif'
     meta_type      = 'ATLink'
-    portal_type    = 'ATLink'
-    archetype_name = 'AT Link'
+    portal_type    = 'Link'
+    archetype_name = 'Link'
     immediate_view = 'link_view'
     default_view   = 'link_view'
     suppl_views    = ()
