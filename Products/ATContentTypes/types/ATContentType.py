@@ -18,7 +18,7 @@
 #
 """
 
-$Id: ATContentType.py,v 1.44.4.3 2004/11/25 16:47:39 ctheune Exp $
+$Id: ATContentType.py,v 1.44.4.4 2004/11/30 15:19:08 ctheune Exp $
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -218,7 +218,7 @@ class ATCTMixin(TemplateMixin):
 
         # If the id is given to a different object already
         if id in parent_ids and aq_base(parent[id]) is not aq_base(self):
-            return 'Id %s is already in use'
+            return 'Id %s is already in use' % id
         
         if ' ' in id:
             return 'Spaces are not allowed in ids'

@@ -32,7 +32,7 @@
       
       <td style="padding: 0.5em;">
 
-        <div tal:content="criterion/Description" />
+        <div i18n:translate="" tal:content="criterion/Description" />
 
         <div id="" 
              i18n:translate=""

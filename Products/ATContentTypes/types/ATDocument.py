@@ -18,7 +18,7 @@
 #
 """
 
-$Id: ATDocument.py,v 1.34 2004/10/17 00:11:31 tiran Exp $
+$Id: ATDocument.py,v 1.34.4.1 2004/11/30 15:19:08 ctheune Exp $
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -117,6 +117,8 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
 
         * hook into mxTidy an replace the value with the tidied value
         """
+        if not value:   # XXX somehow submitting an empty textarea overwrites file uploads because empty strings end up here
+            return
         field = self.getField('text')
 
         # hook for mxTidy / isTidyHtmlWithCleanup validator

@@ -15,6 +15,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Domain: plone\n"
 
+## attopic view
+
+msgid "description_no_items_in_topic"
+msgstr "Momentan sind keine Einträge zu diesem Thema vorhanden."
+
+
+## skins/ATContentTypes/atct_macros.pt
+
+msgid "A simple string criterion"
+msgstr "Textkriterium"
+
+msgid "A date criteria"
+msgstr "Datumskriterium"
+
+msgid "A list criterion"
+msgstr "Listenkriterium"
+
+msgid "A portal_types criterion"
+msgstr "Inhaltstypenkriterium"
+
+msgid "A simple int criterion"
+msgstr "Ganzzahlkriterium"
+
+## portal_status_message
+
+msgid "Changes saved"
+msgstr "Ihre Änderungen wurden gespeichert."
+
+msgid "Your changes have been saved."
+msgstr "Ihre Änderungen wurden gespeichert."
+
 #: ./skins/ATContentTypes/atct_macros.pt
 #. <legend i18n:translate="legend_criteria_field">
 #.                Criterion for
@@ -22,6 +53,20 @@ msgstr ""
 #. </legend>
 msgid "legend_criteria_field"
 msgstr ""
+
+## types.schemata.ATTopicSchema
+
+msgid "help_limit_number"
+msgstr "Schaltet die Einschränkung der anzuzeigenden Artikel ein und aus. Wenn diese Option aktiviert ist, werden nur so viele Artikel angezeigt, wie bei 'Anzahl der Artikel' eingestellt ist."
+
+msgid "label_limit_number"
+msgstr "Anzahl der Artikel einschränken"
+
+msgid "label_item_count"
+msgstr "Anzahl der Artikel"
+
+msgid "help_item_count"
+msgstr "Die Anzahl der Artikel, die angezeigt werden sollen, wenn die Option 'Anzahl der Artikel einschränken' aktiviert ist."
 
 ## types/criteria/schemata.py
 msgid "label_date_criteria_operation"
@@ -37,34 +82,46 @@ msgid "help_date_criteria_value"
 msgstr ""
 
 msgid "label_date_criteria_range"
-msgstr ""
+msgstr "Bezugsdatum im Vergleich zur aktuellen Zeit"
 
 msgid "help_date_criteria_range"
-msgstr ""
+msgstr "Geben Sie an, ob der bei 'Bezugsdatum' angegebene Bereich in der Zukunft oder in der Vergangenheit liegt."
+
+msgid "old"
+msgstr "in der Vergangenheit"
+
+msgid "ahead"
+msgstr "in der Zukunft"
 
 msgid "label_list_criteria_value"
-msgstr ""
+msgstr "Werte"
 
 msgid "help_list_criteria_value"
-msgstr ""
+msgstr "Geben sie die Werte der Liste ein, jeden Wert in eine Zeile"
 
 msgid "label_list_criteria_operator"
-msgstr ""
+msgstr "Operator"
 
 msgid "help_list_criteria_operator"
-msgstr ""
+msgstr "Wählen sie den Operator aus, mit dem die Abfragen für jeden Wert der Liste verknüpft werden sollen"
+
+msgid "and"
+msgstr "Logisches Und"
+
+msgid "or"
+msgstr "Logisches Oder"
 
 msgid "label_int_criteria_value"
-msgstr ""
+msgstr "Zahl"
 
 msgid "help_int_criteria_value"
-msgstr ""
+msgstr "Geben sie eine ganze Zahl ein, die für die Abfrage verwendet werden soll"
 
 msgid "label_string_criteria_value"
-msgstr ""
+msgstr "Text"
 
 msgid "help_string_criteria_value"
-msgstr ""
+msgstr "Geben sie einen Text ein, nach dem die Artikel durchsucht werden sollen"
 
 msgid "id"
 msgstr "Kurzname"
@@ -192,12 +249,22 @@ msgid "within_day"
 msgstr "genau am Bezugsdatum"
 
 msgid "label_date_criteria_value"
-msgstr "Datum"
+msgstr "Bezugsdatum"
 
 msgid "help_date_criteria_value"
 msgstr "Wird als Bezugspunkt für die Auswertung des Kriteriums verwendet."
 
+# Add new search criteria
+
+msgid "legend_add_new_search_criteria"
+msgstr "Neues Kriterium hinzufügen"
+
+
 # Sortierkriterium
+
+msgid "legend_set_sort_order"
+msgstr "Sortierreihenfolge festlegen"
+
 msgid "label_sort_reverse"
 msgstr "Rückwärts"
 
