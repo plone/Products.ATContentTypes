@@ -29,6 +29,10 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
+from Products.ATContentTypes.config import _ATCT_UNIT_TEST_MODE
+from Products.ATContentTypes.config import _ATCT_OLD_VALUES
+from Products.ATContentTypes.config import ATDOCUMENT_CONTENT_TYPE
+from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.ATCTTool import ATCTTool
 from Products.CMFCore.utils import getToolByName
 
@@ -117,6 +121,19 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
     def test_installsetsCMFcataloged(self):
         t = self.tool
         self.failUnless(t.getCMFTypesAreRecataloged())
+        
+    def test_unit_test_mode(self):
+        self.failUnlessEqual(_ATCT_UNIT_TEST_MODE, True)
+
+    def test_release_settings_SAVE_TO_FAIL_FOR_DEVELOPMENT(self):
+        old = _ATCT_OLD_VALUES
+        self.failUnlessEqual(old['ENABLE_CONSTRAIN_TYPES_MIXIN'], True)
+        self.failUnlessEqual(old['ENABLE_TEMPLATE_MIXIN'], True)
+        self.failUnlessEqual(old['EXT_STORAGE_ENABLE'], False)
+        self.failUnlessEqual(old['INSTALL_LINGUA_PLONE'], False)
+
+        self.failUnlessEqual(ATDOCUMENT_CONTENT_TYPE, 'text/html')
+        self.failUnlessEqual(SWALLOW_IMAGE_RESIZE_EXCEPTIONS, True)
         
 tests.append(TestInstallation)
 

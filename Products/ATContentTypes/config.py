@@ -31,12 +31,6 @@ __docformat__ = 'restructuredtext'
 from Products.CMFCore import CMFCorePermissions
 import string
 
-try:
-    True
-except NameError:
-    True  = 1
-    False = 0
-
 ###############################################################################
 ## user options
 ## The options in this section can be overwritten by customconfig
@@ -291,16 +285,24 @@ MIME_ALIAS = {
     'rest'  : 'text/x-rst',
     'structured-text' : 'text/structured',
     'restructuredtext' : 'text/x-rst',
+    'text/restructured' : 'text/x-rst',
     }
 
 ## force enable some features for ATCT unit testing
 import os
 if os.environ.get('ZOPETESTCASE', False):
+    _ATCT_OLD_VALUES = {
+        'ENABLE_CONSTRAIN_TYPES_MIXIN' : ENABLE_CONSTRAIN_TYPES_MIXIN,
+        'ENABLE_TEMPLATE_MIXIN' : ENABLE_TEMPLATE_MIXIN,
+        'EXT_STORAGE_ENABLE' : EXT_STORAGE_ENABLE,
+        'INSTALL_LINGUA_PLONE' : INSTALL_LINGUA_PLONE,
+        }
     ENABLE_CONSTRAIN_TYPES_MIXIN = True
     ENABLE_TEMPLATE_MIXIN = True
     EXT_STORAGE_ENABLE = True
     INSTALL_LINGUA_PLONE = True
-    EXT_STORAGE_ENABLE = True
     _ATCT_UNIT_TEST_MODE = True
+    
 else:
     _ATCT_UNIT_TEST_MODE = False
+    _ATCT_OLD_VALUES = {}
