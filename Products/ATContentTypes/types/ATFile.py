@@ -44,11 +44,13 @@ from Products.ATContentTypes.config import MAX_FILE_SIZE
 from Products.ATContentTypes.config import ICONMAP
 from Products.ATContentTypes.config import HAS_EXT_STORAGE
 from Products.ATContentTypes.config import EXT_STORAGE_ENABLE
+from Products.ATContentTypes import Permissions as ATCTPermissions
 from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTFileContent
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.types.schemata import ATContentTypeSchema
 from Products.ATContentTypes.types.schemata import relatedItemsField
+from Products.ATContentTypes.types.schemata import urlUploadField
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 
 if HAS_EXT_STORAGE:
@@ -77,6 +79,7 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
                         show_content_type = False,)),
     ), marshall=PrimaryFieldMarshaller()
     )
+ATFileSchema.addField(urlUploadField)
 ATFileSchema.addField(relatedItemsField)
 
 ATExtFileSchema = ATFileSchema.copy()

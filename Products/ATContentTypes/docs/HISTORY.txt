@@ -1,17 +1,36 @@
 1.0-devel
 ======================
 
+ * Added 'atct_album_view' and 'atct_album_image' templates based on the
+   templates of CMFPhotoAlbum.
+   [tiran]
+
+ * Replaced the config vars for permissions with new permissions:
+
+    o ModifyConstrainTypes for constrain types mixin
+    o ModifyViewTemplate for template mixin
+    o ViewHistory for history mixin
+    o UploadViaURL for the new upload via url feature
+
+   By default the permissions are restricted to manager only.
+   [tiran]
+
+ * Added new upload via url feature to upload a file or image using an url. The
+   file is downloaded from the remote server using urllib2. Since this feature
+   isn't finished it's not available by default.
+   [tiran]
+
  * Implemented some very useful functions based on CMFPhoto code for ATImage.
    The new features are:
 
-    * getting the exif informations from images using Gene Cash's exif lib
-    * getting the image orientation from exif data (rotation and mirror)
-    * Rotating and flipping images using the PIL library incl. a new tab
+    o getting the exif informations from images using Gene Cash's exif lib
+    o getting the image orientation from exif data (rotation and mirror)
+    o Rotating and flipping images using the PIL library incl. a new tab
 
-  The CMFPhoto exif and transform code was written by several ppl including
-  Oliver Baltzer and me. I'm unable to determine the other coders. Please
-  write me an email if you want credits for your great work!
-  [tiran]
+   The CMFPhoto exif and transform code was written by several ppl including
+   Oliver Baltzer and me. I'm unable to determine the other coders. Please
+   write me an email if you want credits for your great work!
+   [tiran]
 
  * Refactored huge parts of the migration suite. More later
    [tiran]

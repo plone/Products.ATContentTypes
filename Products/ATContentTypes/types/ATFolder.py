@@ -53,7 +53,7 @@ class ATFolder(ATCTOrderedFolder):
     archetype_name = 'Folder'
     immediate_view = 'folder_listing'
     default_view   = 'folder_listing'
-    suppl_views    = ()
+    suppl_views    = ('atct_album_view', )
     _atct_newTypeFor = {'portal_type' : 'CMF Folder', 'meta_type' : 'Plone Folder'}
     typeDescription= ''
     typeDescMsgId  = ''

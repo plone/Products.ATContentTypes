@@ -52,6 +52,7 @@ from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.Archetypes.tests.test_baseschema import BaseSchemaTest
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
+from Products.ATContentTypes import Permissions as ATCTPermissions
 from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests.utils import EmptyValidator
@@ -337,7 +338,7 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnlessEqual(field.default_method, "getDefaultLayout")
         self.failUnlessEqual(field.read_permission, CMFCorePermissions.View)
         self.failUnlessEqual(field.write_permission,
-                             CMFCorePermissions.ManagePortal)
+                             ATCTPermissions.ModifyViewTemplate)
         self.failUnlessEqual(field.generateMode, 'veVc')
         self.failUnlessEqual(field.force, '')
         self.failUnlessEqual(field.type, 'string')

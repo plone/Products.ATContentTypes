@@ -37,13 +37,25 @@ CRITERION_ROLES = ('Manager',)
 
 # Gathering Topic and Event related permissions into one place
 AddTopics = 'Add portal topics'
-ChangeTopics = 'Change portal topics'
-ChangeEvents = 'Change portal events'
-
-# Set up default roles for permissions
 setDefaultRoles(AddTopics, TOPIC_ROLES)
+
+ChangeTopics = 'Change portal topics'
 setDefaultRoles(ChangeTopics, CHANGE_TOPIC_ROLES)
+
+ChangeEvents = 'Change portal events'
 setDefaultRoles(ChangeEvents, ('Manager', 'Owner',))
+
+ModifyConstrainTypes = "ATContentTypes: Modify constrain types"
+setDefaultRoles(ModifyConstrainTypes, ('Manager', ))
+
+ModifyViewTemplate = "ATContentTypes: Modify view template"
+setDefaultRoles(ModifyViewTemplate, ('Manager', ))
+
+ViewHistory = "ATContentTypes: View history"
+setDefaultRoles(ViewHistory, ('Manager', ))
+
+UploadViaURL = "ATContentTypes: Upload via url"
+setDefaultRoles(ViewHistory, ('UploadViaURL', ))
 
 permissions = {}
 def wireAddPermissions():

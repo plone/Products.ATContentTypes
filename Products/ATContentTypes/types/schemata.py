@@ -29,13 +29,13 @@ from Products.Archetypes.public import BaseSchema
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import ReferenceField
 from Products.Archetypes.public import StringField
+from Products.Archetypes.public import StringWidget
 from Products.Archetypes.public import SelectionWidget
 
 from Products.CMFCore import CMFCorePermissions
 
+from Products.ATContentTypes import Permissions as ATCTPermissions
 from Products.ATContentTypes.config import ENABLE_TEMPLATE_MIXIN
-from Products.ATContentTypes.config import TEMPLATE_MIXIN_PERMISSION
-#from Products.ATContentTypes.config import ENABLE_RELATED_ITEMS
 from Products.ATContentTypes.ConstrainTypesMixin import ConstrainTypesMixinSchema
 
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
@@ -70,13 +70,30 @@ relatedItemsField = ReferenceField('relatedItems',
             )
         )
 
+urlUploadField = StringField('urlUpload',
+        required = False,
+        mode = 'w', # write only field
+        languageIndependent = True,
+        validators = ('isURL',),
+        write_permission = ATCTPermissions.UploadViaURL,
+        widget = StringWidget(
+            description="Upload a file from another server by url.",
+            description_msgid = "help_upload_url",
+            label = "Upload from server",
+            label_msgid = "label_upload_url",
+            i18n_domain = "plone",
+            visible={'view' : 'hidden',
+                     'edit' : 'visible'},
+            ),
+        )
+
 ATContentTypeSchema = ATContentTypeBaseSchema + Schema((
     # TemplateMixin
     StringField('layout',
                 accessor="getLayout",
                 mutator="setLayout",
                 languageIndependent = True,
-                write_permission=TEMPLATE_MIXIN_PERMISSION,
+                write_permission=ATCTPermissions.ModifyViewTemplate,
                 default_method="getDefaultLayout",
                 vocabulary="_voc_templates",
                 #enforceVocabulary=True,

@@ -24,6 +24,8 @@ __docformat__ = 'restructuredtext'
 
 
 from copy import copy
+import urllib2
+import urlparse
 
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 if HAS_LINGUA_PLONE:
@@ -59,6 +61,7 @@ from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 
 from Products.Archetypes.TemplateMixin import TemplateMixin
+from Products.ATContentTypes import Permissions as ATCTPermissions
 from Products.Archetypes.debug import _default_logger
 from Products.Archetypes.debug import _zlogger
 
@@ -77,6 +80,10 @@ from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.types.schemata import ATContentTypeSchema
 
 DEBUG = True
+
+class InvalidContentType(Exception):
+    """Invalid content type (uploadFromURL)
+    """
 
 # XXX this should go into LinguaPlone!
 translate_actions = ({
@@ -444,6 +451,65 @@ class ATCTFileContent(ATCTContent):
         else:
             # everything ok
             pass
+        
+    security.declarePrivate('loadFileFromURL')
+    def loadFileFromURL(self, url, contenttypes=()):
+        """Loads a file from an url using urllib2
+        
+        You can use contenttypes to restrict uploaded content types like:
+            ('image',) for all image content types
+            ('image/jpeg', 'image/png') only jpeg and png
+        
+        May raise an urllib2.URLError based exception or InvalidContentType
+        
+        returns file_handler, mimetype, filename, size_in_bytes
+        """
+        fh = urllib2.urlopen(url)
+        
+        info = fh.info()
+        mimetype = info.get('content-type', 'application/octetstream')
+        size = info.get('content-length', None)
+        
+        # scheme, netloc, path, parameters, query, fragment
+        path = urlparse.urlparse(fh.geturl())[2]
+        if path.endswith('/'):
+            pos = -2
+        else:
+            pos = -1
+        filename = path.split('/')[pos]
+        
+        success = False
+        for ct in contenttypes:
+            if ct.find('/') == -1:
+                if mimetype[:mimetype.find('/')] == ct:
+                    success = True
+                    break
+            else:
+                if mimetype == ct:
+                    success = True
+                    break
+        if not contenttypes:
+            success = True
+        if not success:
+            raise InvalidContentType, mimetype
+        
+        return fh, mimetype, filename, size
+
+    security.declareProtected(ATCTPermissions.UploadViaURL, 'setUploadURL')
+    def setUrlUpload(self, value, **kwargs):
+        """Upload a file from URL
+        """
+        # XXX no error catching
+        fh, mimetype, filename, size = self.loadFileFromURL(value,
+                                           contenttypes=('image',))
+        mutator = self.getPrimaryField().getMutator(self)
+        mutator(fh.read(), mimetype=mimetype, filename=filename)
+
+    security.declareProtected(CMFCorePermissions.View, 'getUploadURL')
+    def getUrlUpload(self, **kwargs):
+        """Always return the default value since we don't store the url
+        """
+        return self.getField('urlUpload').default
 
 InitializeClass(ATCTFileContent)
 

@@ -35,7 +35,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.config import HISTORY_VIEW_PERMISSION
+from Products.ATContentTypes import Permissions as ATCTPermissions
 from Products.ATContentTypes.interfaces import IHistoryAware
 
 class HistoryAwareMixin:
@@ -58,7 +58,7 @@ class HistoryAwareMixin:
         'id'          : 'history',
         'name'        : 'History',
         'action'      : 'string:${object_url}/atct_history',
-        'permissions' : (HISTORY_VIEW_PERMISSION, )
+        'permissions' : (ATCTPermissions.ViewHistory, )
          },
     )
 
@@ -115,7 +115,7 @@ class HistoryAwareMixin:
         user = histories[0][3].split(" ")[-1].strip()
         return  user
 
-    security.declareProtected(HISTORY_VIEW_PERMISSION, 'getDocumentComparisons')
+    security.declareProtected(ATCTPermissions.ViewHistory, 'getDocumentComparisons')
     def getDocumentComparisons(self, max=10, filterComment=0):
         """Get history as unified diff
         """

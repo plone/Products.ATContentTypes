@@ -43,7 +43,7 @@ from Products.Archetypes.public import IntDisplayList
 from Products.Archetypes.public import DisplayList
 
 from Products.ATContentTypes.interfaces import IConstrainTypes
-from Products.ATContentTypes.config import CONSTRAIN_TYPES_MIXIN_PERMISSION
+from Products.ATContentTypes import Permissions as ATCTPermissions
 from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
 
 # constants for enableConstrainMixin
@@ -66,7 +66,7 @@ ConstrainTypesMixinSchema = Schema((
         vocabulary = enableDisplayList,
         enforceVocabulary = True,
         languageIndependent = True,
-        write_permissions = CONSTRAIN_TYPES_MIXIN_PERMISSION,
+        write_permissions = ATCTPermissions.ModifyConstrainTypes,
         widget = SelectionWidget(
             label = 'Overwrite allowed types',
             label_msgid = 'label_enable_constrain_allowed_types',
@@ -83,7 +83,7 @@ ConstrainTypesMixinSchema = Schema((
         enforceVocabulary = True,
         languageIndependent = True,
         default_method = '_ct_globalAddableTypeIds',
-        write_permissions = CONSTRAIN_TYPES_MIXIN_PERMISSION,
+        write_permissions = ATCTPermissions.ModifyConstrainTypes,
         widget = MultiSelectionWidget(
             size = 10,
             label = 'Set allowed types',

@@ -25,6 +25,7 @@ __author__  = ''
 __docformat__ = 'restructuredtext'
 
 from cgi import escape
+from urllib2 import URLError
 
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
@@ -49,9 +50,11 @@ from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTFileContent
 from Products.ATContentTypes.types.ATContentType import cleanupFilename
 from Products.ATContentTypes.types.ATContentType import updateActions
+from Products.ATContentTypes.types.ATContentType import InvalidContentType
 from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.types.schemata import ATContentTypeSchema
 from Products.ATContentTypes.types.schemata import relatedItemsField
+from Products.ATContentTypes.types.schemata import urlUploadField
 from Products.ATContentTypes.lib import exif
 from OFS.Image import Image as OFSImage
 
@@ -134,8 +137,10 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
                         label_msgid = "label_image",
                         i18n_domain = "plone",
                         show_content_type = False,)),
+
     ), marshall=PrimaryFieldMarshaller()
     )
+ATImageSchema.addField(urlUploadField)
 ATImageSchema.addField(relatedItemsField)
 
 
@@ -335,7 +340,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     archetype_name = 'Image'
     immediate_view = 'image_view'
     default_view   = 'image_view'
-    suppl_views    = ()
+    suppl_views    = ('atct_album_image', )
     _atct_newTypeFor = {'portal_type' : 'CMF Image', 'meta_type' : 'Portal Image'}
     typeDescription= ("Using this form, you can enter details about the image, \n"
                       "and upload an image if required.")
@@ -368,7 +373,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         """cmf compatibility
         """
         return self.tag()
-
+    
     security.declareProtected(CMFCorePermissions.View, 'getSize')
     def getSize(self, scale=None):
         field = self.getField('image')

@@ -1,14 +1,40 @@
-.atcontenttypes-diff {
-    min-height: 2em;
-    border: 1px solid #8cacbb;
-    background-color: #eeeeee;
+/* <dtml-with base_properties> (do not remove this :) 
+   <dtml-call "REQUEST.set('portal_url', portal_url())"> (not this either :) */
+
+.photoAlbumEntry {
+    float: left;
+    height: 150px;
+    padding: 0.5em;
+    margin: 0.5em;
+    text-align: center;
+    border: &dtml-borderWidth; &dtml-borderStyleAnnotations; &dtml-globalBorderColor;;
 }
 
-.atcontenttypes-del {
-    color: red;
+.photoAlbumFolder {
+    border: &dtml-borderWidth; &dtml-borderStyle; &dtml-globalBorderColor;;
+    background: &dtml-globalBackgroundColor;;
 }
 
-.atcontenttypes-ins {
-    color: green;
-    text-decoration: none;
+.photoAlbumEntry dl,
+.photoAlbumEntry dt,
+.photoAlbumEntry dd {
+    padding: 0;
+    margin: 0;
 }
+
+.photoAlbumFolder dd span {
+    display: block;
+    line-height: 1em;
+}
+
+.photoAlbumEntry dd {
+    font-size: &dtml-fontSmallSize;;
+    font-weight: bold;
+}
+
+.photoAlbumEmpty {
+    display: block;
+    margin: 4em 0 4em 0;
+}
+
+/* </dtml-with> */

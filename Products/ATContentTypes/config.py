@@ -71,17 +71,9 @@ EXT_STORAGE_ENABLE = False
 ## if enabled users can choose between different view templates for each object
 ENABLE_TEMPLATE_MIXIN = True
 
-## TemplateMixin write permission. Only if the member has this permission he
-## is allowed to choose another template then the default permission
-TEMPLATE_MIXIN_PERMISSION = CMFCorePermissions.ManagePortal
-
 ## use ConstrainedMixin?
 ## if enabled you can constrain allowed types on an ATCT Folder
 ENABLE_CONSTRAIN_TYPES_MIXIN = True
-CONSTRAIN_TYPES_MIXIN_PERMISSION = CMFCorePermissions.ManagePortal
-
-## Document History view permission
-HISTORY_VIEW_PERMISSION = CMFCorePermissions.ReviewPortalContent
 
 ## maximum upload size for ATImage and ATFile in MB. 0 is infinitiv
 MAX_FILE_SIZE = 0.0
@@ -102,10 +94,8 @@ GLOBALS = globals()
 INSTALL_LINGUA_PLONE = True
 
 CONFIGUREABLE = ('MX_TIDY_ENABLED', 'MX_TIDY_OPTIONS', 'EXT_STORAGE_ENABLE',
-                 'ENABLE_TEMPLATE_MIXIN', 'TEMPLATE_MIXIN_PERMISSION',
-                 'HISTORY_VIEW_PERMISSION', 'MAX_FILE_SIZE', 'MAX_IMAGE_SIZE',
-                 'ENABLE_CONSTRAIN_TYPES_MIXIN', 'CONSTRAIN_TYPES_MIXIN_PERMISSION',
-                 'ATDOCUMENT_CONTENT_TYPE',
+                 'ENABLE_TEMPLATE_MIXIN', 'MAX_FILE_SIZE', 'MAX_IMAGE_SIZE',
+                 'ENABLE_CONSTRAIN_TYPES_MIXIN', 'ATDOCUMENT_CONTENT_TYPE',
                  )
 
 ## using special plone 2 stuff?
