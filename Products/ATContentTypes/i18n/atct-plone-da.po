@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ATContentTypes 0.2\n"
-"POT-Creation-Date: 2005-02-13 12:49+0000\n"
+"POT-Creation-Date: 2005-03-17 00:59+0000\n"
 "PO-Revision-Date: 2005-02-13 12:49+0000\n"
 "Last-Translator: Anton Stonor <stonor@giraffen.dk>\n"
 "Language-Team: Plone i18n <plone-i18n@lists.sourceforge.net>\n"
@@ -17,7 +17,148 @@ msgstr ""
 "Preferred-Encodings: latin1 utf-8\n"
 "Domain: plone\n"
 
-#: atct_history.pt
+msgid "1 Day"
+msgstr ""
+
+
+msgid "1 Month"
+msgstr ""
+
+
+msgid "1 Week"
+msgstr ""
+
+
+msgid "1 Year"
+msgstr ""
+
+
+msgid "2 Days"
+msgstr ""
+
+
+msgid "2 Weeks"
+msgstr ""
+
+
+msgid "2 Years"
+msgstr ""
+
+
+msgid "3 Months"
+msgstr ""
+
+
+msgid "5 Days"
+msgstr ""
+
+
+msgid "6 Months"
+msgstr ""
+
+
+msgid "A date criteria"
+msgstr ""
+
+
+msgid "A list criterion"
+msgstr ""
+
+
+msgid "A portal_types criterion"
+msgstr ""
+
+
+msgid "A simple int criterion"
+msgstr ""
+
+
+msgid "A simple string criterion"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
+#. <input class="context" i18n:attributes="value" name="form.button.AddCriterion" tabindex="" tal:attributes="tabindex tabindex/next;" type="submit" value="Add"/>
+msgid "Add"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/atct_album_image.pt
+#. <img alt="Back to album" i18n:attributes="alt title" tal:attributes="src string:$portal_url/folder_icon.gif" title="Back to album"/>
+msgid "Back to album"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
+#. <input class="standalone" i18n:attributes="value" name="form.button.Cancel" tabindex="" tal:attributes="tabindex tabindex/next;" type="submit" value="Cancel"/>
+msgid "Cancel"
+msgstr ""
+
+
+msgid "Changes saved"
+msgstr ""
+
+
+msgid "Creator"
+msgstr ""
+
+
+msgid "Description"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/atct_image_transform.pt
+#. <input class="context" i18n:attributes="value" type="submit" value="Execute"/>
+msgid "Execute"
+msgstr ""
+
+
+msgid "Now"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
+#. <input class="context" i18n:attributes="value" name="form.button.Remove" tabindex="" tal:attributes="tabindex tabindex/next;" type="submit" value="Remove"/>
+msgid "Remove"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
+#. <input class="context" i18n:attributes="value" name="form.button.Save" tabindex="" tal:attributes="tabindex tabindex/next;" type="submit" value="Save"/>
+#. <input class="context" i18n:attributes="value" name="form.button.SetSortCriterion" tabindex="" tal:attributes="tabindex tabindex/next;" type="submit" value="Save"/>
+msgid "Save"
+msgstr ""
+
+
+msgid "SearchableText"
+msgstr ""
+
+
+msgid "Subject"
+msgstr ""
+
+
+msgid "Title"
+msgstr ""
+
+
+msgid "Type"
+msgstr ""
+
+
+msgid "Your changes have been saved."
+msgstr ""
+
+
+msgid "ahead"
+msgstr ""
+
+
+msgid "and"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/atct_history.pt
 #. <h1 class="documentFirstHeading" i18n:translate="atct_history_changes_of">
 #.  Changes of
 #.  ${title}
@@ -26,7 +167,7 @@ msgid "atct_history_changes_of"
 msgstr "Ændringer i ${title}"
 
 
-#: atct_history.pt
+#: ../skins/ATContentTypes/atct_history.pt
 #. <legend i18n:translate="atct_history_changes_revision">
 #.  Changes in this revision
 #. </legend>
@@ -34,7 +175,7 @@ msgid "atct_history_changes_revision"
 msgstr "Ændringer"
 
 
-#: atct_history.pt
+#: ../skins/ATContentTypes/atct_history.pt
 #. <dt i18n:translate="atct_history_comment">
 #.  Comment
 #. </dt>
@@ -42,7 +183,7 @@ msgid "atct_history_comment"
 msgstr "Log"
 
 
-#: atct_history.pt
+#: ../skins/ATContentTypes/atct_history.pt
 #. <h2 i18n:translate="atct_history_comparison_between">
 #.  Comparison between
 #.  ${from}
@@ -53,7 +194,7 @@ msgid "atct_history_comparison_between"
 msgstr "Historik mellem ${from} og ${from}"
 
 
-#: atct_history.pt
+#: ../skins/ATContentTypes/atct_history.pt
 #. <div class="documentDescription" i18n:translate="atct_history_lastchanges_description">
 #.     Shows the last changes of the item, with new content in green (normal text),
 #.     and deleted content in red (strike-out text).
@@ -62,7 +203,7 @@ msgid "atct_history_lastchanges_description"
 msgstr "Her kan du se de seneste ændringer af indholdet. Nyt indhold er grønt (normal tekst) og slettet indhold er rødt (udstreget tekst)."
 
 
-#: atct_history.pt
+#: ../skins/ATContentTypes/atct_history.pt
 #. <p i18n:translate="atct_history_lastchanges_notavailable">
 #.        No changes available for this document
 #. </p>
@@ -70,15 +211,7 @@ msgid "atct_history_lastchanges_notavailable"
 msgstr "Ingen historik er tilgængelig for dette indhold."
 
 
-#: atct_history.pt
-#. <div class="portalMessage" i18n:translate="atct_history_lastchanges_warning">
-#.     This last changes log will be partly or fully removed during a pack of the database.
-#. </div>
-msgid "atct_history_lastchanges_warning"
-msgstr "Denne historik bliver nulstillet hver gang webstedets administrator formindsker databasen."
-
-
-#: atct_history.pt
+#: ../skins/ATContentTypes/atct_history.pt
 #. <dt i18n:translate="atct_history_user">
 #.  User
 #. </dt>
@@ -86,7 +219,34 @@ msgid "atct_history_user"
 msgstr "Bruger"
 
 
-#: atct_topic_view.pt
+#: ../skins/ATContentTypes/atct_history.pt
+#. <div class="portalMessage" i18n:translate="atct_lastchanges_warning">
+#.     This changelog will be emptied when the site administrator performs maintenance
+#.     (packing) of the database, and is only provided for your convenience. If the item
+#.     has no history, it normally means that no changes have been made since the last time
+#.     the history log was removed by the administrator.
+#. </div>
+msgid "atct_lastchanges_warning"
+msgstr ""
+
+
+msgid "base_view"
+msgstr ""
+
+
+msgid "created"
+msgstr ""
+
+
+msgid "description_constrain_allowed_types"
+msgstr ""
+
+
+msgid "description_enable_constrain_allowed_types"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/atct_topic_view.pt
 #. <p class="discreet" i18n:translate="description_no_items_in_topic" tal:condition="not: topicContents">
 #.          There are currently no results for this topic search.
 #. </p>
@@ -94,7 +254,100 @@ msgid "description_no_items_in_topic"
 msgstr "Denne emne-søgning gav ingen resultater."
 
 
-#: criterion_edit_form.cpt
+msgid "effective"
+msgstr ""
+
+
+msgid "end"
+msgstr ""
+
+
+msgid "exact date value"
+msgstr ""
+
+
+msgid "exact integer value"
+msgstr ""
+
+
+msgid "exact text value"
+msgstr ""
+
+
+msgid "expires"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/atct_topic_view.pt
+#. <a class="link-parent" href="" i18n:translate="go_to_parent_url" tal:attributes="href parent_url" tal:condition="parent_url" tal:define="parent_url python:here.navigationParent(here, template.getId())">
+#.         Up one level
+#. </a>
+msgid "go_to_parent_url"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
+#. <span i18n:translate="heading_criteria_for" tal:omit-tag="">
+#.             Criteria for
+#.  ${title}
+#. </span>
+msgid "heading_criteria_for"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
+#. <div class="formHelp" i18n:translate="help_criteria_field_name">
+#. 		List Available Fields
+#. </div>
+msgid "help_criteria_field_name"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
+#. <div class="formHelp" i18n:translate="help_criteria_type">
+#.                 Criteria does match
+#. </div>
+msgid "help_criteria_type"
+msgstr ""
+
+
+msgid "help_date_criteria_operation"
+msgstr ""
+
+
+msgid "help_date_criteria_range"
+msgstr ""
+
+
+msgid "help_date_criteria_value"
+msgstr ""
+
+
+msgid "help_event_attendees"
+msgstr ""
+
+
+msgid "help_int_criteria_value"
+msgstr ""
+
+
+msgid "help_item_count"
+msgstr ""
+
+
+msgid "help_limit_number"
+msgstr ""
+
+
+msgid "help_list_criteria_operator"
+msgstr ""
+
+
+msgid "help_list_criteria_value"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
 #. <div class="formHelp" i18n:translate="help_sort_reverse">
 #.  Reverse display order
 #. </div>
@@ -102,7 +355,83 @@ msgid "help_sort_reverse"
 msgstr "Vis i omvendt rækkefølge"
 
 
-#: criterion_edit_form.cpt
+msgid "help_string_criteria_value"
+msgstr ""
+
+
+msgid "help_template_mixin"
+msgstr ""
+
+
+# criterion_edit_form.cpt
+# These are the standard field names. No field_ possible. :/
+msgid "id"
+msgstr ""
+
+
+msgid "label_constrain_allowed_types"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
+#. <label for="field" i18n:translate="label_criteria_field_name">
+#.  Field name
+#. </label>
+msgid "label_criteria_field_name"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
+#. <label for="criterion_type" i18n:translate="label_criteria_type">
+#.  Criteria type
+#. </label>
+msgid "label_criteria_type"
+msgstr ""
+
+
+msgid "label_date_criteria_operation"
+msgstr ""
+
+
+msgid "label_date_criteria_range"
+msgstr ""
+
+
+msgid "label_date_criteria_value"
+msgstr ""
+
+
+# schema of ConstrainTypesMixin.py
+msgid "label_enable_constrain_allowed_types"
+msgstr ""
+
+
+msgid "label_event_attendees"
+msgstr ""
+
+
+msgid "label_int_criteria_value"
+msgstr ""
+
+
+msgid "label_item_count"
+msgstr ""
+
+
+# ATTopic
+msgid "label_limit_number"
+msgstr ""
+
+
+msgid "label_list_criteria_operator"
+msgstr ""
+
+
+msgid "label_list_criteria_value"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
 #. <label for="reversed" i18n:translate="label_sort_reverse">
 #.  Reverse
 #. </label>
@@ -110,7 +439,15 @@ msgid "label_sort_reverse"
 msgstr "Baglæns"
 
 
-#: criterion_edit_form.cpt
+msgid "label_string_criteria_value"
+msgstr ""
+
+
+msgid "label_template_mixin"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
 #. <legend i18n:translate="legend_add_new_search_criteria">
 #.  Add New Search Criteria
 #. </legend>
@@ -118,7 +455,7 @@ msgid "legend_add_new_search_criteria"
 msgstr "Tilføj nyt søgekriterium"
 
 
-#: criterion_edit_form.cpt
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
 #. <legend i18n:translate="legend_set_sort_order">
 #.  Set Sort Order
 #. </legend>
@@ -126,7 +463,23 @@ msgid "legend_set_sort_order"
 msgstr "Rækkefølge for søgning"
 
 
-#: criterion_edit_form.cpt
+msgid "logical AND or OR of list values"
+msgstr ""
+
+
+msgid "max"
+msgstr ""
+
+
+msgid "min"
+msgstr ""
+
+
+msgid "modified"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
 #. <option i18n:translate="no_sort_order" tal:attributes="selected python:not here.hasSortCriterion();" value="no_sort">
 #.  No sort order
 #. </option>
@@ -134,7 +487,40 @@ msgid "no_sort_order"
 msgstr "Ingen søgerækkefølge"
 
 
-#: criterion_edit_form.cpt
+msgid "old"
+msgstr ""
+
+
+msgid "or"
+msgstr ""
+
+
+msgid "path"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/atct_album_view.pt
+#. <span i18n:translate="photos_in_album" tal:omit-tag="">
+#.  ${num_photos}
+#.   photos in album
+#. </span>
+msgid "photos_in_album"
+msgstr ""
+
+
+msgid "portal types values"
+msgstr ""
+
+
+msgid "review_state"
+msgstr ""
+
+
+msgid "start"
+msgstr ""
+
+
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
 #. <th i18n:translate="table_criteria_field">
 #.  Field
 #. </th>
@@ -142,7 +528,7 @@ msgid "table_criteria_field"
 msgstr "Felt"
 
 
-#: criterion_edit_form.cpt
+#: ../skins/ATContentTypes/criterion_edit_form.cpt
 #. <th i18n:translate="table_criterion_details">
 #.  Criterion Details
 #. </th>
@@ -150,287 +536,12 @@ msgid "table_criterion_details"
 msgstr "Om kriterier"
 
 
-# MANUAL STUFF STARTS HERE
-
-msgid "Creator"
-msgstr "Forfatter"
-
-
-msgid "Description"
-msgstr "Beskrivelse"
-
-
-msgid "SearchableText"
-msgstr "Søgbar tekst"
-
-
-msgid "Subject"
-msgstr "Emneord"
-
-
-msgid "Title"
-msgstr "Titel"
-
-
-msgid "Type"
-msgstr "Indholdstype"
-
-
-msgid "created"
-msgstr "Oprettet"
-
-
-msgid "description_constrain_allowed_types"
-msgstr "Vælg en eller flere typer, som det skal være muligt at tilføje i denne mappe og dens undermapper. Vælges ingen, er alle typer tilladte."
-
-
-msgid "description_enable_constrain_allowed_types"
-msgstr "Overskriv tilladte typer"
-
-
-msgid "effective"
-msgstr "Publiceringsdato"
-
-
-msgid "end"
-msgstr "Slut"
-
-
-msgid "exact date value"
-msgstr "Præcis datoværdi"
-
-
-msgid "exact integer value"
-msgstr "Præcis heltalsværdi"
-
-
-msgid "exact text value"
-msgstr "Ordret tekst"
-
-
-msgid "expires"
-msgstr "Udløbsdato"
-
-
-msgid "help_date_criteria_operation"
-msgstr "Dato operator"
-
-
-msgid "help_date_criteria_range"
-msgstr "Angiv om datointervallet er fremtidigt eller fortidigt"
-
-
-msgid "help_date_criteria_value"
-msgstr "Referencedato"
-
-
-msgid "help_int_criteria_value"
-msgstr "Et heltal"
-
-
-msgid "help_item_count"
-msgstr "Hvis 'Begræns antal objekter' er valgt vises kun de første 'antal objekter'."
-
-msgid "help_limit_number"
-msgstr "Begrænser antal viste objekter til de første 'antal objekter'."
-
-msgid "help_list_criteria_operator"
-msgstr ""
-
-
-msgid "help_list_criteria_value"
-msgstr "Værdier. En værdi på hver linje."
-
-
-msgid "help_string_criteria_value"
-msgstr "En strengværdi"
-
-
-# criterion_edit_form.cpt
-# These are the standard field names. No field_ possible. :/
-msgid "id"
-msgstr "Id"
-
-
-msgid "label_constrain_allowed_types"
-msgstr "Set allowed types"
-
-
-msgid "label_date_criteria_operation"
-msgstr "Anvendelse af referencedato"
-
-
-msgid "label_date_criteria_range"
-msgstr "Angiv om intervallet ligger før eller efter referencedatoen"
-
-
-msgid "label_date_criteria_value"
-msgstr "Referencedato"
-
-
-# schema of ConstrainTypesMixin.py
-msgid "label_enable_constrain_allowed_types"
-msgstr "Overskriv tilladte typer"
-
-
-msgid "label_int_criteria_value"
-msgstr "Heltalskriterie"
-
-
-msgid "label_item_count"
-msgstr "Antal objekter"
-
-
-# ATTopic
-msgid "label_limit_number"
-msgstr "Begræns antal objekter"
-
-
-msgid "label_list_criteria_operator"
-msgstr "Operator til sammenkædning af de enkelte kriterier"
-
-
-msgid "label_list_criteria_value"
-msgstr "Værdier. Hver værdi på sin egen linje."
-
-
-msgid "label_string_criteria_value"
-msgstr "En strengværdi"
-
-
-#: ./skins/ATContentTypes/atct_macros.pt
-#. <legend i18n:translate="legend_criteria_field">
-#.                Criterion for
-#.  ${fieldname}
-#. </legend>
-msgid "legend_criteria_field"
-msgstr ""
-
-
-msgid "logical AND or OR of list values"
-msgstr "Logiske OG eller ELLER listeværdier"
-
-
-msgid "modified"
-msgstr "Ændret"
-
-
-msgid "path"
-msgstr "Sti"
-
-
-msgid "portal types values"
-msgstr "Indholdstypeværdier"
-
-
-msgid "review_state"
-msgstr "Status"
-
-
-msgid "start"
-msgstr "Start"
-
-msgid "label_event_attendees"
-msgstr "Deltagere"
-
-msgid "help_event_attendees"
-msgstr "De, der skal deltage i begivenheden"
-
-msgid "label_atimage_longdescription"
-msgstr "Lang beskrivelse"
-
-msgid "help_atimage_longdescription"
-msgstr "Indtast en beskrivelse af billedet. Beskrivelsen bør forklare billedet for handikappede, hvis det er vigtigt for forståelsen af indholdet."
-
-msgid "label_template_mixin"
-msgstr "Template til visning"
-
-msgid "help_template_mixin"
-msgstr "Vælg template til visning af dette objekt"
-
-msgid "base_view"
-msgstr ""
-
-msgid "label_enable_quota_support"
-msgstr "Slå kvotaunderstøttelse til"
-
-msgid "A simple string criterion"
-msgstr "Tekstkriteriue"
-
-msgid "A date criteria"
-msgstr "Datokriterie"
-
-msgid "A list criterion"
-msgstr "Listekriteriue"
-
-msgid "A portal_types criterion"
-msgstr "Indholdstypekriterie"
-
-msgid "A simple int criterion"
-msgstr "Heltalskriterie"
-
-msgid "Changes saved"
-msgstr "Ændringerne er gem."
-
-msgid "Your changes have been saved."
-msgstr "Dine ændringer er gemt."
-
-msgid "old"
-msgstr "i fortiden"
-
-msgid "ahead"
-msgstr "I fremtiden"
-
-msgid "and"
-msgstr "Logisk og"
-
-msgid "or"
-msgstr "Logisk eller"
-
-msgid "help_criteria_type"
-msgstr "Vælg hvilken slags kriterie du vil angive."
-
-msgid "help_criteria_field_name"
-msgstr "Vælg for hvilket felt, du ønsker at angive et kriterie."
-
-msgid "Now"
-msgstr "Nu"
-
-msgid "1 Day"
-msgstr "1 dag"
-
-msgid "2 Days"
-msgstr "2 dage"
-
-msgid "5 Days"
-msgstr "5 dage"
-
-msgid "1 Week"
-msgstr "1 uge"
-
-msgid "2 Weeks"
-msgstr "2 uger"
-
-msgid "1 Month"
-msgstr "1 måned"
-
-msgid "3 Months"
-msgstr "3 måneder"
-
-msgid "6 Months"
-msgstr "6 måneder"
-
-msgid "1 Year"
-msgstr "1 år"
-
-msgid "2 Years"
-msgstr "2 år"
-
-msgid "min"
-msgstr "Referencedato eller senere"
-
-msgid  "max"
-msgstr "Referencedato eller tidligere"
-
 msgid "within_day"
-msgstr "Kun referencedato"
+msgstr ""
+
+#- Removed msgids:
+#  help_atimage_longdescription label_atimage_longdescription
+# label_enable_quota_support
+
+#- Added msgids:
+# 
