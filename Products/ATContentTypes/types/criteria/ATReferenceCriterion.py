@@ -18,7 +18,6 @@
 #
 """ Topic:
 
-$Id: ATReferenceCriterion.py,v 1.1.4.3 2005/03/09 21:48:21 tiran Exp $
 """
 
 __author__  = 'Alec Mitchell'

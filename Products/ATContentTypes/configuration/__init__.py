@@ -18,7 +18,6 @@
 #
 """ATCT ZConfig loader
 
-$Id: __init__.py,v 1.1.4.3 2005/03/20 00:08:37 tiran Exp $
 """
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'

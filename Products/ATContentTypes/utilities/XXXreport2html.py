@@ -15,7 +15,6 @@
 
 Creates a HTML file from a XXXReport file.
 
-$Id: XXXreport2html.py,v 1.1.2.1 2005/03/15 01:07:16 tiran Exp $
 """
 
 import sys
