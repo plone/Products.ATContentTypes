@@ -69,7 +69,10 @@ from Products.Archetypes.debug import _zlogger
 try:
     from Products.CMFPlone.interfaces.Translatable import ITranslatable
 except ImportError:
-    from Products.PloneLanguageTool.interfaces import ITranslatable
+    try:
+        from Products.PloneLanguageTool.interfaces import ITranslatable
+    except ImportError:
+        ITranslatable = None
 
 from Products.ATContentTypes.config import CHAR_MAPPING
 from Products.ATContentTypes.config import GOOD_CHARS
@@ -103,7 +106,8 @@ def registerATCT(class_, project):
     assert IATContentType.isImplementedByInstancesOf(class_)
     
     # this should go into LinguaPlone!
-    if ITranslatable.isImplementedByInstancesOf(class_):
+    # BBB remove is not None test later
+    if ITranslatable is not None and ITranslatable.isImplementedByInstancesOf(class_):
         class_.actions = updateActions(class_, translate_actions)
         
     registerType(class_, project)

@@ -12,7 +12,6 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-# $Id: XXXreport,v 1.1.2.2 2005/03/19 23:37:43 tiran Exp $
 
 # This script assumes it is located in the bin directory of Archetypes
 # Copied from the Zope3 sources. Thx for this nice utility :)

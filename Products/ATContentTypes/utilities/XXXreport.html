@@ -3,15 +3,15 @@
 
 <body>
 <h1>ATContentTypes - Developer report tools: XXX/TODO/BBB comments</h1>
-<p>Generated on Sun, 20 Mar 2005 00:37:41 CET</p>
+<p>Generated on Sun, 20 Mar 2005 15:32:19 CET</p>
 <hr>
 <h3>Summary</h3>
 <p>
- There are currently 52 XXX/TODO/BBB comments.
+ There are currently 54 XXX/TODO/BBB comments.
 </p>
 <hr/>
 <h3>Listing</h3>
-<ol><li><b>File: Archetypes/Extensions/Install.py:117</b><br/><pre>    # BBB remove these two dummy methods
+<ol><li><b>File: Archetypes/Extensions/Install.py:113</b><br/><pre>    # BBB remove these two dummy methods
     manage_addExternalMethod(self,'switchATCT2CMF',
         'DUMMY: Set reenable CMF type',
         PROJECTNAME+'.Install',
@@ -23,7 +23,7 @@
    [tiran]
 
  * Fixed [ 1049018 ] url field on Link doesn't allow mailto. Also added an
-</pre></li><li><b>File: Archetypes/docs/HISTORY.txt:24</b><br/><pre> * Added XXX report tool to ATCT. It's mostly a copy from the Zope3 XXX tools.
+</pre></li><li><b>File: Archetypes/docs/HISTORY.txt:28</b><br/><pre> * Added XXX report tool to ATCT. It's mostly a copy from the Zope3 XXX tools.
    [tiran]
 
  * Fixed [ 1049018 ] url field on Link doesn't allow mailto. Also added an
@@ -31,19 +31,19 @@
 
 Creates a HTML file from a XXXReport file.
 
-</pre></li><li><b>File: Archetypes/utilities/XXXreport2html.py:62</b><br/><pre><h1>ATContentTypes - Developer report tools: XXX/TODO/BBB comments</h1>
+</pre></li><li><b>File: Archetypes/utilities/XXXreport2html.py:61</b><br/><pre><h1>ATContentTypes - Developer report tools: XXX/TODO/BBB comments</h1>
 <p>Generated on %(reporttime)s</p>
 <hr>
 <h3>Summary</h3>
-</pre></li><li><b>File: Archetypes/utilities/XXXreport2html.py:67</b><br/><pre> There are currently %(commentcount)s XXX/TODO/BBB comments.
+</pre></li><li><b>File: Archetypes/utilities/XXXreport2html.py:66</b><br/><pre> There are currently %(commentcount)s XXX/TODO/BBB comments.
 </p>
 <hr/>
 <h3>Listing</h3>
-</pre></li><li><b>File: Archetypes/migration/ATCTMigrator.py:92</b><br/><pre>    # XXX can't handle nested topics
+</pre></li><li><b>File: Archetypes/migration/ATCTMigrator.py:94</b><br/><pre>    # XXX can't handle nested topics
     map = {'acquireCriteria' : 'setAcquireCriteria'}
 
     def custom(self):
-</pre></li><li><b>File: Archetypes/migration/ATCTMigrator.py:196</b><br/><pre>    # XXX atct._fixLargePloneFolder()
+</pre></li><li><b>File: Archetypes/migration/ATCTMigrator.py:198</b><br/><pre>    # XXX atct._fixLargePloneFolder()
     try:
         kwargs['default_language'] = pprop.aq_explicit.site_properties.default_language
     except (AttributeError, KeyError):
@@ -79,11 +79,11 @@ tests = []
 
 tests.append(TestSiteATFile)
 
-</pre></li><li><b>File: Archetypes/tests/test_atimage.py:107</b><br/><pre>        # XXX not a real test
+</pre></li><li><b>File: Archetypes/tests/test_atimage.py:110</b><br/><pre>        # XXX not a real test
         exif_data = self._ATCT.getEXIF()
         self.failUnless(isinstance(exif_data, dict), type(exif_data))
         
-</pre></li><li><b>File: Archetypes/tests/test_atimage.py:112</b><br/><pre>        # XXX not a real test
+</pre></li><li><b>File: Archetypes/tests/test_atimage.py:115</b><br/><pre>        # XXX not a real test
         r, m = self._ATCT.getEXIFOrientation()
         
     def test_transform(self):
@@ -91,8 +91,8 @@ tests.append(TestSiteATFile)
 
     def test_autotransform(self):
         self._ATCT.autoTransformImage()
-
-tests.append(TestSiteATImage)
+        
+    def test_broken_pil(self):
 </pre></li><li><b>File: Archetypes/tests/test_atlink.py:127</b><br/><pre>        # XXX more
 
         self.failUnless(migrated.getRemoteUrl() == url, 'URL mismatch: %s / %s' \
@@ -125,15 +125,19 @@ except ImportError:
 try:
     from Products.CMFPlone.interfaces.Translatable import ITranslatable
 except ImportError:
-</pre></li><li><b>File: Archetypes/types/ATContentType.py:88</b><br/><pre># XXX this should go into LinguaPlone!
+</pre></li><li><b>File: Archetypes/types/ATContentType.py:91</b><br/><pre># XXX this should go into LinguaPlone!
 translate_actions = ({
     'id'          : 'translate',
     'name'        : 'Translate',
-</pre></li><li><b>File: Archetypes/types/ATContentType.py:299</b><br/><pre>        # XXX what should be returned if no data is present?
+</pre></li><li><b>File: Archetypes/types/ATContentType.py:109</b><br/><pre>    # BBB remove is not None test later
+    if ITranslatable is not None and ITranslatable.isImplementedByInstancesOf(class_):
+        class_.actions = updateActions(class_, translate_actions)
+        
+</pre></li><li><b>File: Archetypes/types/ATContentType.py:303</b><br/><pre>        # XXX what should be returned if no data is present?
 
     security.declareProtected(CMFCorePermissions.View, 'get_data')
     def get_data(self):
-</pre></li><li><b>File: Archetypes/types/ATContentType.py:487</b><br/><pre>        # XXX no error catching
+</pre></li><li><b>File: Archetypes/types/ATContentType.py:491</b><br/><pre>        # XXX no error catching
         fh, mimetype, filename, size = self.loadFileFromURL(value,
                                            contenttypes=('image',))
         mutator = self.getPrimaryField().getMutator(self)
@@ -149,15 +153,15 @@ translate_actions = ({
             return cmp(self.Title(), other)
 
     def __hash__(self):
-</pre></li><li><b>File: Archetypes/types/ATImage.py:182</b><br/><pre>        XXX check if PIL removes EXIF when rescaling with orig_size
+</pre></li><li><b>File: Archetypes/types/ATImage.py:183</b><br/><pre>        XXX check if PIL removes EXIF when rescaling with orig_size
         """
         cache = '_image_exif'
         
-</pre></li><li><b>File: Archetypes/types/ATImage.py:198</b><br/><pre>                    # XXX bar exception, LOG
+</pre></li><li><b>File: Archetypes/types/ATImage.py:199</b><br/><pre>                    # XXX bar exception, LOG
                     exif_data = {}
                 # remove some unwanted elements lik thumb nails
                 for key in ('JPEGThumbnail', 'TIFFThumbnail'):
-</pre></li><li><b>File: Archetypes/types/ATImage.py:255</b><br/><pre>            # XXX except all, LOG
+</pre></li><li><b>File: Archetypes/types/ATImage.py:256</b><br/><pre>            # XXX except all, LOG
             return None
                 
             
@@ -193,7 +197,7 @@ translate_actions = ({
       <input type="checkbox" name="remove" />Remove old objects first?<br />
       <input type="submit" name="recatalogATCT" value="Recatalog ATCT types" />
     </fieldset>
-</pre></li><li><b>File: Archetypes/ATCTTool.py:268</b><br/><pre>            # XXX not impelemented
+</pre></li><li><b>File: Archetypes/ATCTTool.py:270</b><br/><pre>            # XXX not impelemented
             raise NotImplementedError, "Migrating a subset of types is not implemented"
         if isinstance(portal_types, basestring):
             portal_types = (portal_types,)
@@ -224,5 +228,9 @@ ACQUIRE = -1 # acquire enabled/disabled and locallyAllowedTypes from parent
 </pre></li><li><b>File: Archetypes/ftests/atctftestcase.py:146</b><br/><pre>        # XXX more tests?
         response = self.publish('%s/view' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
+
+</pre></li><li><b>File: Archetypes/ftests/atctftestcase.py:152</b><br/><pre>        # XXX security tests?
+        response = self.publish('%s/folder_localrole_form' % self.obj_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) # OK    
 
 </pre></li><ol></body></html>

@@ -7,22 +7,25 @@ Quick switching instructions for the impatient
    please install and convert your site on a backup instance, and report any
    failures/errors to us, so we can fix them.
    
- * You have to do two things to migrate the types and switch to the new ones:
- 
-   * Go to the external method 'migrateFromCMFtoATCT' in the ZMI of your portal
-     root. Run it using the 'test' tab. This will move all your content to the
-     new types.
-     
-   * Go to the external method 'switchCMF2ATCT' in the ZMI of your portal
-     root. Run it using the 'test' tab. This will rename the AT-based content
-     types to the default type names - and rename/hide the CMF-based ones.
+ * Update or install all required software like Archetypes,
+   ATReferenceBrowserWidget and ATContentTypes
 
-  * Your types are now be transferred to the new AT-based variants, and set as
-    the default types.
-    
-  * Don't forget to report any migration failures in the ATCT bug tracker on SF:
-    http://tinyurl.com/5brwn - we need your bug report to make migration as smooth
-    as possible!
+ * Restart Zope
+
+ * Install ATContentTypes using the quickinstaller_tool. It should install all
+   required products, too. It may take a while to install ATContentTypes because
+   the installer has to recatalog all CMF based types first in order to make
+   sure the migration doesn't break. Don't panik, reinstalls will be super fast
+   because the installer is able to distinguish between install, uninstall and
+   reinstall.
+
+ * Go to the ZMI (Zope management interface) and browse to the portal_atct tool.
+   Click on the migration tab and run the migration in order to migrate the old
+   CMF types to the new ATContentTypes types.
+     
+ * Don't forget to report any migration failures in the ATCT bug tracker on SF:
+   http://sourceforge.net/tracker/?atid=645337&group_id=55262&func=browse - we
+   need your bug report to make migration as smooth as possible!
     
        
 ============
@@ -40,14 +43,14 @@ Python 2.3.4+
 AT Content Types requires some new features of Python 2.3.4+.
 
 
-Archetypes 1.3.2
+Archetypes 1.3.3
 ----------------
 
 AT Content Types is tested with the following AT versions
 
- * AT 1.3.2-rc1 or newer releases of AT 1.3
+ * AT 1.3.3 (not yet released) or newer releases of AT 1.3
 
- * AT SVN anon bundle after 2005-02-26
+ * AT SVN anon bundle after 2005-03-20
    http://svn.plone.org/archetypes/bundles/anon-archetypes-1.3/
 
 AT Content Types doesn't work with other versions of Archetypes because some
@@ -59,8 +62,7 @@ AT Content Types doesn't work with AT 1.2.x or older!
 CMFQuickinstaller
 -----------------
 
-You have to install the upcoming version 1.5 of the quickinstaller tool. Right
-now it's only available from cvs.
+You have to install CMFQuickinstaller 1.5.2+ of the quickinstaller tool.
 
 Plone
 -----
@@ -69,9 +71,20 @@ AT Content Types requires the templates and icon of CMFPlone for viewing the
 types and AT Folder requires some code from PloneFolder, too. It should be easy
 to seperate the dependecies if needed.
 
-AT Content Types should work with Plone 2.0 but for better results use Plone
-2.0.3 or update CMFPlone to the latest branches/tiran-atct-integration 
-subversion version from http://svn.plone.org/
+ATContentTypes 1.0 is designed for the upcoming version 2.1 of Plone. Most parts
+of ATContentTypes will work with Plone 2.0.5 but there are at least 4 known bugs
+or missing features in Plone 2.0.5. Read ERRATA.txt for more informations. Maybe
+the plone community will release Plone 2.0.6 which will contain some bug fixes
+and backports from 2.1.
+
+ATReferenceBrowserWidget
+------------------------
+
+ATReferenceWidget from http://svn.plone.org/archetypes/MoreFieldsAndWidgets/
+is required for the related items field. There is no official release yet. You
+to get it from svn:
+
+  svn co http://svn.plone.org/archetypes/MoreFieldsAndWidgets/ATReferenceBrowserWidget/trunk/ ATReferenceBrowserWidget
 
 =====================
 Optional Requirements
@@ -146,6 +159,20 @@ For Zope 2.7 you also must set the rest-input-encoding and rest-out-encoding
 to the same encoding you are using as site-encoding for Plone. I suggest using
 utf-8 everywhere.
 
+=======================
+Migration from ATCT 0.2
+=======================
+
+ * Make sure you have switched to ATCT and ATCT types are the default types!
+
+ * Don't uninstall ATCT, instead stop Zope and install the updates for
+   Archetypes, QuickInstaller and ATContentTypes.
+
+ * Start Zope in debug mode to check that all products are installed correctly.
+
+ * Reinstall ATContentTypes using the quickinstaller tool. Do *NOT* uninstall
+   and install it!
+
 ========================
 Migration from CMF types
 ========================
@@ -167,7 +194,5 @@ Run it using the 'test' tab.
 Migration from CMF Plone Types
 ==============================
 
-Migration from CMF Plone Types to AT Content Types is less tested but should
-work like the migration from CMF types.
-There is an external method available for migration. See migrateFromCMFtoATCT
-and replace 'CMF' by 'CPT'
+Migration from CMF Plone Types is no longer supported. There are some outdated
+migration scripts available in CVS.

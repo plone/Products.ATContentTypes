@@ -56,11 +56,7 @@ def install(self, reinstall):
     
     # step 1: install tool
     # It's required for migration
-    tool = getToolByName(self, TOOLNAME, None)
-    if tool is None:
-        addTool = self.manage_addProduct['ATContentTypes'].manage_addTool
-        addTool('ATCT Tool')
-        tool = getToolByName(self, TOOLNAME)
+    tool = installTool(self, out)
         
     # step 2: recatalog CMF items if installing
     # I've to make sure all CMF types are in the catalog
@@ -147,7 +143,7 @@ def install(self, reinstall):
 
 def uninstall(self, reinstall):
     out = StringIO()
-    tool = getattr(self.aq_explicit, TOOLNAME)
+    tool = installTool(self, out)
     qi = getToolByName(self, 'portal_quickinstaller')
 
     # replace ATCT types with CMF types if uninstalling
@@ -178,6 +174,15 @@ def beforeUninstall(self, cascade, product, reinstall):
     if not reinstall:
         removeCMFTypesFromRegisteredTypes(self, product, out)
     return out.getvalue(), cascade
+
+def installTool(self, out):
+    tool = getToolByName(self, TOOLNAME, None)
+    if tool is None:
+        addTool = self.manage_addProduct['ATContentTypes'].manage_addTool
+        addTool('ATCT Tool')
+        tool = getToolByName(self, TOOLNAME)
+    print >>out, "Installing %s" % TOOLNAME
+    return tool
 
 def removeCMFTypesFromRegisteredTypes(self, product, out):
     qi_types = product.types

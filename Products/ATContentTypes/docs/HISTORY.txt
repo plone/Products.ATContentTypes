@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Updated README.txt and INSTALL.txt: new versions, update from ATCT 0.2 and
+   some other informations.
+   [tiran]
+
  * Changed permission of ATNewsItem.EditableBody() to ModifyPortalContent.
    [tiran]
 
