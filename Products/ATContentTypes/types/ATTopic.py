@@ -354,7 +354,7 @@ class ATTopic(ATCTFolder):
         brains = self.queryCatalog(sort_limit=limit)[:limit]
         return [brain.getObject() for brain in brains]
 
-registerType(ATTopic)
+registerType(ATTopic, PROJECTNAME)
 
 def modify_fti(fti):
     """Remove folderlisting action

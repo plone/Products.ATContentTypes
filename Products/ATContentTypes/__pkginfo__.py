@@ -7,7 +7,7 @@ version     = '0.2.0-rc5'
 numversion  = (0, 2, 0, -15)
 
 license     = 'GPL, ZPL'
-copyright   = '''(c) 2003-2004 AT Content Types development team'''
+copyright   = '''(c) 2003-2005 AT Content Types development team'''
 
 author      = 'AT Content Type development team, Christian Heimes'
 author_email= 'heimes@faho.rwth-aachen.de'
