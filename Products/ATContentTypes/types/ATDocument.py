@@ -116,11 +116,9 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         * hook into mxTidy an replace the value with the tidied value
         """
         field = self.getField('text')
-        if value is None:   # XXX work around for default values in collision
-                            # with upload file suppora
+        if value is None or value == "":   
             field.set(self, '', **kwargs)
-        if value == "":
-            return          # Empty strings mean 
+            return
 
         # hook for mxTidy / isTidyHtmlWithCleanup validator
         tidyOutput = self.getTidyOutput(field)
