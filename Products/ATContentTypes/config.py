@@ -76,7 +76,7 @@ TEMPLATE_MIXIN_PERMISSION = CMFCorePermissions.ManagePortal
 
 ## use ConstrainedMixin?
 ## if enabled you can constrain allowed types on an ATCT Folder
-ENABLE_CONSTRAIN_TYPES_MIXIN = False
+ENABLE_CONSTRAIN_TYPES_MIXIN = True
 CONSTRAIN_TYPES_MIXIN_PERMISSION = CMFCorePermissions.ManagePortal
 
 ## Document History view permission

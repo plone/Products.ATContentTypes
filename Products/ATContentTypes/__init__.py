@@ -57,9 +57,9 @@ from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.DirectoryView import registerDirectory
 
 # import all content types, migration and validators
+import Products.ATContentTypes.Validators
 import Products.ATContentTypes.content
 import Products.ATContentTypes.migration
-import Products.ATContentTypes.Validators
 from Products.ATContentTypes.ATCTTool import ATCTTool
 
 # wire the add permission after all types are registered
