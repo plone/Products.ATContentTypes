@@ -1,3 +1,19 @@
+0.2.0-rc4 - unreleased
+======================
+
+ * Fixed [ 1055347 ] id problems when member preferences are set to not display
+   and [ 1055348 ] ATCTFile id problems with portal_factory in ATCTFileContent.
+   _setATCTFileContent()
+   [tiran]
+
+ * Disabled external storages based types because neither I nor MrTopf have time
+   to support it right now.
+   [tiran]
+
+ * Added long description field and image tag to ATImage. Fixed [ 1056050 ] Add
+   longdesc to ATImage.
+   [tiran]
+
 0.2.0-rc3 - 2004-10-17
 ======================
 
