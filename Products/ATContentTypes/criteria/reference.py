@@ -33,6 +33,8 @@ from Products.ATContentTypes.criteria import LIST_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
 
+ATReferenceCriterionSchema = ATSelectionCriterion.schema
+
 class ATReferenceCriterion(ATSelectionCriterion):
     """A reference criterion"""
 

@@ -16,8 +16,7 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""
-
+"""ATContentTypes
 """
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
@@ -43,6 +42,7 @@ from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.DirectoryView import registerDirectory
 
 # import all content types, migration and validators
+import Products.ATContentTypes.configuration
 import Products.ATContentTypes.Extensions.Install
 import Products.ATContentTypes.lib.validators
 import Products.ATContentTypes.content
@@ -58,16 +58,6 @@ from Products.ATContentTypes.permission import wireAddPermissions
 wireAddPermissions()
 
 registerDirectory(SKINS_DIR,GLOBALS)
-
-#from Products.Archetypes import ArchetypeTool
-#ATToolModule = sys.modules[ArchetypeTool.__module__]
-#ATCT_TYPES = tuple(
-#    [at_type['klass'] for at_type in  ATToolModule._types.values()
-#     if (at_type['package'] == PROJECTNAME) and
-#     not IATTopicCriterion.isImplementedByInstancesOf(at_type['klass'])]
-#    )
-
-import Products.ATContentTypes.configuration
 
 def initialize(context):
     # process our custom types
