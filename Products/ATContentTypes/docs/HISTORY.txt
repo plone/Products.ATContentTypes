@@ -1,6 +1,12 @@
 1.0-devel
 ======================
 
+ * Disabled validator for ATEvent's phone field. Some people have reported that
+   they have issues because numbers and especially extensions are handle
+   differently in every country. Also see [ 974102 ] Can't enter phone extension
+   in phone number field.
+   [tiran]
+
  * Added XXX report tool to ATCT. It's mostly a copy from the Zope3 XXX tools.
    Note: XXX is a marker to show "here is something" wrong. It's not porn. :)
    The tool also reports TODO and BBB (for backward compatibility).

@@ -189,7 +189,9 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 searchable=True,
                 accessor='contact_phone',
                 write_permission = ChangeEvents,
-                validators = ('isInternationalPhoneNumber',),
+                # XXX disabled for now, see
+                # https://sourceforge.net/tracker/index.php?func=detail&aid=974102&group_id=55262&atid=645337
+                #validators = ('isInternationalPhoneNumber',),
                 widget = StringWidget(
                         description = ("Enter the phone number to call for "
                                        "information and/or booking."),
