@@ -117,11 +117,11 @@ def install(self, reinstall):
     # BBB remove these two dummy methods
     manage_addExternalMethod(self,'switchATCT2CMF',
         'DUMMY: Set reenable CMF type',
-        PROJECTNAME+'.install',
+        PROJECTNAME+'.Install',
         'dummyExternalMethod')
     manage_addExternalMethod(self,'switchCMF2ATCT',
         'DUMMY: Set ATCT as default content types ',
-        PROJECTNAME+'.install',
+        PROJECTNAME+'.Install',
         'dummyExternalMethod')
 
     manage_addExternalMethod(self,'migrateFromCMFtoATCT',
