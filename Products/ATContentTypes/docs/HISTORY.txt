@@ -1,6 +1,10 @@
 1.0-devel
 ======================
 
+ * Fixed bug [ 1154073 ] criterion_edit_form.cpt(.metadata) has no default
+   action. The default action for the criterion edit form is save.
+   [tiran]
+
  * Added portal_atct tool. The new tool will be used for the new topic features
    and for the plone control panel.
    [tiran]
