@@ -166,7 +166,7 @@ class CatalogWalker(Walker):
 
         for brain in brains:
             obj = brain.getObject()
-            if obj:
+            if obj is not None:
                 yield obj
                 # XXX safe my butt
                 obj._p_deactivate()
@@ -219,7 +219,7 @@ class CatalogWalkerWithLevel(Walker):
 
         for brain in toConvert:
             obj = brain.getObject()
-            if obj:
+            if obj is not None:
                 yield obj
                 # XXX safe my butt
                 obj._p_deactivate()
