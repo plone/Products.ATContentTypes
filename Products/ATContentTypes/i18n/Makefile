@@ -11,4 +11,4 @@ $(POFILES): $(POTFILE)
 	$(I18NDUDE) sync --pot $< $@
 
 rebuild-pot:
-	i18ndude rebuild-pot --pot $(NEWPOTFILE) --create $(DOMAIN) --merge $(POTFILE) $(SKINS)
+	$(I18NDUDE) rebuild-pot --pot $(NEWPOTFILE) --create $(DOMAIN) --merge $(POTFILE) $(SKINS)
