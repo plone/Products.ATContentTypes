@@ -38,10 +38,6 @@ class FakeRequest:
     def get(self, key, default=None):
         return default
 
-class FakeRequest:
-    def get(self, key, default=None):
-        return default
-
 class ATCTSiteTestCase(ArchetypesTestCase.ArcheSiteTestCase):
     """ AT Content Types test case based on a plone site with archetypes"""
 

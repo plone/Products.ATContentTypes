@@ -295,7 +295,19 @@ class ATTopic(ATCTFolder):
         if q is None:
             # empty query - do not show anything
             return []
-        kw.update(q)
+        # Allow parameters to further limit existing criterias
+        for k,v in q.items():
+            if kw.has_key(k):
+                arg = kw.get(k)
+                if isinstance(arg, (ListType,TupleType)) and isinstance(v, (ListType,TupleType)):
+                    kw[k] = [x for x in arg if x in v]
+                elif isinstance(arg, StringType) and isinstance(v, (ListType,TupleType)) and arg in v:
+                    kw[k] = [arg]
+                else:
+                    kw[k]=v
+            else:
+                kw[k]=v
+        #kw.update(q)
         pcatalog = getToolByName(self, 'portal_catalog')
         limit = self.getLimitNumber()
         max_items = self.getItemCount()
