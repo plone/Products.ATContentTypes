@@ -29,6 +29,7 @@ from Products.CMFCore import CMFCorePermissions
 
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import ImageField
+from Products.Archetypes.public import StringField
 from Products.Archetypes.public import TextField
 from Products.Archetypes.public import ImageWidget
 from Products.Archetypes.public import RichWidget
@@ -110,7 +111,8 @@ class ATNewsItem(ATDocument):
 
     content_icon   = 'newsitem_icon.gif'
     meta_type      = 'ATNewsItem'
-    portal_type    = 'News Item'
+    #portal_type    = 'News Item'
+    portal_type    = 'ATNewsItem'
     archetype_name = 'News Item'
     immediate_view = 'newsitem_view'
     default_view   = 'newsitem_view'

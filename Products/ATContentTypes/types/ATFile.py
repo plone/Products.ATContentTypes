@@ -77,7 +77,7 @@ class ATFile(ATCTFileContent):
 
     content_icon   = 'file_icon.gif'
     meta_type      = 'ATFile'
-    portal_type    = 'File'
+    portal_type    = 'ATFile'
     archetype_name = 'File'
     immediate_view = 'file_view'
     default_view   = 'file_view'
@@ -202,7 +202,7 @@ class ATExtFile(ATFile):
     schema         =  ATExtFileSchema
 
     content_icon   = 'file_icon.gif'
-    portal_type    = 'ATExtFile'
+    portal_type    = 'ATATExtFile'
     meta_type      = 'ATExtFile'
     archetype_name = 'AT Ext File'
     _atct_newTypeFor     = ''

@@ -83,7 +83,7 @@ class ATImage(ATCTFileContent):
 
     content_icon   = 'image_icon.gif'
     meta_type      = 'ATImage'
-    portal_type    = 'Image'
+    portal_type    = 'ATImage'
     archetype_name = 'Image'
     immediate_view = 'image_view'
     default_view   = 'image_view'
@@ -153,7 +153,7 @@ class ATExtImage(ATImage):
 
     content_icon   = 'image_icon.gif'
     meta_type      = 'ATExtImage'
-    portal_type    = 'ATExtImage'
+    portal_type    = 'ATATExtImage'
     archetype_name = 'AT Ext Image'
     _atct_newTypeFor     = ''
     assocMimetypes = ()

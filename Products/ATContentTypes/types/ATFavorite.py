@@ -66,7 +66,7 @@ class ATFavorite(ATCTContent):
 
     content_icon   = 'favorite_icon.gif'
     meta_type      = 'ATFavorite'
-    portal_type    = 'Favorite'
+    portal_type    = 'ATFavorite'
     archetype_name = 'Favorite'
     default_view   = 'favorite_view'
     immediate_view = 'favorite_view'

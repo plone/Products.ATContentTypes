@@ -79,7 +79,7 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
 
     content_icon   = 'document_icon.gif'
     meta_type      = 'ATDocument'
-    portal_type    = 'Document'
+    portal_type    = 'ATDocument'
     archetype_name = 'Document'
     default_view   = 'document_view'
     immediate_view = 'document_view'

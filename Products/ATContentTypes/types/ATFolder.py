@@ -34,6 +34,7 @@ from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.types.schemata import ATContentTypeSchema
 from Products.ATContentTypes.types.schemata import relatedItemsField
+from Products.ATContentTypes.ConstrainTypesMixin import ConstrainTypesMixinSchema
 
 ATFolderSchema      = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
@@ -48,7 +49,7 @@ class ATFolder(ATCTOrderedFolder):
 
     content_icon   = 'folder_icon.gif'
     meta_type      = 'ATFolder'
-    portal_type    = 'Folder'
+    portal_type    = 'ATFolder'
     archetype_name = 'Folder'
     immediate_view = 'folder_listing'
     default_view   = 'folder_listing'
@@ -83,7 +84,8 @@ class ATBTreeFolder(ATCTBTreeFolder):
 
     content_icon   = 'folder_icon.gif'
     meta_type      = 'ATBTreeFolder'
-    portal_type    = 'Large Plone Folder'
+    #portal_type    = 'Large Plone Folder'
+    portal_type    = 'ATBTreeFolder'
     archetype_name = 'BTree Folder'
     immediate_view = 'folder_listing'
     default_view   = 'folder_listing'

@@ -111,7 +111,7 @@ class ATTopic(ATCTFolder):
 
     content_icon   = 'topic_icon.gif'
     meta_type      = 'ATTopic'
-    portal_type    = 'Topic'
+    portal_type    = 'ATTopic'
     archetype_name = 'Topic'
     immediate_view = 'atct_topic_view'
     default_view   = 'atct_topic_view'
