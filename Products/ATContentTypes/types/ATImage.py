@@ -35,6 +35,7 @@ from OFS.Image import Image
 from cStringIO import StringIO
 from ExtensionClass import Base
 from Globals import InitializeClass
+from DateTime import DateTime
 
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import ImageField
@@ -120,7 +121,8 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
                primary=True,
                languageIndependent=True,
                #swallowResizeExceptions=True,
-               sizes= {'preview' : (400, 400),
+               sizes= {'large'   : (768, 768),
+                       'preview' : (400, 400),
                        'mini'    : (200, 200),
                        'thumb'   : (128, 128),
                        'tile'    :  (64, 64),
@@ -209,17 +211,22 @@ class ATCTImageTransform(Base):
         if exif_data is None or not isinstance(exif_data, dict):
             img = self.getImageAsFile(scale=None)
             if img:
-                exif_data = exif.process_file(img, debug=False, noclose=True)
+                # some cameras are naughty :(
+                try:
+                    exif_data = exif.process_file(img, debug=False, noclose=True)
+                except:
+                    # XXX bar exception
+                    exif_data = {}
                 # remove some unwanted elements lik thumb nails
                 for key in ('JPEGThumbnail', 'TIFFThumbnail'):
                     if key in exif_data:
                         del exif_data[key]
-        
-        setattr(self, cache, exif_data)
-        
+
         if not exif_data:
             # alawys return a dict
             exif_data = {}
+        else:
+            setattr(self, cache, exif_data)
         return exif_data
 
     security.declareProtected(CMFCorePermissions.View, 'getEXIFOrientation')
@@ -254,6 +261,21 @@ class ATCTImageTransform(Base):
             rotation = 270
        
         return (mirror, rotation)
+    
+    def getEXIFOrigDate(self):
+        """Get the EXIF DateTimeOriginal from the image (or None)
+        """
+        exif_data = self.getEXIF()
+        # some cameras are naughty ...
+        try:
+            raw_date = exif_data.get('EXIF DateTimeOriginal', None)
+            if raw_date is not None:
+                return DateTime(str(raw_date))
+        except:
+            # XXX except all
+            return None
+                
+            
 
     security.declareProtected(CMFCorePermissions.ModifyPortalContent, 
                               'transformImage')

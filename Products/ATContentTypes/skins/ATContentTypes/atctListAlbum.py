@@ -17,12 +17,12 @@ if folders:
     result['folders'] = context.listFolderContents(contentFilter={'Type':('Folder',)})
 if subimages:
     catalog = getToolByName(context, 'portal_catalog')
-    result['subimages'] = catalog(portal_type='Image',
-                                  path='/'.join(context.getPhysicalPath()))
+    path = '/'.join(context.getPhysicalPath())
+    result['subimages'] = catalog(portal_type='Image', path=path)
 if others:
     allowedContentTypes = context.allowedContentTypes()
     filtered = [type.getId() for type in allowedContentTypes
-                if type not in ('Image', 'Folder',) ]
+                if type.getId() not in ('Image', 'Folder',) ]
     if filtered:
         result['others'] = context.listFolderContents(contentFilter={'Type':filtered})
     else:
