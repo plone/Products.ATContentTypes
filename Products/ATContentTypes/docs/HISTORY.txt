@@ -1,3 +1,9 @@
+0.2.0-final - 2005-03-05
+========================
+
+ * fixed an problem with the initial mimetype of a newly created document
+   [tiran]
+
 0.2.0-rc5 - 2005-02-26
 ======================
 

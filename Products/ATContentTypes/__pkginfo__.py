@@ -1,10 +1,10 @@
 
 modname     = 'ATContentTypes'
-version     = '0.2.0-rc5'
+version     = '0.2.0-final'
 # (major, minor, patchlevel, release info) where release info is:
 # -99 for alpha, -49 for beta, -19 for rc and 0 for final
 # increment the release info number by one e.g. -98 for alpha2
-numversion  = (0, 2, 0, -15)
+numversion  = (0, 2, 0, 0)
 
 license     = 'GPL, ZPL'
 copyright   = '''(c) 2003-2005 AT Content Types development team'''
