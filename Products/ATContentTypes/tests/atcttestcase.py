@@ -331,7 +331,7 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnlessEqual(field.searchable, False)
         self.failUnlessEqual(getattr(field, 'primary', None), None)
         vocab = field.vocabulary
-        self.failUnlessEqual(vocab, '_voc_templates')
+        self.failUnlessEqual(vocab, 'getAvailableLayouts')
         self.failUnlessEqual(field.enforceVocabulary, False)
         self.failUnlessEqual(field.multiValued, False)
         self.failUnlessEqual(field.isMetadata, False)

@@ -127,7 +127,8 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
     def test_release_settings_SAVE_TO_FAIL_FOR_DEVELOPMENT(self):
         old = _ATCT_OLD_VALUES
-        self.failUnlessEqual(old['ENABLE_TEMPLATE_MIXIN'], True)
+        # XXX: Removed, because it doesn't do anything now
+        # self.failUnlessEqual(old['ENABLE_TEMPLATE_MIXIN'], True)
         self.failUnlessEqual(old['EXT_STORAGE_ENABLE'], False)
         self.failUnlessEqual(old['INSTALL_LINGUA_PLONE'], False)
 

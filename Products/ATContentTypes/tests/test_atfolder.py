@@ -45,12 +45,13 @@ from Products.CMFPlone.PloneFolder import PloneFolder
 from Products.CMFPlone.LargePloneFolder import LargePloneFolder
 from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
 from Products.CMFPlone.interfaces.OrderedContainer import IOrderedContainer
-from Products.ATContentTypes.interfaces import IConstrainTypes
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.lib.autosort import IAutoSortSupport
 from Products.ATContentTypes.lib.autosort import IAutoOrderSupport
 from Interface.Verify import verifyObject
+
+from Products.CMFPlone.interfaces.ConstrainTypes import ISelectableConstrainTypes
 
 def editCMF(obj):
     dcEdit(obj)
@@ -66,8 +67,8 @@ class FolderTestMixin:
     """
 
     def test_implementsConstrainTypes(self):
-        self.failUnless(IConstrainTypes.isImplementedBy(self._ATCT))
-        self.failUnless(verifyObject(IConstrainTypes, self._ATCT)) 
+        self.failUnless(ISelectableConstrainTypes.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(ISelectableConstrainTypes, self._ATCT)) 
         
     def test_implements_autosort(self):
         self.failUnless(IAutoSortSupport.isImplementedBy(self._ATCT))
@@ -95,7 +96,7 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_implementsConstrainTypes(self):
-        iface = IConstrainTypes
+        iface = ISelectableConstrainTypes
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
@@ -155,7 +156,7 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_implementsConstrainTypes(self):
-        iface = IConstrainTypes
+        iface = ISelectableConstrainTypes
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 

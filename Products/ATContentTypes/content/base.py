@@ -62,7 +62,7 @@ from OFS.IOrderSupport import IOrderedContainer
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 
-from Products.Archetypes.TemplateMixin import TemplateMixin
+from Products.ATContentTypes.lib.browserdefault import BrowserDefaultMixin
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.Archetypes.debug import _default_logger
 from Products.Archetypes.debug import _zlogger
@@ -83,7 +83,6 @@ from Products.ATContentTypes.config import GOOD_CHARS
 from Products.ATContentTypes.config import MIME_ALIAS
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixin
 from Products.ATContentTypes.interfaces import IATContentType
-from Products.ATContentTypes.interfaces import ISelectableDefaultPage
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
 DEBUG = True
@@ -153,7 +152,7 @@ def translateMimetypeAlias(alias):
     return mime
 
 
-class ATCTMixin(TemplateMixin):
+class ATCTMixin(BrowserDefaultMixin):
     """Mixin class for AT Content Types"""
     schema         =  ATContentTypeSchema
 
@@ -172,7 +171,7 @@ class ATCTMixin(TemplateMixin):
     # see SkinnedFolder.__call__
     isDocTemp = False 
 
-    __implements__ = (IATContentType, TemplateMixin.__implements__)
+    __implements__ = (IATContentType, BrowserDefaultMixin.__implements__)
 
     security       = ClassSecurityInfo()
 
@@ -596,8 +595,7 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
     """ Constrained folderish type """
 
     __implements__ = (ATCTMixin.__implements__,
-                      ConstrainTypesMixin.__implements__,
-                      ISelectableDefaultPage)
+                      ConstrainTypesMixin.__implements__,)
 
     security       = ClassSecurityInfo()
 

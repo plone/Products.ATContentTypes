@@ -41,13 +41,16 @@ MX_TIDY_OPTIONS= zconf.mxtidy.options
 ## requires ExternalStorage (not working yet)
 EXT_STORAGE_ENABLE = zconf.externaltypes.enable
 
+
+# XXX: These are not currently used: they are enabled always
+
 ## use TemplateMixin?
 ## if enabled users can choose between different view templates for each object
-ENABLE_TEMPLATE_MIXIN = zconf.templatemixin.enable
+# ENABLE_TEMPLATE_MIXIN = zconf.templatemixin.enable
 
 ## use ConstrainedMixin?
 ## if enabled you can constrain allowed types on an ATCT Folder
-ENABLE_CONSTRAIN_TYPES_MIXIN = zconf.constraintypes.enable
+# ENABLE_CONSTRAIN_TYPES_MIXIN = zconf.constraintypes.enable
 
 ###############################################################################
 ## private options
@@ -263,11 +266,13 @@ MIME_ALIAS = {
 ## force enable some features for ATCT unit testing
 if os.environ.get('ZOPETESTCASE', False):
     _ATCT_OLD_VALUES = {
-        'ENABLE_TEMPLATE_MIXIN' : ENABLE_TEMPLATE_MIXIN,
+        # XXX: Disabled, as it currently does nothing
+        # 'ENABLE_TEMPLATE_MIXIN' : ENABLE_TEMPLATE_MIXIN,
         'EXT_STORAGE_ENABLE' : EXT_STORAGE_ENABLE,
         'INSTALL_LINGUA_PLONE' : INSTALL_LINGUA_PLONE,
         }
-    ENABLE_CONSTRAIN_TYPES_MIXIN = True
+    # XXX: Disabled, as it currently does nothing
+    # ENABLE_CONSTRAIN_TYPES_MIXIN = True
     EXT_STORAGE_ENABLE = True
     INSTALL_LINGUA_PLONE = True
     _ATCT_UNIT_TEST_MODE = True

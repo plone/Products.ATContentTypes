@@ -19,7 +19,7 @@
 """
 """
 
-__author__ = 'Leonardo Almeida'
+__author__ = 'Leonardo Almeida and Martin Aspeli <optilude@gmx.net>'
 __docformat__ = 'restructuredtext'
 
 import os, sys
@@ -33,7 +33,7 @@ from Products.ATContentTypes.config import _ATCT_UNIT_TEST_MODE
 from AccessControl import Unauthorized
 
 from Products.ATContentTypes.lib import constraintypes
-from Products.ATContentTypes.interfaces import IConstrainTypes
+from Products.CMFPlone.interfaces.ConstrainTypes import ISelectableConstrainTypes
 from Products.Archetypes.public import registerType, process_types, listTypes
 from Products.Archetypes.Extensions.utils import installTypes
 from AccessControl.SecurityManagement import newSecurityManager
@@ -65,11 +65,11 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.failUnless(isinstance(self.af,
                                    constraintypes.ConstrainTypesMixin),
                         "ConstrainTypesMixin was not mixed in to ATFolder")
-        self.failUnless(IConstrainTypes.isImplementedBy(self.af),
-                        "IConstrainTypes not implemented by ATFolder instance")
+        self.failUnless(ISelectableConstrainTypes.isImplementedBy(self.af),
+                        "ISelectableConstrainTypes not implemented by ATFolder instance")
 
     def test_enabled(self):
-        self.af.setEnableAddRestrictions(constraintypes.ENABLED)
+        self.af.setConstrainTypesMode(constraintypes.ENABLED)
         self.af.setLocallyAllowedTypes(['Folder', 'Image'])
         self.af.setImmediatelyAddableTypes(['Folder'])
         
@@ -85,7 +85,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
             self.fail()
         
     def test_disabled(self):
-        self.af.setEnableAddRestrictions(constraintypes.DISABLED)
+        self.af.setConstrainTypesMode(constraintypes.DISABLED)
         self.af.setLocallyAllowedTypes(['Folder', 'Image'])
         self.af.setImmediatelyAddableTypes(['Folder'])
         
@@ -108,7 +108,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         
     def test_acquireFromHomogenousParent(self):
         # Set up outer folder with restrictions enabled
-        self.af.setEnableAddRestrictions(constraintypes.ENABLED)
+        self.af.setConstrainTypesMode(constraintypes.ENABLED)
         self.af.setLocallyAllowedTypes(['Folder', 'Image'])
         self.af.setImmediatelyAddableTypes(['Folder'])
         
@@ -116,7 +116,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.af.invokeFactory('Folder', 'inner', title='inner')
         inner = self.af.inner
         
-        inner.setEnableAddRestrictions(constraintypes.ACQUIRE)
+        inner.setConstrainTypesMode(constraintypes.ACQUIRE)
         
         # Test persistence
         inner.setLocallyAllowedTypes(['Document', 'Event'])
@@ -146,7 +146,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
             ('Document', 'Image', 'News Item', 'Topic', 'SimpleFolder', 'Folder')
         
         # Set up outer folder with restrictions enabled
-        self.af.setEnableAddRestrictions(constraintypes.ENABLED)
+        self.af.setConstrainTypesMode(constraintypes.ENABLED)
         self.af.setLocallyAllowedTypes(['Folder', 'Image', 'SimpleFolder'])
         self.af.setImmediatelyAddableTypes(['Folder'])
   
@@ -157,7 +157,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         outer.invokeFactory('Folder', 'inner', title='inner')
         inner = outer.inner 
         
-        inner.setEnableAddRestrictions(constraintypes.ACQUIRE)
+        inner.setConstrainTypesMode(constraintypes.ACQUIRE)
         
         # Test persistence
         inner.setLocallyAllowedTypes(['Document', 'Event'])

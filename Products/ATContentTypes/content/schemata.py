@@ -35,8 +35,7 @@ from Products.Archetypes.public import SelectionWidget
 from Products.CMFCore import CMFCorePermissions
 
 from Products.ATContentTypes import permission as ATCTPermissions
-from Products.ATContentTypes.config import ENABLE_TEMPLATE_MIXIN
-from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
+from Products.ATContentTypes.lib.browserdefault import BrowserDefaultSchema
 
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 
@@ -87,25 +86,6 @@ urlUploadField = StringField('urlUpload',
             ),
         )
 
-ATContentTypeSchema = ATContentTypeBaseSchema + Schema((
-    # TemplateMixin
-    StringField('layout',
-                accessor="getLayout",
-                mutator="setLayout",
-                languageIndependent = True,
-                write_permission=ATCTPermissions.ModifyViewTemplate,
-                default_method="getDefaultLayout",
-                vocabulary="_voc_templates",
-                #enforceVocabulary=True,
-                widget=SelectionWidget(
-                    description="Choose a template that will be used for viewing this item.",
-                    description_msgid = "help_template_mixin",
-                    label = "View template",
-                    label_msgid = "label_template_mixin",
-                    i18n_domain = "plone",
-                    visible={'view' : 'hidden',
-                             'edit' : 'hidden'},
-    )),
-    ))
+ATContentTypeSchema = ATContentTypeBaseSchema + BrowserDefaultSchema
 
 __all__ = ('ATContentTypeSchema', 'relatedItemsField',)

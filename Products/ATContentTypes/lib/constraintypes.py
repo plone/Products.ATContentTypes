@@ -42,13 +42,14 @@ from Products.Archetypes.public import SelectionWidget
 from Products.Archetypes.public import IntDisplayList
 from Products.Archetypes.public import DisplayList
 
-from Products.ATContentTypes.interfaces import IConstrainTypes
 from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.criteria import _criterionRegistry
 
-# filter out forbidden ids and criteria
-FORBIDDEN_FTI_IDS = ('Plone Site', 'TempFolder', 'Discussion Item')
+from Products.ATContentTypes.config import HAS_PLONE2
+
+if HAS_PLONE2:
+    from Products.CMFPlone.interfaces.ConstrainTypes import ISelectableConstrainTypes
 
 # constants for enableConstrainMixin
 ACQUIRE = -1 # acquire locallyAllowedTypes from parent (default)
@@ -67,7 +68,7 @@ enableDisplayList = IntDisplayList((
     ))
 
 ConstrainTypesMixinSchema = Schema((
-    IntegerField('enableAddRestrictions',
+    IntegerField('constrainTypesMode',
         required = False,
         default = ACQUIRE,
         vocabulary = enableDisplayList,
@@ -137,7 +138,10 @@ class ConstrainTypesMixin:
         constrain the addable types on a per-folder basis.
     """
 
-    __implements__ = (IConstrainTypes, )
+    if HAS_PLONE2:
+        __implements__ = (ISelectableConstrainTypes, )
+    else:
+        __implements__ = ()
 
     security = ClassSecurityInfo()
     
@@ -172,16 +176,16 @@ class ConstrainTypesMixin:
         as the parent is of the same type - if not, use the same behaviuor as
         DISABLE: return the types allowable in the item.
         """
-        mode = self.getEnableAddRestrictions()
+        mode = self.getConstrainTypesMode()
         
         if mode == DISABLED:
-            return [fti.getId() for fti in self._ct_getDefaultAllowTypes()]
+            return [fti.getId() for fti in self.getDefaultAddableTypes()]
         elif mode == ENABLED:
             return self.getField('locallyAllowedTypes').get(self)
         elif mode == ACQUIRE:
             parent = self.aq_inner.aq_parent
             if not parent or parent.portal_type != self.portal_type:
-                return [fti.getId() for fti in self._ct_getDefaultAllowTypes()]
+                return [fti.getId() for fti in self.getDefaultAddableTypes()]
             else:
                 return parent.getLocallyAllowedTypes()
         else:
@@ -196,7 +200,7 @@ class ConstrainTypesMixin:
         ACQUIRE, use the value from the parent; if it is DISABLE, return
         all type ids allowable on the item.
         """
-        mode = self.getEnableAddRestrictions()
+        mode = self.getConstrainTypesMode()
         
         if mode == DISABLED:
             return [fti.getId() for fti in \
@@ -217,7 +221,7 @@ class ConstrainTypesMixin:
     def allowedContentTypes(self):
         """returns constrained allowed types as list of fti's
         """
-        mode = self.getEnableAddRestrictions()
+        mode = self.getConstrainTypesMode()
         parent = self.aq_inner.aq_parent
         
         # Short circuit if we are disabled or acquiring from non-compatible
@@ -227,7 +231,7 @@ class ConstrainTypesMixin:
                 (parent and parent.portal_types != self.portal_types):
             return PortalFolder.allowedContentTypes(self)
         
-        globalTypes = self._ct_getDefaultAllowTypes()
+        globalTypes = self.getDefaultAddableTypes()
         allowed = list(self.getLocallyAllowedTypes())
         ftis = [ fti for fti in globalTypes if fti.getId() in allowed ]
 
@@ -238,7 +242,7 @@ class ConstrainTypesMixin:
     def invokeFactory(self, type_name, id, RESPONSE=None, *args, **kw):
         """Invokes the portal_types tool
         """
-        mode = self.getEnableAddRestrictions()
+        mode = self.getConstrainTypesMode()
         parent = self.aq_inner.aq_parent
         
         # Short circuit if we are disabled or acquiring from non-compatible
@@ -255,7 +259,23 @@ class ConstrainTypesMixin:
         pt = getToolByName( self, 'portal_types' )
         args = (type_name, self, id, RESPONSE) + args
         return pt.constructContent(*args, **kw)
-        
+    
+    security.declarePrivate('getDefaultAllowTypes')
+    def getDefaultAddableTypes(self):
+        """returns a list of normally allowed objects as ftis
+        """
+        # Use the parent allowedContentTypes(), which respects global_allow
+        # and filter_content_types
+        return PortalFolder.allowedContentTypes(self)
+
+    security.declarePublic('canSetConstrainTypes')
+    def canSetConstrainTypes(self):
+        """Find out if the current user is allowed to set the allowable types
+        """
+        mtool = getToolByName(self, 'portal_membership')
+        member = mtool.getAuthenticatedMember()
+        return member.has_permission(ATCTPermissions.ModifyConstrainTypes, self)
+
     #
     # Helper methods
     #
@@ -266,7 +286,7 @@ class ConstrainTypesMixin:
         """Get a DisplayList of types which may be added (id -> title)
         """
         typelist = [(fti.title_or_id(), fti.getId())
-                     for fti in self._ct_getDefaultAllowTypes()]
+                     for fti in self.getDefaultAddableTypes()]
         typelist.sort()
         return DisplayList([(id, title) for title, id in typelist])
 
@@ -276,16 +296,7 @@ class ConstrainTypesMixin:
         """Get a list of types which are addable in the ordinary case w/o the 
         constraint machinery. 
         """
-        return [fti.getId() for fti in self._ct_getDefaultAllowTypes()]
-        
-    # Helper for above
-    security.declarePrivate('_ct_getDefaultAllowTypes')
-    def _ct_getDefaultAllowTypes(self):
-        """returns a list of normally allowed objects as ftis
-        """
-        # Use the parent allowedContentTypes(), which respects global_allow
-        # and filter_content_types
-        return PortalFolder.allowedContentTypes(self)
-    
+        return [fti.getId() for fti in self.getDefaultAddableTypes()]
+            
         
 InitializeClass(ConstrainTypesMixin)
