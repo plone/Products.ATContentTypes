@@ -499,6 +499,8 @@ class ATCTFileContent(ATCTContent):
     def setUrlUpload(self, value, **kwargs):
         """Upload a file from URL
         """
+        if not value:
+            return
         # XXX no error catching
         fh, mimetype, filename, size = self.loadFileFromURL(value,
                                            contenttypes=('image',))
