@@ -21,7 +21,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         self.pt = getattr(self.portal.aq_explicit, 'portal_types')
         self.qi = getattr(self.portal.aq_explicit, 'portal_quickinstaller')
         
-    def test_installed_products():
+    def test_installed_products(self):
         qi = self.qi
         installed = [ prod['id'] for prod in qi.listInstalledProducts() ]
         self.failUnless('MimetypesRegistry' in installed, installed)
@@ -30,13 +30,13 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         self.failUnless('ATContentTypes' in installed, installed)
         self.failUnless('ATReferenceBrowserWidget' in installed, installed)
         
-    def test_types_installed():
+    def test_types_installed(self):
         pass
 
-    def test_tool_installed():
+    def test_tool_installed(self):
         pass
 
-    def test_skin_installed():
+    def test_skin_installed(self):
         stool = getattr(self.portal.aq_explicit, 'portal_skins')
         ids = stool.objectIds()
         self.failUnless('ATContentTypes' in ids, ids)
