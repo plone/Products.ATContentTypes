@@ -1,10 +1,9 @@
 # ATContentTypes messages catalog.
-# These are the messages collected by hand that i18ndude will merge in.
-# DO NOT TRANSLATE THIS CATALOG.
+# These are the messages that ATContentTypes adds to the plone domain.
 msgid ""
 msgstr ""
 "Project-Id-Version: ATContentTypes CVS\n"
-"POT-Creation-Date: 2005-03-17 00:16+0000\n"
+"POT-Creation-Date: 2004-05-11 23:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -165,15 +164,6 @@ msgid "label_string_criteria_value"
 msgstr ""
 
 
-#: ./skins/ATContentTypes/atct_macros.pt
-#. <legend i18n:translate="legend_criteria_field">
-#.                Criterion for
-#.  ${fieldname}
-#. </legend>
-msgid "legend_criteria_field"
-msgstr ""
-
-
 msgid "logical AND or OR of list values"
 msgstr ""
 
@@ -203,12 +193,6 @@ msgstr ""
 msgid "help_event_attendees"
 msgstr ""
 
-msgid "label_atimage_longdescription"
-msgstr ""
-
-msgid "help_atimage_longdescription"
-msgstr ""
-
 msgid "label_template_mixin"
 msgstr ""
 
@@ -216,9 +200,6 @@ msgid "help_template_mixin"
 msgstr ""
 
 msgid "base_view"
-msgstr ""
-
-msgid "label_enable_quota_support"
 msgstr ""
 
 msgid "A simple string criterion"
