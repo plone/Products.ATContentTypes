@@ -41,7 +41,9 @@ from Products.ATContentTypes.config import ATDOCUMENT_CONTENT_TYPE
 from Products.ATContentTypes.config import MAX_IMAGE_SIZE
 from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import translateMimetypeAlias
+from Products.ATContentTypes.types.ATContentType import updateActions
 from Products.ATContentTypes.types.ATDocument import ATDocument
+from Products.ATContentTypes.types.ATImage import ATCTImageTransform
 from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.ATContentTypes.types.schemata import ATContentTypeSchema
 from Products.ATContentTypes.types.schemata import relatedItemsField
@@ -104,7 +106,7 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
     )
 ATNewsItemSchema.addField(relatedItemsField)
 
-class ATNewsItem(ATDocument):
+class ATNewsItem(ATDocument, ATCTImageTransform):
     """A AT news item based on AT Document
     """
 
@@ -118,17 +120,19 @@ class ATNewsItem(ATDocument):
     default_view   = 'newsitem_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF News Item', 'meta_type' : 'News Item'}
-    typeDescription= ("A news item is a small piece of news that "
-                      "is published on the front page. "
-                      "Add the relevant details below, and press 'Save'.")
+    typeDescription = ("A news item is a small piece of news that "
+                       "is published on the front page. "
+                       "Add the relevant details below, and press 'Save'.")
     typeDescMsgId  = 'description_edit_news_item'
     assocMimetypes = ()
     assocFileExt   = ('news', )
     cmf_edit_kws   = ATDocument.cmf_edit_kws
 
     __implements__ = ATDocument.__implements__, IATNewsItem
+    
+    actions = updateActions(ATDocument, ATCTImageTransform.actions)
 
-    security       = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
     # XXX plone news template requires the View permission but
     # would be better ModifyPortalContent
@@ -139,7 +143,7 @@ class ATNewsItem(ATDocument):
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
         """
-        if title not in kwargs:
+        if 'title' not in kwargs:
             kwargs['title'] = self.getImageCaption()
         return self.getField('image').tag(self, **kwargs)
 

@@ -32,6 +32,8 @@ from Acquisition import aq_parent
 from ComputedAttribute import ComputedAttribute
 from OFS.Image import Image
 from cStringIO import StringIO
+from ExtensionClass import Base
+from Globals import InitializeClass
 
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import ImageField
@@ -145,30 +147,14 @@ imageField.storage = ExternalStorage(prefix = 'atct',
 # re-register storage layer
 imageField.registerLayer('storage', imageField.storage)
 
-
-class ATImage(ATCTFileContent):
-    """An Archetypes derived version of CMFDefault's Image"""
-
-    schema         =  ATImageSchema
-
-    content_icon   = 'image_icon.gif'
-    meta_type      = 'ATImage'
-    portal_type    = 'Image'
-    archetype_name = 'Image'
-    immediate_view = 'image_view'
-    default_view   = 'image_view'
-    suppl_views    = ()
-    _atct_newTypeFor = {'portal_type' : 'CMF Image', 'meta_type' : 'Portal Image'}
-    typeDescription= ("Using this form, you can enter details about the image, \n"
-                      "and upload an image if required.")
-    typeDescMsgId  = 'description_edit_image'
-    assocMimetypes = ('image/*', )
-    assocFileExt   = ('jpg', 'jpeg', 'png', 'gif', )
-    cmf_edit_kws   = ('file', )
-
-    __implements__ = ATCTFileContent.__implements__, IATImage
+class ATCTImageTransform(Base):
+    """Base class for images containing transformation and exif functions
     
-    actions = updateActions(ATCTFileContent, (
+    * exif information
+    * image rotation
+    """
+    
+    actions = (
         {
         'id'          : 'transform',
         'name'        : 'Transform',
@@ -176,44 +162,9 @@ class ATImage(ATCTFileContent):
         'permissions' : (CMFCorePermissions.ModifyPortalContent,),
         'condition'   : 'object/hasPIL',
          },
-        ))
-
-    security       = ClassSecurityInfo()
-
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setImage')
-    def setImage(self, value, **kwargs):
-        """Set id to uploaded id
-        """
-        self._setATCTFileContent(value, **kwargs)
-        # set exif because rotation might screw up the exif data
-        self.getEXIF(refresh=kwargs.get('refresh_exif', True))
-
-    security.declareProtected(CMFCorePermissions.View, 'tag')
-    def tag(self, **kwargs):
-        """Generate image tag using the api of the ImageField
-        """
-        return self.getField('image').tag(self, **kwargs)
-
-    def __str__(self):
-        """cmf compatibility
-        """
-        return self.tag()
+        )
     
-    security.declareProtected(CMFCorePermissions.View, 'getSize')
-    def getSize(self, scale=None):
-        field = self.getField('image')
-        return field.getSize(self, scale=scale)
-    
-    security.declareProtected(CMFCorePermissions.View, 'getWidth')
-    def getWidth(self, scale=None):
-        return self.getSize(scale)[0]
-
-    security.declareProtected(CMFCorePermissions.View, 'getHeight')
-    def getHeight(self, scale=None):
-        return self.getSize(scale)[1]
-    
-    width = ComputedAttribute(getWidth, 1)
-    height = ComputedAttribute(getHeight, 1)
+    security = ClassSecurityInfo()
 
     security.declarePrivate('getImageAsFile')
     def getImageAsFile(self, scale=None):
@@ -230,14 +181,6 @@ class ATImage(ATCTFileContent):
             return StringIO(data)
         else:
             return None
-    
-    security.declarePrivate('cmf_edit')
-    def cmf_edit(self, precondition='', file=None, title=None):
-        if file is not None:
-            self.setImage(file)
-        if title is not None:
-            self.setTitle(title)
-        self.reindexObject()
 
     # image related code like exif and rotation
     # partly based on CMFPhoto
@@ -378,6 +321,77 @@ class ATImage(ATCTFileContent):
         """Is PIL installed?
         """
         return HAS_PIL
+
+InitializeClass(ATCTImageTransform)
+
+class ATImage(ATCTFileContent, ATCTImageTransform):
+    """An Archetypes derived version of CMFDefault's Image"""
+
+    schema         =  ATImageSchema
+
+    content_icon   = 'image_icon.gif'
+    meta_type      = 'ATImage'
+    portal_type    = 'Image'
+    archetype_name = 'Image'
+    immediate_view = 'image_view'
+    default_view   = 'image_view'
+    suppl_views    = ()
+    _atct_newTypeFor = {'portal_type' : 'CMF Image', 'meta_type' : 'Portal Image'}
+    typeDescription= ("Using this form, you can enter details about the image, \n"
+                      "and upload an image if required.")
+    typeDescMsgId  = 'description_edit_image'
+    assocMimetypes = ('image/*', )
+    assocFileExt   = ('jpg', 'jpeg', 'png', 'gif', )
+    cmf_edit_kws   = ('file', )
+
+    __implements__ = ATCTFileContent.__implements__, IATImage
+    
+    actions = updateActions(ATCTFileContent, ATCTImageTransform.actions)
+
+    security       = ClassSecurityInfo()
+
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setImage')
+    def setImage(self, value, **kwargs):
+        """Set id to uploaded id
+        """
+        self._setATCTFileContent(value, **kwargs)
+        # set exif because rotation might screw up the exif data
+        self.getEXIF(refresh=kwargs.get('refresh_exif', True))
+
+    security.declareProtected(CMFCorePermissions.View, 'tag')
+    def tag(self, **kwargs):
+        """Generate image tag using the api of the ImageField
+        """
+        return self.getField('image').tag(self, **kwargs)
+    
+    def __str__(self):
+        """cmf compatibility
+        """
+        return self.tag()
+
+    security.declareProtected(CMFCorePermissions.View, 'getSize')
+    def getSize(self, scale=None):
+        field = self.getField('image')
+        return field.getSize(self, scale=scale)
+    
+    security.declareProtected(CMFCorePermissions.View, 'getWidth')
+    def getWidth(self, scale=None):
+        return self.getSize(scale)[0]
+
+    security.declareProtected(CMFCorePermissions.View, 'getHeight')
+    def getHeight(self, scale=None):
+        return self.getSize(scale)[1]
+    
+    width = ComputedAttribute(getWidth, 1)
+    height = ComputedAttribute(getHeight, 1)
+
+    security.declarePrivate('cmf_edit')
+    def cmf_edit(self, precondition='', file=None, title=None):
+        if file is not None:
+            self.setImage(file)
+        if title is not None:
+            self.setTitle(title)
+        self.reindexObject()
 
 registerATCT(ATImage, PROJECTNAME)
 
