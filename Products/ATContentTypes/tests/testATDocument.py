@@ -61,8 +61,8 @@ class TestSiteATDocument(ATCTSiteTestCase):
         new = self._ATCT
         editCMF(old)
         editATCT(new)
-        self.failUnless(old.CookedBody() == new.CookedBody(), 'Body mismatch: %s / %s' \
-                        % (old.CookedBody(), new.CookedBody()))
+        self.failUnless(old.CookedBody(stx_level=2) == new.CookedBody(), 'Body mismatch: %s / %s' \
+                        % (old.CookedBody(stx_level=2), new.CookedBody()))
 
     def test_cmf_edit_failure(self):
         self._ATCT.edit(thisisnotcmfandshouldbeignored=1)
@@ -77,7 +77,7 @@ class TestSiteATDocument(ATCTSiteTestCase):
         description = old.Description()
         mod         = old.ModificationDate()
         created     = old.CreationDate()
-        body        = old.CookedBody()
+        body        = old.CookedBody(stx_level=2)
 
         time.sleep(1.5)
 
