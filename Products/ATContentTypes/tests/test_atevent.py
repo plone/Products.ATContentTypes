@@ -351,8 +351,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
-        self.failUnless(field.validators == URLValidator,
-                        'Value is %s' % str(field.validators))
+        self.failUnlessEqual(field.validators, URLValidator)
         self.failUnless(isinstance(field.widget, StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
@@ -564,8 +563,10 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
-        self.failUnless(field.validators == PhoneValidator,
-                        'Value is %s' % str(field.validators))
+        # disabled
+        #self.failUnless(field.validators == PhoneValidator,
+        #                'Value is %s' % str(field.validators))
+        self.failUnlessEqual(field.validators, EmptyValidator)
         self.failUnless(isinstance(field.widget, StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)

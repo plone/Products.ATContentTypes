@@ -156,10 +156,12 @@ class CatalogWalker(Walker):
 
         for brain in brains:
             obj = brain.getObject()
+            try: state = obj._p_changed
+            except: state = 0
             if obj is not None:
                 yield obj
-                # XXX safe my butt
-                obj._p_deactivate()
+                # safe my butt
+                if state is None: obj._p_deactivate()
 
 registerWalker(CatalogWalker)
 
@@ -211,10 +213,12 @@ class CatalogWalkerWithLevel(Walker):
 
         for brain in toConvert:
             obj = brain.getObject()
+            try: state = obj._p_changed
+            except: state = 0
             if obj is not None:
                 yield obj
-                # XXX safe my butt
-                obj._p_deactivate()
+                # safe my butt
+                if state is None: obj._p_deactivate()
             else:
                 LOG("Stale brain found at %s" % brain.getPath())
 

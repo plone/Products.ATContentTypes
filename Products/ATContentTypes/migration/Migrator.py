@@ -442,11 +442,11 @@ class FolderMigrationMixin(ItemMigrationMixin):
         # using objectIds() should be safe with BrokenObjects
         for id in self.old.objectIds():
             obj = getattr(self.old.aq_inner.aq_explicit, id)
-            # XXX Fix broken object support. Maybe we are able to migrate them?
+            # Broken object support. Maybe we are able to migrate them?
             if isinstance(obj, BrokenClass):
                 log('WARNING: BrokenObject in %s' % \
                     self.old.absolute_url(1))
-                continue
+                #continue
             
             if orderAble:
                 try:

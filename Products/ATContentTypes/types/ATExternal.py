@@ -18,6 +18,7 @@
 #
 """External storage variants of ATFile and ATImage
 
+USE AT OWN RISK! Highly unstable
 """
 __author__  = 'Christian'
 __docformat__ = 'restructuredtext'
@@ -84,7 +85,6 @@ class ATExtFile(ATFile):
         field = self.getPrimaryField()
         field.download(self)
 
-# XXX use at own risk
 if HAS_EXT_STORAGE and EXT_STORAGE_ENABLE:
     registerATCT(ATExtFile, PROJECTNAME)
 
@@ -112,7 +112,6 @@ class ATExtImage(ATImage):
         field = self.getPrimaryField()
         field.download(self)
 
-# XXX use at own risk
 if HAS_EXT_STORAGE and EXT_STORAGE_ENABLE:
     registerATCT(ATExtImage, PROJECTNAME)
 

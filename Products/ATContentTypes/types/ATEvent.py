@@ -192,6 +192,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 # XXX disabled for now, see
                 # https://sourceforge.net/tracker/index.php?func=detail&aid=974102&group_id=55262&atid=645337
                 #validators = ('isInternationalPhoneNumber',),
+                validators= (),
                 widget = StringWidget(
                         description = ("Enter the phone number to call for "
                                        "information and/or booking."),
@@ -243,7 +244,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin):
         if type(value) is StringType:
             value = (value,)
         elif not value:
-            # XXX mostly harmless?
+            # mostly harmless?
             value = ()
         f = self.getField('eventType')
         f.set(self, value, **kw) # set is ok

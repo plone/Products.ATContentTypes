@@ -85,10 +85,10 @@ class ATBTreeFolder(ATCTBTreeFolder):
     content_icon   = 'folder_icon.gif'
     meta_type      = 'ATBTreeFolder'
     portal_type    = 'Large Plone Folder'
-    archetype_name = 'BTree Folder'
+    archetype_name = 'Large Folder'
     immediate_view = 'folder_listing'
     default_view   = 'folder_listing'
-    suppl_views    = ()
+    suppl_views    = ('atct_album_view', )
     global_allow   = False
     _atct_newTypeFor = {'portal_type' : 'CMF Large Plone Folder',
                         'meta_type' : 'Large Plone Folder'}

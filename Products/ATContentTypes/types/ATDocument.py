@@ -163,7 +163,6 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
 
         field.set(self, value, **kwargs) # set is ok
 
-    # XXX test me
     text_format = ComputedAttribute(ATCTContent.getContentType, 1)
 
     security.declarePrivate('guessMimetypeOfText')

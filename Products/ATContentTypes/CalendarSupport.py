@@ -113,7 +113,6 @@ class CalendarSupportMixin:
     actions = ({
         'id'          : 'ics',
         'name'        : 'iCalendar',
-        # XXX 'action'      : 'python: "%s/ics_view" % object_url.replace("http://", "webcal://")',
         'action'      : 'string:${object_url}/ics_view',
         'permissions' : (CMFCorePermissions.View, ),
         'category'    : 'document_actions',
@@ -167,7 +166,7 @@ class CalendarSupportMixin:
         eventType = self.getEventType()
         if eventType:
             out.write('CATEGORIES:%s\n' % eventType)
-        # XXX todo
+        # TODO
         #ORGANIZER;CN=%(name):MAILTO=%(email)
         #ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
         out.write(ICS_EVENT_END)
@@ -208,7 +207,7 @@ class CalendarSupportMixin:
         if location:
             out.write('LOCATION:%s\n' % location)
         out.write(VCS_EVENT_END)
-        # XXX todo
+        # TODO
         # Insert missing code here :]
         return n2rn(out.getvalue())
 

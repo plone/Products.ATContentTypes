@@ -180,7 +180,6 @@ class ATCTImageTransform(Base):
         The information is cached in _v_image_exif
         
         XXX check if PIL removes EXIF when rescaling with orig_size
-        XXX remove 'JPEGThumbnail' and 'TIFFThumbnail'?
         """
         cache = '_image_exif'
         
@@ -196,7 +195,7 @@ class ATCTImageTransform(Base):
                 try:
                     exif_data = exif.process_file(img, debug=False, noclose=True)
                 except:
-                    # XXX bar exception
+                    # XXX bar exception, LOG
                     exif_data = {}
                 # remove some unwanted elements lik thumb nails
                 for key in ('JPEGThumbnail', 'TIFFThumbnail'):
@@ -253,7 +252,7 @@ class ATCTImageTransform(Base):
             if raw_date is not None:
                 return DateTime(str(raw_date))
         except:
-            # XXX except all
+            # XXX except all, LOG
             return None
                 
             
@@ -276,7 +275,6 @@ class ATCTImageTransform(Base):
         target = self.absolute_url() + '/atct_image_transform'
         
         if not HAS_PIL:
-            # XXX should add a note for the user
             if REQUEST:
                 REQUEST.RESPONSE.redirect(target)
         
@@ -307,7 +305,7 @@ class ATCTImageTransform(Base):
     def autoTransformImage(self, REQUEST=None):
         """Auto transform image according to EXIF data
         
-        XXX isn't using mirror
+        Note: isn't using mirror
         """
         target = self.absolute_url() + '/atct_image_transform'
         mirror, rotation = self.getEXIFOrientation()

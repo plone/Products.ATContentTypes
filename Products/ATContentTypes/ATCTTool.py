@@ -108,7 +108,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
             if not IImageContent.isImplementedBy(obj):
                 continue
 
-            try: state = object._p_changed
+            try: state = obj._p_changed
             except: state = 0
     
             field = obj.getField('image')
@@ -116,7 +116,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
                 print >>out, 'Updating %s' % obj.absolute_url(1)
                 field.createScales(obj)
 
-            if state is None: object._p_deactivate()
+            if state is None: obj._p_deactivate()
     
         return out.getvalue()
 
@@ -131,7 +131,6 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
     def recatalogATCTTypes(self):
         """Remove and recatalog all ATCT types
         """
-        # XXX
         raise NotImplementedError
         
     def disableCMFTypes(self):
@@ -164,7 +163,14 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
     def enableCMFTypes(self):
         """Enable CMF types
         
-        XXX: Enabling CMF types leaves all ATCT based types in an insane state!
+        NOTE: Enabling CMF types leaves all ATCT based types in an insane state!
+        
+        Maybe we should rename the types:
+        
+            atct_bak_pt = 'AT %s' % cmf_pt
+            self._changePortalTypeName(cmf_pt, atct_bak_pt, global_allow=False)
+        
+        The feature isn't in the code because we don't support uninstall.
         """
         assert self.isCMFdisabled()
         result = []
@@ -180,9 +186,6 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
                 continue
             cmf_orig_pt = klass.portal_type
             cmf_bak_pt = ntf.get('portal_type')
-            # XXX backup?
-            #atct_bak_pt = 'AT %s' % cmf_pt
-            #self._changePortalTypeName(cmf_pt, atct_bak_pt, global_allow=False)
             ttool.manage_delObjects(cmf_orig_pt)
             result.append('Removing ATCT: %s' % cmf_orig_pt)
             self._changePortalTypeName(cmf_bak_pt, cmf_orig_pt, global_allow=False)
@@ -349,7 +352,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
             obj = brain.getObject()
             if not obj:
                 continue
-            try: state = object._p_changed
+            try: state = obj._p_changed
             except: state = 0
             #__traceback_info__ = (obj, getattr(obj, '__class__', 'no class'),
             #                      getattr(obj, 'meta_type', 'no metatype'),
@@ -386,7 +389,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
         ptto._actions = tuple(actions_to)
 
     def _fixPortalTypeOfMembersFolder(self):
-        # XXX why do I need this hack?
+        # Why do I need this hack?
         # probably because of the hard coded and false portal type in Plone :|
         # Members._getPortalTypeName() returns ATBTreeFolder instead of
         # Large Plone Folder

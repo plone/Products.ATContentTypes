@@ -1,6 +1,9 @@
 1.0-devel
 ======================
 
+ * Don't show PloneSite, TempFolder and criteria in constrain types list.
+   [tiran]
+
  * Disabled validator for ATEvent's phone field. Some people have reported that
    they have issues because numbers and especially extensions are handle
    differently in every country. Also see [ 974102 ] Can't enter phone extension

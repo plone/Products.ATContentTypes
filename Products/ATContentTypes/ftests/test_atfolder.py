@@ -47,8 +47,8 @@ tests.append(TestATFolderFunctional)
 
 class TestATBTreeFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
 
-    views = ('folder_listing', 'folder_contents', )
     portal_type = 'Large Plone Folder'
+    views = ('folder_listing', 'folder_contents', 'atct_album_view', )
 
     def afterSetUp(self):
         # enable global allow for BTree Folder

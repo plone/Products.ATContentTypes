@@ -43,8 +43,13 @@ from Products.Archetypes.public import IntDisplayList
 from Products.Archetypes.public import DisplayList
 
 from Products.ATContentTypes.interfaces import IConstrainTypes
+from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes import Permissions as ATCTPermissions
 from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
+from Products.ATContentTypes.types.criteria import _criterionRegistry
+
+# filter out forbidden ids and criteria
+FORBIDDEN_FTI_IDS = ('Plone Site', 'TempFolder', 'Discussion Item')
 
 # constants for enableConstrainMixin
 # XXX acquire vs. enabled is not implemented
@@ -165,6 +170,10 @@ class ConstrainTypesMixin:
         if ancestors_allowed_types:
             possible_ftis = [fti for fti in possible_ftis
                              if fti.getId() in ancestors_allowed_types]
+        
+        # filter out forbidden FTIs (TTT: needs a test)
+        possible_ftis = [fti for fti in possible_ftis
+            if fti.getId() not in _criterionRegistry.getPortalTypes() + FORBIDDEN_FTI_IDS]
         return possible_ftis
 
     security.declarePrivate('_ct_globalAddableTypeIds')

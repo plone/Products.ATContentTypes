@@ -135,7 +135,7 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
 
     security = ClassSecurityInfo()
 
-    # XXX plone news template requires the View permission but
+    # plone news template requires the View permission but
     # would be better ModifyPortalContent
     # BBB will be changed in the future. Don't rely on it!
     security.declareProtected(CMFCorePermissions.View, 'EditableBody')

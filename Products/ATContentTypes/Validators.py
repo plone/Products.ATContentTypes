@@ -196,9 +196,9 @@ def doTidy(value, field, request, cleanup=0):
 
     # it's a file upload
     if isinstance(value, FileUpload):
-        # XXX *mmh* ok it's a file upload but a file upload could destroy
-        # the layout, too. Maybe we are doomed?
-        return
+        # *mmh* ok it's a file upload but a file upload could destroy
+        # the layout, too.
+        value = FileUpload.read()
 
     result = mx_tidy(wrapValueInHTML(value), **MX_TIDY_OPTIONS)
     nerrors, nwarnings, outputdata, errordata = result

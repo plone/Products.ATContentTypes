@@ -57,6 +57,7 @@ class _CriterionRegistry(UserDict):
         UserDict.__init__(self, *args, **kwargs)
         self.index2criterion = {}
         self.criterion2index = {}
+        self.portaltypes = {}
 
     def register(self, criterion, indices):
         if type(indices) is StringType:
@@ -66,17 +67,19 @@ class _CriterionRegistry(UserDict):
         if indices == ():
             indices = ALL_INDICES
 
+        assert IATTopicCriterion.isImplementedByInstancesOf(criterion)
+        #generateClass(criterion)
+        registerType(criterion, PROJECTNAME)
+
         id = criterion.meta_type
         self[id] = criterion
+        self.portaltypes[criterion.portal_type] = criterion
 
         self.criterion2index[id] = indices
         for index in indices:
             value = self.index2criterion.get(index, ())
             self.index2criterion[index] = value + (id,)
 
-        assert IATTopicCriterion.isImplementedByInstancesOf(criterion)
-        #generateClass(criterion)
-        registerType(criterion, PROJECTNAME)
 
     def unregister(self, criterion):
         id = criterion.meta_type
@@ -107,6 +110,9 @@ class _CriterionRegistry(UserDict):
 
     def criteriaByIndex(self, index):
         return self.index2criterion[index]
+    
+    def getPortalTypes(self):
+        return tuple(self.portaltypes.keys())
 
 _criterionRegistry = _CriterionRegistry()
 registerCriterion = _criterionRegistry.register

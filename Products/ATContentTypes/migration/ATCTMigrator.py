@@ -19,6 +19,7 @@ are permitted provided that the following conditions are met:
    prior written permission.
 """
 
+from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.migration.common import registerATCTMigrator
 from Products.ATContentTypes.migration.common import LOG
 from Products.ATContentTypes.migration.Walker import CatalogWalker
@@ -39,7 +40,6 @@ from Products.ATContentTypes.types import ATLink
 from Products.ATContentTypes.types import ATNewsItem
 from Products.ATContentTypes.types import ATTopic
 from Products.ATContentTypes.types.ATContentType import translateMimetypeAlias
-# XXX from Products.ATContentTypes.Extensions.toolbox import _fixLargePloneFolder
 
 CRIT_MAP = {'Integer Criterion': 'ATSimpleIntCriterion',
                 'String Criterion': 'ATSimpleStringCriterion',
@@ -183,17 +183,17 @@ registerATCTMigrator(LargeFolderMigrator, ATFolder.ATBTreeFolder)
 
 migrators = (DocumentMigrator, EventMigrator, FavoriteMigrator, FileMigrator,
              ImageMigrator, LinkMigrator, NewsItemMigrator,
-             # XXX TopicMigrator,
             )
 
-folderMigrators = ( FolderMigrator, LargeFolderMigrator)
+folderMigrators = ( FolderMigrator, LargeFolderMigrator, TopicMigrator,)
 
 def migrateAll(portal):
     # first fix Members folder
     kwargs = {}
-    #XXX _fixLargePloneFolder(portal)
     catalog = getToolByName(portal, 'portal_catalog')
     pprop = getToolByName(portal, 'portal_properties')
+    atct = getToolByName(portal, TOOLNAME)
+    # XXX atct._fixLargePloneFolder()
     try:
         kwargs['default_language'] = pprop.aq_explicit.site_properties.default_language
     except (AttributeError, KeyError):

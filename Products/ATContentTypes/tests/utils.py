@@ -106,12 +106,19 @@ def Xprint(s):
     """
     ZopeTestCase._print(str(s)+'\n')
 
+from DateTime import DateTime
 def dcEdit(obj):
     """dublin core edit (inplace)
     """
-    obj.setTitle('Test Title')
+    obj.setTitle('Test title')
     obj.setDescription('Test description')
-    # XXX more
+    obj.setSubject('Test subject')
+    obj.setContributors(('test user a',))
+    obj.setEffectiveDate(DateTime() -1)
+    obj.setExpirationDate(DateTime() +2)
+    obj.setFormat('text/structured')
+    obj.setLanguage('de')
+    obj.setRights('GPL')
     
 from Products.validation import ValidationChain
 EmptyValidator = ValidationChain('isEmpty')
@@ -126,7 +133,12 @@ URLValidator = ValidationChain('isURL')
 URLValidator.appendSufficient('isEmptyNoError')
 URLValidator.appendRequired('isURL')
 RequiredURLValidator = ValidationChain('isRequiredURL')
+RequiredURLValidator.appendSufficient('isMailto')
 RequiredURLValidator.appendRequired('isURL')
+EmailValidator = ValidationChain('isEmailChain')
+EmailValidator.appendSufficient('isEmptyNoError')
+EmailValidator.appendSufficient('isMailto')
+EmailValidator.appendRequired('isEmail')
 EmailValidator = ValidationChain('isEmailChain')
 EmailValidator.appendSufficient('isEmptyNoError')
 EmailValidator.appendRequired('isEmail')

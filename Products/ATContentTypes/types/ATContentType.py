@@ -65,11 +65,7 @@ from Products.ATContentTypes import Permissions as ATCTPermissions
 from Products.Archetypes.debug import _default_logger
 from Products.Archetypes.debug import _zlogger
 
-# BBB remove import from PloneLanguageTool later
-try:
-    from Products.CMFPlone.interfaces.Translatable import ITranslatable
-except ImportError:
-    from Products.PloneLanguageTool.interfaces import ITranslatable
+from Products.CMFPlone.interfaces.Translatable import ITranslatable
 
 from Products.ATContentTypes.config import CHAR_MAPPING
 from Products.ATContentTypes.config import GOOD_CHARS
@@ -102,7 +98,7 @@ def registerATCT(class_, project):
     """
     assert IATContentType.isImplementedByInstancesOf(class_)
     
-    # XXX this should go into LinguaPlone!
+    # this should go into LinguaPlone!
     if ITranslatable.isImplementedByInstancesOf(class_):
         class_.actions = updateActions(class_, translate_actions)
         
@@ -161,7 +157,7 @@ class ATCTMixin(TemplateMixin):
     assocFileExt   = ()
     cmf_edit_kws   = ()
     
-    # XXX see SkinnedFolder.__call__
+    # see SkinnedFolder.__call__
     isDocTemp = False 
 
     __implements__ = (IATContentType, TemplateMixin.__implements__)
@@ -185,7 +181,7 @@ class ATCTMixin(TemplateMixin):
     security.declareProtected(CMFCorePermissions.ModifyPortalContent,
                               'initializeArchetype')
     def initializeArchetype(self, **kwargs):
-        """called by the generated addXXX factory in types tool
+        """called by the generated add* factory in types tool
 
         Overwritten to call edit() instead of update() to have the cmf
         compatibility method.
@@ -199,7 +195,7 @@ class ATCTMixin(TemplateMixin):
         except Exception, msg:
             _zlogger.log_exc()
             if DEBUG and str(msg) not in ('SESSION',):
-                # XXX debug code
+                # debug code
                 raise
                 #_default_logger.log_exc()
 
@@ -226,23 +222,6 @@ class ATCTMixin(TemplateMixin):
         """Overwrite this method to make AT compatible with the crappy CMF edit()
         """
         raise NotImplementedError("cmf_edit method isn't implemented")
-
-    # XXX: Must not override .vpy validator of same name
-    def DISABLED_validate_id(self, id):
-        parent = aq_parent(self)
-        parent_ids = parent.objectIds()
-
-        # If the id is given to a different object already
-        if id in parent_ids and aq_base(parent[id]) is not aq_base(self):
-            return 'Id %s is already in use' % id
-        
-        if ' ' in id:
-            return 'Spaces are not allowed in ids'
-        
-        try:
-            ObjectManager.checkValidId(self, id, allow_dup=1)
-        except BadRequest, m:
-            return str(m)
 
 InitializeClass(ATCTMixin)
 
@@ -313,7 +292,7 @@ class ATCTFileContent(ATCTContent):
         data  = field.getAccessor(self)(REQUEST=REQUEST, RESPONSE=RESPONSE)
         if data:
             return data.index_html(REQUEST, RESPONSE)
-        # XXX would should be returned if no data is present?
+        # XXX what should be returned if no data is present?
 
     security.declareProtected(CMFCorePermissions.View, 'get_data')
     def get_data(self):

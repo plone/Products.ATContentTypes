@@ -114,15 +114,15 @@ def install(self, reinstall):
     install_subskin(self, out, GLOBALS)
     
     # step 8: register switch methods to toggle old plonetypes on/off
-    # XXX remove this dummy methods
-    #manage_addExternalMethod(self,'switchATCT2CMF',
-    #    'Set reenable CMF type',
-    #    PROJECTNAME+'.toolbox',
-    #    'switchATCT2CMF')
+    # BBB remove these two dummy methods
+    manage_addExternalMethod(self,'switchATCT2CMF',
+        'DUMMY: Set reenable CMF type',
+        PROJECTNAME+'.install',
+        'dummyExternalMethod')
     manage_addExternalMethod(self,'switchCMF2ATCT',
-        'Set ATCT as default content types',
-        PROJECTNAME+'.toolbox',
-        'switchCMF2ATCT')
+        'DUMMY: Set ATCT as default content types ',
+        PROJECTNAME+'.install',
+        'dummyExternalMethod')
 
     manage_addExternalMethod(self,'migrateFromCMFtoATCT',
         'Migrate from CMFDefault types to ATContentTypes',
@@ -217,3 +217,9 @@ def setChainFor(portal_type, chain, wftool, out):
     if chain != '(Default)':
         # default is default :)
         wftool.setChainForPortalTypes((portal_type,), chain)
+
+
+def dummyExternalMethod(self, *args, **kwargs):
+    """Dummy external method for backward compatibility
+    """
+    return 

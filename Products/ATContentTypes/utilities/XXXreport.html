@@ -3,100 +3,30 @@
 
 <body>
 <h1>ATContentTypes - Developer report tools: XXX/TODO/BBB comments</h1>
-<p>Generated on Tue, 15 Mar 2005 01:49:38 CET</p>
+<p>Generated on Tue, 15 Mar 2005 16:24:04 CET</p>
 <hr>
 <h3>Summary</h3>
 <p>
- There are currently 70 XXX/TODO/BBB comments.
+ There are currently 39 XXX/TODO/BBB comments.
 </p>
 <hr/>
 <h3>Listing</h3>
-<ol><li><b>File: Archetypes/Extensions/Install.py:117</b><br/><pre>    # XXX remove this dummy methods
-    #manage_addExternalMethod(self,'switchATCT2CMF',
-    #    'Set reenable CMF type',
-    #    PROJECTNAME+'.toolbox',
-</pre></li><li><b>File: Archetypes/Extensions/toolbox.py:93</b><br/><pre>    # XXXfixMimeTypes(portal, klass, id)
-
-    # adjust the content type registry
-    #for predid, pred in preds:
-    #    typ = pred[1]
-    #    if typ == atId:
-</pre></li><li><b>File: Archetypes/Extensions/toolbox.py:119</b><br/><pre>    # XXX preds = reg.listPredicates()
-    #for predid, pred in preds:
-    #    typ = pred[1]
-    #    if typ == id:
-</pre></li><li><b>File: Archetypes/Extensions/toolbox.py:135</b><br/><pre>    # XXX maybe we need to reindex only portal_type and meta_type
-    #objects are recataloged in switching method
-    #cat.refreshCatalog(clear=1)
-    return out.getvalue()
-</pre></li><li><b>File: Archetypes/Extensions/toolbox.py:151</b><br/><pre>    # XXX maybe we need to reindex only portal_type and meta_type
-    #objects are recataloged in switching method
-    #cat.refreshCatalog(clear=1)
-    return out.getvalue()
-</pre></li><li><b>File: Archetypes/Extensions/toolbox.py:160</b><br/><pre>    # XXX why do I need this hack?
-    # probably because of the hard coded and false portal type in Plone :|
-    # Members._getPortalTypeName() returns ATBTreeFolder instead of
-    # Large Plone Folder
-</pre></li><li><b>File: Archetypes/Extensions/toolbox.py:248</b><br/><pre>    # XXX remove me
-    return
-    if isSwitchedToATCT(self):
-        return "Error: Already switched"
-</pre></li><li><b>File: Archetypes/Extensions/toolbox.py:259</b><br/><pre>    # XXX maybe we need to reindex only portal_type and meta_type
-    #objects are recataloged in switching method
-    #cat.refreshCatalog(clear=1)
-    return out.getvalue()
-</pre></li><li><b>File: Archetypes/Extensions/toolbox.py:265</b><br/><pre>    # XXX remove me
-    return
-    if not isSwitchedToATCT(self):
-        return "Error: Not switched"
-</pre></li><li><b>File: Archetypes/Extensions/toolbox.py:276</b><br/><pre>    # XXX maybe we need to reindex only portal_type and meta_type
-    #objects are recataloged in switching method
-    #cat.refreshCatalog(clear=1)
-    return out.getvalue()
-</pre></li><li><b>File: Archetypes/Extensions/toolbox.py:286</b><br/><pre>    # XXX remove me
-    return True
-    pt = getToolByName(self, 'portal_types')
-    doc = pt.getTypeInfo('Document')
-</pre></li><li><b>File: Archetypes/migration/ATCTMigrator.py:42</b><br/><pre># XXX from Products.ATContentTypes.Extensions.toolbox import _fixLargePloneFolder
-
-CRIT_MAP = {'Integer Criterion': 'ATSimpleIntCriterion',
-                'String Criterion': 'ATSimpleStringCriterion',
+<ol><li><b>File: Archetypes/Extensions/Install.py:117</b><br/><pre>    # BBB remove these two dummy methods
+    manage_addExternalMethod(self,'switchATCT2CMF',
+        'DUMMY: Set reenable CMF type',
+        PROJECTNAME+'install',
 </pre></li><li><b>File: Archetypes/migration/ATCTMigrator.py:92</b><br/><pre>    # XXX can't handle nested topics
     map = {'acquireCriteria' : 'setAcquireCriteria'}
 
     def custom(self):
-</pre></li><li><b>File: Archetypes/migration/ATCTMigrator.py:186</b><br/><pre>             # XXX TopicMigrator,
-            )
-
-folderMigrators = ( FolderMigrator, LargeFolderMigrator)
-</pre></li><li><b>File: Archetypes/migration/ATCTMigrator.py:194</b><br/><pre>    #XXX _fixLargePloneFolder(portal)
-    catalog = getToolByName(portal, 'portal_catalog')
-    pprop = getToolByName(portal, 'portal_properties')
+</pre></li><li><b>File: Archetypes/migration/ATCTMigrator.py:196</b><br/><pre>    # XXX atct._fixLargePloneFolder()
     try:
-</pre></li><li><b>File: Archetypes/migration/Migrator.py:445</b><br/><pre>            # XXX Fix broken object support. Maybe we are able to migrate them?
-            if isinstance(obj, BrokenClass):
-                log('WARNING: BrokenObject in %s' % \
-                    self.old.absolute_url(1))
-</pre></li><li><b>File: Archetypes/migration/Walker.py:161</b><br/><pre>                # XXX safe my butt
-                obj._p_deactivate()
-
-registerWalker(CatalogWalker)
-</pre></li><li><b>File: Archetypes/migration/Walker.py:216</b><br/><pre>                # XXX safe my butt
-                obj._p_deactivate()
-            else:
-                LOG("Stale brain found at %s" % brain.getPath())
-</pre></li><li><b>File: Archetypes/skins/ATContentTypes/validate_atct.vpy:14</b><br/><pre>## XXX It's hacky and not nice but it's working
-# Set the title from the filename of uploaded image or field
-# The title has to be set before the validation. This is the only place to do it
-# right although it's looking hackish.
+        kwargs['default_language'] = pprop.aq_explicit.site_properties.default_language
+    except (AttributeError, KeyError):
 </pre></li><li><b>File: Archetypes/tests/test_atfavorite.py:122</b><br/><pre>        # XXX more
 
         self.failUnless(migrated.getRemoteUrl() == url, 'URL mismatch: %s / %s' \
                         % (migrated.getRemoteUrl(), url))
-</pre></li><li><b>File: Archetypes/tests/utils.py:114</b><br/><pre>    # XXX more
-    
-from Products.validation import ValidationChain
-EmptyValidator = ValidationChain('isEmpty')
 </pre></li><li><b>File: Archetypes/tests/test_attopic.py:429</b><br/><pre>        # XXX not in the current version
         return
         dummy = self._dummy
@@ -167,123 +97,66 @@ except ImportError:
 
     def test_layout(self):
         dummy = self._dummy
-</pre></li><li><b>File: Archetypes/types/ATContentType.py:68</b><br/><pre># BBB remove import from PloneLanguageTool later
-try:
-    from Products.CMFPlone.interfaces.Translatable import ITranslatable
-except ImportError:
-</pre></li><li><b>File: Archetypes/types/ATContentType.py:88</b><br/><pre># XXX this should go into LinguaPlone!
+</pre></li><li><b>File: Archetypes/types/ATContentType.py:84</b><br/><pre># XXX this should go into LinguaPlone!
 translate_actions = ({
     'id'          : 'translate',
     'name'        : 'Translate',
-</pre></li><li><b>File: Archetypes/types/ATContentType.py:105</b><br/><pre>    # XXX this should go into LinguaPlone!
-    if ITranslatable.isImplementedByInstancesOf(class_):
-        class_.actions = updateActions(class_, translate_actions)
-        
-</pre></li><li><b>File: Archetypes/types/ATContentType.py:164</b><br/><pre>    # XXX see SkinnedFolder.__call__
-    isDocTemp = False 
-
-    __implements__ = (IATContentType, TemplateMixin.__implements__)
-</pre></li><li><b>File: Archetypes/types/ATContentType.py:202</b><br/><pre>                # XXX debug code
-                raise
-                #_default_logger.log_exc()
-
-</pre></li><li><b>File: Archetypes/types/ATContentType.py:230</b><br/><pre>    # XXX: Must not override .vpy validator of same name
-    def DISABLED_validate_id(self, id):
-        parent = aq_parent(self)
-        parent_ids = parent.objectIds()
-</pre></li><li><b>File: Archetypes/types/ATContentType.py:316</b><br/><pre>        # XXX would should be returned if no data is present?
+</pre></li><li><b>File: Archetypes/types/ATContentType.py:295</b><br/><pre>        # XXX what should be returned if no data is present?
 
     security.declareProtected(CMFCorePermissions.View, 'get_data')
     def get_data(self):
-</pre></li><li><b>File: Archetypes/types/ATContentType.py:504</b><br/><pre>        # XXX no error catching
+</pre></li><li><b>File: Archetypes/types/ATContentType.py:483</b><br/><pre>        # XXX no error catching
         fh, mimetype, filename, size = self.loadFileFromURL(value,
                                            contenttypes=('image',))
         mutator = self.getPrimaryField().getMutator(self)
-</pre></li><li><b>File: Archetypes/types/ATExternal.py:87</b><br/><pre># XXX use at own risk
-if HAS_EXT_STORAGE and EXT_STORAGE_ENABLE:
-    registerATCT(ATExtFile, PROJECTNAME)
-
-</pre></li><li><b>File: Archetypes/types/ATExternal.py:115</b><br/><pre># XXX use at own risk
-if HAS_EXT_STORAGE and EXT_STORAGE_ENABLE:
-    registerATCT(ATExtImage, PROJECTNAME)
-
 </pre></li><li><b>File: Archetypes/types/ATDocument.py:144</b><br/><pre>        # XXX this is ugly
         # When an object is initialized the first time we have to 
         # set the filename and mimetype.
         # In the case the value is empty/None we must not set the value because
-</pre></li><li><b>File: Archetypes/types/ATDocument.py:166</b><br/><pre>    # XXX test me
-    text_format = ComputedAttribute(ATCTContent.getContentType, 1)
-
-    security.declarePrivate('guessMimetypeOfText')
-</pre></li><li><b>File: Archetypes/types/ATDocument.py:233</b><br/><pre>        assert file == '', 'file currently not supported' # XXX
+</pre></li><li><b>File: Archetypes/types/ATDocument.py:232</b><br/><pre>        assert file == '', 'file currently not supported' # XXX
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
 
-</pre></li><li><b>File: Archetypes/types/ATEvent.py:244</b><br/><pre>            # XXX mostly harmless?
-            value = ()
-        f = self.getField('eventType')
-        f.set(self, value, **kw) # set is ok
-</pre></li><li><b>File: Archetypes/types/ATEvent.py:381</b><br/><pre>            # XXX come up with a nice cmp for types
+</pre></li><li><b>File: Archetypes/types/ATEvent.py:192</b><br/><pre>                # XXX disabled for now, see
+                # https://sourceforge.net/tracker/index.php?func=detail&aid=974102&group_id=55262&atid=645337
+                #validators = ('isInternationalPhoneNumber',),
+                widget = StringWidget(
+</pre></li><li><b>File: Archetypes/types/ATEvent.py:383</b><br/><pre>            # XXX come up with a nice cmp for types
             return cmp(self.Title(), other)
 
     def __hash__(self):
-</pre></li><li><b>File: Archetypes/types/ATImage.py:199</b><br/><pre>                    # XXX bar exception
+</pre></li><li><b>File: Archetypes/types/ATImage.py:198</b><br/><pre>                    # XXX bar exception, LOG
                     exif_data = {}
                 # remove some unwanted elements lik thumb nails
                 for key in ('JPEGThumbnail', 'TIFFThumbnail'):
-</pre></li><li><b>File: Archetypes/types/ATImage.py:256</b><br/><pre>            # XXX except all
+</pre></li><li><b>File: Archetypes/types/ATImage.py:255</b><br/><pre>            # XXX except all, LOG
             return None
                 
             
-</pre></li><li><b>File: Archetypes/types/ATImage.py:279</b><br/><pre>            # XXX should add a note for the user
-            if REQUEST:
-                REQUEST.RESPONSE.redirect(target)
-        
 </pre></li><li><b>File: Archetypes/types/ATLink.py:53</b><br/><pre>            # XXX description is wrong!
             description=("The address of the location. Prefix is "
                           "optional; if not provided, the link will be relative."),
             description_msgid = "help_url",
-</pre></li><li><b>File: Archetypes/types/ATNewsItem.py:138</b><br/><pre>    # XXX plone news template requires the View permission but
-    # would be better ModifyPortalContent
+</pre></li><li><b>File: Archetypes/types/ATNewsItem.py:140</b><br/><pre>    # BBB will be changed in the future. Don't rely on it!
     security.declareProtected(CMFCorePermissions.View, 'EditableBody')
 
     security.declareProtected(CMFCorePermissions.View, 'tag')
-</pre></li><li><b>File: Archetypes/CalendarSupport.py:116</b><br/><pre>        # XXX 'action'      : 'python: "%s/ics_view" % object_url.replace("http://", "webcal://")',
-        'action'      : 'string:${object_url}/ics_view',
-        'permissions' : (CMFCorePermissions.View, ),
-        'category'    : 'document_actions',
-</pre></li><li><b>File: Archetypes/CalendarSupport.py:170</b><br/><pre>        # XXX todo
+</pre></li><li><b>File: Archetypes/CalendarSupport.py:169</b><br/><pre>        # TODO
         #ORGANIZER;CN=%(name):MAILTO=%(email)
         #ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
         out.write(ICS_EVENT_END)
-</pre></li><li><b>File: Archetypes/CalendarSupport.py:211</b><br/><pre>        # XXX todo
+</pre></li><li><b>File: Archetypes/CalendarSupport.py:210</b><br/><pre>        # TODO
         # Insert missing code here :]
         return n2rn(out.getvalue())
 
-</pre></li><li><b>File: Archetypes/ATCTTool.py:134</b><br/><pre>        # XXX
-        raise NotImplementedError
-        
-    def disableCMFTypes(self):
-</pre></li><li><b>File: Archetypes/ATCTTool.py:183</b><br/><pre>            # XXX backup?
-            #atct_bak_pt = 'AT %s' % cmf_pt
-            #self._changePortalTypeName(cmf_pt, atct_bak_pt, global_allow=False)
-            ttool.manage_delObjects(cmf_orig_pt)
-</pre></li><li><b>File: Archetypes/ATCTTool.py:389</b><br/><pre>        # XXX why do I need this hack?
-        # probably because of the hard coded and false portal type in Plone :|
-        # Members._getPortalTypeName() returns ATBTreeFolder instead of
-        # Large Plone Folder
-</pre></li><li><b>File: Archetypes/ConstrainTypesMixin.py:50</b><br/><pre># XXX acquire vs. enabled is not implemented
+</pre></li><li><b>File: Archetypes/ConstrainTypesMixin.py:55</b><br/><pre># XXX acquire vs. enabled is not implemented
 DISABLED = 0 # use default behavior of PortalFolder which uses the FTI information
 ENABLED  = 1 # allow types from locallyAllowedTypes
 ACQUIRE = -1 # acquire enabled/disabled and locallyAllowedTypes from parent
-</pre></li><li><b>File: Archetypes/ConstrainTypesMixin.py:158</b><br/><pre>        # XXX maybe we want also to allow other FTIs
+</pre></li><li><b>File: Archetypes/ConstrainTypesMixin.py:163</b><br/><pre>        # XXX maybe we want also to allow other FTIs
         if myfti.filter_content_types:
             possible_ftis = [fti for fti in possible_ftis
                              if myfti.allowType(fti.getId())]
-</pre></li><li><b>File: Archetypes/Validators.py:199</b><br/><pre>        # XXX *mmh* ok it's a file upload but a file upload could destroy
-        # the layout, too. Maybe we are doomed?
-        return
-
 </pre></li><li><b>File: Archetypes/ftests/test_atfolder.py:42</b><br/><pre>        # XXX more tests?
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) #
