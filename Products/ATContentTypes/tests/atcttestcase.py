@@ -398,8 +398,8 @@ class ATCTFuncionalTestCase(ATFunctionalSiteTestCase):
         # omit ?portal_status_message=...
         body = response.getBody().split('?')[0]
         
-        self.failUnless(body.startswith(self.folder_url))
-        self.failUnless(body.endswith('/atct_edit'))
+        self.failUnless(body.startswith(self.folder_url), body)
+        self.failUnless(body.endswith('/atct_edit'), body)
 
         # Perform the redirect
         edit_form_path = body[len(self.app.REQUEST.SERVER_URL):]

@@ -1,6 +1,9 @@
 1.0-devel
 ======================
 
+ * Fixed ATTopic to use atct_edit like all other ATCT types.
+   [tiran]
+
  * Added ERRATA.txt which covers known issues.
    [tiran]
 

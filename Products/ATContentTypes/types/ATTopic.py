@@ -149,7 +149,7 @@ class ATTopic(ATCTFolder):
         {
         'id'          : 'edit',
         'name'        : 'Edit',
-        'action'      : 'string:${object_url}/base_edit',
+        'action'      : 'string:${object_url}/atct_edit',
         'permissions' : (ChangeTopics,)
         },
         {
