@@ -18,7 +18,7 @@ are permitted provided that the following conditions are met:
    to endorse or promote products derived from this software without specific
    prior written permission.
 
-$Id: Migrator.py,v 1.21.4.1 2004/11/10 18:28:10 tiran Exp $
+$Id: Migrator.py,v 1.21.4.2 2005/01/19 15:07:30 tiran Exp $
 """
 
 from copy import copy
@@ -153,6 +153,7 @@ class BaseMigrator:
             # may raise an exception, catch it later
             method()
 
+        self.reorder()
         self.remove()
 
     __call__ = migrate
@@ -263,6 +264,13 @@ class BaseMigrator:
         """
         raise NotImplementedError
 
+    def reorder(self):
+        """Reorder the new object in its parent
+
+        Must be implemented by the real Migrator
+        """
+        raise NotImplementedError
+
 class BaseCMFMigrator(BaseMigrator):
     """Base migrator for CMF objects
     """
@@ -341,6 +349,12 @@ class ItemMigrationMixin:
         """
         if REMOVE_OLD:
             self.parent.manage_delObjects([self.old_id])
+
+    def reorder(self):
+        """Reorder the new object in its parent
+        """
+        if IOrderedContainer.isImplementedBy(self.parent):
+            self.parent.moveObject(self.new_id,self.parent.getObjectPosition(self.old_id))
 
 class FolderMigrationMixin(ItemMigrationMixin):
     """Migrates a folderish object

@@ -18,7 +18,7 @@
 #
 """
 
-$Id: ATEvent.py,v 1.26.4.1 2004/12/13 17:09:42 tiran Exp $
+$Id: ATEvent.py,v 1.26.4.2 2005/01/19 15:07:31 tiran Exp $
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -207,17 +207,17 @@ class ATEvent(ATCTContent, CalendarSupportMixin):
         """Compare method
         
         If other is based on ATEvent, compare start, duration and title.
-        If other is a number, compare duration and number
+        #If other is a number, compare duration and number
         If other is a DateTime instance, compare start date with date
         In all other cases there is no specific order
         """
         if IATEvent.isImplementedBy(other):
             return cmp((self.start_date, self.duration, self.Title()),
                        (other.start_date, other.duration, other.Title()))
-        elif isinstance(other, (int, long, float)):
-            return cmp(self.duration, other)
+        #elif isinstance(other, (int, long, float)):
+        #    return cmp(self.duration, other)
         elif isinstance(other, DateTime):
-            return cmp(start, other)
+            return cmp(self.start(), other)
         else:
             return 0 # XXX ok?
 
