@@ -26,14 +26,37 @@ from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
-from Products.Archetypes.public import DisplayList
-from Products.ATContentTypes.config import *
-from Products.ATContentTypes.types.criteria import registerCriterion, \
-    STRING_INDICES
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
-from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
-from Products.ATContentTypes.types.criteria.schemata import ATPortalTypeCriterionSchema
 
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import MultiSelectionWidget
+from Products.Archetypes.public import DisplayList
+
+from Products.ATContentTypes.types.criteria import registerCriterion
+from Products.ATContentTypes.types.criteria import STRING_INDICES
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
+from Products.ATContentTypes.Permissions import ChangeTopics
+from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
+from Products.ATContentTypes.types.criteria.schemata import ATBaseCriterionSchema
+
+
+ATPortalTypeCriterionSchema = ATBaseCriterionSchema + Schema((
+    StringField('value',
+                required=1,
+                mode="rw",
+                write_permission=ChangeTopics,
+                accessor="getValue",
+                mutator="setValue",
+                default=None,
+                widget=MultiSelectionWidget(
+                    label="Value",
+                    label_msgid="label_portal_type_criteria_value",
+                    description="One of the registered portal types.",
+                    description_msgid="help_portal_type_criteria_value",
+                    i18n_domain="plone"),
+                ),
+
+    ))
 
 class ATPortalTypeCriterion(ATBaseCriterion):
     """A portal_types criterion"""

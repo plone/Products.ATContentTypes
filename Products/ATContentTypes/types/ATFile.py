@@ -23,26 +23,52 @@
 __author__  = ''
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
-
 from urllib import quote
-
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import registerType, BaseContent
-else:
-    from Products.Archetypes.public import registerType,BaseContent
 
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_parent
+from OFS.Image import File
+
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import FileField
+from Products.Archetypes.public import FileWidget
+from Products.Archetypes.public import PrimaryFieldMarshaller
 from Products.PortalTransforms.utils import TransformException
 
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import MAX_FILE_SIZE
+from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTFileContent
 from Products.ATContentTypes.interfaces import IATFile
-from Products.ATContentTypes.types.schemata import ATFileSchema, ATExtFileSchema
+from Products.ATContentTypes.types.schemata import ATContentTypeSchema
+from Products.ATContentTypes.types.schemata import relatedItemsField
+from Products.validation.validators.SupplValidators import MaxSizeValidator
 
-from OFS.Image import File
+
+
+ATFileSchema = ATContentTypeSchema.copy() + Schema((
+    FileField('file',
+              required=True,
+              primary=True,
+              languageIndependent=True,
+              validators = MaxSizeValidator('checkFileMaxSize',
+                                            maxsize=MAX_FILE_SIZE),
+              widget = FileWidget(
+                        #description = "Select the file to be added by clicking the 'Browse' button.",
+                        #description_msgid = "help_file",
+                        description = "",
+                        label= "File",
+                        label_msgid = "label_file",
+                        i18n_domain = "plone",
+                        show_content_type = False,)),
+    ), marshall=PrimaryFieldMarshaller()
+    )
+ATFileSchema.addField(relatedItemsField)
+
+ATExtFileSchema = ATFileSchema.copy()
+# XXX ATExtFileSchema['file'].storage = ExternalStorage(prefix='atct', archive=False)
 
 class ATFile(ATCTFileContent):
     """A Archetype derived version of CMFDefault's File"""
@@ -166,7 +192,7 @@ class ATFile(ATCTFileContent):
         if file is not None:
             self.setFile(file)
 
-registerType(ATFile, PROJECTNAME)
+registerATCT(ATFile, PROJECTNAME)
 
 
 class ATExtFile(ATFile):
@@ -206,4 +232,4 @@ class ATExtFile(ATFile):
 # and support for ext storage. Neither MrTopf nor I have time to work on ext
 # storage.
 #if HAS_EXT_STORAGE:
-#    registerType(ATExtFile, PROJECTNAME)
+#    registerATCT(ATExtFile, PROJECTNAME)

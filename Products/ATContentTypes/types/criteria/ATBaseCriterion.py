@@ -28,9 +28,11 @@ from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 
-from Products.ATContentTypes.config import *
-from Products.ATContentTypes.types.criteria import registerCriterion, \
-    ALL_INDICES, DATE_INDICES, STRING_INDICES, LIST_INDICES
+from Products.ATContentTypes.types.criteria import registerCriterion
+from Products.ATContentTypes.types.criteria import ALL_INDICES
+from Products.ATContentTypes.types.criteria import DATE_INDICES
+from Products.ATContentTypes.types.criteria import STRING_INDICES
+from Products.ATContentTypes.types.criteria import LIST_INDICES
 from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes.types.criteria.schemata import ATBaseCriterionSchema
 

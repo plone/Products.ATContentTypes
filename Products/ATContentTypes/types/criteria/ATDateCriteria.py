@@ -26,12 +26,92 @@ from DateTime import DateTime
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.config import *
-from Products.ATContentTypes.types.criteria import registerCriterion, \
-    DATE_INDICES
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import IntegerField
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import SelectionWidget
+from Products.Archetypes.public import DisplayList
+from Products.Archetypes.public import IntDisplayList
+
+from Products.ATContentTypes.types.criteria import registerCriterion
+from Products.ATContentTypes.types.criteria import DATE_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
+from Products.ATContentTypes.Permissions import ChangeTopics
 from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
-from Products.ATContentTypes.types.criteria.schemata import ATDateCriteriaSchema
+from Products.ATContentTypes.types.criteria.schemata import ATBaseCriterionSchema
+
+DateOptions = IntDisplayList((
+                    (     0, 'Now'      )
+                  , (     1, '1 Day'    )
+                  , (     2, '2 Days'   )
+                  , (     5, '5 Days'   )
+                  , (     7, '1 Week'   )
+                  , (    14, '2 Weeks'  )
+                  , (    31, '1 Month'  )
+                  , (  31*3, '3 Months' )
+                  , (  31*6, '6 Months' )
+                  , (   365, '1 Year'   )
+                  , ( 365*2, '2 Years'  )
+    ))
+
+CompareOperations = DisplayList((
+                    ('min', 'min')
+                  , ('max', 'max')
+                  , ('within_day', 'within_day')
+    ))
+
+RangeOperations = DisplayList((
+                    ('-', 'old')
+                  , ('+', 'ahead')
+    ))
+
+
+ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
+    IntegerField('value',
+                required=1,
+                mode="rw",
+                accessor="Value",
+                mutator="setValue",
+                write_permission=ChangeTopics,
+                default=None,
+                vocabulary=DateOptions,
+                widget=SelectionWidget(
+                    label="Date",
+                    label_msgid="label_date_criteria_value",
+                    description="Reference date",
+                    description_msgid="help_date_criteria_value",
+                    i18n_domain="plone"),
+                ),
+    StringField('operation',
+                required=1,
+                mode="rw",
+                default=None,
+                write_permission=ChangeTopics,
+                vocabulary=CompareOperations,
+                enforceVocabulary=1,
+                widget=SelectionWidget(
+                    label="Operation name",
+                    label_msgid="label_date_criteria_operation",
+                    description="Operation applied to the values",
+                    description_msgid="help_date_criteria_operation",
+                    i18n_domain="plone"),
+                ),
+    StringField('dateRange',
+                required=1,
+                mode="rw",
+                write_permission=ChangeTopics,
+                default=None,
+                vocabulary=RangeOperations,
+                enforceVocabulary=1,
+                widget=SelectionWidget(
+                    label="date range",
+                    label_msgid="label_date_criteria_range",
+                    description="Specify if the range is ahead of "
+                    "the reference date or not.",
+                    description_msgid="help_date_criteria_range",
+                    i18n_domain="plone"),
+                ),
+    ))
 
 
 class ATDateCriteria(ATBaseCriterion):

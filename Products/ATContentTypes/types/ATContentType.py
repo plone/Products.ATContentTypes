@@ -22,29 +22,24 @@
 __author__  = ''
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
-from Products.ATContentTypes.ConstrainTypesMixin import ConstrainTypesMixin
 
 from copy import copy
 
+from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 if HAS_LINGUA_PLONE:
     from Products.LinguaPlone.public import BaseContent
     from Products.LinguaPlone.public import BaseFolder
     from Products.LinguaPlone.public import OrderedBaseFolder
     from Products.LinguaPlone.public import BaseBTreeFolder
+    from Products.LinguaPlone.public import registerType
 else:
     from Products.Archetypes.public import BaseContent
     from Products.Archetypes.public import BaseFolder
     from Products.Archetypes.public import OrderedBaseFolder
     from Products.Archetypes.public import BaseBTreeFolder
+    from Products.Archetypes.public import registerType
 
-from Products.Archetypes.TemplateMixin import TemplateMixin
-from Products.Archetypes.debug import _default_logger
-from Products.Archetypes.debug import _zlogger
-
-from Products.CMFCore import CMFCorePermissions
-from Products.CMFCore.utils import getToolByName
-
+from Products.ATContentTypes.config import HAS_PLONE2
 if HAS_PLONE2:
     from Products.CMFPlone.PloneFolder import ReplaceableWrapper
     from webdav.NullResource import NullResource
@@ -60,10 +55,30 @@ from OFS import ObjectManager
 from zExceptions import BadRequest
 from webdav.Lockable import ResourceLockedError
 
+from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.utils import getToolByName
+
+from Products.Archetypes.TemplateMixin import TemplateMixin
+from Products.Archetypes.debug import _default_logger
+from Products.Archetypes.debug import _zlogger
+
+from Products.ATContentTypes.config import CHAR_MAPPING
+from Products.ATContentTypes.config import GOOD_CHARS
+from Products.ATContentTypes.config import MIME_ALIAS
+from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
+from Products.ATContentTypes.ConstrainTypesMixin import ConstrainTypesMixin
 from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.types.schemata import ATContentTypeSchema
 
 DEBUG = 1
+
+def registerATCT(class_, project):
+    """Registers an ATContentTypes based type
+    
+    One reason to use it is to hide the lingua plone related magic.
+    """
+    assert IATContentType.isImplementedByInstancesOf(class_)
+    registerType(class_, project)
 
 def updateActions(klass, actions):
     """Merge the actions from a class with a list of actions

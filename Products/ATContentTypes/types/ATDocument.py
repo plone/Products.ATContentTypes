@@ -22,14 +22,7 @@
 __author__  = ''
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
-
 from types import TupleType
-
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import registerType
-else:
-    from Products.Archetypes.public import registerType
 
 from ZPublisher.HTTPRequest import HTTPRequest
 from Products.CMFCore import CMFCorePermissions
@@ -37,12 +30,47 @@ from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
 
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import TextField
+from Products.Archetypes.public import RichWidget
+from Products.Archetypes.public import RFC822Marshaller
+
+from Products.ATContentTypes.config import ATDOCUMENT_CONTENT_TYPE
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTContent
 from Products.ATContentTypes.types.ATContentType import updateActions
 from Products.ATContentTypes.types.ATContentType import translateMimetypeAlias
+from Products.ATContentTypes.types.schemata import ATContentTypeSchema
+from Products.ATContentTypes.types.schemata import relatedItemsField
 from Products.ATContentTypes.HistoryAware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument
-from Products.ATContentTypes.types.schemata import ATDocumentSchema
+
+ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
+    TextField('text',
+              required=True,
+              searchable=True,
+              primary=True,
+              validators = ('isTidyHtmlWithCleanup',),
+              #validators = ('isTidyHtml',),
+              default_content_type = ATDOCUMENT_CONTENT_TYPE,
+              default_output_type = 'text/html',
+              allowable_content_types = ('text/structured',
+                                         'text/restructured',
+                                         'text/html',
+                                         'text/plain',
+                                         'text/plain-pre',
+                                         'text/python-source',),
+              widget = RichWidget(
+                        description = "The body text of the document.",
+                        description_msgid = "help_body_text",
+                        label = "Body text",
+                        label_msgid = "label_body_text",
+                        rows = 25,
+                        i18n_domain = "plone")),
+    ), marshall=RFC822Marshaller()
+    )
+ATDocumentSchema.addField(relatedItemsField)
 
 class ATDocument(ATCTContent, HistoryAwareMixin):
     """An Archetypes derived version of CMFDefault's Document"""
@@ -197,4 +225,4 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
 
-registerType(ATDocument, PROJECTNAME)
+registerATCT(ATDocument, PROJECTNAME)

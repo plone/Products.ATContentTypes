@@ -23,21 +23,27 @@
 __author__  = ''
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
-
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import registerType
-else:
-    from Products.Archetypes.public import registerType
-
 from AccessControl import ClassSecurityInfo
 
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
+from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTOrderedFolder
 from Products.ATContentTypes.types.ATContentType import ATCTBTreeFolder
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
-from Products.ATContentTypes.types.schemata import ATFolderSchema
-from Products.ATContentTypes.types.schemata import ATBTreeFolderSchema
+from Products.ATContentTypes.types.schemata import ATContentTypeSchema
+from Products.ATContentTypes.types.schemata import relatedItemsField
+
+ATFolderSchema      = ATContentTypeSchema.copy()
+ATBTreeFolderSchema = ATContentTypeSchema.copy()
+
+if ENABLE_CONSTRAIN_TYPES_MIXIN:
+    ATFolderSchema      = ATFolderSchema + ConstrainTypesMixinSchema
+    ATBTreeFolderSchema = ATBTreeFolderSchema + ConstrainTypesMixinSchema
+
+ATFolderSchema.addField(relatedItemsField)
+ATBTreeFolderSchema.addField(relatedItemsField)
 
 class ATFolder(ATCTOrderedFolder):
     """A simple folderish archetype"""
@@ -73,9 +79,7 @@ class ATFolder(ATCTOrderedFolder):
 ##        )
 ##    )
 
-registerType(ATFolder, PROJECTNAME)
-
-from Products.Archetypes.public import BaseBTreeFolder
+registerATCT(ATFolder, PROJECTNAME)
 
 class ATBTreeFolder(ATCTBTreeFolder):
     """A simple btree folderish archetype"""
@@ -99,4 +103,4 @@ class ATBTreeFolder(ATCTBTreeFolder):
 
     security       = ClassSecurityInfo()
 
-registerType(ATBTreeFolder, PROJECTNAME)
+registerATCT(ATBTreeFolder, PROJECTNAME)

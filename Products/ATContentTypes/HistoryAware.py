@@ -35,7 +35,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.config import *
+from Products.ATContentTypes.config import HISTORY_VIEW_PERMISSION
 from Products.ATContentTypes.interfaces import IHistoryAware
 
 class HistoryAwareMixin:

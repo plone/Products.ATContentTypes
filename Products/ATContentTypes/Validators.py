@@ -23,7 +23,10 @@
 __author__  = 'Christian Heimes'
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
+from Products.ATContentTypes.config import HAS_MX_TIDY
+from Products.ATContentTypes.config import MX_TIDY_ENABLED
+from Products.ATContentTypes.config import MX_TIDY_MIMETYPES
+from Products.ATContentTypes.config import MX_TIDY_OPTIONS
 
 from Products.validation.config import validation
 from Products.validation.interfaces.IValidator import IValidator

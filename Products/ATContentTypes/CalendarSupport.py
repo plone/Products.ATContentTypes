@@ -32,7 +32,6 @@ from Globals import InitializeClass
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.config import *
 from Products.ATContentTypes.interfaces import ICalendarSupport
 
 DATE = "%Y%m%dT%H%M%SZ"

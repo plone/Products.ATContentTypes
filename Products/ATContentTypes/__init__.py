@@ -25,12 +25,6 @@ __docformat__ = 'restructuredtext'
 
 import sys
 
-from Globals import package_home
-from Products.CMFCore.utils import ContentInit
-from Products.CMFCore.utils import ToolInit
-from Products.CMFCore import CMFCorePermissions
-from Products.CMFCore.DirectoryView import registerDirectory
-
 # load customconfig and overwrite the configureable options of config
 # with the values from customconfig
 try:
@@ -45,17 +39,27 @@ else:
             setattr(config, option, value)
     del config
 
-from Products.ATContentTypes.config import *
+from Products.ATContentTypes.config import HAS_LINGUA_PLONE
+from Products.ATContentTypes.config import SKINS_DIR
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import GLOBALS
 
 if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import *
+    from Products.LinguaPlone.public import process_types
+    from Products.LinguaPlone.public import listTypes
 else:
-    from Products.Archetypes.public import *
+    from Products.Archetypes.public import process_types
+    from Products.Archetypes.public import listTypes
+
+from Products.CMFCore.utils import ContentInit
+from Products.CMFCore.utils import ToolInit
+from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.DirectoryView import registerDirectory
 
 # import all content types, migration and validators
+import Products.ATContentTypes.content
 import Products.ATContentTypes.migration
 import Products.ATContentTypes.Validators
-import Products.ATContentTypes.types
 from Products.ATContentTypes.ATCTTool import ATCTTool
 
 # wire the add permission after all types are registered

@@ -24,7 +24,8 @@ __author__  = ''
 __docformat__ = 'restructuredtext'
 
 from Products.Archetypes import listTypes
-from Products.Archetypes.Extensions.utils import installTypes, install_subskin
+from Products.Archetypes.Extensions.utils import installTypes
+from Products.Archetypes.Extensions.utils import install_subskin
 from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.Catalog import CatalogError
 from StringIO import StringIO
@@ -37,9 +38,17 @@ from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.interfaces import IATFile
 
-from Products.ATContentTypes.config import *
-from Products.ATContentTypes.Extensions.utils import setupMimeTypes, registerTemplates
-from Products.ATContentTypes.Extensions.toolbox import disableCMFTypes, enableCMFTypes
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import WORKFLOW_FOLDER
+from Products.ATContentTypes.config import WORKFLOW_TOPIC
+from Products.ATContentTypes.config import WORKFLOW_CRITERIA
+from Products.ATContentTypes.config import WORKFLOW_DEFAULT
+from Products.ATContentTypes.config import INSTALL_LINGUA_PLONE
+from Products.ATContentTypes.config import GLOBALS
+from Products.ATContentTypes.Extensions.utils import setupMimeTypes
+from Products.ATContentTypes.Extensions.utils import registerTemplates
+from Products.ATContentTypes.Extensions.toolbox import disableCMFTypes
+from Products.ATContentTypes.Extensions.toolbox import enableCMFTypes
 
 def install(self):
     out = StringIO()

@@ -1,6 +1,16 @@
 1.0-devel
 ======================
 
+ * Dismembered the big beast schemata.py in types/ and types/criteria. The
+   schemata are in the same modules as the types.
+   [tiran]
+
+ * Added content module which contains all important classes.
+   [tiran]
+
+ * Replaced all "from foo import *" by explicit imports.
+   [tiran]
+
  * Used some code from Ben's great Bricolite product to have an add permission
    per type. It allows fine granulated permission settings.
    [tiran]

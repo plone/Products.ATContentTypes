@@ -23,27 +23,58 @@
 __author__  = ''
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
-
 from cgi import escape
-
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import registerType
-else:
-    from Products.Archetypes.public import registerType
 
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_parent
 from ComputedAttribute import ComputedAttribute
+from OFS.Image import Image
 
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import ImageField
+from Products.Archetypes.public import ImageWidget
+from Products.Archetypes.public import PrimaryFieldMarshaller
+
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import MAX_IMAGE_SIZE
+from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTFileContent
 from Products.ATContentTypes.types.ATContentType import cleanupFilename
 from Products.ATContentTypes.interfaces import IATImage
-from Products.ATContentTypes.types.schemata import ATImageSchema, ATExtImageSchema
+from Products.ATContentTypes.types.schemata import ATContentTypeSchema
+from Products.ATContentTypes.types.schemata import relatedItemsField
+from Products.validation.validators.SupplValidators import MaxSizeValidator
 
-from OFS.Image import Image
 
+ATImageSchema = ATContentTypeSchema.copy() + Schema((
+    ImageField('image',
+               required=True,
+               primary=True,
+               languageIndependent=True,
+               #swallowResizeExceptions=True,
+               sizes= {'preview' : (400, 400),
+                       'thumb'   : (128, 128),
+                       'tile'    :  (64, 64),
+                       'icon'    :  (32, 32),
+                       'listing' :  (16, 16),
+                      },
+               validators = MaxSizeValidator('checkFileMaxSize',
+                                             maxsize=MAX_IMAGE_SIZE),
+               widget = ImageWidget(
+                        #description = "Select the image to be added by clicking the 'Browse' button.",
+                        #description_msgid = "help_image",
+                        description = "",
+                        label= "Image",
+                        label_msgid = "label_image",
+                        i18n_domain = "plone",
+                        show_content_type = False,)),
+    ), marshall=PrimaryFieldMarshaller()
+    )
+ATImageSchema.addField(relatedItemsField)
+
+ATExtImageSchema = ATImageSchema.copy()
+# XXX ATExtImageSchema['image'].storage = ExternalStorage(prefix='atct', archive=False)
 
 class ATImage(ATCTFileContent):
     """An Archetypes derived version of CMFDefault's Image"""
@@ -114,7 +145,7 @@ class ATImage(ATCTFileContent):
             self.setTitle(title)
         self.reindexObject()
 
-registerType(ATImage, PROJECTNAME)
+registerATCT(ATImage, PROJECTNAME)
 
 
 class ATExtImage(ATImage):
@@ -149,4 +180,4 @@ class ATExtImage(ATImage):
 # and support for ext storage. Neither MrTopf nor I have time to work on ext
 # storage.
 #if HAS_EXT_STORAGE:
-#    registerType(ATExtImage, PROJECTNAME)
+#    registerATCT(ATExtImage, PROJECTNAME)

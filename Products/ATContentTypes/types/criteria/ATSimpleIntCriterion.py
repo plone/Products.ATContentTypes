@@ -25,13 +25,34 @@ __docformat__ = 'restructuredtext'
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.config import *
-from Products.ATContentTypes.types.criteria import registerCriterion, \
-    STRING_INDICES
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
-from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
-from Products.ATContentTypes.types.criteria.schemata import ATSimpleIntCriterionSchema
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import IntegerField
+from Products.Archetypes.public import IntegerWidget
 
+from Products.ATContentTypes.types.criteria import registerCriterion
+from Products.ATContentTypes.types.criteria import STRING_INDICES
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
+from Products.ATContentTypes.Permissions import ChangeTopics
+from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
+from Products.ATContentTypes.types.criteria.schemata import ATBaseCriterionSchema
+
+ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
+    IntegerField('value',
+                required=1,
+                mode="rw",
+                write_permission=ChangeTopics,
+                accessor="Value",
+                mutator="setValue",
+                default=None,
+                widget=IntegerWidget(
+                    label="Value",
+                    label_msgid="label_int_criteria_value",
+                    description="An integer number.",
+                    description_msgid="help_int_criteria_value",
+                    i18n_domain="plone"),
+                ),
+
+    ))
 
 class ATSimpleIntCriterion(ATBaseCriterion):
     """A simple int criterion"""

@@ -201,11 +201,11 @@ def setupATCT(app, id=ArchetypesTestCase.portal_name, quiet=0):
         qi=getToolByName(portal, 'portal_quickinstaller', None)
         qi.installProduct('ATContentTypes')
 
-    if isSwitchedToATCT(portal):
-        # XXX right now ATCT unit tests don't run in ATCT mode.
-        # Switching to native mode
-        ZopeTestCase._print('switching to CMF mode ... ')
-        portal.switchATCT2CMF()
+    #if isSwitchedToATCT(portal):
+    #    # XXX right now ATCT unit tests don't run in ATCT mode.
+    #    # Switching to native mode
+    #    ZopeTestCase._print('switching to CMF mode ... ')
+    #    portal.switchATCT2CMF()
 
     # Log out
     noSecurityManager()

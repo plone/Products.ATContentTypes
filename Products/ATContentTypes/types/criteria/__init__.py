@@ -24,9 +24,10 @@ __docformat__ = 'restructuredtext'
 
 from UserDict import UserDict
 from Products.Archetypes.public import registerType
-from Products.ATContentTypes.config import *
+from Products.ATContentTypes.config import PROJECTNAME
 from types import StringType
 
+from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 
@@ -70,6 +71,7 @@ class _CriterionRegistry(UserDict):
             value = self.index2criterion.get(index, ())
             self.index2criterion[index] = value + (id,)
 
+        assert IATTopicCriterion.isImplementedByInstancesOf(criterion)
         registerType(criterion, PROJECTNAME)
 
     def unregister(self, criterion):
@@ -102,12 +104,12 @@ class _CriterionRegistry(UserDict):
     def criteriaByIndex(self, index):
         return self.index2criterion[index]
 
-CriterionRegistry = _CriterionRegistry()
-registerCriterion = CriterionRegistry.register
-unregisterCriterion = CriterionRegistry.unregister
+_criterionRegistry = _CriterionRegistry()
+registerCriterion = _criterionRegistry.register
+unregisterCriterion = _criterionRegistry.unregister
 
 __all__ = ('registerCriterion', 'ALL_INDICES', 'DATE_INDICES', 'STRING_INDICES',
-           'LIST_INDICES', )
+           'LIST_INDICES', 'SORT_INDICES', )
 
 # criteria
 import ATDateCriteria

@@ -23,22 +23,37 @@
 __author__  = ''
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
-
 import urlparse
-
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import registerType
-else:
-    from Products.Archetypes.public import registerType
 
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import StringWidget
+
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTContent
 from Products.ATContentTypes.interfaces import IATLink
-from Products.ATContentTypes.types.schemata import ATLinkSchema
+from Products.ATContentTypes.types.schemata import ATContentTypeSchema
+from Products.ATContentTypes.types.schemata import relatedItemsField
 
+ATLinkSchema = ATContentTypeSchema.copy() + Schema((
+    StringField('remoteUrl',
+                required=True,
+                searchable=True,
+                primary=True,
+                validators = ('isURL',),
+                widget = StringWidget(
+                        description=("The address of the location. Prefix is "
+                                     "optional; if not provided, the link will be relative."),
+                        description_msgid = "help_url",
+                        label = "URL",
+                        label_msgid = "label_url",
+                        i18n_domain = "plone")),
+    ))
+ATLinkSchema.addField(relatedItemsField)
 
 class ATLink(ATCTContent):
     """An Archetypes derived version of CMFDefault's Link"""
@@ -88,4 +103,4 @@ class ATLink(ATCTContent):
             remote_url = kwargs.get('remote_url', None)
         self.update(remoteUrl = remote_url, **kwargs)
 
-registerType(ATLink, PROJECTNAME)
+registerATCT(ATLink, PROJECTNAME)

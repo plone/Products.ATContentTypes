@@ -23,27 +23,184 @@
 __author__  = ''
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
-
 from types import StringType
-from DateTime import DateTime
-from ComputedAttribute import ComputedAttribute
-
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import registerType
-else:
-    from Products.Archetypes.public import registerType
 
 from Products.CMFCore.CMFCorePermissions import ModifyPortalContent, View
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
+from DateTime import DateTime
+from ComputedAttribute import ComputedAttribute
 
-from Products.ATContentTypes.utils import DT2dt
-from Products.ATContentTypes.types.ATContentType import ATCTContent, updateActions
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import DateTimeField
+from Products.Archetypes.public import LinesField
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import TextField
+from Products.Archetypes.public import CalendarWidget
+from Products.Archetypes.public import LinesWidget
+from Products.Archetypes.public import MultiSelectionWidget
+from Products.Archetypes.public import RichWidget
+from Products.Archetypes.public import StringWidget
+from Products.Archetypes.public import RFC822Marshaller
+
+from Products.ATContentTypes.config import ATDOCUMENT_CONTENT_TYPE
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.types.ATContentType import registerATCT
+from Products.ATContentTypes.types.ATContentType import ATCTContent
+from Products.ATContentTypes.types.ATContentType import updateActions
 from Products.ATContentTypes.interfaces import IATEvent
-from Products.ATContentTypes.types.schemata import ATEventSchema
+from Products.ATContentTypes.types.schemata import ATContentTypeSchema
+from Products.ATContentTypes.types.schemata import relatedItemsField
 from Products.ATContentTypes.CalendarSupport import CalendarSupportMixin
 from Products.ATContentTypes.Permissions import ChangeEvents
+from Products.ATContentTypes.utils import DT2dt
+
+ATEventSchema = ATContentTypeSchema.copy() + Schema((
+    StringField('location',
+                searchable=True,
+                write_permission = ChangeEvents,
+                widget = StringWidget(
+                    description = "Enter the location where the event will take place.",
+                    description_msgid = "help_event_location",
+                    label = "Event Location",
+                    label_msgid = "label_event_location",
+                    i18n_domain = "plone")),
+
+    TextField('text',
+              required=False,
+              searchable=True,
+              primary=True,
+              validators = ('isTidyHtmlWithCleanup',),
+              #validators = ('isTidyHtml',),
+              default_content_type = ATDOCUMENT_CONTENT_TYPE,
+              default_output_type = 'text/html',
+              allowable_content_types = ('text/structured',
+                                         'text/restructured',
+                                         'text/html',
+                                         'text/plain',
+                                         'text/plain-pre',),
+              widget = RichWidget(
+                        description = "The full text of the event announcement.",
+                        description_msgid = "help_body_text",
+                        label = "Body text",
+                        label_msgid = "label_body_text",
+                        rows = 25,
+                        i18n_domain = "plone")),
+
+    LinesField('attendees',
+               languageIndependent=True,
+               searchable=True,
+               write_permission=ChangeEvents,
+               widget=LinesWidget(label="Attendees",
+                                  label_msgid="label_event_attendees",
+                                  description=("People who are attending "
+                                               "the event."),
+                                  description_msgid="help_event_attendees",
+                                  i18n_domain="plone")),
+
+    LinesField('eventType',
+               required=True,
+               searchable=True,
+               write_permission = ChangeEvents,
+               vocabulary = 'getEventTypes',
+               languageIndependent=True,
+               widget = MultiSelectionWidget(
+                        size = 6,
+                        description=("Select the type of event. "
+                                     "Multiple event types possible."),
+                        description_msgid = "help_event_type",
+                        label = "Event Type",
+                        label_msgid = "label_event_type",
+                        i18n_domain = "plone")),
+
+    StringField('eventUrl',
+                required=False,
+                searchable=True,
+                accessor='event_url',
+                write_permission = ChangeEvents,
+                validators = ('isURL',),
+                widget = StringWidget(
+                        description = ("Enter an optional web address of a page "
+                                       "containing more info about the event, if"
+                                       " required."),
+                        description_msgid = "help_url",
+                        label = "Event URL",
+                        label_msgid = "label_url",
+                        i18n_domain = "plone")),
+
+    DateTimeField('startDate',
+                  required=True,
+                  searchable=True,
+                  accessor='start',
+                  write_permission = ChangeEvents,
+                  default_method=DateTime,
+                  languageIndependent=True,
+                  widget = CalendarWidget(
+                        description=("Enter the starting date and time, or click "
+                                     "the calendar icon and select it. "),
+                        description_msgid = "help_event_start",
+                        label="Event Starts",
+                        label_msgid = "label_event_start",
+                        i18n_domain = "plone")),
+
+    DateTimeField('endDate',
+                  required=True,
+                  searchable=True,
+                  accessor='end',
+                  write_permission = ChangeEvents,
+                  default_method=DateTime,
+                  languageIndependent=True,
+                  widget = CalendarWidget(
+                        description=("Enter the ending date and time, or click "
+                                     "the calendar icon and select it. "),
+                        description_msgid = "help_event_end",
+                        label = "Event Ends",
+                        label_msgid = "label_event_end",
+                        i18n_domain = "plone")),
+
+    StringField('contactName',
+                required=False,
+                searchable=True,
+                accessor='contact_name',
+                write_permission = ChangeEvents,
+                widget = StringWidget(
+                        description=("Enter a contact person or "
+                                     "organization for the event."),
+                        description_msgid = "help_contact_name",
+                        label = "Contact Name",
+                        label_msgid = "label_contact_name",
+                        i18n_domain = "plone")),
+
+    StringField('contactEmail',
+                required=False,
+                searchable=True,
+                accessor='contact_email',
+                write_permission = ChangeEvents,
+                validators = ('isEmail',),
+                widget = StringWidget(
+                        description = ("Enter an e-mail address to use for "
+                                       "information regarding the event."),
+                        description_msgid = "help_contact_email",
+                        label = "Contact E-mail",
+                        label_msgid = "label_contact_email",
+                        i18n_domain = "plone")),
+    StringField('contactPhone',
+                required=False,
+                searchable=True,
+                accessor='contact_phone',
+                write_permission = ChangeEvents,
+                validators = ('isInternationalPhoneNumber',),
+                widget = StringWidget(
+                        description = ("Enter the phone number to call for "
+                                       "information and/or booking."),
+                        description_msgid = "help_contact_phone",
+                        label = "Contact Phone",
+                        label_msgid = "label_contact_phone",
+                        i18n_domain = "plone")),
+    ), marshall = RFC822Marshaller()
+    )
+ATEventSchema.addField(relatedItemsField)
+
 
 class ATEvent(ATCTContent, CalendarSupportMixin):
     """An Archetype derived version of CMFCalendar's Event"""
@@ -239,4 +396,4 @@ class ATEvent(ATCTContent, CalendarSupportMixin):
         ATCTContent.update(self, **info)
 
 
-registerType(ATEvent, PROJECTNAME)
+registerATCT(ATEvent, PROJECTNAME)

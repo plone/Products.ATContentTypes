@@ -25,13 +25,33 @@ __docformat__ = 'restructuredtext'
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.config import *
-from Products.ATContentTypes.types.criteria import registerCriterion, \
-    SORT_INDICES
-from Products.ATContentTypes.interfaces import IATTopicSortCriterion
-from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
-from Products.ATContentTypes.types.criteria.schemata import ATSortCriterionSchema
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import BooleanField
+from Products.Archetypes.public import BooleanWidget
 
+from Products.ATContentTypes.types.criteria import registerCriterion
+from Products.ATContentTypes.types.criteria import SORT_INDICES
+from Products.ATContentTypes.interfaces import IATTopicSortCriterion
+from Products.ATContentTypes.Permissions import ChangeTopics
+from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
+from Products.ATContentTypes.types.criteria.schemata import ATBaseCriterionSchema
+
+ATSortCriterionSchema = ATBaseCriterionSchema + Schema((
+    BooleanField('reversed',
+                required=0,
+                mode="rw",
+                write_permission=ChangeTopics,
+                default=0,
+                widget=BooleanWidget(
+                    label="Reverse",
+                    #label_msgid="label_criterion_field_name",
+                    #description="Should not contain spaces, underscores or mixed case. "\
+                    #            "Short Name is part of the item's web address.",
+                    #description_msgid="help_criterion_field_name",
+                    i18n_domain="plone"),
+                ),
+
+    ))
 
 class ATSortCriterion(ATBaseCriterion):
     """A sort criterion"""

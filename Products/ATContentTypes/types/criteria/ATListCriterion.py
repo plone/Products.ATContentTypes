@@ -25,12 +25,55 @@ __docformat__ = 'restructuredtext'
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.config import *
-from Products.ATContentTypes.types.criteria import registerCriterion, \
-    STRING_INDICES
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import LinesField
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import SelectionWidget
+from Products.Archetypes.public import LinesWidget
+from Products.Archetypes.public import DisplayList
+
+from Products.ATContentTypes.types.criteria import registerCriterion
+from Products.ATContentTypes.types.criteria import STRING_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
+from Products.ATContentTypes.Permissions import ChangeTopics
 from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
-from Products.ATContentTypes.types.criteria.schemata import ATListCriterionSchema
+from Products.ATContentTypes.types.criteria.schemata import ATBaseCriterionSchema
+
+CompareOperators = DisplayList((
+                    ('and', 'and')
+                  , ('or', 'or')
+    ))
+
+ATListCriterionSchema = ATBaseCriterionSchema + Schema((
+    LinesField('value',
+                required=1,
+                mode="rw",
+                write_permission=ChangeTopics,
+                accessor="Value",
+                mutator="setValue",
+                default=[],
+                widget=LinesWidget(
+                    label="Values",
+                    label_msgid="label_list_criteria_value",
+                    description="Values, each on its own line.",
+                    description_msgid="help_list_criteria_value",
+                    i18n_domain="plone"),
+                ),
+    StringField('operator',
+                required=1,
+                mode="rw",
+                write_permission=ChangeTopics,
+                default='or',
+                vocabulary=CompareOperators,
+                widget=SelectionWidget(
+                    label="operator name",
+                    label_msgid="label_list_criteria_operator",
+                    description="Operator used to join the tests "
+                    "on each value.",
+                    description_msgid="help_list_criteria_operator",
+                    i18n_domain="plone"),
+                ),
+    ))
 
 
 class ATListCriterion(ATBaseCriterion):

@@ -23,13 +23,6 @@
 __author__  = ''
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
-
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import registerType
-else:
-    from Products.Archetypes.public import registerType
-
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
@@ -38,10 +31,33 @@ from ComputedAttribute import ComputedAttribute
 from ZODB.POSException import ConflictError
 
 from Products.Archetypes.debug import _zlogger
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import StringWidget
 
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTContent
 from Products.ATContentTypes.interfaces import IATFavorite
-from Products.ATContentTypes.types.schemata import ATFavoriteSchema
+from Products.ATContentTypes.types.schemata import ATContentTypeSchema
+from Products.ATContentTypes.types.schemata import relatedItemsField
+
+ATFavoriteSchema = ATContentTypeSchema.copy() + Schema((
+    StringField('remoteUrl',
+                required=True,
+                searchable=True,
+                accessor='_getRemoteUrl',
+                primary=True,
+                validators = (),
+                widget = StringWidget(
+                        description=("The address of the location. Prefix is "
+                                     "optional; if not provided, the link will be relative."),
+                        description_msgid = "help_url",
+                        label = "URL",
+                        label_msgid = "label_url",
+                        i18n_domain = "plone")),
+    ))
+ATFavoriteSchema.addField(relatedItemsField)
 
 class ATFavorite(ATCTContent):
     """An Archetypes derived version of CMFDefault's Favorite"""
@@ -121,4 +137,4 @@ class ATFavorite(ATCTContent):
             remote_url = kwargs.get('remote_url', None)
         self.update(remoteUrl = remote_url, **kwargs)
 
-registerType(ATFavorite, PROJECTNAME)
+registerATCT(ATFavorite, PROJECTNAME)

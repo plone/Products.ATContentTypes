@@ -23,20 +23,81 @@
 __author__  = ''
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
-
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import registerType
-else:
-    from Products.Archetypes.public import registerType
-
 from AccessControl import ClassSecurityInfo
 
+from Products.CMFCore import CMFCorePermissions
+
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import ImageField
+from Products.Archetypes.public import TextField
+from Products.Archetypes.public import ImageWidget
+from Products.Archetypes.public import RichWidget
+from Products.Archetypes.public import StringWidget
+from Products.Archetypes.public import RFC822Marshaller
+
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import ATDOCUMENT_CONTENT_TYPE
+from Products.ATContentTypes.config import MAX_IMAGE_SIZE
+from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import translateMimetypeAlias
 from Products.ATContentTypes.types.ATDocument import ATDocument
 from Products.ATContentTypes.interfaces import IATNewsItem
-from Products.ATContentTypes.types.schemata import ATNewsItemSchema
+from Products.ATContentTypes.types.schemata import ATContentTypeSchema
+from Products.ATContentTypes.types.schemata import relatedItemsField
+from Products.validation.validators.SupplValidators import MaxSizeValidator
 
+ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
+    TextField('text',
+              required=True,
+              searchable=True,
+              primary=True,
+              validators = ('isTidyHtmlWithCleanup',),
+              #validators = ('isTidyHtml',),
+              default_content_type = ATDOCUMENT_CONTENT_TYPE,
+              default_output_type = 'text/html',
+              allowable_content_types = ('text/structured',
+                                         'text/restructured',
+                                         'text/html',
+                                         'text/plain',
+                                         ),
+              widget = RichWidget(
+                        description = "The body text of the document.",
+                        description_msgid = "help_body_text",
+                        label = "Body text",
+                        label_msgid = "label_body_text",
+                        rows = 25,
+                        i18n_domain = "plone")),
+    ImageField('image',
+               required=False,
+               languageIndependent=True,
+               sizes= {'preview' : (400, 400),
+                       'thumb'   : (128, 128),
+                       'tile'    :  (64, 64),
+                       'icon'    :  (32, 32),
+                       'listing' :  (16, 16),
+                      },
+               validators = MaxSizeValidator('checkFileMaxSize',
+                                             maxsize=MAX_IMAGE_SIZE),
+               widget = ImageWidget(
+                        description = "Add an optional image by clicking the 'Browse' button. This will be shown in the news listing, and in the news item itself. It will automatically scale the picture you upload to a sensible size.",
+                        description_msgid = "help_image",
+                        label= "Image",
+                        label_msgid = "label_image",
+                        i18n_domain = "plone",
+                        show_content_type = False,)),
+    TextField('imageCaption',
+              required=False,
+              searchable=True,
+              widget = StringWidget(
+                        description = "A caption text for the image.",
+                        description_msgid = "help_image_caption",
+                        label = "Image caption",
+                        label_msgid = "label_image_caption",
+                        size = 40,
+                        i18n_domain = "plone")),
+    ), marshall=RFC822Marshaller()
+    )
+ATNewsItemSchema.addField(relatedItemsField)
 
 class ATNewsItem(ATDocument):
     """A AT news item based on AT Document
@@ -76,4 +137,4 @@ class ATNewsItem(ATDocument):
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
 
-registerType(ATNewsItem, PROJECTNAME)
+registerATCT(ATNewsItem, PROJECTNAME)

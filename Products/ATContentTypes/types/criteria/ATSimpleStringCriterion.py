@@ -25,12 +25,35 @@ __docformat__ = 'restructuredtext'
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.config import *
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import StringWidget
+
 from Products.ATContentTypes.types.criteria import registerCriterion, \
     STRING_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
+from Products.ATContentTypes.Permissions import ChangeTopics
 from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
-from Products.ATContentTypes.types.criteria.schemata import ATSimpleStringCriterionSchema
+from Products.ATContentTypes.types.criteria.schemata import ATBaseCriterionSchema
+
+
+ATSimpleStringCriterionSchema = ATBaseCriterionSchema + Schema((
+    StringField('value',
+                required=1,
+                mode="rw",
+                write_permission=ChangeTopics,
+                accessor="Value",
+                mutator="setValue",
+                default="",
+                widget=StringWidget(
+                    label="Value",
+                    label_msgid="label_string_criteria_value",
+                    description="A string value.",
+                    description_msgid="help_string_criteria_value",
+                    i18n_domain="plone"),
+                ),
+
+    ))
 
 
 class ATSimpleStringCriterion(ATBaseCriterion):
