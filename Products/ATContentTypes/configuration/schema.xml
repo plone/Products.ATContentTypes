@@ -13,18 +13,6 @@
     </description>
   </section>
 
-  <section type="feature" name="templatemixin" attribute="templatemixin"
-   required="yes">
-  </section>
-
-  <section type="feature" name="constraintypes" attribute="constraintypes"
-   required="yes">
-  </section>
-
-  <section type="feature" name="externaltypes" attribute="externaltypes"
-   required="yes">
-  </section>
-  
   <section type="archetype" name="ATDocument"
    attribute="ATDocument" required="yes" />
 

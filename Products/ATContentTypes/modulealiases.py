@@ -37,7 +37,6 @@ from Products.ATContentTypes.content import newsitem
 from Products.ATContentTypes.content import folder
 from Products.ATContentTypes.content import favorite
 from Products.ATContentTypes.content import topic
-from Products.ATContentTypes.content import external
 
 from Products.ATContentTypes import criteria
 from Products.ATContentTypes.criteria import boolean

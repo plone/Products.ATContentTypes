@@ -13,18 +13,6 @@
     char_encoding    raw
 </mxtidy>
 
-<feature templatemixin>
-    enable yes
-</feature>
-
-<feature constraintypes>
-    enable yes
-</feature>
-
-<feature externaltypes>
-    enable no
-</feature>
-
 <archetype ATDocument>
   allow_document_upload yes
   <contenttypes>

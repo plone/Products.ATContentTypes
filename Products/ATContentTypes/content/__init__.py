@@ -32,6 +32,5 @@ import Products.ATContentTypes.content.newsitem
 import Products.ATContentTypes.content.folder
 import Products.ATContentTypes.content.favorite
 import Products.ATContentTypes.content.topic
-import Products.ATContentTypes.content.external
 
 

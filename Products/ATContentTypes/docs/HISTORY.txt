@@ -1,6 +1,12 @@
 1.0-devel
 =====================
 
+ * Removed some configuration vars from config.py and the ZConfig schema.
+   [tiran]
+
+ * Moved external types from ATCT to the new ATCTAddons product.
+   [tiran]
+
  * Remove path of filename from ATFile's title when upload a file using MS IE.
    [panjunyong]
 
