@@ -54,6 +54,7 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
                languageIndependent=True,
                #swallowResizeExceptions=True,
                sizes= {'preview' : (400, 400),
+                       'mini'    : (200, 200),
                        'thumb'   : (128, 128),
                        'tile'    :  (64, 64),
                        'icon'    :  (32, 32),

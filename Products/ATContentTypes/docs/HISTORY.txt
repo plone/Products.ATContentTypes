@@ -1,6 +1,9 @@
 1.0-devel
 ======================
 
+ * Added mini scale with 200x200.
+   [tiran]
+
  * Added integration tests for view and edit templates.
    [tiran]
 
