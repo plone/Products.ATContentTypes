@@ -1,7 +1,10 @@
 1.0-devel
 ======================
 
- * Started integration tests for discussions.
+ * Added ERRATA.txt which covers known issues.
+   [tiran]
+
+ * Added integration tests for discussions.
    [tiran]
 
  * Ported topic migration and criteria enhancements + additional criteria

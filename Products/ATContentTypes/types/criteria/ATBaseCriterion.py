@@ -75,6 +75,13 @@ class ATBaseCriterion(NonRefCatalogContent):
     typeDescription= ''
     typeDescMsgId  = ''
     global_allow = 0
+    
+    def __init__(self, oid=None, id=None, field=None):
+        id = oid and oid or id
+        assert id
+        NonRefCatalogContent.__init__(self, id)
+        self.getField('id').set(self, id)
+        self.getField('field').set(self, field)
 
     security.declareProtected(CMFCorePermissions.View, 'getId')
     def getId(self):

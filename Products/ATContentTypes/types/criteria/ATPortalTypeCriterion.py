@@ -61,11 +61,13 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
 
     shortDesc      = 'portal types values'
 
+    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCurrentValues(self):
-        """Return enabled portal types"""
-        topic_tool = getToolByName(self, 'portal_topics')
-        allowed_types = topic_tool.getAllowedPortalTypes()
-        return DisplayList(list(allowed_types))
+         """Return enabled portal types"""
+         types_tool = getToolByName(self, 'portal_types')
+         portal_types = [types_tool.getTypeInfo(pt).Title() or pt
+                         for pt in types_tool.listContentTypes()]
+         return DisplayList(zip(portal_types,portal_types))
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):

@@ -67,8 +67,8 @@ def editATCT(obj):
     obj.setAcquireCriteria(ACQUIRE)
     obj.setLimitNumber(LIMIT)
     obj.setItemCount(COUNT)
-    obj.setCustomView(CUSTOM)
-    obj.setCustomViewFields(FIELDS)
+    #obj.setCustomView(CUSTOM)
+    #obj.setCustomViewFields(FIELDS)
     for meta in CRITERIA_SETUP.keys():
         AT_META = CRIT_MAP[meta]
         CRIT_FIELD = CRITERIA_SETUP[meta][0]
@@ -153,6 +153,8 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         topic = self._ATCT
 
         topic.addCriterion( 'foo', 'ATSimpleStringCriterion' )
+        self.failUnless('crit__foo_ATSimpleStringCriterion' in
+            topic.objectIds(), topic.objectIds())
         topic.getCriterion( 'foo_ATSimpleStringCriterion' ).setValue( 'bar' )
 
         query = topic.buildQuery()
@@ -171,6 +173,8 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         topic = self._ATCT
 
         topic.addCriterion( 'foo', 'ATSimpleStringCriterion' )
+        self.failUnless('crit__foo_ATSimpleStringCriterion' in
+            topic.objectIds(), topic.objectIds())
         topic.getCriterion( 'foo_ATSimpleStringCriterion' ).setValue( 'bar' )
 
         topic.addSubtopic( 'qux' )
@@ -179,6 +183,8 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         subtopic.setAcquireCriteria(True)
 
         subtopic.addCriterion( 'baz', 'ATSimpleStringCriterion' )
+        self.failUnless('crit__baz_ATSimpleStringCriterion' in
+            subtopic.objectIds(), subtopic.objectIds())
         subtopic.getCriterion( 'baz_ATSimpleStringCriterion' ).setValue( 'bam' )
 
         query = subtopic.buildQuery()
@@ -393,6 +399,8 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_customViewField(self):
+        # XXX not in the current version
+        return
         dummy = self._dummy
         field = dummy.getField('customView')
 
@@ -433,6 +441,8 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
     def test_customViewFieldsField(self):
+        # XXX not in the current version
+        return
         dummy = self._dummy
         field = dummy.getField('customViewFields')
 

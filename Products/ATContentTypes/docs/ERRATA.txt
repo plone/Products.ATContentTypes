@@ -1,0 +1,18 @@
+Known issues and errors
+=======================
+
+Discussions aren't visible under Plone 2.0.x
+--------------------------------------------
+
+Discussion items aren't shown below an item because the viewThreadsAtBottom 
+doesn't play nice with TemplateMixin. Replace the template with
+http://svn.plone.org/plone/CMFPlone/branches/2.1/skins/plone_templates/viewThreadsAtBottom.pt
+This issue is fixed in CMFPlone 2.1
+
+
+Discussions aren't working under Plone 2.0.x
+--------------------------------------------
+
+You are getting a AttributeError: talkback. Replace the discussion_reply script
+with http://svn.plone.org/plone/CMFPlone/branches/2.1/skins/plone_form_scripts/discussion_reply.cpy
+This issue is fixed in CMFPlone 2.1

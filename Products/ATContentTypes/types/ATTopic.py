@@ -56,14 +56,17 @@ from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 
 # A couple of fields just don't make sense to sort (for a user),
 # some are just doubles.
-IGNORED_FIELDS = ['Date', 'allowedRolesAndUsers', 'getId', 'in_reply_to',
-    'meta_type', 'portal_type']
+IGNORED_FIELDS = ['Date', 'allowedRolesAndUsers', 'getId', 'in_reply_to', 
+    'meta_type',
+    # 'portal_type' # portal type and Type might differ!
+    ]
 
 ATTopicSchema = ATContentTypeSchema.copy() + Schema((
     BooleanField('acquireCriteria',
                 required=False,
                 mode="rw",
                 default=False,
+                write_permission = ChangeTopics,
                 widget=BooleanWidget(
                         label="Inherit Criteria",
                         label_msgid="label_inherit_criteria",
@@ -78,6 +81,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 required=False,
                 mode="rw",
                 default=False,
+                write_permission = ChangeTopics,
                 widget=BooleanWidget(
                         label="Limit Number of Items",
                         label_msgid="label_limit_number",
@@ -91,6 +95,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 required=False,
                 mode="rw",
                 default=0,
+                write_permission = ChangeTopics,
                 widget=IntegerWidget(
                         label="Number of Items",
                         label_msgid="label_item_count",
