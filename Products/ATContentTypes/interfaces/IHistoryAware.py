@@ -28,3 +28,20 @@ from Interface import Interface
 class IHistoryAware(Interface):
     """History awareness marker interface
     """
+
+    def getHistorySource():
+        """get source for HistoryAwareMixin
+
+        Must return a (raw) string
+        """
+
+    def getHistories(max=10):
+        """Get a list of historic revisions.
+
+        Returns metadata as well
+        (object, time, transaction_note, user)
+        """
+
+    def getDocumentComparisons(max=10, filterComment=0):
+        """Get history as unified diff
+        """
