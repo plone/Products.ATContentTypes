@@ -35,10 +35,12 @@ from Products.Archetypes.public import Schema
 from Products.Archetypes.public import FileField
 from Products.Archetypes.public import FileWidget
 from Products.Archetypes.public import PrimaryFieldMarshaller
+from Products.Archetypes.BaseContent import BaseContent
 from Products.PortalTransforms.utils import TransformException
 
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import MAX_FILE_SIZE
+from Products.ATContentTypes.config import ICONMAP
 from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTFileContent
 from Products.ATContentTypes.interfaces import IATFile
