@@ -22,6 +22,13 @@ class TestATFolderFunctional(atcttestcase.ATCTFuncionalTestCase):
     portal_type = 'ATFolder'
     views = ('folder_listing', 'folder_contents', )
 
+    def test_templatemixin_view(self):
+        # template mixin magic should work
+        # XXX more tests?
+        # XXX special case: view doesn't work
+        response = self.publish('%s/' % self.obj_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) #
+
 tests.append(TestATFolderFunctional)
 
 class TestATBTreeFolderFunctional(atcttestcase.ATCTFuncionalTestCase):
@@ -34,6 +41,12 @@ class TestATBTreeFolderFunctional(atcttestcase.ATCTFuncionalTestCase):
         fti = getattr(self.portal.portal_types, self.portal_type)
         fti.manage_changeProperties(global_allow=1)
         atcttestcase.ATCTFuncionalTestCase.afterSetUp(self)
+
+    def test_templatemixin_view_without_view(self):
+        # template mixin magic should work
+        # XXX more tests?
+        response = self.publish('%s/' % self.obj_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) #
 
 tests.append(TestATBTreeFolderFunctional)
 

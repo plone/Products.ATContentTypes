@@ -66,11 +66,12 @@ from Products.ATContentTypes.config import CHAR_MAPPING
 from Products.ATContentTypes.config import GOOD_CHARS
 from Products.ATContentTypes.config import MIME_ALIAS
 from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
+from Products.ATContentTypes.config import USE_AT_PREFIX
 from Products.ATContentTypes.ConstrainTypesMixin import ConstrainTypesMixin
 from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.types.schemata import ATContentTypeSchema
 
-DEBUG = 1
+DEBUG = True
 
 def registerATCT(class_, project):
     """Registers an ATContentTypes based type
@@ -78,6 +79,8 @@ def registerATCT(class_, project):
     One reason to use it is to hide the lingua plone related magic.
     """
     assert IATContentType.isImplementedByInstancesOf(class_)
+    if not USE_AT_PREFIX and class_.portal_type.startswith('AT'):
+        class_.portal_type = class_.portal_type[2:]
     registerType(class_, project)
 
 def updateActions(klass, actions):

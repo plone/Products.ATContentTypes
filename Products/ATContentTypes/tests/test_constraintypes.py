@@ -26,13 +26,25 @@ from Products.Archetypes.Extensions.utils import installTypes
 from AccessControl.SecurityManagement import newSecurityManager
 from Testing.ZopeTestCase import user_name as default_user
 
+from Products.ATContentTypes.config import USE_AT_PREFIX
+
 tests = []
 
 class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
+    folder_type = 'ATFolder'
+    image_type = 'ATImage'
+    document_type = 'ATDocument'
+    file_type = 'ATFile'
 
     def afterSetUp(self):
+        if not USE_AT_PREFIX and self.folder_type.startswith('AT'):
+            self.folder_type = self.folder_type[2:]
+            self.image_type = self.image_type[2:]
+            self.document_type = self.document_type[2:]
+            self.file_type = self.file_type[2:]
+            
         atcttestcase.ATCTSiteTestCase.afterSetUp(self)
-        self.folder.invokeFactory('ATFolder', id='af')
+        self.folder.invokeFactory(self.folder_type, id='af')
         self.tt = self.portal.portal_types
         # an ATCT folder
         self.af = self.folder.af
@@ -60,16 +72,16 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
                     "ContentTypes are still being filtered at factory")
         af.setLocallyAllowedTypes([])
         possible_types_ids = [fti.id for fti in af._ct_getPossibleTypes()]
-        self.failIf('ATImage' not in possible_types_ids,
+        self.failIf(self.image_type not in possible_types_ids,
                     'ATImage not available to be filtered!')
         allowed_ids = [fti.id for fti in af.allowedContentTypes()]
-        self.failIf('ATImage' not in allowed_ids,
+        self.failIf(self.image_type not in allowed_ids,
                     'ATImage not available to add!')
-        af.invokeFactory('ATImage', id='anATImage')
+        af.invokeFactory(self.image_type, id='anATImage')
         afi = af.anATImage # will bail if invokeFactory didn't work
-        self.failIf('ATDocument' not in possible_types_ids,
+        self.failIf(self.document_type not in possible_types_ids,
                     'ATDocument not available to add!')
-        af.invokeFactory('ATDocument', id='anATDocument')
+        af.invokeFactory(self.document_type, id='anATDocument')
         afd = af.anATDocument # will bail if invokeFactory didn't work
 
     def test_constrained(self):
@@ -79,21 +91,21 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         at.manage_changeProperties(filter_content_types=False)
         self.failIf(at.filter_content_types,
                     "ContentTypes are still being filtered at factory")
-        af.setLocallyAllowedTypes(['ATImage'])
+        af.setLocallyAllowedTypes([self.image_type])
         allowed_ids = [fti.id for fti in af.allowedContentTypes()]
-        af.invokeFactory('ATImage', id='anATImage')
+        af.invokeFactory(self.image_type, id='anATImage')
         afi = af.anATImage # will bail if invokeFactory didn't work
-        self.assertEquals(allowed_ids, ['ATImage'])
+        self.assertEquals(allowed_ids, [self.image_type])
         self.assertRaises(Unauthorized, af.invokeFactory,
-                          'ATDocument', id='anATDocument')
+                          self.document_type, id='anATDocument')
 
     def test_ftiInteraction(self):
         af = self.af
         at = self.at
         tt = self.tt
         af.setEnableConstrainMixin(True)
-        af_allowed_types = ['ATDocument', 'ATImage',
-                            'ATFile', 'ATFolder',
+        af_allowed_types = [self.document_type, self.image_type,
+                            self.file_type, self.folder_type,
                             'Folder']
         af_allowed_types.sort()
         at.manage_changeProperties(filter_content_types=True,
@@ -104,7 +116,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.assertEquals(af_allowed_types, af_local_types)
         #                  "fti allowed types don't match local ones")
         # let's limit locally and see what happens
-        types1 = ['ATImage', 'ATFile', 'ATFolder', 'Folder']
+        types1 = [self.image_type, self.file_type, self.folder_type, 'Folder']
         types1.sort()
         af.setLocallyAllowedTypes(types1)
         af_local_types = [fti.getId() for fti in af.allowedContentTypes()]
@@ -133,7 +145,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         newSecurityManager(None, user)
         af = self.af
         self.assertRaises(Unauthorized,
-                          af.invokeFactory, 'ATFolder', id='bf')
+                          af.invokeFactory, self.folder_type, id='bf')
         self.logout()
 
 tests.append(TestConstrainTypes)

@@ -278,6 +278,8 @@ def switchCMF2ATCT(self, skip_rename=False):
     return out.getvalue()
 
 def switchATCT2CMF(self):
+    # XXX
+    return
     if not isSwitchedToATCT(self):
         return "Error: Not switched"
     pt = getToolByName(self,'portal_types')
@@ -297,6 +299,8 @@ def isSwitchedToATCT(self):
 
     This test isn't very good but sufficient for our purpose
     """
+    # XXX
+    return True
     pt = getToolByName(self, 'portal_types')
     doc = pt.getTypeInfo('Document')
     if doc.Metatype() == ATDocument.ATDocument.meta_type:

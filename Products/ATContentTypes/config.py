@@ -247,3 +247,8 @@ if os.environ.get('ZOPETESTCASE', False):
     _ATCT_UNIT_TEST_MODE = True
 else:
     _ATCT_UNIT_TEST_MODE = False
+
+# XXX for development only
+# I need this as hack to quickly change between portal type names like ATFolder
+# and Folder for testing. It will be removed soon
+USE_AT_PREFIX = False
