@@ -18,8 +18,10 @@
 #
 """
 """
-from StringIO import StringIO
+import os
+from cStringIO import StringIO
 import time
+import urllib
 
 from OFS.SimpleItem import SimpleItem
 from OFS.PropertyManager import PropertyManager
@@ -27,9 +29,11 @@ from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 import Persistence
 from Acquisition import aq_base
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from Products.CMFCore.utils import UniqueObject 
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.utils import format_stx
 from Products.CMFCore import CMFCorePermissions
 
 from Products.Archetypes import listTypes
@@ -43,6 +47,9 @@ from Products.ATContentTypes.migration.ATCTMigrator import migrateAll
 CMF_PRODUCTS = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFCalendar')
 ATCT_PRODUCTS = ('ATContentTypes', )
 SITE_TYPES = ('Portal Site', 'Plone Site',)
+
+_here = os.path.dirname(__file__)
+_www = os.path.join(_here, 'www')
 
 configlets = ({
     'id' : TOOLNAME,
@@ -74,9 +81,29 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
     
     __implements__ = (SimpleItem.__implements__, IATCTTool)
         
-    manage_options = SimpleItem.manage_options + \
-        PropertyManager.manage_options
-        
+    manage_options =  PropertyManager.manage_options + (
+            {'label' : 'Overview', 'action' : 'manage_overview'},
+            {'label' : 'Migration', 'action' : 'manage_migration'},
+            {'label' : 'Recatalog', 'action' : 'manage_recatalog'},
+            {'label' : 'Image scales', 'action' : 'manage_imageScales'}
+        ) + SimpleItem.manage_options
+
+    security.declareProtected(CMFCorePermissions.ManagePortal,
+                              'manage_imageScales')
+    manage_imageScales = PageTemplateFile('imageScales', _www)
+    
+    security.declareProtected(CMFCorePermissions.ManagePortal,
+                              'manage_recatalog')
+    manage_recatalog = PageTemplateFile('recatalog', _www)
+
+    security.declareProtected(CMFCorePermissions.ManagePortal,
+                              'manage_migration')
+    manage_migration = PageTemplateFile('migration', _www)
+
+    security.declareProtected(CMFCorePermissions.ManagePortal,
+                              'manage_overview')
+    manage_overview = PageTemplateFile('overview', _www)
+
 
     security.declareProtected(CMFCorePermissions.ManagePortal,
                               'getCMFTypesAreRecataloged')
@@ -123,17 +150,30 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
 
     security.declareProtected(CMFCorePermissions.ManagePortal,
                               'recatalogCMFTypes')
-    def recatalogCMFTypes(self):
+    def recatalogCMFTypes(self, remove=True):
         """Remove and recatalog all CMF core products + CMFPlone types
         """
-        self._removeCMFtypesFromCatalog()
-        self._catalogCMFtypes()
-
-    def recatalogATCTTypes(self):
+        if remove:
+            rres, relapse, rc_elapse = self._removeCMFtypesFromCatalog()
+        else:
+            rres, relapse, rc_elapse = None, 0, 0
+        cres, celapse, cc_elapse = self._catalogCMFtypes()
+        elapse = relapse + celapse
+        c_elapse = rc_elapse + cc_elapse
+        return elapse, c_elapse
+ 
+    def recatalogATCTTypes(self, remove=False):
         """Remove and recatalog all ATCT types
         """
-        raise NotImplementedError
-        
+        if remove:
+            rres, relapse, rc_elapse = self._removeATCTtypesFromCatalog()
+        else:
+            rres, relapse, rc_elapse = None, 0, 0
+        cres, celapse, cc_elapse = self._catalogATCTtypes()
+        elapse = relapse + celapse
+        c_elapse = rc_elapse + cc_elapse
+        return elapse, c_elapse
+
     def disableCMFTypes(self):
         """Disable and rename CMF types
         
@@ -232,6 +272,12 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
         portal = getToolByName(self, 'portal_url').getPortalObject()
         return migrateAll(portal)
 
+    security.declareProtected(CMFCorePermissions.ManagePortal,
+                              'getReadme')
+    def getReadme(self, stx_level=4):
+        f = open(os.path.join(_here, 'README.txt'))
+        return format_stx(f.read(), stx_level)
+
     # ************************************************************************
     # private methods
 
@@ -277,7 +323,16 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
             mt = getattr(aq_base(fti), 'content_meta_type')
             meta_types[mt] = 1
         return meta_types.keys()
-        
+
+    def _getATCTMetaTypes(self):
+        """Get all meta_types registered by ATCT
+        """
+        meta_types = {}
+        for fti in self._getATCTFtis():
+            mt = getattr(aq_base(fti), 'content_meta_type')
+            meta_types[mt] = 1
+        return meta_types.keys()
+
     def _getCMFPortalTypes(self, metatype=None):
         """Get all portal types registered by CMF core products + CMFPlone for types
         """
@@ -308,10 +363,6 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
         
         return counter, elapse, c_elapse
     
-    def _removeCMFtypesFromCatalog(self, count=False):
-        mt = self._getCMFMetaTypes()
-        return self._removeTypesFromCatalogByMetatype(mt, count)
-    
     def _catalogTypesByMetatype(self, mt):
         """Catalogs objects by meta type
         
@@ -337,10 +388,23 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
         c_elapse = time.clock() - c_elapse
         
         return results, elapse, c_elapse
+ 
+    def _removeCMFtypesFromCatalog(self, count=False):
+        mt = self._getCMFMetaTypes()
+        return self._removeTypesFromCatalogByMetatype(mt, count)
     
     def _catalogCMFtypes(self):
         mt = self._getCMFMetaTypes()
         return self._catalogTypesByMetatype(mt)
+ 
+    def _removeATCTtypesFromCatalog(self, count=False):
+        mt = self._getATCTMetaTypes()
+        return self._removeTypesFromCatalogByMetatype(mt, count)
+    
+    def _catalogATCTtypes(self):
+        mt = self._getATCTMetaTypes()
+        return self._catalogTypesByMetatype(mt)
+ 
     
     def _changePortalTypeName(self, old_name, new_name, global_allow=None,
         title=None):
