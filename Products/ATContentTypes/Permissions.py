@@ -30,8 +30,9 @@ from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.interfaces import IATTopic
 from Products.ATContentTypes.interfaces import IATTopicCriterion
 
-TYPE_ROLES = ('Manager', 'Member',)
+TYPE_ROLES = ('Manager', 'Owner')
 TOPIC_ROLES = ('Manager',)
+CHANGE_TOPIC_ROLES = TOPIC_ROLES + ('Owner',)
 CRITERION_ROLES = ('Manager',)
 
 # Gathering Topic and Event related permissions into one place
@@ -41,7 +42,7 @@ ChangeEvents = 'Change portal events'
 
 # Set up default roles for permissions
 setDefaultRoles(AddTopics, TOPIC_ROLES)
-setDefaultRoles(ChangeTopics, TOPIC_ROLES + ('Owner',))
+setDefaultRoles(ChangeTopics, CHANGE_TOPIC_ROLES)
 setDefaultRoles(ChangeEvents, ('Manager', 'Owner',))
 
 permissions = {}
