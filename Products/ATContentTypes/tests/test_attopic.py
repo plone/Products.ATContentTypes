@@ -181,6 +181,9 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         subtopic = topic.qux
 
         subtopic.setAcquireCriteria(True)
+        
+        #Ensure an empty subtopic uses it's parents' queries
+        self.failUnlessEqual(subtopic.buildQuery(), topic.buildQuery())
 
         subtopic.addCriterion( 'baz', 'ATSimpleStringCriterion' )
         self.failUnless('crit__baz_ATSimpleStringCriterion' in

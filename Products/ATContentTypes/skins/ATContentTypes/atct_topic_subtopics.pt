@@ -19,6 +19,7 @@
           tal:attributes="action here_url"
           tal:define="contents python: here.listSubtopics();
                       contentTypes here/getAllowedTypes;
+                      num_types python: len(contentTypes);
                       standalone python:1">
         <h2>Sub-topics</h2>
         <metal:list metal:use-macro="here/folder_contents/macros/folder_listing"/>

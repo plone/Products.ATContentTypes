@@ -325,11 +325,12 @@ class ATTopic(ATCTFolder):
         """
         result = {}
         criteria = self.listCriteria()
-        if not criteria:
+        acquire = self.getAcquireCriteria()
+        if not criteria and not acquire:
             # no criteria found
-            return None
-
-        if self.getAcquireCriteria():
+             return None
+ 
+        if acquire:
             try:
                 # Tracker 290 asks to allow combinations, like this:
                 # parent = aq_parent(self)
