@@ -454,7 +454,7 @@ class ATCTFuncionalTestCase(ATFunctionalSiteTestCase):
         # create translation creates a new object
         response = self.publish('%s/createTranslation?language=de&set_language=de' 
                                  % self.obj_path, self.basic_auth)
-        self.assertStatusEqual(response.getStatus(), 302) # Redirect to edit
+        self.assertStatusEqual(response.getStatus(), 302) # Redirect
 
         # omit ?portal_status_message=...
         body = response.getBody().split('?')[0]
@@ -477,6 +477,29 @@ class ATCTFuncionalTestCase(ATFunctionalSiteTestCase):
             response = self.publish('%s/%s' % (self.obj_path, view), self.basic_auth)
             self.assertStatusEqual(response.getStatus(), 200, 
                 "%s: %s" % (view, response.getStatus())) # OK
+                
+    def test_discussion(self):
+        # enable discussion for  the type
+        ttool = getToolByName(self.portal, 'portal_types')
+        ttool[self.portal_type].allow_discussion = True
+        
+        response = self.publish('%s/discussion_reply_form' 
+                                 % self.obj_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) # ok
+        
+        response = self.publish('%s/discussion_reply?subject=test&body=testbody' 
+                                 % self.obj_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 302) # Redirect
+        # omit ?portal_status_message=...
+        body = response.getBody().split('?')[0]
+        
+        self.failUnless(body.startswith(self.folder_url))
+        
+        # Perform the redirect
+        form_path = body[len(self.app.REQUEST.SERVER_URL):]
+        response = self.publish(form_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) # OK
+
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFQuickInstallerTool.QuickInstallerTool import AlreadyInstalled
