@@ -41,12 +41,9 @@ from Products.Archetypes.public import Schema
 from Products.Archetypes.public import ImageField
 from Products.Archetypes.public import ImageWidget
 from Products.Archetypes.public import PrimaryFieldMarshaller
-from Products.Archetypes.Storage import Storage
 
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import MAX_IMAGE_SIZE
-from Products.ATContentTypes.config import HAS_EXT_STORAGE
-from Products.ATContentTypes.config import EXT_STORAGE_ENABLE
 from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTFileContent
 from Products.ATContentTypes.types.ATContentType import cleanupFilename
@@ -106,14 +103,6 @@ AUTO_ROTATE_MAP = {
     270 : ROTATE_90,
     }
 
-if HAS_EXT_STORAGE:
-    from Products.ExternalStorage.ExternalStorage import ExternalStorage
-else:
-    class ExternalStorage(Storage):
-        """Dummy storage
-        """
-        def __init__(self, *args, **kwargs):
-            pass
 
 ATImageSchema = ATContentTypeSchema.copy() + Schema((
     ImageField('image',
@@ -145,14 +134,6 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
 ATImageSchema.addField(urlUploadField)
 ATImageSchema.addField(relatedItemsField)
 
-
-ATExtImageSchema = ATImageSchema.copy()
-imageField = ATExtImageSchema['image']
-imageField.storage = ExternalStorage(prefix = 'atct',
-                                     archive = False,
-                                     rename = True)
-# re-register storage layer
-imageField.registerLayer('storage', imageField.storage)
 
 class ATCTImageTransform(Base):
     """Base class for images containing transformation and exif functions
@@ -421,31 +402,3 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         self.reindexObject()
 
 registerATCT(ATImage, PROJECTNAME)
-
-
-class ATExtImage(ATImage):
-    """An Archetypes derived version of CMFDefault's Image with
-    external storage
-    """
-
-    schema         =  ATExtImageSchema
-
-    content_icon   = 'image_icon.gif'
-    meta_type      = 'ATExtImage'
-    portal_type    = 'ATExtImage'
-    archetype_name = 'Image (ext)'
-    _atct_newTypeFor = None
-    assocMimetypes = ()
-    assocFileExt   = ()
-
-    security       = ClassSecurityInfo()
-
-    security.declareProtected(CMFCorePermissions.View, 'index_html')
-    def index_html(self):
-        """Allows file direct access download."""
-        field = self.getPrimaryField()
-        field.download(self)
-
-# XXX use at own risk
-if HAS_EXT_STORAGE and EXT_STORAGE_ENABLE:
-    registerATCT(ATExtImage, PROJECTNAME)

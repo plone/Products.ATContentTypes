@@ -25,7 +25,7 @@ __docformat__ = 'restructuredtext'
 
 from Interface import Interface
 from Interface import Attribute
-from Products.Archetypes.interfaces.ITemplateMixin import ITemplateMixin
+from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
 from Products.Archetypes.interfaces.base import IBaseContent
 from Products.Archetypes.interfaces.base import IBaseFolder
 

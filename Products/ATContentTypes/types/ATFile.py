@@ -18,7 +18,6 @@
 #
 """
 
-
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -35,15 +34,12 @@ from Products.Archetypes.public import Schema
 from Products.Archetypes.public import FileField
 from Products.Archetypes.public import FileWidget
 from Products.Archetypes.public import PrimaryFieldMarshaller
-from Products.Archetypes.Storage import Storage
 from Products.Archetypes.BaseContent import BaseContent
 from Products.PortalTransforms.utils import TransformException
 
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import MAX_FILE_SIZE
 from Products.ATContentTypes.config import ICONMAP
-from Products.ATContentTypes.config import HAS_EXT_STORAGE
-from Products.ATContentTypes.config import EXT_STORAGE_ENABLE
 from Products.ATContentTypes import Permissions as ATCTPermissions
 from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTFileContent
@@ -52,15 +48,6 @@ from Products.ATContentTypes.types.schemata import ATContentTypeSchema
 from Products.ATContentTypes.types.schemata import relatedItemsField
 from Products.ATContentTypes.types.schemata import urlUploadField
 from Products.validation.validators.SupplValidators import MaxSizeValidator
-
-if HAS_EXT_STORAGE:
-    from Products.ExternalStorage.ExternalStorage import ExternalStorage
-else:
-    class ExternalStorage(Storage):
-        """Dummy storage
-        """
-        def __init__(self, *args, **kwargs):
-            pass
 
 ATFileSchema = ATContentTypeSchema.copy() + Schema((
     FileField('file',
@@ -82,13 +69,6 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
 ATFileSchema.addField(urlUploadField)
 ATFileSchema.addField(relatedItemsField)
 
-ATExtFileSchema = ATFileSchema.copy()
-fileField = ATExtFileSchema['file']
-fileField.storage = ExternalStorage(prefix = 'atct',
-                                    archive = False,
-                                    rename = False)
-# re-register storage layer
-fileField.registerLayer('storage', fileField.storage)
 
 class ATFile(ATCTFileContent):
     """A Archetype derived version of CMFDefault's File"""
@@ -213,30 +193,3 @@ class ATFile(ATCTFileContent):
             self.setFile(file)
 
 registerATCT(ATFile, PROJECTNAME)
-
-
-class ATExtFile(ATFile):
-    """
-    """
-
-    schema         =  ATExtFileSchema
-
-    content_icon   = 'file_icon.gif'
-    portal_type    = 'ATExtFile'
-    meta_type      = 'ATExtFile'
-    archetype_name = 'File (ext)'
-    _atct_newTypeFor = None
-    assocMimetypes = ()
-    assocFileExt   = ()
-
-    security       = ClassSecurityInfo()
-
-    security.declareProtected(CMFCorePermissions.View, 'index_html')
-    def index_html(self):
-        """Allows file direct access download."""
-        field = self.getPrimaryField()
-        field.download(self)
-
-# XXX use at own risk
-if HAS_EXT_STORAGE and EXT_STORAGE_ENABLE:
-    registerATCT(ATExtFile, PROJECTNAME)

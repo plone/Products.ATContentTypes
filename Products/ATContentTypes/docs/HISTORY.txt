@@ -1,6 +1,15 @@
 1.0-devel
 ======================
 
+ * Fixed [ 1158950 ] ATTopic default view wrong. This fix needs also a svn up
+   of CMFPlone 2.1.
+   [tiran]
+
+ * Moved external storage based variants for ATFile and ATImage to a seperate
+   module. They won't make it in the official trunk unless the storage is 
+   working well and the types are tested.
+   [tiran]
+
  * Added 'atct_album_view' and 'atct_album_image' templates based on the
    templates of CMFPhotoAlbum.
    [tiran]

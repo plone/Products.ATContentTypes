@@ -32,5 +32,6 @@ import ATNewsItem
 import ATFolder
 import ATFavorite
 import ATTopic
+import ATExternal
 
 import criteria
