@@ -1,0 +1,34 @@
+Known issues and errors
+=======================
+
+Discussions aren't visible under Plone 2.0.x
+--------------------------------------------
+
+Discussion items aren't shown below an item because the viewThreadsAtBottom 
+doesn't play nice with TemplateMixin. Replace the template with
+http://svn.plone.org/plone/CMFPlone/branches/2.1/skins/plone_templates/viewThreadsAtBottom.pt
+This issue is fixed in CMFPlone 2.1
+
+
+Discussions aren't working under Plone 2.0.x
+--------------------------------------------
+
+You are getting a AttributeError: talkback. Replace the discussion_reply script
+with http://svn.plone.org/plone/CMFPlone/branches/2.1/skins/plone_form_scripts/discussion_reply.cpy
+This issue is fixed in CMFPlone 2.1
+
+Template views for folders aren't working under Plone 2.0.x
+-----------------------------------------------------------
+
+Features like the photo album view for folders doesn't work under Plone 2.0.x
+because the browserDefault method of plone utilities doesn't know how to handle
+folders with template mixin.
+This issue is fixed in CMFPlone 2.1
+
+Permission error when viewing news (the portal news tab)
+--------------------------------------------------------
+
+The news template tries to access EditableBody which is a protected method.
+Replace the news template with with 
+http://svn.plone.org/plone/CMFPlone/branches/2.1/skins/plone_templates/news.pt
+The issue is fixed in CMFPlone 2.1

@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -18,36 +18,33 @@
 #
 """
 
-
 """
-__author__  = ''
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
-from Products.ATContentTypes.ConstrainTypesMixin import ConstrainTypesMixin
 
 from copy import copy
+import urllib2
+import urlparse
 
+from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 if HAS_LINGUA_PLONE:
     from Products.LinguaPlone.public import BaseContent
     from Products.LinguaPlone.public import BaseFolder
     from Products.LinguaPlone.public import OrderedBaseFolder
     from Products.LinguaPlone.public import BaseBTreeFolder
+    from Products.LinguaPlone.public import registerType
 else:
     from Products.Archetypes.public import BaseContent
     from Products.Archetypes.public import BaseFolder
     from Products.Archetypes.public import OrderedBaseFolder
     from Products.Archetypes.public import BaseBTreeFolder
+    from Products.Archetypes.public import registerType
 
-from Products.Archetypes.TemplateMixin import TemplateMixin
-from Products.Archetypes.debug import _default_logger
-from Products.Archetypes.debug import _zlogger
-
-from Products.CMFCore import CMFCorePermissions
-from Products.CMFCore.utils import getToolByName
-
+from Products.ATContentTypes.config import HAS_PLONE2
 if HAS_PLONE2:
     from Products.CMFPlone.PloneFolder import ReplaceableWrapper
+    from webdav.NullResource import NullResource
 
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
@@ -60,10 +57,57 @@ from OFS import ObjectManager
 from zExceptions import BadRequest
 from webdav.Lockable import ResourceLockedError
 
-from Products.ATContentTypes.interfaces.IATContentType import IATContentType
+from Products.Archetypes.TemplateMixin import TemplateMixin
+from Products.ATContentTypes import Permissions as ATCTPermissions
+from Products.Archetypes.debug import _default_logger
+from Products.Archetypes.debug import _zlogger
+
+# BBB CMFPlone 2.0.x
+try:
+    from Products.CMFPlone.interfaces.Translatable import ITranslatable
+except ImportError:
+    try:
+        from Products.PloneLanguageTool.interfaces import ITranslatable
+    except ImportError:
+        ITranslatable = None
+
+from Products.ATContentTypes.config import CHAR_MAPPING
+from Products.ATContentTypes.config import GOOD_CHARS
+from Products.ATContentTypes.config import MIME_ALIAS
+from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
+from Products.ATContentTypes.ConstrainTypesMixin import ConstrainTypesMixin
+from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.types.schemata import ATContentTypeSchema
 
-DEBUG = 1
+DEBUG = True
+
+class InvalidContentType(Exception):
+    """Invalid content type (uploadFromURL)
+    """
+
+# XXX this should go into LinguaPlone!
+translate_actions = ({
+    'id'          : 'translate',
+    'name'        : 'Translate',
+    'action'      : 'string:${object_url}/translate_item',
+    'permissions' : (CMFCorePermissions.ModifyPortalContent, ),
+    'condition'   : 'not: object/isCanonical|nothing',
+    },
+    )
+
+def registerATCT(class_, project):
+    """Registers an ATContentTypes based type
+    
+    One reason to use it is to hide the lingua plone related magic.
+    """
+    assert IATContentType.isImplementedByInstancesOf(class_)
+    
+    # this should go into LinguaPlone!
+    # BBB remove is not None test later
+    if ITranslatable is not None and ITranslatable.isImplementedByInstancesOf(class_):
+        class_.actions = updateActions(class_, translate_actions)
+        
+    registerType(class_, project)
 
 def updateActions(klass, actions):
     """Merge the actions from a class with a list of actions
@@ -79,7 +123,7 @@ def updateActions(klass, actions):
 
     return tuple(actions)
 
-def cleanupFilename(filename):
+def cleanupFilename(filename, encoding='utf-8'):
     """Removes bad chars from file names to make them a good id
     """
     if not filename:
@@ -88,8 +132,8 @@ def cleanupFilename(filename):
     for s in str(filename):
         s = CHAR_MAPPING.get(s, s)
         if s in GOOD_CHARS:
-            result+=s
-    return result
+            result += s
+    return result.encode(encoding)
 
 def translateMimetypeAlias(alias):
     """Maps old CMF content types to real mime types
@@ -111,14 +155,17 @@ class ATCTMixin(TemplateMixin):
     archetype_name = 'AT Content Type'
     immediate_view = 'base_view'
     suppl_views    = ()
-    newTypeFor     = ()
+    _atct_newTypeFor = {'portal_type' : None, 'meta_type' : None}
     typeDescription= ''
     typeDescMsgId  = ''
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()
+    
+    # see SkinnedFolder.__call__
+    isDocTemp = False 
 
-    __implements__ = IATContentType
+    __implements__ = (IATContentType, TemplateMixin.__implements__)
 
     security       = ClassSecurityInfo()
 
@@ -139,7 +186,7 @@ class ATCTMixin(TemplateMixin):
     security.declareProtected(CMFCorePermissions.ModifyPortalContent,
                               'initializeArchetype')
     def initializeArchetype(self, **kwargs):
-        """called by the generated addXXX factory in types tool
+        """called by the generated add* factory in types tool
 
         Overwritten to call edit() instead of update() to have the cmf
         compatibility method.
@@ -153,7 +200,7 @@ class ATCTMixin(TemplateMixin):
         except Exception, msg:
             _zlogger.log_exc()
             if DEBUG and str(msg) not in ('SESSION',):
-                # XXX debug code
+                # debug code
                 raise
                 #_default_logger.log_exc()
 
@@ -236,7 +283,7 @@ class ATCTContent(ATCTMixin, BaseContent):
     """Base class for non folderish AT Content Types"""
 
     __implements__ = (BaseContent.__implements__,
-                      IATContentType)
+                      ATCTMixin.__implements__)
 
     security       = ClassSecurityInfo()
     actions = updateActions(ATCTMixin,
@@ -299,7 +346,7 @@ class ATCTFileContent(ATCTContent):
         data  = field.getAccessor(self)(REQUEST=REQUEST, RESPONSE=RESPONSE)
         if data:
             return data.index_html(REQUEST, RESPONSE)
-        # XXX would should be returned if no data is present?
+        # XXX what should be returned if no data is present?
 
     security.declareProtected(CMFCorePermissions.View, 'get_data')
     def get_data(self):
@@ -314,8 +361,8 @@ class ATCTFileContent(ATCTContent):
     def get_size(self):
         """CMF compatibility method
         """
-        f = self.getPrimaryField().getAccessor(self)()
-        return f and f.get_size() or 0
+        f = self.getPrimaryField()
+        return f.get_size(self) or 0
 
     security.declareProtected(CMFCorePermissions.View, 'size')
     def size(self):
@@ -411,7 +458,7 @@ class ATCTFileContent(ATCTContent):
         f_name = field.getName()
         upload = REQUEST.form.get('%s_file' % f_name, None)
         filename = getattr(upload, 'filename', None)
-        clean_filename = cleanupFilename(filename)
+        clean_filename = cleanupFilename(filename, self.getCharset())
 
         if upload:
             # the file may have already been read by a
@@ -436,6 +483,67 @@ class ATCTFileContent(ATCTContent):
         else:
             # everything ok
             pass
+        
+    security.declarePrivate('loadFileFromURL')
+    def loadFileFromURL(self, url, contenttypes=()):
+        """Loads a file from an url using urllib2
+        
+        You can use contenttypes to restrict uploaded content types like:
+            ('image',) for all image content types
+            ('image/jpeg', 'image/png') only jpeg and png
+        
+        May raise an urllib2.URLError based exception or InvalidContentType
+        
+        returns file_handler, mimetype, filename, size_in_bytes
+        """
+        fh = urllib2.urlopen(url)
+        
+        info = fh.info()
+        mimetype = info.get('content-type', 'application/octetstream')
+        size = info.get('content-length', None)
+        
+        # scheme, netloc, path, parameters, query, fragment
+        path = urlparse.urlparse(fh.geturl())[2]
+        if path.endswith('/'):
+            pos = -2
+        else:
+            pos = -1
+        filename = path.split('/')[pos]
+        
+        success = False
+        for ct in contenttypes:
+            if ct.find('/') == -1:
+                if mimetype[:mimetype.find('/')] == ct:
+                    success = True
+                    break
+            else:
+                if mimetype == ct:
+                    success = True
+                    break
+        if not contenttypes:
+            success = True
+        if not success:
+            raise InvalidContentType, mimetype
+        
+        return fh, mimetype, filename, size
+
+    security.declareProtected(ATCTPermissions.UploadViaURL, 'setUploadURL')
+    def setUrlUpload(self, value, **kwargs):
+        """Upload a file from URL
+        """
+        if not value:
+            return
+        # XXX no error catching
+        fh, mimetype, filename, size = self.loadFileFromURL(value,
+                                           contenttypes=('image',))
+        mutator = self.getPrimaryField().getMutator(self)
+        mutator(fh.read(), mimetype=mimetype, filename=filename)
+
+    security.declareProtected(CMFCorePermissions.View, 'getUploadURL')
+    def getUrlUpload(self, **kwargs):
+        """Always return the default value since we don't store the url
+        """
+        return self.getField('urlUpload').default
 
 InitializeClass(ATCTFileContent)
 
@@ -471,7 +579,7 @@ class ATCTFolder(ATCTMixin, BaseFolder):
 InitializeClass(ATCTFolder)
 
 
-class ATCTConstrainedFolderMixin(ConstrainTypesMixin, ATCTMixin):
+class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
     """ Constrained folderish type """
 
     __implements__ = (ATCTMixin.__implements__,
@@ -479,10 +587,14 @@ class ATCTConstrainedFolderMixin(ConstrainTypesMixin, ATCTMixin):
 
     security       = ClassSecurityInfo()
 
-if ENABLE_CONSTRAIN_TYPES_MIXIN:
-    ATCTFolderMixin = ATCTConstrainedFolderMixin
-else:
-    ATCTFolderMixin = ATCTMixin
+    def __browser_default__(self, request):
+        """ Set default so we can return whatever we want instead
+        of index_html """
+        if HAS_PLONE2:
+            return getToolByName(self, 'plone_utils').browserDefault(self)
+        else:
+            #return OrderedBaseFolder.__browser_default__(self, request)
+            return self, [self.getLayout(),]
 
 InitializeClass(ATCTFolderMixin)
 
@@ -513,13 +625,21 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
 
     security.declareProtected(CMFCorePermissions.View, 'index_html')
     def index_html(self):
-        """ Acquire if not present. """
-        if HAS_PLONE2:
-            _target = aq_parent(aq_inner(self)).aq_acquire('index_html')
-            return ReplaceableWrapper(aq_base(_target).__of__(self))
-        else:
-            OrderedBaseFolder.index_html(self)
-
+       """Special case index_html"""
+       if HAS_PLONE2:
+           # COPIED FROM CMFPLONE 2.1
+           request = getattr(self, 'REQUEST', None)
+           if request and request.has_key('REQUEST_METHOD'):
+               if (request.maybe_webdav_client and
+                   request['REQUEST_METHOD'] in  ['PUT']):
+                   # Very likely a WebDAV client trying to create something
+                   return ReplaceableWrapper(NullResource(self, 'index_html'))
+           # Acquire from parent
+           _target = aq_parent(aq_inner(self)).aq_acquire('index_html')
+           return ReplaceableWrapper(aq_base(_target).__of__(self))
+       else:
+           return OrderedBaseFolder.index_html(self)
+       
     index_html = ComputedAttribute(index_html, 1)
 
     def __browser_default__(self, request):
@@ -528,7 +648,8 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
         if HAS_PLONE2:
             return getToolByName(self, 'plone_utils').browserDefault(self)
         else:
-            return OrderedBaseFolder.__browser_default__(self, request)
+            #return OrderedBaseFolder.__browser_default__(self, request)
+            return self, [self.getLayout(),]
 
 InitializeClass(ATCTOrderedFolder)
 
@@ -577,6 +698,15 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
             return aq_base(_target).__of__(self)
 
     index_html = ComputedAttribute(index_html, 1)
+
+    def __browser_default__(self, request):
+        """ Set default so we can return whatever we want instead
+        of index_html """
+        if HAS_PLONE2:
+            return getToolByName(self, 'plone_utils').browserDefault(self)
+        else:
+            #return OrderedBaseFolder.__browser_default__(self, request)
+            return self, [self.getLayout(),]
 
 InitializeClass(ATCTBTreeFolder)
 

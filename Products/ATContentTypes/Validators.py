@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -20,10 +20,13 @@
 
 
 """
-__author__  = 'Christian Heimes'
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
+from Products.ATContentTypes.config import HAS_MX_TIDY
+from Products.ATContentTypes.config import MX_TIDY_ENABLED
+from Products.ATContentTypes.config import MX_TIDY_MIMETYPES
+from Products.ATContentTypes.config import MX_TIDY_OPTIONS
 
 from Products.validation.config import validation
 from Products.validation.interfaces.IValidator import IValidator
@@ -193,9 +196,9 @@ def doTidy(value, field, request, cleanup=0):
 
     # it's a file upload
     if isinstance(value, FileUpload):
-        # XXX *mmh* ok it's a file upload but a file upload could destroy
-        # the layout, too. Maybe we are doomed?
-        return
+        # *mmh* ok it's a file upload but a file upload could destroy
+        # the layout, too.
+        value = FileUpload.read()
 
     result = mx_tidy(wrapValueInHTML(value), **MX_TIDY_OPTIONS)
     nerrors, nwarnings, outputdata, errordata = result

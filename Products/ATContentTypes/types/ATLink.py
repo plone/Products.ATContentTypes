@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -20,25 +20,45 @@
 
 
 """
-__author__  = ''
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
-
 import urlparse
-
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import registerType
-else:
-    from Products.Archetypes.public import registerType
 
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.types.ATContentType import ATCTContent
-from Products.ATContentTypes.interfaces.IATLink import IATLink
-from Products.ATContentTypes.types.schemata import ATLinkSchema
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import StringWidget
 
+from Products.validation import V_SUFFICIENT
+from Products.validation import V_REQUIRED
+
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.types.ATContentType import registerATCT
+from Products.ATContentTypes.types.ATContentType import ATCTContent
+from Products.ATContentTypes.interfaces import IATLink
+from Products.ATContentTypes.types.schemata import ATContentTypeSchema
+from Products.ATContentTypes.types.schemata import relatedItemsField
+
+ATLinkSchema = ATContentTypeSchema.copy() + Schema((
+    StringField('remoteUrl',
+        required=True,
+        searchable=True,
+        primary=True,
+        # either mailto or an absolute url
+        validators = (('isMailto', V_SUFFICIENT), ('isURL', V_REQUIRED),),
+        widget = StringWidget(
+            # XXX description is wrong!
+            description=("The address of the location. Prefix is "
+                          "optional; if not provided, the link will be relative."),
+            description_msgid = "help_url",
+            label = "URL",
+            label_msgid = "label_url",
+            i18n_domain = "plone")),
+    ))
+ATLinkSchema.addField(relatedItemsField)
 
 class ATLink(ATCTContent):
     """An Archetypes derived version of CMFDefault's Link"""
@@ -47,11 +67,12 @@ class ATLink(ATCTContent):
 
     content_icon   = 'link_icon.gif'
     meta_type      = 'ATLink'
-    archetype_name = 'AT Link'
+    portal_type    = 'Link'
+    archetype_name = 'Link'
     immediate_view = 'link_view'
     default_view   = 'link_view'
     suppl_views    = ()
-    newTypeFor     = ('Link', 'Link')
+    _atct_newTypeFor = {'portal_type' : 'CMF Link', 'meta_type' : 'Link'}
     typeDescription= ("A link is a pointer to a location on "
                       "the internet or intranet.\n"
                       "Enter the relevant details below, and press 'Save'.")
@@ -87,4 +108,4 @@ class ATLink(ATCTContent):
             remote_url = kwargs.get('remote_url', None)
         self.update(remoteUrl = remote_url, **kwargs)
 
-registerType(ATLink, PROJECTNAME)
+registerATCT(ATLink, PROJECTNAME)

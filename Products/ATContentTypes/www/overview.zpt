@@ -1,0 +1,15 @@
+<tal:header tal:replace="structure here/manage_page_header|nothing">Header</tal:header>
+<tal:message tal:define="manage_tabs_message options/manage_tabs_message | request/manage_tabs_message | nothing"
+    tal:replace="structure here/manage_tabs">Tabs</tal:message>
+<tal:body>
+
+  <h3>Overview</h3>
+
+  <p>TODO explain me</p>
+
+  <h3>README</h3>
+  
+  <div tal:content="structure here/getReadme" />
+
+</tal:body>
+<tal:footer tal:replace="structure here/manage_page_footer|nothing">footer</tal:footer>

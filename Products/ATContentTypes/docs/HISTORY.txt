@@ -1,23 +1,255 @@
-0.3-DEVEL - unreleased
-======================
+1.0-devel
+=====================
 
-  * prepare ATFolder for use with TemplateMixin, use generic /view instead of 
-    /folder_listing as default and immediate view.
-    [yenzenz]
-
-  * Use a seperate schemata for ConstrainTypesMixin. We may have many mixins.
-   This way, we can avoid a long edit form when edit the content.
-   [panjunyong]
-
- * Removed default description text for upload fields for ATFile and ATImage. 
-   They are superflouous and don't really add any help to the user. Quite obvious
-   what the fields do/mean.
-
- * Fixed [ 1047878 ] For ical and vcal export, use action icons instead of tabs
+ * Updated README.txt and INSTALL.txt: new versions, update from ATCT 0.2 and
+   some other informations.
    [tiran]
 
-0.2.0-rc5 - unreleased
+ * Changed permission of ATNewsItem.EditableBody() to ModifyPortalContent.
+   [tiran]
+
+ * Added some tabs to the ZMI view of the portal_atct tool: Overview, rescale
+   migrate and recatalog. The usage of the external methods is deprecated in
+   favor of the tool.
+   [tiran]
+
+ * Restored Plone 2.0.x compatibility.
+   [dtremea]
+
+ * Don't show PloneSite, TempFolder and criteria in constrain types list.
+   [tiran]
+
+ * Disabled validator for ATEvent's phone field. Some people have reported that
+   they have issues because numbers and especially extensions are handle
+   differently in every country. Also see [ 974102 ] Can't enter phone extension
+   in phone number field.
+   [tiran]
+
+ * Added XXX report tool to ATCT. It's mostly a copy from the Zope3 XXX tools.
+   Note: XXX is a marker to show "here is something" wrong. It's not porn. :)
+   The tool also reports TODO and BBB (for backward compatibility).
+   [tiran]
+
+ * Fixed [ 1049018 ] url field on Link doesn't allow mailto. Also added an
+   isMailto validator to validation and enhanced the isUrl validator to support
+   more protocols.
+   [tiran]
+
+ * Fixed [ 1114696 ] use correct mimetype for reStructuredText and [ 1122135 ]
+   ATCT edit not preserving text type selection, not ATCT bug be renaming
+   text/restructured to text/x-rst.
+   [tiran]
+
+ * Fixed [ 1158950 ] ATTopic default view wrong. This fix needs also a svn up
+   of CMFPlone 2.1.
+   [tiran]
+
+ * Moved external storage based variants for ATFile and ATImage to a seperate
+   module. They won't make it in the official trunk unless the storage is
+   working well and the types are tested.
+   [tiran]
+
+ * Added 'atct_album_view' and 'atct_album_image' templates based on the
+   templates of CMFPhotoAlbum.
+   [tiran]
+
+ * Replaced the config vars for permissions with new permissions:
+
+    o ModifyConstrainTypes for constrain types mixin
+    o ModifyViewTemplate for template mixin
+    o ViewHistory for history mixin
+    o UploadViaURL for the new upload via url feature
+
+   By default the permissions are restricted to manager only.
+   [tiran]
+
+ * Added new upload via url feature to upload a file or image using an url. The
+   file is downloaded from the remote server using urllib2. Since this feature
+   isn't finished it's not available by default.
+   [tiran]
+
+ * Implemented some very useful functions based on CMFPhoto code for ATImage.
+   The new features are:
+
+    o getting the exif informations from images using Gene Cash's exif lib
+    o getting the image orientation from exif data (rotation and mirror)
+    o Rotating and flipping images using the PIL library incl. a new tab
+
+   The CMFPhoto exif and transform code was written by several ppl including
+   Oliver Baltzer and me. I'm unable to determine the other coders. Please
+   write me an email if you want credits for your great work!
+   [tiran]
+
+ * Refactored huge parts of the migration suite. More later
+   [tiran]
+
+ * Fixed [ 1026616 ] Actions aren't migrated. Actions are migrated from
+   the cmf fti if an action with the id doesn't exist on the atct fti.
+   [tiran]
+
+ * Migrating filter content types, allowed content types and allow
+   discussion from cmf fti to atct fti.
+   [tiran]
+
+ * Updated requirements to CMFQuickinstaller 1.5/cvs,
+   [tiran]
+
+ * Starting to remove the switch* and migrate* external methods.
+   [tiran]
+
+ * Fixed default view of ATFolder. Pointing to view again makes a loop and
+   raises a hard to debug exception because TemplateMixin is trying to use
+   itself as default view which doesn't work.
+   [tiran]
+
+ * FTests: install kupu and epoz when available. Moved function test suite to
+   ftests/
+   [tiran]
+
+ * Fixed [ 1157812 ] ival/vcal action icons not available
+   [tiran]
+
+ * Fixed ATTopic to use atct_edit like all other ATCT types.
+   [tiran]
+
+ * Added ERRATA.txt which covers known issues.
+   [tiran]
+
+ * Added integration tests for discussions.
+   [tiran]
+
+ * Ported topic migration and criteria enhancements + additional criteria
+   from ender topic branch. Thx to Alec Mitchell for his great work! The new
+   criteria are: ATSelectionCriterion, ATDateRangeCriterion,
+   ATReferenceCriterion and ATBooleanCriterion.
+   [allecm, tiran]
+
+ * Changed archetype names of criteria and removed the AT prefix.
+   [tiran]
+
+ * Added unit tests for criteria and ATTopic.
+   [allecm, tiran]
+
+ * Added translate tab when LinguaPlone is available at installation or
+   reinstallation time.
+   [tiran]
+
+ * Added mini scale with 200x200.
+   [tiran]
+
+ * Added integration tests for view and edit templates.
+   [tiran]
+
+ * I made major changes to the unit test suite. Also I've added more field
+   tests, some important interface tests and cleaner and better base classes
+   for tests.
+   [tiran]
+
+ * prepare ATFolder for use with TemplateMixin, use generic /view instead of
+   /folder_listing as default and immediate view.
+   [yenzenz]
+
+ * Changed the way ConstrainTypes gets mixed in: Now ATCT is always subclassing
+   folders from the ConstrainTypes class and the schema is always in the folder
+   schema. Before this change ppl couldn't rely on the api. When the feature
+   is disabled the fields are not shown in the schema and the overwritten
+   methods are using a "shortcut" to the default methods.
+   [tiran]
+
+ * Renamed some methods in the constrain mixin to start with _ct_ for a clean
+   name space.
+   [tiran]
+
+ * Added a tag methods to NewsItem for its image. Also changed the caption from
+   TextField to StringField since it should contain only a small sentence or
+   similar. The caption is applied as title to the news item image.
+   [tiran]
+
+ * When running unit tests all features like constrain mixin and template
+   mixin are forced to be enabled in order to keep the tests sane and to test
+   all features under all circumstances
+   [tiran]
+
+ * Dismembered the big beast schemata.py in types/ and types/criteria. The
+   schemata are in the same modules as the types.
+   [tiran]
+
+ * Added content module which contains all important classes.
+   [tiran]
+
+ * Replaced all "from foo import *" by explicit imports.
+   [tiran]
+
+ * Used some code from Ben's great Bricolite product to have an add permission
+   per type. It allows fine granulated permission settings.
+   [tiran]
+
+ * Fixed bug [ 1154073 ] criterion_edit_form.cpt(.metadata) has no default
+   action. The default action for the criterion edit form is save.
+   [tiran]
+
+ * Added portal_atct tool. The new tool will be used for the new topic features
+   and for the plone control panel.
+   [tiran]
+
+ * Interface geddon: Merged all interfaces into a single file
+   [tiran]
+
+ * Merged limi's ui branch which adds a text field to ATEvent and an image plus
+   image caption to ATNewsItem.
+   [limi, tiran]
+
+ * Added related items reference field to all types using Danny's reference
+   browser widget. The ATReferenceBrowserWidget has to be available.
+   http://svn.plone.org/archetypes/MoreFieldsAndWidgets/ATReferenceBrowserWidget
+   [tiran]
+
+ * Removed old debian/ directory. I don't maintain it any more so there is no
+   reason of having it in the cvs
+   [tiran]
+
+ * Removed QuotaSupport.py. It should never be in the official tree of ATCT
+   [tiran]
+
+ * Introduced great chances in the migration system: The portal type names of
+   the ATCT types are the same as the CMF types. CMF types will be renamed at
+   install time.
+   [tiran]
+
+ * Introduced ZConfig based configuration. It will replace the customconfig.py
+   file.
+   [tiran]
+
+0.2.0-rc5 - 2005-02-26
 ======================
+
+ * Updated requirements to Zope 2.7.4+, Python 2.3.4+ and AT 1.3.2-rc1+
+   [tiran]
+
+ * Cleaned up the migration suite a little bit and enhanced the doc strings.
+   [tiran]
+
+ * Replaces the globalAllow hack by createTypeByName which doesn't make
+   security checks like "is the type implicitly or explicitly addable in the
+   folder". It shares the same codebase as the function from PloneUtilities
+   I once wrote to unfuck the create member area method.
+   [tiran]
+
+ * Better traceback support inside the migration suite.
+   [tiran]
+
+ * Added knob to toggle the installation of LinguaPlone in ATCT install.
+   [tiran]
+
+ * Added explicit portal type name to all ATCT types.
+   [tiran]
+
+ * Renamed newTypeFor to _actc_newTypeFor. The former name was confusing
+   people.
+   [tiran]
+
+ * Added feature to access the name of the last editor through IHistoryAware.
+   [ctheune]
 
  * Fixed a bug in the migration walker. Empty folders aren't skipped any more.
    [panjunyong]
@@ -27,9 +259,10 @@
    [tiran]
 
  * Ported atct_topic_view icon fix from HEAD.
+   [tiran]
 
  * Don't create ATDocuments when uploading .pdf and .doc files
-  [batlogg]
+   [batlogg]
 
  * Resurrected warning message when we hit a broken object in the folder
    migration.
@@ -39,6 +272,7 @@
    [panjunyong]
 
  * Update requirements to the soon to release AT 1.3.2 version and svn.
+   [tiran]
 
  * Added update_data and manage_edit compat. methods to ATFile and ATImage.
    [tiran]
@@ -77,7 +311,7 @@
    AccessContentsInfo permission.
    [tesdal]
 
- * Removed support of Python 2.1 and 2.2 from INSTALL.txt. Some code like 
+ * Removed support of Python 2.1 and 2.2 from INSTALL.txt. Some code like
    migration requires new features of Python 2.3 like generators.
    [tiran]
 
@@ -104,7 +338,7 @@
 
  * Sorting criterion lists (by their translations)
    [ctheune]
- 
+
  * Added german translation
    [ctheune]
 

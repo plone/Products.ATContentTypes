@@ -1,7 +1,7 @@
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -26,18 +26,10 @@ See customconfig.py.example
 
 
 """
-__author__  = ''
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.Permissions import ADD_CONTENT_PERMISSION, ADD_TOPIC_PERMISSION
 from Products.CMFCore import CMFCorePermissions
 import string
-
-try:
-    True
-except NameError:
-    True  = 1
-    False = 0
 
 ###############################################################################
 ## user options
@@ -63,17 +55,14 @@ MX_TIDY_OPTIONS= {
     'char_encoding'    : 'raw',
     }
 
-## enable external storage
-## requires ExternalStorage from Christian Scholz
+## enable external storage variant of ATFile and ATImage
+## requires ExternalStorage (not working yet)
+#EXT_STORAGE_ENABLE = True
 EXT_STORAGE_ENABLE = False
 
 ## use TemplateMixin?
 ## if enabled users can choose between different view templates for each object
-ENABLE_TEMPLATE_MIXIN = False
-
-## TemplateMixin write permission. Only if the member has this permission he
-## is allowed to choose another template then the default permission
-TEMPLATE_MIXIN_PERMISSION = CMFCorePermissions.ModifyPortalContent
+ENABLE_TEMPLATE_MIXIN = True
 
 ## use ConstrainedMixin?
 ## if enabled you can constrain allowed types on an ATCT Folder
@@ -94,15 +83,20 @@ ATDOCUMENT_CONTENT_TYPE = 'text/html'        # html
 ## private options
 
 PROJECTNAME = "ATContentTypes"
+TOOLNAME = "portal_atct"
 SKINS_DIR = 'skins'
 
 GLOBALS = globals()
 
+INSTALL_LINGUA_PLONE = True
+
+## swallow PIL exceptions when resizing the image?
+#SWALLOW_IMAGE_RESIZE_EXCEPTIONS = True
+SWALLOW_IMAGE_RESIZE_EXCEPTIONS = False
+
 CONFIGUREABLE = ('MX_TIDY_ENABLED', 'MX_TIDY_OPTIONS', 'EXT_STORAGE_ENABLE',
-                 'ENABLE_TEMPLATE_MIXIN', 'TEMPLATE_MIXIN_PERMISSION',
-                 'HISTORY_VIEW_PERMISSION', 'MAX_FILE_SIZE', 'MAX_IMAGE_SIZE',
-                 'ENABLE_CONSTRAIN_TYPES_MIXIN', 'CONSTRAIN_TYPES_MIXIN_PERMISSION',
-                 'ATDOCUMENT_CONTENT_TYPE',
+                 'ENABLE_TEMPLATE_MIXIN', 'MAX_FILE_SIZE', 'MAX_IMAGE_SIZE',
+                 'ENABLE_CONSTRAIN_TYPES_MIXIN', 'ATDOCUMENT_CONTENT_TYPE',
                  )
 
 ## using special plone 2 stuff?
@@ -162,68 +156,131 @@ ICONMAP = {'application/pdf' : 'pdf_icon.gif',
 GOOD_CHARS = string.ascii_letters + string.digits + '._-'
 CHAR_MAPPING = {
     ' ' : '_',
-    '≈' : 'Aa',
-    '¿' : 'A',
-    '¡' : 'A',
-    '¬' : 'A',
-    '√' : 'A',
-    'ƒ' : 'Ae',
-    '≈' : 'A',
-    '∆' : 'Ae',
-    '«' : 'C',
-    '»' : 'E',
-    '…' : 'E',
-    ' ' : 'E',
-    'À' : 'E',
-    'Ã' : 'I',
-    'Õ' : 'I',
-    'Œ' : 'I',
-    'œ' : 'I',
-    '–' : 'D',
-    '—' : 'N',
-    '“' : 'O',
-    '”' : 'O',
-    '‘' : 'O',
-    '’' : 'O',
-    '÷' : 'Oe',
-    'ÿ' : 'Oe',
-    'Ÿ' : 'U',
-    '⁄' : 'U',
-    '€' : 'U',
-    '‹' : 'Ue',
-    '›' : 'Y',
-    'ﬂ' : 'ss',
-    '‡' : 'a',
-    '·' : 'a',
-    '‚' : 'a',
-    '„' : 'a',
-    '‰' : 'ae',
-    'Â' : 'aa',
-    'Ê' : 'ae',
-    'Á' : 'c',
-    'Ë' : 'e',
-    'È' : 'e',
-    'Í' : 'e',
-    'Î' : 'e',
-    'Ï' : 'i',
-    'Ì' : 'i',
-    'Ó' : 'i',
-    'Ô' : 'i',
-    '' : 'd',
-    'Ò' : 'n',
-    'Ú' : 'o',
-    'Û' : 'o',
-    'Ù' : 'o',
-    'ı' : 'o',
-    'ˆ' : 'oe',
-    '¯' : 'oe',
-    '˘' : 'u',
-    '˙' : 'u',
-    '˚' : 'u',
-    '¸' : 'ue',
-    '˝' : 'y',
-    'ˇ' : 'y',
+
+# Latin-1 below here
+    '√Ö' : 'Aa',
+    '√Ä' : 'A',
+    '√Å' : 'A',
+    '√Ç' : 'A',
+    '√É' : 'A',
+    '√Ñ' : 'Ae',
+    '√Ö' : 'A',
+    '√Ü' : 'Ae',
+    '√á' : 'C',
+    '√à' : 'E',
+    '√â' : 'E',
+    '√ä' : 'E',
+    '√ã' : 'E',
+    '√å' : 'I',
+    '√ç' : 'I',
+    '√é' : 'I',
+    '√è' : 'I',
+    '√ê' : 'D',
+    '√ë' : 'N',
+    '√í' : 'O',
+    '√ì' : 'O',
+    '√î' : 'O',
+    '√ï' : 'O',
+    '√ñ' : 'Oe',
+    '√ò' : 'Oe',
+    '√ô' : 'U',
+    '√ö' : 'U',
+    '√õ' : 'U',
+    '√ú' : 'Ue',
+    '√ù' : 'Y',
+    '√ü' : 'ss',
+    '√†' : 'a',
+    '√°' : 'a',
+    '√¢' : 'a',
+    '√£' : 'a',
+    '√§' : 'ae',
+    '√•' : 'aa',
+    '√¶' : 'ae',
+    '√ß' : 'c',
+    '√®' : 'e',
+    '√©' : 'e',
+    '√™' : 'e',
+    '√´' : 'e',
+    '√¨' : 'i',
+    '√≠' : 'i',
+    '√Æ' : 'i',
+    '√Ø' : 'i',
+    '√∞' : 'd',
+    '√±' : 'n',
+    '√≤' : 'o',
+    '√≥' : 'o',
+    '√¥' : 'o',
+    '√µ' : 'o',
+    '√∂' : 'oe',
+    '√∏' : 'oe',
+    '√π' : 'u',
+    '√∫' : 'u',
+    '√ª' : 'u',
+    '√º' : 'ue',
+    '√Ω' : 'y',
+    '√ø' : 'y',
+
+# Greek below here
+    'Œê' : 'i',
+    'Œë' : 'A',
+    'Œí' : 'B',
+    'Œì' : 'G',
+    'Œî' : 'D',
+    'Œï' : 'E',
+    'Œñ' : 'Z',
+    'Œó' : 'I',
+    'Œò' : 'TH',
+    'Œô' : 'I',
+    'Œö' : 'K',
+    'Œõ' : 'L',
+    'Œú' : 'M',
+    'Œù' : 'N',
+    'Œû' : 'KS',
+    'Œü' : 'O',
+    'Œ†' : 'P',
+    'Œ°' : 'R',
+    'Œ£' : 'S',
+    'Œ§' : 'T',
+    'Œ•' : 'Y',
+    'Œ¶' : 'F',
+    'Œ®' : 'PS',
+    'Œ©' : 'O',
+    'Œ™' : 'I',
+    'Œ´' : 'Y',
+    'Œ¨' : 'a',
+    'Œ≠' : 'e',
+    'ŒØ' : 'i',
+    'Œ∞' : 'y',
+    'Œ±' : 'a',
+    'Œ≤' : 'b',
+    'Œ≥' : 'g',
+    'Œ¥' : 'd',
+    'Œµ' : 'e',
+    'Œ∂' : 'z',
+    'Œ∑' : 'i',
+    'Œ∏' : 'th',
+    'Œπ' : 'i',
+    'Œ∫' : 'k',
+    'Œª' : 'l',
+    'Œº' : 'm',
+    'ŒΩ' : 'n',
+    'Œæ' : 'ks',
+    'Œø' : 'o',
+    'œÄ' : 'p',
+    'œÅ' : 'r',
+    'œÇ' : 's',
+    'œÉ' : 's',
+    'œÑ' : 't',
+    'œÖ' : 'y',
+    'œÜ' : 'f',
+    'œà' : 'ps',
+    'œâ' : 'o',
+    'œä' : 'i',
+    'œã' : 'y',
+    'œå' : 'o',
+    'œç' : 'y'
     }
+CHAR_MAPPING = dict([(k.decode('utf-8'), v) for k, v in CHAR_MAPPING.items()])
 
 MIME_ALIAS = {
     'plain' : 'text/plain',
@@ -232,4 +289,24 @@ MIME_ALIAS = {
     'rest'  : 'text/x-rst',
     'structured-text' : 'text/structured',
     'restructuredtext' : 'text/x-rst',
+    'text/restructured' : 'text/x-rst',
     }
+
+## force enable some features for ATCT unit testing
+import os
+if os.environ.get('ZOPETESTCASE', False):
+    _ATCT_OLD_VALUES = {
+        'ENABLE_CONSTRAIN_TYPES_MIXIN' : ENABLE_CONSTRAIN_TYPES_MIXIN,
+        'ENABLE_TEMPLATE_MIXIN' : ENABLE_TEMPLATE_MIXIN,
+        'EXT_STORAGE_ENABLE' : EXT_STORAGE_ENABLE,
+        'INSTALL_LINGUA_PLONE' : INSTALL_LINGUA_PLONE,
+        }
+    ENABLE_CONSTRAIN_TYPES_MIXIN = True
+    ENABLE_TEMPLATE_MIXIN = True
+    EXT_STORAGE_ENABLE = True
+    INSTALL_LINGUA_PLONE = True
+    _ATCT_UNIT_TEST_MODE = True
+    
+else:
+    _ATCT_UNIT_TEST_MODE = False
+    _ATCT_OLD_VALUES = {}

@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -18,13 +18,13 @@
 #
 """
 
-
 """
-__author__  = ''
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 from Products.Archetypes import listTypes
-from Products.Archetypes.Extensions.utils import installTypes, install_subskin
+from Products.Archetypes.Extensions.utils import installTypes
+from Products.Archetypes.Extensions.utils import install_subskin
 from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.Catalog import CatalogError
 from StringIO import StringIO
@@ -43,15 +43,76 @@ from Products.ATContentTypes.Extensions.utils import registerActionIcons
 from Products.ATContentTypes.Extensions.toolbox import switchATCT2CMF
 from Products.ATContentTypes.Extensions.toolbox import isSwitchedToATCT
 
-def install(self):
+def install(self, reinstall):
     out = StringIO()
 
+    qi = getToolByName(self, 'portal_quickinstaller')
+    
+    # step 1: install tool
+    # It's required for migration
+    tool = installTool(self, out)
+        
+    # step 2: recatalog CMF items if installing
+    # I've to make sure all CMF types are in the catalog
+    # Because it make take a long time on a large site you can add the tool
+    # manually and recatalog before installing ATCT or even set the flag to
+    # True *ON YOUR OWN RISK*
+    if not reinstall:
+        if tool.getCMFTypesAreRecataloged():
+            print >>out, 'CMF types are marked as catalog, no recataloging'
+        else:
+            print >>out, 'Recataloging CMF types'
+            print 'Recataloging CMF types, this make take a while ...'
+            tool.recatalogCMFTypes()
+            print 'Done'
+            tool.setCMFTypesAreRecataloged(True)
+    
+    # step 3: Rename and move away to old CMF types on install
+    if not reinstall:
+        assert not tool.isCMFdisabled()
+        print >>out, 'Disable CMF types. They are backuped as "CMF Document" ...'
+        tool.disableCMFTypes()
+    
+    # step 4: Install dependency products 
+    installable = [ prod['id'] for prod in qi.listInstallableProducts() ]
+    installed = [ prod['id'] for prod in qi.listInstalledProducts() ]
+    
+    if 'ATReferenceBrowserWidget' not in installable + installed:
+        raise RuntimeError('ATReferenceBrowserWidget not available')
+    if 'ATReferenceBrowserWidget' in installable:
+        qi.installProduct('ATReferenceBrowserWidget')
+        print >>out, 'Install ATReferenceBrowserWidget'
+    
+    if INSTALL_LINGUA_PLONE:
+        if 'LinguaPlone' in installable:
+            print >>out, 'Installing LinguaPlone as reqested'
+            qi.installProduct('LinguaPlone')
+            
+
+    # step 5: install types
     typeInfo = listTypes(PROJECTNAME)
     installTypes(self, out,
                  typeInfo,
                  PROJECTNAME)
 
+    # step 6: copy fti flags like allow discussion
+    if not reinstall:
+        print >>out, 'Copying FTI flags like allow_discussion'
+        tool.copyFTIFlags()
+
+    # step 7: install skins
     install_subskin(self, out, GLOBALS)
+    
+    # step 8: register switch methods to toggle old plonetypes on/off
+    # BBB remove these two dummy methods
+    manage_addExternalMethod(self,'switchATCT2CMF',
+        'DUMMY: Set reenable CMF type',
+        PROJECTNAME+'.Install',
+        'dummyExternalMethod')
+    manage_addExternalMethod(self,'switchCMF2ATCT',
+        'DUMMY: Set ATCT as default content types ',
+        PROJECTNAME+'.Install',
+        'dummyExternalMethod')
 
     print >> out, 'Successfully installed %s' % PROJECTNAME
 
@@ -71,20 +132,12 @@ def install(self):
         PROJECTNAME+'.migrateFromCMF',
         'migrate')
 
-    #manage_addExternalMethod(portal,'migrateFromCPTtoATCT',
-    #    'Migrate from CMFPloneTypes types to ATContentTypes',
-    #    PROJECTNAME+'.migrateFromCPT',
-    #    'migrate')
-
-    manage_addExternalMethod(portal,'recreateATImageScales',
-        '',
-        PROJECTNAME+'.toolbox',
-        'recreateATImageScales')
-
-    # changing workflow
+    # step 9: changing workflow
+    print >>out, 'Workflows setup'
     setupWorkflows(self, typeInfo, out)
 
-    # setup content type registry
+    # step 10: setup content type registry
+    print >>out, 'Content Type Registry setup'
     old = ('link', 'news', 'document', 'file', 'image')
     setupMimeTypes(self, typeInfo, old=old, moveDown=(IATFile,), out=out)
 
@@ -96,12 +149,14 @@ def install(self):
 
     removeApplicationXPython(self, out)
     
-    # for quota support
-    # addCatalog_get_size(self, out)
-
+    # step 11: add additional action icons
+    print >>out, 'Adding additional action icons'
+    registerActionIcons(self, out)
+    
+    print >> out, 'Successfully installed %s' % PROJECTNAME
     return out.getvalue()
 
-def uninstall(self):
+def uninstall(self, reinstall):
     out = StringIO()
     classes=listTypes(PROJECTNAME)
 
@@ -110,14 +165,48 @@ def uninstall(self):
         switchATCT2CMF(self)
 
     # remove external methods for toggling between old and new types
-    portal=getToolByName(self,'portal_url').getPortalObject()
+    # leave it for clean up
     for script in ('switch_old_plone_types_on', 'switch_old_plone_types_off',
      'migrateFromCMFtoATCT', 'migrateFromCPTtoATCT', 'recreateATImageScales',
      'switchATCT2CMF', 'switchCMF2ATCT', ):
-        if hasattr(aq_base(portal), script):
-            portal.manage_delObjects(ids=[script,])
-
+        if hasattr(aq_base(self), script):
+            print >>out, 'Removing script %s from portal root' % script
+            self.manage_delObjects(ids=[script,])
+    
     return out.getvalue()
+
+# QI Hooks
+def afterInstall(self, product, reinstall):
+    out = StringIO()
+    if not reinstall:
+        removeCMFTypesFromRegisteredTypes(self, product, out)
+    return out.getvalue()
+
+def beforeUninstall(self, cascade, product, reinstall):
+    out = StringIO()
+    if not reinstall:
+        removeCMFTypesFromRegisteredTypes(self, product, out)
+    return out.getvalue(), cascade
+
+def installTool(self, out):
+    tool = getToolByName(self, TOOLNAME, None)
+    if tool is None:
+        addTool = self.manage_addProduct['ATContentTypes'].manage_addTool
+        addTool('ATCT Tool')
+        tool = getToolByName(self, TOOLNAME)
+    print >>out, "Installing %s" % TOOLNAME
+    return tool
+
+def removeCMFTypesFromRegisteredTypes(self, product, out):
+    qi_types = product.types
+    tool = getToolByName(self, TOOLNAME)
+    cmf_types = tool._getCMFPortalTypes()
+    new_types = [ t for t in qi_types if t not in cmf_types]
+    product.types = new_types
+    print >>out, 'Changing registered type list from %s to %s in order to' \
+                 'save backed up cmf types' % (qi_types, new_types)
+
+    return out
 
 def setupWorkflows(self, typeInfo, out):
     wftool = getToolByName(self, 'portal_workflow')
@@ -147,30 +236,8 @@ def setChainFor(portal_type, chain, wftool, out):
         # default is default :)
         wftool.setChainForPortalTypes((portal_type,), chain)
 
-def removeApplicationXPython(self, out):
-    """Fixed broken .py file extension in older version of PortalTransforms
-    """
-    mtr  = getToolByName(self, 'mimetypes_registry')
-    mimetypes = mtr.lookup('application/x-python')
-    if mimetypes:
-        for m in mimetypes:
-            mtr.unregister(m)
-        print >>out, 'Unregistering application/x-python from mimetypes_registry'
-    textpy = mtr.lookup('text/x-python')
-    mtr.register_extension('py', textpy)
 
-def addCatalog_get_size(self, out):
-    """Add get_size metadata to catalog
+def dummyExternalMethod(self, *args, **kwargs):
+    """Dummy external method for backward compatibility
     """
-    cat = getToolByName(self, 'portal_catalog')
-    try:
-        cat.addColumn('get_size', default_value=0)
-    except CatalogError:
-        print >>out, 'portal_catalog already has get_size metadata, recreate it'
-        # readd the get_size metadata to make sure it has default_value=0
-        cat.delColumn('get_size')
-        cat.addColumn('get_size', default_value=0)
-    else:
-        print >>out, 'Added get_size metadata to portal_catalog'
-    cat.refreshCatalog()
-    
+    return 

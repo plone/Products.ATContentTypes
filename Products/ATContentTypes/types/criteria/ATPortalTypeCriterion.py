@@ -4,7 +4,7 @@
 # Archetypes reimplementation of the CMF core types
 #
 # Copyright (c) 2001 Zope Corporation and Contributors. All Rights Reserved.
-# Copyright (c) 2003-2004 AT Content Types development team
+# Copyright (c) 2003-2005 AT Content Types development team
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -26,46 +26,56 @@ from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
+
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import MultiSelectionWidget
 from Products.Archetypes.public import DisplayList
-from Products.ATContentTypes.config import *
-from Products.ATContentTypes.types.criteria import registerCriterion, \
-    STRING_INDICES
-from Products.ATContentTypes.interfaces.IATTopic import IATTopicSearchCriterion
-from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
-from Products.ATContentTypes.types.criteria.schemata import ATPortalTypeCriterionSchema
+
+from Products.ATContentTypes.types.criteria import registerCriterion
+from Products.ATContentTypes.types.criteria import FIELD_INDICES
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
+from Products.ATContentTypes.Permissions import ChangeTopics
+from Products.ATContentTypes.types.criteria.ATSelectionCriterion import ATSelectionCriterion
 
 
-class ATPortalTypeCriterion(ATBaseCriterion):
+ATPortalTypeCriterionSchema = ATSelectionCriterion.schema.copy()
+
+val_widget = ATPortalTypeCriterionSchema['value'].widget
+val_widget.description="One of the registered portal types."
+val_widget.description_msgid="help_portal_type_criteria_value"
+val_widget.label_msgid="label_portal_type_criteria_value"
+ATPortalTypeCriterionSchema['value'].widget = val_widget
+
+    
+class ATPortalTypeCriterion(ATSelectionCriterion):
     """A portal_types criterion"""
 
-    __implements__ = ATBaseCriterion.__implements__ + (IATTopicSearchCriterion, )
+    __implements__ = ATSelectionCriterion.__implements__ + (IATTopicSearchCriterion, )
     security       = ClassSecurityInfo()
     schema         = ATPortalTypeCriterionSchema
     meta_type      = 'ATPortalTypeCriterion'
-    archetype_name = 'AT Portal Types Criterion'
+    archetype_name = 'Portal Types Criterion'
     typeDescription= ''
     typeDescMsgId  = ''
 
     shortDesc      = 'portal types values'
 
-    security.declareProtected(CMFCorePermissions.View, 'getValue')
-    def getValue(self):
-        # refresh vocabulary
-        types_tool = getToolByName(self, 'portal_types')
-        portal_types = types_tool.listContentTypes()
-        portal_types = [(portal_type, portal_type)
-                        for portal_type in portal_types]
-        self.schema['value'].vocabulary = DisplayList(list(portal_types))
-        return self.getField('value').get(self)
-
+    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    def getCurrentValues(self):
+         """Return enabled portal types"""
+         types_tool = getToolByName(self, 'portal_types')
+         portal_types = [types_tool.getTypeInfo(pt).Title() or pt
+                         for pt in types_tool.listContentTypes()]
+         return DisplayList(zip(portal_types,portal_types))
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
 
-        if self.getValue() is not '':
-            result.append((self.Field(), self.getValue()))
+        if self.Value() is not '':
+            result.append((self.Field(), self.Value()))
 
         return tuple(result)
 
-registerCriterion(ATPortalTypeCriterion, STRING_INDICES)
+registerCriterion(ATPortalTypeCriterion, FIELD_INDICES)

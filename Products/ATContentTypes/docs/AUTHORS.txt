@@ -12,6 +12,9 @@ Dominik Bartenstein:
 
 Thomas Bechter:
 
+Danny Bloemendaal:
+ * Topic enhancements and topic tool
+ * UI 
 
 Kai Bielenberg:
 
@@ -20,9 +23,10 @@ Godefroid Chapelle:
  * ATTopic and criteria enhancements
 
 Christian Heimes:
- * maintainer
+ * maintainer and main developer
  * migration system
  * basic unit testing suit and most of the unit tests
+ * functional testing
  * reimplementation of CMFTopic for ATContentTypes
  * moving CMFPloneTypes to ATContentTypes
  * mxTidy validation
@@ -31,6 +35,9 @@ Christian Heimes:
 Jens Klein:
  * did some work on the forerunner model CMFPloneTypes (ex-maintainer)
  * constrain types support
+
+Alec Mitchell:
+ * Topic enhancements and topic tool
 
 Bill Schindler:
 
@@ -45,6 +52,9 @@ Volker Bachschneider:
 
 Lele Gaifax:
  * bug reports and improvements
+
+André Knoerig:
+ * testing and bug reports
 
 Markus Koelle:
  * bug reporting

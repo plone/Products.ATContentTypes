@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -20,24 +20,60 @@
 
 
 """
-__author__  = ''
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.CMFCorePermissions import setDefaultRoles
+from Products.Archetypes.public import listTypes
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.interfaces import IATTopic
+from Products.ATContentTypes.interfaces import IATTopicCriterion
+
+TYPE_ROLES = ('Manager', 'Owner')
+TOPIC_ROLES = ('Manager',)
+CHANGE_TOPIC_ROLES = TOPIC_ROLES + ('Owner',)
+CRITERION_ROLES = ('Manager',)
 
 # Gathering Topic and Event related permissions into one place
 AddTopics = 'Add portal topics'
-ChangeTopics = 'Change portal topics'
-ChangeEvents = 'Change portal events'
+setDefaultRoles(AddTopics, TOPIC_ROLES)
 
-# Set up default roles for permissions
-setDefaultRoles(AddTopics, ('Manager',))
-setDefaultRoles(ChangeTopics, ('Manager', 'Owner',))
+ChangeTopics = 'Change portal topics'
+setDefaultRoles(ChangeTopics, CHANGE_TOPIC_ROLES)
+
+ChangeEvents = 'Change portal events'
 setDefaultRoles(ChangeEvents, ('Manager', 'Owner',))
 
-# Add a AT Content Type
-ADD_CONTENT_PERMISSION = CMFCorePermissions.AddPortalContent
+ModifyConstrainTypes = "ATContentTypes: Modify constrain types"
+setDefaultRoles(ModifyConstrainTypes, ('Manager', ))
 
-# Add a AT Topic / criterion
-ADD_TOPIC_PERMISSION   = AddTopics
+ModifyViewTemplate = "ATContentTypes: Modify view template"
+setDefaultRoles(ModifyViewTemplate, ('Manager', ))
+
+ViewHistory = "ATContentTypes: View history"
+setDefaultRoles(ViewHistory, ('Manager', ))
+
+UploadViaURL = "ATContentTypes: Upload via url"
+setDefaultRoles(ViewHistory, ('UploadViaURL', ))
+
+permissions = {}
+def wireAddPermissions():
+    """Creates a list of add permissions for all types in this project
+    
+    Must be called **after** all types are registered!
+    """
+    global permissions
+    atct_types = listTypes(PROJECTNAME)
+    for atct in atct_types:
+        if IATTopic.isImplementedByInstancesOf(atct['klass']):
+            permission = AddTopics 
+        elif IATTopicCriterion.isImplementedByInstancesOf(atct['klass']):
+            permission = "%s Topic: Add %s" % (PROJECTNAME, atct['portal_type'])
+            setDefaultRoles(permission, CRITERION_ROLES)
+        else:
+            permission = "%s: Add %s" % (PROJECTNAME, atct['portal_type'])
+            setDefaultRoles(permission, TYPE_ROLES)
+        
+        permissions[atct['portal_type']] = permission
+    return permissions

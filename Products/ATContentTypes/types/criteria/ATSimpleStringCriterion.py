@@ -4,7 +4,7 @@
 # Archetypes reimplementation of the CMF core types
 #
 # Copyright (c) 2001 Zope Corporation and Contributors. All Rights Reserved.
-# Copyright (c) 2003-2004 AT Content Types development team
+# Copyright (c) 2003-2005 AT Content Types development team
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -19,18 +19,41 @@
 
 """
 
-__author__  = 'Christian Heimes'
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.config import *
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import StringWidget
+
 from Products.ATContentTypes.types.criteria import registerCriterion, \
     STRING_INDICES
-from Products.ATContentTypes.interfaces.IATTopic import IATTopicSearchCriterion
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
+from Products.ATContentTypes.Permissions import ChangeTopics
 from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
-from Products.ATContentTypes.types.criteria.schemata import ATSimpleStringCriterionSchema
+from Products.ATContentTypes.types.criteria.schemata import ATBaseCriterionSchema
+
+
+ATSimpleStringCriterionSchema = ATBaseCriterionSchema + Schema((
+    StringField('value',
+                required=1,
+                mode="rw",
+                write_permission=ChangeTopics,
+                accessor="Value",
+                mutator="setValue",
+                default="",
+                widget=StringWidget(
+                    label="Value",
+                    label_msgid="label_string_criteria_value",
+                    description="A string value.",
+                    description_msgid="help_string_criteria_value",
+                    i18n_domain="plone"),
+                ),
+
+    ))
 
 
 class ATSimpleStringCriterion(ATBaseCriterion):
@@ -40,7 +63,7 @@ class ATSimpleStringCriterion(ATBaseCriterion):
     security       = ClassSecurityInfo()
     schema         = ATSimpleStringCriterionSchema
     meta_type      = 'ATSimpleStringCriterion'
-    archetype_name = 'AT Simple String Criterion'
+    archetype_name = 'Simple String Criterion'
     typeDescription= ''
     typeDescMsgId  = ''
 

@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -20,31 +20,94 @@
 
 
 """
-__author__  = ''
+__author__  = 'Christian Heimes <ch@comlounge.net>, Alec Mitchell'
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
-
-from types import ListType, TupleType, StringType
+from types import ListType
+from types import TupleType
+from types import StringType
 from locale import strcoll
-
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import registerType
-else:
-    from Products.Archetypes.public import registerType
 
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.CatalogTool import CatalogTool
 from AccessControl import ClassSecurityInfo
-from Acquisition import aq_parent, aq_inner
+from Acquisition import aq_parent
+from Acquisition import aq_inner
 
-from Products.ATContentTypes.types.ATContentType import ATCTFolder, updateActions
-from Products.ATContentTypes.interfaces.IATTopic import IATTopic
-from Products.ATContentTypes.types.criteria import CriterionRegistry
-from Products.ATContentTypes.Permissions import ChangeTopics, AddTopics
-from Products.ATContentTypes.types.schemata import ATTopicSchema
-from Products.ATContentTypes.interfaces.IATTopic import IATTopicSearchCriterion, IATTopicSortCriterion
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import BooleanField
+from Products.Archetypes.public import IntegerField
+from Products.Archetypes.public import BooleanWidget
+from Products.Archetypes.public import IntegerWidget
+
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.types.ATContentType import registerATCT
+from Products.ATContentTypes.types.ATContentType import ATCTFolder
+from Products.ATContentTypes.types.ATContentType import updateActions
+from Products.ATContentTypes.types.criteria import _criterionRegistry
+from Products.ATContentTypes.Permissions import ChangeTopics
+from Products.ATContentTypes.Permissions import AddTopics
+from Products.ATContentTypes.types.schemata import ATContentTypeSchema
+from Products.ATContentTypes.types.schemata import relatedItemsField
+from Products.ATContentTypes.interfaces import IATTopic
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
+from Products.ATContentTypes.interfaces import IATTopicSortCriterion
+
+# A couple of fields just don't make sense to sort (for a user),
+# some are just doubles.
+IGNORED_FIELDS = ['Date', 'allowedRolesAndUsers', 'getId', 'in_reply_to', 
+    'meta_type',
+    # 'portal_type' # portal type and Type might differ!
+    ]
+
+ATTopicSchema = ATContentTypeSchema.copy() + Schema((
+    BooleanField('acquireCriteria',
+                required=False,
+                mode="rw",
+                default=False,
+                write_permission = ChangeTopics,
+                widget=BooleanWidget(
+                        label="Inherit Criteria",
+                        label_msgid="label_inherit_criteria",
+                        description=("Toggles inheritance of criteria. For example, if you "
+                                     "have specified that only items from the last three days "
+                                     "should be shown in a Topic above the current one, this "
+                                     "Topic will also have that criterion automatically."),
+                        description_msgid="help_inherit_criteria",
+                        i18n_domain = "plone"),
+                ),
+    BooleanField('limitNumber',
+                required=False,
+                mode="rw",
+                default=False,
+                write_permission = ChangeTopics,
+                widget=BooleanWidget(
+                        label="Limit Number of Items",
+                        label_msgid="label_limit_number",
+                        description=("Toggles limitation of number of items displayed. "
+                                     "If selected, only the first 'Number of Items' "
+                                     "will be displayed."),
+                        description_msgid="help_limit_number",
+                        i18n_domain = "plone"),
+                ),
+    IntegerField('itemCount',
+                required=False,
+                mode="rw",
+                default=0,
+                write_permission = ChangeTopics,
+                widget=IntegerWidget(
+                        label="Number of Items",
+                        label_msgid="label_item_count",
+                        description="If 'Limit Number of Items' is "
+                        "selected, only the first "
+                        "'Number of Items' will be "
+                        "displayed ",
+                        description_msgid="help_item_count",
+                        i18n_domain = "plone"),
+                 ),
+    ))
+ATTopicSchema.addField(relatedItemsField)
 
 # A couple of fields just don't make sense to sort (for a user),
 # some are just doubles.
@@ -58,11 +121,12 @@ class ATTopic(ATCTFolder):
 
     content_icon   = 'topic_icon.gif'
     meta_type      = 'ATTopic'
-    archetype_name = 'AT Topic'
+    portal_type    = 'Topic'
+    archetype_name = 'Topic'
     immediate_view = 'atct_topic_view'
     default_view   = 'atct_topic_view'
     suppl_views    = ()
-    newTypeFor     = ('Topic', 'Portal Topic')
+    _atct_newTypeFor = {'portal_type' : 'CMF Topic', 'meta_type' : 'Portal Topic'}
     typeDescription= ("A topic is a pre-defined search, showing all "
                       "items matching\n criteria you specify. "
                       "Topics may also contain sub-topics.")
@@ -72,7 +136,7 @@ class ATTopic(ATCTFolder):
     cmf_edit_kws   = ()
 
     filter_content_types  = 1
-    allowed_content_types = ()
+    allowed_content_types = ('Topic',)
 
     use_folder_tabs = 0
 
@@ -81,16 +145,16 @@ class ATTopic(ATCTFolder):
     security       = ClassSecurityInfo()
     actions = updateActions(ATCTFolder,
         (
-        {
-        'id'          : 'view',
-        'name'        : 'View',
-        'action'      : 'string:${folder_url}/',
-        'permissions' : (CMFCorePermissions.View,)
-        },
+        #{
+        #'id'          : 'view',
+        #'name'        : 'View',
+        #'action'      : 'string:${folder_url}/',
+        #'permissions' : (CMFCorePermissions.View,)
+        #},
         {
         'id'          : 'edit',
         'name'        : 'Edit',
-        'action'      : 'string:${object_url}/base_edit',
+        'action'      : 'string:${object_url}/atct_edit',
         'permissions' : (ChangeTopics,)
         },
         {
@@ -102,7 +166,7 @@ class ATTopic(ATCTFolder):
         {
         'id'          : 'subtopics',
         'name'        : 'Subtopics',
-        'action'      : 'string:${folder_url}/topic_subtopics_form',
+        'action'      : 'string:${folder_url}/atct_topic_subtopics',
         'permissions' : (ChangeTopics,)
         },
        )
@@ -118,7 +182,7 @@ class ATTopic(ATCTFolder):
     def criteriaByIndexId(self, indexId):
         catalog_tool = getToolByName(self, CatalogTool.id)
         indexObj = catalog_tool.Indexes[indexId]
-        results = CriterionRegistry.criteriaByIndex(indexObj.meta_type)
+        results = _criterionRegistry.criteriaByIndex(indexObj.meta_type)
         return results
 
     security.declareProtected(ChangeTopics, 'listCriteriaTypes')
@@ -126,14 +190,14 @@ class ATTopic(ATCTFolder):
         """List available criteria types as dict
         """
         return [ {'name': ctype,
-                  'description':CriterionRegistry[ctype].shortDesc}
+                  'description':_criterionRegistry[ctype].shortDesc}
                  for ctype in self.listCriteriaMetaTypes() ]
 
     security.declareProtected(ChangeTopics, 'listCriteriaMetaTypes')
     def listCriteriaMetaTypes(self):
         """List available criteria
         """
-        val = CriterionRegistry.listTypes()
+        val = _criterionRegistry.listTypes()
         val.sort()
         return val
 
@@ -142,14 +206,14 @@ class ATTopic(ATCTFolder):
         """List available search criteria types as dict
         """
         return [ {'name': ctype,
-                  'description':CriterionRegistry[ctype].shortDesc}
+                  'description':_criterionRegistry[ctype].shortDesc}
                  for ctype in self.listSearchCriteriaMetaTypes() ]
 
     security.declareProtected(ChangeTopics, 'listSearchCriteriaMetaTypes')
     def listSearchCriteriaMetaTypes(self):
         """List available search criteria
         """
-        val = CriterionRegistry.listSearchTypes()
+        val = _criterionRegistry.listSearchTypes()
         val.sort()
         return val
 
@@ -158,14 +222,14 @@ class ATTopic(ATCTFolder):
         """List available sort criteria types as dict
         """
         return [ {'name': ctype,
-                  'description':CriterionRegistry[ctype].shortDesc}
+                  'description':_criterionRegistry[ctype].shortDesc}
                  for ctype in self.listSortCriteriaMetaTypes() ]
 
     security.declareProtected(ChangeTopics, 'listSortCriteriaMetaTypes')
     def listSortCriteriaMetaTypes(self):
         """List available sort criteria
         """
-        val = CriterionRegistry.listSortTypes()
+        val = _criterionRegistry.listSortTypes()
         val.sort()
         return val
 
@@ -218,7 +282,7 @@ class ATTopic(ATCTFolder):
     def listIndicesByCriterion(self, criterion):
         """
         """
-        return CriterionRegistry.indicesByCriterion(criterion)
+        return _criterionRegistry.indicesByCriterion(criterion)
 
     security.declareProtected(ChangeTopics, 'listFields')
     def listFields(self):
@@ -266,11 +330,12 @@ class ATTopic(ATCTFolder):
         """
         result = {}
         criteria = self.listCriteria()
-        if not criteria:
+        acquire = self.getAcquireCriteria()
+        if not criteria and not acquire:
             # no criteria found
-            return None
-
-        if self.getAcquireCriteria():
+             return None
+ 
+        if acquire:
             try:
                 # Tracker 290 asks to allow combinations, like this:
                 # parent = aq_parent(self)
@@ -314,6 +379,7 @@ class ATTopic(ATCTFolder):
             # sorting when sort is involved
             # See: http://zope.org/Members/Caseman/ZCatalog_for_2.6.1
             kw.setdefault('sort_limit', max_items)
+        __traceback_info__ = (self, kw,)
         results = pcatalog.searchResults(REQUEST, **kw)
         if limit:
             return results[:max_items]
@@ -363,15 +429,16 @@ class ATTopic(ATCTFolder):
         syn_tool = getToolByName(self, 'portal_syndication')
         limit = syn_tool.getMaxItems(self)
         brains = self.queryCatalog(sort_limit=limit)[:limit]
-        return [brain.getObject() for brain in brains]
+        objs = [brain.getObject() for brain in brains]
+        return [obj for obj in objs if obj is not None]
 
-registerType(ATTopic)
+registerATCT(ATTopic, PROJECTNAME)
 
 def modify_fti(fti):
     """Remove folderlisting action
     """
     actions = []
     for action in fti['actions']:
-        if action['id'] != 'folderlisting':
-                actions.append(action)
-    fti['actions'] = tuple(actions)
+        if action['id'] == 'folderlisting':
+                action['visible'] = False
+

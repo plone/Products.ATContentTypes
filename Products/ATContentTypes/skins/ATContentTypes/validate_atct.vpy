@@ -11,7 +11,7 @@ errors  = {}
 request = context.REQUEST
 form    = request.form
 
-## XXX It's hacky and not nice but it's working
+## It's hacky and not nice but it's working
 # Set the title from the filename of uploaded image or field
 # The title has to be set before the validation. This is the only place to do it
 # right although it's looking hackish.

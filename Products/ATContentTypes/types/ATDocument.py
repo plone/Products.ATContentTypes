@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -18,19 +18,11 @@
 #
 """
 
-
 """
-__author__  = ''
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
-
 from types import TupleType
-
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import registerType
-else:
-    from Products.Archetypes.public import registerType
 
 from ZPublisher.HTTPRequest import HTTPRequest
 from Products.CMFCore import CMFCorePermissions
@@ -38,12 +30,47 @@ from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
 
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import TextField
+from Products.Archetypes.public import RichWidget
+from Products.Archetypes.public import RFC822Marshaller
+
+from Products.ATContentTypes.config import ATDOCUMENT_CONTENT_TYPE
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTContent
 from Products.ATContentTypes.types.ATContentType import updateActions
 from Products.ATContentTypes.types.ATContentType import translateMimetypeAlias
+from Products.ATContentTypes.types.schemata import ATContentTypeSchema
+from Products.ATContentTypes.types.schemata import relatedItemsField
 from Products.ATContentTypes.HistoryAware import HistoryAwareMixin
-from Products.ATContentTypes.interfaces.IATDocument import IATDocument
-from Products.ATContentTypes.types.schemata import ATDocumentSchema
+from Products.ATContentTypes.interfaces import IATDocument
+
+ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
+    TextField('text',
+              required=True,
+              searchable=True,
+              primary=True,
+              validators = ('isTidyHtmlWithCleanup',),
+              #validators = ('isTidyHtml',),
+              default_content_type = ATDOCUMENT_CONTENT_TYPE,
+              default_output_type = 'text/html',
+              allowable_content_types = ('text/structured',
+                                         'text/x-rst',
+                                         'text/html',
+                                         'text/plain',
+                                         'text/plain-pre',
+                                         'text/python-source',),
+              widget = RichWidget(
+                        description = "The body text of the document.",
+                        description_msgid = "help_body_text",
+                        label = "Body text",
+                        label_msgid = "label_body_text",
+                        rows = 25,
+                        i18n_domain = "plone")),
+    ), marshall=RFC822Marshaller()
+    )
+ATDocumentSchema.addField(relatedItemsField)
 
 class ATDocument(ATCTContent, HistoryAwareMixin):
     """An Archetypes derived version of CMFDefault's Document"""
@@ -52,11 +79,12 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
 
     content_icon   = 'document_icon.gif'
     meta_type      = 'ATDocument'
-    archetype_name = 'AT Document'
+    portal_type    = 'Document'
+    archetype_name = 'Document'
     default_view   = 'document_view'
     immediate_view = 'document_view'
     suppl_views    = ()
-    newTypeFor     = ('Document', 'Document')
+    _atct_newTypeFor = {'portal_type' : 'CMF Document', 'meta_type' : 'Document'}
     typeDescription= 'Fill in the details of this document.'
     typeDescMsgId  = 'description_edit_document'
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
@@ -73,9 +101,6 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
     actions = updateActions(ATCTContent,
                             HistoryAwareMixin.actions
                            )
-
-    # backward compat
-    text_format = 'text/plain'
 
     security.declareProtected(CMFCorePermissions.View, 'CookedBody')
     def CookedBody(self, stx_level='ignored'):
@@ -119,6 +144,20 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         if not value:   # XXX somehow submitting an empty textarea overwrites file uploads because empty strings end up here
             return
         field = self.getField('text')
+        # XXX this is ugly
+        # When an object is initialized the first time we have to 
+        # set the filename and mimetype.
+        # In the case the value is empty/None we must not set the value because
+        # it will overwrite uploaded data like a pdf file.
+        if (value is None or value == ""):
+            if not field.getRaw(self):
+                # set mimetype and file name although the fi
+                if 'mimetype' in kwargs:
+                    field.setContentType(self, kwargs['mimetype'])
+                if 'filename' in kwargs:
+                    field.setContentType(self, kwargs['filename'])
+            else:
+                return
 
         # hook for mxTidy / isTidyHtmlWithCleanup validator
         tidyOutput = self.getTidyOutput(field)
@@ -127,7 +166,6 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
 
         field.set(self, value, **kwargs) # set is ok
 
-    # XXX test me
     text_format = ComputedAttribute(ATCTContent.getContentType, 1)
 
     security.declarePrivate('guessMimetypeOfText')
@@ -198,4 +236,4 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
 
-registerType(ATDocument, PROJECTNAME)
+registerATCT(ATDocument, PROJECTNAME)

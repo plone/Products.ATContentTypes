@@ -12,4 +12,4 @@ from Products.CMFCore.utils import getToolByName
 iface = getToolByName(context, 'portal_interface')
 
 return iface.objectImplements(obj,
-           'Products.ATContentTypes.interfaces.IATContentType.IATContentType')
+           'Products.ATContentTypes.interfaces.IATContentType')

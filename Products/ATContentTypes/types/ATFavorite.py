@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -20,15 +20,8 @@
 
 
 """
-__author__  = ''
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
-
-from Products.ATContentTypes.config import *
-
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import registerType
-else:
-    from Products.Archetypes.public import registerType
 
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
@@ -38,10 +31,33 @@ from ComputedAttribute import ComputedAttribute
 from ZODB.POSException import ConflictError
 
 from Products.Archetypes.debug import _zlogger
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import StringWidget
 
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTContent
-from Products.ATContentTypes.interfaces.IATFavorite import IATFavorite
-from Products.ATContentTypes.types.schemata import ATFavoriteSchema
+from Products.ATContentTypes.interfaces import IATFavorite
+from Products.ATContentTypes.types.schemata import ATContentTypeSchema
+from Products.ATContentTypes.types.schemata import relatedItemsField
+
+ATFavoriteSchema = ATContentTypeSchema.copy() + Schema((
+    StringField('remoteUrl',
+                required=True,
+                searchable=True,
+                accessor='_getRemoteUrl',
+                primary=True,
+                validators = (),
+                widget = StringWidget(
+                        description=("The address of the location. Prefix is "
+                                     "optional; if not provided, the link will be relative."),
+                        description_msgid = "help_url",
+                        label = "URL",
+                        label_msgid = "label_url",
+                        i18n_domain = "plone")),
+    ))
+ATFavoriteSchema.addField(relatedItemsField)
 
 class ATFavorite(ATCTContent):
     """An Archetypes derived version of CMFDefault's Favorite"""
@@ -50,16 +66,17 @@ class ATFavorite(ATCTContent):
 
     content_icon   = 'favorite_icon.gif'
     meta_type      = 'ATFavorite'
-    archetype_name = 'AT Favorite'
+    portal_type    = 'Favorite'
+    archetype_name = 'Favorite'
     default_view   = 'favorite_view'
     immediate_view = 'favorite_view'
     suppl_views    = ()
-    include_default_actions = 0
-    global_allow   = 1
-    filter_content_types  = 1
+    include_default_actions = False
+    global_allow   = True
+    filter_content_types  = True
     allowed_content_types = ()
-    newTypeFor     = ('Favorite', 'Favorite')
-    typeDescription= ''
+    _atct_newTypeFor = {'portal_type' : 'CMF Favorite', 'meta_type' : 'Favorite'}
+    typeDescription = ''
     typeDescMsgId  = ''
     assocMimetypes = ()
     assocFileExt   = ('fav', )
@@ -120,4 +137,4 @@ class ATFavorite(ATCTContent):
             remote_url = kwargs.get('remote_url', None)
         self.update(remoteUrl = remote_url, **kwargs)
 
-registerType(ATFavorite, PROJECTNAME)
+registerATCT(ATFavorite, PROJECTNAME)

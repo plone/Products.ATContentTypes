@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -16,11 +16,10 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""History awareness
-
+"""Calendar export / import
 
 """
-__author__  = 'Christian Heimes, Christian Theune'
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 from cStringIO import StringIO
@@ -32,8 +31,7 @@ from Globals import InitializeClass
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.config import *
-#from Products.ATContentTypes.interfaces.IHistoryAware import IHistoryAware
+from Products.ATContentTypes.interfaces import ICalendarSupport
 
 DATE = "%Y%m%dT%H%M%SZ"
 
@@ -108,7 +106,7 @@ class CalendarSupportMixin:
     """Mixin class for iCal/vCal support
     """
 
-    #__implements__ = IHistoryAware
+    __implements__ = (ICalendarSupport, )
 
     security       = ClassSecurityInfo()
 
@@ -169,7 +167,7 @@ class CalendarSupportMixin:
         eventType = self.getEventType()
         if eventType:
             out.write('CATEGORIES:%s\n' % eventType)
-        # XXX todo
+        # TODO
         #ORGANIZER;CN=%(name):MAILTO=%(email)
         #ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
         out.write(ICS_EVENT_END)
@@ -210,7 +208,7 @@ class CalendarSupportMixin:
         if location:
             out.write('LOCATION:%s\n' % location)
         out.write(VCS_EVENT_END)
-        # XXX todo
+        # TODO
         # Insert missing code here :]
         return n2rn(out.getvalue())
 

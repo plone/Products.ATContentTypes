@@ -1,1 +1,1 @@
-0.3-DEVEL (CVS/Unreleased)
+1.0-devel (CVS/Unreleased)

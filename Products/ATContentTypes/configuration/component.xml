@@ -1,0 +1,138 @@
+<component prefix="Products.ATContentTypes.configuration.datatype">
+
+   <sectiontype name="mxtidy" keytype="identifier">
+    <description format="plain">
+      Section for mxTidy related configuration
+    </description>
+    <key name="enable" datatype="boolean" required="no" default="true">
+      <description format="plain">
+        Enable mxTidy?
+      </description>
+    </key>
+    <key name="drop_font_tags" datatype="boolean" required="no" default="true">
+      <description>
+        XXX
+      </description>
+    </key>
+    <key name="drop_empty_paras" datatype="boolean" required="no" default="true">
+      <description>
+        XXX
+      </description>
+    </key>
+    <key name="input_xml" datatype="boolean" required="no" default="false">
+      <description>
+        XXX
+      </description>
+    </key>
+    <key name="output_xhtml" datatype="boolean" required="no" default="true">
+      <description>
+        XXX
+      </description>
+    </key>
+    <key name="quiet" datatype="boolean" required="no" default="true">
+      <description>
+        XXX
+      </description>
+    </key>
+    <key name="show_warnings" datatype="boolean" required="no" default="true">
+      <description>
+        XXX
+      </description>
+    </key>
+    <key name="indent_spaces" datatype="boolean" required="no" default="true">
+      <description>
+        XXX
+      </description>
+    </key>
+    <key name="word_2000" datatype="boolean" required="no" default="true">
+      <description>
+        XXX
+      </description>
+    </key>
+    <key name="wrap" datatype="integer" required="no" default="72">
+      <description>
+        XXX
+      </description>
+    </key>
+    <key name="tab_size" datatype="integer" required="no" default="4">
+      <description>
+        XXX
+      </description>
+    </key> 
+    <key name="char_encoding" datatype="string" required="no" default="raw">
+      <description>
+        XXX
+      </description>
+    </key> 
+  </sectiontype>
+
+  <sectiontype name="feature" keytype="identifier">
+    <description format="plain">
+      Section for a feature has a enable knob and a permission
+    </description>
+    <key name="enable" datatype="boolean" required="yes">
+      <description format="plain">
+        enable the feature?
+      </description>
+    </key>
+    <key name="permission" datatype="permission" default="cmf.ManagePortal">
+      <description format="plain">
+        permission name
+      </description>
+    </key>
+  </sectiontype>
+
+  <sectiontype name="view" keytype="identifier">
+    <description format="plain">
+      A section that is describing the different aspects of views for AT types
+    </description>
+    <key name="default" datatype="identifier" default="None">
+      <description format="plain">
+        default view, if None -> portal_types immediate_view
+      </description>
+    </key>
+    <key name="immediate" datatype="identifier" default="base_view">
+      <description format="plain">
+        XXX
+      </description>
+    </key>
+    <multikey name="supplementary" datatype="identifier">
+      <description format="plain">
+        XXX
+      </description>
+    </multikey>
+  </sectiontype>
+
+  <sectiontype name="typedescription" keytype="identifier">
+    <description format="plain">
+      describing text and msgid for a type
+    </description>
+    <key name="description" datatype="string" required="yes">
+      <description format="plain">
+        XXX
+      </description>
+    </key>
+    <key name="i18n_msgid" datatype="identifier">
+      <description format="plain">
+        XXX
+      </description>
+    </key>
+  </sectiontype>
+
+  <sectiontype name="contenttype" keytype="string">
+    <description format="plain">
+      An archetype type information
+    </description>
+    <key name="add_permission" datatype="permission" default="cmf.AddPortalContent">
+      <description format="plain">
+        permission name
+      </description>
+    </key>
+    <section type="typedescription" name="*" attribute="typedescription"
+     required="yes" />
+    <!--section type="view" name="*" attribute="view" required="yes" /-->
+
+  </sectiontype>
+
+
+</component>

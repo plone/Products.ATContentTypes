@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -18,31 +18,57 @@
 #
 """
 
-
 """
-__author__  = ''
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.config import *
-
 from urllib import quote
-
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import registerType, BaseContent
-else:
-    from Products.Archetypes.public import registerType,BaseContent
 
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_parent
+from OFS.Image import File
+
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import FileField
+from Products.Archetypes.public import FileWidget
+from Products.Archetypes.public import PrimaryFieldMarshaller
+from Products.Archetypes.BaseContent import BaseContent
 from Products.PortalTransforms.utils import TransformException
 
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import MAX_FILE_SIZE
+from Products.ATContentTypes.config import ICONMAP
+from Products.ATContentTypes import Permissions as ATCTPermissions
+from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTFileContent
-from Products.ATContentTypes.interfaces.IATFile import IATFile
-from Products.ATContentTypes.types.schemata import ATFileSchema, ATExtFileSchema
+from Products.ATContentTypes.interfaces import IATFile
+from Products.ATContentTypes.types.schemata import ATContentTypeSchema
+from Products.ATContentTypes.types.schemata import relatedItemsField
+from Products.ATContentTypes.types.schemata import urlUploadField
+from Products.validation.validators.SupplValidators import MaxSizeValidator
 
-from OFS.Image import File
+ATFileSchema = ATContentTypeSchema.copy() + Schema((
+    FileField('file',
+              required=True,
+              primary=True,
+              languageIndependent=True,
+              validators = MaxSizeValidator('checkFileMaxSize',
+                                            maxsize=MAX_FILE_SIZE),
+              widget = FileWidget(
+                        #description = "Select the file to be added by clicking the 'Browse' button.",
+                        #description_msgid = "help_file",
+                        description = "",
+                        label= "File",
+                        label_msgid = "label_file",
+                        i18n_domain = "plone",
+                        show_content_type = False,)),
+    ), marshall=PrimaryFieldMarshaller()
+    )
+ATFileSchema.addField(urlUploadField)
+ATFileSchema.addField(relatedItemsField)
+
 
 class ATFile(ATCTFileContent):
     """A Archetype derived version of CMFDefault's File"""
@@ -51,11 +77,12 @@ class ATFile(ATCTFileContent):
 
     content_icon   = 'file_icon.gif'
     meta_type      = 'ATFile'
-    archetype_name = 'AT File'
+    portal_type    = 'File'
+    archetype_name = 'File'
     immediate_view = 'file_view'
     default_view   = 'file_view'
     suppl_views    = ()
-    newTypeFor     = ('File', 'Portal File')
+    _atct_newTypeFor = {'portal_type' : 'CMF File', 'meta_type' : 'Portal File'}
     typeDescription= "Add the relevant details of the file to be added in the form below,\n" \
                      "select the file with the 'Browse' button, and press 'Save'."
     typeDescMsgId  = 'description_edit_file'

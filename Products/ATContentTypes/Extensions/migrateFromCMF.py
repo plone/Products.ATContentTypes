@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -20,21 +20,10 @@
 
 
 """
-__author__  = 'Christian Heimes'
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 from Products.ATContentTypes.migration.ATCTMigrator import migrateAll
-from Products.ATContentTypes.Extensions.toolbox import switchATCT2CMF, switchCMF2ATCT, isSwitchedToATCT
 
 def migrate(self):
-    if isSwitchedToATCT(self):
-        switched = 1
-        switchATCT2CMF(self)
-        get_transaction().commit(1)
-    else:
-        switched = 0
-    try:
-        return migrateAll(self)
-    finally:
-        if switched:
-            switchCMF2ATCT(self)
+    return migrateAll(self)

@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -20,24 +20,27 @@
 
 
 """
-__author__  = ''
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
-
-from Products.ATContentTypes.config import *
-
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import registerType
-else:
-    from Products.Archetypes.public import registerType
 
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.types.ATContentType import ATCTOrderedFolder, \
-    ATCTBTreeFolder
-from Products.ATContentTypes.interfaces.IATFolder import IATFolder, \
-    IATBTreeFolder
-from Products.ATContentTypes.types.schemata import ATFolderSchema
-from Products.ATContentTypes.types.schemata import ATBTreeFolderSchema
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
+from Products.ATContentTypes.types.ATContentType import registerATCT
+from Products.ATContentTypes.types.ATContentType import ATCTOrderedFolder
+from Products.ATContentTypes.types.ATContentType import ATCTBTreeFolder
+from Products.ATContentTypes.interfaces import IATFolder
+from Products.ATContentTypes.interfaces import IATBTreeFolder
+from Products.ATContentTypes.types.schemata import ATContentTypeSchema
+from Products.ATContentTypes.types.schemata import relatedItemsField
+from Products.ATContentTypes.ConstrainTypesMixin import ConstrainTypesMixinSchema
+
+ATFolderSchema      = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
+ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
+
+ATFolderSchema.addField(relatedItemsField)
+ATBTreeFolderSchema.addField(relatedItemsField)
 
 class ATFolder(ATCTOrderedFolder):
     """A simple folderish archetype"""
@@ -46,11 +49,12 @@ class ATFolder(ATCTOrderedFolder):
 
     content_icon   = 'folder_icon.gif'
     meta_type      = 'ATFolder'
-    archetype_name = 'AT Folder'
-    immediate_view = 'view'
-    default_view   = 'view'
-    suppl_views    = ()
-    newTypeFor     = ('Folder', 'Plone Folder')
+    portal_type    = 'Folder'
+    archetype_name = 'Folder'
+    immediate_view = 'folder_listing'
+    default_view   = 'folder_listing'
+    suppl_views    = ('atct_album_view', )
+    _atct_newTypeFor = {'portal_type' : 'CMF Folder', 'meta_type' : 'Plone Folder'}
     typeDescription= ''
     typeDescMsgId  = ''
     assocMimetypes = ()
@@ -72,9 +76,7 @@ class ATFolder(ATCTOrderedFolder):
 ##        )
 ##    )
 
-registerType(ATFolder, PROJECTNAME)
-
-from Products.Archetypes.public import BaseBTreeFolder
+registerATCT(ATFolder, PROJECTNAME)
 
 class ATBTreeFolder(ATCTBTreeFolder):
     """A simple btree folderish archetype"""
@@ -82,12 +84,14 @@ class ATBTreeFolder(ATCTBTreeFolder):
 
     content_icon   = 'folder_icon.gif'
     meta_type      = 'ATBTreeFolder'
-    archetype_name = 'AT BTree Folder'
+    portal_type    = 'Large Plone Folder'
+    archetype_name = 'Large Folder'
     immediate_view = 'folder_listing'
     default_view   = 'folder_listing'
-    suppl_views    = ()
-    global_allow   = 0
-    newTypeFor     = ('Large Plone Folder', 'Large Plone Folder')
+    suppl_views    = ('atct_album_view', )
+    global_allow   = False
+    _atct_newTypeFor = {'portal_type' : 'CMF Large Plone Folder',
+                        'meta_type' : 'Large Plone Folder'}
     TypeDescription= ''
     assocMimetypes = ()
     assocFileExt   = ()
@@ -97,4 +101,4 @@ class ATBTreeFolder(ATCTBTreeFolder):
 
     security       = ClassSecurityInfo()
 
-registerType(ATBTreeFolder, PROJECTNAME)
+registerATCT(ATBTreeFolder, PROJECTNAME)

@@ -4,7 +4,7 @@
 # Archetypes reimplementation of the CMF core types
 #
 # Copyright (c) 2001 Zope Corporation and Contributors. All Rights Reserved.
-# Copyright (c) 2003-2004 AT Content Types development team
+# Copyright (c) 2003-2005 AT Content Types development team
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -19,7 +19,7 @@
 
 """
 
-__author__  = 'Christian Heimes'
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 from Products.Archetypes.public import BaseContentMixin
@@ -28,18 +28,46 @@ from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 
-from Products.ATContentTypes.config import *
-from Products.ATContentTypes.types.criteria import registerCriterion, \
-    ALL_INDICES, DATE_INDICES, STRING_INDICES, LIST_INDICES
-from Products.ATContentTypes.interfaces.IATTopic import IATTopicCriterion
+from Products.Archetypes.ClassGen import generateClass
+from Products.ATContentTypes.types.criteria import registerCriterion
+from Products.ATContentTypes.types.criteria import ALL_INDICES
+from Products.ATContentTypes.types.criteria import DATE_INDICES
+from Products.ATContentTypes.types.criteria import STRING_INDICES
+from Products.ATContentTypes.types.criteria import LIST_INDICES
+from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes.types.criteria.schemata import ATBaseCriterionSchema
 
+from Products.CMFCore.PortalContent import PortalContent
+from Products.Archetypes.interfaces.base import IBaseContent
 
-class ATBaseCriterion(BaseContentMixin):
+class NonRefCatalogContent(BaseContentMixin):
+    """Base class for content that is neither referenceable nor in the catalog
+    """
+   
+    isReferenceable = None
+
+    __implements__ = (PortalContent.__implements__, IATTopicCriterion,
+                      IBaseContent)
+    
+    # reference register / unregister methods
+    def _register(self, *args, **kwargs): pass
+    def _unregister(self, *args, **kwargs): pass
+    def _updateCatalog(self, *args, **kwargs): pass
+    def _referenceApply(self, *args, **kwargs): pass
+    def _uncatalogUID(self, *args, **kwargs): pass
+    def _uncatalogRefs(self, *args, **kwargs): pass
+    
+    # catalog methods
+    def indexObject(self, *args, **kwargs): pass
+    def unindexObject(self, *args, **kwargs): pass
+    def reindexObject(self, *args, **kwargs): pass
+
+class ATBaseCriterion(NonRefCatalogContent):
     """A basic criterion"""
-
-    __implements__ = BaseContentMixin.__implements__ + (IATTopicCriterion, )
+    
     security = ClassSecurityInfo()
+    
+    __implements__ = (IATTopicCriterion, NonRefCatalogContent.__implements__)
 
     schema = ATBaseCriterionSchema
     meta_type = 'ATBaseCriterion'
@@ -47,9 +75,16 @@ class ATBaseCriterion(BaseContentMixin):
     typeDescription= ''
     typeDescMsgId  = ''
     global_allow = 0
-
-    def __init__(self, id, field=None):
-        self.getField('id').set(self, id) # set is ok
+    
+    def __init__(self, id=None, field=None, oid=None):
+        if oid is not None:
+            if field is None:
+                field = id
+            id = oid
+        assert id
+        assert field
+        NonRefCatalogContent.__init__(self, id)
+        self.getField('id').set(self, id)
         self.getField('field').set(self, field)
 
     security.declareProtected(CMFCorePermissions.View, 'getId')
@@ -75,7 +110,10 @@ class ATBaseCriterion(BaseContentMixin):
     def getCriteriaItems(self):
         """Return a sequence of items to be used to build the catalog query.
         """
-        raise NotImplementedError
+        return ()
 
+# because I don't register the class I've to generator it on my own. Otherwise
+# I'm not able to unit test it in the right way.
+generateClass(ATBaseCriterion)
 InitializeClass(ATBaseCriterion)
 # registerCriterion(ATBaseCriterion, ())

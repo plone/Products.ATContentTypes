@@ -1,5 +1,5 @@
 [default]
-title = Edit
+title = ATContentTypes Edit
 
 [validators]
 validators = validate_atct

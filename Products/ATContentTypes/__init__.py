@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -20,15 +20,10 @@
 
 
 """
-__author__  = ''
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 import sys
-
-from Globals import package_home
-from Products.CMFCore.utils import ContentInit
-from Products.CMFCore import CMFCorePermissions
-from Products.CMFCore.DirectoryView import registerDirectory
 
 # load customconfig and overwrite the configureable options of config
 # with the values from customconfig
@@ -44,30 +39,54 @@ else:
             setattr(config, option, value)
     del config
 
-from Products.ATContentTypes.config import *
+from Products.ATContentTypes.config import HAS_LINGUA_PLONE
+from Products.ATContentTypes.config import SKINS_DIR
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import GLOBALS
 
 if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import *
+    from Products.LinguaPlone.public import process_types
+    from Products.LinguaPlone.public import listTypes
 else:
-    from Products.Archetypes.public import *
+    from Products.Archetypes.public import process_types
+    from Products.Archetypes.public import listTypes
 
-import Products.ATContentTypes.migration
+from Products.CMFCore.utils import ContentInit
+from Products.CMFCore.utils import ToolInit
+from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.DirectoryView import registerDirectory
+
+# import all content types, migration and validators
+import Products.ATContentTypes.Extensions.Install
 import Products.ATContentTypes.Validators
-from Products.ATContentTypes.interfaces.IATTopic import IATTopic, IATTopicCriterion
-from Products.ATContentTypes import ATContentTypes
+import Products.ATContentTypes.content
+import Products.ATContentTypes.migration
+from Products.ATContentTypes.ATCTTool import ATCTTool
+
+# wire the add permission after all types are registered
+from Products.ATContentTypes.Permissions import wireAddPermissions
+wireAddPermissions()
 
 registerDirectory(SKINS_DIR,GLOBALS)
 
-from Products.Archetypes import ArchetypeTool
-ATToolModule = sys.modules[ArchetypeTool.__module__]
-ATCT_TYPES = tuple(
-    [at_type['klass'] for at_type in  ATToolModule._types.values()
-     if (at_type['package'] == PROJECTNAME) and
-     not IATTopicCriterion.isImplementedByInstancesOf(at_type['klass'])]
-    )
+#from Products.Archetypes import ArchetypeTool
+#ATToolModule = sys.modules[ArchetypeTool.__module__]
+#ATCT_TYPES = tuple(
+#    [at_type['klass'] for at_type in  ATToolModule._types.values()
+#     if (at_type['package'] == PROJECTNAME) and
+#     not IATTopicCriterion.isImplementedByInstancesOf(at_type['klass'])]
+#    )
+
+import Products.ATContentTypes.configuration
 
 def initialize(context):
     # process our custom types
+    
+    ToolInit(
+        'ATContentTypes tools', 
+        tools=(ATCTTool,),  
+        product_name='ATContentTypes', 
+        icon='tool.gif', ).initialize(context) 
 
     listOfTypes = listTypes(PROJECTNAME)
 
@@ -75,51 +94,21 @@ def initialize(context):
         listOfTypes,
         PROJECTNAME)
 
-    # A brief explanation for the following code:
-    #
-    # We want to have another add permission for the topic and
-    # criteria because topics shouldn't be addable by non
-    # managers. The following code iterats over all content types and
-    # seperates the content_types using the interfaces. At last it
-    # initializes topic/criteria and the rest with two different
-    # permissions.
-
-    topic_content_types = []
-    topic_constructors  = []
-    other_content_types = []
-    other_constructors  = []
-
-    for i in range(len(listOfTypes)):
-        aType = listOfTypes[i]
-        if IATTopic.isImplementedByInstancesOf(aType['klass']) or \
-          IATTopicCriterion.isImplementedByInstancesOf(aType['klass']):
-            topic_content_types.append(content_types[i])
-            topic_constructors.append(constructors[i])
-        else:
-            other_content_types.append(content_types[i])
-            other_constructors.append(constructors[i])
-
-    # other
-    ContentInit(
-        PROJECTNAME + ' Content',
-        content_types = tuple(other_content_types),
-        permission = ADD_CONTENT_PERMISSION,
-        extra_constructors = tuple(other_constructors),
-        fti = ftis,
-        ).initialize(context)
-
-    # topics
-    ContentInit(
-        PROJECTNAME + ' Topic',
-        content_types = tuple(topic_content_types),
-        permission = ADD_TOPIC_PERMISSION,
-        extra_constructors = tuple(topic_constructors),
-        fti = ftis,
-        ).initialize(context)
-        
-    # XXX remove try/except block after we depend on AT 1.3.1
-    try:
-        from Products.ATContentTypes.customizationpolicy import registerPolicy
-        registerPolicy(context)
-    except ImportError:
-        pass
+    # Assign an own permission to all content types
+    # Heavily based on Bricolite's code from Ben Saller
+    from Products.ATContentTypes.Permissions import permissions
+    
+    allTypes = zip(content_types, constructors)
+    for atype, constructor in allTypes:
+        kind = "%s: %s" % (PROJECTNAME, atype.archetype_name)
+        ContentInit(
+            kind,
+            content_types      = (atype,),
+            permission         = permissions[atype.portal_type],
+            extra_constructors = (constructor,),
+            fti                = ftis,
+            ).initialize(context)
+       
+    from Products.ATContentTypes.customizationpolicy import registerPolicy
+    registerPolicy(context)
+ 

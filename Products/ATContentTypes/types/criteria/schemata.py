@@ -4,7 +4,7 @@
 # Archetypes reimplementation of the CMF core types
 #
 # Copyright (c) 2001 Zope Corporation and Contributors. All Rights Reserved.
-# Copyright (c) 2003-2004 AT Content Types development team
+# Copyright (c) 2003-2005 AT Content Types development team
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -21,46 +21,12 @@
 __author__  = ''
 __docformat__ = 'restructuredtext'
 
-from Products.Archetypes.public import *
+
+from Products.Archetypes.public import Schema
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import IdWidget
+from Products.Archetypes.public import StringWidget
 from Products.ATContentTypes.Permissions import ChangeTopics
-
-###
-# DateCriteria vocabularies
-###
-
-DateOptions = DisplayList((
-                    (     str(0), 'Now'      )
-                  , (     str(1), '1 Day'    )
-                  , (     str(2), '2 Days'   )
-                  , (     str(5), '5 Days'   )
-                  , (     str(7), '1 Week'   )
-                  , (    str(14), '2 Weeks'  )
-                  , (    str(31), '1 Month'  )
-                  , (  str(31*3), '3 Months' )
-                  , (  str(31*6), '6 Months' )
-                  , (   str(365), '1 Year'   )
-                  , ( str(365*2), '2 Years'  )
-    ))
-
-CompareOperations = DisplayList((
-                    ('min', 'min')
-                  , ('max', 'max')
-                  , ('within_day', 'within_day')
-    ))
-
-RangeOperations = DisplayList((
-                    ('-', 'old')
-                  , ('+', 'ahead')
-    ))
-
-###
-# ListCriterion vocabularies
-###
-
-CompareOperators = DisplayList((
-                    ('and', 'and')
-                  , ('or', 'or')
-    ))
 
 ###
 # AT Base Criterion

@@ -1,12 +1,1228 @@
-2004-12-13 18:12 ctheune
+2005-03-07 21:07  tiran
 
-    * Default content type for ATDocument is now "html" which is more common.
-      I also cleaned up the config.py to not list all the examples from
-      customconfig.example.py again.
+	* tests/test_installation.py: upps ... forgot to add self
 
-2004-12-13 17:49 ctheune
+2005-03-07 20:51  tiran
 
-    * Fixed 1078278 (Minor typos in utils.py)
+	* ATCTTool.py, __init__.py, interfaces.py, Extensions/Install.py,
+	  Extensions/toolbox.py, docs/HISTORY.txt, ftests/test_atfolder.py,
+	  migration/ATCTMigrator.py, tests/atcttestcase.py,
+	  tests/test_atdocument.py, tests/test_atevent.py,
+	  tests/test_atfavorite.py, tests/test_atfile.py,
+	  tests/test_atfolder.py, tests/test_atimage.py,
+	  tests/test_atlink.py, tests/test_atnewsitem.py,
+	  tests/test_installation.py, tests/test_tool.py,
+	  types/ATContentType.py, types/ATDocument.py, types/ATEvent.py,
+	  types/ATFavorite.py, types/ATFile.py, types/ATFolder.py,
+	  types/ATImage.py, types/ATLink.py, types/ATNewsItem.py,
+	  types/ATTopic.py, types/schemata.py: * added translate tab when
+	  LP is installed * added integration tests for LP * fixed
+	  migration tests, now it's using self.folder for everything *
+	  added some more tests like installation tests and ITranslateable
+	  tests
+
+2005-03-07 16:13  tiran
+
+	* docs/HISTORY.txt, types/ATImage.py, types/ATNewsItem.py: added
+	  mini scale with 200x200 as limi requested
+
+2005-03-07 16:08  tiran
+
+	* config.py, migration/Migrator.py, migration/common.py,
+	  tests/atcttestcase.py, tests/test_constraintypes.py,
+	  tests/test_tool.py, tests/utils.py, types/ATContentType.py: Added
+	  unrestricted rename method to ship arond some issues while
+	  migrating a  site FakeRequestSession must not be empty because of
+	  some stupid tests in AT Some more portal name fixes
+
+2005-03-06 21:48  tiran
+
+	* config.py, Extensions/toolbox.py, ftests/test_atfolder.py,
+	  tests/atcttestcase.py, tests/test_constraintypes.py,
+	  types/ATContentType.py: made some changes to make ATCT 1.0
+	  compatible with Plone 2.1 + atct branch Added USE_AT_PREFIX flag
+	  for debugging and migration testing"
+
+2005-03-06 18:50  tiran
+
+	* ftests/test_atdocument.py, ftests/test_atnewsitem.py,
+	  tests/atcttestcase.py: better debug output using error log
+
+2005-03-06 18:18  tiran
+
+	* ftests/test_atdocument.py, ftests/test_atevent.py,
+	  ftests/test_atfile.py, ftests/test_atfolder.py,
+	  ftests/test_atimage.py, ftests/test_atnewsitem.py,
+	  tests/atcttestcase.py: more integration tests for templates
+
+2005-03-06 17:32  tiran
+
+	* tests/: atcttestcase.py, utils.py: Because the session setup of
+	  ZTC didn't work well for me (python freezes after 6 tests
+	  reproceable) I made up my own dummy session manager. It was a
+	  little bit tricky to find the place where SESSION was added to
+	  REQUEST but finally I found the traverse hook
+
+2005-03-06 15:40  tiran
+
+	* configuration/.cvsignore, docs/HISTORY.txt, ftests/.cvsignore,
+	  ftests/__init__.py, ftests/framework.py, ftests/runalltests.py,
+	  ftests/runtests.sh.example, ftests/test_atdocument.py,
+	  ftests/test_atevent.py, ftests/test_atfavorite.py,
+	  ftests/test_atfile.py, ftests/test_atfolder.py,
+	  ftests/test_atimage.py, ftests/test_atlink.py,
+	  ftests/test_atnewsitem.py, tests/atcttestcase.py,
+	  tests/test_atdocument.py, tests/test_atevent.py,
+	  tests/test_atfile.py: Added integration tests for view and edit
+	  templates.
+
+2005-03-06 03:54  tiran
+
+	* CalendarSupport.py, docs/HISTORY.txt, tests/ATCTSiteTestCase.py,
+	  tests/atcttestcase.py, tests/common.py, tests/testATDocument.py,
+	  tests/testATEvent.py, tests/testATFavorite.py,
+	  tests/testATFile.py, tests/testATFolder.py, tests/testATImage.py,
+	  tests/testATLink.py, tests/testATNewsItem.py,
+	  tests/testContrainTypes.py, tests/test_atdocument.py,
+	  tests/test_atevent.py, tests/test_atfavorite.py,
+	  tests/test_atfile.py, tests/test_atfolder.py,
+	  tests/test_atimage.py, tests/test_atlink.py,
+	  tests/test_atnewsitem.py, tests/test_constraintypes.py,
+	  tests/test_tool.py, tests/utils.py, types/ATEvent.py,
+	  types/schemata.py:  I made major changes to the unit test suite.
+	  Also I've added more field
+	   tests, some important interface tests and cleaner and better
+	  base classes
+	   for tests.
+
+2005-03-06 02:41  tiran
+
+	* types/ATFile.py: Added missing imports
+
+2005-03-05 21:15  tiran
+
+	* __pkginfo__.py, version.txt, docs/HISTORY.txt: preparing
+	  0.2.0-final release for Plone 2.1 alpha
+
+2005-03-05 21:09  tiran
+
+	* __init__.py, config.py, types/ATDocument.py,
+	  skins/ATContentTypes/criterion_edit_form.cpt.metadata: fixed an
+	  problem with the initial mimetype of a newly created document
+
+2005-03-05 15:44  tiran
+
+	* docs/HISTORY.txt, types/ATFolder.py: Moved jensens changes to the
+	  branch where development takes place
+
+2005-03-05 11:32  yenzenz
+
+	* types/ATFolder.py, docs/HISTORY.txt: ATFolder uses now /view to
+	  get its view, not folder_listing. This is needed for
+	  TemplateMixin.
+
+2005-03-04 21:01  tiran
+
+	* types/: ATDocument.py, ATEvent.py, ATFavorite.py, ATFile.py,
+	  ATFolder.py, ATImage.py, ATLink.py, ATNewsItem.py, ATTopic.py:
+	  fixed missing imports
+
+2005-03-04 19:51  tiran
+
+	* ConstrainTypesMixin.py, config.py, docs/HISTORY.txt,
+	  tests/testContrainTypes.py, types/ATContentType.py,
+	  types/ATFolder.py, types/ATImage.py, types/ATNewsItem.py,
+	  types/schemata.py:  * Changed the way ConstrainTypes gets mixed
+	  in: Now ATCT is always subclassing
+	     folders from the ConstrainTypes class and the schema is always
+	  in the folder
+	     schema. Before this change ppl couldn't rely on the api. When
+	  the feature
+	     is disabled the fields are not shown in the schema and the
+	  overwritten
+	     methods are using a "shortcut" to the default methods.
+
+	   * Renamed some methods in the constrain mixin to start with _ct_
+	  for a clean
+	     name space.
+
+	   * Added a tag methods to NewsItem for its image. Also changed
+	  the caption from
+	     TextField to StringField since it should contain only a small
+	  sentence or
+	     similar. The caption is applied as title to the news item
+	  image.
+
+	   * When running unit tests all features like constrain mixin and
+	  template
+	     mixin are forced to be enabled in order to keep the tests sane
+	  and to test
+	     all features under all circumstances
+
+2005-03-04 16:22  tiran
+
+	* ATCTTool.py, config.py, tests/test_tool.py: The id of the tool
+	  should be in one single place
+
+2005-03-04 15:54  tiran
+
+	* CalendarSupport.py, HistoryAware.py, Validators.py, __init__.py,
+	  content.py, tool.gif, Extensions/Install.py, docs/HISTORY.txt,
+	  tests/ATCTSiteTestCase.py, types/ATContentType.py,
+	  types/ATDocument.py, types/ATEvent.py, types/ATFavorite.py,
+	  types/ATFile.py, types/ATFolder.py, types/ATImage.py,
+	  types/ATLink.py, types/ATNewsItem.py, types/ATTopic.py,
+	  types/schemata.py, types/criteria/ATBaseCriterion.py,
+	  types/criteria/ATDateCriteria.py,
+	  types/criteria/ATListCriterion.py,
+	  types/criteria/ATPortalTypeCriterion.py,
+	  types/criteria/ATSimpleIntCriterion.py,
+	  types/criteria/ATSimpleStringCriterion.py,
+	  types/criteria/ATSortCriterion.py, types/criteria/__init__.py,
+	  types/criteria/schemata.py:  * Dismembered the big beast
+	  schemata.py in types/ and types/criteria. The
+	     schemata are in the same modules as the types.
+
+	   * Added content module which contains all important classes.
+
+	   * Replaced all "from foo import *" by explicit imports.
+
+2005-03-04 01:50  alecacct
+
+	* ATCTTool.py, ConstrainTypesMixin.py, __init__.py,
+	  Extensions/Install.py, tests/ATCTSiteTestCase.py,
+	  tests/test_tool.py, types/ATTopic.py, types/schemata.py: Another
+	  few updates from 1.0 and a fix so that there aren't two
+	  toolInits.
+
+2005-03-04 00:25  tiran
+
+	* tests/ATCTSiteTestCase.py, types/ATTopic.py, types/schemata.py:
+	  Merged enders changes to file/image description and helges topic
+	  enhancement from the trunk to this branch
+
+2005-03-04 00:05  tiran
+
+	* ATCTTool.py, tests/test_tool.py: get portal types by metatype
+
+2005-03-03 23:56  tiran
+
+	* ATCTTool.py, Extensions/Install.py, tests/test_tool.py: Added
+	  some methods to the tool to get a list of cmf meta_types and
+	  portal_types. Also added two methods to remove all cmf core +
+	  plone core based objects from the catalog and to readd them. I'm
+	  going to use them in the migration
+
+2005-03-03 22:40  alecacct
+
+	* ATCTTool.py, CalendarSupport.py, ConstrainTypesMixin.py,
+	  HistoryAware.py, Permissions.py, __init__.py, __pkginfo__.py,
+	  config.py, customconfig.py.example, interfaces.py, version.txt,
+	  Extensions/Install.py, Extensions/toolbox.py,
+	  Extensions/utils.py, configuration/__init__.py,
+	  configuration/component.xml, configuration/config.py,
+	  configuration/datatype.py, configuration/schema.py,
+	  configuration/schema.xml, docs/HISTORY.txt, docs/INSTALL.txt,
+	  etc/atcontenttypes.conf.in, i18n/atct-plone-da.po,
+	  i18n/atct-plone.pot, migration/ATCTMigrator.py,
+	  migration/CPTMigrator.py, migration/Migrator.py,
+	  migration/Walker.py, migration/__init__.py, migration/common.py,
+	  skins/ATContentTypes/atct_macros.pt,
+	  skins/ATContentTypes/atct_topic_view.pt,
+	  skins/ATContentTypes/criterion_edit_form.cpt,
+	  tests/ATCTSiteTestCase.py, tests/common.py,
+	  tests/runtests.sh.example, tests/testATDocument.py,
+	  tests/testATEvent.py, tests/testATFavorite.py,
+	  tests/testATFile.py, tests/testATFolder.py, tests/testATImage.py,
+	  tests/testATLink.py, tests/testATNewsItem.py,
+	  tests/testContrainTypes.py, types/ATContentType.py,
+	  types/ATDocument.py, types/ATEvent.py, types/ATFavorite.py,
+	  types/ATFile.py, types/ATFolder.py, types/ATImage.py,
+	  types/ATLink.py, types/ATNewsItem.py, types/ATTopic.py,
+	  types/schemata.py, types/criteria/ATBaseCriterion.py,
+	  types/criteria/ATBooleanCriterion.py,
+	  types/criteria/ATDateCriteria.py,
+	  types/criteria/ATDateRangeCriterion.py,
+	  types/criteria/ATListCriterion.py,
+	  types/criteria/ATPortalTypeCriterion.py,
+	  types/criteria/ATReferenceCriterion.py,
+	  types/criteria/ATSelectionCriterion.py,
+	  types/criteria/ATSimpleIntCriterion.py,
+	  types/criteria/ATSimpleStringCriterion.py,
+	  types/criteria/ATSortCriterion.py, types/criteria/__init__.py:
+	  Merged in changes from 1.0 branch, will need to make TopicTool
+	  part fo the ATCTTool.
+
+2005-03-03 21:44  alecacct
+
+	* skins/ATContentTypes/: atct_macros.pt, atct_topic_view.pt,
+	  criterion_edit_form.cpt, criterion_edit_form.cpt.metadata,
+	  isATCTbased.py, validate_add_criterion.vpy: Fix whitespace
+	  issues, no more tabs.
+
+2005-03-03 21:39  tiran
+
+	* Permissions.py, __init__.py, config.py, docs/HISTORY.txt,
+	  types/ATTopic.py: Used some code from Ben's great Bricolite
+	  product to have an add permission per type. It allows fine
+	  granulated permission settings.
+
+2005-03-02 12:52  tiran
+
+	* docs/HISTORY.txt,
+	  skins/ATContentTypes/criterion_edit_form.cpt.metadata:  * Fixed
+	  bug [ 1154073 ] criterion_edit_form.cpt(.metadata) has no default
+	      action. The default action for the criterion edit form is
+	  save.
+
+2005-03-02 00:59  tiran
+
+	* ATCTTool.py, __init__.py, Extensions/Install.py,
+	  docs/HISTORY.txt: Added portal_atct tool. The new tool will be
+	  used for the new topic features and for the plone control panel.
+
+2005-03-01 23:33  tiran
+
+	* __pkginfo__.py, version.txt, types/schemata.py: renamed the
+	  related field according to danny's patch. He will be happy that
+	  he doesn't have to migrate his site :)
+
+2005-03-01 23:08  tiran
+
+	* CalendarSupport.py, ConstrainTypesMixin.py, HistoryAware.py,
+	  __init__.py, interfaces.py, Extensions/Install.py,
+	  Extensions/toolbox.py, Extensions/utils.py, docs/HISTORY.txt,
+	  skins/ATContentTypes/isATCTbased.py, tests/ATCTSiteTestCase.py,
+	  tests/testContrainTypes.py, types/ATContentType.py,
+	  types/ATDocument.py, types/ATEvent.py, types/ATFavorite.py,
+	  types/ATFile.py, types/ATFolder.py, types/ATImage.py,
+	  types/ATLink.py, types/ATNewsItem.py, types/ATTopic.py,
+	  types/criteria/ATBaseCriterion.py,
+	  types/criteria/ATDateCriteria.py,
+	  types/criteria/ATListCriterion.py,
+	  types/criteria/ATPortalTypeCriterion.py,
+	  types/criteria/ATSimpleIntCriterion.py,
+	  types/criteria/ATSimpleStringCriterion.py,
+	  types/criteria/ATSortCriterion.py, types/criteria/__init__.py:
+	  Interface geddon: Merged all interfaces into a single file
+
+2005-03-01 22:41  tiran
+
+	* CalendarSupport.py, customconfig.py.example,
+	  Extensions/Install.py, Extensions/utils.py, docs/HISTORY.txt,
+	  docs/INSTALL.txt, migration/common.py,
+	  skins/ATContentTypes/atct_history.pt, tests/ATCTSiteTestCase.py,
+	  tests/common.py, types/ATDocument.py, types/ATFile.py,
+	  types/ATImage.py, types/schemata.py, types/criteria/__init__.py:
+	  * Merged limi's ui branch which adds a text field to ATEvent and
+	  an image plus
+	     image caption to ATNewsItem.
+	     [limi, tiran]
+
+	   * Added related items reference field to all types using Danny's
+	  reference
+	     browser widget. The ATReferenceBrowserWidget has to be
+	  available.
+
+	  http://svn.plone.org/archetypes/MoreFieldsAndWidgets/ATReferenceBrowserWidget
+
+2005-03-01 19:09  tiran
+
+	* QuotaSupport.py, __init__.py, Extensions/Install.py,
+	  Extensions/toolbox.py, configuration/__init__.py,
+	  configuration/component.xml, configuration/config.py,
+	  configuration/datatype.py, configuration/schema.py,
+	  configuration/schema.xml, etc/atcontenttypes.conf.in,
+	  skins/ATContentTypes/validate_add_criterion.vpy,
+	  types/ATDocument.py, types/ATEvent.py, types/ATFavorite.py,
+	  types/ATFile.py, types/ATFolder.py, types/ATImage.py,
+	  types/ATLink.py, types/ATNewsItem.py, types/ATTopic.py: * Created
+	  1.0 release branch *Removed old debian/ directory. I don't
+	  maintain it any more so there is no reason in having it in the
+	  cvs * Removed QuotaSupport.py. It should never be in the official
+	  tree of ATCT * Introduced great chances in the migration system:
+	  The portal type names of the ATCT types are the same as the CMF
+	  types. CMF types will be renamed at install time.  * Introduced
+	  ZConfig based configuration. It will replace the customconfig.py
+	  file.
+
+2005-03-01 10:19  shh42
+
+	* migration/ATCTMigrator.py: Reduce amount of logfile spam.
+
+2005-02-26 20:38  tiran
+
+	* __pkginfo__.py, docs/HISTORY.txt, docs/INSTALL.txt,
+	  types/ATTopic.py: Preparing ATContentTypes 0.2-rc5 release
+
+2005-02-26 02:12  brcwhit
+
+	* types/ATDocument.py: fixed ATDocument.setText to use
+	  default_content_type if value None or value '' is passed in
+
+2005-02-25 16:16  tiran
+
+	* config.py, Extensions/Install.py, Extensions/toolbox.py,
+	  docs/HISTORY.txt, migration/ATCTMigrator.py,
+	  migration/CPTMigrator.py, migration/Migrator.py,
+	  migration/Walker.py, migration/__init__.py, migration/common.py,
+	  tests/ATCTSiteTestCase.py, types/ATContentType.py,
+	  types/ATDocument.py, types/ATEvent.py, types/ATFavorite.py,
+	  types/ATFile.py, types/ATFolder.py, types/ATImage.py,
+	  types/ATLink.py, types/ATNewsItem.py, types/ATTopic.py:  *
+	  Cleaned up the migration suite a little bit and enhanced the doc
+	  strings.
+	     [tiran]
+
+	   * Replaces the globalAllow hack by createTypeByName which
+	  doesn't make
+	     security checks like "is the type implicitly or explicitly
+	  addable in the
+	     folder". It shares the same codebase as the function from
+	  PloneUtilities
+	     I once wrote to unfuck the create member area method.
+	     [tiran]
+
+	   * Better traceback support inside the migration suite.
+	     [tiran]
+
+	   * Added knob to toggle the installation of LinguaPlone in ATCT
+	  install.
+	     [tiran]
+
+	   * Added explicit portal type name to all ATCT types.
+	     [tiran]
+
+	   * Renamed newTypeFor to _actc_newTypeFor. The former name was
+	  confusing
+	     people.
+	     [tiran]
+
+2005-02-25 00:09  brcwhit
+
+	* tests/ATCTSiteTestCase.py: changed afterSetUp to use
+	  loginAsPortalOwner
+
+2005-02-24 02:23  alecacct
+
+	* ATTopicsTool.py, Extensions/Install.py,
+	  Extensions/installTopicsTool.py,
+	  skins/ATContentTypes/DynamicOptionList.js,
+	  skins/ATContentTypes/atct_manageTopicSetup.cpt,
+	  skins/ATContentTypes/atct_manageTopicSetup.cpt.metadata,
+	  skins/ATContentTypes/atct_saveTopicSetup.cpy,
+	  skins/ATContentTypes/atct_saveTopicSetup.cpy.metadata,
+	  skins/ATContentTypes/atct_topic_pdf.pt,
+	  skins/ATContentTypes/atct_topic_pdf_template.pt,
+	  skins/ATContentTypes/atct_topic_view.pt,
+	  skins/ATContentTypes/criterion_edit_form.cpt, types/ATTopic.py,
+	  types/schemata.py, types/criteria/ATBooleanCriterion.py,
+	  types/criteria/ATPortalTypeCriterion.py,
+	  types/criteria/ATSimpleIntCriterion.py,
+	  types/criteria/__init__.py: Many changes: *Updated and added doc
+	  strings in ATTopicsTool.  Added a few more security declarations.
+	  *Added support for storing info about catalog Metadata columns
+	  in ATTopicsTool.  *Added support for restricting criteria
+	  available for specific indices in ATTopicsTool.  This requires
+	  that any old versions of the tool be deleted and the product be
+	  reinstalled, this should be OK as the tool has never been in a
+	  released version.  *Added configlet for Topics Tool.	*Switched
+	  from inefficient function based sorting to faster Schwartzian
+	  transforms.  *Added methods to ATTopicsTool for returning
+	  DisplayLists (for use in AT widgets).  *Make
+	  ATTopicTool.getFriendlyName return the index name if the
+	  friendlyName is blank.  *Change layout of the configlet to a
+	  plonish table.  It's a bit large, and is probably not the best
+	  UI, but it works.  Add support for metadata and criteria
+	  specification to the configlet.  Made configuration form
+	  monolithic calling a single script.  May be a good idea to split
+	  this in three.  *Added customizable view using catalog metadata
+	  and pdf view option (appears only if CMFReportTool is installed).
+	  *Made the criteria edit form show only the relevant criteria for
+	  a given index.  Uses some very liberally licensed 3rd party
+	  javascript (should probably go in plone_3rdParty eventually as it
+	  has some general utility).  *Restricted indexes associated with
+	  particular criteria a bit further (e.g. no more
+	  PortalTypeCriterion for TextIndex).
+
+2005-02-23 12:45  ctheune
+
+	* HistoryAware.py:  - Only returning the username. Not the whole
+	  path to the user in the userfolder
+
+2005-02-22 18:16  tiran
+
+	* types/: ATContentType.py, ATDocument.py: Ported webdav index_html
+	  form CMFPlone 2.1 to ATCT ATFolder
+
+2005-02-22 18:15  tiran
+
+	* types/ATImage.py: Removed longdesc from ATImage because it is not
+	  longer in use in Plone 2.1
+
+2005-02-22 17:14  tiran
+
+	* types/ATTopic.py: Changed folderlisting in ATTopic. Now it is set
+	  to invisible instead of removed
+
+2005-02-22 16:52  tiran
+
+	* types/: ATImage.py, schemata.py: Removed longdesc but add it
+	  always to the tag of ATImage
+
+2005-02-22 16:24  tiran
+
+	* tests/: runtests.sh.example, testATDocument.py: PortalTransforms
+	  has changed and returns stx with header level 2 now
+
+2005-02-22 11:27  ctheune
+
+	* HistoryAware.py, docs/HISTORY.txt, types/ATDocument.py:  - Small
+	  feature to access the last editor.
+
+2005-02-17 21:43  tiran
+
+	* tests/: ATCTSiteTestCase.py, common.py, testATDocument.py,
+	  testATEvent.py, testATFavorite.py, testATFile.py,
+	  testATFolder.py, testATImage.py, testATLink.py,
+	  testATNewsItem.py, testContrainTypes.py: A bunch of small updates
+	  and fixes for the unit test suite including some compatibility
+	  changes for the unit test suite of AT 1.3
+
+2005-02-14 18:28  stonor
+
+	* i18n/atct-plone-da.po: added Danish translation. Still needs some
+	  work.
+
+2005-02-14 18:03  stonor
+
+	* i18n/atct-plone.pot: ran i18ndude to update msgids from
+	  templates. added a bunch of manual msgid's, e.g. from the
+	  atct-plone-de.po. (Hope I didn't wipe out anything.)
+
+2005-02-14 15:46  tiran
+
+	* types/ATContentType.py: removed unused code
+
+2005-02-14 11:51  tiran
+
+	* types/criteria/: ATBooleanCriterion.py, ATDateRangeCriterion.py,
+	  ATReferenceCriterion.py, ATSelectionCriterion.py: Added
+	  additional criteria from Alec Mitchell's patch, second try
+
+2005-02-14 11:48  tiran
+
+	* ATTopicsTool.py, Extensions/Install.py,
+	  types/criteria/__init__.py, types/criteria/schemata.py: Added
+	  additional criteria from Alec Mitchell's patch Fixed some small
+	  issues in the topic tool including initial index creation and
+	  adding the tool at install time
+
+2005-02-14 10:56  tiran
+
+	* ATContentTypes.py, CalendarSupport.py, ConstrainTypesMixin.py,
+	  HistoryAware.py, Permissions.py, QuotaSupport.py, Validators.py,
+	  __init__.py, __pkginfo__.py, config.py, customconfig.py.example,
+	  utils.py, version.txt, Extensions/Install.py,
+	  Extensions/__init__.py, Extensions/batchCreate.py,
+	  Extensions/findStaledObjects.py, Extensions/migrateFromCMF.py,
+	  Extensions/migrateFromCPT.py, Extensions/toolbox.py,
+	  Extensions/utils.py, docs/CHANGELOG.txt, docs/HISTORY.txt,
+	  docs/INSTALL.txt, i18n/atct-plone-de.po, i18n/atct-plone-zh.po,
+	  i18n/atct-plone.pot, migration/ATCTMigrator.py,
+	  migration/CPTMigrator.py, migration/Migrator.py,
+	  migration/Walker.py, migration/common.py,
+	  skins/ATContentTypes/atct_history.pt,
+	  skins/ATContentTypes/atct_macros.pt,
+	  skins/ATContentTypes/atct_topic_view.pt,
+	  skins/ATContentTypes/validate_atct.vpy,
+	  tests/ATCTSiteTestCase.py, tests/__init__.py, tests/common.py,
+	  tests/testATDocument.py, tests/testATEvent.py,
+	  tests/testATFavorite.py, tests/testATFile.py,
+	  tests/testATFolder.py, tests/testATImage.py, tests/testATLink.py,
+	  tests/testATNewsItem.py, tests/testContrainTypes.py,
+	  types/ATContentType.py, types/ATDocument.py, types/ATEvent.py,
+	  types/ATFavorite.py, types/ATFile.py, types/ATFolder.py,
+	  types/ATImage.py, types/ATLink.py, types/ATNewsItem.py,
+	  types/ATTopic.py, types/__init__.py, types/schemata.py,
+	  types/criteria/ATBaseCriterion.py,
+	  types/criteria/ATDateCriteria.py,
+	  types/criteria/ATListCriterion.py,
+	  types/criteria/ATPortalTypeCriterion.py,
+	  types/criteria/ATSimpleIntCriterion.py,
+	  types/criteria/ATSimpleStringCriterion.py,
+	  types/criteria/ATSortCriterion.py, types/criteria/__init__.py,
+	  types/criteria/schemata.py: Merged changes from HEAD into ender's
+	  topic branch
+
+2005-02-14 10:31  tiran
+
+	* customconfig.py.example, docs/HISTORY.txt, docs/INSTALL.txt,
+	  migration/Migrator.py, migration/Walker.py, migration/common.py,
+	  skins/ATContentTypes/atct_history.pt, types/ATContentType.py,
+	  types/ATDocument.py, types/ATEvent.py, types/ATNewsItem.py:
+	  ported fixes from the 0.2 branch to the head
+
+2005-02-14 10:14  tiran
+
+	* ATContentTypes.py, CalendarSupport.py, ConstrainTypesMixin.py,
+	  HistoryAware.py, Permissions.py, QuotaSupport.py, Validators.py,
+	  __init__.py, config.py, utils.py, Extensions/Install.py,
+	  Extensions/__init__.py, Extensions/batchCreate.py,
+	  Extensions/findStaledObjects.py, Extensions/migrateFromCMF.py,
+	  Extensions/migrateFromCPT.py, Extensions/toolbox.py,
+	  Extensions/utils.py, migration/ATCTMigrator.py,
+	  migration/CPTMigrator.py, migration/Migrator.py,
+	  migration/common.py, tests/ATCTSiteTestCase.py,
+	  tests/__init__.py, tests/common.py, tests/testATDocument.py,
+	  tests/testATEvent.py, tests/testATFavorite.py,
+	  tests/testATFile.py, tests/testATFolder.py, tests/testATImage.py,
+	  tests/testATLink.py, tests/testATNewsItem.py,
+	  tests/testContrainTypes.py, types/ATContentType.py,
+	  types/ATDocument.py, types/ATEvent.py, types/ATFavorite.py,
+	  types/ATFile.py, types/ATFolder.py, types/ATImage.py,
+	  types/ATLink.py, types/ATNewsItem.py, types/ATTopic.py,
+	  types/__init__.py, types/schemata.py,
+	  types/criteria/ATBaseCriterion.py,
+	  types/criteria/ATDateCriteria.py,
+	  types/criteria/ATListCriterion.py,
+	  types/criteria/ATPortalTypeCriterion.py,
+	  types/criteria/ATSimpleIntCriterion.py,
+	  types/criteria/ATSimpleStringCriterion.py,
+	  types/criteria/ATSortCriterion.py, types/criteria/__init__.py,
+	  types/criteria/schemata.py: Removed the $ lines as they are
+	  causing lot's of conflicts
+
+2005-02-14 10:09  tiran
+
+	* ATContentTypes.py, CalendarSupport.py, ConstrainTypesMixin.py,
+	  HistoryAware.py, Permissions.py, QuotaSupport.py, Validators.py,
+	  __init__.py, config.py, utils.py, Extensions/Install.py,
+	  Extensions/__init__.py, Extensions/batchCreate.py,
+	  Extensions/findStaledObjects.py, Extensions/migrateFromCMF.py,
+	  Extensions/migrateFromCPT.py, Extensions/toolbox.py,
+	  Extensions/utils.py, migration/ATCTMigrator.py,
+	  migration/CPTMigrator.py, migration/Migrator.py,
+	  migration/common.py, tests/ATCTSiteTestCase.py,
+	  tests/__init__.py, tests/common.py, tests/testATDocument.py,
+	  tests/testATEvent.py, tests/testATFavorite.py,
+	  tests/testATFile.py, tests/testATFolder.py, tests/testATImage.py,
+	  tests/testATLink.py, tests/testATNewsItem.py,
+	  tests/testContrainTypes.py, types/ATContentType.py,
+	  types/ATDocument.py, types/ATEvent.py, types/ATFavorite.py,
+	  types/ATFile.py, types/ATFolder.py, types/ATImage.py,
+	  types/ATLink.py, types/ATNewsItem.py, types/ATTopic.py,
+	  types/__init__.py, types/schemata.py,
+	  types/criteria/ATBaseCriterion.py,
+	  types/criteria/ATDateCriteria.py,
+	  types/criteria/ATListCriterion.py,
+	  types/criteria/ATPortalTypeCriterion.py,
+	  types/criteria/ATSimpleIntCriterion.py,
+	  types/criteria/ATSimpleStringCriterion.py,
+	  types/criteria/ATSortCriterion.py, types/criteria/__init__.py,
+	  types/criteria/schemata.py: Removed the $ lines as they are
+	  causing lot's of conflicts
+
+2005-02-14 09:59  tiran
+
+	* ConstrainTypesMixin.py, docs/HISTORY.txt: Sorry but that's a new
+	  feature. I'm trying to make the 0.2 branch stable for a new
+	  release candidate. New features have to go into the trunk for
+	  ATCT 0.3
+
+2005-02-14 08:24  panjunyong
+
+	* docs/HISTORY.txt, ConstrainTypesMixin.py: ported from head
+
+2005-02-14 07:35  tiran
+
+	* docs/HISTORY.txt, migration/Walker.py: ported panjunyong's fix to
+	  the 0.2 branch. Thx for your help but please check in bug fixes
+	  to the 0.2 branch!
+
+2005-02-14 07:34  tiran
+
+	* skins/ATContentTypes/atct_history.pt: renamed some i18n vars
+
+2005-02-14 04:17  panjunyong
+
+	* docs/HISTORY.txt, migration/Walker.py:  migrate empty folder now
+
+2005-02-13 14:01  stonor
+
+	* skins/ATContentTypes/atct_history.pt: added some i18n markup
+
+2005-02-12 11:02  tiran
+
+	* docs/HISTORY.txt, docs/INSTALL.txt, i18n/atct-plone-zh.po,
+	  i18n/atct-plone.pot, migration/Migrator.py, migration/Walker.py,
+	  migration/common.py, skins/ATContentTypes/atct_topic_view.pt,
+	  types/ATContentType.py, types/ATDocument.py, types/ATEvent.py,
+	  types/ATNewsItem.py: A bunch of fixes  * Increase debugging in
+	  Migration suite to find issues with missing types in
+	  globalAllow.	   [tiran]
+
+	   * Ported atct_topic_view icon fix from HEAD.
+
+	   * Don't create ATDocuments when uploading .pdf and .doc files
+	    [batlogg]
+
+	   * Resurrected warning message when we hit a broken object in the
+	  folder
+	     migration.
+	     [tiran]
+
+	   * Local roles and Creator are kept when migration.
+	     [panjunyong]
+
+	   * Update requirements to the soon to release AT 1.3.2 version
+	  and svn.
+
+	   * Added update_data and manage_edit compat. methods to ATFile
+	  and ATImage.
+	     [tiran]
+
+	   * Added temporary fix for [ 1095242 ] EditableBody in ATNewsItem
+	  requires
+	     Modify portal content. It will stay in ATNewsItem until Plone
+	  is fixed.
+	     [tiran]
+
+	   * Fixed [ 1075193 ] infinite recursion in ATEvent. The __cmp__
+	  hook was fixed
+	     a while ago but I forgot to mention it here.
+	     [tiran]
+
+	   * Fixed [ 1098347 ] validate_add_criterion.vpy has errors. The
+	  file was dos
+	     encoded
+	     [tiran]
+
+2005-02-11 07:19  panjunyong
+
+	* docs/HISTORY.txt: update doc
+
+2005-02-11 06:50  panjunyong
+
+	* migration/Migrator.py: migrate local roles
+
+2005-02-10 03:28  limi
+
+	* types/schemata.py: Added image caption to the news type, removed
+	  longdesc attribute from images.  (If it's going to be in there,
+	  longdesc contains a URL, not text. No  accessibility-enhanced
+	  browsers support it that I know of, though.)
+
+2005-02-08 02:27  limi
+
+	* migration/common.py: Added sys import statement. This needs to go
+	  into HEAD too.
+
+2005-02-07 15:16  tesdal
+
+	* types/ATTopic.py: Enable limiting existing criterias in addition
+	  to limiting on variables not defined in criterias
+
+2005-02-04 04:47  panjunyong
+
+	* docs/HISTORY.txt, ConstrainTypesMixin.py:
+	   * Use a seperate schemata for ConstrainTypesMixin. We may have
+	  many mixins.
+	     This way, we can avoid a long edit form when edit the content.
+
+2005-02-02 13:41  tesdal
+
+	* skins/ATContentTypes/atct_topic_view.pt: Filter out / instead of
+	  assuming it's always present and having no icon if the getIcon is
+	  just the icon name.
+
+2005-02-02 08:56  panjunyong
+
+	* skins/ATContentTypes/atct_topic_view.pt: content icon is ok now.
+
+2005-02-01 21:18  batlogg
+
+	* types/ATDocument.py: don't create ATDocuments when uploading .pdf
+	  and .doc files
+
+2005-02-01 08:12  panjunyong
+
+	* i18n/: atct-plone-zh.po, atct-plone.pot: more i18n
+
+2005-01-31 16:44  panjunyong
+
+	* i18n/atct-plone-zh.po: fix
+
+2005-01-31 16:33  panjunyong
+
+	* i18n/: atct-plone-zh.po, atct-plone.pot: more i18n and add
+	  chinese translation
+
+2005-01-28 16:01  dannybloe
+
+	* docs/HISTORY.txt, types/schemata.py: It's even better without
+	  help descriptions.
+
+2005-01-28 15:57  dannybloe
+
+	* types/schemata.py: It's even better without help descriptions.
+
+2005-01-28 09:43  dannybloe
+
+	* types/schemata.py: Removed brackets
+
+2005-01-28 09:43  dannybloe
+
+	* types/schemata.py: More sensible descriptions for files and
+	  images.
+
+2005-01-28 09:39  dannybloe
+
+	* types/schemata.py: More sensible descriptions for files and
+	  images.
+
+2005-01-26 07:06  limi
+
+	* types/schemata.py: Added Image support to News Items, and Rich
+	  Text support to Events.
+
+	  Still missing:
+
+	  - Proper rendering of STX etc. in the Event view.  - Tile view of
+	  image in the news listing.
+
+2005-01-25 18:52  yenzenz
+
+	* CalendarSupport.py: please check your code before checkin
+
+2005-01-24 19:26  tiran
+
+	* __pkginfo__.py, Extensions/Install.py, Extensions/toolbox.py,
+	  docs/CHANGELOG.txt, docs/HISTORY.txt, docs/INSTALL.txt,
+	  i18n/atct-plone-de.po, i18n/atct-plone.pot,
+	  migration/ATCTMigrator.py, migration/Migrator.py,
+	  migration/Walker.py, migration/common.py,
+	  skins/ATContentTypes/atct_macros.pt,
+	  skins/ATContentTypes/criterion_edit_form.cpt,
+	  skins/ATContentTypes/validate_atct.vpy,
+	  tests/ATCTSiteTestCase.py, tests/testATDocument.py,
+	  tests/testATEvent.py, tests/testATFavorite.py,
+	  tests/testATFile.py, tests/testATFolder.py, tests/testATImage.py,
+	  tests/testATLink.py, tests/testATNewsItem.py,
+	  tests/testContrainTypes.py, types/ATContentType.py,
+	  types/ATDocument.py, types/ATEvent.py, types/ATFile.py,
+	  types/ATImage.py, types/ATTopic.py, types/schemata.py,
+	  types/criteria/schemata.py: Merged changes from 0.2 branch into
+	  the head
+
+2005-01-24 19:18  tiran
+
+	* CalendarSupport.py, __pkginfo__.py, version.txt,
+	  Extensions/Install.py, Extensions/utils.py, docs/HISTORY.txt:
+	  Changed ical/vcal exports to use action icons
+
+2005-01-19 16:09  tiran
+
+	* tests/testDocTests.py: removed false import
+
+2005-01-19 16:07  tiran
+
+	* docs/HISTORY.txt, migration/Migrator.py, tests/testDocTests.py,
+	  types/ATEvent.py: [ 1104069 ] ATCT migration -- more ordering
+	  issues
+
+2005-01-07 18:04  dreamcatcher
+
+	* types/: ATEvent.py, ATFile.py: Fix a recursion error
+
+2004-12-24 00:53  shh42
+
+	* types/ATContentType.py: ATCTMixin must not override
+	  validate_id.vpy validator.
+
+2004-12-23 16:51  dannybloe
+
+	* types/criteria/__init__.py: tesdal's fixes for extendedpathindex.
+
+2004-12-23 16:16  tesdal
+
+	* types/criteria/__init__.py: Added ExtendedPathIndex to the index
+	  list.
+
+2004-12-17 16:49  dannybloe
+
+	* ATTopicsTool.py, skins/ATContentTypes/atct_manageTopicSetup.cpt,
+	  skins/ATContentTypes/atct_manageTopicSetup.cpt.metadata,
+	  skins/ATContentTypes/atct_saveTopicSetupTypes.cpy,
+	  skins/ATContentTypes/atct_saveTopicSetupTypes.cpy.metadata: [no
+	  log message]
+
+2004-12-17 16:40  dannybloe
+
+	* ATTopicsTool.py, Extensions/installTopicsTool.py,
+	  types/criteria/ATPortalTypeCriterion.py,
+	  skins/ATContentTypes/atct_manageTopicSetup.cpt,
+	  skins/ATContentTypes/atct_manageTopicSetup.cpt.metadata,
+	  skins/ATContentTypes/atct_saveTopicSetup.cpy,
+	  skins/ATContentTypes/atct_saveTopicSetup.cpy.metadata: [no log
+	  message]
+
+2004-12-17 15:16  dannybloe
+
+	* skins/ATContentTypes/: atct_manageTopicIndices.cpt,
+	  atct_manageTopicIndices.cpt.metadata, atct_saveTopicIndices.cpy,
+	  atct_saveTopicIndices.cpy.metadata: [no log message]
+
+2004-12-16 17:09  dannybloe
+
+	* Extensions/Install.py, Extensions/.cvsignore,
+	  Extensions/installTopicsTool.py, __init__.py, ATTopicsTool.py,
+	  tool.gif, skins/ATContentTypes/atct_macros.pt,
+	  skins/ATContentTypes/atct_manageTopicIndices.cpt,
+	  skins/ATContentTypes/atct_manageTopicIndices.cpt.metadata,
+	  skins/ATContentTypes/atct_saveTopicIndices.cpy,
+	  skins/ATContentTypes/atct_saveTopicIndices.cpy.metadata,
+	  skins/ATContentTypes/criterion_edit_form.cpt, types/ATTopic.py:
+	  Initial check-in for the enhanced ATTopics.  You can now
+	  configure which indexes will be shown in the topics criteria page
+	  and how these indexes will be displayed. You can give them a
+	  friendly name and an explanation.  I also modified the criteria
+	  edit page a bit and removed unnecessary comments in the UI (less
+	  is usually better).
+
+	  More to come....
+
+2004-12-15 17:48  tiran
+
+	* tests/: ATCTSiteTestCase.py, testATDocument.py, testATEvent.py,
+	  testATNewsItem.py: fixed unit tests for default_content_type
+	  change added some cmp() tests for ATEvent
+
+2004-12-14 22:52  ctheune
+
+	* config.py, customconfig.py.example, utils.py,
+	  skins/ATContentTypes/atct_topic_view.pt, tests/testATDocument.py,
+	  tests/testATNewsItem.py:  - ported earlier fixes from 0.2 branch
+
+2004-12-14 22:43  ctheune
+
+	* docs/HISTORY.txt, skins/ATContentTypes/atct_topic_view.pt:  - fix
+	  for bug 1079030 (avoid using getObject for atct_topic_view)
+
+2004-12-13 19:11  ctheune
+
+	* config.py, docs/HISTORY.txt:	- fixed syntax error that occured
+	  from uncommenting the html content type
+
+2004-12-13 18:13  ctheune
+
+	* config.py, customconfig.py.example, docs/CHANGELOG.txt:  Default
+	  content type is now html. This is good. Really.
+
+2004-12-13 18:09  tiran
+
+	* types/ATEvent.py: First fix for cmp() error in ATEvent
+
+2004-12-13 17:55  ctheune
+
+	* utils.py, docs/CHANGELOG.txt:  fix for bug 1078278
+
+2004-12-13 16:30  tiran
+
+	* __pkginfo__.py, version.txt, Extensions/toolbox.py,
+	  docs/HISTORY.txt, docs/INSTALL.txt, migration/ATCTMigrator.py,
+	  migration/Walker.py, migration/common.py,
+	  skins/ATContentTypes/atct_topic_view.pt,
+	  tests/ATCTSiteTestCase.py, types/ATDocument.py:  * Fixed [
+	  1080729 ] Wrong permissions for ATDocument.EditableText /
+	  setFormat
+	    [tiran]
+
+	   * Use StdoutStringIO in migration to be more verbose
+
+	   * Fixed atct_topcic_view: Make sure there is an object before
+	  referencing
+	     attributes. This can typically happen if there are problems
+	  with the
+	     AccessContentsInfo permission.
+	     [tesdal]
+
+	   * Removed support of Python 2.1 and 2.2 from INSTALL.txt. Some
+	  code like
+	     migration requires new features of Python 2.3 like generators.
+	     [tiran]
+
+	   * Added note to INSTALL.txt that ATCT will soon drop support for
+	  Zope < 2.7.2.
+	     [tiran]
+
+	   * Added Christian Theune's changes to HISTORY.txt
+
+2004-12-13 16:02  tiran
+
+	* tests/testContrainTypes.py: fixed constrain test
+
+2004-12-06 13:06  tesdal
+
+	* skins/ATContentTypes/atct_topic_view.pt: Avoid calling the object
+	  when checking for existance.
+
+2004-12-05 17:39  shh42
+
+	* tests/ATCTSiteTestCase.py: Remove a debug print.
+
+2004-12-03 12:20  tesdal
+
+	* skins/ATContentTypes/atct_topic_view.pt: Make sure there is an
+	  object before referencing attributes. This can typically happen
+	  if there are problems with the AccessContentsInfo permission.
+
+2004-11-30 16:51  ctheune
+
+	* version.txt:	- still heading to 0.2
+
+2004-11-30 16:49  ctheune
+
+	* version.txt:	version bump to rc4
+
+2004-11-30 16:18  ctheune
+
+	* i18n/atct-plone-de.po, skins/ATContentTypes/atct_macros.pt,
+	  types/ATContentType.py, types/ATDocument.py:	- Extended german
+	  translations
+	   - Fixed ATDocument to not kill uploaded files on the submission
+	  of an empty text area
+	   - Fixed small bug in id protection
+
+2004-11-25 17:47  ctheune
+
+	* tests/ATCTSiteTestCase.py, types/ATContentType.py:  - fixed
+	  _very_ annoying problem with bad ids. this should be bullet
+	  proof.
+
+2004-11-24 20:42  ctheune
+
+	* i18n/atct-plone-de.po, i18n/atct-plone.pot,
+	  skins/ATContentTypes/atct_macros.pt,
+	  skins/ATContentTypes/criterion_edit_form.cpt,
+	  tests/testATDocument.py, tests/testATEvent.py,
+	  tests/testATFavorite.py, tests/testATFile.py,
+	  tests/testATFolder.py, tests/testATImage.py, tests/testATLink.py,
+	  tests/testATNewsItem.py, types/ATTopic.py,
+	  types/criteria/schemata.py:  - fixed unit tests to work without
+	  (and hopefully with too) runner again
+	   - added feature that doesn't show users non-sortable criterions
+	  in the form
+	   - added feature that removes double or stupid criterions
+	  (allowedRolesAndUsers, id/getId)
+	   - sorting criterion lists (by their translations)
+	   - added german translation
+	   - more i18n support in the templates
+	   - fixed minor typos
+
+2004-11-24 17:58  ctheune
+
+	* types/criteria/schemata.py:  - Better to use an empty string as a
+	  default for StringCriterion. Otherwise
+	     indizes will annoy the user with exception pages.
+
+2004-11-24 17:29  ctheune
+
+	* types/ATTopic.py:  - Adding the criterion type to the generated
+	  id, so you can sort and filter
+	     on the same field.
+
+2004-11-24 16:34  tiran
+
+	* skins/ATContentTypes/validate_atct.vpy, types/ATContentType.py:
+	  Disabled _getPortalTypeName() Beautified the rename on upload
+	  functionality
+
+2004-11-24 15:55  tiran
+
+	* docs/HISTORY.txt, Extensions/Install.py:  * Fixed [ 1067719 ]
+	  Install.py bug: property modified but not assigned by
+	     removing unnecessary code from Install.py. AT itself is
+	  already handling
+	     use_folder_tabs.
+
+2004-11-10 19:28  tiran
+
+	* migration/Migrator.py, docs/HISTORY.txt: Added fix for [ 1063549
+	  ] ATCT migration doesn't migrate order
+
+2004-11-10 04:39  limi
+
+	* docs/INSTALL.txt, skins/ATContentTypes/atct_history.pt: Made the
+	  "History is temporary, disappears on pack" message more friendly
+	  to mere mortals.
+
+2004-11-10 01:20  dtremea
+
+	* Extensions/toolbox.py, docs/HISTORY.txt: Fixed the case where the
+	  portal doesn't has a 'Members' folder or when it has another
+	  name.
+
+2004-11-01 15:55  tiran
+
+	* Extensions/toolbox.py: Changed recreateATImageScales: Now it's
+	  easy to reuse the function for other portal types
+
+2004-10-31 15:37  tiran
+
+	* docs/HISTORY.txt, tests/ATCTSiteTestCase.py,
+	  tests/testATDocument.py, tests/testATEvent.py,
+	  tests/testATFavorite.py, tests/testATFile.py,
+	  tests/testATFolder.py, tests/testATImage.py, tests/testATLink.py,
+	  tests/testATNewsItem.py, tests/testContrainTypes.py: Fixed [
+	  1057691 ] Make ATContentTypes tests works with testrunner.py
+
+2004-10-30 17:58  tiran
+
+	* docs/HISTORY.txt, types/ATContentType.py, types/ATFile.py,
+	  types/ATImage.py, types/schemata.py: Fixed [ 1055347 ] id
+	  problems when member preferences are set to not display and [
+	  1055348 ] ATCTFile id problems with portal_factory in
+	  ATCTFileContent.  _setATCTFileContent()
+
+	  Disabled external storages based types because neither I nor
+	  MrTopf have time to support it right now.
+
+	  Added long description field and image tag to ATImage. Fixed [
+	  1056050 ] Add longdesc to ATImage.
+
+2004-10-22 12:45  jladage
+
+	* docs/INSTALL.txt: Updated install info.
+
+2004-10-22 12:43  jladage
+
+	* config.py, customconfig.py.example, types/schemata.py: Added
+	  ENABLE_CLAMAV to CONFIGURABLE, add ENABLE_CLAMAV to
+	  customconfig.py.example, default False
+
+2004-10-22 11:12  jladage
+
+	* docs/INSTALL.txt: updated INSTALL.txt, new version of pyclamav
+	  available.
+
+2004-10-22 11:05  jladage
+
+	* docs/INSTALL.txt: updated INSTALL.txt, new version of pyclamav
+	  available.
+
+2004-10-21 21:22  tiran
+
+	* __init__.py, configuration/__init__.py,
+	  configuration/component.xml, configuration/datatypes.py,
+	  configuration/schema.xml, etc/atct.conf.in: Checking in first
+	  code for the new ZConfig infrastructur Future versions of ATCT
+	  will be configured with ZConfig
+
+2004-10-20 12:35  jladage
+
+	* Validators.py, config.py, types/schemata.py: moved remove() after
+	  file scan, duh
+
+2004-10-20 11:34  jladage
+
+	* Validators.py: use tempfile and delete afterwards.
+
+2004-10-20 01:00  jladage
+
+	* docs/INSTALL.txt: updated installation info.
+
+2004-10-20 00:52  jladage
+
+	* types/schemata.py: default do not use isNotInfected, only MaxSize
+	  validator
+
+2004-10-20 00:48  jladage
+
+	* Validators.py, config.py: Added checks for importing pyclamav.
+
+2004-10-20 00:41  jladage
+
+	* Validators.py, docs/INSTALL.txt, types/schemata.py: Added
+	  isNotInfectedValidator and added isNotInfected to the schema for
+	  ATFileSchema.
+
+2004-10-19 22:47  dtremea
+
+	* customconfig.py.example: Added missing EXT_STORAGE_ENABLE config
+	  option.
+
+2004-10-17 03:33  tiran
+
+	* docs/HISTORY.txt, types/ATLink.py: Minor fixes in history and
+	  security
+
+2004-10-17 03:18  tiran
+
+	* __pkginfo__.py, version.txt, docs/INSTALL.txt,
+	  tests/testContrainTypes.py: Preparing 0.2-rc3
+
+2004-10-17 02:11  tiran
+
+	* docs/HISTORY.txt, types/ATDocument.py: Added support for the
+	  clear format feature of CMF Document.
+
+2004-10-17 01:56  tiran
+
+	* types/ATLink.py: Fixed permission
+
+2004-10-17 01:29  tiran
+
+	* docs/HISTORY.txt, types/ATLink.py: ATLink: Use urlparse library
+	  to sanify the url to strip of additional slashes. This is fixing
+	  http://plone.org/collector/3296 for ATCT.
+
+2004-10-16 23:24  tiran
+
+	* ConstrainTypesMixin.py, types/ATContentType.py, types/ATEvent.py,
+	  types/ATFavorite.py, types/ATImage.py, types/ATLink.py: More
+	  fixes for cmf_edit_kws. I forgot some values
+
+2004-10-15 23:26  dtremea
+
+	* i18n/atct-plone-ca.po: Added Catalan translation file. Thanks to
+	  Albert Lombarte.
+
+2004-10-15 00:30  tiran
+
+	* migration/: Migrator.py, Walker.py: Now using _p_deactive() to
+	  put migrated objects to sleep Added kwargs and some other minor
+	  changes for PHC migration
+
+2004-10-10 06:25  limi
+
+	* HistoryAware.py: The tab should be "History", even if it might
+	  not be 100% correct from a technical viewpoint. "Last changes" is
+	  a bad name for it. ;)
+
+2004-10-09 23:39  limi
+
+	* docs/INSTALL.txt: Added install instructions for the impatient at
+	  the top ;)
+
+2004-10-08 18:23  tiran
+
+	* docs/HISTORY.txt, types/ATContentType.py, types/ATDocument.py,
+	  types/ATEvent.py, types/ATFavorite.py, types/ATFile.py,
+	  types/ATFolder.py, types/ATImage.py, types/ATLink.py,
+	  types/ATNewsItem.py, types/ATTopic.py: Fixed [ 1041830 ]
+	  TypeError: cmf_edit() takes at least 3 non-keyword arguments
+
+2004-10-06 23:53  tiran
+
+	* __init__.py, customizationpolicy.py, docs/HISTORY.txt: Added
+	  ATContentTypes Site customization policy
+
+2004-10-06 14:09  tiran
+
+	* __pkginfo__.py, version.txt, docs/CHANGELOG.txt,
+	  docs/HISTORY.txt, docs/INSTALL.txt: preparing ATCT 0.2-rc2
+	  release
 
 2004-10-06 01:38  tiran
 
@@ -220,9 +1436,8 @@
 
 2004-08-17 18:59  tiran
 
-	* config.py, interfaces/IConstrainTypes.py,
-	  interfaces/IRestrainTypes.py, types/ATFolder.py,
-	  types/schemata.py: Interface was renamed in branch
+	* config.py, types/ATFolder.py, types/schemata.py: Interface was
+	  renamed in branch
 
 2004-08-17 18:48  tiran
 
@@ -321,20 +1536,11 @@
 	  Extensions/Install.py, Extensions/__init__.py,
 	  Extensions/batchCreate.py, Extensions/findStaledObjects.py,
 	  Extensions/migrateFromCMF.py, Extensions/migrateFromCPT.py,
-	  Extensions/toolbox.py, Extensions/utils.py, debian/changelog,
-	  debian/control, debian/rules, docs/AUTHORS.txt,
+	  Extensions/toolbox.py, Extensions/utils.py, docs/AUTHORS.txt,
 	  docs/CHANGELOG.txt, docs/ExtendingType.txt, docs/HISTORY.txt,
 	  docs/INSTALL.txt, docs/atct-uml.png, docs/atct-uml.zuml,
-	  interfaces/IATContentType.py, interfaces/IATDocument.py,
-	  interfaces/IATEvent.py, interfaces/IATFavorite.py,
-	  interfaces/IATFile.py, interfaces/IATFolder.py,
-	  interfaces/IATImage.py, interfaces/IATLink.py,
-	  interfaces/IATNewsItem.py, interfaces/IATTopic.py,
-	  interfaces/IConstrainTypes.py, interfaces/IHistoryAware.py,
-	  interfaces/IQuotaSupport.py, interfaces/IRestrainTypes.py,
-	  interfaces/__init__.py, migration/ATCTMigrator.py,
-	  migration/CPTMigrator.py, migration/Migrator.py,
-	  migration/Walker.py, migration/common.py,
+	  migration/ATCTMigrator.py, migration/CPTMigrator.py,
+	  migration/Migrator.py, migration/Walker.py, migration/common.py,
 	  skins/ATContentTypes/atct_history.pt,
 	  skins/ATContentTypes/atct_macros.pt,
 	  skins/ATContentTypes/atct_topic_view.pt,
@@ -448,11 +1654,11 @@
 
 2004-07-25 09:45  tiran
 
-	* __init__.py, __pkginfo__.py, version.txt, debian/changelog,
-	  debian/control, docs/AUTHORS.txt, docs/HISTORY.txt,
-	  docs/INSTALL.txt: Depend on new AT 1.3.0-beta3 release Changed
-	  ZMI add name of topic related types to 'ATContentTypes Topic'
-	  Added Gotcha to team list Preparing 0.2.0-rc1 release
+	* __init__.py, __pkginfo__.py, version.txt, docs/AUTHORS.txt,
+	  docs/HISTORY.txt, docs/INSTALL.txt: Depend on new AT 1.3.0-beta3
+	  release Changed ZMI add name of topic related types to
+	  'ATContentTypes Topic' Added Gotcha to team list Preparing
+	  0.2.0-rc1 release
 
 2004-07-24 09:54  godchap
 
@@ -461,10 +1667,9 @@
 
 2004-07-23 21:03  tiran
 
-	* QuotaSupport.py, Extensions/Install.py,
-	  interfaces/IQuotaSupport.py: Added quote support code to ATCT
-	  cvs. It's just the beginning of an idea but I need a place to
-	  back up the work and cvs is a good place :)
+	* QuotaSupport.py, Extensions/Install.py: Added quote support code
+	  to ATCT cvs. It's just the beginning of an idea but I need a
+	  place to back up the work and cvs is a good place :)
 
 2004-07-23 20:53  tiran
 
@@ -500,8 +1705,8 @@
 
 2004-07-21 17:36  tiran
 
-	* version.txt, debian/changelog, debian/control, debian/rules,
-	  docs/CHANGELOG.txt, docs/HISTORY.txt: Preparing beta8 release
+	* version.txt, docs/CHANGELOG.txt, docs/HISTORY.txt: Preparing
+	  beta8 release
 
 2004-07-21 17:22  tiran
 
@@ -528,14 +1733,7 @@
 	  __init__.py, config.py, Extensions/Install.py,
 	  Extensions/__init__.py, Extensions/migrateFromCMF.py,
 	  Extensions/migrateFromCPT.py, Extensions/toolbox.py,
-	  Extensions/utils.py, interfaces/IATContentType.py,
-	  interfaces/IATDocument.py, interfaces/IATEvent.py,
-	  interfaces/IATFavorite.py, interfaces/IATFile.py,
-	  interfaces/IATFolder.py, interfaces/IATImage.py,
-	  interfaces/IATLink.py, interfaces/IATNewsItem.py,
-	  interfaces/IATTopic.py, interfaces/IHistoryAware.py,
-	  interfaces/IRestrainTypes.py, interfaces/__init__.py,
-	  interfaces/interface.py, migration/ATCTMigrator.py,
+	  Extensions/utils.py, migration/ATCTMigrator.py,
 	  migration/CPTMigrator.py, migration/Migrator.py,
 	  migration/Walker.py, migration/common.py,
 	  skins/ATContentTypes/formatHistoryDiff.py,
@@ -621,8 +1819,8 @@
 
 2004-06-27 18:59  tiran
 
-	* __pkginfo__.py, version.txt, debian/changelog, docs/HISTORY.txt,
-	  docs/INSTALL.txt: Preparing 0.2beta7
+	* __pkginfo__.py, version.txt, docs/HISTORY.txt, docs/INSTALL.txt:
+	  Preparing 0.2beta7
 
 2004-06-27 18:41  tiran
 
@@ -725,16 +1923,11 @@
 
 	* CalendarSupport.py, HistoryAware.py, Validators.py, config.py,
 	  Extensions/Install.py, Extensions/toolbox.py,
-	  interfaces/IATDocument.py, interfaces/IATEvent.py,
-	  interfaces/IATFavorite.py, interfaces/IATFile.py,
-	  interfaces/IATFolder.py, interfaces/IATImage.py,
-	  interfaces/IATLink.py, interfaces/IATNewsItem.py,
-	  interfaces/IHistoryAware.py, migration/ATCTMigrator.py,
-	  migration/CPTMigrator.py, migration/Migrator.py,
-	  tests/ATCTSiteTestCase.py, types/ATFavorite.py, types/ATFile.py,
-	  types/ATFolder.py, types/ATImage.py, types/ATLink.py,
-	  types/ATNewsItem.py, types/schemata.py,
-	  types/criteria/ATBaseCriterion.py,
+	  migration/ATCTMigrator.py, migration/CPTMigrator.py,
+	  migration/Migrator.py, tests/ATCTSiteTestCase.py,
+	  types/ATFavorite.py, types/ATFile.py, types/ATFolder.py,
+	  types/ATImage.py, types/ATLink.py, types/ATNewsItem.py,
+	  types/schemata.py, types/criteria/ATBaseCriterion.py,
 	  types/criteria/ATDateCriteria.py,
 	  types/criteria/ATListCriterion.py,
 	  types/criteria/ATPortalTypeCriterion.py,
@@ -870,11 +2063,10 @@
 
 	* RestrainTypesMixin.py, config.py, docs/AUTHORS.txt,
 	  docs/CHANGELOG.txt, docs/HISTORY.txt, docs/TODO.txt,
-	  interfaces/IRestrainTypes.py, types/ATContentType.py,
-	  types/schemata.py: Added RestrainedTypes support, which allows to
-	  restrain (restrict) the allowed types on any AT[*]Folder based on
-	  FTI/portal_types + parents restrictions + local restriction per
-	  folder instance.
+	  types/ATContentType.py, types/schemata.py: Added RestrainedTypes
+	  support, which allows to restrain (restrict) the allowed types on
+	  any AT[*]Folder based on FTI/portal_types + parents restrictions
+	  + local restriction per folder instance.
 
 2004-06-09 15:59  tiran
 
@@ -1104,14 +2296,9 @@
 	* types/: ATDocument.py, ATTopic.py: first types compliant to
 	  LinguaPlone
 
-2004-05-14 14:04  godchap
-
-	* interfaces/IATTopic.py: fixed interface
-
 2004-05-14 13:40  godchap
 
-	* interfaces/IATTopic.py,
-	  skins/ATContentTypes/criterion_edit_form.cpt,
+	* skins/ATContentTypes/criterion_edit_form.cpt,
 	  skins/ATContentTypes/criterion_edit_form.cpt.metadata,
 	  skins/ATContentTypes/criterion_set_sort.cpy,
 	  skins/ATContentTypes/criterion_set_sort.cpy.metadata,
@@ -1202,8 +2389,8 @@
 
 2004-05-04 21:02  tiran
 
-	* __pkginfo__.py, version.txt, debian/changelog, docs/AUTHORS.txt,
-	  docs/HISTORY.txt, docs/INSTALL.txt: Preparing 0.2-beta4
+	* __pkginfo__.py, version.txt, docs/AUTHORS.txt, docs/HISTORY.txt,
+	  docs/INSTALL.txt: Preparing 0.2-beta4
 
 2004-05-04 20:51  tiran
 
@@ -1275,12 +2462,10 @@
 
 2004-04-26 08:30  tiran
 
-	* interfaces/IATContentType.py, types/ATContentType.py,
-	  types/ATDocument.py, types/ATEvent.py, types/ATFavorite.py,
-	  types/ATFile.py, types/ATFolder.py, types/ATImage.py,
-	  types/ATLink.py, types/ATNewsItem.py, types/ATTopic.py,
-	  types/schemata.py: Added default_view class var Changed
-	  newTypeFor to a tuple
+	* types/: ATContentType.py, ATDocument.py, ATEvent.py,
+	  ATFavorite.py, ATFile.py, ATFolder.py, ATImage.py, ATLink.py,
+	  ATNewsItem.py, ATTopic.py, schemata.py: Added default_view class
+	  var Changed newTypeFor to a tuple
 
 2004-04-26 08:29  tiran
 
@@ -1294,8 +2479,7 @@
 
 2004-04-24 19:50  tiran
 
-	* Field.py, ReplaceableStorage.py,
-	  interfaces/IReplaceableStorage.py, types/ATImage.py,
+	* Field.py, ReplaceableStorage.py, types/ATImage.py,
 	  types/schemata.py: Experimental replaceable storage (doesn't work
 	  yet)
 
@@ -1324,8 +2508,8 @@
 
 2004-04-20 02:27  tiran
 
-	* __pkginfo__.py, version.txt, debian/changelog, docs/HISTORY.txt,
-	  docs/INSTALL.txt: Preparing 0.2-beta3 release
+	* __pkginfo__.py, version.txt, docs/HISTORY.txt, docs/INSTALL.txt:
+	  Preparing 0.2-beta3 release
 
 2004-04-18 19:06  tiran
 
@@ -1452,10 +2636,6 @@
 	  TemplateMixin field from invisible to hidden Added support for
 	  customconfig and a customconfig.py.example file
 
-2004-04-10 00:37  tiran
-
-	* debian/changelog: updated debian installer
-
 2004-04-10 00:28  tiran
 
 	* __pkginfo__.py, version.txt, Extensions/Install.py,
@@ -1464,8 +2644,7 @@
 
 2004-04-10 00:02  tiran
 
-	* interfaces/IATContentType.py, interfaces/IATNewsItem.py,
-	  interfaces/IATTopic.py, skins/ATContentTypes/atct_edit.cpt,
+	* skins/ATContentTypes/atct_edit.cpt,
 	  skins/ATContentTypes/atct_edit.cpt.metadata,
 	  types/ATContentType.py, types/ATDocument.py, types/ATEvent.py,
 	  types/ATFavorite.py, types/ATFile.py, types/ATFolder.py,
@@ -1516,17 +2695,9 @@
 	  works even with types that have global_allow = 0 because it's
 	  using the type information instead of the factory tool
 
-2004-04-04 23:45  tiran
-
-	* interfaces/: IATContentType.py, IATDocument.py, IATEvent.py,
-	  IATFavorite.py, IATFile.py, IATFolder.py, IATImage.py,
-	  IATLink.py, IATNewsItem.py, IATTopic.py, IHistoryAware.py:
-	  changed doc strings in interface package
-
 2004-04-02 23:30  tiran
 
 	* HistoryAware.py, config.py, version.txt,
-	  interfaces/IHistoryAware.py,
 	  skins/ATContentTypes/atct_history.pt,
 	  skins/ATContentTypes/atct_history.pt.metadata,
 	  skins/ATContentTypes/atdocument_history.pt,
@@ -1558,9 +2729,8 @@
 2004-03-29 18:44  tiran
 
 	* config.py, docs/AUTHORS.txt, docs/INSTALL.txt,
-	  interfaces/IATContentType.py, types/ATContentType.py,
-	  types/ATDocument.py, types/schemata.py: * Finished TemplateMixin
-	  * Added document history
+	  types/ATContentType.py, types/ATDocument.py, types/schemata.py: *
+	  Finished TemplateMixin * Added document history
 
 2004-03-29 09:23  tiran
 
@@ -1570,11 +2740,11 @@
 2004-03-29 09:20  tiran
 
 	* Extensions/Install.py, docs/AUTHORS.txt, docs/TODO.txt,
-	  interfaces/IATContentType.py, types/ATContentType.py,
-	  types/ATDocument.py, types/ATEvent.py, types/ATFavorite.py,
-	  types/ATFile.py, types/ATFolder.py, types/ATImage.py,
-	  types/ATLink.py, types/ATNewsItem.py, types/ATTopic.py,
-	  types/schemata.py, types/criteria/ATBaseCriterion.py,
+	  types/ATContentType.py, types/ATDocument.py, types/ATEvent.py,
+	  types/ATFavorite.py, types/ATFile.py, types/ATFolder.py,
+	  types/ATImage.py, types/ATLink.py, types/ATNewsItem.py,
+	  types/ATTopic.py, types/schemata.py,
+	  types/criteria/ATBaseCriterion.py,
 	  types/criteria/ATDateCriteria.py,
 	  types/criteria/ATListCriterion.py,
 	  types/criteria/ATSimpleIntCriterion.py,
@@ -1605,18 +2775,13 @@
 2004-03-20 17:08  tiran
 
 	* Validators.py, config.py, Extensions/Install.py,
-	  interfaces/.cvsignore, interfaces/IATContentType.py,
-	  interfaces/IATDocument.py, interfaces/IATEvent.py,
-	  interfaces/IATFavorite.py, interfaces/IATFile.py,
-	  interfaces/IATFolder.py, interfaces/IATImage.py,
-	  interfaces/IATLink.py, interfaces/IATNewsItem.py,
-	  interfaces/IATTopic.py, types/ATDocument.py, types/ATEvent.py,
-	  types/ATFavorite.py, types/ATFile.py, types/ATFolder.py,
-	  types/ATImage.py, types/ATLink.py, types/ATNewsItem.py,
-	  types/ATTopic.py: * Fixed small bug in Validator (thx to Volker
-	  Bachschneider) * Fixed problem with workflow security (thx to
-	  Volker Bachschneider) * Added more interfaces * Now registering
-	  ATContentTypes in content_type_registry
+	  types/ATDocument.py, types/ATEvent.py, types/ATFavorite.py,
+	  types/ATFile.py, types/ATFolder.py, types/ATImage.py,
+	  types/ATLink.py, types/ATNewsItem.py, types/ATTopic.py: * Fixed
+	  small bug in Validator (thx to Volker Bachschneider) * Fixed
+	  problem with workflow security (thx to Volker Bachschneider) *
+	  Added more interfaces * Now registering ATContentTypes in
+	  content_type_registry
 
 2004-03-19 18:50  tiran
 
@@ -1631,9 +2796,8 @@
 
 2004-03-18 14:17  tiran
 
-	* Extensions/Install.py, interfaces/IATFolder.py,
-	  migration/ATCTMigrator.py, migration/Migrator.py: updated
-	  migration adding missing file
+	* Extensions/Install.py, migration/ATCTMigrator.py,
+	  migration/Migrator.py: updated migration adding missing file
 
 2004-03-18 02:24  tiran
 
@@ -1777,15 +2941,11 @@
 	  Validators.py, __init__.py, __pkginfo__.py, config.py,
 	  refresh.txt, version.txt, Extensions/Install.py,
 	  Extensions/__init__.py, Extensions/migrateFromCMF.py,
-	  debian/changelog, debian/config, debian/control,
-	  debian/copyright, debian/postinst, debian/prerm, debian/rules,
-	  debian/templates, docs/AUTHORS.txt, docs/HISTORY.txt,
-	  docs/INSTALL.txt, docs/LICENSE.GPL, docs/LICENSE.ZPL,
-	  docs/LICENSE.txt, docs/README.txt, docs/TODO.txt,
-	  interfaces/IATContentType.py, interfaces/IATTopic.py,
-	  interfaces/__init__.py, interfaces/interface.py,
-	  migration/ATCTMigrator.py, migration/Migrator.py,
-	  migration/Walker.py, migration/__init__.py, migration/common.py,
+	  docs/AUTHORS.txt, docs/HISTORY.txt, docs/INSTALL.txt,
+	  docs/LICENSE.GPL, docs/LICENSE.ZPL, docs/LICENSE.txt,
+	  docs/README.txt, docs/TODO.txt, migration/ATCTMigrator.py,
+	  migration/Migrator.py, migration/Walker.py,
+	  migration/__init__.py, migration/common.py,
 	  skins/ATContentTypes/atct_edit.cpt,
 	  skins/ATContentTypes/atct_edit.cpt.metadata,
 	  skins/ATContentTypes/criterion_add.cpy,
@@ -1822,15 +2982,11 @@
 	  Validators.py, __init__.py, __pkginfo__.py, config.py,
 	  refresh.txt, version.txt, Extensions/Install.py,
 	  Extensions/__init__.py, Extensions/migrateFromCMF.py,
-	  debian/changelog, debian/config, debian/control,
-	  debian/copyright, debian/postinst, debian/prerm, debian/rules,
-	  debian/templates, docs/AUTHORS.txt, docs/HISTORY.txt,
-	  docs/INSTALL.txt, docs/LICENSE.GPL, docs/LICENSE.ZPL,
-	  docs/LICENSE.txt, docs/README.txt, docs/TODO.txt,
-	  interfaces/IATContentType.py, interfaces/IATTopic.py,
-	  interfaces/__init__.py, interfaces/interface.py,
-	  migration/ATCTMigrator.py, migration/Migrator.py,
-	  migration/Walker.py, migration/__init__.py, migration/common.py,
+	  docs/AUTHORS.txt, docs/HISTORY.txt, docs/INSTALL.txt,
+	  docs/LICENSE.GPL, docs/LICENSE.ZPL, docs/LICENSE.txt,
+	  docs/README.txt, docs/TODO.txt, migration/ATCTMigrator.py,
+	  migration/Migrator.py, migration/Walker.py,
+	  migration/__init__.py, migration/common.py,
 	  skins/ATContentTypes/atct_edit.cpt,
 	  skins/ATContentTypes/atct_edit.cpt.metadata,
 	  skins/ATContentTypes/criterion_add.cpy,

@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 
 """
-__author__  = 'Christian Heimes, Christian Theune'
+__author__  = 'Christian Heimes <ch@comlounge.net>, Christian Theune'
 __docformat__ = 'restructuredtext'
 
 import difflib
@@ -32,10 +32,11 @@ from Acquisition import aq_parent
 from Globals import InitializeClass
 
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.config import *
-from Products.ATContentTypes.interfaces.IHistoryAware import IHistoryAware
+from Products.ATContentTypes import Permissions as ATCTPermissions
+from Products.ATContentTypes.interfaces import IHistoryAware
 
 class HistoryAwareMixin:
     """History aware mixin class
@@ -49,7 +50,7 @@ class HistoryAwareMixin:
     managers.
     """
 
-    __implements__ = IHistoryAware
+    __implements__ = (IHistoryAware ,)
 
     security       = ClassSecurityInfo()
 
@@ -57,7 +58,7 @@ class HistoryAwareMixin:
         'id'          : 'history',
         'name'        : 'History',
         'action'      : 'string:${object_url}/atct_history',
-        'permissions' : (HISTORY_VIEW_PERMISSION, )
+        'permissions' : (ATCTPermissions.ViewHistory, )
          },
     )
 
@@ -90,6 +91,9 @@ class HistoryAwareMixin:
         lst = []
         parent = aq_parent(self)
         for revision in historyList:
+            if not revision.has_key('serial'):
+                # XXX alan reported it, add logging!
+                continue
             serial = revision['serial']
             # get the revision object and wrap it in a context wrapper
             obj    = historicalRevision(self, serial)
@@ -102,7 +106,19 @@ class HistoryAwareMixin:
 
         return lst
 
-    security.declareProtected(HISTORY_VIEW_PERMISSION, 'getDocumentComparisons')
+    security.declareProtected(CMFCorePermissions.View, 'getLastEditor')
+    def getLastEditor(self):
+        """Returns the user name of the last editor.
+
+        Returns None if no last editor is known.
+        """
+        histories = self.getHistories(1)
+        if not histories:
+            return None
+        user = histories[0][3].split(" ")[-1].strip()
+        return  user
+
+    security.declareProtected(ATCTPermissions.ViewHistory, 'getDocumentComparisons')
     def getDocumentComparisons(self, max=10, filterComment=0):
         """Get history as unified diff
         """
