@@ -135,6 +135,9 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
         
         You *should* run recatalogCMFTypes() before running this method to make
         sure all types are found!
+        
+        * Backups the old FTIs as "CMF Name"
+        * Changes the portal_type of all existing objects
         """
         if self.isCMFdisabled():
             raise AlreadySwitched
@@ -181,6 +184,24 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
             self._changePortalTypeName(cmf_bak_pt, cmf_pt, global_allow=False)
             result.append('Renamed %s to %s' % (cmf_pt, cmf_bak_pt))
         return ''.join(result)
+    
+    def copyFTIFlags(self):
+        """Copies some flags like allow discussion from the old types to new
+        """
+        assert self.isCMFdisabled()
+        ttool = getToolByName(self, 'portal_types')
+        for atct in self._listATCTTypes():
+            klass = atct['klass']
+            if not IATContentType.isImplementedByInstancesOf(klass):
+                # skip criteria
+                continue
+            ntf = klass._atct_newTypeFor
+            if not ntf or not ntf.get('portal_type'):
+                # no old portal type given
+                continue
+            atct_pt = ntf.get('portal_type')
+            cmf_bak_pt = 'CMF %s' % atct_pt
+            self._copyFTIFlags(ptfrom=cmf_bak_pt, ptto=atct_pt)
     
     def isCMFdisabled(self):
         """Query if CMF types are disabled
@@ -306,8 +327,8 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
         title=None):
         """Changes the portal type name of an object
         
-        Changes the id of the portal type inside portal types
-        Also updates the catalog indexes and metadata
+        * Changes the id of the portal type inside portal types
+        * Updates the catalog indexes and metadata
         """
         cat = getToolByName(self, 'portal_catalog')
         ttool = getToolByName(self, 'portal_types')
@@ -332,6 +353,19 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
             obj._setPortalTypeName(new_name)
             obj.reindexObject(idxs=['portal_type', 'Type', 'meta_type', ])
             if state is None: obj._p_deativate()
+            
+    def _copyFTIFlags(self, ptfrom, ptto, flags = ('filter_content_types',
+                      'allowed_content_types', 'allow_discussion')):
+        """Copies different flags from one fti to another
+        """
+        ttool = getToolByName(self, 'portal_types')
+        ptfrom = getattr(ttool.aq_explicit, ptfrom)
+        ptto = getattr(ttool.aq_explicit, ptto)
+        kw = {}
+        for flag in flags:
+            kw[flag] = getattr(ptfrom.aq_explicit, flag)
+        ptto.manage_changeProperties(**kw)
+        return kw
 
     def _fixPortalTypeOfMembersFolder(self):
         # XXX why do I need this hack?

@@ -107,10 +107,15 @@ def install(self, reinstall):
                  typeInfo,
                  PROJECTNAME)
 
-    # step 6: install skins
+    # step 6: copy fti flags like allow discussion
+    if not reinstall:
+        print >>out, 'Copying FTI flags like allow_discussion'
+        tool.copyFTIFlags()
+
+    # step 7: install skins
     install_subskin(self, out, GLOBALS)
     
-    # step 7: register switch methods to toggle old plonetypes on/off
+    # step 8: register switch methods to toggle old plonetypes on/off
     # XXX remove this dummy methods
     manage_addExternalMethod(self,'switchATCT2CMF',
         'Set reenable CMF type',
@@ -126,16 +131,16 @@ def install(self, reinstall):
         PROJECTNAME+'.migrateFromCMF',
         'migrate')
 
-    # step 8: changing workflow
+    # step 9: changing workflow
     print >>out, 'Workflows setup'
     setupWorkflows(self, typeInfo, out)
 
-    # step 9: setup content type registry
+    # step 10: setup content type registry
     print >>out, 'Content Type Registry setup'
     old = ('link', 'news', 'document', 'file', 'image')
     setupMimeTypes(self, typeInfo, old=old, moveDown=(IATFile,), out=out)
     
-    # step 10: add additional action icons
+    # step 11: add additional action icons
     print >>out, 'Adding additional action icons'
     registerActionIcons(self, out)
     

@@ -37,7 +37,7 @@ tests = []
 class TestTool(atcttestcase.ATCTSiteTestCase):
 
     def afterSetUp(self):
-        self.tool = getattr(self.portal.aq_explicit, TOOLNAME)
+        self.tool = getToolByName(self.portal, TOOLNAME)
         
     def test_cmfftis(self):
         t = self.tool
@@ -70,7 +70,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         
     def test_uncatalogcmf(self):
         t = self.tool
-        cat = self.portal.portal_catalog
+        cat = getToolByName(self.portal, 'portal_catalog')
         mt = t._getCMFMetaTypes()
         pt = t._getCMFPortalTypes()
         
@@ -84,7 +84,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         
     def test_catalogcmf(self):
         t = self.tool
-        cat = self.portal.portal_catalog
+        cat = getToolByName(self.portal, 'portal_catalog')
         mt = t._getCMFMetaTypes()
         pt = t._getCMFPortalTypes()
         
@@ -114,6 +114,20 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(t.getId(), TOOLNAME)
         self.failUnlessEqual(t.title, 'ATContentTypes Tool')
         self.failUnlessEqual(t.plone_tool, True)
+        
+    def test_copyftiflags(self):
+        ttool = getToolByName(self.portal, 'portal_types')
+        cmfdoc = ttool['CMF Document']
+        atctdoc = ttool['Document']
+        
+        cmfdoc.manage_changeProperties(allow_discussion=True)
+        ttool.copyFTIFlags()
+        self.failUnlessEqual(atctdoc.allow_discussion, True)
+        
+        cmfdoc.manage_changeProperties(allow_discussion=False)
+        ttool.copyFTIFlags()
+        self.failUnlessEqual(atctdoc.allow_discussion, False)
+        
 
 tests.append(TestTool)
 
