@@ -17,7 +17,8 @@ from Products.ATContentTypes.tests.common import *
 from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTFieldTestCase
 from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTSiteTestCase
 
-from Products.ATContentTypes.config import *
+from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
+from Products.ATContentTypes.config import _ATCT_UNIT_TEST_MODE
 from AccessControl import Unauthorized
 from Products.ATContentTypes import ConstrainTypesMixin
 from Products.ATContentTypes.interfaces import IConstrainTypes
@@ -47,6 +48,10 @@ class TestConstrainTypes(ATCTSiteTestCase):
         self.af = self.portal.af
         # portal_types object for ATCT folder
         self.at = self.tt.getTypeInfo(self.af)
+        
+    def test_000enabledforunittest(self):
+        self.failUnless(_ATCT_UNIT_TEST_MODE)
+        self.failUnless(ENABLE_CONSTRAIN_TYPES_MIXIN)
 
     def test_isMixedIn(self):
         self.failUnless(isinstance(self.af,
@@ -146,10 +151,6 @@ def test_suite():
     # framework.py test_suite is trying to run ATCT*TestCase
     # so we have to provide our own
     suite = unittest.TestSuite()
-    if not ENABLE_CONSTRAIN_TYPES_MIXIN:
-        # we can only run tests if ConstrainedTypesMixin is enabled
-        # return an empty suite otherwise
-        return suite
     for test in tests:
         suite.addTest(unittest.makeSuite(test))
     return suite

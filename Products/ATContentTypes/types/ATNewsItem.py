@@ -48,53 +48,56 @@ from Products.validation.validators.SupplValidators import MaxSizeValidator
 
 ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
     TextField('text',
-              required=True,
-              searchable=True,
-              primary=True,
-              validators = ('isTidyHtmlWithCleanup',),
-              #validators = ('isTidyHtml',),
-              default_content_type = ATDOCUMENT_CONTENT_TYPE,
-              default_output_type = 'text/html',
-              allowable_content_types = ('text/structured',
-                                         'text/restructured',
-                                         'text/html',
-                                         'text/plain',
-                                         ),
-              widget = RichWidget(
-                        description = "The body text of the document.",
-                        description_msgid = "help_body_text",
-                        label = "Body text",
-                        label_msgid = "label_body_text",
-                        rows = 25,
-                        i18n_domain = "plone")),
+        required = True,
+        searchable = True,
+        primary = True,
+        validators = ('isTidyHtmlWithCleanup',),
+        #validators = ('isTidyHtml',),
+        default_content_type = ATDOCUMENT_CONTENT_TYPE,
+        default_output_type = 'text/html',
+        allowable_content_types = ('text/structured',
+                                   'text/restructured',
+                                   'text/html',
+                                   'text/plain'
+                                  ),
+        widget = RichWidget(
+            description = "The body text of the document.",
+            description_msgid = "help_body_text",
+            label = "Body text",
+            label_msgid = "label_body_text",
+            rows = 25,
+            i18n_domain = "plone")
+        ),
     ImageField('image',
-               required=False,
-               languageIndependent=True,
-               sizes= {'preview' : (400, 400),
-                       'thumb'   : (128, 128),
-                       'tile'    :  (64, 64),
-                       'icon'    :  (32, 32),
-                       'listing' :  (16, 16),
-                      },
-               validators = MaxSizeValidator('checkFileMaxSize',
-                                             maxsize=MAX_IMAGE_SIZE),
-               widget = ImageWidget(
-                        description = "Add an optional image by clicking the 'Browse' button. This will be shown in the news listing, and in the news item itself. It will automatically scale the picture you upload to a sensible size.",
-                        description_msgid = "help_image",
-                        label= "Image",
-                        label_msgid = "label_image",
-                        i18n_domain = "plone",
-                        show_content_type = False,)),
-    TextField('imageCaption',
-              required=False,
-              searchable=True,
-              widget = StringWidget(
-                        description = "A caption text for the image.",
-                        description_msgid = "help_image_caption",
-                        label = "Image caption",
-                        label_msgid = "label_image_caption",
-                        size = 40,
-                        i18n_domain = "plone")),
+        required = False,
+        languageIndependent = True,
+        sizes= {'preview' : (400, 400),
+                'thumb'   : (128, 128),
+                'tile'    :  (64, 64),
+                'icon'    :  (32, 32),
+                'listing' :  (16, 16),
+               },
+        validators = MaxSizeValidator('checkFileMaxSize',
+                                       maxsize=MAX_IMAGE_SIZE),
+        widget = ImageWidget(
+            description = "Add an optional image by clicking the 'Browse' button. This will be shown in the news listing, and in the news item itself. It will automatically scale the picture you upload to a sensible size.",
+            description_msgid = "help_image",
+            label= "Image",
+            label_msgid = "label_image",
+            i18n_domain = "plone",
+            show_content_type = False)
+        ),
+    StringField('imageCaption',
+        required = False,
+        searchable = True,
+        widget = StringWidget(
+            description = "A caption text for the image.",
+            description_msgid = "help_image_caption",
+            label = "Image caption",
+            label_msgid = "label_image_caption",
+            size = 40,
+            i18n_domain = "plone")
+        ),
     ), marshall=RFC822Marshaller()
     )
 ATNewsItemSchema.addField(relatedItemsField)
@@ -114,7 +117,7 @@ class ATNewsItem(ATDocument):
     suppl_views    = ()
     _atct_newTypeFor     = ('News Item', 'News Item')
     typeDescription= ("A news item is a small piece of news that "
-                      "is published \non the front page. "
+                      "is published on the front page. "
                       "Add the relevant details below, and press 'Save'.")
     typeDescMsgId  = 'description_edit_news_item'
     assocMimetypes = ()
@@ -129,6 +132,14 @@ class ATNewsItem(ATDocument):
     # would be better ModifyPortalContent
     # BBB will be changed in the future. Don't rely on it!
     security.declareProtected(CMFCorePermissions.View, 'EditableBody')
+
+    security.declareProtected(CMFCorePermissions.View, 'tag')
+    def tag(self, **kwargs):
+        """Generate image tag using the api of the ImageField
+        """
+        if title not in kwargs:
+            kwargs['title'] = self.getImageCaption()
+        return self.getField('image').tag(self, **kwargs)
 
     security.declarePrivate('cmf_edit')
     def cmf_edit(self, text, description=None, text_format=None, **kwargs):

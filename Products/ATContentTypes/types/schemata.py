@@ -63,7 +63,6 @@ relatedItemsField = ReferenceField('relatedItems',
             description = "Select one or more related items",
             description_msgid = "help_related_items",
             i18n_domain = "plone",
-            
             visible={'view' : 'hidden',
                      #'edit' : ENABLE_RELATED_ITEMS and 'visible' or 'hidden'
                     },

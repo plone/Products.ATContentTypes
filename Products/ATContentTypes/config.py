@@ -68,11 +68,11 @@ EXT_STORAGE_ENABLE = False
 
 ## use TemplateMixin?
 ## if enabled users can choose between different view templates for each object
-ENABLE_TEMPLATE_MIXIN = False
+ENABLE_TEMPLATE_MIXIN = True
 
 ## TemplateMixin write permission. Only if the member has this permission he
 ## is allowed to choose another template then the default permission
-TEMPLATE_MIXIN_PERMISSION = CMFCorePermissions.ModifyPortalContent
+TEMPLATE_MIXIN_PERMISSION = CMFCorePermissions.ManagePortal
 
 ## use ConstrainedMixin?
 ## if enabled you can constrain allowed types on an ATCT Folder
@@ -235,3 +235,15 @@ MIME_ALIAS = {
     'structured-text' : 'text/structured',
     'restructuredtext' : 'text/x-rst',
     }
+
+## force enable some features for ATCT unit testing
+import os
+if os.environ.get('ZOPETESTCASE', False):
+    ENABLE_CONSTRAIN_TYPES_MIXIN = True
+    ENABLE_TEMPLATE_MIXIN = True
+    EXT_STORAGE_ENABLE = True
+    INSTALL_LINGUA_PLONE = True
+    EXT_STORAGE_ENABLE = True
+    _ATCT_UNIT_TEST_MODE = True
+else:
+    _ATCT_UNIT_TEST_MODE = False

@@ -35,12 +35,8 @@ from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.types.schemata import ATContentTypeSchema
 from Products.ATContentTypes.types.schemata import relatedItemsField
 
-ATFolderSchema      = ATContentTypeSchema.copy()
-ATBTreeFolderSchema = ATContentTypeSchema.copy()
-
-if ENABLE_CONSTRAIN_TYPES_MIXIN:
-    ATFolderSchema      = ATFolderSchema + ConstrainTypesMixinSchema
-    ATBTreeFolderSchema = ATBTreeFolderSchema + ConstrainTypesMixinSchema
+ATFolderSchema      = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
+ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 
 ATFolderSchema.addField(relatedItemsField)
 ATBTreeFolderSchema.addField(relatedItemsField)

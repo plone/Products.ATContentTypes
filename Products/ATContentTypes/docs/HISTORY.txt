@@ -1,6 +1,27 @@
 1.0-devel
 ======================
 
+ * Changed the way ConstrainTypes gets mixed in: Now ATCT is always subclassing
+   folders from the ConstrainTypes class and the schema is always in the folder
+   schema. Before this change ppl couldn't rely on the api. When the feature
+   is disabled the fields are not shown in the schema and the overwritten
+   methods are using a "shortcut" to the default methods.
+   [tiran]
+
+ * Renamed some methods in the constrain mixin to start with _ct_ for a clean
+   name space.
+   [tiran]
+
+ * Added a tag methods to NewsItem for its image. Also changed the caption from
+   TextField to StringField since it should contain only a small sentence or
+   similar. The caption is applied as title to the news item image.
+   [tiran]
+
+ * When running unit tests all features like constrain mixin and template
+   mixin are forced to be enabled in order to keep the tests sane and to test
+   all features under all circumstances
+   [tiran]
+
  * Dismembered the big beast schemata.py in types/ and types/criteria. The
    schemata are in the same modules as the types.
    [tiran]

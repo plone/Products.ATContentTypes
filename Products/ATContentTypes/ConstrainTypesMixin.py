@@ -43,36 +43,43 @@ from Products.Archetypes.public import DisplayList
 
 from Products.ATContentTypes.interfaces import IConstrainTypes
 from Products.ATContentTypes.config import CONSTRAIN_TYPES_MIXIN_PERMISSION
+from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
 
 ConstrainTypesMixinSchema = Schema((
     BooleanField('enableConstrainMixin',
-        default=False,
-        languageIndependent=True,
-        write_permissions=CONSTRAIN_TYPES_MIXIN_PERMISSION,
-        widget=BooleanWidget(
-            label='Overwrite allowed types',
-            visible = {'edit': 'visible', 'view': 'hidden'},
-            label_msgid='label_enable_constrain_allowed_types',
-            description='',
-            description_msgid='description_enable_constrain_allowed_types',
-            i18n_domain='plone')
+        default = False,
+        languageIndependent = True,
+        write_permissions = CONSTRAIN_TYPES_MIXIN_PERMISSION,
+        widget = BooleanWidget(
+            label = 'Overwrite allowed types',
+            label_msgid = 'label_enable_constrain_allowed_types',
+            description = '',
+            description_msgid = 'description_enable_constrain_allowed_types',
+            i18n_domain = 'plone',
+            visible = {'view' : 'hidden',
+                       'edit' : ENABLE_CONSTRAIN_TYPES_MIXIN and 'visible' or 'hidden'
+                      },
+            )
         ),
     LinesField('locallyAllowedTypes',
-        vocabulary='vocabularyPossibleTypes',
-        enforceVocabulary=True,
-        languageIndependent=True,
-        default_method='_globalAddableTypeIds',
-        write_permissions=CONSTRAIN_TYPES_MIXIN_PERMISSION,
-        widget=MultiSelectionWidget(
-            size=10,
-            label='Set allowed types',
-            visible = {'edit': 'visible', 'view': 'hidden'},
-            label_msgid='label_constrain_allowed_types',
-            description='Select one or more types, that should be allowed to '
-                        'add inside this folder and its subfolders. Choose '
-                        'nothing will allow all types.',
-            description_msgid='description_constrain_allowed_types',
-            i18n_domain='plone')
+        vocabulary = '_ct_vocabularyPossibleTypes',
+        enforceVocabulary = True,
+        languageIndependent = True,
+        default_method = '_ct_globalAddableTypeIds',
+        write_permissions = CONSTRAIN_TYPES_MIXIN_PERMISSION,
+        widget = MultiSelectionWidget(
+            size = 10,
+            label = 'Set allowed types',
+            label_msgid = 'label_constrain_allowed_types',
+            description = 'Select one or more types, that should be allowed to '
+                          'add inside this folder and its subfolders. Choose '
+                          'nothing will allow all types.',
+            description_msgid = 'description_constrain_allowed_types',
+            i18n_domain = 'plone',
+            visible = {'view' : 'hidden',
+                      'edit' : ENABLE_CONSTRAIN_TYPES_MIXIN and 'visible' or 'hidden'
+                      },
+            )
         ),
     ))
 
@@ -85,30 +92,30 @@ class ConstrainTypesMixin:
 
     security = ClassSecurityInfo()
 
-    security.declarePrivate('vocabularyPossibleTypes')
-    def vocabularyPossibleTypes(self):
+    security.declarePrivate('_ct_vocabularyPossibleTypes')
+    def _ct_vocabularyPossibleTypes(self):
         """returns a list of tuples in archetypes vocabulary style:
 
         [(key,value),(key2,value2),...,(keyN,valueN)]
         """
         typetuples= [(fti.title_or_id(), fti.id)
-                     for fti in self._getPossibleTypes()]
+                     for fti in self._ct_getPossibleTypes()]
         typetuples.sort()
         return DisplayList([(id, title) for title, id in typetuples])
 
-    security.declarePrivate('recursiveGetLocallyAllowedTypes')
-    def recursiveGetLocallyAllowedTypes(self):
+    security.declarePrivate('_ct_recursiveGetLocallyAllowedTypes')
+    def _ct_recursiveGetLocallyAllowedTypes(self):
         """get intersection of mine and my ancestors allowed types
         """
         typeIDs = self.getLocallyAllowedTypes()
-        ancestors_allowed_types = self.ancestorsGetLocallyAllowedTypes()
+        ancestors_allowed_types = self._ct_ancestorsGetLocallyAllowedTypes()
         if ancestors_allowed_types:
             typeIDs = [typeID for typeID in typeIDs
                        if typeID in ancestors_allowed_types]
         return typeIDs
 
-    security.declarePrivate('ancestorsGetLocallyAllowedTypes')
-    def ancestorsGetLocallyAllowedTypes(self):
+    security.declarePrivate('_ct_ancestorsGetLocallyAllowedTypes')
+    def _ct_ancestorsGetLocallyAllowedTypes(self):
         """get all ancestors's allowed types, doing intersection
         """
         parent = aq_parent(self)
@@ -117,15 +124,16 @@ class ConstrainTypesMixin:
             # because we want acquisition to work its magic.
             # The closest aq_parent that is an IConstrainTypes
             # will answer
-            return parent.recursiveGetLocallyAllowedTypes()
+            return parent._ct_recursiveGetLocallyAllowedTypes()
         except AttributeError:
             # no parent in the acquisition chain is a Constrainer
             return ()
 
-    def _getPossibleTypes(self):
+    security.declarePrivate('_ct_getPossibleTypes')
+    def _ct_getPossibleTypes(self):
         """returns a list of normally allowed objects as fti
         """
-        tt = getToolByName(self,'portal_types')
+        tt = getToolByName(self, 'portal_types')
         myfti = tt.getTypeInfo(self)
         # first we start with all available portal types.
         possible_ftis = tt.listTypeInfo()
@@ -134,14 +142,15 @@ class ConstrainTypesMixin:
             possible_ftis = [fti for fti in possible_ftis
                              if myfti.allowType(fti.getId())]
         # then we try to find a types-constraint up the acquisition chain
-        ancestors_allowed_types = self.ancestorsGetLocallyAllowedTypes()
+        ancestors_allowed_types = self._ct_ancestorsGetLocallyAllowedTypes()
         # if we find it, keep only the allowed types
         if ancestors_allowed_types:
             possible_ftis = [fti for fti in possible_ftis
                              if fti.getId() in ancestors_allowed_types]
         return possible_ftis
 
-    def _globalAddableTypeIds(self, asList=False):
+    security.declarePrivate('_ct_globalAddableTypeIds')
+    def _ct_globalAddableTypeIds(self, asList=False):
         """
         """
         # list of types which are addable in the ordinary case w/o the constrain
@@ -151,14 +160,25 @@ class ConstrainTypesMixin:
             return ids
         else:
             return '\n'.join(ids)
+        
+    security.declarePublic("getGlobalEnableConstrainMixin")
+    def getGlobalEnableConstrainMixin(self):
+        """Check if the constrain mixin is enabled globally
+        """
+        return ENABLE_CONSTRAIN_TYPES_MIXIN
 
     # overrides CMFCore's PortalFolder allowedTypes
     def allowedContentTypes(self):
         """returns constrained allowed types as list of fti's
         """
-        if not self.getEnableConstrainMixin():
+        if not ENABLE_CONSTRAIN_TYPES_MIXIN:
+            # not globally enabled - use the default
             return PortalFolder.allowedContentTypes(self)
-        possible_ftis= self._getPossibleTypes()
+        if not self.getEnableConstrainMixin():
+            # not locally enabled - use the default
+            return PortalFolder.allowedContentTypes(self)
+        
+        possible_ftis= self._ct_getPossibleTypes()
         # getLocallyAllowedTypes is the accessor for the
         # the locallyAllowedTypes schema field.
         allowed = list(self.getLocallyAllowedTypes())
@@ -173,13 +193,17 @@ class ConstrainTypesMixin:
 
     # overrides CMFCore's PortalFolder invokeFactory
     security.declareProtected(CMFCorePermissions.AddPortalContent, 'invokeFactory')
-    def invokeFactory( self, type_name, id, RESPONSE=None, *args, **kw):
-        """ Invokes the portal_types tool """
+    def invokeFactory(self, type_name, id, RESPONSE=None, *args, **kw):
+        """Invokes the portal_types tool
+        """
+        if not ENABLE_CONSTRAIN_TYPES_MIXIN:
+            # not globally enabled - use the default
+            return PortalFolder.invokeFactory(self, type_name, id, RESPONSE=None, *args, **kw)
         if not type_name in [fti.id for fti in self.allowedContentTypes()]:
             raise Unauthorized('Disallowed subobject type: %s' % type_name)
 
         pt = getToolByName( self, 'portal_types' )
         args = (type_name, self, id, RESPONSE) + args
-        pt.constructContent(*args, **kw)
+        return pt.constructContent(*args, **kw)
         
 InitializeClass(ConstrainTypesMixin)

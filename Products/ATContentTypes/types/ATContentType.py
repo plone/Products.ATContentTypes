@@ -454,18 +454,13 @@ class ATCTFolder(ATCTMixin, BaseFolder):
 InitializeClass(ATCTFolder)
 
 
-class ATCTConstrainedFolderMixin(ConstrainTypesMixin, ATCTMixin):
+class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
     """ Constrained folderish type """
 
     __implements__ = (ATCTMixin.__implements__,
                       ConstrainTypesMixin.__implements__)
 
     security       = ClassSecurityInfo()
-
-if ENABLE_CONSTRAIN_TYPES_MIXIN:
-    ATCTFolderMixin = ATCTConstrainedFolderMixin
-else:
-    ATCTFolderMixin = ATCTMixin
 
 InitializeClass(ATCTFolderMixin)
 
