@@ -18,7 +18,7 @@
 #
 """
 
-$Id: ATContentType.py,v 1.44.4.4 2004/11/30 15:19:08 ctheune Exp $
+$Id: ATContentType.py,v 1.44.4.5 2004/12/23 23:53:28 shh42 Exp $
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -212,7 +212,8 @@ class ATCTMixin(TemplateMixin):
         """
         raise NotImplementedError("cmf_edit method isn't implemented")
 
-    def validate_id(self, id):
+    # XXX: Must not override .vpy validator of same name
+    def DISABLED_validate_id(self, id):
         parent = aq_parent(self)
         parent_ids = parent.objectIds()
 
