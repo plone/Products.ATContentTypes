@@ -2,7 +2,7 @@
 
 For tests that needs a plone portal including archetypes and portal transforms
 
-$Id: ATCTSiteTestCase.py,v 1.12 2004/08/05 23:52:10 tiran Exp $
+$Id: ATCTSiteTestCase.py,v 1.12.4.1 2004/10/31 14:37:52 tiran Exp $
 """
 
 __author__ = 'Christian Heimes'
@@ -15,7 +15,7 @@ from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 from Acquisition import aq_base
 
-from common import dcEdit, EmptyValidator
+from Products.ATContentTypes.tests.common import dcEdit, EmptyValidator
 
 from Products.Archetypes.Storage import MetadataStorage
 from Products.CMFCore import CMFCorePermissions

@@ -2,7 +2,7 @@
 
 Use this file as a skeleton for your own tests
 
-$Id: testATNewsItem.py,v 1.9 2004/07/13 13:12:56 dreamcatcher Exp $
+$Id: testATNewsItem.py,v 1.9.4.1 2004/10/31 14:37:53 tiran Exp $
 """
 
 __author__ = 'Christian Heimes'
@@ -18,7 +18,7 @@ def editCMF(obj):
 def editATCT(obj):
     dcEdit(obj)
 
-from common import *
+from Products.ATContentTypes.tests.common import *
 
 tests = []
 

@@ -14,6 +14,10 @@
    longdesc to ATImage.
    [tiran]
 
+ * Fixed [ 1057691 ] Make ATContentTypes tests works with testrunner.py. Thx to
+   dan_t.
+   [dan_t, tiran]
+
 0.2.0-rc3 - 2004-10-17
 ======================
 

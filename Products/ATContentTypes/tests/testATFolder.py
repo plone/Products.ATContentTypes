@@ -2,7 +2,7 @@
 
 Use this file as a skeleton for your own tests
 
-$Id: testATFolder.py,v 1.6 2004/07/13 13:12:56 dreamcatcher Exp $
+$Id: testATFolder.py,v 1.6.4.1 2004/10/31 14:37:53 tiran Exp $
 """
 
 __author__ = 'Christian Heimes'
@@ -12,7 +12,7 @@ import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
-from common import *
+from Products.ATContentTypes.tests.common import *
 
 def editCMF(obj):
     dcEdit(obj)
