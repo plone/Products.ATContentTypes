@@ -1,6 +1,6 @@
 """AT Content Types migration suite
 """
-import Products.ATContentTypes.migration.Walker
-import Products.ATContentTypes.migration.Migrator
-import Products.ATContentTypes.migration.ATCTMigrator
+import Products.ATContentTypes.migration.walker
+import Products.ATContentTypes.migration.migrator
+import Products.ATContentTypes.migration.atctmigrator
 

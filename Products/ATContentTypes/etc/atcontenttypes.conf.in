@@ -96,7 +96,7 @@
 </contenttype>
 
 <contenttype ATTopic>
-  add_permission Products.ATContentTypes.Permissions.AddTopics
+  add_permission Products.ATContentTypes.permission.AddTopics
   <typedescription>
     description foo
     i18n_msgid  bar

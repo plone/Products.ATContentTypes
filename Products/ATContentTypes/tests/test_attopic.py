@@ -34,13 +34,13 @@ from Products.CMFCore import CMFCorePermissions
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 
-from Products.ATContentTypes.types.ATTopic import ATTopic
-from Products.ATContentTypes.types.ATTopic import ATTopicSchema
-from Products.ATContentTypes.types.ATTopic import ChangeTopics
-from Products.ATContentTypes.migration.ATCTMigrator import TopicMigrator
+from Products.ATContentTypes.content.topic import ATTopic
+from Products.ATContentTypes.content.topic import ATTopicSchema
+from Products.ATContentTypes.content.topic import ChangeTopics
+from Products.ATContentTypes.migration.atctmigrator import TopicMigrator
 from Products.CMFTopic.Topic import Topic
 from Products.ATContentTypes.tests.utils import EmptyValidator
-from Products.ATContentTypes.migration.ATCTMigrator import CRIT_MAP, REV_CRIT_MAP
+from Products.ATContentTypes.migration.atctmigrator import CRIT_MAP, REV_CRIT_MAP
 from Products.ATContentTypes.interfaces import IATTopic
 from Interface.Verify import verifyObject
 

@@ -37,9 +37,9 @@ from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
 import time
 
-from Products.ATContentTypes.types.ATFile import ATFile
-from Products.ATContentTypes.types.ATFile import ATFileSchema
-from Products.ATContentTypes.migration.ATCTMigrator import FileMigrator
+from Products.ATContentTypes.content.file import ATFile
+from Products.ATContentTypes.content.file import ATFileSchema
+from Products.ATContentTypes.migration.atctmigrator import FileMigrator
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.interfaces import IFileContent
 from Products.CMFDefault.File import File
@@ -189,7 +189,7 @@ tests.append(TestATFileFields)
 class TestCleanupFilename(unittest.TestCase):
 
     def test_cleanup_filename(self):
-        from Products.ATContentTypes.types.ATContentType import cleanupFilename
+        from Products.ATContentTypes.content.base import cleanupFilename
         text = 'Νίκος Τζάνος'
         self.assertEquals(cleanupFilename(text, 'utf-8'), 'Nikos_Tzanos')
 

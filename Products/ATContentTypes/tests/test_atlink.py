@@ -41,9 +41,9 @@ from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
 import time
 
-from Products.ATContentTypes.types.ATLink import ATLink
-from Products.ATContentTypes.types.ATLink import ATLinkSchema
-from Products.ATContentTypes.migration.ATCTMigrator import LinkMigrator
+from Products.ATContentTypes.content.link import ATLink
+from Products.ATContentTypes.content.link import ATLinkSchema
+from Products.ATContentTypes.migration.atctmigrator import LinkMigrator
 from Products.ATContentTypes.tests.utils import RequiredURLValidator
 from Products.ATContentTypes.interfaces import IATLink
 from Products.CMFDefault.Link import Link

@@ -33,7 +33,7 @@ from Products.ATContentTypes.config import _ATCT_UNIT_TEST_MODE
 from Products.ATContentTypes.config import _ATCT_OLD_VALUES
 from Products.ATContentTypes.config import ATDOCUMENT_CONTENT_TYPE
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
-from Products.ATContentTypes.ATCTTool import ATCTTool
+from Products.ATContentTypes.tool.atct import ATCTTool
 from Products.CMFCore.utils import getToolByName
 
 tests = []

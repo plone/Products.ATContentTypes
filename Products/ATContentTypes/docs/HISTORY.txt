@@ -1,6 +1,15 @@
 1.0-devel
 =====================
 
+ * Merged tiran-notypesdir-branch. It's renaming and moving lot's of modules
+   around. All content types are in the content/ package, criteria were moved
+   to criteria/, tools to tool/ and modules like history aware to lib/. Also
+   all modules and packages were renamed to be lower case.
+   [tiran]
+
+ * Added history support ATEvent's text field just like Document and News Item.
+   [tiran]
+
  * Updated README.txt and INSTALL.txt: new versions, update from ATCT 0.2 and
    some other informations.
    [tiran]

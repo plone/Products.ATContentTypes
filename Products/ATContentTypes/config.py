@@ -28,8 +28,8 @@ See customconfig.py.example
 """
 __docformat__ = 'restructuredtext'
 
-from Products.CMFCore import CMFCorePermissions
 import string
+import os
 
 ###############################################################################
 ## user options
@@ -81,6 +81,9 @@ ATDOCUMENT_CONTENT_TYPE = 'text/html'        # html
 PROJECTNAME = "ATContentTypes"
 TOOLNAME = "portal_atct"
 SKINS_DIR = 'skins'
+
+ATCT_DIR = os.path.dirname(__file__)
+WWW_DIR = os.path.join(ATCT_DIR, 'www')
 
 GLOBALS = globals()
 
@@ -289,7 +292,6 @@ MIME_ALIAS = {
     }
 
 ## force enable some features for ATCT unit testing
-import os
 if os.environ.get('ZOPETESTCASE', False):
     _ATCT_OLD_VALUES = {
         'ENABLE_CONSTRAIN_TYPES_MIXIN' : ENABLE_CONSTRAIN_TYPES_MIXIN,
@@ -306,3 +308,4 @@ if os.environ.get('ZOPETESTCASE', False):
 else:
     _ATCT_UNIT_TEST_MODE = False
     _ATCT_OLD_VALUES = {}
+

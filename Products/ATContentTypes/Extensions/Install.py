@@ -126,17 +126,24 @@ def install(self, reinstall):
         'migrate')
 
     # step 9: changing workflow
-    print >>out, 'Workflows setup'
-    setupWorkflows(self, typeInfo, out)
+    if not reinstall:
+        print >>out, 'Workflows setup'
+        setupWorkflows(self, typeInfo, out)
 
     # step 10: setup content type registry
-    print >>out, 'Content Type Registry setup'
-    old = ('link', 'news', 'document', 'file', 'image')
-    setupMimeTypes(self, typeInfo, old=old, moveDown=(IATFile,), out=out)
+    if not reinstall:
+        print >>out, 'Content Type Registry setup'
+        old = ('link', 'news', 'document', 'file', 'image')
+        setupMimeTypes(self, typeInfo, old=old, moveDown=(IATFile,), out=out)
     
     # step 11: add additional action icons
     print >>out, 'Adding additional action icons'
     registerActionIcons(self, out)
+    
+    # step 12: update / create internal version info
+    nv, v = tool.getVersion()
+    if not nv and not v:
+        tool.setVersionFromFS()
     
     print >> out, 'Successfully installed %s' % PROJECTNAME
     return out.getvalue()
@@ -181,7 +188,12 @@ def installTool(self, out):
         addTool = self.manage_addProduct['ATContentTypes'].manage_addTool
         addTool('ATCT Tool')
         tool = getToolByName(self, TOOLNAME)
-    print >>out, "Installing %s" % TOOLNAME
+    
+    # register tool as action provider, multiple installs are harmeless
+    #actions_tool = getToolByName(self, 'portal_actions')
+    #actions_tool.addActionProvider(TOOLNAME)
+    
+    print >>out, "Installing %s and registering it as action provider" % TOOLNAME
     return tool
 
 def removeCMFTypesFromRegisteredTypes(self, product, out):

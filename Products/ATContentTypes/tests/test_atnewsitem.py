@@ -41,10 +41,10 @@ from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
 import time
 
-from Products.ATContentTypes.types.ATNewsItem import ATNewsItem
-from Products.ATContentTypes.types.ATNewsItem import ATNewsItemSchema
+from Products.ATContentTypes.content.newsitem import ATNewsItem
+from Products.ATContentTypes.content.newsitem import ATNewsItemSchema
 from Products.ATContentTypes.tests.utils import TidyHTMLValidator
-from Products.ATContentTypes.migration.ATCTMigrator import NewsItemMigrator
+from Products.ATContentTypes.migration.atctmigrator import NewsItemMigrator
 from Products.ATContentTypes.interfaces import ITextContent
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATNewsItem

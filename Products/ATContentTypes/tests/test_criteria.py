@@ -43,26 +43,26 @@ from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 
-from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
-from Products.ATContentTypes.types.criteria.ATDateCriteria import \
+from Products.ATContentTypes.criteria.base import ATBaseCriterion
+from Products.ATContentTypes.criteria.date import \
     ATDateCriteria 
-from Products.ATContentTypes.types.criteria.ATListCriterion import \
+from Products.ATContentTypes.criteria.list import \
     ATListCriterion
-from Products.ATContentTypes.types.criteria.ATSimpleIntCriterion import \
+from Products.ATContentTypes.criteria.simpleint import \
     ATSimpleIntCriterion
-from Products.ATContentTypes.types.criteria.ATSimpleStringCriterion import \
+from Products.ATContentTypes.criteria.simplestring import \
     ATSimpleStringCriterion
-from Products.ATContentTypes.types.criteria.ATPortalTypeCriterion import \
+from Products.ATContentTypes.criteria.portaltype import \
     ATPortalTypeCriterion
-from Products.ATContentTypes.types.criteria.ATSortCriterion import \
+from Products.ATContentTypes.criteria.sort import \
     ATSortCriterion
-from Products.ATContentTypes.types.criteria.ATSelectionCriterion import \
+from Products.ATContentTypes.criteria.selection import \
     ATSelectionCriterion
-from Products.ATContentTypes.types.criteria.ATDateRangeCriterion import \
+from Products.ATContentTypes.criteria.daterange import \
     ATDateRangeCriterion
-from Products.ATContentTypes.types.criteria.ATReferenceCriterion import \
+from Products.ATContentTypes.criteria.reference import \
     ATReferenceCriterion
-from Products.ATContentTypes.types.criteria.ATBooleanCriterion import \
+from Products.ATContentTypes.criteria.boolean import \
     ATBooleanCriterion
 tests = []
 

@@ -36,11 +36,11 @@ from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
 import time
 
-from Products.ATContentTypes.types.ATFolder import ATFolder
-from Products.ATContentTypes.types.ATFolder import ATBTreeFolder
-from Products.ATContentTypes.types.ATFolder import ATFolderSchema
+from Products.ATContentTypes.content.folder import ATFolder
+from Products.ATContentTypes.content.folder import ATBTreeFolder
+from Products.ATContentTypes.content.folder import ATFolderSchema
 from Products.ATContentTypes.tests.utils import TidyHTMLValidator
-from Products.ATContentTypes.migration.ATCTMigrator import FolderMigrator
+from Products.ATContentTypes.migration.atctmigrator import FolderMigrator
 from Products.CMFPlone.PloneFolder import PloneFolder
 from Products.CMFPlone.LargePloneFolder import LargePloneFolder
 from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer

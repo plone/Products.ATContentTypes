@@ -35,15 +35,15 @@ from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
 import time
 
-from Products.ATContentTypes.types.ATEvent import ATEvent
-from Products.ATContentTypes.types.ATEvent import ATEventSchema
-from Products.ATContentTypes.migration.ATCTMigrator import EventMigrator
+from Products.ATContentTypes.content.event import ATEvent
+from Products.ATContentTypes.content.event import ATEventSchema
+from Products.ATContentTypes.migration.atctmigrator import EventMigrator
 from Products.CMFCalendar.Event import Event
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.tests.utils import EmailValidator
 from Products.ATContentTypes.tests.utils import PhoneValidator
 from Products.ATContentTypes.tests.utils import URLValidator
-from Products.ATContentTypes.Permissions import ChangeEvents
+from Products.ATContentTypes.permission import ChangeEvents
 from Products.ATContentTypes.utils import DT2dt
 from DateTime import DateTime
 from Products.ATContentTypes.interfaces import ICalendarSupport

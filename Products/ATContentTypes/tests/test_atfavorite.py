@@ -35,10 +35,10 @@ from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
 import time
 
-from Products.ATContentTypes.types.ATFavorite import ATFavorite
-from Products.ATContentTypes.types.ATFavorite import ATFavoriteSchema
+from Products.ATContentTypes.content.favorite import ATFavorite
+from Products.ATContentTypes.content.favorite import ATFavoriteSchema
 from Products.ATContentTypes.tests.utils import TidyHTMLValidator
-from Products.ATContentTypes.migration.ATCTMigrator import FavoriteMigrator
+from Products.ATContentTypes.migration.atctmigrator import FavoriteMigrator
 from Products.ATContentTypes.interfaces import IATFavorite
 from Products.CMFDefault.Favorite import Favorite
 from Interface.Verify import verifyObject

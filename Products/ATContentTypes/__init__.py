@@ -18,10 +18,12 @@
 #
 """
 
-
 """
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
+
+import os.path
+__version__ = open(os.path.join(__path__[0], 'version.txt')).read().strip()
 
 import sys
 
@@ -58,13 +60,17 @@ from Products.CMFCore.DirectoryView import registerDirectory
 
 # import all content types, migration and validators
 import Products.ATContentTypes.Extensions.Install
-import Products.ATContentTypes.Validators
+import Products.ATContentTypes.lib.validators
 import Products.ATContentTypes.content
+import Products.ATContentTypes.criteria
 import Products.ATContentTypes.migration
-from Products.ATContentTypes.ATCTTool import ATCTTool
+from Products.ATContentTypes.tool.atct import ATCTTool
+
+# BBB aliases
+import Products.ATContentTypes.modulealiases
 
 # wire the add permission after all types are registered
-from Products.ATContentTypes.Permissions import wireAddPermissions
+from Products.ATContentTypes.permission import wireAddPermissions
 wireAddPermissions()
 
 registerDirectory(SKINS_DIR,GLOBALS)
@@ -96,7 +102,7 @@ def initialize(context):
 
     # Assign an own permission to all content types
     # Heavily based on Bricolite's code from Ben Saller
-    from Products.ATContentTypes.Permissions import permissions
+    from Products.ATContentTypes.permission import permissions
     
     allTypes = zip(content_types, constructors)
     for atype, constructor in allTypes:

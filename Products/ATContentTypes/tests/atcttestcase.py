@@ -52,7 +52,7 @@ from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.Archetypes.tests.test_baseschema import BaseSchemaTest
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
-from Products.ATContentTypes import Permissions as ATCTPermissions
+from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests.utils import EmptyValidator

@@ -35,10 +35,10 @@ from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
 import time
 
-from Products.ATContentTypes.types.ATDocument import ATDocument
-from Products.ATContentTypes.types.ATDocument import ATDocumentSchema
+from Products.ATContentTypes.content.document import ATDocument
+from Products.ATContentTypes.content.document import ATDocumentSchema
 from Products.ATContentTypes.tests.utils import TidyHTMLValidator
-from Products.ATContentTypes.migration.ATCTMigrator import DocumentMigrator
+from Products.ATContentTypes.migration.atctmigrator import DocumentMigrator
 from Products.CMFDefault.Document import Document
 from Products.ATContentTypes.interfaces import IHistoryAware
 from Products.ATContentTypes.interfaces import ITextContent

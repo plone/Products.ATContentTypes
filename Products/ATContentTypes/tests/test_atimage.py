@@ -35,9 +35,9 @@ from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
 import time
 
-from Products.ATContentTypes.types.ATImage import ATImage
-from Products.ATContentTypes.types.ATImage import ATImageSchema
-from Products.ATContentTypes.migration.ATCTMigrator import ImageMigrator
+from Products.ATContentTypes.content.image import ATImage
+from Products.ATContentTypes.content.image import ATImageSchema
+from Products.ATContentTypes.migration.atctmigrator import ImageMigrator
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage
 from Products.CMFDefault.Image import Image

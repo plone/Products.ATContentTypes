@@ -19,11 +19,19 @@
 """
 
 """
-__author__  = 'Christian Heimes <ch@comlounge.net>'
+__author__  = ''
 __docformat__ = 'restructuredtext'
+__old_name__ = 'Products.ATContentTypes.types'
 
-from Products.ATContentTypes.migration.atctmigrator import migrateAll
+import Products.ATContentTypes.content.link
+import Products.ATContentTypes.content.image
+import Products.ATContentTypes.content.document
+import Products.ATContentTypes.content.file
+import Products.ATContentTypes.content.event
+import Products.ATContentTypes.content.newsitem
+import Products.ATContentTypes.content.folder
+import Products.ATContentTypes.content.favorite
+import Products.ATContentTypes.content.topic
+import Products.ATContentTypes.content.external
 
-def migrate(self):
-    return migrateAll(self)
 

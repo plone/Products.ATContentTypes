@@ -33,7 +33,7 @@ from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
 from Products.ATContentTypes.config import _ATCT_UNIT_TEST_MODE
 
 from AccessControl import Unauthorized
-from Products.ATContentTypes import ConstrainTypesMixin
+from Products.ATContentTypes.lib import constraintypes
 from Products.ATContentTypes.interfaces import IConstrainTypes
 from Products.Archetypes.public import registerType, process_types, listTypes
 from Products.Archetypes.Extensions.utils import installTypes
@@ -64,7 +64,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
 
     def test_isMixedIn(self):
         self.failUnless(isinstance(self.af,
-                                   ConstrainTypesMixin.ConstrainTypesMixin),
+                                   constraintypes.ConstrainTypesMixin),
                         "ConstrainTypesMixin was not mixed in to ATFolder")
         self.failUnless(IConstrainTypes.isImplementedBy(self.af),
                         "IConstrainTypes not implemented by ATFolder instance")
