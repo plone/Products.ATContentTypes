@@ -1,7 +1,13 @@
 0.2.0-rc5 - unreleased
 ======================
 
+ * atct_topic_view now doesn't call getObject() anymore and is a small
+   bit more performant. This also takes some burden from waking up objects.
+   (Bug 1079030)
+   [ctheune]
+
  * Made HTML the default content type for documents (and news items).
+ * [ctheune]
 
  * Fixed [ 1080729 ] Wrong permissions for ATDocument.EditableText / setFormat
    [tiran]
