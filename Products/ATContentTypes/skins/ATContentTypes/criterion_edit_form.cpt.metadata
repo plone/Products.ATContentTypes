@@ -1,5 +1,5 @@
-[defaults]
-title=Edit Topic
+[default]
+title = Edit Topic
 
 [validators]
 validators..AddCriterion = validate_add_criterion
