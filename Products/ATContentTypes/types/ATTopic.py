@@ -364,5 +364,4 @@ def modify_fti(fti):
     for action in fti['actions']:
         if action['id'] == 'folderlisting':
                 action['visible'] = False
-                #actions.append(action)
-    #fti['actions'] = tuple(actions)
+

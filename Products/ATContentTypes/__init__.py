@@ -52,22 +52,25 @@ if HAS_LINGUA_PLONE:
 else:
     from Products.Archetypes.public import *
 
+# import all content types, migration and validators
 import Products.ATContentTypes.migration
 import Products.ATContentTypes.Validators
-from Products.ATContentTypes.interfaces import IATTopic
-from Products.ATContentTypes.interfaces import IATTopicCriterion
-from Products.ATContentTypes import ATContentTypes
+import Products.ATContentTypes.types
 from Products.ATContentTypes.ATCTTool import ATCTTool
+
+# wire the add permission after all types are registered
+from Products.ATContentTypes.Permissions import wireAddPermissions
+wireAddPermissions()
 
 registerDirectory(SKINS_DIR,GLOBALS)
 
-from Products.Archetypes import ArchetypeTool
-ATToolModule = sys.modules[ArchetypeTool.__module__]
-ATCT_TYPES = tuple(
-    [at_type['klass'] for at_type in  ATToolModule._types.values()
-     if (at_type['package'] == PROJECTNAME) and
-     not IATTopicCriterion.isImplementedByInstancesOf(at_type['klass'])]
-    )
+#from Products.Archetypes import ArchetypeTool
+#ATToolModule = sys.modules[ArchetypeTool.__module__]
+#ATCT_TYPES = tuple(
+#    [at_type['klass'] for at_type in  ATToolModule._types.values()
+#     if (at_type['package'] == PROJECTNAME) and
+#     not IATTopicCriterion.isImplementedByInstancesOf(at_type['klass'])]
+#    )
 
 import Products.ATContentTypes.configuration
 
@@ -86,51 +89,21 @@ def initialize(context):
         listOfTypes,
         PROJECTNAME)
 
-    # A brief explanation for the following code:
-    #
-    # We want to have another add permission for the topic and
-    # criteria because topics shouldn't be addable by non
-    # managers. The following code iterats over all content types and
-    # seperates the content_types using the interfaces. At last it
-    # initializes topic/criteria and the rest with two different
-    # permissions.
-
-    topic_content_types = []
-    topic_constructors  = []
-    other_content_types = []
-    other_constructors  = []
-
-    for i in range(len(listOfTypes)):
-        aType = listOfTypes[i]
-        if IATTopic.isImplementedByInstancesOf(aType['klass']) or \
-          IATTopicCriterion.isImplementedByInstancesOf(aType['klass']):
-            topic_content_types.append(content_types[i])
-            topic_constructors.append(constructors[i])
-        else:
-            other_content_types.append(content_types[i])
-            other_constructors.append(constructors[i])
-
-    # other
-    ContentInit(
-        PROJECTNAME + ' Content',
-        content_types = tuple(other_content_types),
-        permission = ADD_CONTENT_PERMISSION,
-        extra_constructors = tuple(other_constructors),
-        fti = ftis,
-        ).initialize(context)
-
-    # topics
-    ContentInit(
-        PROJECTNAME + ' Topic',
-        content_types = tuple(topic_content_types),
-        permission = ADD_TOPIC_PERMISSION,
-        extra_constructors = tuple(topic_constructors),
-        fti = ftis,
-        ).initialize(context)
-        
-    # XXX remove try/except block after we depend on AT 1.3.1
-    try:
-        from Products.ATContentTypes.customizationpolicy import registerPolicy
-        registerPolicy(context)
-    except ImportError:
-        pass
+    # Assign an own permission to all content types
+    # Heavily based on Bricolite's code from Ben Saller
+    from Products.ATContentTypes.Permissions import permissions
+    
+    allTypes = zip(content_types, constructors)
+    for atype, constructor in allTypes:
+        kind = "%s: %s" % (PROJECTNAME, atype.archetype_name)
+        ContentInit(
+            kind,
+            content_types      = (atype,),
+            permission         = permissions[atype.portal_type],
+            extra_constructors = (constructor,),
+            fti                = ftis,
+            ).initialize(context)
+       
+    from Products.ATContentTypes.customizationpolicy import registerPolicy
+    registerPolicy(context)
+ 

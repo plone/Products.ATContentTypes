@@ -1,6 +1,10 @@
 1.0-devel
 ======================
 
+ * Used some code from Ben's great Bricolite product to have an add permission
+   per type. It allows fine granulated permission settings.
+   [tiran]
+
  * Fixed bug [ 1154073 ] criterion_edit_form.cpt(.metadata) has no default
    action. The default action for the criterion edit form is save.
    [tiran]

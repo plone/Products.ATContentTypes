@@ -29,7 +29,6 @@ See customconfig.py.example
 __author__  = ''
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.Permissions import ADD_CONTENT_PERMISSION, ADD_TOPIC_PERMISSION
 from Products.CMFCore import CMFCorePermissions
 import string
 

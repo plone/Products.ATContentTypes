@@ -25,6 +25,14 @@ __docformat__ = 'restructuredtext'
 
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.CMFCorePermissions import setDefaultRoles
+from Products.Archetypes.public import listTypes
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.interfaces import IATTopic
+from Products.ATContentTypes.interfaces import IATTopicCriterion
+
+TYPE_ROLES = ('Manager', 'Member',)
+TOPIC_ROLES = ('Manager',)
+CRITERION_ROLES = ('Manager',)
 
 # Gathering Topic and Event related permissions into one place
 AddTopics = 'Add portal topics'
@@ -32,12 +40,27 @@ ChangeTopics = 'Change portal topics'
 ChangeEvents = 'Change portal events'
 
 # Set up default roles for permissions
-setDefaultRoles(AddTopics, ('Manager',))
-setDefaultRoles(ChangeTopics, ('Manager', 'Owner',))
+setDefaultRoles(AddTopics, TOPIC_ROLES)
+setDefaultRoles(ChangeTopics, TOPIC_ROLES + ('Owner',))
 setDefaultRoles(ChangeEvents, ('Manager', 'Owner',))
 
-# Add a AT Content Type
-ADD_CONTENT_PERMISSION = CMFCorePermissions.AddPortalContent
-
-# Add a AT Topic / criterion
-ADD_TOPIC_PERMISSION   = AddTopics
+permissions = {}
+def wireAddPermissions():
+    """Creates a list of add permissions for all types in this project
+    
+    Must be called **after** all types are registered!
+    """
+    global permissions
+    atct_types = listTypes(PROJECTNAME)
+    for atct in atct_types:
+        if IATTopic.isImplementedByInstancesOf(atct['klass']):
+            permission = AddTopics 
+        elif IATTopicCriterion.isImplementedByInstancesOf(atct['klass']):
+            permission = "%s Topic: Add %s" % (PROJECTNAME, atct['portal_type'])
+            setDefaultRoles(permission, CRITERION_ROLES)
+        else:
+            permission = "%s: Add %s" % (PROJECTNAME, atct['portal_type'])
+            setDefaultRoles(permission, TYPE_ROLES)
+        
+        permissions[atct['portal_type']] = permission
+    return permissions
