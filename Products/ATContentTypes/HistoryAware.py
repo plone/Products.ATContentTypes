@@ -32,6 +32,7 @@ from Acquisition import aq_parent
 from Globals import InitializeClass
 
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.config import *
@@ -101,6 +102,18 @@ class HistoryAwareMixin:
                       ))
 
         return lst
+
+    security.declareProtected(CMFCorePermissions.View, 'getLastEditor')
+    def getLastEditor(self):
+        """Returns the user name of the last editor.
+
+        Returns None if no last editor is known.
+        """
+        histories = self.getHistories(1)
+        if not histories:
+            return None
+        user = histories[0][3].strip()
+        return  user
 
     security.declareProtected(HISTORY_VIEW_PERMISSION, 'getDocumentComparisons')
     def getDocumentComparisons(self, max=10, filterComment=0):

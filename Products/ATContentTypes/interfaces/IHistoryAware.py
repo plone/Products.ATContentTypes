@@ -42,6 +42,12 @@ class IHistoryAware(Interface):
         (object, time, transaction_note, user)
         """
 
+    def getLastEditor():
+        """Returns the user name of the last editor.
+
+        Returns None if no last editor is known.
+        """
+
     def getDocumentComparisons(max=10, filterComment=0):
         """Get history as unified diff
         """

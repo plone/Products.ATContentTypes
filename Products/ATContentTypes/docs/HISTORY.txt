@@ -1,6 +1,9 @@
 0.2.0-rc5 - unreleased
 ======================
 
+ * Added feature to access the name of the last editor through IHistoryAware.
+   [ctheune]
+
  * Fixed a bug in the migration walker. Empty folders aren't skipped any more.
    [panjunyong]
 

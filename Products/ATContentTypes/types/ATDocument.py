@@ -115,9 +115,12 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
 
         * hook into mxTidy an replace the value with the tidied value
         """
-        if not value:   # XXX somehow submitting an empty textarea overwrites file uploads because empty strings end up here
-            return
         field = self.getField('text')
+        if value is None:   # XXX work around for default values in collision
+                            # with upload file suppora
+            field.set(self, '', **kwargs)
+        if value == "":
+            return          # Empty strings mean 
 
         # hook for mxTidy / isTidyHtmlWithCleanup validator
         tidyOutput = self.getTidyOutput(field)
