@@ -31,6 +31,7 @@ from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.interfaces import IATCTTool
 from Interface.Verify import verifyObject
+from Products.CMFCore.utils import getToolByName
 
 tests = []
 
@@ -116,16 +117,17 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(t.plone_tool, True)
         
     def test_copyftiflags(self):
+        t = self.tool
         ttool = getToolByName(self.portal, 'portal_types')
         cmfdoc = ttool['CMF Document']
         atctdoc = ttool['Document']
         
         cmfdoc.manage_changeProperties(allow_discussion=True)
-        ttool.copyFTIFlags()
+        t.copyFTIFlags()
         self.failUnlessEqual(atctdoc.allow_discussion, True)
         
         cmfdoc.manage_changeProperties(allow_discussion=False)
-        ttool.copyFTIFlags()
+        t.copyFTIFlags()
         self.failUnlessEqual(atctdoc.allow_discussion, False)
         
 
