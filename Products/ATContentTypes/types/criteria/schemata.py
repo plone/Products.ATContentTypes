@@ -16,7 +16,7 @@
 ##############################################################################
 """
 
-$Id: schemata.py,v 1.8 2004/09/17 14:19:34 tiran Exp $
+$Id: schemata.py,v 1.8.4.1 2004/11/24 16:58:38 ctheune Exp $
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -217,7 +217,7 @@ ATSimpleStringCriterionSchema = ATBaseCriterionSchema + Schema((
                 write_permission=ChangeTopics,
                 accessor="Value",
                 mutator="setValue",
-                default=None,
+                default="",
                 widget=StringWidget(
                     label="Value",
                     label_msgid="label_string_criteria_value",
