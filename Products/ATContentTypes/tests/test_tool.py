@@ -13,14 +13,12 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests.common import *
-import Products.ATContentTypes.tests.ATCTSiteTestCase
-from Products.Archetypes.tests import ArchetypesTestCase
+from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
 
 tests = []
 
-class TestTool(ArchetypesTestCase.ArcheSiteTestCase):
+class TestTool(atcttestcase.ATCTSiteTestCase):
 
     def afterSetUp(self):
         self.tool = getattr(self.portal.aq_explicit, TOOLNAME)

@@ -13,12 +13,11 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests.common import *
-from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTFieldTestCase
-from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTSiteTestCase
+from Products.ATContentTypes.tests import atcttestcase
 
 from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
 from Products.ATContentTypes.config import _ATCT_UNIT_TEST_MODE
+
 from AccessControl import Unauthorized
 from Products.ATContentTypes import ConstrainTypesMixin
 from Products.ATContentTypes.interfaces import IConstrainTypes
@@ -27,25 +26,16 @@ from Products.Archetypes.Extensions.utils import installTypes
 from AccessControl.SecurityManagement import newSecurityManager
 from Testing.ZopeTestCase import user_name as default_user
 
-def editCMF(obj):
-    dcEdit(obj)
-
-def editATCT(obj):
-    dcEdit(obj)
-
 tests = []
 
-class TestConstrainTypes(ATCTSiteTestCase):
+class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
 
     def afterSetUp(self):
-        ATCTSiteTestCase.afterSetUp(self)
-        #qi = self.portal.portal_quickinstaller
-        #qi.installProduct('ATContentTypes')
-        self.loginPortalOwner()
-        self.portal.invokeFactory('ATFolder', id='af')
+        atcttestcase.ATCTSiteTestCase.afterSetUp(self)
+        self.folder.invokeFactory('ATFolder', id='af')
         self.tt = self.portal.portal_types
         # an ATCT folder
-        self.af = self.portal.af
+        self.af = self.folder.af
         # portal_types object for ATCT folder
         self.at = self.tt.getTypeInfo(self.af)
         
@@ -69,7 +59,7 @@ class TestConstrainTypes(ATCTSiteTestCase):
         self.failIf(at.filter_content_types,
                     "ContentTypes are still being filtered at factory")
         af.setLocallyAllowedTypes([])
-        possible_types_ids = [fti.id for fti in af._getPossibleTypes()]
+        possible_types_ids = [fti.id for fti in af._ct_getPossibleTypes()]
         self.failIf('ATImage' not in possible_types_ids,
                     'ATImage not available to be filtered!')
         allowed_ids = [fti.id for fti in af.allowedContentTypes()]
@@ -139,10 +129,12 @@ class TestConstrainTypes(ATCTSiteTestCase):
 
     def test_unconstrainedButUnauthorized(self):
         user = self.portal.portal_membership.getMemberById(default_user)
+        self.logout()
         newSecurityManager(None, user)
-        af = self.portal.af
+        af = self.af
         self.assertRaises(Unauthorized,
                           af.invokeFactory, 'ATFolder', id='bf')
+        self.logout()
 
 tests.append(TestConstrainTypes)
 

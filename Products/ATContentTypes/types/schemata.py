@@ -44,7 +44,7 @@ from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import Reference
 # just like CMF
 ATContentTypeBaseSchema = BaseSchema.copy()
 ATContentTypeBaseSchema['id'].validators = ('isValidId',)
-ATContentTypeBaseSchema['description'].isMetadata = False
+ATContentTypeBaseSchema['id'].searchable = True
 ATContentTypeBaseSchema['description'].schemata = 'default'
 
 relatedItemsField = ReferenceField('relatedItems',

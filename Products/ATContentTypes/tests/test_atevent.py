@@ -13,11 +13,27 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests.common import *
-from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTFieldTestCase
-from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTSiteTestCase
+from Products.ATContentTypes.tests import atcttestcase
+
+from Products.CMFCore import CMFCorePermissions
+from Products.Archetypes.interfaces.layer import ILayerContainer
+from Products.Archetypes.public import *
+from Products.ATContentTypes.tests.utils import dcEdit
+import time
+
+from Products.ATContentTypes.types.ATEvent import ATEvent
+from Products.ATContentTypes.types.ATEvent import ATEventSchema
+from Products.ATContentTypes.migration.ATCTMigrator import EventMigrator
+from Products.CMFCalendar.Event import Event
+from Products.ATContentTypes.tests.utils import EmptyValidator
+from Products.ATContentTypes.tests.utils import EmailValidator
+from Products.ATContentTypes.tests.utils import PhoneValidator
+from Products.ATContentTypes.tests.utils import URLValidator
 from Products.ATContentTypes.Permissions import ChangeEvents
 from Products.ATContentTypes.utils import DT2dt
+from DateTime import DateTime
+from Products.ATContentTypes.interfaces import ICalendarSupport
+from Interface.Verify import verifyObject
 
 LOCATION = 'my location'
 EV_TYPE  = 'Meeting'
@@ -57,13 +73,19 @@ def editATCT(obj):
 
 tests = []
 
-class TestSiteATEvent(ATCTSiteTestCase):
+class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
 
-    klass = ATEvent.ATEvent
+    klass = ATEvent
     portal_type = 'ATEvent'
-    title = 'AT Event'
+    cmf_portal_type = 'CMF Event'
+    cmf_klass = Event
+    title = 'Event'
     meta_type = 'ATEvent'
     icon = 'event_icon.gif'
+
+    def test_doesImplementCalendarSupport(self):
+        self.failUnless(ICalendarSupport.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(ICalendarSupport, self._ATCT))
 
     def test_edit(self):
         old = self._cmf
@@ -182,18 +204,13 @@ class TestSiteATEvent(ATCTSiteTestCase):
         e2.edit(startDate = day29, endDate=day30, title='evenz')
         self.failUnlessEqual(cmp(e1, e2), -1)  # e1 < e2
 
-    def beforeTearDown(self):
-        del self._ATCT
-        del self._cmf
-        ATCTSiteTestCase.beforeTearDown(self)
-
 tests.append(TestSiteATEvent)
 
-class TestATEventFields(ATCTFieldTestCase):
+class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
     def afterSetUp(self):
-        ATCTFieldTestCase.afterSetUp(self)
-        self._dummy = self.createDummy(klass=ATEvent.ATEvent)
+        atcttestcase.ATCTFieldTestCase.afterSetUp(self)
+        self._dummy = self.createDummy(klass=ATEvent)
 
     def test_locationField(self):
         dummy = self._dummy
@@ -577,7 +594,7 @@ class TestATEventFields(ATCTFieldTestCase):
 
     def beforeTearDown(self):
         # more
-        ATCTFieldTestCase.beforeTearDown(self)
+        atcttestcase.ATCTFieldTestCase.beforeTearDown(self)
 
 tests.append(TestATEventFields)
 

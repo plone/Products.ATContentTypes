@@ -1,8 +1,4 @@
-"""Skeleton ATContentTypes tests
-
-Use this file as a skeleton for your own tests
-
-
+"""
 """
 
 __author__ = 'Christian Heimes'
@@ -13,9 +9,18 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests.common import *
-from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTFieldTestCase
-from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTSiteTestCase
+from Products.ATContentTypes.tests import atcttestcase
+
+from Products.CMFCore import CMFCorePermissions
+from Products.Archetypes.interfaces.layer import ILayerContainer
+from Products.Archetypes.public import *
+from Products.ATContentTypes.tests.utils import dcEdit
+import time
+
+from Products.ATContentTypes.types.ATImage import ATImage
+from Products.ATContentTypes.types.ATImage import ATImageSchema
+from Products.ATContentTypes.migration.ATCTMigrator import ImageMigrator
+from Products.CMFDefault.Image import Image
 
 def editCMF(obj):
     dcEdit(obj)
@@ -25,11 +30,13 @@ def editATCT(obj):
 
 tests = []
 
-class TestSiteATImage(ATCTSiteTestCase):
+class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
 
-    klass = ATImage.ATImage
+    klass = ATImage
     portal_type = 'ATImage'
-    title = 'AT Image'
+    cmf_portal_type = 'CMF Image'
+    cmf_klass = Image
+    title = 'Image'
     meta_type = 'ATImage'
     icon = 'image_icon.gif'
 
@@ -66,19 +73,13 @@ class TestSiteATImage(ATCTSiteTestCase):
 
         # XXX more
 
-
-    def beforeTearDown(self):
-        del self._ATCT
-        del self._cmf
-        ATCTSiteTestCase.beforeTearDown(self)
-
 tests.append(TestSiteATImage)
 
-class TestATImageFields(ATCTFieldTestCase):
+class TestATImageFields(atcttestcase.ATCTFieldTestCase):
 
     def afterSetUp(self):
-        ATCTFieldTestCase.afterSetUp(self)
-        self._dummy = self.createDummy(klass=ATImage.ATImage)
+        atcttestcase.ATCTFieldTestCase.afterSetUp(self)
+        self._dummy = self.createDummy(klass=ATImage)
 
     def test_imageField(self):
         dummy = self._dummy
@@ -123,9 +124,6 @@ class TestATImageFields(ATCTFieldTestCase):
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
         self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
 
-    def beforeTearDown(self):
-        # more
-        ATCTFieldTestCase.beforeTearDown(self)
 
 tests.append(TestATImageFields)
 

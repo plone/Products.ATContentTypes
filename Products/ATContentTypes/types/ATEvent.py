@@ -225,7 +225,8 @@ class ATEvent(ATCTContent, CalendarSupportMixin):
                       'start_date', 'end_date', 'contact_name', 'contact_email',
                       'contact_phone', 'event_url')
 
-    __implements__ = ATCTContent.__implements__, IATEvent
+    __implements__ = ATCTContent.__implements__, IATEvent, \
+                     CalendarSupportMixin.__implements__
 
     security       = ClassSecurityInfo()
 

@@ -1,6 +1,11 @@
 1.0-devel
 ======================
 
+ * I made major changes to the unit test suite. Also I've added more field
+   tests, some important interface tests and cleaner and better base classes
+   for tests.
+   [tiran]
+
  * prepare ATFolder for use with TemplateMixin, use generic /view instead of 
    /folder_listing as default and immediate view.
    [yenzenz]

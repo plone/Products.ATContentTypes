@@ -19,9 +19,19 @@ def editATCT(obj):
     dcEdit(obj)
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests.common import *
-from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTFieldTestCase
-from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTSiteTestCase
+from Products.ATContentTypes.tests import atcttestcase
+
+from Products.CMFCore import CMFCorePermissions
+from Products.Archetypes.interfaces.layer import ILayerContainer
+from Products.Archetypes.public import *
+from Products.ATContentTypes.tests.utils import dcEdit
+import time
+
+from Products.ATContentTypes.types.ATLink import ATLink
+from Products.ATContentTypes.types.ATLink import ATLinkSchema
+from Products.ATContentTypes.migration.ATCTMigrator import LinkMigrator
+from Products.ATContentTypes.tests.utils import RequiredURLValidator
+from Products.CMFDefault.Link import Link
 
 URL='http://www.example.org/'
 
@@ -37,11 +47,13 @@ def editATCT(obj):
 
 tests = []
 
-class TestSiteATLink(ATCTSiteTestCase):
+class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
 
-    klass = ATLink.ATLink
+    klass = ATLink
     portal_type = 'ATLink'
-    title = 'AT Link'
+    cmf_portal_type = 'CMF Link'
+    cmf_klass = Link
+    title = 'Link'
     meta_type = 'ATLink'
     icon = 'link_icon.gif'
 
@@ -95,21 +107,13 @@ class TestSiteATLink(ATCTSiteTestCase):
         self.failUnless(migrated.getRemoteUrl() == url, 'URL mismatch: %s / %s' \
                         % (migrated.getRemoteUrl(), url))
 
-    def beforeTearDown(self):
-        # logout
-        noSecurityManager()
-        del self._ATCT
-        del self._cmf
-        ATCTSiteTestCase.beforeTearDown(self)
-
-
 tests.append(TestSiteATLink)
 
-class TestATLinkFields(ATCTFieldTestCase):
+class TestATLinkFields(atcttestcase.ATCTFieldTestCase):
 
     def afterSetUp(self):
-        ATCTFieldTestCase.afterSetUp(self)
-        self._dummy = self.createDummy(klass=ATLink.ATLink)
+        atcttestcase.ATCTFieldTestCase.afterSetUp(self)
+        self._dummy = self.createDummy(klass=ATLink)
 
     def test_remoteUrlField(self):
         dummy = self._dummy
@@ -153,10 +157,6 @@ class TestATLinkFields(ATCTFieldTestCase):
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
         self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
-
-    def beforeTearDown(self):
-        # more
-        ATCTFieldTestCase.beforeTearDown(self)
 
 tests.append(TestATLinkFields)
 

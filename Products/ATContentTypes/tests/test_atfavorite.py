@@ -1,8 +1,4 @@
-"""Skeleton ATContentTypes tests
-
-Use this file as a skeleton for your own tests
-
-
+"""
 """
 
 __author__ = 'Christian Heimes'
@@ -13,59 +9,66 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests.common import *
-from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTFieldTestCase
-from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTSiteTestCase
+from Products.ATContentTypes.tests import atcttestcase
 
-example_stx = """
-Header
+from Products.CMFCore import CMFCorePermissions
+from Products.Archetypes.interfaces.layer import ILayerContainer
+from Products.Archetypes.public import *
+from Products.ATContentTypes.tests.utils import dcEdit
+import time
 
- Text, Text, Text
+from Products.ATContentTypes.types.ATFavorite import ATFavorite
+from Products.ATContentTypes.types.ATFavorite import ATFavoriteSchema
+from Products.ATContentTypes.tests.utils import TidyHTMLValidator
+from Products.ATContentTypes.migration.ATCTMigrator import FavoriteMigrator
+from Products.CMFDefault.Favorite import Favorite
 
-   * List
-   * List
-"""
-
-example_rest = """
-Header
-======
-
-Text, text, text
-
-* List
-* List
-"""
+URL='/test/url'
 
 def editCMF(obj):
-    text_format='stx'
-    dcEdit(obj)
-    obj.edit(text_format = text_format, text = example_stx)
+    obj.setTitle('Test Title')
+    obj.setDescription('Test description')
+    obj.edit(remote_url=URL)
 
 def editATCT(obj):
-    text_format='text/structured'
-    dcEdit(obj)
-    obj.setText(example_stx, mimetype = text_format)
+    obj.setTitle('Test Title')
+    obj.setDescription('Test description')
+    obj.setRemoteUrl(URL)
 
 tests = []
 
-class TestSiteATDocument(ATCTSiteTestCase):
+class TestSiteATFavorite(atcttestcase.ATCTTypeTestCase):
 
-    klass = ATDocument.ATDocument
-    portal_type = 'ATDocument'
-    title = 'AT Document'
-    meta_type = 'ATDocument'
-    icon = 'document_icon.gif'
+    klass = ATFavorite
+    portal_type = 'ATFavorite'
+    cmf_portal_type = 'CMF Favorite'
+    cmf_klass = Favorite
+    title = 'Favorite'
+    meta_type = 'ATFavorite'
+    icon = 'favorite_icon.gif'
 
     def test_edit(self):
         old = self._cmf
         new = self._ATCT
         editCMF(old)
         editATCT(new)
-        self.failUnless(old.CookedBody(stx_level=2) == new.CookedBody(), 'Body mismatch: %s / %s' \
-                        % (old.CookedBody(stx_level=2), new.CookedBody()))
+        self.failUnless(old.Title() == new.Title(), 'Title mismatch: %s / %s' \
+                        % (old.Title(), new.Title()))
+        self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
+                        % (old.Description(), new.Description()))
+        self.failUnless(old.getRemoteUrl() == new.getRemoteUrl(), 'URL mismatch: %s / %s' \
+                        % (old.getRemoteUrl(), new.getRemoteUrl()))
 
-    def test_cmf_edit_failure(self):
-        self._ATCT.edit(thisisnotcmfandshouldbeignored=1)
+    def testLink(self):
+        obj = self._ATCT
+        for url in ('', '/test/',):
+            obj.setRemoteUrl(url)
+            u = self.portal.portal_url()
+            if url.startswith('/'):
+                url = url[1:]
+            if url:
+                u='%s/%s' % (u, url)
+            self.failUnlessEqual(obj.getRemoteUrl(), u)
 
     def test_migration(self):
         old = self._cmf
@@ -77,49 +80,36 @@ class TestSiteATDocument(ATCTSiteTestCase):
         description = old.Description()
         mod         = old.ModificationDate()
         created     = old.CreationDate()
-        body        = old.CookedBody(stx_level=2)
+        url         = old.getRemoteUrl()
 
-        time.sleep(1.5)
 
         # migrated (needs subtransaction to work)
         get_transaction().commit(1)
-        m = DocumentMigrator(old)
+        m = FavoriteMigrator(old)
         m(unittest=1)
-        get_transaction().commit(1)
 
         migrated = getattr(self.portal, id)
 
         self.compareAfterMigration(migrated, mod=mod, created=created)
         self.compareDC(migrated, title=title, description=description)
 
-        self.failUnless(migrated.CookedBody() == body, 'Body mismatch: %s / %s' \
-                        % (migrated.CookedBody(), body))
+        # XXX more
 
-    def test_rename(self):
-        doc = self._ATCT
-        doc.setText(example_rest, mimetype="text/x-rst")
-        self.failUnless(str(doc.getField('text').getContentType(doc)) == "text/x-rst")
-        #make sure we have _p_jar
-        get_transaction().commit(1)
-
-        cur_id = 'ATCT'
-        new_id = 'WasATCT'
-        self.portal.manage_renameObject(cur_id, new_id)
-        doc = getattr(self.portal, new_id)
-        self.failUnless(str(doc.getField('text').getContentType(doc)) == "text/x-rst")
+        self.failUnless(migrated.getRemoteUrl() == url, 'URL mismatch: %s / %s' \
+                        % (migrated.getRemoteUrl(), url))
 
 
-tests.append(TestSiteATDocument)
+tests.append(TestSiteATFavorite)
 
-class TestATDocumentFields(ATCTFieldTestCase):
+class TestATFavoriteFields(atcttestcase.ATCTFieldTestCase):
 
     def afterSetUp(self):
-        ATCTFieldTestCase.afterSetUp(self)
-        self._dummy = self.createDummy(klass=ATDocument.ATDocument)
+        atcttestcase.ATCTFieldTestCase.afterSetUp(self)
+        self._dummy = self.createDummy(klass=ATFavorite)
 
-    def test_textField(self):
+    def test_remoteUrlField(self):
         dummy = self._dummy
-        field = dummy.getField('text')
+        field = dummy.getField('remoteUrl')
 
         self.failUnless(ILayerContainer.isImplementedBy(field))
         self.failUnless(field.required == 1, 'Value is %s' % field.required)
@@ -132,9 +122,9 @@ class TestATDocumentFields(ATCTFieldTestCase):
         self.failUnless(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
         self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'getText',
+        self.failUnless(field.accessor == '_getRemoteUrl',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setText',
+        self.failUnless(field.mutator == 'setRemoteUrl',
                         'Value is %s' % field.mutator)
         self.failUnless(field.read_permission == CMFCorePermissions.View,
                         'Value is %s' % field.read_permission)
@@ -144,35 +134,23 @@ class TestATDocumentFields(ATCTFieldTestCase):
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'text', 'Value is %s' % field.type)
+        self.failUnless(field.type == 'string', 'Value is %s' % field.type)
         self.failUnless(isinstance(field.storage, AttributeStorage),
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
-        self.failUnless(field.validators == TidyHTMLValidator,
-                        'Value is %s' % repr(field.validators))
-        self.failUnless(isinstance(field.widget, RichWidget),
+        self.failUnless(field.validators == (),
+                        'Value is %s' % str(field.validators))
+        self.failUnless(isinstance(field.widget, StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
         self.failUnless(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
-
         self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
-        self.failUnless(field.default_content_type == 'text/html',
-                        'Value is %s' % field.default_content_type)
-        self.failUnless(field.default_output_type == 'text/html',
-                        'Value is %s' % field.default_output_type)
-        self.failUnless(field.allowable_content_types == ('text/structured',
-                        'text/restructured', 'text/html', 'text/plain',
-                        'text/plain-pre', 'text/python-source'),
-                        'Value is %s' % str(field.allowable_content_types))
 
-    def beforeTearDown(self):
-        ATCTFieldTestCase.beforeTearDown(self)
-
-tests.append(TestATDocumentFields)
+tests.append(TestATFavoriteFields)
 
 if __name__ == '__main__':
     framework()

@@ -12,56 +12,48 @@ import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
-from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests.common import *
-from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTFieldTestCase
-from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTSiteTestCase
-
-file_text = """
-foooooo
-"""
-
 def editCMF(obj):
     dcEdit(obj)
-    obj.edit(file=file_text)
 
 def editATCT(obj):
     dcEdit(obj)
-    obj.edit(file=file_text)
-    #XXX obj.setFormat('text/plain')
+
+from Testing import ZopeTestCase # side effect import. leave it here.
+from Products.ATContentTypes.tests import atcttestcase
+
+from Products.CMFCore import CMFCorePermissions
+from Products.Archetypes.interfaces.layer import ILayerContainer
+from Products.Archetypes.public import *
+from Products.ATContentTypes.tests.utils import dcEdit
+import time
+
+from Products.ATContentTypes.types.ATNewsItem import ATNewsItem
+from Products.ATContentTypes.types.ATNewsItem import ATNewsItemSchema
+from Products.ATContentTypes.tests.utils import TidyHTMLValidator
+from Products.ATContentTypes.migration.ATCTMigrator import NewsItemMigrator
+from Products.CMFDefault.NewsItem import NewsItem
 
 tests = []
 
-class TestSiteATFile(ATCTSiteTestCase):
+class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
 
-    klass = ATFile.ATFile
-    portal_type = 'ATFile'
-    title = 'AT File'
-    meta_type = 'ATFile'
-    icon = 'file_icon.gif'
+    klass = ATNewsItem
+    portal_type = 'ATNewsItem'
+    cmf_portal_type = 'CMF News Item'
+    cmf_klass = NewsItem
+    title = 'News Item'
+    meta_type = 'ATNewsItem'
+    icon = 'newsitem_icon.gif'
 
     def test_edit(self):
         old = self._cmf
         new = self._ATCT
         editCMF(old)
         editATCT(new)
-        self.compareDC(old, new)
-        self.failUnlessEqual(str(old), str(new.getFile()))
-
-    def testCompatibilityFileAccess(self):
-        new = self._ATCT
-        editATCT(new)
-        # test for crappy access ways of CMF :)
-        self.failUnlessEqual(str(new), file_text)
-        self.failUnlessEqual(new.data, file_text)
-        self.failUnlessEqual(str(new.getFile()), file_text)
-        self.failUnlessEqual(new.getFile().data, file_text)
-        self.failUnlessEqual(new.get_data(), file_text)
-
-    def testCompatibilityContentTypeAccess(self):
-        new = self._ATCT
-        editATCT(new)
-        # XXX todo
+        self.failUnless(old.Title() == new.Title(), 'Title mismatch: %s / %s' \
+                        % (old.Title(), new.Title()))
+        self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
+                        % (old.Description(), new.Description()))
 
     def test_migration(self):
         old = self._cmf
@@ -73,13 +65,12 @@ class TestSiteATFile(ATCTSiteTestCase):
         description = old.Description()
         mod         = old.ModificationDate()
         created     = old.CreationDate()
-        file        = str(old)
 
         time.sleep(1.5)
 
         # migrated (needs subtransaction to work)
         get_transaction().commit(1)
-        m = FileMigrator(old)
+        m = NewsItemMigrator(old)
         m(unittest=1)
 
         migrated = getattr(self.portal, id)
@@ -87,32 +78,25 @@ class TestSiteATFile(ATCTSiteTestCase):
         self.compareAfterMigration(migrated, mod=mod, created=created)
         self.compareDC(migrated, title=title, description=description)
 
-        self.failUnlessEqual(file, str(migrated.getFile()))
-        self.failIfEqual(migrated.data, None)
-        self.failIfEqual(migrated.data, '')
         # XXX more
 
-    def beforeTearDown(self):
-        del self._ATCT
-        del self._cmf
-        ATCTSiteTestCase.beforeTearDown(self)
 
-tests.append(TestSiteATFile)
+tests.append(TestSiteATNewsItem)
 
-class TestATFileFields(ATCTFieldTestCase):
+class TestATNewsItemFields(atcttestcase.ATCTFieldTestCase):
 
     def afterSetUp(self):
-        ATCTFieldTestCase.afterSetUp(self)
-        self._dummy = self.createDummy(klass=ATFile.ATFile)
+        atcttestcase.ATCTFieldTestCase.afterSetUp(self)
+        self._dummy = self.createDummy(klass=ATNewsItem)
 
-    def test_fileField(self):
+    def test_textField(self):
         dummy = self._dummy
-        field = dummy.getField('file')
+        field = dummy.getField('text')
 
         self.failUnless(ILayerContainer.isImplementedBy(field))
         self.failUnless(field.required == 1, 'Value is %s' % field.required)
         self.failUnless(field.default == '', 'Value is %s' % str(field.default))
-        self.failUnless(field.searchable == 0, 'Value is %s' % field.searchable)
+        self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
         self.failUnless(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.failUnless(field.enforceVocabulary == 0,
@@ -120,9 +104,9 @@ class TestATFileFields(ATCTFieldTestCase):
         self.failUnless(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
         self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'getFile',
+        self.failUnless(field.accessor == 'getText',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setFile',
+        self.failUnless(field.mutator == 'setText',
                         'Value is %s' % field.mutator)
         self.failUnless(field.read_permission == CMFCorePermissions.View,
                         'Value is %s' % field.read_permission)
@@ -132,27 +116,32 @@ class TestATFileFields(ATCTFieldTestCase):
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'file', 'Value is %s' % field.type)
+        self.failUnless(field.type == 'text', 'Value is %s' % field.type)
         self.failUnless(isinstance(field.storage, AttributeStorage),
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
-        self.failUnless(field.validators == "(('checkFileMaxSize', V_REQUIRED))",
-                        'Value is %s' % str(field.validators))
-        self.failUnless(isinstance(field.widget, FileWidget),
+        self.failUnless(field.validators == TidyHTMLValidator,
+                        'Value is %s: %s' % (str(field.validators), TidyHTMLValidator))
+        self.failUnless(isinstance(field.widget, RichWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
         self.failUnless(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+
         self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
+        self.failUnless(field.default_content_type == 'text/html',
+                        'Value is %s' % field.default_content_type)
+        self.failUnless(field.default_output_type == 'text/html',
+                        'Value is %s' % field.default_output_type)
+        self.failUnless(field.allowable_content_types == ('text/structured',
+                        'text/restructured', 'text/html', 'text/plain'),
+                        'Value is %s' % str(field.allowable_content_types))
 
-    def beforeTearDown(self):
-        # more
-        ATCTFieldTestCase.beforeTearDown(self)
 
-tests.append(TestATFileFields)
+tests.append(TestATNewsItemFields)
 
 if __name__ == '__main__':
     framework()
