@@ -60,7 +60,8 @@ ZopeTestCase.installProduct('Archetypes', 1)
 ZopeTestCase.installProduct('ArchExample', 1)
 ZopeTestCase.installProduct('ArchetypesTestUpdateSchema', 1)
 ZopeTestCase.installProduct('PortalTransforms', 1)
-ZopeTestCase.installProduct('ATContentTypes', 1)
+ZopeTestCase.installProduct('ATContentTypes')
+ZopeTestCase.installProduct('ATReferenceBrowserWidget')
 
 ###
 # from archetypes

@@ -14,8 +14,11 @@
     and deleted content in red (strike-out text).
     </div>
 
-    <div class="portalMessage" i18n:translate="atct_history_lastchanges_warning">
-    This last changes log will be partly or fully removed during a pack of the database.
+    <div class="portalMessage" i18n:translate="atct_lastchanges_warning">
+    This changelog will be emptied when the site administrator performs maintenance
+    (packing) of the database, and is only provided for your convenience. If the item
+    has no history, it normally means that no changes have been made since the last time
+    the history log was removed by the administrator.
     </div>
 
     <tal:histories tal:repeat="history histories" tal:condition="histories">

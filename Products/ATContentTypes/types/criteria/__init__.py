@@ -31,7 +31,7 @@ from Products.ATContentTypes.interfaces.IATTopic import IATTopicSearchCriterion,
 
 ALL_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex', 'KeywordIndex',
                'PathIndex', 'TextIndex', 'TextIndexNG2', 'TopicIndex',
-               'ZCTextIndex', 'NavtreeIndexNG')
+               'ZCTextIndex', 'NavtreeIndexNG', 'ExtendedPathIndex')
 
 SORT_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex', 'KeywordIndex')
 # TextIndex, PathIndex, TopicIndex, ZCTextIndex, TextIndexNG2, NavtreeIndexNG
@@ -41,7 +41,7 @@ SORT_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex', 'KeywordIndex')
 DATE_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex')
 
 STRING_INDICES = ('FieldIndex', 'KeywordIndex', 'PathIndex', 'TextIndex',
-                  'TextIndexNG2', 'ZCTextIndex', 'NavtreeIndexNG')
+                  'TextIndexNG2', 'ZCTextIndex', 'NavtreeIndexNG', 'ExtendedPathIndex')
 
 LIST_INDICES = ('FieldIndex', 'KeywordIndex', )
 

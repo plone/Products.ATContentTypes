@@ -21,6 +21,7 @@ are permitted provided that the following conditions are met:
 
 """
 
+import sys
 from Products.Archetypes.debug import log as at_log
 from Products.CMFCore.utils import getToolByName
 from StringIO import StringIO

@@ -98,7 +98,7 @@ class ATFile(ATCTFileContent):
         contenttype       = field.getContentType(self)
         contenttype_major = contenttype and contenttype.split('/')[0] or ''
 
-        mtr   = getToolByName(self,'mimetypes_registry',None)
+        mtr   = getToolByName(self, 'mimetypes_registry', None)
         utool = getToolByName( self, 'portal_url' )
 
         if ICONMAP.has_key(contenttype):

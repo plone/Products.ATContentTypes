@@ -46,10 +46,17 @@ def install(self):
     # step 1: Rename and move away to old CMF types
     disableCMFTypes(self)
     
-    # step 2: Install LinguaPlone if available and enabled
+    # step 2: Install dependency products 
+    qi = getToolByName(self, 'portal_quickinstaller')
+    installable = [ prod['id'] for prod in qi.listInstallableProducts() ]
+    installed = [ prod['id'] for prod in qi.listInstalledProducts() ]
+    
+    if 'ATReferenceBrowserWidget' not in installable + installed:
+        raise RuntimeError('ATReferenceBrowserWidget not available')
+    if 'ATReferenceBrowserWidget' in installable:
+        qi.installProduct('ATReferenceBrowserWidget')
+    
     if INSTALL_LINGUA_PLONE:
-        qi = getToolByName(self, 'portal_quickinstaller')
-        installable = [ d['id'] for d in qi.listInstallableProducts() ]
         if 'LinguaPlone' in installable:
             qi.installProduct('LinguaPlone')
 

@@ -29,30 +29,39 @@ import Products.ATContentTypes.Validators
 from Products.ATContentTypes.Permissions import ChangeEvents
 from Products.ATContentTypes.config import *
 from Products.ATContentTypes.ConstrainTypesMixin import ConstrainTypesMixinSchema
+from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 
 from Products.validation.validators.SupplValidators import MaxSizeValidator
-
-try:
-    True
-except NameError:
-    True=1
-    False=0
-
-if HAS_EXT_STORAGE:
-    from Products.ExternalStorage.ExternalStorage import ExternalStorage
-else:
-    # dummy storage
-    from Products.Archetypes.Storage import Storage as BaseStorage
-
-    class ExternalStorage(BaseStorage):
-        def __init__(self, prefix='', archive=False):
-            pass
 
 # for ATContentTypes we want to have the description in the edit view
 # just like CMF
 ATContentTypeBaseSchema = BaseSchema.copy()
+ATContentTypeBaseSchema['id'].validators = ('isValidId',)
 ATContentTypeBaseSchema['description'].isMetadata = False
 ATContentTypeBaseSchema['description'].schemata = 'default'
+
+RelatedField = ReferenceField('related',
+        relationship = 'related',
+        multiValued = True,
+        write_permission = CMFCorePermissions.ModifyPortalContent,
+        widget = ReferenceBrowserWidget(
+            allow_search = 1, 
+            allow_browse = 1,
+            #show_indexes = 1, 
+            #available_indexes={'SearchableText' : "Free text search",
+            #                   'Description' : "Object's description",
+            #                   'Title' : "Objects's title",
+            #                  },
+            label = "Related items",
+            label_msgid = "label_related_items",
+            description = "XXX",
+            description_msgid = "help_related_item",
+            i18n_domain = "plone",
+            #visible={'view' : 'hidden',
+            #         #'edit' : ENABLE_RELATED_ITEMS and 'visible' or 'hidden'
+            #        },
+            )
+        )
 
 ATContentTypeSchema = ATContentTypeBaseSchema + Schema((
     # TemplateMixin
@@ -73,7 +82,6 @@ ATContentTypeSchema = ATContentTypeBaseSchema + Schema((
                              'edit' : ENABLE_TEMPLATE_MIXIN and 'visible' or 'hidden'},
     )),
     ))
-
 
 ###
 # AT Content Type Document
@@ -102,6 +110,7 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
                         i18n_domain = "plone")),
     ), marshall=RFC822Marshaller()
     )
+ATDocumentSchema.addField(RelatedField)
 
 ###
 # AT Content Type Event
@@ -112,11 +121,32 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 searchable=True,
                 write_permission = ChangeEvents,
                 widget = StringWidget(
-    description = "Enter the location where the event will take place.",
-    description_msgid = "help_event_location",
-    label = "Event Location",
-    label_msgid = "label_event_location",
-    i18n_domain = "plone")),
+                    description = "Enter the location where the event will take place.",
+                    description_msgid = "help_event_location",
+                    label = "Event Location",
+                    label_msgid = "label_event_location",
+                    i18n_domain = "plone")),
+
+    TextField('text',
+              required=False,
+              searchable=True,
+              primary=True,
+              validators = ('isTidyHtmlWithCleanup',),
+              #validators = ('isTidyHtml',),
+              default_content_type = ATDOCUMENT_CONTENT_TYPE,
+              default_output_type = 'text/html',
+              allowable_content_types = ('text/structured',
+                                         'text/restructured',
+                                         'text/html',
+                                         'text/plain',
+                                         'text/plain-pre',),
+              widget = RichWidget(
+                        description = "The full text of the event announcement.",
+                        description_msgid = "help_body_text",
+                        label = "Body text",
+                        label_msgid = "label_body_text",
+                        rows = 25,
+                        i18n_domain = "plone")),
 
     LinesField('attendees',
                languageIndependent=True,
@@ -124,8 +154,8 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                write_permission=ChangeEvents,
                widget=LinesWidget(label="Attendees",
                                   label_msgid="label_event_attendees",
-                                  description=("People which should attend "
-                                               "to the event."),
+                                  description=("People who are attending "
+                                               "the event."),
                                   description_msgid="help_event_attendees",
                                   i18n_domain="plone")),
 
@@ -151,8 +181,9 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 write_permission = ChangeEvents,
                 validators = ('isURL',),
                 widget = StringWidget(
-                        description = ("Enter the optional web address of a page "
-                                       "containing more info about the event. "),
+                        description = ("Enter an optional web address of a page "
+                                       "containing more info about the event, if"
+                                       " required."),
                         description_msgid = "help_url",
                         label = "Event URL",
                         label_msgid = "label_url",
@@ -227,10 +258,9 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                         label = "Contact Phone",
                         label_msgid = "label_contact_phone",
                         i18n_domain = "plone")),
-    ), marshall = RFC822Marshaller())
-
-# Set description as primary field
-ATEventSchema['description'].primary = True
+    ), marshall = RFC822Marshaller()
+    )
+ATEventSchema.addField(RelatedField)
 
 ###
 # AT Content Type Favorite
@@ -250,6 +280,7 @@ ATFavoriteSchema = ATContentTypeSchema.copy() + Schema((
                         label_msgid = "label_url",
                         i18n_domain = "plone")),
     ))
+ATFavoriteSchema.addField(RelatedField)
 
 ###
 # AT Content Type File
@@ -269,10 +300,12 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
                         label_msgid = "label_file",
                         i18n_domain = "plone",
                         show_content_type = False,)),
-    ), marshall=PrimaryFieldMarshaller())
+    ), marshall=PrimaryFieldMarshaller()
+    )
+ATFileSchema.addField(RelatedField)
 
 ATExtFileSchema = ATFileSchema.copy()
-ATExtFileSchema['file'].storage = ExternalStorage(prefix='atct', archive=False)
+# XXX ATExtFileSchema['file'].storage = ExternalStorage(prefix='atct', archive=False)
 
 ###
 # AT Content Type Folder
@@ -284,6 +317,9 @@ ATBTreeFolderSchema = ATContentTypeSchema.copy()
 if ENABLE_CONSTRAIN_TYPES_MIXIN:
     ATFolderSchema      = ATFolderSchema + ConstrainTypesMixinSchema
     ATBTreeFolderSchema = ATBTreeFolderSchema + ConstrainTypesMixinSchema
+
+ATFolderSchema.addField(RelatedField)
+ATBTreeFolderSchema.addField(RelatedField)
 
 ###
 # AT Content Type Image
@@ -310,10 +346,12 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
                         label_msgid = "label_image",
                         i18n_domain = "plone",
                         show_content_type = False,)),
-    ), marshall=PrimaryFieldMarshaller())
+    ), marshall=PrimaryFieldMarshaller()
+    )
+ATImageSchema.addField(RelatedField)
 
 ATExtImageSchema = ATImageSchema.copy()
-ATExtImageSchema['image'].storage = ExternalStorage(prefix='atct', archive=False)
+# XXX ATExtImageSchema['image'].storage = ExternalStorage(prefix='atct', archive=False)
 
 ###
 # AT Content Type Link
@@ -332,6 +370,7 @@ ATLinkSchema = ATContentTypeSchema.copy() + Schema((
                         label_msgid = "label_url",
                         i18n_domain = "plone")),
     ))
+ATLinkSchema.addField(RelatedField)
 
 ###
 # AT Content Type News Item
@@ -357,16 +396,37 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
                         label_msgid = "label_body_text",
                         rows = 25,
                         i18n_domain = "plone")),
-    #StringField('newstype',
-    #            vocabulary=NEWS_TYPES,
-    #           widget=SelectionWidget(label='Type of News',
-    #                                   description='The type of news item.',
-    #                                   label_msgid='label_newstype',
-    #                                   description_msgid='help_newstype',
-    #                                   i18n_domain='plone'),
-    #            ),
+    ImageField('image',
+               required=False,
+               languageIndependent=True,
+               sizes= {'preview' : (400, 400),
+                       'thumb'   : (128, 128),
+                       'tile'    :  (64, 64),
+                       'icon'    :  (32, 32),
+                       'listing' :  (16, 16),
+                      },
+               validators = MaxSizeValidator('checkFileMaxSize',
+                                             maxsize=MAX_IMAGE_SIZE),
+               widget = ImageWidget(
+                        description = "Add an optional image by clicking the 'Browse' button. This will be shown in the news listing, and in the news item itself. It will automatically scale the picture you upload to a sensible size.",
+                        description_msgid = "help_image",
+                        label= "Image",
+                        label_msgid = "label_image",
+                        i18n_domain = "plone",
+                        show_content_type = False,)),
+    TextField('imageCaption',
+              required=False,
+              searchable=True,
+              widget = StringWidget(
+                        description = "A caption text for the image.",
+                        description_msgid = "help_image_caption",
+                        label = "Image caption",
+                        label_msgid = "label_image_caption",
+                        size = 40,
+                        i18n_domain = "plone")),
     ), marshall=RFC822Marshaller()
     )
+ATNewsItemSchema.addField(RelatedField)
 
 ###
 # AT Content Type Topic
@@ -414,3 +474,4 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                         i18n_domain = "plone"),
                  ),
     ))
+ATTopicSchema.addField(RelatedField)

@@ -112,6 +112,8 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
 
         * hook into mxTidy an replace the value with the tidied value
         """
+        if not value:   # XXX somehow submitting an empty textarea overwrites file uploads because empty strings end up here
+            return
         field = self.getField('text')
         if value is None or value == "":   
             field.set(self, '', **kwargs)
