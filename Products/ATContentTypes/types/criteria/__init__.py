@@ -27,7 +27,8 @@ from Products.Archetypes.public import registerType
 from Products.ATContentTypes.config import *
 from types import StringType
 
-from Products.ATContentTypes.interfaces.IATTopic import IATTopicSearchCriterion, IATTopicSortCriterion
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
+from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 
 ALL_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex', 'KeywordIndex',
                'PathIndex', 'TextIndex', 'TextIndexNG2', 'TopicIndex',

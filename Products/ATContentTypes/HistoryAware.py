@@ -36,7 +36,7 @@ from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.config import *
-from Products.ATContentTypes.interfaces.IHistoryAware import IHistoryAware
+from Products.ATContentTypes.interfaces import IHistoryAware
 
 class HistoryAwareMixin:
     """History aware mixin class
@@ -50,7 +50,7 @@ class HistoryAwareMixin:
     managers.
     """
 
-    __implements__ = IHistoryAware
+    __implements__ = (IHistoryAware ,)
 
     security       = ClassSecurityInfo()
 

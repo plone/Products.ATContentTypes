@@ -24,7 +24,7 @@ __author__  = 'Christian Heimes'
 __docformat__ = 'restructuredtext'
 
 from Products.CMFCore.utils import getToolByName
-from Products.ATContentTypes.interfaces.IATContentType import IATContentType
+from Products.ATContentTypes.interfaces import IATContentType
 
 def setupMimeTypes(self, typeInfo, old=(), moveDown=(), out=None):
     """Setup up and registers mimetype associations

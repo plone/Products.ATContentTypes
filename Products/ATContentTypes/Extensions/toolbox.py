@@ -29,7 +29,7 @@ import sys
 from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.types import ATDocument, ATEvent, ATFavorite, \
     ATFile, ATFolder, ATImage, ATLink, ATNewsItem, ATTopic
-from Products.ATContentTypes.interfaces.IATImage import IATImage
+from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.Extensions.utils import fixMimeTypes
 from zLOG import LOG, ERROR
 

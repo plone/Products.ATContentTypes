@@ -31,7 +31,7 @@ from Globals import InitializeClass
 from Products.ATContentTypes.config import *
 from Products.ATContentTypes.types.criteria import registerCriterion, \
     ALL_INDICES, DATE_INDICES, STRING_INDICES, LIST_INDICES
-from Products.ATContentTypes.interfaces.IATTopic import IATTopicCriterion
+from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes.types.criteria.schemata import ATBaseCriterionSchema
 
 

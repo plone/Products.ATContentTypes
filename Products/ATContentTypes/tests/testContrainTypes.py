@@ -20,7 +20,7 @@ from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTSiteTestCase
 from Products.ATContentTypes.config import *
 from AccessControl import Unauthorized
 from Products.ATContentTypes import ConstrainTypesMixin
-from Products.ATContentTypes.interfaces.IConstrainTypes import IConstrainTypes
+from Products.ATContentTypes.interfaces import IConstrainTypes
 from Products.Archetypes.public import registerType, process_types, listTypes
 from Products.Archetypes.Extensions.utils import installTypes
 from AccessControl.SecurityManagement import newSecurityManager

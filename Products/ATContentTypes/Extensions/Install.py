@@ -32,9 +32,10 @@ from Products.ExternalMethod.ExternalMethod import manage_addExternalMethod
 from Acquisition import aq_base
 
 from Products.Archetypes.interfaces.base import IBaseFolder
-from Products.ATContentTypes.interfaces.IATTopic import IATTopic, IATTopicCriterion
-from Products.ATContentTypes.interfaces.IATContentType import IATContentType
-from Products.ATContentTypes.interfaces.IATFile import IATFile
+from Products.ATContentTypes.interfaces import IATTopic
+from Products.ATContentTypes.interfaces import IATTopicCriterion
+from Products.ATContentTypes.interfaces import IATContentType
+from Products.ATContentTypes.interfaces import IATFile
 
 from Products.ATContentTypes.config import *
 from Products.ATContentTypes.Extensions.utils import setupMimeTypes, registerTemplates

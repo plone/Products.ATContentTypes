@@ -36,7 +36,7 @@ from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.types.ATContentType import ATCTContent
-from Products.ATContentTypes.interfaces.IATLink import IATLink
+from Products.ATContentTypes.interfaces import IATLink
 from Products.ATContentTypes.types.schemata import ATLinkSchema
 
 

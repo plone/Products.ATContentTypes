@@ -30,7 +30,7 @@ from Products.Archetypes.public import DisplayList
 from Products.ATContentTypes.config import *
 from Products.ATContentTypes.types.criteria import registerCriterion, \
     STRING_INDICES
-from Products.ATContentTypes.interfaces.IATTopic import IATTopicSearchCriterion
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
 from Products.ATContentTypes.types.criteria.schemata import ATPortalTypeCriterionSchema
 

@@ -1,6 +1,9 @@
 1.0-devel
 ======================
 
+ * Interface geddon: Merged all interfaces into a single file
+   [tiran]
+
  * Merged limi's ui branch which adds a text field to ATEvent and an image plus
    image caption to ATNewsItem.
    [limi, tiran]

@@ -34,7 +34,7 @@ from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.types.ATContentType import translateMimetypeAlias
 from Products.ATContentTypes.types.ATDocument import ATDocument
-from Products.ATContentTypes.interfaces.IATNewsItem import IATNewsItem
+from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.ATContentTypes.types.schemata import ATNewsItemSchema
 
 

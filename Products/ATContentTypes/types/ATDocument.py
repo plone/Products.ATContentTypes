@@ -41,7 +41,7 @@ from Products.ATContentTypes.types.ATContentType import ATCTContent
 from Products.ATContentTypes.types.ATContentType import updateActions
 from Products.ATContentTypes.types.ATContentType import translateMimetypeAlias
 from Products.ATContentTypes.HistoryAware import HistoryAwareMixin
-from Products.ATContentTypes.interfaces.IATDocument import IATDocument
+from Products.ATContentTypes.interfaces import IATDocument
 from Products.ATContentTypes.types.schemata import ATDocumentSchema
 
 class ATDocument(ATCTContent, HistoryAwareMixin):

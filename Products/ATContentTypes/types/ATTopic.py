@@ -40,11 +40,12 @@ from AccessControl import ClassSecurityInfo
 from Acquisition import aq_parent, aq_inner
 
 from Products.ATContentTypes.types.ATContentType import ATCTFolder, updateActions
-from Products.ATContentTypes.interfaces.IATTopic import IATTopic
 from Products.ATContentTypes.types.criteria import CriterionRegistry
 from Products.ATContentTypes.Permissions import ChangeTopics, AddTopics
 from Products.ATContentTypes.types.schemata import ATTopicSchema
-from Products.ATContentTypes.interfaces.IATTopic import IATTopicSearchCriterion, IATTopicSortCriterion
+from Products.ATContentTypes.interfaces import IATTopic
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
+from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 
 # A couple of fields just don't make sense to sort (for a user),
 # some are just doubles.

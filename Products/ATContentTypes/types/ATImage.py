@@ -37,9 +37,9 @@ from AccessControl import ClassSecurityInfo
 from Acquisition import aq_parent
 from ComputedAttribute import ComputedAttribute
 
-from Products.ATContentTypes.types.ATContentType import ATCTFileContent, \
-    cleanupFilename
-from Products.ATContentTypes.interfaces.IATImage import IATImage
+from Products.ATContentTypes.types.ATContentType import ATCTFileContent
+from Products.ATContentTypes.types.ATContentType import cleanupFilename
+from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.types.schemata import ATImageSchema, ATExtImageSchema
 
 from OFS.Image import Image

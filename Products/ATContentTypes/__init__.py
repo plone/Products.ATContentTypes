@@ -53,7 +53,8 @@ else:
 
 import Products.ATContentTypes.migration
 import Products.ATContentTypes.Validators
-from Products.ATContentTypes.interfaces.IATTopic import IATTopic, IATTopicCriterion
+from Products.ATContentTypes.interfaces import IATTopic
+from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes import ATContentTypes
 
 registerDirectory(SKINS_DIR,GLOBALS)

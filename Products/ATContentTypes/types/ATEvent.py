@@ -40,7 +40,7 @@ from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.utils import DT2dt
 from Products.ATContentTypes.types.ATContentType import ATCTContent, updateActions
-from Products.ATContentTypes.interfaces.IATEvent import IATEvent
+from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.types.schemata import ATEventSchema
 from Products.ATContentTypes.CalendarSupport import CalendarSupportMixin
 from Products.ATContentTypes.Permissions import ChangeEvents

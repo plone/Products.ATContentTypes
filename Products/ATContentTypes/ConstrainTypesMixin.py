@@ -41,7 +41,7 @@ from Products.Archetypes.public import MultiSelectionWidget
 from Products.Archetypes.public import BooleanWidget
 from Products.Archetypes.public import DisplayList
 
-from Products.ATContentTypes.interfaces.IConstrainTypes import IConstrainTypes
+from Products.ATContentTypes.interfaces import IConstrainTypes
 from Products.ATContentTypes.config import CONSTRAIN_TYPES_MIXIN_PERMISSION
 
 ConstrainTypesMixinSchema = Schema((
@@ -81,7 +81,7 @@ class ConstrainTypesMixin:
         constrain the addable types on a per-folder basis.
     """
 
-    __implements__ = IConstrainTypes
+    __implements__ = (IConstrainTypes, )
 
     security = ClassSecurityInfo()
 

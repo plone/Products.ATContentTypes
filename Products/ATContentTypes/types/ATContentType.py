@@ -60,7 +60,7 @@ from OFS import ObjectManager
 from zExceptions import BadRequest
 from webdav.Lockable import ResourceLockedError
 
-from Products.ATContentTypes.interfaces.IATContentType import IATContentType
+from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.types.schemata import ATContentTypeSchema
 
 DEBUG = 1
@@ -118,7 +118,7 @@ class ATCTMixin(TemplateMixin):
     assocFileExt   = ()
     cmf_edit_kws   = ()
 
-    __implements__ = IATContentType
+    __implements__ = (IATContentType, )
 
     security       = ClassSecurityInfo()
 

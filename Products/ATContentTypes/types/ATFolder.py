@@ -32,10 +32,10 @@ else:
 
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.types.ATContentType import ATCTOrderedFolder, \
-    ATCTBTreeFolder
-from Products.ATContentTypes.interfaces.IATFolder import IATFolder, \
-    IATBTreeFolder
+from Products.ATContentTypes.types.ATContentType import ATCTOrderedFolder
+from Products.ATContentTypes.types.ATContentType import ATCTBTreeFolder
+from Products.ATContentTypes.interfaces import IATFolder
+from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.types.schemata import ATFolderSchema
 from Products.ATContentTypes.types.schemata import ATBTreeFolderSchema
 

@@ -40,7 +40,7 @@ from ZODB.POSException import ConflictError
 from Products.Archetypes.debug import _zlogger
 
 from Products.ATContentTypes.types.ATContentType import ATCTContent
-from Products.ATContentTypes.interfaces.IATFavorite import IATFavorite
+from Products.ATContentTypes.interfaces import IATFavorite
 from Products.ATContentTypes.types.schemata import ATFavoriteSchema
 
 class ATFavorite(ATCTContent):

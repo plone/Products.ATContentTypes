@@ -39,7 +39,7 @@ from Acquisition import aq_parent
 from Products.PortalTransforms.utils import TransformException
 
 from Products.ATContentTypes.types.ATContentType import ATCTFileContent
-from Products.ATContentTypes.interfaces.IATFile import IATFile
+from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.types.schemata import ATFileSchema, ATExtFileSchema
 
 from OFS.Image import File

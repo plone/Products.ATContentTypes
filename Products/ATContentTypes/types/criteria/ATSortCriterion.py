@@ -28,7 +28,7 @@ from AccessControl import ClassSecurityInfo
 from Products.ATContentTypes.config import *
 from Products.ATContentTypes.types.criteria import registerCriterion, \
     SORT_INDICES
-from Products.ATContentTypes.interfaces.IATTopic import IATTopicSortCriterion
+from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
 from Products.ATContentTypes.types.criteria.schemata import ATSortCriterionSchema
 
