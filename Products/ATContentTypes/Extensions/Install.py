@@ -95,6 +95,10 @@ def install(self):
         '',
         PROJECTNAME+'.toolbox',
         'recreateATImageScales')
+        
+    # install tool
+    addTool = self.manage_addProduct['ATContentTypes'].manage_addTool
+    addTool('ATCT Tool')
 
     # changing workflow
     setupWorkflows(self, typeInfo, out)

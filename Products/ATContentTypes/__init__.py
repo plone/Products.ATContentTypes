@@ -27,6 +27,7 @@ import sys
 
 from Globals import package_home
 from Products.CMFCore.utils import ContentInit
+from Products.CMFCore.utils import ToolInit
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.DirectoryView import registerDirectory
 
@@ -56,6 +57,7 @@ import Products.ATContentTypes.Validators
 from Products.ATContentTypes.interfaces import IATTopic
 from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes import ATContentTypes
+from Products.ATContentTypes.ATCTTool import ATCTTool
 
 registerDirectory(SKINS_DIR,GLOBALS)
 
@@ -71,6 +73,12 @@ import Products.ATContentTypes.configuration
 
 def initialize(context):
     # process our custom types
+    
+    ToolInit(
+        'ATContentTypes tools', 
+        tools=(ATCTTool,),  
+        product_name='ATContentTypes', 
+        icon='tool.gif', ).initialize(context) 
 
     listOfTypes = listTypes(PROJECTNAME)
 
