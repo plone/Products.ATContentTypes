@@ -125,41 +125,33 @@ def registerTemplates(self, typeInfo, out):
         portal_type    = klass.portal_type
         registerTemplatesForClass(self, klass, portal_type)
 
-
-def registerTemplatesForClass(self, klass, portal_type):
-    atTool       = getToolByName(self, 'archetype_tool')
-    default_view = getattr(klass, 'default_view', 'base_view')
-    suppl_views  = getattr(klass, 'suppl_views', ())
-    views        = ['base_view',]
-
-    if default_view != 'base_view':
-        atTool.registerTemplate(default_view)
-        views.append(default_view)
-
-    for view in suppl_views:
-        atTool.registerTemplate(view)
-        views.append(view)
-
-    atTool.bindTemplate(portal_type, views)
-
-def registerActionIcons(self, typeInfo, out):
-    """
+def registerActionIcons(self, out):
+    """Register action icons for Calendar
     """
     aitool = getToolByName(self, 'portal_actionicons')
-    for t in typeInfo:
-        klass        = t['klass']
-        portal_type  = klass.portal_type
-        action_icons = getattr(klass, '_at_action_icons', None)
-        if action_icons:
-            for icon in action_icons:
-                info = (icon['category'], icon['action_id'], portal_type)
-                try:
-                    aitool.addActionIcon(**icon)
-                except KeyError:
-                    print >>out, 'Action icon %s:%s for %s is already defined'\
-                                 ', reinstalling' % info
-                    aitool.removeActionIcon(icon['category'], icon['action_id'])
-                    aitool.addActionIcon(**icon)
-                else:
-                    print >>out, 'Added action icon %s:%s for %s' % info
-                    
+    action_icons = ({
+        'category'  : 'plone',
+        'action_id' : 'ics',
+        'icon_expr' : 'ical_icon.gif',
+        'title'     : 'iCalendar export',
+        'priority'  : 0,
+        },
+        {
+        'category'  : 'plone',
+        'action_id' : 'vcs',
+        'icon_expr' : 'vcal_icon.gif',
+        'title'     : 'vCalendar export',
+        'priority'  : 0,
+        },
+        )
+    for icon in action_icons:
+        info = (icon['category'], icon['action_id'])
+        try:
+            aitool.addActionIcon(**icon)
+        except KeyError:
+            print >>out, 'Action icon %s:%s is already defined, reintalling ' \
+                        % info
+            aitool.removeActionIcon(icon['category'], icon['action_id'])
+            aitool.addActionIcon(**icon)
+        else:
+            print >>out, 'Added action icon %s:%s' % info

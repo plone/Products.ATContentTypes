@@ -1,6 +1,9 @@
 1.0-devel
 ======================
 
+ * Fixed [ 1157812 ] ival/vcal action icons not available
+   [tiran]
+
  * Fixed ATTopic to use atct_edit like all other ATCT types.
    [tiran]
 

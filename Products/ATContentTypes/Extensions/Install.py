@@ -47,6 +47,7 @@ from Products.ATContentTypes.config import GLOBALS
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.Extensions.utils import setupMimeTypes
 from Products.ATContentTypes.Extensions.utils import registerTemplates
+from Products.ATContentTypes.Extensions.utils import registerActionIcons
 #from Products.ATContentTypes.Extensions.toolbox import disableCMFTypes
 #from Products.ATContentTypes.Extensions.toolbox import enableCMFTypes
 
@@ -63,7 +64,8 @@ def install(self):
         tool = getattr(self.aq_explicit, TOOLNAME)
     
     # step 1: Rename and move away to old CMF types
-    tool.disableCMFTypes()
+    if not tool.isCMFdisabled():
+        tool.disableCMFTypes()
     #disableCMFTypes(self)
     
     # step 2: Install dependency products 
@@ -121,9 +123,7 @@ def install(self):
     # setup content type registry
     old = ('link', 'news', 'document', 'file', 'image')
     setupMimeTypes(self, typeInfo, old=old, moveDown=(IATFile,), out=out)
-
-    # bind templates for TemplateMixin
-    #registerTemplates(self, typeInfo, out)
+    registerActionIcons(self, out)
     
     return out.getvalue()
 

@@ -30,6 +30,8 @@ configlets = ({
     },
     )
 
+class AlreadySwitched(RuntimeError): pass
+
 class ATCTTool(UniqueObject, SimpleItem, PropertyManager): 
     """
     """
@@ -91,6 +93,8 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
         You *should* run recatalogCMFTypes() before running this method to make
         sure all types are found!
         """
+        if self.isCMFdisabled():
+            raise AlreadySwitched
         result = []
         for atct in self._listATCTTypes():
             klass = atct['klass']
@@ -113,15 +117,13 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
         # XXX
         raise NotImplementedError
     
-    def queryCMFdisabled(self):
+    def isCMFdisabled(self):
         """Query if CMF types are disabled
         """
         ttool = getToolByName(self, 'portal_types')
-        ids = ttool.objectIds()
-        if 'Document' in ids and 'CMF Document' in ids:
+        if 'Document' in ttool.objectIds():
             docp = getattr(ttool, 'Document').product
-            cmfdocp = getattr(ttool, 'CMF Document').product
-            if docp == 'ATContentTypes' and cmfdocp == 'CMFDefault':
+            if docp == 'ATContentTypes':
                 return True
         return False
 
