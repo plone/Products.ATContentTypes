@@ -75,9 +75,9 @@ def install(self, reinstall):
             print >>out, 'CMF types are marked as catalog, no recataloging'
         else:
             print >>out, 'Recataloging CMF types'
-            print 'Recataloging CMF types, this make take a while ...'
+            #print 'Recataloging CMF types, this make take a while ...'
             tool.recatalogCMFTypes()
-            print 'Done'
+            #print 'Done'
             tool.setCMFTypesAreRecataloged(True)
     
     # step 3: Rename and move away to old CMF types on install
