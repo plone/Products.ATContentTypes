@@ -2,7 +2,7 @@
 
 Test the ability to constrain types inside a folder
 
-$Id: testContrainTypes.py,v 1.4.4.1 2004/10/31 14:37:53 tiran Exp $
+$Id: testContrainTypes.py,v 1.4.4.2 2004/12/13 15:02:00 tiran Exp $
 """
 
 __author__ = 'Leonardo Almeida'
@@ -12,6 +12,7 @@ import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
+from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests.common import *
 
 from Products.ATContentTypes.config import *
