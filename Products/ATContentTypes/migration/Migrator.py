@@ -361,7 +361,8 @@ class ItemMigrationMixin:
         """
         LOG("renameOld | orig_id: " + str(self.orig_id) + "; old_id: " + str(self.old_id))
         LOG(str(self.old.absolute_url()))
-        self.parent.manage_renameObject(self.orig_id, self.old_id)
+        unrestricted_rename(self.parent, self.orig_id, self.old_id)
+        #self.parent.manage_renameObject(self.orig_id, self.old_id)
 
     def createNew(self):
         """Create the new object

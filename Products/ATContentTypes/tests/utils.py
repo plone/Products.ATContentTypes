@@ -13,10 +13,20 @@ class FakeRequestSession(ExtensionClass.Base, UserDict):
     security.setDefaultAccess('allow')
     security.declareObjectPublic()
     
+    def __init__(self):
+        UserDict.__init__(self)
+        # add a dummy because request mustn't be empty for test
+        # like 'if REQUEST:'
+        self['__dummy__'] = None
+    
+    def __nonzero__(self):
+        return True
+    
     def set(self, key, value):
         self[key] = value
 
 InitializeClass(FakeRequestSession)
+FakeRequestSession()
 
 class DummySessionDataManager(Implicit):
     """Dummy sdm for sessioning

@@ -26,23 +26,17 @@ from Products.Archetypes.Extensions.utils import installTypes
 from AccessControl.SecurityManagement import newSecurityManager
 from Testing.ZopeTestCase import user_name as default_user
 
-from Products.ATContentTypes.config import USE_AT_PREFIX
+from Products.ATContentTypes.config import ATCT_PORTAL_TYPE
 
 tests = []
 
 class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
-    folder_type = 'ATFolder'
-    image_type = 'ATImage'
-    document_type = 'ATDocument'
-    file_type = 'ATFile'
+    folder_type = ATCT_PORTAL_TYPE('ATFolder')
+    image_type = ATCT_PORTAL_TYPE('ATImage')
+    document_type = ATCT_PORTAL_TYPE('ATDocument')
+    file_type = ATCT_PORTAL_TYPE('ATFile')
 
     def afterSetUp(self):
-        if not USE_AT_PREFIX and self.folder_type.startswith('AT'):
-            self.folder_type = self.folder_type[2:]
-            self.image_type = self.image_type[2:]
-            self.document_type = self.document_type[2:]
-            self.file_type = self.file_type[2:]
-            
         atcttestcase.ATCTSiteTestCase.afterSetUp(self)
         self.folder.invokeFactory(self.folder_type, id='af')
         self.tt = self.portal.portal_types
@@ -105,8 +99,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         tt = self.tt
         af.setEnableConstrainMixin(True)
         af_allowed_types = [self.document_type, self.image_type,
-                            self.file_type, self.folder_type,
-                            'Folder']
+                            self.file_type, self.folder_type, ]
         af_allowed_types.sort()
         at.manage_changeProperties(filter_content_types=True,
                                    allowed_content_types=af_allowed_types)
@@ -116,7 +109,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.assertEquals(af_allowed_types, af_local_types)
         #                  "fti allowed types don't match local ones")
         # let's limit locally and see what happens
-        types1 = [self.image_type, self.file_type, self.folder_type, 'Folder']
+        types1 = [self.image_type, self.file_type, self.folder_type]
         types1.sort()
         af.setLocallyAllowedTypes(types1)
         af_local_types = [fti.getId() for fti in af.allowedContentTypes()]
@@ -129,6 +122,9 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         af_local_types.sort()
         self.assertEquals(types1, af_local_types,
                           "constrained types don't match local ones")
+        
+        # XXX this test does't work because it expects a CMF Folder!
+        
         # now let's see if inheritance kicks in even thru a non
         # constrained type
         af.invokeFactory('Folder', id='nf')

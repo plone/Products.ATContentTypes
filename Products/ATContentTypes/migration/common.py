@@ -43,7 +43,7 @@ class StdoutStringIO(StringIO):
     def write(self, s):
         print >> sys.stdout, str(s),
         StringIO.write(self, s)
-
+        
 ## LinguaPlone addon?
 try:
     from Products.LinguaPlone.public import registerType
@@ -84,3 +84,52 @@ def _createObjectByType(type_name, container, id, *args, **kw):
     ob = container._getOb( id )
     
     return fti._finishConstruction(ob)
+
+from Acquisition import aq_base, aq_inner, aq_parent
+from App.Dialogs import MessageDialog
+from OFS.CopySupport import CopyContainer
+from OFS.CopySupport import CopyError
+from OFS.CopySupport import eNotSupported
+from cgi import escape
+import sys
+
+def unrestricted_rename(self, id, new_id):
+    """Rename a particular sub-object
+    
+    Copied from OFS.CopySupport
+    
+    Less strict version of manage_renameObject:
+        * no write look check
+        * no verify object check from PortalFolder so it's allowed to rename
+          even unallowed portal types inside a folder
+    """
+    try: self._checkId(new_id)
+    except: raise CopyError, MessageDialog(
+                  title='Invalid Id',
+                  message=sys.exc_info()[1],
+                  action ='manage_main')
+    ob=self._getOb(id)
+    #!#if ob.wl_isLocked():
+    #!#    raise ResourceLockedError, 'Object "%s" is locked via WebDAV' % ob.getId()
+    if not ob.cb_isMoveable():
+        raise CopyError, eNotSupported % escape(id)
+    #!#self._verifyObjectPaste(ob)
+    #!#CopyContainer._verifyObjectPaste(self, ob)
+    try:    ob._notifyOfCopyTo(self, op=1)
+    except: raise CopyError, MessageDialog(
+                  title='Rename Error',
+                  message=sys.exc_info()[1],
+                  action ='manage_main')
+    self._delObject(id)
+    ob = aq_base(ob)
+    ob._setId(new_id)
+
+    # Note - because a rename always keeps the same context, we
+    # can just leave the ownership info unchanged.
+    self._setObject(new_id, ob, set_owner=0)
+    ob = self._getOb(new_id)
+    ob._postCopy(self, op=1)
+
+    #!#if REQUEST is not None:
+    #!#    return self.manage_main(self, REQUEST, update_menu=1)
+    return None

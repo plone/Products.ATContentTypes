@@ -41,7 +41,7 @@ from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 
-from Products.ATContentTypes.config import USE_AT_PREFIX
+from Products.ATContentTypes.config import ATCT_PORTAL_TYPE
 
 class ATCTSiteTestCase(ATSiteTestCase):
     pass
@@ -61,8 +61,7 @@ class ATCTTypeTestCase(ATSiteTestCase):
     icon = ''
 
     def afterSetUp(self):
-        if not USE_AT_PREFIX and self.portal_type.startswith('AT'):
-            self.portal_type = self.portal_type[2:]
+        self.portal_type = ATCT_PORTAL_TYPE(self.portal_type)
         self.setRoles(['Manager', 'Member'])
         self._ATCT = self._createType(self.folder, self.portal_type, 'ATCT')
         self._cmf = self._createType(self.folder, self.cmf_portal_type, 'cmf')
@@ -333,8 +332,7 @@ class ATCTFuncionalTestCase(ATFunctionalSiteTestCase):
     views = ()
 
     def afterSetUp(self):
-        if not USE_AT_PREFIX and self.portal_type.startswith('AT'):
-            self.portal_type = self.portal_type[2:]
+        self.portal_type = ATCT_PORTAL_TYPE(self.portal_type)
         # Put dummy sdm and dummy SESSION object into REQUEST
         request = self.app.REQUEST
         self.app._setOb('session_data_manager', DummySessionDataManager())

@@ -252,3 +252,12 @@ else:
 # I need this as hack to quickly change between portal type names like ATFolder
 # and Folder for testing. It will be removed soon
 USE_AT_PREFIX = False
+AT_TYPE_MAPPING = {
+    'BTreeFolder' : 'Large Plone Folder',
+    'NewsItem' : 'News Item',
+    }
+def ATCT_PORTAL_TYPE(name):
+    if not USE_AT_PREFIX and name.startswith('AT'):
+        name = name[2:]
+        return AT_TYPE_MAPPING.get(name, name)
+    return name
