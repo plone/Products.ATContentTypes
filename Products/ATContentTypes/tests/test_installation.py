@@ -137,6 +137,27 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         
 tests.append(TestInstallation)
 
+##class TestSuppressedInstallation(atcttestcase.ATCTSiteTestCase):
+##
+##    def afterSetUp(self):
+##        os.environ['SUPPRESS_ATCT_INSTALLATION'] = 'YES'
+##        
+##        self.setRoles(['Manager', 'Owner'])
+##        self.login()
+##        self.app.manage_addProduct['CMFPlone'].manage_addSite('portal2')
+##        self.portal2 = self.app.portal2
+##        
+##        self.ttool = getattr(self.portal2.aq_explicit, 'portal_types')
+##        self.qi = getattr(self.portal2.aq_explicit, 'portal_quickinstaller')
+##        
+##    def test_atct_not_installed(self):
+##        self.failUnlessEqual(getToolByName(self.portal2, TOOLNAME, None), None)
+##
+##    def beforeTearDown(self):
+##        del os.environ['SUPPRESS_ATCT_INSTALLATION']
+##
+##tests.append(TestSuppressedInstallation)
+
 if __name__ == '__main__':
     framework()
 else:

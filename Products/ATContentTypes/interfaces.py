@@ -29,7 +29,7 @@ from Interface import Attribute
 try:
     from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
 except ImportError:
-    from Products.Archetypes.interfaces.ITemplateMixin import ITemplateMi
+    from Products.Archetypes.interfaces.ITemplateMixin import ITemplateMixin
 
 from Products.Archetypes.interfaces.base import IBaseContent
 from Products.Archetypes.interfaces.base import IBaseFolder
