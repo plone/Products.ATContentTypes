@@ -116,9 +116,20 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         * hook into mxTidy an replace the value with the tidied value
         """
         field = self.getField('text')
-        if value is None or value == "":   
-            field.set(self, '', **kwargs)
-            return
+        # XXX this is ugly
+        # When an object is initialized the first time we have to 
+        # set the filename and mimetype.
+        # In the case the value is empty/None we must not set the value because
+        # it will overwrite uploaded data like a pdf file.
+        if (value is None or value == ""):
+            if not field.getRaw(self):
+                # set mimetype and file name although the fi
+                if 'mimetype' in kwargs:
+                    field.setContentType(self, kwargs['mimetype'])
+                if 'filename' in kwargs:
+                    field.setContentType(self, kwargs['filename'])
+            else:
+                return
 
         # hook for mxTidy / isTidyHtmlWithCleanup validator
         tidyOutput = self.getTidyOutput(field)
