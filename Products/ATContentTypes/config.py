@@ -62,8 +62,9 @@ MX_TIDY_OPTIONS= {
     'char_encoding'    : 'raw',
     }
 
-## enable external storage
-## requires ExternalStorage from Christian Scholz
+## enable external storage variant of ATFile and ATImage
+## requires ExternalStorage (not working yet)
+#EXT_STORAGE_ENABLE = True
 EXT_STORAGE_ENABLE = False
 
 ## use TemplateMixin?

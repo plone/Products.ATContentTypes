@@ -35,12 +35,15 @@ from Products.Archetypes.public import Schema
 from Products.Archetypes.public import FileField
 from Products.Archetypes.public import FileWidget
 from Products.Archetypes.public import PrimaryFieldMarshaller
+from Products.Archetypes.Storage import Storage
 from Products.Archetypes.BaseContent import BaseContent
 from Products.PortalTransforms.utils import TransformException
 
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import MAX_FILE_SIZE
 from Products.ATContentTypes.config import ICONMAP
+from Products.ATContentTypes.config import HAS_EXT_STORAGE
+from Products.ATContentTypes.config import EXT_STORAGE_ENABLE
 from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTFileContent
 from Products.ATContentTypes.interfaces import IATFile
@@ -48,7 +51,14 @@ from Products.ATContentTypes.types.schemata import ATContentTypeSchema
 from Products.ATContentTypes.types.schemata import relatedItemsField
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 
-
+if HAS_EXT_STORAGE:
+    from Products.ExternalStorage.ExternalStorage import ExternalStorage
+else:
+    class ExternalStorage(Storage):
+        """Dummy storage
+        """
+        def __init__(self, *args, **kwargs):
+            pass
 
 ATFileSchema = ATContentTypeSchema.copy() + Schema((
     FileField('file',
@@ -70,7 +80,12 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
 ATFileSchema.addField(relatedItemsField)
 
 ATExtFileSchema = ATFileSchema.copy()
-# XXX ATExtFileSchema['file'].storage = ExternalStorage(prefix='atct', archive=False)
+fileField = ATExtFileSchema['file']
+fileField.storage = ExternalStorage(prefix = 'atct',
+                                    archive = False,
+                                    rename = False)
+# re-register storage layer
+fileField.registerLayer('storage', fileField.storage)
 
 class ATFile(ATCTFileContent):
     """A Archetype derived version of CMFDefault's File"""
@@ -206,32 +221,19 @@ class ATExtFile(ATFile):
     content_icon   = 'file_icon.gif'
     portal_type    = 'ATExtFile'
     meta_type      = 'ATExtFile'
-    archetype_name = 'AT Ext File'
+    archetype_name = 'File (ext)'
     _atct_newTypeFor = None
     assocMimetypes = ()
     assocFileExt   = ()
 
     security       = ClassSecurityInfo()
 
-    security.declareProtected(CMFCorePermissions.View, 'getFile')
-    def getFile(self, **kwargs):
-        """return the file with proper content type"""
-        #REQUEST=kwargs.get('REQUEST',self.REQUEST)
-        #RESPONSE=kwargs.get('RESPONSE', REQUEST.RESPONSE)
-        field  = self.getField('file')
-        file   = field.get(self, **kwargs)
-        ct     = self.getContentType()
-        parent = aq_parent(self)
-        f      = File(self.getId(), self.Title(), file, ct)
-        return f.__of__(parent)
-
-    # make it directly viewable when entering the objects URL
     security.declareProtected(CMFCorePermissions.View, 'index_html')
-    def index_html(self, REQUEST, RESPONSE):
-        self.getFile(REQUEST=REQUEST, RESPONSE=RESPONSE).index_html(REQUEST, RESPONSE)
+    def index_html(self):
+        """Allows file direct access download."""
+        field = self.getPrimaryField()
+        field.download(self)
 
-# XXX external storage based types are currently disabled due the lack of time
-# and support for ext storage. Neither MrTopf nor I have time to work on ext
-# storage.
-#if HAS_EXT_STORAGE:
-#    registerATCT(ATExtFile, PROJECTNAME)
+# XXX use at own risk
+if HAS_EXT_STORAGE and EXT_STORAGE_ENABLE:
+    registerATCT(ATExtFile, PROJECTNAME)

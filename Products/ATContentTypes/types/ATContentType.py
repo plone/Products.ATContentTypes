@@ -321,8 +321,8 @@ class ATCTFileContent(ATCTContent):
     def get_size(self):
         """CMF compatibility method
         """
-        f = self.getPrimaryField().getAccessor(self)()
-        return f and f.get_size() or 0
+        f = self.getPrimaryField()
+        return f.get_size(self) or 0
 
     security.declareProtected(CMFCorePermissions.View, 'size')
     def size(self):

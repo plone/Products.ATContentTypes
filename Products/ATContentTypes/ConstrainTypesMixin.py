@@ -19,8 +19,6 @@
 
 """This module contains a mixin-class and a schema snippet to constrain
 which types can be added in a folder-instance
-
-
 """
 __author__  = 'Jens Klein <jens.klein@jensquadrat.de>'
 __docformat__ = 'plaintext'
@@ -36,21 +34,40 @@ from Products.CMFCore.PortalFolder import PortalFolder
 
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import LinesField
+from Products.Archetypes.public import IntegerField
 from Products.Archetypes.public import BooleanField
 from Products.Archetypes.public import MultiSelectionWidget
 from Products.Archetypes.public import BooleanWidget
+from Products.Archetypes.public import SelectionWidget
+from Products.Archetypes.public import IntDisplayList
 from Products.Archetypes.public import DisplayList
 
 from Products.ATContentTypes.interfaces import IConstrainTypes
 from Products.ATContentTypes.config import CONSTRAIN_TYPES_MIXIN_PERMISSION
 from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
 
+# constants for enableConstrainMixin
+# XXX acquire vs. enabled is not implemented
+DISABLED = 0 # use default behavior of PortalFolder which uses the FTI information
+ENABLED  = 1 # allow types from locallyAllowedTypes
+ACQUIRE = -1 # acquire enabled/disabled and locallyAllowedTypes from parent
+
+enableDisplayList = IntDisplayList((
+    (ENABLED, 'enabled'),
+    (DISABLED, 'disabled'),
+    #(ACQUIRE, 'acquire from parent'),
+    ))
+
 ConstrainTypesMixinSchema = Schema((
-    BooleanField('enableConstrainMixin',
-        default = False,
+    IntegerField('enableConstrainMixin',
+        required = True,
+        #default = ACQUIRE,
+        default = DISABLED,
+        vocabulary = enableDisplayList,
+        enforceVocabulary = True,
         languageIndependent = True,
         write_permissions = CONSTRAIN_TYPES_MIXIN_PERMISSION,
-        widget = BooleanWidget(
+        widget = SelectionWidget(
             label = 'Overwrite allowed types',
             label_msgid = 'label_enable_constrain_allowed_types',
             description = '',
@@ -98,10 +115,10 @@ class ConstrainTypesMixin:
 
         [(key,value),(key2,value2),...,(keyN,valueN)]
         """
-        typetuples= [(fti.title_or_id(), fti.id)
+        typelist = [(fti.title_or_id(), fti.getId())
                      for fti in self._ct_getPossibleTypes()]
-        typetuples.sort()
-        return DisplayList([(id, title) for title, id in typetuples])
+        typelist.sort()
+        return DisplayList([(id, title) for title, id in typelist])
 
     security.declarePrivate('_ct_recursiveGetLocallyAllowedTypes')
     def _ct_recursiveGetLocallyAllowedTypes(self):
@@ -138,6 +155,7 @@ class ConstrainTypesMixin:
         # first we start with all available portal types.
         possible_ftis = tt.listTypeInfo()
         # then we only keep those that our fti allows
+        # XXX maybe we want also to allow other FTIs
         if myfti.filter_content_types:
             possible_ftis = [fti for fti in possible_ftis
                              if myfti.allowType(fti.getId())]
@@ -155,7 +173,7 @@ class ConstrainTypesMixin:
         """
         # list of types which are addable in the ordinary case w/o the constrain
         ftis = PortalFolder.allowedContentTypes(self)
-        ids = [ fti.id for fti in ftis ]
+        ids = [ fti.getId() for fti in ftis ]
         if asList:
             return ids
         else:
@@ -182,14 +200,14 @@ class ConstrainTypesMixin:
         # getLocallyAllowedTypes is the accessor for the
         # the locallyAllowedTypes schema field.
         allowed = list(self.getLocallyAllowedTypes())
-        possible_allowed = [ fti for fti in possible_ftis if fti.id in allowed ]
+        possible_allowed = [ fti for fti in possible_ftis
+                             if fti.getId() in allowed ]
 
         # if none are selected as allowed then all possible types
         # are allowed
         ftis = possible_allowed and possible_allowed or possible_ftis
         return [ fti for fti in ftis
-                 if fti.isConstructionAllowed(self)
-               ]
+                 if fti.isConstructionAllowed(self) ]
 
     # overrides CMFCore's PortalFolder invokeFactory
     security.declareProtected(CMFCorePermissions.AddPortalContent, 'invokeFactory')
@@ -199,7 +217,7 @@ class ConstrainTypesMixin:
         if not ENABLE_CONSTRAIN_TYPES_MIXIN:
             # not globally enabled - use the default
             return PortalFolder.invokeFactory(self, type_name, id, RESPONSE=None, *args, **kw)
-        if not type_name in [fti.id for fti in self.allowedContentTypes()]:
+        if not type_name in [fti.getId() for fti in self.allowedContentTypes()]:
             raise Unauthorized('Disallowed subobject type: %s' % type_name)
 
         pt = getToolByName( self, 'portal_types' )
