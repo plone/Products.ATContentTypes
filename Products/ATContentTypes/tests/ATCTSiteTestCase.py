@@ -1,8 +1,9 @@
+# -*- coding: iso-8859-1 -*-
 """ATContentTypes site tests
 
 For tests that needs a plone portal including archetypes and portal transforms
 
-$Id: ATCTSiteTestCase.py,v 1.12.4.1 2004/10/31 14:37:52 tiran Exp $
+$Id: ATCTSiteTestCase.py,v 1.12.4.2 2004/11/25 16:47:38 ctheune Exp $
 """
 
 __author__ = 'Christian Heimes'
@@ -35,6 +36,10 @@ from Products.CMFCore.interfaces.DublinCore import MutableDublinCore as IMutable
 from Products.CMFPlone.tests import PloneTestCase
 portal_name = PloneTestCase.portal_name
 portal_owner = PloneTestCase.portal_owner
+
+class FakeRequest:
+    def get(self, key, default=None):
+        return default
 
 class ATCTSiteTestCase(ArchetypesTestCase.ArcheSiteTestCase):
     """ AT Content Types test case based on a plone site with archetypes"""
@@ -109,6 +114,29 @@ class ATCTSiteTestCase(ArchetypesTestCase.ArcheSiteTestCase):
     def beforeTearDown(self):
         # logout
         noSecurityManager()
+
+    def test_idValidation(self):
+        ttool = getToolByName(self._portal, 'portal_types')
+        atctFTI = ttool.getTypeInfo(self.portal_type)
+        atctFTI.constructInstance(self._portal, 'asdf')
+        atctFTI.constructInstance(self._portal, 'asdf2')
+        asdf = self._portal.asdf
+        
+        request = FakeRequest()
+        
+        # invalid ids
+        ids = ['asdf2', 'ההה', '/asdf2', ' asdf2', 'portal_workflow',
+            'portal_url']
+        for id in ids:
+            request.form = {'id':id, 'fieldset':'default'}
+            self.assertNotEquals(asdf.validate(REQUEST=request), {}, "Not catched id: %s" % id)
+
+        # valid ids
+        ids = ['', 'abcd', 'blafasel']
+        for id in ids:
+            request.form = {'id':id}
+            self.assertEquals(asdf.validate(REQUEST=request), {})
+
 
 
 class ATCTFieldTestCase(BaseSchemaTest):

@@ -18,7 +18,7 @@
 #
 """
 
-$Id: ATContentType.py,v 1.44.4.2 2004/11/24 15:34:45 tiran Exp $
+$Id: ATContentType.py,v 1.44.4.3 2004/11/25 16:47:39 ctheune Exp $
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -56,6 +56,8 @@ from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ExtensionClass import Base
+from OFS import ObjectManager
+from zExceptions import BadRequest
 
 from Products.ATContentTypes.interfaces.IATContentType import IATContentType
 from Products.ATContentTypes.types.schemata import ATContentTypeSchema
@@ -209,6 +211,22 @@ class ATCTMixin(TemplateMixin):
         """Overwrite this method to make AT compatible with the crappy CMF edit()
         """
         raise NotImplementedError("cmf_edit method isn't implemented")
+
+    def validate_id(self, id):
+        parent = aq_parent(self)
+        parent_ids = parent.objectIds()
+
+        # If the id is given to a different object already
+        if id in parent_ids and aq_base(parent[id]) is not aq_base(self):
+            return 'Id %s is already in use'
+        
+        if ' ' in id:
+            return 'Spaces are not allowed in ids'
+        
+        try:
+            ObjectManager.checkValidId(self, id, allow_dup=1)
+        except BadRequest, m:
+            return str(m)
 
 InitializeClass(ATCTMixin)
 
