@@ -1,11 +1,20 @@
 1.0-devel
 ======================
 
+ * Started integration tests for discussions.
+   [tiran]
+
+ * Ported topic migration and criteria enhancements + additional criteria
+   from ender topic branch. Thx to Alec Mitchell for his great work! The new
+   criteria are: ATSelectionCriterion, ATDateRangeCriterion,
+   ATReferenceCriterion and ATBooleanCriterion.
+   [allecm, tiran]
+
  * Changed archetype names of criteria and removed the AT prefix.
    [tiran]
 
- * Added small unit tests for criteria and ATTopic. Better than nothing :)
-   [tiran]
+ * Added unit tests for criteria and ATTopic.
+   [allecm, tiran]
 
  * Added translate tab when LinguaPlone is available at installation or
    reinstallation time.

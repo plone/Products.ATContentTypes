@@ -58,7 +58,7 @@ class ATBooleanCriterion(ATBaseCriterion):
     security       = ClassSecurityInfo()
     schema         = ATBooleanCriterionSchema
     meta_type      = 'ATBooleanCriterion'
-    archetype_name = 'AT Boolean Criterion'
+    archetype_name = 'Boolean Criterion'
     typeDescription= ''
     typeDescMsgId  = ''
 

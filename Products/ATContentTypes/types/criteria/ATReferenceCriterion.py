@@ -16,7 +16,7 @@
 ##############################################################################
 """ Topic:
 
-$Id: ATReferenceCriterion.py,v 1.1.4.1 2005/03/08 01:03:45 tiran Exp $
+$Id: ATReferenceCriterion.py,v 1.1.4.2 2005/03/08 01:08:24 tiran Exp $
 """
 
 __author__  = 'Alec Mitchell'
@@ -37,7 +37,7 @@ class ATReferenceCriterion(ATSelectionCriterion):
     __implements__ = ATSelectionCriterion.__implements__ + (IATTopicSearchCriterion, )
     security       = ClassSecurityInfo()
     meta_type      = 'ATReferenceCriterion'
-    archetype_name = 'AT Reference Criterion'
+    archetype_name = 'Reference Criterion'
     typeDescription= ''
     typeDescMsgId  = ''
 

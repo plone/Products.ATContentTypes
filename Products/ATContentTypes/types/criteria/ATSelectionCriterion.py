@@ -16,7 +16,7 @@
 ##############################################################################
 """ Topic:
 
-$Id: ATSelectionCriterion.py,v 1.1.4.1 2005/03/08 01:03:45 tiran Exp $
+$Id: ATSelectionCriterion.py,v 1.1.4.2 2005/03/08 01:08:24 tiran Exp $
 """
 
 __author__  = 'Alec Mitchell'
@@ -64,7 +64,7 @@ class ATSelectionCriterion(ATBaseCriterion):
     security       = ClassSecurityInfo()
     schema         = ATSelectionCriterionSchema
     meta_type      = 'ATSelectionCriterion'
-    archetype_name = 'AT Selection Criterion'
+    archetype_name = 'Selection Criterion'
     typeDescription= ''
     typeDescMsgId  = ''
 

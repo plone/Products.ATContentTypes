@@ -16,7 +16,7 @@
 ##############################################################################
 """ Topic:
 
-$Id: ATDateRangeCriterion.py,v 1.1.4.1 2005/03/08 01:03:45 tiran Exp $
+$Id: ATDateRangeCriterion.py,v 1.1.4.2 2005/03/08 01:08:24 tiran Exp $
 """
 
 __author__  = 'Alec Mitchell'
@@ -75,7 +75,7 @@ class ATDateRangeCriterion(ATBaseCriterion):
     security       = ClassSecurityInfo()
     schema         = ATDateRangeCriterionSchema
     meta_type      = 'ATDateRangeCriterion'
-    archetype_name = 'AT Date Range Criterion'
+    archetype_name = 'Date Range Criterion'
     typeDescription= ''
     typeDescMsgId  = ''
 
