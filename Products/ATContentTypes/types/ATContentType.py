@@ -157,38 +157,6 @@ class ATCTMixin(TemplateMixin):
                 raise
                 #_default_logger.log_exc()
 
-##    def _getPortalTypeName(self):
-##        """
-##        """
-##        ptTool = getToolByName(self, 'portal_types', None)
-##
-##        portal_type = self.portal_type
-##        if callable(portal_type):
-##                portal_type = portal_type()
-##
-##        if ptTool is None:
-##            # this may when we don't have an acquisition context
-##            return portal_type
-##
-##        # make it easy to derive from atct:
-##        newTypeFor = self.__class__.__dict__.get('newTypeFor', None)
-##        if newTypeFor:
-##            correct_pt = self.newTypeFor[0]
-##        else:
-##            correct_pt = portal_type
-##
-##        fti = ptTool.getTypeInfo(correct_pt)
-##        if fti is None:
-##            # FTI is None which may happen in ATCT2CMF switching
-##            # script in this case the self.portal_type aka
-##            # self.__class__.__name__ is right but test to be sure
-##            assert(portal_type, self.__class__.__name__)
-##            return portal_type
-##        if fti.Metatype() == self.meta_type:
-##            return correct_pt
-##        else:
-##            return portal_type
-
     security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'edit')
     def edit(self, *args, **kwargs):
         """Reimplementing edit() to have a compatibility method for the old
