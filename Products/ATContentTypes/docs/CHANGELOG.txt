@@ -1,3 +1,7 @@
+2004-12-13 17:49 ctheune
+
+    * Fixed 1078278 (Minor typos in utils.py)
+
 2004-10-06 01:38  tiran
 
 	* ConstrainTypesMixin.py, docs/HISTORY.txt, migration/Walker.py,
