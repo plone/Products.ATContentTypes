@@ -2,7 +2,7 @@
 
 Test the ability to constrain types inside a folder
 
-$Id: testContrainTypes.py,v 1.4.4.2 2004/12/13 15:02:00 tiran Exp $
+
 """
 
 __author__ = 'Leonardo Almeida'

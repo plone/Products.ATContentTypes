@@ -2,7 +2,7 @@
 
 Use this file as a skeleton for your own tests
 
-$Id: testATEvent.py,v 1.12.4.3 2004/12/15 16:48:38 tiran Exp $
+
 """
 
 __author__ = 'Christian Heimes'

@@ -18,7 +18,7 @@ are permitted provided that the following conditions are met:
    to endorse or promote products derived from this software without specific
    prior written permission.
 
-$Id: ATCTMigrator.py,v 1.13.4.1 2004/12/13 15:30:51 tiran Exp $
+
 """
 
 from common import *

@@ -18,7 +18,7 @@
 #
 """
 
-$Id: utils.py,v 1.2.4.1 2004/12/13 16:55:02 ctheune Exp $
+
 """
 
 import datetime

@@ -3,7 +3,7 @@
 
 For tests that needs a plone portal including archetypes and portal transforms
 
-$Id: ATCTSiteTestCase.py,v 1.12.4.4 2004/12/15 16:48:38 tiran Exp $
+
 """
 
 __author__ = 'Christian Heimes'

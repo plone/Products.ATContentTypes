@@ -17,7 +17,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-$Id: utils.py,v 1.6 2004/07/13 13:12:55 dreamcatcher Exp $
+
 """
 
 __author__  = 'Christian Heimes'

@@ -18,7 +18,7 @@
 #
 """
 
-$Id: ATTopic.py,v 1.27.4.2 2004/11/24 19:42:08 ctheune Exp $
+
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'

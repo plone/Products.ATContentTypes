@@ -18,7 +18,7 @@
 #
 """
 
-$Id: schemata.py,v 1.53.4.1 2004/10/30 15:58:12 tiran Exp $
+
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'

@@ -18,7 +18,7 @@
 #
 """
 
-$Id: ATContentType.py,v 1.44.4.6 2005/02/12 10:02:23 tiran Exp $
+
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'

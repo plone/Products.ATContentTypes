@@ -18,7 +18,7 @@
 #
 """
 
-$Id: Install.py,v 1.18.4.1 2004/11/24 14:55:56 tiran Exp $
+
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
