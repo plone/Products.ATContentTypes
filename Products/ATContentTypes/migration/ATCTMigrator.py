@@ -148,13 +148,15 @@ def migrateAll(portal):
         kwargs['default_language'] = 'en'
         
     out = []
-    out.append('Migration: ')
+    #out.append('Migration: ')
     for migrator in migrators:
-        out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.fromType, migrator.toType))
+        #out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.fromType, migrator.toType))
+        out.append('*** Migrating %s to %s ***' % (migrator.fromType, migrator.toType))
         w = CatalogWalker(migrator, catalog)
         out.append(w.go(**kwargs))
     for migrator in folderMigrators:
-        out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.fromType, migrator.toType))
+        #out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.fromType, migrator.toType))
+        out.append('*** Migrating %s to %s ***' % (migrator.fromType, migrator.toType))
         depth=2
         while 1:
             # loop around until we got 'em all :]
@@ -176,7 +178,8 @@ def migrateAll(portal):
     wf = getToolByName(catalog, 'portal_workflow')
     LOG('starting wf migration')
     count = wf.updateRoleMappings()
-    out.append('\n\n*** Workflow: %d object(s) updated. ***\n' % count)
+    #out.append('\n\n*** Workflow: %d object(s) updated. ***\n' % count)
+    out.append('Workflow: %d object(s) updated.' % count)
     
     #out.append('\nCommitting full transaction')
     #get_transaction().commit()
@@ -185,6 +188,6 @@ def migrateAll(portal):
     LOG('starting catalog update')
     ct = getToolByName(catalog, 'portal_catalog')
     ct.refreshCatalog(clear=1)
-    out.append('Portal catalog was updated')
+    out.append('Portal catalog updated.')
 
     return '\n'.join(out)
