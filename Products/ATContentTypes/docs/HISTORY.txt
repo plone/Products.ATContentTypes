@@ -1,6 +1,16 @@
 1.0-devel
 ======================
 
+ * Added XXX report tool to ATCT. It's mostly a copy from the Zope3 XXX tools.
+   Note: XXX is a marker to show "here is something" wrong. It's not porn. :)
+   The tool also reports TODO and BBB (for backward compatibility).
+   [tiran]
+
+ * Fixed [ 1049018 ] url field on Link doesn't allow mailto. Also added an
+   isMailto validator to validation and enhanced the isUrl validator to support
+   more protocols.
+   [tiran]
+
  * Fixed [ 1114696 ] use correct mimetype for reStructuredText and [ 1122135 ]
    ATCT edit not preserving text type selection, not ATCT bug be renaming 
    text/restructured to text/x-rst.

@@ -32,6 +32,9 @@ from Products.Archetypes.public import Schema
 from Products.Archetypes.public import StringField
 from Products.Archetypes.public import StringWidget
 
+from Products.validation import V_SUFFICIENT
+from Products.validation import V_REQUIRED
+
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTContent
@@ -41,17 +44,19 @@ from Products.ATContentTypes.types.schemata import relatedItemsField
 
 ATLinkSchema = ATContentTypeSchema.copy() + Schema((
     StringField('remoteUrl',
-                required=True,
-                searchable=True,
-                primary=True,
-                validators = ('isURL',),
-                widget = StringWidget(
-                        description=("The address of the location. Prefix is "
-                                     "optional; if not provided, the link will be relative."),
-                        description_msgid = "help_url",
-                        label = "URL",
-                        label_msgid = "label_url",
-                        i18n_domain = "plone")),
+        required=True,
+        searchable=True,
+        primary=True,
+        # either mailto or an absolute url
+        validators = (('isMailto', V_SUFFICIENT), ('isURL', V_REQUIRED),),
+        widget = StringWidget(
+            # XXX description is wrong!
+            description=("The address of the location. Prefix is "
+                          "optional; if not provided, the link will be relative."),
+            description_msgid = "help_url",
+            label = "URL",
+            label_msgid = "label_url",
+            i18n_domain = "plone")),
     ))
 ATLinkSchema.addField(relatedItemsField)
 
