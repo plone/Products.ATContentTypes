@@ -1,6 +1,18 @@
 1.0-devel
 ======================
 
+ * Implemented some very useful functions based on CMFPhoto code for ATImage.
+   The new features are:
+
+    * getting the exif informations from images using Gene Cash's exif lib
+    * getting the image orientation from exif data (rotation and mirror)
+    * Rotating and flipping images using the PIL library incl. a new tab
+
+  The CMFPhoto exif and transform code was written by several ppl including
+  Oliver Baltzer and me. I'm unable to determine the other coders. Please
+  write me an email if you want credits for your great work!
+  [tiran]
+
  * Refactored huge parts of the migration suite. More later
    [tiran]
 

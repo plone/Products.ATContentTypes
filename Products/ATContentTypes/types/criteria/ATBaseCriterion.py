@@ -110,7 +110,7 @@ class ATBaseCriterion(NonRefCatalogContent):
     def getCriteriaItems(self):
         """Return a sequence of items to be used to build the catalog query.
         """
-        raise NotImplementedError
+        return ()
 
 # because I don't register the class I've to generator it on my own. Otherwise
 # I'm not able to unit test it in the right way.

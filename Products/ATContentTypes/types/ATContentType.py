@@ -344,7 +344,8 @@ class ATCTFileContent(ATCTContent):
         kwargs = {}
         if content_type is not None:
             kwargs['mimetype'] = content_type
-        self.setFile(data, **kwargs)
+        mutator = self.getPrimaryField().mutator(self)
+        mutator(data, **kwargs)
         ##self.ZCacheable_invalidate()
         ##self.ZCacheable_set(None)
         ##self.http__refreshEtag()

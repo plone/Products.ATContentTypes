@@ -103,7 +103,22 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         self.compareAfterMigration(migrated, mod=mod, created=created)
         self.compareDC(migrated, title=title, description=description)
 
-        # XXX more
+    def test_getEXIF(self):
+        # XXX not a real test
+        exif_data = self._ATCT.getEXIF()
+        self.failUnless(isinstance(exif_data, dict), type(exif_data))
+        
+    def test_exifOrientation(self):
+        # XXX not a real test
+        r, m = self._ATCT.getEXIFOrientation()
+        
+    def test_transform(self):
+        # XXX not a real test
+        self._ATCT.transformImage(2)
+
+    def test_autotransform(self):
+        # XXX not a real test
+        self._ATCT.autoTransformImage()
 
 tests.append(TestSiteATImage)
 

@@ -24,6 +24,7 @@ __docformat__ = 'restructuredtext'
 
 from UserDict import UserDict
 from Products.Archetypes.public import registerType
+from Products.Archetypes.ClassGen import generateClass
 from Products.ATContentTypes.config import PROJECTNAME
 from types import StringType
 
@@ -74,6 +75,7 @@ class _CriterionRegistry(UserDict):
             self.index2criterion[index] = value + (id,)
 
         assert IATTopicCriterion.isImplementedByInstancesOf(criterion)
+        #generateClass(criterion)
         registerType(criterion, PROJECTNAME)
 
     def unregister(self, criterion):
