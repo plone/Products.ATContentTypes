@@ -85,7 +85,7 @@ translate_actions = ({
     'name'        : 'Translate',
     'action'      : 'string:${object_url}/translate_item',
     'permissions' : (CMFCorePermissions.ModifyPortalContent, ),
-    'condition'   : 'not: object/isCanonical',
+    'condition'   : 'not: object/isCanonical|nothing',
     },
     )
 

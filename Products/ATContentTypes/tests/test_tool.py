@@ -130,6 +130,21 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         t.copyFTIFlags()
         self.failUnlessEqual(atctdoc.allow_discussion, False)
         
+    def test_copyactions(self):
+        t = self.tool
+        ttool = getToolByName(self.portal, 'portal_types')
+        cmfdoc = ttool['CMF Document']
+        atctdoc = ttool['Document']
+        
+        id = 'test'
+        title = 'Test Title'
+        expression = 'string: ${object}/getId'
+        
+        cmfdoc.addAction('test' , name=title, action=expression, condition='',
+                         permission='Manage properties', category='object')
+        t.copyFTIFlags()
+        atct_actions_ids = [action.getId() for action in atctdoc.listActions()]
+        self.failUnless(id in atct_actions_ids, atct_actions_ids)
 
 tests.append(TestTool)
 

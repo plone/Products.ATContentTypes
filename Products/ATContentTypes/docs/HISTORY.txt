@@ -1,6 +1,14 @@
 1.0-devel
 ======================
 
+ * Fixed [ 1026616 ] Actions aren't migrated. Actions are migrated from
+   the cmf fti if an action with the id doesn't exist on the atct fti.
+   [tiran]
+
+ * Migrating filter content types, allowed content types and allow
+   discussion from cmf fti to atct fti.
+   [tiran]
+ 
  * Updated requirements to CMFQuickinstaller 1.5/cvs,
    [tiran]
 

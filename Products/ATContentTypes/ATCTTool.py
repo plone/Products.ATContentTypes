@@ -357,6 +357,11 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
     def _copyFTIFlags(self, ptfrom, ptto, flags = ('filter_content_types',
                       'allowed_content_types', 'allow_discussion')):
         """Copies different flags from one fti to another
+        
+        * allow discussion
+        * allowed content types
+        * filter content types
+        * actions
         """
         ttool = getToolByName(self, 'portal_types')
         ptfrom = getattr(ttool.aq_explicit, ptfrom)
@@ -365,7 +370,16 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
         for flag in flags:
             kw[flag] = getattr(ptfrom.aq_explicit, flag)
         ptto.manage_changeProperties(**kw)
-        return kw
+        
+        # create clones
+        actions_from = tuple(ptfrom._cloneActions())
+        actions_to = list(ptto._cloneActions())
+        action_to_ids = [action.getId() for action in actions_to]
+        # append unlisted actions to actions_to
+        for action in actions_from:
+            if action.getId() not in action_to_ids:
+                actions_to.append(action)
+        ptto._actions = tuple(actions_to)
 
     def _fixPortalTypeOfMembersFolder(self):
         # XXX why do I need this hack?
