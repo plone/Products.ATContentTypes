@@ -18,7 +18,7 @@
 #
 """
 
-$Id: ATTopic.py,v 1.27 2004/10/08 16:23:16 tiran Exp $
+$Id: ATTopic.py,v 1.27.4.1 2004/11/24 16:29:11 ctheune Exp $
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -296,7 +296,7 @@ class ATTopic(ATCTFolder):
     def addCriterion(self, field, criterion_type):
         """Add a new search criterion.
         """
-        newid = 'crit__%s' % field
+        newid = 'crit__%s_%s' % (field, criterion_type)
         ct    = CriterionRegistry[criterion_type]
         crit  = ct(newid, field)
 
