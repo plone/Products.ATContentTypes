@@ -44,11 +44,8 @@ from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
 
-class ATCTIntegrationTestCase(ATFunctionalSiteTestCase):
-    """Integration tests for view and edit templates
-    """
-    
-    portal_type = None
+class IntegrationTestCase(ATFunctionalSiteTestCase):
+
     views = ()
 
     def afterSetUp(self):
@@ -66,19 +63,21 @@ class ATCTIntegrationTestCase(ATFunctionalSiteTestCase):
         
         # We want 401 responses, not redirects to a login page
         self.portal._delObject('cookie_authentication')
-        
-        # create test object
-        self.obj_id = 'test_object'
-        self.folder.invokeFactory(self.portal_type, self.obj_id, title=self.obj_id)
-        self.obj = getattr(self.folder.aq_explicit, self.obj_id)
-        self.obj_url = self.obj.absolute_url()
-        self.obj_path = '/%s' % self.obj.absolute_url(1)
-        
+
         # error log
         from Products.SiteErrorLog.SiteErrorLog import temp_logs
         temp_logs = {} # clean up log
         self.error_log = self.getPortal().error_log
         self.error_log._ignored_exceptions = ()
+        
+        # object
+        self.setupTestObject()
+
+    def setupTestObject(self):
+        self.obj_id = 'test_object'
+        self.obj = None
+        self.obj_url = self.obj.absolute_url()
+        self.obj_path = '/%s' % self.obj.absolute_url(1)
 
     def assertStatusEqual(self, a, b, msg=''):
         """Helper method that uses the error log to output useful debug infos
@@ -92,6 +91,21 @@ class ATCTIntegrationTestCase(ATFunctionalSiteTestCase):
                 if not msg:
                     msg = 'no error log msg available'
         self.failUnlessEqual(a, b, msg)
+
+
+class ATCTIntegrationTestCase(IntegrationTestCase):
+    """Integration tests for view and edit templates
+    """
+    
+    portal_type = None
+        
+    def setupTestObject(self):
+        # create test object
+        self.obj_id = 'test_object'
+        self.folder.invokeFactory(self.portal_type, self.obj_id, title=self.obj_id)
+        self.obj = getattr(self.folder.aq_explicit, self.obj_id)
+        self.obj_url = self.obj.absolute_url()
+        self.obj_path = '/%s' % self.obj.absolute_url(1)
         
     def test_createObject(self):
         # create an object using the createObject script
@@ -208,6 +222,18 @@ class ATCTIntegrationTestCase(ATFunctionalSiteTestCase):
         self.assertStatusEqual(response.getStatus(), 200) # OK
         
         self.failUnless(hasattr(self.obj.aq_explicit, 'talkback'))
+
+    def XXX_test_templateMixinContext(self):
+        # register and add a testing template (it's a script)
+        import pdb; pdb.set_trace()
+        self.setRoles(['Manager', 'Member'])
+        at = getToolByName(self, 'archetype_tool')
+        at.registerTemplate('unittestGetTitleOf')
+        at._templates[self.portal_type] += ['unittestGetTitleOf']
+        self.obj.setLayout('unittestGetTitleOf')
+        self.setRoles(['Member'])
+        
+        response = self.publish('%s/view' % (self.obj_path, view), self.basic_auth)
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFQuickInstallerTool.QuickInstallerTool import AlreadyInstalled
