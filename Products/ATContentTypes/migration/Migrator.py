@@ -33,6 +33,10 @@ from OFS.IOrderSupport import IOrderedContainer
 from Products.ATContentTypes.migration.common import *
 from Products.ATContentTypes.migration.common import _createObjectByType
 
+import sys, traceback
+from StringIO import StringIO
+from warnings import warn
+
 _marker = []
 
 # Dublin Core mapping
@@ -445,7 +449,15 @@ class FolderMigrationMixin(ItemMigrationMixin):
                 continue
             
             if orderAble:
-                orderMap[id] = self.old.getObjectPosition(id)
+                try:
+                    orderMap[id] = self.old.getObjectPosition(id)
+                except AttributeError:
+                    out = StringIO()
+                    t, e, tb = sys.exc_info()
+                    traceback.print_exc(tb, out)
+                    msg = "Broken OrderSupport::\n %s\n %s\n %s\n" %( t, e,  out.getvalue())
+                    LOG(msg)
+                    orderAble=0
             self.new._setObject(id, aq_base(obj), set_owner=0)
         
         # reorder items

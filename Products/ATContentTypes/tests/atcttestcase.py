@@ -162,7 +162,7 @@ class ATCTTypeTestCase(ATSiteTestCase):
     def compareDC(self, first, second=None, **kwargs):
         """
         """
-        if second:
+        if second != None:
             title = second.Title()
             description = second.Description()
         else:

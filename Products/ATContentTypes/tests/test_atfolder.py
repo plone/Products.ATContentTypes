@@ -27,6 +27,7 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
+from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests import atcttestcase
 
 from Products.CMFCore import CMFCorePermissions
