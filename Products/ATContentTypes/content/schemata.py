@@ -44,6 +44,7 @@ from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import Reference
 ATContentTypeBaseSchema = BaseSchema.copy()
 ATContentTypeBaseSchema['id'].validators = ('isValidId',)
 ATContentTypeBaseSchema['id'].searchable = True
+ATContentTypeBaseSchema['id'].widget.macro = 'zid'
 ATContentTypeBaseSchema['description'].schemata = 'default'
 
 relatedItemsField = ReferenceField('relatedItems',

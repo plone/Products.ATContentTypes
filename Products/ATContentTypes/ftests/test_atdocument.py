@@ -42,6 +42,45 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
         response = self.publish('%s/atct_history' % self.obj_path, self.owner_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
 
+    def xxx_test_id_change_on_initial_edit(self):
+        """Make sure Id is taken from title on initial edit and not otherwise"""
+        # ***Disabled because it fails even though it works through the UI, likely
+        #    due to some CMFFormController stuff, but possibly just something dumb
+        #    that I've done***
+        # first create an object using the createObject script
+        response = self.publish(self.folder_path +
+                                '/createObject?type_name=%s' % self.portal_type,
+                                self.basic_auth)
+
+        self.assertStatusEqual(response.getStatus(), 302) # Redirect to edit
+
+        # omit ?portal_status_message=...
+        body = response.getBody().split('?')[0]
+        
+        self.failUnless(body.startswith(self.folder_url), body)
+        self.failUnless(body.endswith('/atct_edit'), body)
+        # Perform the redirect
+        edit_form_path = body[len(self.app.REQUEST.SERVER_URL):]
+        response = self.publish(edit_form_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) # OK
+        #Change the title
+        temp_id = body.split('/')[-2]
+        obj_title = "New Title for Document"
+        new_id = "new-title-for-document"
+        new_obj = getattr(self.folder.aq_explicit, temp_id)
+        new_obj_path = '/%s' % new_obj.absolute_url(1)
+        self.failUnlessEqual(new_obj.checkCreationFlag(), True) # object is not yet edited
+
+        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&body=Blank' % (new_obj_path, obj_title), self.basic_auth) # Edit object
+        self.assertStatusEqual(response.getStatus(), 200) # OK
+        self.failUnlessEqual(new_obj.getId(), new_id) # does id match
+        self.failUnlessEqual(new_obj.checkCreationFlag(), False) # object is fully created
+        new_title = "Second Title"
+        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&body=Blank' % (new_obj_path, new_title), self.basic_auth) # Edit object
+        self.assertStatusEqual(response.getStatus(), 200) # OK
+        self.failUnlessEqual(new_obj.getId(), new_id) # id shouldn't have changed
+        
+
 tests.append(TestATDocumentFunctional)
 
 if __name__ == '__main__':

@@ -1,7 +1,18 @@
 1.0-devel
 =====================
 
+ * Merged uiteam-plip73-sanitize-short-names from the old plone
+   svn repos: diff https://svn.plone.org/svn/plone/ATContentTypes/branches/1.0@6168
+   https://svn.plone.org/svn/plone/ATContentTypes/branches/uiteam-plip73-sanitize-short-names
+   [tiran]
+
+ * Added flag to determine whether an content object has undergone a successful
+   initial edit.  Use this flag along with detection of default naming to
+   rename object on inital edit.
+   [alecm]
+
  * Merged the topic tool branch into 1.0 XXX: insert history here 
+   [tiran]
 
  * Refactored ConstrainTypesMixin to support PLIP 78
     o DISABLED means use standard allowed types from portal_types
@@ -32,7 +43,7 @@
  * Implemented PLIP #2 of ATCT: using ZConfig to configure the types and
    features of ATContentTypes.
    [tiran]
-
+   
  * Changed default output of Document, Event and News Item to text/x-safe-html.
    X-safe-html is using CMFDefault.utils.scrubHTML to remove harmful tags
    like script.

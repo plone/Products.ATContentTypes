@@ -126,6 +126,14 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         edit_form_path = body[len(self.app.REQUEST.SERVER_URL):]
         response = self.publish(edit_form_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
+        temp_id = body.split('/')[-2]
+        new_obj = getattr(self.folder.aq_explicit, temp_id)
+        self.failUnlessEqual(self.obj.checkCreationFlag(), True) # object is not yet edited
+        
+
+    def check_newly_created(self):
+        """Objects created programmatically should not have the creation flag set"""
+        self.failUnlessEqual(self.obj.checkCreationFlag(), False) # object is fully created
 
     def test_edit_view(self):
         # edit should work        
