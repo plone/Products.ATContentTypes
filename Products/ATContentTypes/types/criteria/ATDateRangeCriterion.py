@@ -16,89 +16,82 @@
 ##############################################################################
 """ Topic:
 
-
+$Id: ATDateRangeCriterion.py,v 1.1.4.1 2005/03/08 01:03:45 tiran Exp $
 """
 
-__author__  = 'Christian Heimes'
+__author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 
 from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.public import Schema
-from Products.Archetypes.public import LinesField
-from Products.Archetypes.public import StringField
-from Products.Archetypes.public import SelectionWidget
-from Products.Archetypes.public import LinesWidget
-from Products.Archetypes.public import DisplayList
+from Products.Archetypes.public import DateTimeField
+from Products.Archetypes.public import CalendarWidget
 
 from Products.ATContentTypes.types.criteria import registerCriterion
-from Products.ATContentTypes.types.criteria import STRING_INDICES
+from Products.ATContentTypes.types.criteria import DATE_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.Permissions import ChangeTopics
 from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
 from Products.ATContentTypes.types.criteria.schemata import ATBaseCriterionSchema
 
-CompareOperators = DisplayList((
-                    ('and', 'and')
-                  , ('or', 'or')
-    ))
+RELEVANT_INDICES=list(DATE_INDICES)
+RELEVANT_INDICES.remove('DateRangeIndex')
+RELEVANT_INDICES = tuple(RELEVANT_INDICES)
 
-ATListCriterionSchema = ATBaseCriterionSchema + Schema((
-    LinesField('value',
+ATDateRangeCriterionSchema = ATBaseCriterionSchema + Schema((
+    DateTimeField('start',
                 required=1,
                 mode="rw",
                 write_permission=ChangeTopics,
-                accessor="Value",
-                mutator="setValue",
-                default=[],
-                widget=LinesWidget(
-                    label="Values",
-                    label_msgid="label_list_criteria_value",
-                    description="Values, each on its own line.",
-                    description_msgid="help_list_criteria_value",
+                default=None,
+                widget=CalendarWidget(
+                    label="Start Date",
+                    label_msgid="label_date_range_criteria_start",
+                    description="The beginning of the date range to search",
+                    description_msgid="help_date_range_criteria_start",
                     i18n_domain="plone"),
                 ),
-    StringField('operator',
+    DateTimeField('end',
                 required=1,
                 mode="rw",
                 write_permission=ChangeTopics,
-                default='or',
-                vocabulary=CompareOperators,
-                widget=SelectionWidget(
-                    label="operator name",
-                    label_msgid="label_list_criteria_operator",
-                    description="Operator used to join the tests "
-                    "on each value.",
-                    description_msgid="help_list_criteria_operator",
+                default=None,
+                widget=CalendarWidget(
+                    label="End Date",
+                    label_msgid="label_date_range_criteria_end",
+                    description="The beginning of the date range to search",
+                    description_msgid="help_date_range_criteria_end",
                     i18n_domain="plone"),
                 ),
     ))
 
-
-class ATListCriterion(ATBaseCriterion):
-    """A list criterion"""
+class ATDateRangeCriterion(ATBaseCriterion):
+    """A date range criterion"""
 
     __implements__ = ATBaseCriterion.__implements__ + (IATTopicSearchCriterion, )
     security       = ClassSecurityInfo()
-    schema         = ATListCriterionSchema
-    meta_type      = 'ATListCriterion'
-    archetype_name = 'List Criterion'
+    schema         = ATDateRangeCriterionSchema
+    meta_type      = 'ATDateRangeCriterion'
+    archetype_name = 'AT Date Range Criterion'
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'logical AND or OR of list values'
+    shortDesc      = 'date range value'
+
+    security.declareProtected(CMFCorePermissions.View, 'getValue')
+    def Value(self):
+        return (self.getStart(), self.getEnd())
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):
-        # filter out empty strings
         result = []
 
-        value = tuple([ value for value in self.Value() if value ])
-        if not value:
-            return ()
-        result.append((self.Field(), { 'query': value, 'operator': self.getOperator()}),)
+        field = self.Field()
+        value = self.Value()
 
-        return tuple(result)
+        return ( ( field, {'query': value, 'range': 'min:max'} ), )
 
-registerCriterion(ATListCriterion, STRING_INDICES)
+registerCriterion(ATDateRangeCriterion, RELEVANT_INDICES)

@@ -38,7 +38,14 @@ from Products.ATContentTypes.types.criteria.ATPortalTypeCriterion import \
     ATPortalTypeCriterion
 from Products.ATContentTypes.types.criteria.ATSortCriterion import \
     ATSortCriterion
-
+from Products.ATContentTypes.types.criteria.ATSelectionCriterion import \
+    ATSelectionCriterion
+from Products.ATContentTypes.types.criteria.ATDateRangeCriterion import \
+    ATDateRangeCriterion
+from Products.ATContentTypes.types.criteria.ATReferenceCriterion import \
+    ATReferenceCriterion
+from Products.ATContentTypes.types.criteria.ATBooleanCriterion import \
+    ATBooleanCriterion
 tests = []
 
 class CriteriaTest(atcttestcase.ATCTSiteTestCase):
@@ -99,7 +106,7 @@ tests.append(TestATBaseCriterion)
 class TestATDateCriteria(CriteriaTest):
     klass = ATDateCriteria
     title = 'Friendly Date Criteria'
-    meta_type = 'ATDateCriteria'
+    meta_type = 'ATFriendlyDateCriteria'
     portal_type = 'ATDateCriteria'
 
 tests.append(TestATDateCriteria)
@@ -139,6 +146,42 @@ class TestATSortCriterion(CriteriaTest):
     portal_type = 'ATSortCriterion'
 
 tests.append(TestATSortCriterion)
+
+
+class TestATSelectionCriterion(CriteriaTest):
+    klass = ATSelectionCriterion
+    title = 'Selection Criterion'
+    meta_type = 'ATSelectionCriterion'
+    portal_type = 'ATSelectionCriterion'
+
+tests.append(TestATSelectionCriterion)
+
+
+class TestATDateRangeCriterion(CriteriaTest):
+    klass = ATDateRangeCriterion
+    title = 'Date Range Criterion'
+    meta_type = 'ATDateRangeCriterion'
+    portal_type = 'ATDateRangeCriterion'
+
+tests.append(TestATDateRangeCriterion)
+
+
+class TestATReferenceCriterion(CriteriaTest):
+    klass = ATReferenceCriterion
+    title = 'Reference Criterion'
+    meta_type = 'ATReferenceCriterion'
+    portal_type = 'ATReferenceCriterion'
+
+tests.append(TestATReferenceCriterion)
+
+
+class TestATBooleanCriterion(CriteriaTest):
+    klass = ATBooleanCriterion
+    title = 'Boolean Criterion'
+    meta_type = 'ATBooleanCriterion'
+    portal_type = 'ATBooleanCriterion'
+
+tests.append(TestATBooleanCriterion)
 
 
 if __name__ == '__main__':

@@ -43,9 +43,11 @@ SORT_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex', 'KeywordIndex')
 DATE_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex')
 
 STRING_INDICES = ('FieldIndex', 'KeywordIndex', 'PathIndex', 'TextIndex',
-                  'TextIndexNG2', 'ZCTextIndex', 'NavtreeIndexNG', 'ExtendedPathIndex')
+                  'TextIndexNG2', 'ZCTextIndex', 'NavtreeIndexNG',
+                  'ExtendedPathIndex', 'TopicIndex')
 
-LIST_INDICES = ('FieldIndex', 'KeywordIndex', )
+LIST_INDICES = ('FieldIndex', 'KeywordIndex', 'TopicIndex')
+FIELD_INDICES = ('FieldIndex',)
 
 class _CriterionRegistry(UserDict):
     """Registry for criteria """
@@ -118,3 +120,7 @@ import ATSimpleIntCriterion
 import ATSimpleStringCriterion
 import ATPortalTypeCriterion
 import ATSortCriterion
+import ATSelectionCriterion
+import ATDateRangeCriterion
+import ATReferenceCriterion
+import ATBooleanCriterion

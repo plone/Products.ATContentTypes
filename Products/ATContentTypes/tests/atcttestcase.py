@@ -487,9 +487,10 @@ class ATCTFuncionalTestCase(ATFunctionalSiteTestCase):
                                  % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # ok
         
-        response = self.publish('%s/discussion_reply?subject=test&body=testbody' 
+        response = self.publish('%s/discussion_reply?subject=test&body_text=testbody' 
                                  % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 302) # Redirect
+        
         # omit ?portal_status_message=...
         body = response.getBody().split('?')[0]
         
@@ -499,6 +500,8 @@ class ATCTFuncionalTestCase(ATFunctionalSiteTestCase):
         form_path = body[len(self.app.REQUEST.SERVER_URL):]
         response = self.publish(form_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
+        
+        self.failUnless(hasattr(self.obj.aq_explicit, 'talkback'))
 
 
 from Products.CMFCore.utils import getToolByName

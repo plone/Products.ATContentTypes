@@ -16,64 +16,63 @@
 ##############################################################################
 """ Topic:
 
-
 """
 
-__author__  = 'Godefroid Chapelle'
+__author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
-
 from Products.Archetypes.public import Schema
-from Products.Archetypes.public import StringField
-from Products.Archetypes.public import MultiSelectionWidget
-from Products.Archetypes.public import DisplayList
+from Products.Archetypes.public import BooleanField
+from Products.Archetypes.public import BooleanWidget
 
 from Products.ATContentTypes.types.criteria import registerCriterion
 from Products.ATContentTypes.types.criteria import FIELD_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.Permissions import ChangeTopics
-from Products.ATContentTypes.types.criteria.ATSelectionCriterion import ATSelectionCriterion
+from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
+from Products.ATContentTypes.types.criteria.schemata import ATBaseCriterionSchema
 
+ATBooleanCriterionSchema = ATBaseCriterionSchema + Schema((
+    BooleanField('bool',
+                required=1,
+                mode="rw",
+                write_permission=ChangeTopics,
+                default=None,
+                widget=BooleanWidget(
+                    label="Value",
+                    label_msgid="label_boolean_criteria_bool",
+                    description="True or false",
+                    description_msgid="help_boolean_criteria_bool",
+                    i18n_domain="plone"),
+                ),
+    ))
 
-ATPortalTypeCriterionSchema = ATSelectionCriterion.schema.copy()
+class ATBooleanCriterion(ATBaseCriterion):
+    """A boolean criterion"""
 
-val_widget = ATPortalTypeCriterionSchema['value'].widget
-val_widget.description="One of the registered portal types."
-val_widget.description_msgid="help_portal_type_criteria_value"
-val_widget.label_msgid="label_portal_type_criteria_value"
-ATPortalTypeCriterionSchema['value'].widget = val_widget
-
-    
-class ATPortalTypeCriterion(ATSelectionCriterion):
-    """A portal_types criterion"""
-
-    __implements__ = ATSelectionCriterion.__implements__ + (IATTopicSearchCriterion, )
+    __implements__ = ATBaseCriterion.__implements__ + (IATTopicSearchCriterion, )
     security       = ClassSecurityInfo()
-    schema         = ATPortalTypeCriterionSchema
-    meta_type      = 'ATPortalTypeCriterion'
-    archetype_name = 'Portal Types Criterion'
+    schema         = ATBooleanCriterionSchema
+    meta_type      = 'ATBooleanCriterion'
+    archetype_name = 'AT Boolean Criterion'
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'portal types values'
-
-    def getCurrentValues(self):
-        """Return enabled portal types"""
-        topic_tool = getToolByName(self, 'portal_topics')
-        allowed_types = topic_tool.getAllowedPortalTypes()
-        return DisplayList(list(allowed_types))
+    shortDesc      = 'Boolean (true/false)'
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
+        if self.getBool():
+            value = [1,True,'1','True']
+        else:
+            value = [0,'',False,'0','False', None, (), [], {}]
+        result.append((self.Field(), value))
 
-        if self.Value() is not '':
-            result.append((self.Field(), self.Value()))
+        return tuple( result )
 
-        return tuple(result)
-
-registerCriterion(ATPortalTypeCriterion, FIELD_INDICES)
+registerCriterion(ATBooleanCriterion, FIELD_INDICES)

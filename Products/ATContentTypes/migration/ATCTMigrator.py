@@ -38,8 +38,17 @@ from Products.ATContentTypes.types import ATFolder
 from Products.ATContentTypes.types import ATImage
 from Products.ATContentTypes.types import ATLink
 from Products.ATContentTypes.types import ATNewsItem
+from Products.ATContentTypes.types import ATTopic
 from Products.ATContentTypes.types.ATContentType import translateMimetypeAlias
 from Products.ATContentTypes.Extensions.toolbox import _fixLargePloneFolder
+
+CRIT_MAP = {'Integer Criterion': 'ATSimpleIntCriterion',
+                'String Criterion': 'ATSimpleStringCriterion',
+                'Friendly Date Criterion': 'ATFriendlyDateCriteria',
+                'List Criterion': 'ATListCriterion',
+                'Sort Criterion': 'ATSortCriterion'}
+
+REV_CRIT_MAP = dict([[v,k] for k,v in CRIT_MAP.items()])
 
 class DocumentMigrator(CMFItemMigrator):
     fromType = ATDocument.ATDocument._atct_newTypeFor['portal_type']
@@ -77,6 +86,38 @@ class EventMigrator(CMFItemMigrator):
         self.new.setStartDate(sdate)
         self.new.setEndDate(edate)
 
+class TopicMigrator(CMFItemMigrator):
+    # XXX can't handle nested topics
+    fromType = ATTopic.ATTopic._atct_newTypeFor['portal_type']
+    toType   = ATTopic.ATTopic.portal_type
+    map = {'acquireCriteria' : 'setAcquireCriteria'}
+
+    def custom(self):
+        for old_crit in self.old.listCriteria():
+            old_meta = old_crit.meta_type
+            new_meta = CRIT_MAP[old_meta]
+            self.new.addCriterion(old_crit.field or old_crit.index, new_meta)
+            new_crit = self.new.getCriterion('%s_%s'%(old_crit.field or old_crit.index, new_meta))
+            if new_meta not in ('ATSortCriterion', 'ATSimpleIntCriterion'):
+                new_crit.setValue(old_crit.value)
+            elif new_meta == 'ATSortCriterion':
+                new_crit.setReversed(old_crit.reversed)
+            if new_meta == 'ATFriendlyDateCriteria':
+                new_crit.setOperation(old_crit.operation)
+                DATE_RANGE = ( old_crit.daterange == 'old' and '-') or '+'
+                new_crit.setDateRange(DATE_RANGE)
+            if new_meta == 'ATListCriterion':
+                new_crit.setOperator(old_crit.operator)
+            if new_meta == 'ATSimpleIntCriterion':
+                old_val = old_crit.value
+                if isinstance(old_val, (tuple,list)):
+                    new_crit.setValue(old_val[0])
+                    new_crit.setValue2(old_val[1])
+                elif isinstance(old_val, int):
+                    new_crit.setValue(old_val)
+                else:
+                    raise AttributeError, 'Int Criteria for topic %s has invalid value %s'%(old_crit.title_or_id(), old_val)
+                new_crit.setDirection(old_crit.direction)
 
 class FileMigrator(CMFItemMigrator):
     fromType = ATFile.ATFile._atct_newTypeFor['portal_type']
@@ -132,6 +173,7 @@ class LargeFolderMigrator(CMFFolderMigrator):
 
 migrators = (DocumentMigrator, EventMigrator, FavoriteMigrator, FileMigrator,
              ImageMigrator, LinkMigrator, NewsItemMigrator,
+             # XXX TopicMigrator,
             )
 
 folderMigrators = ( FolderMigrator, LargeFolderMigrator)

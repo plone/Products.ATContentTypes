@@ -16,35 +16,30 @@
 ##############################################################################
 """ Topic:
 
-
+$Id: ATSelectionCriterion.py,v 1.1.4.1 2005/03/08 01:03:45 tiran Exp $
 """
 
-__author__  = 'Christian Heimes'
+__author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 
 from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import LinesField
-from Products.Archetypes.public import StringField
-from Products.Archetypes.public import SelectionWidget
-from Products.Archetypes.public import LinesWidget
-from Products.Archetypes.public import DisplayList
+from Products.Archetypes.public import MultiSelectionWidget
 
 from Products.ATContentTypes.types.criteria import registerCriterion
-from Products.ATContentTypes.types.criteria import STRING_INDICES
+from Products.ATContentTypes.types.criteria import LIST_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.Permissions import ChangeTopics
 from Products.ATContentTypes.types.criteria.ATBaseCriterion import ATBaseCriterion
 from Products.ATContentTypes.types.criteria.schemata import ATBaseCriterionSchema
 
-CompareOperators = DisplayList((
-                    ('and', 'and')
-                  , ('or', 'or')
-    ))
+from types import StringType
 
-ATListCriterionSchema = ATBaseCriterionSchema + Schema((
+ATSelectionCriterionSchema = ATBaseCriterionSchema + Schema((
     LinesField('value',
                 required=1,
                 mode="rw",
@@ -52,53 +47,47 @@ ATListCriterionSchema = ATBaseCriterionSchema + Schema((
                 accessor="Value",
                 mutator="setValue",
                 default=[],
-                widget=LinesWidget(
-                    label="Values",
-                    label_msgid="label_list_criteria_value",
-                    description="Values, each on its own line.",
-                    description_msgid="help_list_criteria_value",
-                    i18n_domain="plone"),
-                ),
-    StringField('operator',
-                required=1,
-                mode="rw",
-                write_permission=ChangeTopics,
-                default='or',
-                vocabulary=CompareOperators,
-                widget=SelectionWidget(
-                    label="operator name",
-                    label_msgid="label_list_criteria_operator",
-                    description="Operator used to join the tests "
-                    "on each value.",
-                    description_msgid="help_list_criteria_operator",
+                vocabulary="getCurrentValues",
+                widget=MultiSelectionWidget(
+                    label="Value",
+                    label_msgid="label_selection_criteria_value",
+                    description="Existing values.",
+                    description_msgid="help_selection_criteria_value",
                     i18n_domain="plone"),
                 ),
     ))
 
-
-class ATListCriterion(ATBaseCriterion):
-    """A list criterion"""
+class ATSelectionCriterion(ATBaseCriterion):
+    """A selection criterion"""
 
     __implements__ = ATBaseCriterion.__implements__ + (IATTopicSearchCriterion, )
     security       = ClassSecurityInfo()
-    schema         = ATListCriterionSchema
-    meta_type      = 'ATListCriterion'
-    archetype_name = 'List Criterion'
+    schema         = ATSelectionCriterionSchema
+    meta_type      = 'ATSelectionCriterion'
+    archetype_name = 'AT Selection Criterion'
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'logical AND or OR of list values'
+    shortDesc      = 'select list'
+
+
+    def getCurrentValues(self):
+        catalog = getToolByName(self, 'portal_catalog')
+        options = catalog.uniqueValuesFor(self.Field())
+        # AT is currently broken, and does not accept ints as
+        # DisplayList keys though it is supposed to (it should
+        # probably accept Booleans as well) so we only accept strings
+        # for now
+        options = [o for o in options if type(o) is StringType]
+        return options
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):
-        # filter out empty strings
         result = []
 
-        value = tuple([ value for value in self.Value() if value ])
-        if not value:
-            return ()
-        result.append((self.Field(), { 'query': value, 'operator': self.getOperator()}),)
+        if self.Value() is not '':
+            result.append((self.Field(), self.Value()))
 
-        return tuple(result)
+        return tuple( result )
 
-registerCriterion(ATListCriterion, STRING_INDICES)
+registerCriterion(ATSelectionCriterion, LIST_INDICES)
