@@ -56,20 +56,11 @@ Archetypes.
 
 AT Content Types doesn't work with AT 1.2.x or older!
 
+CMFQuickinstaller
+-----------------
 
-PortalTransforms
-----------------
-
-AT Content Types requires the CVS version of PortalTransforms. All older
-versions are missing some important bugfixes.
-
-   Note: Please use the version of PT that is bundled with AT Content Types.
-         It's the latest developer checkout.
-
-Because PortalTransforms has a problem updating the tools you *must* remove the
-mimetypes_registry and portal_transforms manually and reinstall PortalTransforms
-using the Quickinstaller. Otherwise some features of AT Content Types may not
-work or worse AT Content Types may break.
+You have to install the upcoming version 1.5 of the quickinstaller tool. Right
+now it's only available from cvs.
 
 Plone
 -----

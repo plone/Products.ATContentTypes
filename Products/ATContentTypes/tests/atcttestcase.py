@@ -59,6 +59,8 @@ from Products.ATContentTypes.tests.utils import idValidator
 from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
+from Products.CMFCore.utils import getToolByName
+
 # BBB remove import from PloneLanguageTool later
 try:
     from Products.CMFPlone.interfaces.Translatable import ITranslatable
@@ -350,7 +352,6 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnless(len(tuple(vocab)) >= 2, tuple(vocab))
         self.failUnless('base_view' in tuple(vocab), tuple(vocab))
 
-from Products.CMFCore.utils import getToolByName
 from Products.CMFQuickInstallerTool.QuickInstallerTool import AlreadyInstalled
 from Products.Archetypes.tests.atsitetestcase import portal_name
 from Products.Archetypes.tests.atsitetestcase import portal_owner
@@ -378,12 +379,6 @@ def setupATCT(app, id=portal_name, quiet=False):
         qi.installProduct('ATContentTypes')
     except AlreadyInstalled:
         if not quiet: ZopeTestCase._print('ATContentTypes already installed ...\n')
-
-    #if isSwitchedToATCT(portal):
-    #    # XXX right now ATCT unit tests don't run in ATCT mode.
-    #    # Switching to native mode
-    #    ZopeTestCase._print('switching to CMF mode ... ')
-    #    portal.switchATCT2CMF()
 
     # Log out
     noSecurityManager()

@@ -1,6 +1,12 @@
 1.0-devel
 ======================
 
+ * Updated requirements to CMFQuickinstaller 1.5/cvs,
+   [tiran]
+
+ * Starting to remove the switch* and migrate* external methods.
+   [tiran]
+
  * Fixed default view of ATFolder. Pointing to view again makes a loop and
    raises a hard to debug exception because TemplateMixin is trying to use
    itself as default view which doesn't work.

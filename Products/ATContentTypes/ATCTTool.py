@@ -39,6 +39,10 @@ from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.interfaces import IATCTTool
 from Products.ATContentTypes.config import TOOLNAME
 
+CMF_PRODUCTS = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFCalendar')
+ATCT_PRODUCTS = ('ATContentTypes', )
+SITE_TYPES = ('Portal Site', 'Plone Site',)
+
 configlets = ({
     'id' : TOOLNAME,
     'appId' : 'ATContentTypes',
@@ -53,7 +57,9 @@ configlets = ({
 class AlreadySwitched(RuntimeError): pass
 
 class ATCTTool(UniqueObject, SimpleItem, PropertyManager): 
-    """
+    """ATContentTypes tool
+    
+    Used for migration, maintenace ...
     """
     
     security = ClassSecurityInfo()
@@ -61,12 +67,29 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
     id = TOOLNAME 
     meta_type= 'ATCT Tool'
     title = 'ATContentTypes Tool'
-    plone_tool = 1
+    plone_tool = True
+    
+    _cmfTypesAreRecataloged = False
     
     __implements__ = (SimpleItem.__implements__, IATCTTool)
         
     manage_options = SimpleItem.manage_options + \
         PropertyManager.manage_options
+        
+
+    security.declareProtected(CMFCorePermissions.ManagePortal,
+                              'getCMFTypesAreRecataloged')
+    def getCMFTypesAreRecataloged(self):
+        """Get the is recatalog flag
+        """
+        return bool(self._cmfTypesAreRecataloged)
+    
+    security.declareProtected(CMFCorePermissions.ManagePortal,
+                              'setCMFTypesAreRecataloged')
+    def setCMFTypesAreRecataloged(self, value=True):
+        """set the is recatalog flag
+        """
+        self._cmfTypesAreRecataloged = value
 
     security.declareProtected(CMFCorePermissions.ManagePortal,
                               'recreateImageScales')
@@ -125,17 +148,40 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
             if not ntf or not ntf.get('portal_type'):
                 # no old portal type given
                 continue
-            old_pt = ntf.get('portal_type')
-            new_pt = 'CMF %s' % old_pt
-            self._changePortalTypeName(old_pt, new_pt, global_allow=False)
-            result.append('Renamed %s to %s' % (old_pt, new_pt))
+            cmf_pt = ntf.get('portal_type')
+            cmf_bak_pt = 'CMF %s' % cmf_pt
+            self._changePortalTypeName(cmf_pt, cmf_bak_pt, global_allow=False)
+            result.append('Renamed %s to %s' % (cmf_pt, cmf_bak_pt))
         return ''.join(result)
     
     def enableCMFTypes(self):
         """Enable CMF types
+        
+        XXX: Enabling CMF types leaves all ATCT based types in an insane state!
         """
-        # XXX
-        raise NotImplementedError
+        assert self.isCMFdisabled()
+        result = []
+        ttool = getToolByName(self, 'portal_types')
+        for atct in self._listATCTTypes():
+            klass = atct['klass']
+            if not IATContentType.isImplementedByInstancesOf(klass):
+                # skip criteria
+                continue
+            ntf = klass._atct_newTypeFor
+            if not ntf or not ntf.get('portal_type'):
+                # no old portal type given
+                continue
+            cmf_pt = ntf.get('portal_type')
+            cmf_bak_pt = 'CMF %s' % cmf_pt
+            # XXX backup?
+            #atct_bak_pt = 'AT %s' % cmf_pt
+            #self._changePortalTypeName(cmf_pt, atct_bak_pt, global_allow=False)
+            print cmf_pt, cmf_bak_pt
+            ttool.manage_delObjects(cmf_pt)
+            result.append('Removing ATCT: %s' % cmf_pt)
+            self._changePortalTypeName(cmf_bak_pt, cmf_pt, global_allow=False)
+            result.append('Renamed %s to %s' % (cmf_pt, cmf_bak_pt))
+        return ''.join(result)
     
     def isCMFdisabled(self):
         """Query if CMF types are disabled
@@ -153,30 +199,28 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
     def _getFtis(self, products = None):
         """Get FTIs by product
         """
-        products = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFEvent')
         ttool = getToolByName(self, 'portal_types')
         if products is None:
             return ttool.objectValues()
         ftis = []
         for fti in ttool.objectValues():
             product = getattr(aq_base(fti), 'product', None)
-            if product in products:
-                ftis.append(fti)
+            if product in CMF_PRODUCTS:
+                if fti.getId() not in SITE_TYPES:
+                    ftis.append(fti)
         return ftis
     
     def _getCMFFtis(self):
         """Get all FTIs register by CMF core products + CMFPlone
         
-        It includes CMFPlone, CMFDefault, CMFTopic and CMFEvent
+        It includes CMFPlone, CMFDefault, CMFTopic and CMFCalendar
         """
-        products = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFEvent')
-        return self._getFtis(products = products)
+        return self._getFtis(products = CMF_PRODUCTS)
 
     def _getATCTFtis(self):
         """Get all FTIs register by ATCT
         """
-        products = ('ATContentTypes', )
-        return self._getFtis(products = products)
+        return self._getFtis(products = ATCT_PRODUCTS)
 
     def _listATCTTypes(self):
         """Get all atct types

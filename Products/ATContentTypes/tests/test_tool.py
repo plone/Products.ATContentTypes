@@ -29,6 +29,8 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
+from Products.ATContentTypes.interfaces import IATCTTool
+from Interface.Verify import verifyObject
 
 tests = []
 
@@ -46,9 +48,9 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
     def test_cmfmetatypes(self):
         t = self.tool
         mt = t._getCMFMetaTypes()
-        expected = ['Document', 'Favorite', 'Large Plone Folder',
-        'Link', 'News Item', 'Plone Folder', 'Plone Site', 'Portal File',
-        'Portal Image', 'Portal Topic']
+        expected = ['CMF Event', 'Document', 'Favorite', 'Large Plone Folder',
+            'Link', 'News Item', 'Plone Folder', 'Portal File',
+            'Portal Image', 'Portal Topic',]
         mt.sort()
         expected.sort()
         self.failUnlessEqual(mt, expected)
@@ -57,8 +59,8 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         t = self.tool
         pt = t._getCMFPortalTypes()
         expected = ['CMF Document', 'CMF Favorite', 'CMF File',
-        'CMF Folder', 'CMF Image', 'CMF Large Plone Folder', 'CMF Link',
-        'CMF News Item', 'CMF Topic', 'Plone Site', ]
+            'CMF Folder', 'CMF Image', 'CMF Large Plone Folder', 'CMF Link',
+            'CMF News Item', 'CMF Topic', 'CMF Event']
         pt.sort()
         expected.sort()
         self.failUnlessEqual(pt, expected)
@@ -100,6 +102,18 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         # just to make sure it is callable
         t = self.tool
         t.recatalogCMFTypes()
+        
+    def test_interface(self):
+        t = self.tool
+        self.failUnless(IATCTTool.isImplementedBy(t))
+        self.failUnless(verifyObject(IATCTTool, t))
+        
+    def test_names(self):
+        t = self.tool
+        self.failUnlessEqual(t.meta_type, 'ATCT Tool')
+        self.failUnlessEqual(t.getId(), TOOLNAME)
+        self.failUnlessEqual(t.title, 'ATContentTypes Tool')
+        self.failUnlessEqual(t.plone_tool, True)
 
 tests.append(TestTool)
 

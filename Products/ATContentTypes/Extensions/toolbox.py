@@ -245,6 +245,8 @@ def _switchToCMF(portal, pt, cat, reg, klass, out):
 
 
 def switchCMF2ATCT(self, skip_rename=False):
+    # XXX remove me
+    return
     if isSwitchedToATCT(self):
         return "Error: Already switched"
     pt = getToolByName(self, 'portal_types')
@@ -260,7 +262,7 @@ def switchCMF2ATCT(self, skip_rename=False):
     return out.getvalue()
 
 def switchATCT2CMF(self):
-    # XXX
+    # XXX remove me
     return
     if not isSwitchedToATCT(self):
         return "Error: Not switched"
@@ -281,7 +283,7 @@ def isSwitchedToATCT(self):
 
     This test isn't very good but sufficient for our purpose
     """
-    # XXX
+    # XXX remove me
     return True
     pt = getToolByName(self, 'portal_types')
     doc = pt.getTypeInfo('Document')

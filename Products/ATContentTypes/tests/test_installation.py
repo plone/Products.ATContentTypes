@@ -29,6 +29,8 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
+from Products.ATContentTypes.ATCTTool import ATCTTool
+from Products.CMFCore.utils import getToolByName
 
 tests = []
 
@@ -36,7 +38,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
     def afterSetUp(self):
         self.tool = getattr(self.portal.aq_explicit, TOOLNAME)
-        self.pt = getattr(self.portal.aq_explicit, 'portal_types')
+        self.ttool = getattr(self.portal.aq_explicit, 'portal_types')
         self.qi = getattr(self.portal.aq_explicit, 'portal_quickinstaller')
         
     def test_installed_products(self):
@@ -48,17 +50,74 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         self.failUnless('ATContentTypes' in installed, installed)
         self.failUnless('ATReferenceBrowserWidget' in installed, installed)
         
-    def test_types_installed(self):
-        pass
-
     def test_tool_installed(self):
-        pass
+        t = getToolByName(self.portal, TOOLNAME, None)
+        self.failUnless(t, t)
+        self.failUnless(isinstance(t, ATCTTool), t.__class__)
+        self.failUnlessEqual(t.meta_type, 'ATCT Tool')
+        self.failUnlessEqual(t.getId(), TOOLNAME)
 
     def test_skin_installed(self):
         stool = getattr(self.portal.aq_explicit, 'portal_skins')
         ids = stool.objectIds()
         self.failUnless('ATContentTypes' in ids, ids)
-        
+
+    def test_installedAllTypes(self):
+        # test that all types are installed well
+        ttool = self.ttool
+        ids = ('Document', 'Favorite', 'File',
+            'Folder', 'Image', 'Large Plone Folder', 'Link',
+            'News Item', 'Topic', 'Event')
+
+        tids = ttool.objectIds()
+        for id in ids:
+            self.failUnless(id in tids, (id, tids))
+            tinfo = ttool[id]
+            self.failUnless(tinfo.product == 'ATContentTypes', tinfo.product)
+
+    def test_reinstallKeepsCMFTypes(self):
+        # test if CMF types are not removed and are still CMF types
+        # reinstall requires manager roles
+        self.setRoles(['Manager', 'Member']) 
+        qi = self.qi
+        ttool = self.ttool
+        cmf_ids = ('CMF Document', 'CMF Favorite', 'CMF File',
+            'CMF Folder', 'CMF Image', 'CMF Large Plone Folder', 'CMF Link',
+            'CMF News Item', 'CMF Topic', 'CMF Event', )
+        cmf_prods = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFCalendar')
+
+        qi.reinstallProducts(('ATContentTypes',))
+
+        tids = ttool.objectIds()
+        for id in cmf_ids:
+            self.failUnless(id in tids, (id, tids))
+            tinfo = ttool[id]
+            self.failUnless(tinfo.product in cmf_prods, tinfo.product)
+            
+    def test_uninstallMakesCMFTypes(self):
+        # tests if uninstall resets cmf types
+        # reinstall requires manager roles
+        self.setRoles(['Manager', 'Member']) 
+        qi = self.qi
+        ttool = self.ttool
+        import pdb; pdb.set_trace()
+        cmf_ids = ('Document', 'Favorite', 'File',
+            'Folder', 'Image', 'Large Plone Folder', 'Link',
+            'News Item', 'Topic', 'Event')
+        cmf_prods = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFEvent')
+
+        qi.uninstallProducts(('ATContentTypes',))
+        get_transaction().commit(1)
+
+        tids = ttool.objectIds()
+        for id in cmf_ids:
+            self.failUnless(id in tids, (id, tids))
+            tinfo = ttool[id]
+            self.failUnless(tinfo.product in cmf_prods, tinfo.product)
+            
+    def test_installsetsCMFcataloged(self):
+        t = self.tool
+        self.failUnless(t.getCMFTypesAreRecataloged())
         
 tests.append(TestInstallation)
 

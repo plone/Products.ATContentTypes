@@ -51,25 +51,41 @@ from Products.ATContentTypes.Extensions.utils import registerActionIcons
 #from Products.ATContentTypes.Extensions.toolbox import disableCMFTypes
 #from Products.ATContentTypes.Extensions.toolbox import enableCMFTypes
 
-def install(self):
+def install(self, reinstall):
     out = StringIO()
 
     qi = getToolByName(self, 'portal_quickinstaller')
     
-    # install tool
-    tool = getattr(self.aq_explicit, TOOLNAME, None)
+    # step 1: install tool
+    # It's required for migration
+    tool = getToolByName(self, TOOLNAME, None)
     if tool is None:
         addTool = self.manage_addProduct['ATContentTypes'].manage_addTool
         addTool('ATCT Tool')
-        tool = getattr(self.aq_explicit, TOOLNAME)
+        tool = getToolByName(self, TOOLNAME)
+        
+    # step 2: recatalog CMF items if installing
+    # I've to make sure all CMF types are in the catalog
+    # Because it make take a long time on a large site you can add the tool
+    # manually and recatalog before installing ATCT or even set the flag to
+    # True *ON YOUR OWN RISK*
+    if not reinstall:
+        if tool.getCMFTypesAreRecataloged():
+            print >>out, 'CMF types are marked as catalog, no recataloging'
+        else:
+            print >>out, 'Recataloging CMF types'
+            print 'Recataloging CMF types, this make take a while ...'
+            tool.recatalogCMFTypes()
+            print 'Done'
+            tool.setCMFTypesAreRecataloged(True)
     
-    # step 1: Rename and move away to old CMF types
-    if not tool.isCMFdisabled():
+    # step 3: Rename and move away to old CMF types on install
+    if not reinstall:
+        assert not tool.isCMFdisabled()
+        print >>out, 'Disable CMF types. They are backuped as "CMF Document" ...'
         tool.disableCMFTypes()
-    #disableCMFTypes(self)
     
-    # step 2: Install dependency products 
-    
+    # step 4: Install dependency products 
     installable = [ prod['id'] for prod in qi.listInstallableProducts() ]
     installed = [ prod['id'] for prod in qi.listInstalledProducts() ]
     
@@ -77,22 +93,25 @@ def install(self):
         raise RuntimeError('ATReferenceBrowserWidget not available')
     if 'ATReferenceBrowserWidget' in installable:
         qi.installProduct('ATReferenceBrowserWidget')
+        print >>out, 'Install ATReferenceBrowserWidget'
     
     if INSTALL_LINGUA_PLONE:
         if 'LinguaPlone' in installable:
+            print >>out, 'Installing LinguaPlone as reqested'
             qi.installProduct('LinguaPlone')
+            
 
+    # step 5: install types
     typeInfo = listTypes(PROJECTNAME)
     installTypes(self, out,
                  typeInfo,
                  PROJECTNAME)
 
+    # step 6: install skins
     install_subskin(self, out, GLOBALS)
-
-    print >> out, 'Successfully installed %s' % PROJECTNAME
-
-    # register switch methods to toggle old plonetypes on/off
     
+    # step 7: register switch methods to toggle old plonetypes on/off
+    # XXX remove this dummy methods
     manage_addExternalMethod(self,'switchATCT2CMF',
         'Set reenable CMF type',
         PROJECTNAME+'.toolbox',
@@ -107,42 +126,66 @@ def install(self):
         PROJECTNAME+'.migrateFromCMF',
         'migrate')
 
-    #manage_addExternalMethod(portal,'migrateFromCPTtoATCT',
-    #    'Migrate from CMFPloneTypes types to ATContentTypes',
-    #    PROJECTNAME+'.migrateFromCPT',
-    #    'migrate')
-
-    #manage_addExternalMethod(portal,'recreateATImageScales',
-    #    '',
-    #    PROJECTNAME+'.toolbox',
-    #    'recreateATImageScales')
-        
-    # changing workflow
+    # step 8: changing workflow
+    print >>out, 'Workflows setup'
     setupWorkflows(self, typeInfo, out)
 
-    # setup content type registry
+    # step 9: setup content type registry
+    print >>out, 'Content Type Registry setup'
     old = ('link', 'news', 'document', 'file', 'image')
     setupMimeTypes(self, typeInfo, old=old, moveDown=(IATFile,), out=out)
+    
+    # step 10: add additional action icons
+    print >>out, 'Adding additional action icons'
     registerActionIcons(self, out)
     
+    print >> out, 'Successfully installed %s' % PROJECTNAME
     return out.getvalue()
 
-def uninstall(self):
+def uninstall(self, reinstall):
     out = StringIO()
-    classes=listTypes(PROJECTNAME)
+    tool = getattr(self.aq_explicit, TOOLNAME)
+    qi = getToolByName(self, 'portal_quickinstaller')
 
-    # switch back before uninstalling
-    #if isSwitchedToATCT(self):
-    #    switchATCT2CMF(self)
+    # replace ATCT types with CMF types if uninstalling
+    if not reinstall:
+        assert tool.isCMFdisabled()
+        tool.enableCMFTypes()
 
     # remove external methods for toggling between old and new types
+    # leave it for clean up
     for script in ('switch_old_plone_types_on', 'switch_old_plone_types_off',
      'migrateFromCMFtoATCT', 'migrateFromCPTtoATCT', 'recreateATImageScales',
      'switchATCT2CMF', 'switchCMF2ATCT', ):
         if hasattr(aq_base(self), script):
+            print >>out, 'Removing script %s from portal root' % script
             self.manage_delObjects(ids=[script,])
-
+    
     return out.getvalue()
+
+# QI Hooks
+def afterInstall(self, product, reinstall):
+    out = StringIO()
+    if not reinstall:
+        removeCMFTypesFromRegisteredTypes(self, product, out)
+    return out.getvalue()
+
+def beforeUninstall(self, cascade, product, reinstall):
+    out = StringIO()
+    if not reinstall:
+        removeCMFTypesFromRegisteredTypes(self, product, out)
+    return out.getvalue(), cascade
+
+def removeCMFTypesFromRegisteredTypes(self, product, out):
+    qi_types = product.types
+    tool = getToolByName(self, TOOLNAME)
+    cmf_types = tool._getCMFPortalTypes()
+    new_types = [ t for t in qi_types if t not in cmf_types]
+    product.types = new_types
+    print >>out, 'Changing registered type list from %s to %s in order to' \
+                 'save backed up cmf types' % (qi_types, new_types)
+
+    return out
 
 def setupWorkflows(self, typeInfo, out):
     wftool = getToolByName(self, 'portal_workflow')
