@@ -91,7 +91,6 @@ registerATCTMigrator(EventMigrator, event.ATEvent)
 
 class TopicMigrator(CMFItemMigrator):
     walker = CatalogWalker
-    # XXX can't handle nested topics
     map = {'acquireCriteria' : 'setAcquireCriteria'}
 
     def custom(self):
@@ -195,7 +194,6 @@ def migrateAll(portal):
     catalog = getToolByName(portal, 'portal_catalog')
     pprop = getToolByName(portal, 'portal_properties')
     atct = getToolByName(portal, TOOLNAME)
-    # XXX atct._fixLargePloneFolder()
     try:
         kwargs['default_language'] = pprop.aq_explicit.site_properties.default_language
     except (AttributeError, KeyError):

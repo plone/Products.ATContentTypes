@@ -40,6 +40,7 @@ SCHEMA_FILE = os.path.join(DIR, SCHEMA_FILE_NAME)
 atctRegistry = Registry()
 atctRegistry.register('permission', datatype.permission_handler)
 atctRegistry.register('identifer_none', datatype.identifier_none)
+atctRegistry.register('byte-size-in-mb', datatype.byte_size_in_mb)
 
 # schema
 atctSchema = None

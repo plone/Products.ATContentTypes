@@ -73,6 +73,12 @@ class IConstrainTypes(Interface):
     """ConstrainTypes awareness marker interface
     """
 
+# XXX: This should perhaps be in Archetypes
+class ISelectableDefaultPage(Interface):
+    """Marker interface for folderish objects which allow their default_page
+    property to be set in the Plone user interface.
+    """
+
 class IHistoryAware(Interface):
     """History awareness marker interface
     """
@@ -325,4 +331,8 @@ class IATTopicSortCriterion(IATTopicCriterion):
 
 class IATCTTool(Interface):
     """
+    """
+    
+class IATCTTopicsTool(Interface):
+    """Mixin class for providing features to customize the display of topics
     """

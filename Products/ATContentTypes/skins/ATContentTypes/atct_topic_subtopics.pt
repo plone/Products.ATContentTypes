@@ -8,7 +8,7 @@
     <!-- When the catalog based folder listing with extra macros becomes part of plone 2.1,
          this is all we'll need, until then everything below is necessary.
 
-        <tal:subtopics define="full_page python:False;
+        <tal:subtopics define="full_view python:False;
                                view_title string:Sub-topics:">
             <metal:list metal:use-macro="here/folder_contents/macros/contents"/>
         </tal:subtopics>

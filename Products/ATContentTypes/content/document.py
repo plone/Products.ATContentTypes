@@ -25,6 +25,8 @@ __old_name__ = 'Products.ATContentTypes.types.ATDocument'
 
 from types import TupleType
 
+import time
+
 from ZPublisher.HTTPRequest import HTTPRequest
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
@@ -36,7 +38,7 @@ from Products.Archetypes.public import TextField
 from Products.Archetypes.public import RichWidget
 from Products.Archetypes.public import RFC822Marshaller
 
-from Products.ATContentTypes.config import ATDOCUMENT_CONTENT_TYPE
+from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
@@ -54,21 +56,17 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
               primary=True,
               validators = ('isTidyHtmlWithCleanup',),
               #validators = ('isTidyHtml',),
-              default_content_type = ATDOCUMENT_CONTENT_TYPE,
-              default_output_type = 'text/html',
-              allowable_content_types = ('text/structured',
-                                         'text/x-rst',
-                                         'text/html',
-                                         'text/plain',
-                                         'text/plain-pre',
-                                         'text/python-source',),
+              default_content_type = zconf.ATDocument.default_content_type,
+              default_output_type = 'text/x-html-safe',
+              allowable_content_types = zconf.ATDocument.allowed_content_types,
               widget = RichWidget(
                         description = "The body text of the document.",
                         description_msgid = "help_body_text",
                         label = "Body text",
                         label_msgid = "label_body_text",
                         rows = 25,
-                        i18n_domain = "plone")),
+                        i18n_domain = "plone",
+                        allow_file_upload = zconf.ATDocument.allow_document_upload)),
     ), marshall=RFC822Marshaller()
     )
 ATDocumentSchema.addField(relatedItemsField)
@@ -130,7 +128,7 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
 
         """
         if not value:
-            value = ATDOCUMENT_CONTENT_TYPE
+            value = zconf.ATDocument.default_content_type
         else:
             value = translateMimetypeAlias(value)
         ATCTContent.setFormat(self, value)
@@ -233,5 +231,12 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         assert file == '', 'file currently not supported' # XXX
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
+
+    def deferring(self):
+        """
+        """
+        t = time.time()
+        time.sleep(10)
+        return str(time.time(), t)
 
 registerATCT(ATDocument, PROJECTNAME)

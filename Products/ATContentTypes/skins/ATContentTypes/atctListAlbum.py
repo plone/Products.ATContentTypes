@@ -12,9 +12,9 @@ from Products.CMFCore.utils import getToolByName
 result = {}
 
 if images:
-    result['images'] = context.listFolderContents(contentFilter={'Type':('Image',)})
+    result['images'] = context.folderlistingFolderContents(contentFilter={'Type':('Image',)})
 if folders:
-    result['folders'] = context.listFolderContents(contentFilter={'Type':('Folder',)})
+    result['folders'] = context.folderlistingFolderContents(contentFilter={'Type':('Folder',)})
 if subimages:
     catalog = getToolByName(context, 'portal_catalog')
     path = '/'.join(context.getPhysicalPath())
@@ -24,7 +24,7 @@ if others:
     filtered = [type.getId() for type in allowedContentTypes
                 if type.getId() not in ('Image', 'Folder',) ]
     if filtered:
-        result['others'] = context.listFolderContents(contentFilter={'Type':filtered})
+        result['others'] = context.folderlistingFolderContents(contentFilter={'Type':filtered})
     else:
         result['others'] = ()
 

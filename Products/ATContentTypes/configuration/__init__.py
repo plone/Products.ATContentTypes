@@ -22,6 +22,6 @@
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.configuration.config import conf
+from Products.ATContentTypes.configuration.config import zconf
 from Products.ATContentTypes.configuration.config import handler
 from Products.ATContentTypes.configuration.config import conf_file

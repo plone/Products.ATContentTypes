@@ -1,6 +1,43 @@
 1.0-devel
 =====================
 
+ * Merged the topic tool branch into 1.0 XXX: insert history here 
+
+ * Refactored ConstrainTypesMixin to support PLIP 78
+    o DISABLED means use standard allowed types from portal_types
+    o ENABLED means use restrictions set
+    o ACQUIRE means use types from parent if parent is of same portal type,
+      else same as ENABLED (doesn't make sense to inherit from any content type)
+    o immediatelyAddableTypes field - for subset of allowed types to show in
+      the "add" menu
+    o turned off and removed disable constrain-types flag
+
+ * Turn on TemplateMixin for everything - now directly supported in Plone
+   via "display" menu
+
+ * Merged plip #3 branch: auto ordering / sorting into the 1.0 branch.
+   Features / Changes:
+    * Added getObjPositioninParent and getObjSize as helper methods for
+      the catalog based folder listing to all types
+    * Added AutoSortSuppot and AutoOrderSupport to ATCT. AutoSortSupport is
+      used for the catalog based folder listing and AutoOrderSupport also
+      adds some auto ordering based on OrderedFolder
+    * Subclass ATFolder from AutoOrderSupport+AutoSortSupport, ATBTreeFolder
+      only from AutoSortSupport
+   [tiran]
+
+ * ATEvent: Removed end date and start date from searchable text.
+   [tiran]
+
+ * Implemented PLIP #2 of ATCT: using ZConfig to configure the types and
+   features of ATContentTypes.
+   [tiran]
+
+ * Changed default output of Document, Event and News Item to text/x-safe-html.
+   X-safe-html is using CMFDefault.utils.scrubHTML to remove harmful tags
+   like script.
+   [tiran]
+
  * Merged tiran-notypesdir-branch. It's renaming and moving lot's of modules
    around. All content types are in the content/ package, criteria were moved
    to criteria/, tools to tool/ and modules like history aware to lib/. Also

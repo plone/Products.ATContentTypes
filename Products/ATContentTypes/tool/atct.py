@@ -49,6 +49,7 @@ from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import ATCT_DIR
 from Products.ATContentTypes.config import WWW_DIR
 from Products.ATContentTypes.migration.atctmigrator import migrateAll
+from Products.ATContentTypes.tool.topic import ATTopicsTool
 
 CMF_PRODUCTS = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFCalendar')
 ATCT_PRODUCTS = ('ATContentTypes', )
@@ -67,7 +68,8 @@ configlets = ({
 
 class AlreadySwitched(RuntimeError): pass
 
-class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase):
+class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
+    ATTopicsTool):
     """ATContentTypes tool
     
     Used for migration, maintenace ...
@@ -85,7 +87,8 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase):
     _version = ''
     
     __implements__ = (SimpleItem.__implements__, IATCTTool,
-                      ActionProviderBase.__implements__)
+                      ActionProviderBase.__implements__,
+                      ATTopicsTool.__implements__)
         
     manage_options =  (
             {'label' : 'Overview', 'action' : 'manage_overview'},
@@ -331,7 +334,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase):
         """Migrate CMF types to ATCT types
         """
         if portal_types is not None:
-            # XXX not impelemented
+            # TODO: not impelemented
             raise NotImplementedError, "Migrating a subset of types is not implemented"
         if isinstance(portal_types, basestring):
             portal_types = (portal_types,)

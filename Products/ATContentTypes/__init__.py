@@ -25,22 +25,6 @@ __docformat__ = 'restructuredtext'
 import os.path
 __version__ = open(os.path.join(__path__[0], 'version.txt')).read().strip()
 
-import sys
-
-# load customconfig and overwrite the configureable options of config
-# with the values from customconfig
-try:
-    from Products.ATContentTypes import customconfig
-except ImportError:
-    pass
-else:
-    from Products.ATContentTypes import config
-    for option in config.CONFIGUREABLE:
-        value = getattr(customconfig, option, None)
-        if value:
-            setattr(config, option, value)
-    del config
-
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.config import SKINS_DIR
 from Products.ATContentTypes.config import PROJECTNAME

@@ -56,7 +56,6 @@ def editCMF(obj):
 def editATCT(obj):
     dcEdit(obj)
     obj.edit(file=file_text)
-    #XXX obj.setFormat('text/plain')
 
 tests = []
 
@@ -101,7 +100,7 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
     def testCompatibilityContentTypeAccess(self):
         new = self._ATCT
         editATCT(new)
-        # XXX todo
+        # TODO: more tests
 
     def test_migration(self):
         old = self._cmf
@@ -131,7 +130,7 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         self.failUnlessEqual(file, str(migrated.getFile()))
         self.failIfEqual(migrated.data, None)
         self.failIfEqual(migrated.data, '')
-        # XXX more
+        # TODO: more tests
 
 tests.append(TestSiteATFile)
 

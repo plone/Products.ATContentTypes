@@ -104,7 +104,7 @@ ATContentTypeSchema = ATContentTypeBaseSchema + Schema((
                     label_msgid = "label_template_mixin",
                     i18n_domain = "plone",
                     visible={'view' : 'hidden',
-                             'edit' : ENABLE_TEMPLATE_MIXIN and 'visible' or 'hidden'},
+                             'edit' : 'hidden'},
     )),
     ))
 

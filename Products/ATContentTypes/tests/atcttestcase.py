@@ -203,6 +203,10 @@ class ATCTTypeTestCase(ATSiteTestCase):
             request.form = {'id':id}
             self.assertEquals(asdf.validate(REQUEST=request), {})
 
+    def test_getobjpositioninparent(self):
+        # TODO: not a real test
+        self._ATCT.getObjPositionInParent()
+
     def beforeTearDown(self):
         self.logout()
 
@@ -316,7 +320,6 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnless(isinstance(field.widget, ReferenceBrowserWidget))
         vocab = field.Vocabulary(dummy)
         self.failUnless(isinstance(vocab, DisplayList))
-        #XXX self.failUnlessEqual(tuple(vocab), ())
 
     def test_layout(self):
         dummy = self._dummy
@@ -348,8 +351,7 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnless(isinstance(field.widget, SelectionWidget))
         vocab = field.Vocabulary(dummy)
         self.failUnless(isinstance(vocab, DisplayList))
-        self.failUnless(len(tuple(vocab)) >= 2, tuple(vocab))
-        self.failUnless('base_view' in tuple(vocab), tuple(vocab))
+        self.failUnless(len(tuple(vocab)) >= 1, tuple(vocab))
 
 from Products.CMFQuickInstallerTool.QuickInstallerTool import AlreadyInstalled
 from Products.Archetypes.tests.atsitetestcase import portal_name

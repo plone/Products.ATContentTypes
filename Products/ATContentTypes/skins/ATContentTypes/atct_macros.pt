@@ -13,11 +13,12 @@
                 default_fieldset python:(not schematas or schematas.has_key('default'))
                                          and 'default' or fieldsets[0];
                 fieldset request/fieldset|options/fieldset|default_fieldset;
+                index python:here.portal_atct.getIndex(criterion.Field());
                 edit_macros here/edit_macros/macros;
                 criterionid criterion/getId;
                ">
 
-	  <td style="padding: 0.5em; align: center;">
+      <td style="padding: 0.5em; align: center;">
         <input class="noborder"
                type="checkbox" 
                value="" 
@@ -26,10 +27,12 @@
                tal:attributes="value criterionid; 
                                id string:cb_${criterionid}"
                />
-      </td>         
+      </td>
       
-      <td style="padding: 0.5em;" i18n:translate="" tal:content="criterion/Field" />
-      
+      <td style="padding: 0.5em;" i18n:translate="">
+         <span tal:replace="python:index.friendlyName or index.index" />
+         <div class="formHelp" tal:content="index/description"/>
+      </td>
       <td style="padding: 0.5em;">
 
         <div i18n:translate="" tal:content="criterion/Description" />
@@ -37,7 +40,7 @@
         <div id="" 
              i18n:translate=""
              class="formHelp" 
-             style="visibility:hidden"
+             style="visibilitys:hidden"
              tal:content="criterion/Description"
              tal:attributes="id string:${criterionid}_help;"
              >
@@ -50,13 +53,13 @@
                tal:attributes="value criterionid"
                />
 
-	    <tal:fields repeat="field python: schematas[fieldset].fields()">
+        <tal:fields repeat="field python: schematas[fieldset].fields()">
           <tal:editable tal:condition="python:field.mode != 'r'">
-	          <metal:fieldMacro use-macro="python: criterion.widget('%s_%s' % (criterionid, field.getName()),
+              <metal:fieldMacro use-macro="python: criterion.widget('%s_%s' % (criterionid, field.getName()),
                                            field = field,
                                            mode='edit')"/>
           </tal:editable>
-	    </tal:fields>
+        </tal:fields>
       </td>
 
   </tal:define-block>

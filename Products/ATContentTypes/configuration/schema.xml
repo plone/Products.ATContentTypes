@@ -13,48 +13,31 @@
     </description>
   </section>
 
-  <section type="feature" name="templatemixin"  attribute="templatemixin"
-   required="yes" datatype=".templatemixin_handler">
+  <section type="feature" name="templatemixin" attribute="templatemixin"
+   required="yes">
   </section>
 
-  <section type="feature" name="constrainmixin" attribute="constrainmixin"
-   required="yes" datatype=".constrainmixin_handler">
+  <section type="feature" name="constraintypes" attribute="constraintypes"
+   required="yes">
+  </section>
+
+  <section type="feature" name="externaltypes" attribute="externaltypes"
+   required="yes">
   </section>
   
-  <section type="contenttype" name="ATDocument"
+  <section type="archetype" name="ATDocument"
    attribute="ATDocument" required="yes" />
 
-  <section type="contenttype" name="ATEvent"
+  <section type="archetype" name="ATEvent"
    attribute="ATEvent" required="yes" />
 
-  <section type="contenttype" name="ATFavorite"
-   attribute="ATFavorite" required="yes" />
-
-  <section type="contenttype" name="ATFile"
-   attribute="ATFile" required="yes" />
-   
-   <!--section type="contenttype" name="ATExtFile"
-   attribute="ATExtFile" required="yes" /-->
-
-  <section type="contenttype" name="ATFolder"
-   attribute="ATFolder" required="yes" />
-
-  <section type="contenttype" name="ATBTreeFolder"
-   attribute="ATBTreeFolder" required="yes" />
-
-  <section type="contenttype" name="ATImage"
-   attribute="ATImage" required="yes" />
-
-  <!--section type="contenttype" name="ATExtImage"
-   attribute="ATExtImage" required="yes" /-->
-
-  <section type="contenttype" name="ATLink"
-   attribute="ATLink" required="yes" />
-
-  <section type="contenttype" name="ATNewsItem"
+  <section type="archetype" name="ATNewsItem"
    attribute="ATNewsItem" required="yes" />
 
-  <section type="contenttype" name="ATTopic"
-   attribute="ATTopic" required="yes" />
+  <section type="archetype" name="ATFile"
+   attribute="ATFile" required="yes" />
+
+  <section type="archetype" name="ATImage"
+   attribute="ATImage" required="yes" />
 
 </schema>

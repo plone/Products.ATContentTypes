@@ -42,9 +42,10 @@ from Products.Archetypes.public import Schema
 from Products.Archetypes.public import ImageField
 from Products.Archetypes.public import ImageWidget
 from Products.Archetypes.public import PrimaryFieldMarshaller
+from Products.Archetypes.public import log_exc
 
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.config import MAX_IMAGE_SIZE
+from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
@@ -121,7 +122,7 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
                        'listing' :  (16, 16),
                       },
                validators = MaxSizeValidator('checkFileMaxSize',
-                                             maxsize=MAX_IMAGE_SIZE),
+                                             maxsize=zconf.ATImage.max_size),
                widget = ImageWidget(
                         #description = "Select the image to be added by clicking the 'Browse' button.",
                         #description_msgid = "help_image",
@@ -180,8 +181,6 @@ class ATCTImageTransform(Base):
         """Get the exif informations of the file
         
         The information is cached in _v_image_exif
-        
-        XXX check if PIL removes EXIF when rescaling with orig_size
         """
         cache = '_image_exif'
         
@@ -197,7 +196,7 @@ class ATCTImageTransform(Base):
                 try:
                     exif_data = exif.process_file(img, debug=False, noclose=True)
                 except:
-                    # XXX bar exception, LOG
+                    log_exc()
                     exif_data = {}
                 # remove some unwanted elements lik thumb nails
                 for key in ('JPEGThumbnail', 'TIFFThumbnail'):
@@ -254,10 +253,8 @@ class ATCTImageTransform(Base):
             if raw_date is not None:
                 return DateTime(str(raw_date))
         except:
-            # XXX except all, LOG
+            log_exc()
             return None
-                
-            
 
     security.declareProtected(CMFCorePermissions.ModifyPortalContent, 
                               'transformImage')

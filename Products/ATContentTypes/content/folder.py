@@ -27,7 +27,6 @@ __old_name__ = 'Products.ATContentTypes.types.ATFolder'
 from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTOrderedFolder
 from Products.ATContentTypes.content.base import ATCTBTreeFolder
@@ -36,6 +35,8 @@ from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import relatedItemsField
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
+from Products.ATContentTypes.lib.autosort import AutoSortSupport
+from Products.ATContentTypes.lib.autosort import AutoOrderSupport
 
 ATFolderSchema      = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
@@ -43,7 +44,7 @@ ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 ATFolderSchema.addField(relatedItemsField)
 ATBTreeFolderSchema.addField(relatedItemsField)
 
-class ATFolder(ATCTOrderedFolder):
+class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
     """A simple folderish archetype"""
 
     schema         =  ATFolderSchema
@@ -61,10 +62,16 @@ class ATFolder(ATCTOrderedFolder):
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()
-
-    __implements__ = ATCTOrderedFolder.__implements__, IATFolder
+    
+    __implements__ = (ATCTOrderedFolder.__implements__, IATFolder,
+                     AutoOrderSupport.__implements__)
 
     security       = ClassSecurityInfo()
+    
+    def manage_afterAdd(self, item, container):
+        ATCTOrderedFolder.manage_afterAdd(self, item, container)
+        AutoOrderSupport.manage_afterAdd(self, item, container)
+    
 
 ##    actions = updateActions(ATCTOrderedFolder,
 ##        ({
@@ -79,7 +86,7 @@ class ATFolder(ATCTOrderedFolder):
 
 registerATCT(ATFolder, PROJECTNAME)
 
-class ATBTreeFolder(ATCTBTreeFolder):
+class ATBTreeFolder(AutoSortSupport, ATCTBTreeFolder):
     """A simple btree folderish archetype"""
     schema         =  ATBTreeFolderSchema
 
@@ -98,7 +105,8 @@ class ATBTreeFolder(ATCTBTreeFolder):
     assocFileExt   = ()
     cmf_edit_kws   = ()
 
-    __implements__ = ATCTBTreeFolder.__implements__, IATBTreeFolder
+    __implements__ = (ATCTBTreeFolder.__implements__, IATBTreeFolder,
+                      AutoSortSupport.__implements__)
 
     security       = ClassSecurityInfo()
 

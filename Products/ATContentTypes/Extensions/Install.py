@@ -36,6 +36,7 @@ from Products.ATContentTypes.interfaces import IATTopic
 from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.interfaces import IATFile
+from Products.ATContentTypes.interfaces import IATCTTool
 
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import WORKFLOW_FOLDER
@@ -57,6 +58,12 @@ def install(self, reinstall):
     # step 1: install tool
     # It's required for migration
     tool = installTool(self, out)
+    if not IATCTTool.isImplementedBy(tool):
+        self.manage_delObjects([TOOLNAME])
+        tool = installTool(self, out)
+    result = tool._initializeTopicTool()
+    if result:
+        print >>out, 'Initialized Topic Tool'
         
     # step 2: recatalog CMF items if installing
     # I've to make sure all CMF types are in the catalog
@@ -93,21 +100,20 @@ def install(self, reinstall):
         if 'LinguaPlone' in installable:
             print >>out, 'Installing LinguaPlone as reqested'
             qi.installProduct('LinguaPlone')
-            
 
-    # step 5: install types
+    # step 5: install skins before install types to make TemplateMixin happy
+    install_subskin(self, out, GLOBALS)
+
+    # step 6: install types
     typeInfo = listTypes(PROJECTNAME)
     installTypes(self, out,
                  typeInfo,
                  PROJECTNAME)
 
-    # step 6: copy fti flags like allow discussion
+    # step 7: copy fti flags like allow discussion
     if not reinstall:
         print >>out, 'Copying FTI flags like allow_discussion'
         tool.copyFTIFlags()
-
-    # step 7: install skins
-    install_subskin(self, out, GLOBALS)
     
     # step 8: register switch methods to toggle old plonetypes on/off
     # BBB remove these two dummy methods

@@ -123,8 +123,7 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
         self.compareAfterMigration(migrated, mod=mod, created=created)
         self.compareDC(migrated, title=title, description=description)
 
-
-        # XXX more
+        # TODO: more tests
 
         self.failUnless(migrated.getRemoteUrl() == url, 'URL mismatch: %s / %s' \
                         % (migrated.getRemoteUrl(), url))

@@ -141,7 +141,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         self.failUnless(migrated.CookedBody() == body, 'Body mismatch: %s / %s' \
                         % (migrated.CookedBody(), body))
 
-    def test_rename(self):
+    def test_rename_keeps_contenttype(self):
         doc = self._ATCT
         doc.setText(example_rest, mimetype="text/x-rst")
         self.failUnless(str(doc.getField('text').getContentType(doc)) == "text/x-rst")
@@ -153,6 +153,21 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         self.folder.manage_renameObject(cur_id, new_id)
         doc = getattr(self.folder, new_id)
         self.failUnless(str(doc.getField('text').getContentType(doc)) == "text/x-rst")
+        
+    def test_x_safe_html(self):
+        doc = self._ATCT
+        mimetypes = (
+            'text/html',
+            'text/stx',
+            #'text/x-rst', # <p>&lt;script&gt;I'm a nasty boy&lt;/script&gt;</p>
+            #'text/python-source', # syntax highlighting
+            #'text/plain', # <p>&lt;script&gt;I'm a nasty boy&lt;/script&gt;</p>
+            )
+        for mimetype in mimetypes:
+            # scrub html is removing unallowed tags
+            doc.setText("<p>test</p><script>I'm a nasty boy<p>nested</p></script>", mimetype=mimetype)
+            txt = doc.getText()
+            self.failUnlessEqual(txt, '<p>test</p>', (txt, mimetype))
 
 
 tests.append(TestSiteATDocument)
@@ -208,12 +223,11 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
         self.failUnless(field.default_content_type == 'text/html',
                         'Value is %s' % field.default_content_type)
-        self.failUnless(field.default_output_type == 'text/html',
+        self.failUnless(field.default_output_type == 'text/x-html-safe',
                         'Value is %s' % field.default_output_type)
-        self.failUnless(field.allowable_content_types == ('text/structured',
+        self.failUnlessEqual(field.allowable_content_types, ('text/structured',
                         'text/x-rst', 'text/html', 'text/plain',
-                        'text/plain-pre', 'text/python-source'),
-                        'Value is %s' % str(field.allowable_content_types))
+                        'text/plain-pre', 'text/python-source'))
 
 tests.append(TestATDocumentFields)
 

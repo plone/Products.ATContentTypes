@@ -30,50 +30,24 @@ __docformat__ = 'restructuredtext'
 
 import string
 import os
+from Products.ATContentTypes.configuration import zconf
 
-###############################################################################
-## user options
-## The options in this section can be overwritten by customconfig
-
-## enable mxTidy for ATDocument and ATNewsItem?
-MX_TIDY_ENABLED = True
-
-## options for mxTidy
+## options for mx tidy
 ## read http://www.egenix.com/files/python/mxTidy.html for more informations
-MX_TIDY_OPTIONS= {
-    'drop_font_tags'   : 1,
-    'drop_empty_paras' : 1,
-    'input_xml'        : 0,
-    'output_xhtml'     : 1,
-    'quiet'            : 1,
-    'show_warnings'    : 1,
-    'tab_size'         : 4,
-    'wrap'             : 72,
-    #'indent'           : 'auto',
-    'indent_spaces'    : 1,
-    'word_2000'        : 1,
-    'char_encoding'    : 'raw',
-    }
+MX_TIDY_ENABLED = zconf.mxtidy.enable
+MX_TIDY_OPTIONS= zconf.mxtidy.options
 
 ## enable external storage variant of ATFile and ATImage
 ## requires ExternalStorage (not working yet)
-#EXT_STORAGE_ENABLE = True
-EXT_STORAGE_ENABLE = False
+EXT_STORAGE_ENABLE = zconf.externaltypes.enable
 
 ## use TemplateMixin?
 ## if enabled users can choose between different view templates for each object
-ENABLE_TEMPLATE_MIXIN = True
+ENABLE_TEMPLATE_MIXIN = zconf.templatemixin.enable
 
 ## use ConstrainedMixin?
 ## if enabled you can constrain allowed types on an ATCT Folder
-ENABLE_CONSTRAIN_TYPES_MIXIN = True
-
-## maximum upload size for ATImage and ATFile in MB. 0 is infinitiv
-MAX_FILE_SIZE = 0.0
-MAX_IMAGE_SIZE = 0.0
-
-## Default content type for ATDocument and ATNewsItem
-ATDOCUMENT_CONTENT_TYPE = 'text/html'        # html
+ENABLE_CONSTRAIN_TYPES_MIXIN = zconf.constraintypes.enable
 
 ###############################################################################
 ## private options
@@ -92,11 +66,6 @@ INSTALL_LINGUA_PLONE = True
 ## swallow PIL exceptions when resizing the image?
 #SWALLOW_IMAGE_RESIZE_EXCEPTIONS = True
 SWALLOW_IMAGE_RESIZE_EXCEPTIONS = False
-
-CONFIGUREABLE = ('MX_TIDY_ENABLED', 'MX_TIDY_OPTIONS', 'EXT_STORAGE_ENABLE',
-                 'ENABLE_TEMPLATE_MIXIN', 'MAX_FILE_SIZE', 'MAX_IMAGE_SIZE',
-                 'ENABLE_CONSTRAIN_TYPES_MIXIN', 'ATDOCUMENT_CONTENT_TYPE',
-                 )
 
 ## using special plone 2 stuff?
 try:
@@ -294,13 +263,11 @@ MIME_ALIAS = {
 ## force enable some features for ATCT unit testing
 if os.environ.get('ZOPETESTCASE', False):
     _ATCT_OLD_VALUES = {
-        'ENABLE_CONSTRAIN_TYPES_MIXIN' : ENABLE_CONSTRAIN_TYPES_MIXIN,
         'ENABLE_TEMPLATE_MIXIN' : ENABLE_TEMPLATE_MIXIN,
         'EXT_STORAGE_ENABLE' : EXT_STORAGE_ENABLE,
         'INSTALL_LINGUA_PLONE' : INSTALL_LINGUA_PLONE,
         }
     ENABLE_CONSTRAIN_TYPES_MIXIN = True
-    ENABLE_TEMPLATE_MIXIN = True
     EXT_STORAGE_ENABLE = True
     INSTALL_LINGUA_PLONE = True
     _ATCT_UNIT_TEST_MODE = True

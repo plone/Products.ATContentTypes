@@ -25,6 +25,7 @@ __docformat__ = 'restructuredtext'
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import Permissions as ZopePermissions
 from ZConfig.datatypes import IdentifierConversion
+from ZConfig.datatypes import stock_datatypes
 
 _marker = object()
 
@@ -67,8 +68,79 @@ def identifier_none(value):
     if value == 'None':
         return None
     return IdentifierConversion()(value)
+
+def byte_size_in_mb(value):
+    """Byte size handler for max size validator
+    """
+    if isinstance(value, str) and value.lower() == 'no':
+        return 0.0
+    byte_size = stock_datatypes["byte-size"]
+    v = byte_size(value)
+    return float(v) / (1024.0**2)
+
+class BaseFactory(object):
+    """Basic factory
+    """
     
-def mxtidy_handler(section):
+    def __init__(self, section):
+        self.name = section.getSectionName()
+        #self._parsed = False
+        self._section = section
+        self._names = {}
+        self._parse()
+        
+    #def __call__(self):
+    #    if not self._parsed:
+    #        self._parse()
+    #    return self
+        
+    def set(self, name, value):
+        self._names[name] = 1
+        setattr(self, name, value)
+        
+    def _parse(self):
+        raise NotImplementedError
+        
+class MxTidy(BaseFactory):
+    """data handler for mx tidy settings
+    
+    sets enable and options
     """
+    
+    def _parse(self):
+        sec = self._section
+        self.set('enable', sec.enable)
+        cfg = {}
+        for id in ('char_encoding', 'drop_empty_paras', 'drop_font_tags',
+          'indent_spaces', 'input_xml', 'output_xhtml', 'quiet', 'show_warnings',
+          'tab_size', 'word_2000', 'wrap'):
+            cfg[id] = getattr(sec, id)
+        self.set('options' , cfg)
+
+class Archetype(BaseFactory):
+    """data handler for an archetype option
     """
-    import pdb; pdb.set_trace()
+    
+    def _parse(self):
+        sec = self._section
+        self.set('max_size', sec.max_size)
+        self.set('allow_document_upload', sec.allow_document_upload)
+        
+        ct = sec.contenttypes
+        if ct is not None:
+            allowed = tuple(ct.allowed_content_types)
+            default = ct.default_content_type
+        
+            if default not in allowed:
+                raise ValueError, "Default %s is not in %s" % (default, ct)
+        
+            self.set('default_content_type', default)
+            self.set('allowed_content_types', allowed)
+        
+class Feature(BaseFactory):
+    """data handler for a feature
+    """
+    
+    def _parse(self):
+        sec = self._section
+        self.set('enable', sec.enable)        

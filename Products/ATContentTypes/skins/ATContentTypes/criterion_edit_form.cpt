@@ -2,15 +2,40 @@
     xmlns:metal="http://xml.zope.org/namespaces/metal"
     metal:use-macro="container/main_template/macros/master"
     i18n:domain="plone">
+<metal:head fill-slot="javascript_head_slot">
+    <script type="text/javascript"
+            tal:attributes="src string:$portal_url/DynamicOptionList.js">
+    </script>
+    <script type="text/javascript">
+        var opt_list = new DynamicOptionList();
+        opt_list.addDependentFields("field","criterion_type");
+        opt_list.setFormName("criteria_select");
+        window.onload = initDynamicOptionLists
+    </script>
+</metal:head>
 
 <body>
 
 <div metal:fill-slot="main">
 
+    <script>
+        function showHelp(selectedItem, helpElementId){
+             helpElement = document.getElementById(helpElementId);
+             elementTooltip = selectedItem.title;
+             if (elementTooltip!='')
+                {
+                    helpText = elementTooltip
+                } else {
+                    helpText = '&nbsp;'
+                }
+             if (helpElement) {helpElement.innerHTML = helpText;}
+            }
+    </script>
+    
     <h1>
         <span i18n:translate="heading_criteria_for" tal:omit-tag="">
             Criteria for
-            <span i18n:name="title" tal:content="here/getId" tal:omit-tag="" />
+            <span i18n:name="title" tal:content="here/title_or_id" tal:omit-tag="" />
         </span>
     </h1>
 
@@ -44,7 +69,7 @@
             </tbody>
             
         </table>
-	    <input type="hidden" name="form.submitted" value="1" />
+        <input type="hidden" name="form.submitted" value="1" />
 
         <div class="formControls">
 
@@ -76,7 +101,8 @@
 
      </form>
 
-    <form action="" 
+    <form action=""
+          name="criteria_select"
           method="post" 
           tal:attributes="action template/getId"
           tal:define="errors options/state/getErrors|nothing;
@@ -84,29 +110,42 @@
 
 
         <fieldset>
-    
+
             <legend i18n:translate="legend_add_new_search_criteria">Add New Search Criteria</legend>
 
             <div class="field" style="float:left">
         
                 <label for="field" i18n:translate="label_criteria_field_name">Field name</label>
+
+                <div class="formHelp"
+                     id="fieldHelp"
+                     i18n:translate="help_criteria_field_name">
+                    List Available Fields
+                </div>
+
+
         
-                <div class="formHelp" i18n:translate="help_criteria_field_name">
-		List Available Fields
-                </div>		
-        
-        <select name="field"
+            <select name="field"
                     id="field"
                     tabindex=""
+                    onchange=""
                     tal:define="fields here/listAvailableFields;"
-                    tal:attributes="tabindex tabindex/next;">
-		
-                    <option value="" 
-                        tal:repeat="field fields" 
-                        tal:attributes="value field"
-                        i18n:translate=""
-                        tal:content="field">Field</option>
+                    tal:attributes="tabindex tabindex/next;
+                                    onchange string:javascript:showHelp(this.options[this.selectedIndex], 'fieldHelp');; opt_list.change(this);">
 
+                    <tal:options tal:repeat="field fields">
+                        <script type="text/javascript"
+                                tal:define="name python:field[0];
+                                    allowed python:here.allowedCriteriaForField(name, 1);
+                                    allowed_str python:'\''+'\',\''.join(allowed)+'\''"
+                                tal:content="string:opt_list.forValue('$name').addOptionsTextValue($allowed_str);;"/>
+
+                        <option value="" 
+                            tal:define="explanation python:field[2]"
+                            tal:attributes="value python:field[0];
+                                            title python:explanation"
+                            tal:content="python:field[1]">Field</option>
+                    </tal:options>
                 </select>
 
             </div>
@@ -116,8 +155,8 @@
                 <label for="criterion_type" i18n:translate="label_criteria_type">Criteria type</label>
 
                 <div class="formHelp" i18n:translate="help_criteria_type">
-                Criteria does match
-                </div>		
+                    Criteria does match
+                </div>
         
                 <select name="criterion_type"
                     id="criterion_type"
@@ -125,6 +164,8 @@
                     tal:define="types here/listSearchCriteriaTypes;"
                     tal:attributes="tabindex tabindex/next;">
 
+                    <script>opt_list.printOptions("criterion_type")</script>
+                    
                     <option value="" tal:repeat="type types"
                                      tal:attributes="value type/name"
                                      i18n:translate=""
@@ -163,30 +204,33 @@
 
             <div class="field" style="float:left">
         
-                <label for="field" i18n:translate="label_criteria_field_name">Field name</label>
+                <label for="field" i18n:translate="label_criteria_field_name">Field Name</label>
         
-                <div class="formHelp" i18n:translate="help_criteria_field_name">
-		List Available Fields
-                </div>		
-        
+                <div class="formHelp"
+                     id="fieldHelpSort"
+                     i18n:translate="help_criteria_field_name">
+                    List Available Fields
+                </div>
+
                     <select name="field"
                             id="field"
                             tabindex=""
-                            tal:define="fields here/listSortFields"  
-                            tal:attributes="tabindex tabindex/next;">
+                            tal:define="fields here/listSortFields"
+                            tal:attributes="tabindex tabindex/next;
+                                            onchange string:javascript:showHelp(this.options[this.selectedIndex], 'fieldHelpSort');">
 
                          <option value="no_sort" 
                                  tal:attributes="selected python:not here.hasSortCriterion();"
-                                 i18n:translate="no_sort_order">No sort order</option>   
-		
-                         <tal:block repeat="field  fields">
-                             <option value=""
-                                     tal:attributes="value field;
-                                                     selected python:here.hasSortCriterion() and here.getSortCriterion().field==field;"
-                                     i18n:translate=""
-                                     tal:content="field">Field</option>
-                         </tal:block>
+                                 i18n:translate="no_sort_order">No sort order</option>
 
+                         <tal:block tal:repeat="field  fields">
+                             <option value="" 
+                                     tal:define="explanation python:field[2]"
+                                     tal:attributes="value python:field[0];
+                                                     selected python:here.hasSortCriterion() and here.getSortCriterion().field==field[0];
+                                                     title explanation"
+                                     tal:content="python:field[1]">Field</option>
+                         </tal:block>
                     </select>
 
                  </div>

@@ -107,20 +107,20 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         self.compareDC(migrated, title=title, description=description)
 
     def test_getEXIF(self):
-        # XXX not a real test
+        # NOTE: not a real test
         exif_data = self._ATCT.getEXIF()
         self.failUnless(isinstance(exif_data, dict), type(exif_data))
         
     def test_exifOrientation(self):
-        # XXX not a real test
+        # NOTE: not a real test
         r, m = self._ATCT.getEXIFOrientation()
         
     def test_transform(self):
-        # XXX not a real test
+        # NOTE: not a real test
         self._ATCT.transformImage(2)
 
     def test_autotransform(self):
-        # XXX not a real test
+        # NOTE: not a real test
         self._ATCT.autoTransformImage()
         
     def test_broken_pil(self):

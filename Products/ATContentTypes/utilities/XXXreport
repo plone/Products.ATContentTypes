@@ -19,8 +19,8 @@
 
 PYTHON=`which python2.3`
 
-PATTERN='(XXX|TODO|BBB)[: ]'
-TMPFILE=`mktemp -p /tmp` 
+PATTERN=' (XXX|TODO|BBB)[: ]'
+TMPFILE=`mktemp -t /tmp` 
 TARGET=${1:-XXXreport.html}
 PRODUCTBASE=`dirname $0`/../
 BASE=`dirname $0`

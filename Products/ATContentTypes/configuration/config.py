@@ -27,12 +27,12 @@ import sys
 
 from ZConfig.loader import ConfigLoader
 from Globals import INSTANCE_HOME
-from Products.ATContentTypes import config as ATCTconfig
 from Products.ATContentTypes.configuration.schema import atctSchema
 
 # directories
 INSTANCE_ETC = os.path.join(INSTANCE_HOME, 'etc')
-ATCT_HOME = os.path.dirname(os.path.abspath(ATCTconfig.__file__))
+_here = os.path.dirname(__file__)
+ATCT_HOME = os.path.dirname(os.path.abspath(os.path.join(_here)))
 ATCT_ETC = os.path.join(ATCT_HOME, 'etc')
 
 # files
@@ -52,25 +52,25 @@ if not os.path.isfile(ATCT_CONFIG_IN):
 FILES = (INSTANCE_CONFIG, ATCT_CONFIG, ATCT_CONFIG_IN,)
 
 # config
-conf, handler, conf_file = None, None, None
+zconf, handler, conf_file = None, None, None
 def loadConfig(files, schema=atctSchema, overwrite=False):
     """Config loader
     
     The config loader tries to load the first existing file
     """
-    global conf, handler, conf_file
+    global zconf, handler, conf_file
     if not isinstance(files, (tuple, list)):
         files = (files, )
-    if conf is not None and not overwrite:
+    if zconf is not None and not overwrite:
         raise RuntimeError, 'Configuration is already loaded'
     for file in files:
         if file is not None:
             if not os.path.exists(file):
                 raise RuntimeError, '%s does not exist' % file
             conf_file = file
-            conf, handler = ConfigLoader(schema).loadURL(conf_file)
+            zconf, handler = ConfigLoader(schema).loadURL(conf_file)
 
 
 loadConfig(FILES)
-__all__ = ('conf', 'handler', 'conf_file')
 
+__all__ = ('zconf', 'handler', 'conf_file')

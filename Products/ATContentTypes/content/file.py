@@ -39,7 +39,7 @@ from Products.Archetypes.BaseContent import BaseContent
 from Products.PortalTransforms.utils import TransformException
 
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.config import MAX_FILE_SIZE
+from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import ICONMAP
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.content.base import registerATCT
@@ -56,7 +56,7 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
               primary=True,
               languageIndependent=True,
               validators = MaxSizeValidator('checkFileMaxSize',
-                                            maxsize=MAX_FILE_SIZE),
+                                            maxsize=zconf.ATFile.max_size),
               widget = FileWidget(
                         #description = "Select the file to be added by clicking the 'Browse' button.",
                         #description_msgid = "help_file",

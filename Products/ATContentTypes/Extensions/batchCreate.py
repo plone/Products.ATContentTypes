@@ -24,7 +24,7 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 DEPTH=5
-OBJ_PER_FOLDER=10
+OBJ_PER_FOLDER=20
 id = 'batch_%(type)s_%(no)d'
 description = 'batch test'
 text = """Lorem ipsum dolor sit amet

@@ -35,6 +35,8 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
+from Products.Archetypes.public import log_exc
+
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.interfaces import IHistoryAware
 
@@ -92,7 +94,7 @@ class HistoryAwareMixin:
         parent = aq_parent(self)
         for revision in historyList:
             if not revision.has_key('serial'):
-                # XXX alan reported it, add logging!
+                log_exc()
                 continue
             serial = revision['serial']
             # get the revision object and wrap it in a context wrapper

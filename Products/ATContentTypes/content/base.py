@@ -49,6 +49,7 @@ if HAS_PLONE2:
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
 from Globals import InitializeClass
+from ZODB.POSException import ConflictError
 from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
@@ -56,6 +57,7 @@ from ExtensionClass import Base
 from OFS import ObjectManager
 from zExceptions import BadRequest
 from webdav.Lockable import ResourceLockedError
+from OFS.IOrderSupport import IOrderedContainer
 
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
@@ -64,6 +66,8 @@ from Products.Archetypes.TemplateMixin import TemplateMixin
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.Archetypes.debug import _default_logger
 from Products.Archetypes.debug import _zlogger
+from Products.Archetypes.public import log_exc
+from Products.CMFPlone import base_hasattr
 
 # BBB CMFPlone 2.0.x
 try:
@@ -77,9 +81,9 @@ except ImportError:
 from Products.ATContentTypes.config import CHAR_MAPPING
 from Products.ATContentTypes.config import GOOD_CHARS
 from Products.ATContentTypes.config import MIME_ALIAS
-from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixin
 from Products.ATContentTypes.interfaces import IATContentType
+from Products.ATContentTypes.interfaces import ISelectableDefaultPage
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
 DEBUG = True
@@ -230,6 +234,60 @@ class ATCTMixin(TemplateMixin):
         """Overwrite this method to make AT compatible with the crappy CMF edit()
         """
         raise NotImplementedError("cmf_edit method isn't implemented")
+
+    security.declareProtected(CMFCorePermissions.View, 'getObjPositionInParent')
+    def getObjPositionInParent(self):
+        """Helper method for catalog based folder contents
+        """
+        parent = self.aq_inner.aq_parent
+        if IOrderedContainer.isImplementedBy(parent):
+            try:
+                return parent.getObjectPosition(self.getId())
+            except ConflictError:
+                raise
+            except:
+                log_exc()
+        return 0
+        
+    security.declareProtected(CMFCorePermissions.View, 'getObjSize')
+    def getObjSize(self, obj=None, size=None):
+        """Helper method for catalog based folder contents
+        """
+        if not obj:
+            obj = self
+        
+        const = {'kB':1024,
+                 'MB':1024*1024,
+                 'GB':1024*1024*1024
+                }
+        order = ('GB', 'MB', 'kB')
+        smaller = order[-1]
+        
+        # allow arbitrary sizes to be passed through,
+        # if there is no size, but there is an object
+        # look up the object, this maintains backwards 
+        # compatibility
+        if size is None and base_hasattr(obj, 'get_size'):
+            size=obj.get_size()
+        
+        # if the size is a float, then make it an int
+        # happens for large files
+        try:
+            size = int(size)
+        except (ValueError, TypeError):
+            pass
+        
+        if not size:
+            return '0 %s' % smaller
+        
+        if isinstance(size, (int, long)):
+            if size < const[smaller]:
+                return '1 %s' % smaller
+            for c in order:
+                if size/const[c] > 0:
+                    break
+            return '%.1f %s' % (float(size/float(const[c])), c)
+        return size
 
 InitializeClass(ATCTMixin)
 
@@ -538,7 +596,8 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
     """ Constrained folderish type """
 
     __implements__ = (ATCTMixin.__implements__,
-                      ConstrainTypesMixin.__implements__)
+                      ConstrainTypesMixin.__implements__,
+                      ISelectableDefaultPage)
 
     security       = ClassSecurityInfo()
 

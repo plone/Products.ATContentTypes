@@ -31,7 +31,6 @@ from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import _ATCT_UNIT_TEST_MODE
 from Products.ATContentTypes.config import _ATCT_OLD_VALUES
-from Products.ATContentTypes.config import ATDOCUMENT_CONTENT_TYPE
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.tool.atct import ATCTTool
 from Products.CMFCore.utils import getToolByName
@@ -44,6 +43,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         self.tool = getattr(self.portal.aq_explicit, TOOLNAME)
         self.ttool = getattr(self.portal.aq_explicit, 'portal_types')
         self.qi = getattr(self.portal.aq_explicit, 'portal_quickinstaller')
+        self.cat = getattr(self.portal.aq_explicit, 'portal_catalog')
         
     def test_installed_products(self):
         qi = self.qi
@@ -127,14 +127,24 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
     def test_release_settings_SAVE_TO_FAIL_FOR_DEVELOPMENT(self):
         old = _ATCT_OLD_VALUES
-        self.failUnlessEqual(old['ENABLE_CONSTRAIN_TYPES_MIXIN'], True)
         self.failUnlessEqual(old['ENABLE_TEMPLATE_MIXIN'], True)
         self.failUnlessEqual(old['EXT_STORAGE_ENABLE'], False)
         self.failUnlessEqual(old['INSTALL_LINGUA_PLONE'], False)
 
         self.failUnlessEqual(ATDOCUMENT_CONTENT_TYPE, 'text/html')
         self.failUnlessEqual(SWALLOW_IMAGE_RESIZE_EXCEPTIONS, True)
-        
+ 
+    def test_reindex_doesnt_add_tools(self):
+        cat = self.cat
+        ids = [id for id in self.portal.objectIds()
+               if id.startswith('portal_') ]
+        # a rought guess
+        self.failIf(len(ids) < 5)
+        for id in ids:
+                result = cat(id=id)
+                l = len(result)
+                self.failUnlessEqual(l, 0, (id, l, result))
+    
 tests.append(TestInstallation)
 
 ##class TestSuppressedInstallation(atcttestcase.ATCTSiteTestCase):

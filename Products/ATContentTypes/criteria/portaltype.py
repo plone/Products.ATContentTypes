@@ -38,6 +38,7 @@ from Products.ATContentTypes.criteria import FIELD_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
+from Products.ATContentTypes.config import TOOLNAME
 
 
 ATPortalTypeCriterionSchema = ATSelectionCriterion.schema.copy()
@@ -65,9 +66,9 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCurrentValues(self):
          """Return enabled portal types"""
-         types_tool = getToolByName(self, 'portal_types')
-         portal_types = [types_tool.getTypeInfo(pt).Title() or pt
-                         for pt in types_tool.listContentTypes()]
+         topic_tool = getToolByName(self, TOOLNAME)
+         portal_types = topic_tool.getAllowedPortalTypes()
+         portal_types = [t[1] or t[0] for t in portal_types]
          return DisplayList(zip(portal_types,portal_types))
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')

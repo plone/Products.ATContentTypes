@@ -48,6 +48,8 @@ from Products.CMFPlone.interfaces.OrderedContainer import IOrderedContainer
 from Products.ATContentTypes.interfaces import IConstrainTypes
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
+from Products.ATContentTypes.lib.autosort import IAutoSortSupport
+from Products.ATContentTypes.lib.autosort import IAutoOrderSupport
 from Interface.Verify import verifyObject
 
 def editCMF(obj):
@@ -66,6 +68,10 @@ class FolderTestMixin:
     def test_implementsConstrainTypes(self):
         self.failUnless(IConstrainTypes.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(IConstrainTypes, self._ATCT)) 
+        
+    def test_implements_autosort(self):
+        self.failUnless(IAutoSortSupport.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(IAutoSortSupport, self._ATCT)) 
         
 class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
@@ -124,9 +130,12 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
         self.compareAfterMigration(migrated, mod=mod, created=created)
         self.compareDC(migrated, title=title, description=description)
+        
+        # TODO: more tests
 
-
-        # XXX more
+    def test_implements_autoorder(self):
+        self.failUnless(IAutoOrderSupport.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(IAutoOrderSupport, self._ATCT)) 
 
 tests.append(TestSiteATFolder)
 
@@ -160,6 +169,7 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
                         % (old.Description(), new.Description()))
 
+
 tests.append(TestSiteATBTreeFolder)
 
 class TestATFolderFields(atcttestcase.ATCTFieldTestCase):
@@ -185,6 +195,44 @@ class TestATBTreeFolderFields(TestATFolderFields):
         self._dummy = self.createDummy(klass=ATBTreeFolder)
 
 tests.append(TestATBTreeFolderFields)
+
+class TestAutoSortSupport(atcttestcase.ATCTSiteTestCase):
+    
+    def afterSetUp(self):
+        atcttestcase.ATCTSiteTestCase.afterSetUp(self)
+        self.folder.invokeFactory('Folder', 'fobj', title='folder 1')
+        self.fobj = self.folder.fobj
+        self.objs = (('Document', 'x1', 'Document 3'),
+                     ('Document', 'x2', 'Document 4'),
+                     ('Document', 'doc1', 'Document 1'),
+                     ('Document', 'doc2', 'Document 2'),
+                     ('Folder', 'folder1', 'Folder 1'),
+                     ('Folder', 'folder2', 'Folder 2'),
+                    )
+        for pt, id, title in self.objs:
+            self.fobj.invokeFactory(pt, id, title=title)
+        
+    def test_autoordering(self):
+        f = self.fobj
+        self.failUnlessEqual(f.getDefaultSorting(), ('Title', False))
+        self.failUnlessEqual(f.getSortFolderishFirst(), True)
+        self.failUnlessEqual(f.getSortReverse(), False)
+        self.failUnlessEqual(f.getSortAuto(), True)
+        
+        f.setDefaultSorting('getId', reverse=True)
+        f.setSortFolderishFirst(False)
+        f.setSortReverse(True)
+        f.setSortAuto(False)
+        
+        self.failUnlessEqual(f.getDefaultSorting(), ('getId', True))
+        self.failUnlessEqual(f.getSortFolderishFirst(), False)
+        self.failUnlessEqual(f.getSortReverse(), True)
+        self.failUnlessEqual(f.getSortAuto(), False)
+
+    # TODO: more tests
+
+tests.append(TestAutoSortSupport)
+
 
 if __name__ == '__main__':
     framework()

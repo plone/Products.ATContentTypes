@@ -38,8 +38,7 @@ from Products.Archetypes.public import StringWidget
 from Products.Archetypes.public import RFC822Marshaller
 
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.config import ATDOCUMENT_CONTENT_TYPE
-from Products.ATContentTypes.config import MAX_IMAGE_SIZE
+from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.ATContentTypes.content.base import updateActions
@@ -57,20 +56,17 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
         primary = True,
         validators = ('isTidyHtmlWithCleanup',),
         #validators = ('isTidyHtml',),
-        default_content_type = ATDOCUMENT_CONTENT_TYPE,
-        default_output_type = 'text/html',
-        allowable_content_types = ('text/structured',
-                                   'text/x-rst',
-                                   'text/html',
-                                   'text/plain'
-                                  ),
+        default_content_type = zconf.ATNewsItem.default_content_type,
+        default_output_type = 'text/x-html-safe',
+        allowable_content_types = zconf.ATNewsItem.allowed_content_types,
         widget = RichWidget(
             description = "The body text of the document.",
             description_msgid = "help_body_text",
             label = "Body text",
             label_msgid = "label_body_text",
             rows = 25,
-            i18n_domain = "plone")
+            i18n_domain = "plone",
+            allow_file_upload = zconf.ATDocument.allow_document_upload)
         ),
     ImageField('image',
         required = False,
@@ -84,7 +80,7 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
                 'listing' :  (16, 16),
                },
         validators = MaxSizeValidator('checkFileMaxSize',
-                                       maxsize=MAX_IMAGE_SIZE),
+                                       maxsize=zconf.ATNewsItem.max_size),
         widget = ImageWidget(
             description = "Add an optional image by clicking the 'Browse' button. This will be shown in the news listing, and in the news item itself. It will automatically scale the picture you upload to a sensible size.",
             description_msgid = "help_image",

@@ -39,8 +39,10 @@ from Acquisition import aq_inner
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import BooleanField
 from Products.Archetypes.public import IntegerField
+from Products.Archetypes.public import LinesField
 from Products.Archetypes.public import BooleanWidget
 from Products.Archetypes.public import IntegerWidget
+from Products.Archetypes.public import InAndOutWidget
 
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
@@ -54,6 +56,7 @@ from Products.ATContentTypes.content.schemata import relatedItemsField
 from Products.ATContentTypes.interfaces import IATTopic
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces import IATTopicSortCriterion
+from Products.ATContentTypes.config import TOOLNAME
 
 # A couple of fields just don't make sense to sort (for a user),
 # some are just doubles.
@@ -105,6 +108,39 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                         "'Number of Items' will be "
                         "displayed ",
                         description_msgid="help_item_count",
+                        i18n_domain = "plone"),
+                 ),
+    BooleanField('customView',
+                required=False,
+                mode="rw",
+                default=False,
+                write_permission = ChangeTopics,
+                widget=BooleanWidget(
+                        label="Use Custom View",
+                        label_msgid="label_custom_view",
+                        description="Toggles the view used to display the "
+                        "search results.  If selected, the view will use a "
+                        "table with fields determined by the values selected "
+                        "in 'Custom View Fields', otherwise the default "
+                        "listing will be used.",
+                        description_msgid="help_custom_view",
+                        i18n_domain = "plone"),
+                 ),
+    LinesField('customViewFields',
+                required=False,
+                mode="rw",
+                default=('Title',),
+                vocabulary='listMetaDataFields',
+                enforceVocabulary=True,
+                write_permission = ChangeTopics,
+                widget=InAndOutWidget(
+                        label="Custom View Fields",
+                        label_msgid="label_custom_view_fields",
+                        description="If 'Use Custom View' is "
+                        "selected, the view will use a table with fields "
+                        "determined by the values selected in "
+                        "'Custom View Fields'.",
+                        description_msgid="help_custom_view_fields",
                         i18n_domain = "plone"),
                  ),
     ))
@@ -284,21 +320,15 @@ class ATTopic(ATCTFolder):
     def listFields(self):
         """Return a list of fields from portal_catalog.
         """
-        pcatalog = getToolByName( self, 'portal_catalog' )
-        available = pcatalog.indexes()
-        val = [ field
-                 for field in available
-                 if  field not in IGNORED_FIELDS
-               ]
-        val.sort(lambda x,y: strcoll(self.translate(x),self.translate( y)))
-        return val
+        tool = getToolByName(self, TOOLNAME)
+        return tool.getEnabledFields()
 
     security.declareProtected(ChangeTopics, 'listSortFields')
     def listSortFields(self):
         """Return a list of available fields for sorting."""
         fields = [ field
                     for field in self.listFields() 
-                    if self.validateAddCriterion(field, 'ATSortCriterion') ]
+                    if self.validateAddCriterion(field[0], 'ATSortCriterion') ]
         return fields
 
     security.declareProtected(ChangeTopics, 'listAvailableFields')
@@ -306,9 +336,10 @@ class ATTopic(ATCTFolder):
         """Return a list of available fields for new criteria.
         """
         current   = [ crit.Field() for crit in self.listCriteria() ]
+        fields = self.listFields()
         val = [ field
-                 for field in self.listFields()
-                 if field not in current
+                 for field in fields
+                 if field[0] not in current
                ]
         return val
 
@@ -320,6 +351,29 @@ class ATTopic(ATCTFolder):
         val.sort()
         return val
 
+    security.declareProtected(ChangeTopics, 'listMetaDataFields')
+    def listMetaDataFields(self, exclude=True):
+        """Return a list of metadata fields from portal_catalog.
+        """
+        tool = getToolByName(self, TOOLNAME)
+        return tool.getMetadataDisplay(exclude)
+
+    def allowedCriteriaForField(self, field, flat_list=False):
+        """ Return all valid criteria for a given field, optionally include
+            descriptions in list in format [desc1, val1, desc2, val2] for 
+            javascript selector. """
+        tool = getToolByName(self, TOOLNAME)
+        criteria = tool.getIndex(field).criteria
+        allowed = [crit for crit in criteria
+                                if self.validateAddCriterion(field, crit)]
+        if flat_list:
+            flat = []
+            for a in allowed:
+                desc = _criterionRegistry[a].shortDesc
+                flat.extend([desc,a])
+            allowed = flat
+        return allowed
+
     security.declareProtected(CMFCorePermissions.View, 'buildQuery')
     def buildQuery(self):
         """Construct a catalog query using our criterion objects.
@@ -329,8 +383,8 @@ class ATTopic(ATCTFolder):
         acquire = self.getAcquireCriteria()
         if not criteria and not acquire:
             # no criteria found
-             return None
- 
+            return None
+
         if acquire:
             try:
                 # Tracker 290 asks to allow combinations, like this:

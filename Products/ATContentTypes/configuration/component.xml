@@ -1,6 +1,6 @@
 <component prefix="Products.ATContentTypes.configuration.datatype">
 
-   <sectiontype name="mxtidy" keytype="identifier">
+   <sectiontype name="mxtidy" attribute="mxtidy" keytype="identifier" datatype=".MxTidy">
     <description format="plain">
       Section for mxTidy related configuration
     </description>
@@ -66,73 +66,49 @@
     </key> 
   </sectiontype>
 
-  <sectiontype name="feature" keytype="identifier">
+  <sectiontype name="feature" keytype="identifier" datatype=".Feature">
     <description format="plain">
-      Section for a feature has a enable knob and a permission
+      Section for a feature
     </description>
     <key name="enable" datatype="boolean" required="yes">
       <description format="plain">
         enable the feature?
       </description>
     </key>
-    <key name="permission" datatype="permission" default="cmf.ManagePortal">
-      <description format="plain">
-        permission name
-      </description>
-    </key>
   </sectiontype>
-
-  <sectiontype name="view" keytype="identifier">
+  
+  <sectiontype name="contenttypes">
     <description format="plain">
-      A section that is describing the different aspects of views for AT types
+      Section content types of an archetype
     </description>
-    <key name="default" datatype="identifier" default="None">
-      <description format="plain">
-        default view, if None -> portal_types immediate_view
+    <key name="default" attribute="default_content_type" datatype="string"
+        required="no" default="text/html">
+      <description>
+         XXX
       </description>
     </key>
-    <key name="immediate" datatype="identifier" default="base_view">
-      <description format="plain">
-        XXX
+    <multikey name="allowed" attribute="allowed_content_types" datatype="string"
+        required="no">
+      <description>
+         XXX
       </description>
-    </key>
-    <multikey name="supplementary" datatype="identifier">
-      <description format="plain">
-        XXX
-      </description>
+      <default>
+        allowed text/html
+      </default>
     </multikey>
   </sectiontype>
 
-  <sectiontype name="typedescription" keytype="identifier">
-    <description format="plain">
-      describing text and msgid for a type
-    </description>
-    <key name="description" datatype="string" required="yes">
-      <description format="plain">
-        XXX
-      </description>
-    </key>
-    <key name="i18n_msgid" datatype="identifier">
-      <description format="plain">
-        XXX
-      </description>
-    </key>
-  </sectiontype>
-
-  <sectiontype name="contenttype" keytype="string">
+  <sectiontype name="archetype" keytype="identifier" datatype=".Archetype">
     <description format="plain">
       An archetype type information
     </description>
-    <key name="add_permission" datatype="permission" default="cmf.AddPortalContent">
-      <description format="plain">
-        permission name
-      </description>
-    </key>
-    <section type="typedescription" name="*" attribute="typedescription"
-     required="yes" />
-    <!--section type="view" name="*" attribute="view" required="yes" /-->
-
+    <section name="*" attribute="contenttypes" type="contenttypes"
+       required="no" />
+       
+    <key name="max_size" attribute="max_size" datatype="byte-size-in-mb"
+         default="0" required="no" />
+    <key name="allow_document_upload" attribute="allow_document_upload"
+         datatype="boolean" default="yes" required="no" /> 
+    
   </sectiontype>
-
-
 </component>

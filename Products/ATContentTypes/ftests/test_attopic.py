@@ -41,7 +41,6 @@ class TestATTopicFunctional(atctftestcase.ATCTIntegrationTestCase):
         
     def test_templatemixin_view_without_view(self):
         # template mixin magic should work
-        # XXX more tests?
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) #
     

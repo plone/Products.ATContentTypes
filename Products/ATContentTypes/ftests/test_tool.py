@@ -37,7 +37,7 @@ tests = []
 class TestATCTToolFunctional(atctftestcase.IntegrationTestCase):
     
     zmi_tabs = ('manage_imageScales', 'manage_recatalog', 'manage_versionMigration',
-                'manage_overview', 'manage_typesMigration',
+                'manage_overview', 'manage_typeMigration',
                )
     
     def setupTestObject(self):

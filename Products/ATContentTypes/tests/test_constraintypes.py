@@ -29,10 +29,8 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from Products.ATContentTypes.config import ENABLE_CONSTRAIN_TYPES_MIXIN
 from Products.ATContentTypes.config import _ATCT_UNIT_TEST_MODE
 
-from AccessControl import Unauthorized
 from Products.ATContentTypes.lib import constraintypes
 from Products.ATContentTypes.interfaces import IConstrainTypes
 from Products.Archetypes.public import registerType, process_types, listTypes
@@ -40,6 +38,7 @@ from Products.Archetypes.Extensions.utils import installTypes
 from AccessControl.SecurityManagement import newSecurityManager
 from Testing.ZopeTestCase import user_name as default_user
 
+from Products.CMFCore.utils import getToolByName
 
 tests = []
 
@@ -60,7 +59,6 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         
     def test_000enabledforunittest(self):
         self.failUnless(_ATCT_UNIT_TEST_MODE)
-        self.failUnless(ENABLE_CONSTRAIN_TYPES_MIXIN)
 
     def test_isMixedIn(self):
         self.failUnless(isinstance(self.af,
@@ -69,93 +67,122 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.failUnless(IConstrainTypes.isImplementedBy(self.af),
                         "IConstrainTypes not implemented by ATFolder instance")
 
-    def test_unconstrained(self):
-        # unlimited types at portal_types tool
-        # no portal_type filtered at object
-        af = self.af
-        at = self.at
-        at.manage_changeProperties(filter_content_types=False)
-        self.failIf(at.filter_content_types,
-                    "ContentTypes are still being filtered at factory")
-        af.setLocallyAllowedTypes([])
-        possible_types_ids = [fti.id for fti in af._ct_getPossibleTypes()]
-        self.failIf(self.image_type not in possible_types_ids,
-                    'Image not available to be filtered!')
-        allowed_ids = [fti.id for fti in af.allowedContentTypes()]
-        self.failIf(self.image_type not in allowed_ids,
-                    'Image not available to add!')
-        af.invokeFactory(self.image_type, id='anATImage')
-        afi = af.anATImage # will bail if invokeFactory didn't work
-        self.failIf(self.document_type not in possible_types_ids,
-                    'Document not available to add!')
-        af.invokeFactory(self.document_type, id='anATDocument')
-        afd = af.anATDocument # will bail if invokeFactory didn't work
-
-    def test_constrained(self):
-        af = self.af
-        at = self.at
-        af.setEnableConstrainMixin(True)
-        at.manage_changeProperties(filter_content_types=False)
-        self.failIf(at.filter_content_types,
-                    "ContentTypes are still being filtered at factory")
-        af.setLocallyAllowedTypes([self.image_type])
-        allowed_ids = [fti.id for fti in af.allowedContentTypes()]
-        af.invokeFactory(self.image_type, id='anATImage')
-        afi = af.anATImage # will bail if invokeFactory didn't work
-        self.assertEquals(allowed_ids, [self.image_type])
-        self.assertRaises(Unauthorized, af.invokeFactory,
-                          self.document_type, id='anATDocument')
-
-    def test_ftiInteraction(self):
-        af = self.af
-        at = self.at
-        tt = self.tt
-        af.setEnableConstrainMixin(True)
-        af_allowed_types = [self.document_type, self.image_type,
-                            self.file_type, self.folder_type, ]
-        af_allowed_types.sort()
-        at.manage_changeProperties(filter_content_types=True,
-                                   allowed_content_types=af_allowed_types)
-        af.setLocallyAllowedTypes([])
-        af_local_types = [fti.getId() for fti in af.allowedContentTypes()]
-        af_local_types.sort()
-        self.assertEquals(af_allowed_types, af_local_types)
-        #                  "fti allowed types don't match local ones")
-        # let's limit locally and see what happens
-        types1 = [self.image_type, self.file_type, self.folder_type]
-        types1.sort()
-        af.setLocallyAllowedTypes(types1)
-        af_local_types = [fti.getId() for fti in af.allowedContentTypes()]
-        af_local_types.sort()
-        self.assertEquals(types1, af_local_types,
-                          "constrained types don't match local ones")
-        # now let's unlimit globally to see if the local constrains remain
-        at.manage_changeProperties(filter_content_types=False)
-        af_local_types = [fti.getId() for fti in af.allowedContentTypes()]
-        af_local_types.sort()
-        self.assertEquals(types1, af_local_types,
-                          "constrained types don't match local ones")
+    def test_enabled(self):
+        self.af.setEnableAddRestrictions(constraintypes.ENABLED)
+        self.af.setLocallyAllowedTypes(['Folder', 'Image'])
+        self.af.setImmediatelyAddableTypes(['Folder'])
         
-        # XXX this test does't work because it expects a CMF Folder!
+        self.failUnlessEqual(self.af.getLocallyAllowedTypes(), 
+                                ('Folder', 'Image',))
+        self.failUnlessEqual(self.af.getImmediatelyAddableTypes(),
+                                ('Folder',))
         
-        # now let's see if inheritance kicks in even thru a non
-        # constrained type
-        af.invokeFactory('Folder', id='nf')
-        af.nf.invokeFactory('Folder', id='bf')
-        bf = af.nf.bf
-        bf_local_types = [fti.getId() for fti in af.allowedContentTypes()]
-        bf_local_types.sort()
-        self.assertEquals(types1, bf_local_types,
-                          "constrained types don't match inherited ones")
-
-    def test_unconstrainedButUnauthorized(self):
-        user = self.portal.portal_membership.getMemberById(default_user)
-        self.logout()
-        newSecurityManager(None, user)
-        af = self.af
-        self.assertRaises(Unauthorized,
-                          af.invokeFactory, self.folder_type, id='bf')
-        self.logout()
+        self.assertRaises(ValueError, self.af.invokeFactory, 'Document', 'a')
+        try:
+            self.af.invokeFactory('Image', 'image', title="death")
+        except ValueError:
+            self.fail()
+        
+    def test_disabled(self):
+        self.af.setEnableAddRestrictions(constraintypes.DISABLED)
+        self.af.setLocallyAllowedTypes(['Folder', 'Image'])
+        self.af.setImmediatelyAddableTypes(['Folder'])
+        
+        # We can still set and persist, even though it is disabled - must
+        # remember!
+        self.failUnlessEqual(self.af.getRawLocallyAllowedTypes(), 
+                                ('Folder', 'Image',))
+        self.failUnlessEqual(self.af.getRawImmediatelyAddableTypes(), 
+                                ('Folder',))
+        
+        try:
+            self.af.invokeFactory('Document', 'whatever', title='life')
+            self.af.invokeFactory('Image', 'image', title="more life")
+        except ValueError:
+            self.fail()
+            
+        # Make sure immediately-addable are all types if we are disabled
+        allowedIds = [ctype.getId() for ctype in self.af.allowedContentTypes()]
+        self.failUnlessEqual(allowedIds, self.af.getImmediatelyAddableTypes())
+        
+    def test_acquireFromHomogenousParent(self):
+        # Set up outer folder with restrictions enabled
+        self.af.setEnableAddRestrictions(constraintypes.ENABLED)
+        self.af.setLocallyAllowedTypes(['Folder', 'Image'])
+        self.af.setImmediatelyAddableTypes(['Folder'])
+        
+        # Create inner type to acquire (default)
+        self.af.invokeFactory('Folder', 'inner', title='inner')
+        inner = self.af.inner
+        
+        inner.setEnableAddRestrictions(constraintypes.ACQUIRE)
+        
+        # Test persistence
+        inner.setLocallyAllowedTypes(['Document', 'Event'])
+        inner.setImmediatelyAddableTypes(['Document'])
+        
+        self.failUnlessEqual(inner.getRawLocallyAllowedTypes(), 
+                                ('Document', 'Event',))
+        self.failUnlessEqual(inner.getRawImmediatelyAddableTypes(),
+                                ('Document',))
+        
+        self.assertRaises(ValueError, inner.invokeFactory, 'Event', 'a')
+        try:
+            inner.invokeFactory('Image', 'whatever', title='life')
+        except ValueError:
+            self.fail()
+        
+        # Make sure immediately-addable are inherited
+        self.failUnlessEqual(inner.getImmediatelyAddableTypes(), 
+                                self.af.getImmediatelyAddableTypes())
+        
+        
+    def test_acquireFromHetereogenousParent(self):
+        
+        # Let folder use a restricted set of types
+        self.portal.portal_types.Folder.filter_content_types = 1
+        self.portal.portal_types.Folder.allowed_content_types = \
+            ('Document', 'Image', 'News Item', 'Topic', 'SimpleFolder', 'Folder')
+        
+        # Set up outer folder with restrictions enabled
+        self.af.setEnableAddRestrictions(constraintypes.ENABLED)
+        self.af.setLocallyAllowedTypes(['Folder', 'Image', 'SimpleFolder'])
+        self.af.setImmediatelyAddableTypes(['Folder'])
+  
+        # Create inner type to acquire (default)
+        self.af.invokeFactory('SimpleFolder', 'outer', title='outer')
+        outer = self.af.outer
+        
+        outer.invokeFactory('Folder', 'inner', title='inner')
+        inner = outer.inner 
+        
+        inner.setEnableAddRestrictions(constraintypes.ACQUIRE)
+        
+        # Test persistence
+        inner.setLocallyAllowedTypes(['Document', 'Event'])
+        inner.setImmediatelyAddableTypes(['Document'])
+        
+        self.failUnlessEqual(inner.getRawLocallyAllowedTypes(), 
+                                ('Document', 'Event',))
+        self.failUnlessEqual(inner.getRawImmediatelyAddableTypes(),
+                                ('Document',))
+        
+        # Fail - we didn't acquire this, really, since we can't acquire
+        # from parent folder of different type
+        self.assertRaises(ValueError, inner.invokeFactory, 'CMF Folder', 'a')
+        self.failIf('CMF Folder' in inner.getLocallyAllowedTypes())
+        try:
+            # Will be OK, since we've got global defaults since we can't
+            # acquire from parent with different type
+            inner.invokeFactory('News Item', 'whatever', title='life')
+        except ValueError:
+            self.fail()
+        
+        # Make sure immediately-addable are set to default
+        self.failUnlessEqual(inner.getImmediatelyAddableTypes(), 
+                                inner.getLocallyAllowedTypes())
+        
+        
 
 tests.append(TestConstrainTypes)
 

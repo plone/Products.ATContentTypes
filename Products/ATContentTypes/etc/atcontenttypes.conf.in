@@ -15,91 +15,65 @@
 
 <feature templatemixin>
     enable yes
-    permission cmf.ModifyPortalContent
 </feature>
 
-<feature constrainmixin>
+<feature constraintypes>
     enable yes
-    permission cmf.ManagePortal
 </feature>
 
-<contenttype ATDocument>
-  add_permission cmf.AddPortalContent
-  <typedescription>
-    description foo
-    i18n_msgid  bar
-  </typedescription>
-</contenttype>
+<feature externaltypes>
+    enable no
+</feature>
 
-<contenttype ATEvent>
-  add_permission cmf.AddPortalContent
-  <typedescription>
-    description foo
-    i18n_msgid  bar
-  </typedescription>
-</contenttype>
+<archetype ATDocument>
+  allow_document_upload yes
+  <contenttypes>
+    default text/html
 
-<contenttype ATFavorite>
-  add_permission cmf.AddPortalContent
-  <typedescription>
-    description foo
-    i18n_msgid  bar
-  </typedescription>
-</contenttype>
+    allowed text/structured
+    allowed text/x-rst
+    allowed text/html
+    allowed text/plain
+    allowed text/plain-pre
+    allowed text/python-source
+  </contenttypes>
+</archetype>
 
-<contenttype ATFile>
-  add_permission cmf.AddPortalContent
-  <typedescription>
-    description foo
-    i18n_msgid  bar
-  </typedescription>
-</contenttype>
+<archetype ATEvent>
+  allow_document_upload yes
+  <contenttypes>
+    default text/html
 
-<contenttype ATFolder>
-  add_permission cmf.AddPortalContent
-  <typedescription>
-    description foo
-    i18n_msgid  bar
-  </typedescription>
-</contenttype>
+    allowed text/structured
+    allowed text/x-rst
+    allowed text/html
+    allowed text/plain
+    allowed text/plain-pre
+  </contenttypes>
+</archetype>
 
-<contenttype ATBTreeFolder>
-  add_permission cmf.AddPortalContent
-  <typedescription>
-    description foo
-    i18n_msgid  bar
-  </typedescription>
-</contenttype>
+<archetype ATNewsItem>
+  max_size no
+  allow_document_upload yes
+  
+  <contenttypes>
+    default text/html
+    
+    allowed text/structured
+    allowed text/x-rst
+    allowed text/html
+    allowed text/plain
+    allowed text/plain-pre
+  </contenttypes>
+</archetype>
 
-<contenttype ATImage>
-  add_permission cmf.AddPortalContent
-  <typedescription>
-    description foo
-    i18n_msgid  bar
-  </typedescription>
-</contenttype>
+<archetype ATFile>
+  # max_size 1MB
+  max_size no
+</archetype>
 
-<contenttype ATLink>
-  add_permission cmf.AddPortalContent
-  <typedescription>
-    description foo
-    i18n_msgid  bar
-  </typedescription>
-</contenttype>
-
-<contenttype ATNewsItem>
-  add_permission cmf.AddPortalContent
-  <typedescription>
-    description foo
-    i18n_msgid  bar
-  </typedescription>
-</contenttype>
-
-<contenttype ATTopic>
-  add_permission Products.ATContentTypes.permission.AddTopics
-  <typedescription>
-    description foo
-    i18n_msgid  bar
-  </typedescription>
-</contenttype>
+<archetype ATImage>
+  # max_size 1MB
+  max_size no
+</archetype>
 

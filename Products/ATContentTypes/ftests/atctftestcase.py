@@ -102,6 +102,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
     def setupTestObject(self):
         # create test object
         self.obj_id = 'test_object'
+        self.folder.setLocallyAllowedTypes([self.portal_type])
         self.folder.invokeFactory(self.portal_type, self.obj_id, title=self.obj_id)
         self.obj = getattr(self.folder.aq_explicit, self.obj_id)
         self.obj_url = self.obj.absolute_url()
@@ -143,13 +144,11 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
     def test_templatemixin_view(self):
         # template mixin magic should work
-        # XXX more tests?
         response = self.publish('%s/view' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
 
     def test_local_sharing_view(self):
         # sharing tab should work
-        # XXX security tests?
         response = self.publish('%s/folder_localrole_form' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK    
 
@@ -223,17 +222,26 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         
         self.failUnless(hasattr(self.obj.aq_explicit, 'talkback'))
 
-    def XXX_test_templateMixinContext(self):
+    def test_templateMixinContext(self):
         # register and add a testing template (it's a script)
-        import pdb; pdb.set_trace()
         self.setRoles(['Manager', 'Member'])
-        at = getToolByName(self, 'archetype_tool')
+        at = getToolByName(self.portal, 'archetype_tool')
         at.registerTemplate('unittestGetTitleOf')
         at._templates[self.portal_type] += ['unittestGetTitleOf']
         self.obj.setLayout('unittestGetTitleOf')
         self.setRoles(['Member'])
         
-        response = self.publish('%s/view' % (self.obj_path, view), self.basic_auth)
+        self.folder.setTitle('the folder')
+        self.obj.setTitle('the obj')
+        
+        response = self.publish('%s/view' % self.obj_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) # OK
+        
+        output = response.getBody().split(',')
+        self.failUnlessEqual(len(output), 4, output)
+        
+        self.failUnlessEqual(output, ['the obj', 'the folder', 'the obj', 'the folder'])
+
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFQuickInstallerTool.QuickInstallerTool import AlreadyInstalled

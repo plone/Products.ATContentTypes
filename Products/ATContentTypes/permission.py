@@ -17,8 +17,6 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-
-
 """
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
@@ -46,10 +44,10 @@ ChangeEvents = 'Change portal events'
 setDefaultRoles(ChangeEvents, ('Manager', 'Owner',))
 
 ModifyConstrainTypes = "ATContentTypes: Modify constrain types"
-setDefaultRoles(ModifyConstrainTypes, ('Manager', ))
+setDefaultRoles(ModifyConstrainTypes, ('Manager', 'Owner'))
 
 ModifyViewTemplate = "ATContentTypes: Modify view template"
-setDefaultRoles(ModifyViewTemplate, ('Manager', ))
+setDefaultRoles(ModifyViewTemplate, ('Manager', 'Owner'))
 
 ViewHistory = "ATContentTypes: View history"
 setDefaultRoles(ViewHistory, ('Manager', ))

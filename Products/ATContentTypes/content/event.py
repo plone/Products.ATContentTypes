@@ -44,7 +44,7 @@ from Products.Archetypes.public import RichWidget
 from Products.Archetypes.public import StringWidget
 from Products.Archetypes.public import RFC822Marshaller
 
-from Products.ATContentTypes.config import ATDOCUMENT_CONTENT_TYPE
+from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
@@ -74,20 +74,17 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
               primary=True,
               validators = ('isTidyHtmlWithCleanup',),
               #validators = ('isTidyHtml',),
-              default_content_type = ATDOCUMENT_CONTENT_TYPE,
-              default_output_type = 'text/html',
-              allowable_content_types = ('text/structured',
-                                         'text/x-rst',
-                                         'text/html',
-                                         'text/plain',
-                                         'text/plain-pre',),
+              default_content_type = zconf.ATEvent.default_content_type,
+              default_output_type = 'text/x-html-safe',
+              allowable_content_types = zconf.ATEvent.allowed_content_types,
               widget = RichWidget(
                         description = "The full text of the event announcement.",
                         description_msgid = "help_body_text",
                         label = "Body text",
                         label_msgid = "label_body_text",
                         rows = 25,
-                        i18n_domain = "plone")),
+                        i18n_domain = "plone",
+                        allow_file_upload = zconf.ATDocument.allow_document_upload)),
 
     LinesField('attendees',
                languageIndependent=True,
@@ -132,7 +129,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
 
     DateTimeField('startDate',
                   required=True,
-                  searchable=True,
+                  searchable=False,
                   accessor='start',
                   write_permission = ChangeEvents,
                   default_method=DateTime,
@@ -147,7 +144,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
 
     DateTimeField('endDate',
                   required=True,
-                  searchable=True,
+                  searchable=False,
                   accessor='end',
                   write_permission = ChangeEvents,
                   default_method=DateTime,
