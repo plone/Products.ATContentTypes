@@ -310,18 +310,6 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
                         label_msgid = "label_image",
                         i18n_domain = "plone",
                         show_content_type = False,)),
-    StringField('longDescription',
-                required=False,
-                searchable=True,
-                widget = StringWidget(
-                         size = 50,
-                         description = "Enter the long description for the "
-                             "image. It should explain the image for disabled "
-                             "persons if it's important for the content. ",
-                         description_msgid = "help_atimage_longdescription",
-                         label = "Long description",
-                         label_msgid = "label_atimage_longdescription",
-                         i18n_domain = "plone")),
     ), marshall=PrimaryFieldMarshaller())
 
 ATExtImageSchema = ATImageSchema.copy()
