@@ -100,11 +100,10 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         self.setRoles(['Manager', 'Member']) 
         qi = self.qi
         ttool = self.ttool
-        import pdb; pdb.set_trace()
         cmf_ids = ('Document', 'Favorite', 'File',
             'Folder', 'Image', 'Large Plone Folder', 'Link',
             'News Item', 'Topic', 'Event')
-        cmf_prods = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFEvent')
+        cmf_prods = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFCalendar')
 
         qi.uninstallProducts(('ATContentTypes',))
         get_transaction().commit(1)

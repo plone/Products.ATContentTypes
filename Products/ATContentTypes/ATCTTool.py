@@ -176,7 +176,6 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
             # XXX backup?
             #atct_bak_pt = 'AT %s' % cmf_pt
             #self._changePortalTypeName(cmf_pt, atct_bak_pt, global_allow=False)
-            print cmf_pt, cmf_bak_pt
             ttool.manage_delObjects(cmf_pt)
             result.append('Removing ATCT: %s' % cmf_pt)
             self._changePortalTypeName(cmf_bak_pt, cmf_pt, global_allow=False)
