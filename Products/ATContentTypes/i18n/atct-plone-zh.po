@@ -7,7 +7,7 @@ msgstr ""
 "PO-Revision-Date: 2005-01-30 23:13 +0080\n"
 "Last-Translator: Junyong Pan <panjyAT zopechina.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=gbk\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 "Language-Code: zh\n"
@@ -22,146 +22,146 @@ msgstr ""
 #.  ${fieldname}
 #. </legend>
 msgid "legend_criteria_field"
-msgstr "${fieldname}µÄÌõ¼ş"
+msgstr "${fieldname}çš„æ¡ä»¶"
 
 ## types/criteria/schemata.py
 
 msgid "label_date_criteria_operation"
-msgstr "ÈÕÆÚÌõ¼şµÄ²Ù×÷"
+msgstr "æ—¥æœŸæ¡ä»¶çš„æ“ä½œ"
 
 msgid "help_date_criteria_operation"
-msgstr "¶ÔÈÕÆÚÌõ¼şµÄ²Ù×÷" 
+msgstr "å¯¹æ—¥æœŸæ¡ä»¶çš„æ“ä½œ" 
 
 msgid "label_date_criteria_value"
-msgstr "ÈÕÆÚÖµ"
+msgstr "æ—¥æœŸå€¼"
 
 msgid "help_date_criteria_value"
-msgstr "Ìõ¼şµÄÖµÊÇÒ»¸öÈÕÆÚÀàĞÍ"
+msgstr "æ¡ä»¶çš„å€¼æ˜¯ä¸€ä¸ªæ—¥æœŸç±»å‹"
 
 msgid "label_date_criteria_range"
-msgstr "ÈÕÆÚ·¶Î§"
+msgstr "æ—¥æœŸèŒƒå›´"
 
 msgid "help_date_criteria_range"
-msgstr "ÈÕÆÚµÄ·¶Î§"
+msgstr "æ—¥æœŸçš„èŒƒå›´"
 
 msgid "label_list_criteria_value"
-msgstr "ÁĞ±íÀàĞÍ"
+msgstr "åˆ—è¡¨ç±»å‹"
 
 msgid "help_list_criteria_value"
-msgstr "ÁĞ±íÀàĞÍÔÊĞí¶Ô¶à¸öÖµ²Ù×÷"
+msgstr "åˆ—è¡¨ç±»å‹å…è®¸å¯¹å¤šä¸ªå€¼æ“ä½œ"
 
 msgid "label_list_criteria_operator"
-msgstr "ÁĞ±íÖµµÄ²Ù×÷"
+msgstr "åˆ—è¡¨å€¼çš„æ“ä½œ"
 
 msgid "help_list_criteria_operator"
-msgstr "¶ÔÁĞ±íÊı¾İ²ÉÓÃºÎÖÖ²Ù×÷"
+msgstr "å¯¹åˆ—è¡¨æ•°æ®é‡‡ç”¨ä½•ç§æ“ä½œ"
 
 msgid "label_int_criteria_value"
-msgstr "ÕûÊıÖµ"
+msgstr "æ•´æ•°å€¼"
 
 msgid "help_int_criteria_value"
-msgstr "Ìõ¼şµÄÖµÎªÒ»¸öÕûÊı"
+msgstr "æ¡ä»¶çš„å€¼ä¸ºä¸€ä¸ªæ•´æ•°"
 
 msgid "label_string_criteria_value"
-msgstr "×Ö·û´®Öµ"
+msgstr "å­—ç¬¦ä¸²å€¼"
 
 msgid "help_string_criteria_value"
-msgstr "Ìõ¼şµÄÖµÎªÒ»¸ö×Ö·û´®"
+msgstr "æ¡ä»¶çš„å€¼ä¸ºä¸€ä¸ªå­—ç¬¦ä¸²"
 
 
 # criterion_edit_form.cpt
 
 # These are the standard field names. No field_ possible. :/
 msgid "id"
-msgstr "Ó¢ÎÄID"
+msgstr "è‹±æ–‡ID"
 
 msgid "Creator"
-msgstr "´´½¨ÈË"
+msgstr "åˆ›å»ºäºº"
 
 msgid "Subject"
-msgstr "·ÖÀà"
+msgstr "åˆ†ç±»"
 
 msgid "Type"
-msgstr "ÄÚÈİÀàĞÍ"
+msgstr "å†…å®¹ç±»å‹"
 
 msgid "created"
-msgstr "´´½¨Ê±¼ä"
+msgstr "åˆ›å»ºæ—¶é—´"
 
 msgid "effective"
-msgstr "ÉúĞ§Ê±¼ä"
+msgstr "ç”Ÿæ•ˆæ—¶é—´"
 
 
 msgid "end"
-msgstr "½áÊøÊ±¼ä"
+msgstr "ç»“æŸæ—¶é—´"
 
 msgid "expires"
-msgstr "Ê§Ğ§Ê±¼ä"
+msgstr "å¤±æ•ˆæ—¶é—´"
 
 msgid "modified"
-msgstr "ĞŞ¸ÄÊ±¼ä"
+msgstr "ä¿®æ”¹æ—¶é—´"
 
 msgid "review_state"
-msgstr "×´Ì¬"
+msgstr "çŠ¶æ€"
 
 msgid "start"
-msgstr "ÆğÊ¼Ê±¼ä"
+msgstr "èµ·å§‹æ—¶é—´"
 
 msgid "Description"
-msgstr "ÃèÊö"
+msgstr "æè¿°"
 
 msgid "path"
-msgstr "Â·¾¶"
+msgstr "è·¯å¾„"
 
 msgid "Title"
-msgstr "±êÌâ"
+msgstr "æ ‡é¢˜"
 
 msgid "SearchableText"
-msgstr "È«ÎÄËÑË÷"
+msgstr "å…¨æ–‡æœç´¢"
 
 msgid "exact date value"
-msgstr "ÈÕÆÚ"
+msgstr "æ—¥æœŸ"
 
 msgid "logical AND or OR of list values"
-msgstr "ÖµÇåµ¥µÄ¡°Óë¡±»òÕß¡°²¢¡±Âß¼­"
+msgstr "å€¼æ¸…å•çš„â€œä¸â€æˆ–è€…â€œå¹¶â€é€»è¾‘"
 
 msgid "portal types values"
-msgstr "ÄÚÈİÀàĞÍµÄÖµ"
+msgstr "å†…å®¹ç±»å‹çš„å€¼"
 
 msgid "exact integer value"
-msgstr "Êı×Ö"
+msgstr "æ•°å­—"
 
 msgid "exact text value"
-msgstr "ÎÄ±¾"
+msgstr "æ–‡æœ¬"
 
 msgid "table_criteria_field"
-msgstr "Ìõ¼şÓò"
+msgstr "æ¡ä»¶åŸŸ"
 
 msgid "table_criterion_details"
-msgstr "Ìõ¼şÏêÏ¸ĞÅÏ¢"
+msgstr "æ¡ä»¶è¯¦ç»†ä¿¡æ¯"
 
 msgid "label_sort_reverse"
-msgstr "ÄæĞò"
+msgstr "é€†åº"
 
 msgid "help_sort_reverse"
-msgstr "ÓÉ´óµ½Ğ¡½øĞĞÅÅĞò"
+msgstr "ç”±å¤§åˆ°å°è¿›è¡Œæ’åº"
 
 ###################
 # schema of ConstrainTypesMixin.py
 #################
 
 msgid "label_enable_constrain_allowed_types"
-msgstr "¶¨ÖÆÔÊĞíÌí¼ÓµÄÄÚÈİÀàĞÍ"
+msgstr "å®šåˆ¶å…è®¸æ·»åŠ çš„å†…å®¹ç±»å‹"
 
 msgid "description_enable_constrain_allowed_types"
-msgstr "¶¨ÖÆ¡°Ìí¼ÓÏÂÀ­²Ëµ¥¡±²Ëµ¥ÖĞµÄÄÚÈİÀàĞÍ"
+msgstr "å®šåˆ¶â€œæ·»åŠ ä¸‹æ‹‰èœå•â€èœå•ä¸­çš„å†…å®¹ç±»å‹"
 
 msgid "label_constrain_allowed_types"
-msgstr "ÔÊĞíÌí¼ÓµÄÄÚÈİÀàĞÍ"
+msgstr "å…è®¸æ·»åŠ çš„å†…å®¹ç±»å‹"
 
 msgid "description_constrain_allowed_types"
-msgstr "Ñ¡ÔñÒ»¸ö»òÕß¶à¸öÄÚÈİÀàĞÍ, ËûÃÇ½«ÄÜ¹»±»"
-       "Ìí¼Óµ½Õâ¸öÎÄ¼ş¼ĞºÍÆä×ÓÎÄ¼ş¼ĞÖĞ¡£"
-       "Èç¹û²»Ñ¡£¬½«ÔÊĞíÌí¼ÓËùÓĞµÄÄÚÈİÀàĞÍ¡£"
+msgstr "é€‰æ‹©ä¸€ä¸ªæˆ–è€…å¤šä¸ªå†…å®¹ç±»å‹, ä»–ä»¬å°†èƒ½å¤Ÿè¢«"
+       "æ·»åŠ åˆ°è¿™ä¸ªæ–‡ä»¶å¤¹å’Œå…¶å­æ–‡ä»¶å¤¹ä¸­ã€‚"
+       "å¦‚æœä¸é€‰ï¼Œå°†å…è®¸æ·»åŠ æ‰€æœ‰çš„å†…å®¹ç±»å‹ã€‚"
 
 
 ####################
@@ -169,14 +169,14 @@ msgstr "Ñ¡ÔñÒ»¸ö»òÕß¶à¸öÄÚÈİÀàĞÍ, ËûÃÇ½«ÄÜ¹»±»"
 #######################
 
 msgid "label_limit_number"
-msgstr "ÏŞÖÆ½á¹ûÊıÁ¿"
+msgstr "é™åˆ¶ç»“æœæ•°é‡"
 
 msgid "help_limit_number"
-msgstr "ÏŞÖÆÏÔÊ¾ÌõÄ¿µÄÊıÁ¿. Èç¹ûÑ¡ÖĞ£¬½ö½öÏÔÊ¾Ç°Ãæ²¿·Ö"
+msgstr "é™åˆ¶æ˜¾ç¤ºæ¡ç›®çš„æ•°é‡. å¦‚æœé€‰ä¸­ï¼Œä»…ä»…æ˜¾ç¤ºå‰é¢éƒ¨åˆ†"
 
 msgid "label_item_count"
-msgstr "ÏÔÊ¾ÊıÁ¿"
+msgstr "æ˜¾ç¤ºæ•°é‡"
 
 msgid "help_item_count"
-msgstr "Èç¹û¡°ÏŞÖÆ½á¹ûÊıÁ¿¡±Ñ¡ÖĞ£¬½ö½öÏÔÊ¾ÉèÖÃµÄÊıÁ¿"
+msgstr "å¦‚æœâ€œé™åˆ¶ç»“æœæ•°é‡â€é€‰ä¸­ï¼Œä»…ä»…æ˜¾ç¤ºè®¾ç½®çš„æ•°é‡"
 
