@@ -9,7 +9,7 @@ numversion  = (1, 0, 0, -199)
 license     = 'GPL, ZPL'
 copyright   = '''(c) 2003-2005 AT Content Types development team'''
 
-author      = 'AT Content Type development team, Christian Heimes'
+author      = 'AT Content Type development team, Christian Heimes <ch@comlounge.net>'
 author_email= 'heimes@faho.rwth-aachen.de'
 
 short_desc  = 'Archetypes reimplementation of the CMF core types'

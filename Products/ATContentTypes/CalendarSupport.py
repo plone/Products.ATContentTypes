@@ -19,7 +19,7 @@
 """Calendar export / import
 
 """
-__author__  = 'Christian Heimes'
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 from cStringIO import StringIO

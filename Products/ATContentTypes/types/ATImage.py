@@ -21,7 +21,7 @@
 The basics for the EXIF information, orientation code and the rotation code
 were taken from CMFPhoto.
 """
-__author__  = ''
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 from cgi import escape

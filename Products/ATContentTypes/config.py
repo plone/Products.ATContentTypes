@@ -26,7 +26,6 @@ See customconfig.py.example
 
 
 """
-__author__  = ''
 __docformat__ = 'restructuredtext'
 
 from Products.CMFCore import CMFCorePermissions

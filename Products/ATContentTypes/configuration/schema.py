@@ -18,9 +18,8 @@
 #
 """ATCT ZConfig schema loader
 
-$Id: schema.py,v 1.1.2.2 2005/03/09 21:47:57 tiran Exp $
 """
-__author__  = 'Christian Heimes'
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 import os

@@ -20,7 +20,7 @@
 
 
 """
-__author__  = 'Christian Heimes, Christian Theune'
+__author__  = 'Christian Heimes <ch@comlounge.net>, Christian Theune'
 __docformat__ = 'restructuredtext'
 
 import difflib

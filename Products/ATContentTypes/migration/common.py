@@ -3,7 +3,7 @@
 Migration system for the migration from CMFDefault/Event types to archetypes
 based CMFPloneTypes (http://sf.net/projects/collective/).
 
-Copyright (c) 2004, Christian Heimes and contributors
+Copyright (c) 2004, Christian Heimes <ch@comlounge.net> and contributors
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -20,6 +20,8 @@ are permitted provided that the following conditions are met:
 
 
 """
+__author__  = 'Christian Heimes <ch@comlounge.net>'
+__docformat__ = 'restructuredtext'
 
 import sys
 from Products.Archetypes.debug import log as at_log

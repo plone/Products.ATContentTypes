@@ -20,7 +20,7 @@
 
 Based on the multilingual policy from Plone Solutions
 """
-__author__  = 'Christian Heimes, Christian Theune'
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 from StringIO import StringIO

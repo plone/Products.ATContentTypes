@@ -20,7 +20,7 @@
 
 
 """
-__author__  = ''
+__author__  = 'Christian Heimes <ch@comlounge.net>, Alec Mitchell'
 __docformat__ = 'restructuredtext'
 
 from types import ListType

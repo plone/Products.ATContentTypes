@@ -18,9 +18,9 @@
 #
 """ATCT ZConfig loader
 
-$Id: __init__.py,v 1.1.4.2 2005/03/09 21:47:57 tiran Exp $
+$Id: __init__.py,v 1.1.4.3 2005/03/20 00:08:37 tiran Exp $
 """
-__author__  = 'Christian Heimes'
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 from Products.ATContentTypes.configuration.config import conf

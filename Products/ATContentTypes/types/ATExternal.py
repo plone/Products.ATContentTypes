@@ -20,7 +20,7 @@
 
 USE AT OWN RISK! Highly unstable
 """
-__author__  = 'Christian'
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 from Products.CMFCore import CMFCorePermissions

@@ -19,7 +19,7 @@
 """ATContentTypes types and schemata
 """
 
-__author__  = 'Christian Heimes'
+__author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 from Products.ATContentTypes.types.ATContentType import ATCTContent

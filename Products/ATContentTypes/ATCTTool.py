@@ -18,6 +18,8 @@
 #
 """
 """
+__author__  = 'Christian Heimes <ch@comlounge.net>'
+
 import os
 from cStringIO import StringIO
 import time
