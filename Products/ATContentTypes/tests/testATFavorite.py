@@ -14,6 +14,8 @@ if __name__ == '__main__':
 
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests.common import *
+from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTFieldTestCase
+from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTSiteTestCase
 
 def editCMF(obj):
     dcEdit(obj)
@@ -73,7 +75,7 @@ class TestSiteATFavorite(ATCTSiteTestCase):
         obj = self._ATCT
         for url in ('', '/test/',):
             obj.setRemoteUrl(url)
-            u = self._portal.portal_url()
+            u = self.portal.portal_url()
             if url.startswith('/'):
                 url = url[1:]
             if url:
@@ -98,7 +100,7 @@ class TestSiteATFavorite(ATCTSiteTestCase):
         m = FavoriteMigrator(old)
         m(unittest=1)
 
-        migrated = getattr(self._portal, id)
+        migrated = getattr(self.portal, id)
 
         self.compareAfterMigration(migrated, mod=mod, created=created)
         self.compareDC(migrated, title=title, description=description)

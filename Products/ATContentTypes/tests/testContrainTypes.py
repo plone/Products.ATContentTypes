@@ -14,6 +14,8 @@ if __name__ == '__main__':
 
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests.common import *
+from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTFieldTestCase
+from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTSiteTestCase
 
 from Products.ATContentTypes.config import *
 from AccessControl import Unauthorized
@@ -21,7 +23,6 @@ from Products.ATContentTypes import ConstrainTypesMixin
 from Products.ATContentTypes.interfaces.IConstrainTypes import IConstrainTypes
 from Products.Archetypes.public import registerType, process_types, listTypes
 from Products.Archetypes.Extensions.utils import installTypes
-from Products.CMFPlone.tests import PloneTestCase
 from AccessControl.SecurityManagement import newSecurityManager
 from Testing.ZopeTestCase import user_name as default_user
 
@@ -33,10 +34,10 @@ def editATCT(obj):
 
 tests = []
 
-class TestConstrainTypes(PloneTestCase.PloneTestCase):
+class TestConstrainTypes(ATCTSiteTestCase):
 
     def afterSetUp(self):
-        PloneTestCase.PloneTestCase.afterSetUp(self)
+        ATCTSiteTestCase.afterSetUp(self)
         #qi = self.portal.portal_quickinstaller
         #qi.installProduct('ATContentTypes')
         self.loginPortalOwner()

@@ -14,6 +14,8 @@ if __name__ == '__main__':
 
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests.common import *
+from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTFieldTestCase
+from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTSiteTestCase
 
 example_stx = """
 Header
@@ -85,7 +87,7 @@ class TestSiteATDocument(ATCTSiteTestCase):
         m(unittest=1)
         get_transaction().commit(1)
 
-        migrated = getattr(self._portal, id)
+        migrated = getattr(self.portal, id)
 
         self.compareAfterMigration(migrated, mod=mod, created=created)
         self.compareDC(migrated, title=title, description=description)
@@ -102,8 +104,8 @@ class TestSiteATDocument(ATCTSiteTestCase):
 
         cur_id = 'ATCT'
         new_id = 'WasATCT'
-        self._portal.manage_renameObject(cur_id, new_id)
-        doc = getattr(self._portal, new_id)
+        self.portal.manage_renameObject(cur_id, new_id)
+        doc = getattr(self.portal, new_id)
         self.failUnless(str(doc.getField('text').getContentType(doc)) == "text/x-rst")
 
 

@@ -33,9 +33,6 @@ from Products.ATContentTypes.interfaces.IATContentType import IATContentType
 from Products.CMFCore.interfaces.DublinCore import DublinCore as IDublinCore
 from Products.CMFCore.interfaces.DublinCore import MutableDublinCore as IMutableDublinCore
 
-from Products.CMFPlone.tests import PloneTestCase
-portal_name = PloneTestCase.portal_name
-portal_owner = PloneTestCase.portal_owner
 
 class FakeRequest:
     def get(self, key, default=None):
@@ -51,13 +48,12 @@ class ATCTSiteTestCase(ArchetypesTestCase.ArcheSiteTestCase):
     icon = ''
 
     def afterSetUp(self):
-        self._portal = self.app.portal
         # login as manager
         user = self.getManagerUser()
         newSecurityManager(None, user)
 
-        self._ATCT = self._createType(self._portal, self.portal_type, 'ATCT')
-        self._cmf = self._createType(self._portal, self.klass.newTypeFor[0], 'cmf')
+        self._ATCT = self._createType(self.portal, self.portal_type, 'ATCT')
+        self._cmf = self._createType(self.portal, self.klass.newTypeFor[0], 'cmf')
 
     def _createType(self, context, portal_type, id):
         """Helper method to create a new type 
@@ -117,11 +113,11 @@ class ATCTSiteTestCase(ArchetypesTestCase.ArcheSiteTestCase):
         noSecurityManager()
 
     def test_idValidation(self):
-        ttool = getToolByName(self._portal, 'portal_types')
+        ttool = getToolByName(self.portal, 'portal_types')
         atctFTI = ttool.getTypeInfo(self.portal_type)
-        atctFTI.constructInstance(self._portal, 'asdf')
-        atctFTI.constructInstance(self._portal, 'asdf2')
-        asdf = self._portal.asdf
+        atctFTI.constructInstance(self.portal, 'asdf')
+        atctFTI.constructInstance(self.portal, 'asdf2')
+        asdf = self.portal.asdf
         
         request = FakeRequest()
         
@@ -189,20 +185,21 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnless(isinstance(vocab, DisplayList))
         self.failUnless(tuple(vocab) == ())
 
-def setupATCT(app, quiet=0):
+def setupATCT(app, id=ArchetypesTestCase.portal_name, quiet=0):
     get_transaction().begin()
     _start = time.time()
-    portal = app.portal
+    portal = app[id]
     if not quiet: ZopeTestCase._print('Installing ATContentTypes ... ')
 
     # login as manager
     user = app.acl_users.getUserById(ArchetypesTestCase.portal_owner).__of__(app.acl_users)
     newSecurityManager(None, user)
-    # add ATCT
+     # add ATCT
     if hasattr(aq_base(portal), 'switchCMF2ATCT'):
         ZopeTestCase._print('already installed ... ')
     else:
-        installATCT(portal)
+        qi=getToolByName(portal, 'portal_quickinstaller', None)
+        qi.installProduct('ATContentTypes')
 
     if isSwitchedToATCT(portal):
         # XXX right now ATCT unit tests don't run in ATCT mode.

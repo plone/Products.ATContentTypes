@@ -14,6 +14,8 @@ if __name__ == '__main__':
 
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests.common import *
+from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTFieldTestCase
+from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTSiteTestCase
 from Products.ATContentTypes.Permissions import ChangeEvents
 from Products.ATContentTypes.utils import DT2dt
 
@@ -122,7 +124,7 @@ class TestSiteATEvent(ATCTSiteTestCase):
         m = EventMigrator(old)
         m(unittest=1)
 
-        migrated = getattr(self._portal, id)
+        migrated = getattr(self.portal, id)
 
         self.compareAfterMigration(migrated, mod=mod, created=created)
         self.compareDC(migrated, title=title, description=description)
@@ -156,7 +158,7 @@ class TestSiteATEvent(ATCTSiteTestCase):
 
     def test_cmp(self):
         e1 = self._ATCT
-        e2 = self._createType(self._portal, self.portal_type, 'e2')
+        e2 = self._createType(self.portal, self.portal_type, 'e2')
         day29 = DateTime('2004-12-29 0:00:00')
         day30 = DateTime('2004-12-30 0:00:00')
         day31 = DateTime('2004-12-31 0:00:00')

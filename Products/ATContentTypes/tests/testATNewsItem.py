@@ -20,6 +20,8 @@ def editATCT(obj):
 
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests.common import *
+from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTFieldTestCase
+from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTSiteTestCase
 
 tests = []
 
@@ -59,7 +61,7 @@ class TestSiteATNewsItem(ATCTSiteTestCase):
         m = NewsItemMigrator(old)
         m(unittest=1)
 
-        migrated = getattr(self._portal, id)
+        migrated = getattr(self.portal, id)
 
         self.compareAfterMigration(migrated, mod=mod, created=created)
         self.compareDC(migrated, title=title, description=description)

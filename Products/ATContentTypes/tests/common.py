@@ -76,7 +76,7 @@ from Products.Archetypes import listTypes
 from Products.Archetypes.Widget import IdWidget, StringWidget, BooleanWidget, \
      KeywordWidget, TextAreaWidget, CalendarWidget, SelectionWidget
 from Products.Archetypes.utils import DisplayList
-from Products.CMFCore  import CMFCorePermissions
+from Products.CMFCore import CMFCorePermissions
 from Products.Archetypes.ExtensibleMetadata import FLOOR_DATE,CEILING_DATE
 
 from DateTime import DateTime
@@ -120,33 +120,8 @@ from Products.CMFCore import PortalFolder
 from Products.CMFDefault import Document, Favorite, File, Image, Link, NewsItem
 from Products.CMFCalendar import Event
 
-# import Interface for interface testing
-try:
-    import Interface
-except ImportError:
-    # set dummy functions and exceptions for older zope versions
-    def verifyClass(iface, candidate, tentative=0):
-        return True
-    def verifyObject(iface, candidate, tentative=0):
-        return True
-    def getImplementsOfInstances(object):
-        return ()
-    def getImplements(object):
-        return ()
-    def flattenInterfaces(interfaces, remove_duplicates=1):
-        return ()
-    class BrokenImplementation(Exception): pass
-    class DoesNotImplement(Exception): pass
-    class BrokenMethodImplementation(Exception): pass
-else:
-    from Interface.Implements import getImplementsOfInstances, \
-         getImplements, flattenInterfaces
-    from Interface.Verify import verifyClass, verifyObject
-    from Interface.Exceptions import BrokenImplementation, DoesNotImplement
-    from Interface.Exceptions import BrokenMethodImplementation
-
-###
-# ATContentTypes tests
-###
-from ATCTSiteTestCase import ATCTFieldTestCase
-from ATCTSiteTestCase import ATCTSiteTestCase
+from Interface.Implements import getImplementsOfInstances, \
+     getImplements, flattenInterfaces
+from Interface.Verify import verifyClass, verifyObject
+from Interface.Exceptions import BrokenImplementation, DoesNotImplement
+from Interface.Exceptions import BrokenMethodImplementation

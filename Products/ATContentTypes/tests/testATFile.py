@@ -14,6 +14,8 @@ if __name__ == '__main__':
 
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests.common import *
+from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTFieldTestCase
+from Products.ATContentTypes.tests.ATCTSiteTestCase import ATCTSiteTestCase
 
 file_text = """
 foooooo
@@ -80,7 +82,7 @@ class TestSiteATFile(ATCTSiteTestCase):
         m = FileMigrator(old)
         m(unittest=1)
 
-        migrated = getattr(self._portal, id)
+        migrated = getattr(self.portal, id)
 
         self.compareAfterMigration(migrated, mod=mod, created=created)
         self.compareDC(migrated, title=title, description=description)
