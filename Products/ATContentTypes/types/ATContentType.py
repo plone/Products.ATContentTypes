@@ -553,6 +553,15 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
 
     security       = ClassSecurityInfo()
 
+    def __browser_default__(self, request):
+        """ Set default so we can return whatever we want instead
+        of index_html """
+        if HAS_PLONE2:
+            return getToolByName(self, 'plone_utils').browserDefault(self)
+        else:
+            #return OrderedBaseFolder.__browser_default__(self, request)
+            return self, [self.getLayout(),]
+
 InitializeClass(ATCTFolderMixin)
 
 
@@ -605,7 +614,8 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
         if HAS_PLONE2:
             return getToolByName(self, 'plone_utils').browserDefault(self)
         else:
-            return OrderedBaseFolder.__browser_default__(self, request)
+            #return OrderedBaseFolder.__browser_default__(self, request)
+            return self, [self.getLayout(),]
 
 InitializeClass(ATCTOrderedFolder)
 
@@ -654,6 +664,15 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
             return aq_base(_target).__of__(self)
 
     index_html = ComputedAttribute(index_html, 1)
+
+    def __browser_default__(self, request):
+        """ Set default so we can return whatever we want instead
+        of index_html """
+        if HAS_PLONE2:
+            return getToolByName(self, 'plone_utils').browserDefault(self)
+        else:
+            #return OrderedBaseFolder.__browser_default__(self, request)
+            return self, [self.getLayout(),]
 
 InitializeClass(ATCTBTreeFolder)
 
