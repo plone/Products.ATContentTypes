@@ -67,6 +67,7 @@
               <span tal:content="album/title_or_id">Title</span>
               <span>(<span i18n:translate="photos_in_album" tal:omit-tag=""><tal:number i18n:name="num_photos" content="number_of_images" /> photos in album</span>)</span>
           </dd>
+      </dl>
       </div>
       </tal:albums>
 
