@@ -91,6 +91,9 @@ class HistoryAwareMixin:
         lst = []
         parent = aq_parent(self)
         for revision in historyList:
+            if not revision.has_key('serial'):
+                # XXX alan reported it, add logging!
+                continue
             serial = revision['serial']
             # get the revision object and wrap it in a context wrapper
             obj    = historicalRevision(self, serial)
