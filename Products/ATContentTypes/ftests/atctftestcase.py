@@ -29,12 +29,12 @@ if ZopeTestCase.hasProduct('kupu'):
     ZopeTestCase.installProduct('kupu')
     HAS_KUPU = True
 else:
-    HAS_KUPU = True
+    HAS_KUPU = False
 if ZopeTestCase.hasProduct('Epoz'):
     ZopeTestCase.installProduct('Epoz')
     HAS_EPOZ = True
 else:
-    HAS_EPOZ = True
+    HAS_EPOZ = False
 
 import time
 from Products.Archetypes.tests.atsitetestcase import ATFunctionalSiteTestCase

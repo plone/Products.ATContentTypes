@@ -59,7 +59,7 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
         default_content_type = ATDOCUMENT_CONTENT_TYPE,
         default_output_type = 'text/html',
         allowable_content_types = ('text/structured',
-                                   'text/restructured',
+                                   'text/x-rst',
                                    'text/html',
                                    'text/plain'
                                   ),

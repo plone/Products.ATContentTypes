@@ -1,6 +1,11 @@
 1.0-devel
 ======================
 
+ * Fixed [ 1114696 ] use correct mimetype for reStructuredText and [ 1122135 ]
+   ATCT edit not preserving text type selection, not ATCT bug be renaming 
+   text/restructured to text/x-rst.
+   [tiran]
+
  * Fixed [ 1158950 ] ATTopic default view wrong. This fix needs also a svn up
    of CMFPlone 2.1.
    [tiran]

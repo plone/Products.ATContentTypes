@@ -211,7 +211,7 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.default_output_type == 'text/html',
                         'Value is %s' % field.default_output_type)
         self.failUnless(field.allowable_content_types == ('text/structured',
-                        'text/restructured', 'text/html', 'text/plain',
+                        'text/x-rst', 'text/html', 'text/plain',
                         'text/plain-pre', 'text/python-source'),
                         'Value is %s' % str(field.allowable_content_types))
 

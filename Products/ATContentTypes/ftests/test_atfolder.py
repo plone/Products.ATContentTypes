@@ -35,10 +35,10 @@ tests = []
 class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
     
     portal_type = 'Folder'
-    views = ('folder_listing', 'folder_contents', )
+    views = ('folder_listing', 'folder_contents', 'atct_album_view', )
 
     def test_templatemixin_view_without_view(self):
-        # template mixin magic should work
+        # template mixin should work
         # XXX more tests?
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) #

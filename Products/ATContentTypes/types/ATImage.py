@@ -343,7 +343,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     archetype_name = 'Image'
     immediate_view = 'image_view'
     default_view   = 'image_view'
-    suppl_views    = ('atct_album_image', )
+    suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Image', 'meta_type' : 'Portal Image'}
     typeDescription= ("Using this form, you can enter details about the image, \n"
                       "and upload an image if required.")
