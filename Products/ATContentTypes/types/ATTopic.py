@@ -373,6 +373,7 @@ class ATTopic(ATCTFolder):
             # sorting when sort is involved
             # See: http://zope.org/Members/Caseman/ZCatalog_for_2.6.1
             kw.setdefault('sort_limit', max_items)
+        __traceback_info__ = (self, kw,)
         results = pcatalog.searchResults(REQUEST, **kw)
         if limit:
             return results[:max_items]

@@ -61,7 +61,7 @@ class CriteriaTest(atcttestcase.ATCTSiteTestCase):
 
     def createDummy(self, klass, id='dummy'):
         folder = self.folder
-        dummy = klass(oid=id)
+        dummy = klass(id, 'dummyfield')
         # put dummy in context of portal
         folder._setObject(id, dummy)
         dummy = getattr(folder, id)
@@ -73,6 +73,27 @@ class CriteriaTest(atcttestcase.ATCTSiteTestCase):
         self.failUnless(self.portal_type)
         self.failUnless(self.title)
         self.failUnless(self.meta_type)
+        
+    def test_multipleCreateVariants(self):
+        klass = self.klass
+        id = 'dummy'
+        field = 'dummyfield'
+        
+        dummy = klass(id, field)
+        self.failUnless(dummy.getId(), id)
+        self.failUnless(dummy.Field(), field)
+
+        dummy = klass(id=id, field=field)
+        self.failUnless(dummy.getId(), id)
+        self.failUnless(dummy.Field(), field)
+
+        dummy = klass(field, oid=id)
+        self.failUnless(dummy.getId(), id)
+        self.failUnless(dummy.Field(), field)
+
+        dummy = klass(field=field, oid=id)
+        self.failUnless(dummy.getId(), id)
+        self.failUnless(dummy.Field(), field)
     
     def test_typeInfo(self):
         ti = self.dummy.getTypeInfo()

@@ -21,7 +21,7 @@ class TestATTopicFunctional(atcttestcase.ATCTFuncionalTestCase):
         atcttestcase.ATCTFuncionalTestCase.afterSetUp(self)
     
     portal_type = 'ATTopic'
-    views = ('atct_topic_view', )
+    views = ('atct_topic_view', 'criterion_edit_form', 'topic_subtopics_form')
 
 tests.append(TestATTopicFunctional)
 

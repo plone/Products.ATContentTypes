@@ -76,9 +76,13 @@ class ATBaseCriterion(NonRefCatalogContent):
     typeDescMsgId  = ''
     global_allow = 0
     
-    def __init__(self, oid=None, id=None, field=None):
-        id = oid and oid or id
+    def __init__(self, id=None, field=None, oid=None):
+        if oid is not None:
+            if field is None:
+                field = id
+            id = oid
         assert id
+        assert field
         NonRefCatalogContent.__init__(self, id)
         self.getField('id').set(self, id)
         self.getField('field').set(self, field)
