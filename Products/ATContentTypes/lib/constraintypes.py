@@ -95,6 +95,7 @@ ConstrainTypesMixinSchema = Schema((
         default_method = '_ct_defaultAddableTypeIds',
         accessor = 'getLocallyAllowedTypes', # Respects ENABLE/DISABLE/ACQUIRE
         write_permissions = ATCTPermissions.ModifyConstrainTypes,
+        multiValued = True,
         widget = MultiSelectionWidget(
             size = 10,
             label = 'Permitted types',
@@ -116,6 +117,7 @@ ConstrainTypesMixinSchema = Schema((
         default_method = '_ct_defaultAddableTypeIds',
         accessor = 'getImmediatelyAddableTypes', # Respects ENABLE/DISABLE/ACQUIRE
         write_permissions = ATCTPermissions.ModifyConstrainTypes,
+        multiValued=True,
         widget = MultiSelectionWidget(
             size = 10,
             label = 'Preferred types',
@@ -291,7 +293,7 @@ class ConstrainTypesMixin:
         return DisplayList([(id, title) for title, id in typelist])
 
     # Default method for type lists
-    security.declarePrivate('_ct_globalAddableTypeIds')
+    security.declarePrivate('_ct_defaultAddableTypeIds')
     def _ct_defaultAddableTypeIds(self):
         """Get a list of types which are addable in the ordinary case w/o the 
         constraint machinery. 
