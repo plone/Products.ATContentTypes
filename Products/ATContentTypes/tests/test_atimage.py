@@ -43,6 +43,9 @@ from Products.ATContentTypes.interfaces import IATImage
 from Products.CMFDefault.Image import Image
 from Interface.Verify import verifyObject
 
+_here = os.path.dirname(__file__)
+TEST_GIF = open(os.path.join(_here, 'test.gif')).read()
+
 def editCMF(obj):
     dcEdit(obj)
 
@@ -119,6 +122,24 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
     def test_autotransform(self):
         # XXX not a real test
         self._ATCT.autoTransformImage()
+        
+    def test_broken_pil(self):
+        # PIL has a nasty bug when the image ratio is too extrem like 300x15:
+        # Module PIL.Image, line 1136, in save
+        # Module PIL.PngImagePlugin, line 510, in _save
+        # Module PIL.ImageFile, line 474, in _save
+        # SystemError: tile cannot extend outside image
+        atct = self._ATCT
+        scales = atct.getField('image').getAvailableSizes(atct)
+        
+        # test upload
+        atct.setImage(TEST_GIF, mimetype='image/gif', filename='test.gif')
+        self.failUnlessEqual(atct.getImage(), TEST_GIF)
+        
+        # test if all scales exist
+        for scale in scales.keys():
+            name = 'image_' + scale
+            self.failUnless(hasattr(aq_base(atct), name), name)
 
 tests.append(TestSiteATImage)
 

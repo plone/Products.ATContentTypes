@@ -44,6 +44,7 @@ from Products.Archetypes.public import PrimaryFieldMarshaller
 
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import MAX_IMAGE_SIZE
+from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.types.ATContentType import registerATCT
 from Products.ATContentTypes.types.ATContentType import ATCTFileContent
 from Products.ATContentTypes.types.ATContentType import cleanupFilename
@@ -109,7 +110,7 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
                required=True,
                primary=True,
                languageIndependent=True,
-               #swallowResizeExceptions=True,
+               swallowResizeExceptions = SWALLOW_IMAGE_RESIZE_EXCEPTIONS,
                sizes= {'large'   : (768, 768),
                        'preview' : (400, 400),
                        'mini'    : (200, 200),
