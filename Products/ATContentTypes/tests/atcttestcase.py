@@ -348,9 +348,8 @@ class ATCTFuncionalTestCase(ATFunctionalSiteTestCase):
         self.portal_type = ATCT_PORTAL_TYPE(self.portal_type)
         # Put dummy sdm and dummy SESSION object into REQUEST
         request = self.app.REQUEST
-        self.app._setOb('session_data_manager', DummySessionDataManager())
+        self.app._setObject('session_data_manager', DummySessionDataManager())
         sdm = self.app.session_data_manager
-        sdm.setupHook()
         request.set('SESSION', sdm.getSessionData())
         
         # basic data

@@ -42,10 +42,8 @@ class DummySessionDataManager(Implicit):
     def __init__(self):
         self.session = FakeRequestSession()
         
-    def setupHook(self):
-        """Use traversal hooks to add SESSION to request
-        
-        Must be called after the dummy sdm is added to app!
+    def manage_afterAdd(self, item, container):
+        """Register traversal hooks to add SESSION to request
         """
         parent = self.aq_inner.aq_parent
         hook = DummySDMTraverseHook()

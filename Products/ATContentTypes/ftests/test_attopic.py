@@ -14,6 +14,11 @@ from Products.ATContentTypes.tests import atcttestcase
 tests = []
 
 class TestATTopicFunctional(atcttestcase.ATCTFuncionalTestCase):
+
+    def afterSetUp(self):
+        # adding topics is restricted
+        self.setRoles(['Manager', 'Member',])
+        atcttestcase.ATCTFuncionalTestCase.afterSetUp(self)
     
     portal_type = 'ATTopic'
     views = ('atct_topic_view', )
