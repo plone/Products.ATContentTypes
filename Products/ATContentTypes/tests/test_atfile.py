@@ -152,6 +152,7 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
 
 tests.append(TestATFileFields)
 
+
 if __name__ == '__main__':
     framework()
 else:

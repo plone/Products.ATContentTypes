@@ -598,6 +598,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
 tests.append(TestATEventFields)
 
+
 if __name__ == '__main__':
     framework()
 else:

@@ -18,6 +18,8 @@ from Products.Archetypes.tests.attestcase import ATTestCase
 from Products.Archetypes.tests.atsitetestcase import ATSiteTestCase
 from Products.ATContentTypes.config import INSTALL_LINGUA_PLONE
 
+## sessions are required for functional tests
+ZopeTestCase.utils.setupCoreSessions()
 
 ZopeTestCase.installProduct('ATContentTypes')
 ZopeTestCase.installProduct('ATReferenceBrowserWidget')
@@ -41,9 +43,19 @@ from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.tests.utils import idValidator
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 
-class FakeRequest:
-    def get(self, key, default=None):
-        return default
+from AccessControl import ClassSecurityInfo
+from Globals import InitializeClass
+from UserDict import UserDict
+
+class FakeRequestSession(UserDict):
+    security = ClassSecurityInfo()
+    security.setDefaultAccess('allow')
+    security.declareObjectPublic()
+    
+    def set(self, key, value):
+        self[key] = value
+
+InitializeClass(FakeRequestSession)
 
 class ATCTSiteTestCase(ATSiteTestCase):
     pass
@@ -157,7 +169,7 @@ class ATCTTypeTestCase(ATSiteTestCase):
         atctFTI.constructInstance(self.portal, 'asdf2')
         asdf = self.portal.asdf
         
-        request = FakeRequest()
+        request = FakeRequestSession()
         
         # invalid ids
         ids = ['asdf2', 'ההה', '/asdf2', ' asdf2', 'portal_workflow',
@@ -320,6 +332,72 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnless(len(tuple(vocab)) >= 2)
         self.failUnless('base_view' in tuple(vocab))
 
+from Products.Archetypes.tests.atsitetestcase import ATFunctionalSiteTestCase
+from Products.Archetypes.tests.attestcase import default_user
+
+class ATCTFuncionalTestCase(ATFunctionalSiteTestCase):
+    """Integration tests for view and edit templates
+    """
+    
+    portal_type = None
+    views = ()
+
+    def afterSetUp(self):
+        # Put SESSION object into REQUEST
+        request = self.app.REQUEST
+        ##sdm = self.app.session_data_manager
+        ##request.set('SESSION', sdm.getSessionData())
+        request.set('SESSION', FakeRequestSession())
+            
+        self.folder_url = self.folder.absolute_url()
+        self.folder_path = '/%s' % self.folder.absolute_url(1)
+        self.basic_auth = '%s:secret' % default_user
+        # We want 401 responses, not redirects to a login page
+        self.portal._delObject('cookie_authentication')
+        
+    def test_createObject(self):
+        # create an object using the createObject script
+        response = self.publish(self.folder_path +
+                                '/createObject?type_name=%s' % self.portal_type,
+                                self.basic_auth)
+
+        self.assertEqual(response.getStatus(), 302) # Redirect to edit
+
+        # omit ?portal_status_message=...
+        body = response.getBody().split('?')[0]
+        
+        self.failUnless(body.startswith(self.folder_url))
+        self.failUnless(body.endswith('/atct_edit'))
+
+        # Perform the redirect
+        edit_form_path = body[len(self.app.REQUEST.SERVER_URL):]
+        response = self.publish(edit_form_path, self.basic_auth)
+        self.assertEqual(response.getStatus(), 200) # OK
+
+    def test_views(self):
+        obj_id = 'test_object'
+        self.folder.invokeFactory(self.portal_type, obj_id, title=obj_id)
+        obj = getattr(self.folder.aq_explicit, obj_id)
+        obj_url = obj.absolute_url()
+        obj_path = '/%s' % obj.absolute_url(1)
+
+        # edit should work        
+        response = self.publish('%s/atct_edit' % obj_path, self.basic_auth)
+        self.assertEqual(response.getStatus(), 200) # OK
+
+        # metadata edit should work
+        response = self.publish('%s/base_metadata' % obj_path, self.basic_auth)
+        self.assertEqual(response.getStatus(), 200) # OK
+
+        # base view should work
+        response = self.publish('%s/base_view' % obj_path, self.basic_auth)
+        self.assertEqual(response.getStatus(), 200) # OK
+    
+        # additional views:
+        for view in self.views:
+            response = self.publish('%s/%s' % (obj_path, view), self.basic_auth)
+            self.assertEqual(response.getStatus(), 200) # OK
+
 from Products.CMFCore.utils import getToolByName
 from Products.CMFQuickInstallerTool.QuickInstallerTool import AlreadyInstalled
 from Products.Archetypes.tests.atsitetestcase import portal_name
@@ -363,4 +441,3 @@ def setupATCT(app, id=portal_name, quiet=False):
 app = ZopeTestCase.app()
 setupATCT(app)
 ZopeTestCase.close(app)
-

@@ -1,6 +1,9 @@
 1.0-devel
 ======================
 
+ * Added integration tests for view and edit templates.
+   [tiran]
+
  * I made major changes to the unit test suite. Also I've added more field
    tests, some important interface tests and cleaner and better base classes
    for tests.

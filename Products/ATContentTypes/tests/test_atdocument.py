@@ -187,9 +187,6 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
                         'text/plain-pre', 'text/python-source'),
                         'Value is %s' % str(field.allowable_content_types))
 
-    def beforeTearDown(self):
-        atcttestcase.ATCTFieldTestCase.beforeTearDown(self)
-
 tests.append(TestATDocumentFields)
 
 if __name__ == '__main__':
