@@ -18,9 +18,6 @@ from Products.Archetypes.tests.attestcase import ATTestCase
 from Products.Archetypes.tests.atsitetestcase import ATSiteTestCase
 from Products.ATContentTypes.config import INSTALL_LINGUA_PLONE
 
-## sessions are required for functional tests
-ZopeTestCase.utils.setupCoreSessions()
-
 ZopeTestCase.installProduct('ATContentTypes')
 ZopeTestCase.installProduct('ATReferenceBrowserWidget')
 
@@ -41,21 +38,11 @@ from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.tests.utils import idValidator
+from Products.ATContentTypes.tests.utils import FakeRequestSession
+from Products.ATContentTypes.tests.utils import DummySessionDataManager
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 
-from AccessControl import ClassSecurityInfo
-from Globals import InitializeClass
-from UserDict import UserDict
 
-class FakeRequestSession(UserDict):
-    security = ClassSecurityInfo()
-    security.setDefaultAccess('allow')
-    security.declareObjectPublic()
-    
-    def set(self, key, value):
-        self[key] = value
-
-InitializeClass(FakeRequestSession)
 
 class ATCTSiteTestCase(ATSiteTestCase):
     pass
@@ -343,11 +330,12 @@ class ATCTFuncionalTestCase(ATFunctionalSiteTestCase):
     views = ()
 
     def afterSetUp(self):
-        # Put SESSION object into REQUEST
+        # Put dummy sdm and dummy SESSION object into REQUEST
         request = self.app.REQUEST
-        ##sdm = self.app.session_data_manager
-        ##request.set('SESSION', sdm.getSessionData())
-        request.set('SESSION', FakeRequestSession())
+        self.app._setOb('session_data_manager', DummySessionDataManager())
+        sdm = self.app.session_data_manager
+        sdm.setupHook()
+        request.set('SESSION', sdm.getSessionData())
             
         self.folder_url = self.folder.absolute_url()
         self.folder_path = '/%s' % self.folder.absolute_url(1)

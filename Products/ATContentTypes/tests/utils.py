@@ -1,3 +1,77 @@
+from AccessControl import ClassSecurityInfo
+from Globals import InitializeClass
+from UserDict import UserDict
+import ExtensionClass
+from Acquisition import Implicit
+from ZPublisher.BeforeTraverse import registerBeforeTraverse
+from Persistence import Persistent
+
+class FakeRequestSession(ExtensionClass.Base, UserDict):
+    """Dummy dict like object with set method for SESSION and REQUEST
+    """
+    security = ClassSecurityInfo()
+    security.setDefaultAccess('allow')
+    security.declareObjectPublic()
+    
+    def set(self, key, value):
+        self[key] = value
+
+InitializeClass(FakeRequestSession)
+
+class DummySessionDataManager(Implicit):
+    """Dummy sdm for sessioning
+    
+    Uses traversal hooks to add the SESSION object as lazy item to the request
+    """
+    security = ClassSecurityInfo()
+    security.setDefaultAccess('allow')
+    security.declareObjectPublic()
+    
+    id = 'session_data_manager'
+    
+    def __init__(self):
+        self.session = FakeRequestSession()
+        
+    def setupHook(self):
+        """Use traversal hooks to add SESSION to request
+        
+        Must be called after the dummy sdm is added to app!
+        """
+        parent = self.aq_inner.aq_parent
+        hook = DummySDMTraverseHook()
+        registerBeforeTraverse(parent, hook, 'SessionDataManager', 50)
+
+    def getSessionData(self, create=1):
+        """ """
+        return self.session
+    
+    def hasSessionData(self):
+        """ """
+        return True
+    
+    def getSessionDataByKey(self, key):
+        """ """
+        return self.session
+    
+    def getBrowserIdManager(self):
+        """ """
+        # dummy
+        return self
+
+InitializeClass(DummySessionDataManager)
+
+class DummySDMTraverseHook(Persistent):
+    """Traversal hook for dummy sessions
+    
+    See Products.Sessions.SessionDataManager.SessionDataManagerTraverser
+    """
+    
+    def __call__(self, container, request):
+        id = DummySessionDataManager.id
+        sdm = getattr(container, id)
+        getSessionData = sdm.getSessionData
+        request.set_lazy('SESSION', getSessionData)
+
 def Xprint(s):
     """print helper
 
