@@ -11,11 +11,13 @@ from Products.CMFCore.utils import UniqueObject
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore import CMFCorePermissions
 
+from Products.ATContentTypes.config import TOOLNAME
+
 configlets = ({
-    'id' : 'portal_atct',
+    'id' : TOOLNAME,
     'appId' : 'ATContentTypes',
     'name' : 'ATContentTypes Tool',
-    'action' : 'string:${portal_url}/portal_atct/atct_manageTopicSetup',
+    'action' : 'string:${portal_url}/%s/atct_manageTopicSetup' % TOOLNAME,
     'category' : 'Products',
     'permission' : CMFCorePermissions.ManagePortal,
     'imageUrl' : 'tool_icon.gif'
@@ -28,7 +30,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager):
     
     security = ClassSecurityInfo()
     
-    id = 'portal_atct' 
+    id = TOOLNAME 
     meta_type= 'ATCT Tool'
     title = 'ATContentTypes Tool'
     plone_tool = 1

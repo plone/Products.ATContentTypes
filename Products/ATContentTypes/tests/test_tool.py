@@ -16,13 +16,14 @@ from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests.common import *
 import Products.ATContentTypes.tests.ATCTSiteTestCase
 from Products.Archetypes.tests import ArchetypesTestCase
+from Products.ATContentTypes.config import TOOLNAME
 
 tests = []
 
 class TestTool(ArchetypesTestCase.ArcheSiteTestCase):
 
     def afterSetUp(self):
-        self.tool = self.portal.aq_explicit.portal_atct
+        self.tool = getattr(self.portal.aq_explicit, TOOLNAME)
         
     def test_cmfftis(self):
         t = self.tool

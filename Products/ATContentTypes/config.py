@@ -93,6 +93,7 @@ ATDOCUMENT_CONTENT_TYPE = 'text/html'        # html
 ## private options
 
 PROJECTNAME = "ATContentTypes"
+TOOLNAME = "portal_atct"
 SKINS_DIR = 'skins'
 
 GLOBALS = globals()
