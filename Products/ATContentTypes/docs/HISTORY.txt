@@ -18,6 +18,9 @@
    dan_t.
    [dan_t, tiran]
 
+ * Added fix for [ 1063549 ] ATCT migration doesn't migrate order to migrator.py
+   [tiran]
+
 0.2.0-rc3 - 2004-10-17
 ======================
 
