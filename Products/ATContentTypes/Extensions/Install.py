@@ -18,7 +18,7 @@
 #
 """
 
-$Id: Install.py,v 1.18 2004/07/23 19:03:19 tiran Exp $
+$Id: Install.py,v 1.18.4.1 2004/11/24 14:55:56 tiran Exp $
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -49,16 +49,6 @@ def install(self):
                  PROJECTNAME)
 
     install_subskin(self, out, GLOBALS)
-
-    #register folderish classes in use_folder_contents
-    props=getToolByName(self,'portal_properties').site_properties
-    use_folder_tabs=list(props.use_folder_tabs)
-
-    print >> out, 'adding classes to use_folder_tabs:'
-    for cl in typeInfo:
-        print >> out,  'type:',cl['klass'].portal_type
-        if cl['klass'].isPrincipiaFolderish:
-            use_folder_tabs.append(cl['klass'].portal_type)
 
     print >> out, 'Successfully installed %s' % PROJECTNAME
 
@@ -112,19 +102,6 @@ def uninstall(self):
     # switch back before uninstalling
     if isSwitchedToATCT(self):
         switchATCT2CMF(self)
-
-    #unregister folderish classes in use_folder_contents
-    props = getToolByName(self,'portal_properties').site_properties
-    use_folder_tabs = list(props.use_folder_tabs)
-
-    print >> out, 'removing classes from use_folder_tabs:'
-    for cl in classes:
-        print >> out,  'type:', cl['klass'].portal_type
-        if cl['klass'].isPrincipiaFolderish:
-            if cl['klass'].portal_type in use_folder_tabs:
-                use_folder_tabs.remove(cl['klass'].portal_type)
-
-    props.use_folder_tabs=tuple(use_folder_tabs)
 
     # remove external methods for toggling between old and new types
     portal=getToolByName(self,'portal_url').getPortalObject()

@@ -21,6 +21,11 @@
  * Added fix for [ 1063549 ] ATCT migration doesn't migrate order to migrator.py
    [tiran]
 
+ * Fixed [ 1067719 ] Install.py bug: property modified but not assigned by
+   removing unnecessary code from Install.py. AT itself is already handling
+   use_folder_tabs.
+   [tiran]
+
 0.2.0-rc3 - 2004-10-17
 ======================
 
