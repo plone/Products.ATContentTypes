@@ -18,7 +18,7 @@
 #
 """
 
-$Id: ATNewsItem.py,v 1.14 2004/10/08 16:23:16 tiran Exp $
+$Id: ATNewsItem.py,v 1.14.4.1 2005/02/12 10:02:23 tiran Exp $
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -62,6 +62,11 @@ class ATNewsItem(ATDocument):
     __implements__ = ATDocument.__implements__, IATNewsItem
 
     security       = ClassSecurityInfo()
+
+    # XXX plone news template requires the View permission but
+    # would be better ModifyPortalContent
+    # BBB will be changed in the future. Don't rely on it!
+    security.declareProtected(CMFCorePermissions.View, 'EditableBody')
 
     security.declarePrivate('cmf_edit')
     def cmf_edit(self, text, description=None, text_format=None, **kwargs):

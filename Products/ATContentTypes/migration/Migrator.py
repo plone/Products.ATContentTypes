@@ -18,7 +18,7 @@ are permitted provided that the following conditions are met:
    to endorse or promote products derived from this software without specific
    prior written permission.
 
-$Id: Migrator.py,v 1.21.4.2 2005/01/19 15:07:30 tiran Exp $
+$Id: Migrator.py,v 1.21.4.3 2005/02/12 10:02:22 tiran Exp $
 """
 
 from copy import copy
@@ -214,7 +214,7 @@ class BaseMigrator:
         """Migrates the zope owner
         """
         # getWrappedOwner is not always available
-        if hasattr(self.old, 'getWrappedOwner'):
+        if hasattr(aq_base(self.old), 'getWrappedOwner'):
             owner = self.old.getWrappedOwner()
             self.new.changeOwnership(owner)
             LOG("changing owner via changeOwnership: %s" % str(self.old.getWrappedOwner()))
@@ -225,6 +225,20 @@ class BaseMigrator:
             # did not work, at least not with plone 1.x, at 1.0.1, zope 2.6.2
             LOG("changing owner via property _owner: %s" % str(self.old.getOwner(info = 1)))
             self.new._owner = self.old.getOwner(info = 1)
+
+    def migrate_localroles(self):
+        """Migrate local roles
+        """
+        self.new.__ac_local_roles__ = None
+        # clean the auto-generated creators by Archetypes ExtensibleMeatadata
+        self.new.setCreators([])
+        local_roles = self.old.__ac_local_roles__
+        if not local_roles:
+            owner = self.old.getWrappedOwner()
+            self.new.manage_setLocalRoles(owner.getId(), ['Owner'])
+        else:
+            self.new.__ac_local_roles__ = copy(local_roles)
+
 
     def migrate_withmap(self):
         """Migrates other attributes from obj.__dict__ using a map
@@ -360,40 +374,29 @@ class FolderMigrationMixin(ItemMigrationMixin):
     """Migrates a folderish object
     """
 
-    def XXX_migrate_children(self):
+    def migrate_children(self):
         """Copy childish objects from the old folder to the new one
-
-        XXX: Oh hell that's very inefficient and I'm very shure that it will
-        blow up the zodb. See alternative
-        """
-        for obj in self.old.objectValues():
-            self.new.manage_clone(obj, obj.getId())
-
-    def migrate_alternativeChildren(self):
-        """Just an idea
 
         I don't know wether it works or fails due the ExtensionClass, ZODB and
         acquisition stuff of zope
 
         It seems to work for me very well :)
         """
-        #for obj in self.old.objectValues():
-        #    if isinstance(obj, BrokenClass):
-        #        log('WARNING: Loosing BrokenObject in %s' % \
-        #            self.old.absolute_url(1))
-        #        continue
-        #    id = obj.getId()
-        #    self.new._setObject(id, aq_base(obj))
-        
         orderAble = IOrderedContainer.isImplementedBy(self.old)
         orderMap = {}
 
         # using objectIds() should be safe with BrokenObjects
         for id in self.old.objectIds():
             obj = getattr(self.old.aq_inner.aq_explicit, id)
+            # XXX Fix broken object support. Maybe we are able to migrate them?
+            if isinstance(obj, BrokenClass):
+                log('WARNING: BrokenObject in %s' % \
+                    self.old.absolute_url(1))
+                continue
+            
             if orderAble:
                 orderMap[id] = self.old.getObjectPosition(id)
-            self.new._setObject(id, aq_base(obj))
+            self.new._setObject(id, aq_base(obj), set_owner=0)
         
         # reorder items
         if orderAble:

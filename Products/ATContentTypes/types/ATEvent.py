@@ -18,7 +18,7 @@
 #
 """
 
-$Id: ATEvent.py,v 1.26.4.2 2005/01/19 15:07:31 tiran Exp $
+$Id: ATEvent.py,v 1.26.4.3 2005/02/12 10:02:23 tiran Exp $
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -219,7 +219,8 @@ class ATEvent(ATCTContent, CalendarSupportMixin):
         elif isinstance(other, DateTime):
             return cmp(self.start(), other)
         else:
-            return 0 # XXX ok?
+            # XXX come up with a nice cmp for types
+            return cmp(self.Title(), other)
 
     def __hash__(self):
         return hash((self.start_date, self.duration, self.title))

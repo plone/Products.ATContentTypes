@@ -18,11 +18,12 @@ are permitted provided that the following conditions are met:
    to endorse or promote products derived from this software without specific
    prior written permission.
 
-$Id: common.py,v 1.4.4.1 2004/12/13 15:30:52 tiran Exp $
+$Id: common.py,v 1.4.4.2 2005/02/12 10:02:22 tiran Exp $
 """
 
 from Products.Archetypes.debug import log as at_log
 from StringIO import StringIO
+import sys
 
 try:
     dummy = True

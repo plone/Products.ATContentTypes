@@ -144,3 +144,41 @@ msgstr ""
 
 msgid "help_sort_reverse"
 msgstr ""
+
+###################
+# schema of ConstrainTypesMixin.py
+#################
+
+msgid "label_enable_constrain_allowed_types"
+msgstr "Overwrite allowed types"
+
+msgid "description_enable_constrain_allowed_types"
+msgstr ""
+
+msgid "label_constrain_allowed_types"
+msgstr "Set allowed types"
+
+msgid "description_constrain_allowed_types"
+msgstr "Select one or more types, that should be allowed to "
+       "add inside this folder and its subfolders. Choose "
+       "nothing will allow all types."
+
+####################
+# ATTopic
+#######################
+
+msgid "label_limit_number"
+msgstr "Limit Number of Items"
+
+msgid "help_limit_number"
+msgstr "Toggles limitation of number of items displayed. "
+       "If selected, only the first 'Number of Items' "
+       "will be displayed."
+
+msgid "label_item_count"
+msgstr "Number of Items"
+
+msgid "help_item_count"
+msgstr "If 'Limit Number of Items' is "
+       "selected, only the first 'Number of Items' will be displayed "
+

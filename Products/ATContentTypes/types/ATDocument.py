@@ -18,7 +18,7 @@
 #
 """
 
-$Id: ATDocument.py,v 1.34.4.2 2004/12/13 15:30:54 tiran Exp $
+$Id: ATDocument.py,v 1.34.4.3 2005/02/12 10:02:23 tiran Exp $
 """
 __author__  = ''
 __docformat__ = 'restructuredtext'
@@ -59,10 +59,8 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
     newTypeFor     = ('Document', 'Document')
     typeDescription= 'Fill in the details of this document.'
     typeDescMsgId  = 'description_edit_document'
-    assocMimetypes = ('application/pdf', 'application/xhtml+xml',
-                      'application/msword', 'message/rfc822', 'text/*',
-                     )
-    assocFileExt   = ('doc', 'txt', 'stx', 'rst', 'rest', 'pdf', 'py' )
+    assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
+    assocFileExt   = ('txt', 'stx', 'rst', 'rest', 'py',)
     cmf_edit_kws   = ('text_format',)
 
     __implements__ = (ATCTContent.__implements__,
@@ -85,9 +83,8 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         """
         return self.getText()
 
-    # XXX plone news template requires the View permission but
-    # would be better ModifyPortalContent
-    security.declareProtected(CMFCorePermissions.View, 'EditableBody')
+
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'EditableBody')
     def EditableBody(self):
         """CMF compatibility method
         """
