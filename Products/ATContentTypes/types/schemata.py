@@ -40,26 +40,26 @@ ATContentTypeBaseSchema['id'].validators = ('isValidId',)
 ATContentTypeBaseSchema['description'].isMetadata = False
 ATContentTypeBaseSchema['description'].schemata = 'default'
 
-RelatedField = ReferenceField('related',
-        relationship = 'related',
+RelatedField = ReferenceField('relatedItems',
+        relationship = 'relatesTo', 
         multiValued = True,
+        isMetadata = True,
         write_permission = CMFCorePermissions.ModifyPortalContent,
         widget = ReferenceBrowserWidget(
-            allow_search = 1, 
-            allow_browse = 1,
-            #show_indexes = 1, 
-            #available_indexes={'SearchableText' : "Free text search",
-            #                   'Description' : "Object's description",
-            #                   'Title' : "Objects's title",
-            #                  },
+            allow_search = True,
+            allow_browse = True,
+            show_indexes = False,
+            force_close_on_insert = True,
+
             label = "Related items",
             label_msgid = "label_related_items",
-            description = "XXX",
-            description_msgid = "help_related_item",
+            description = "Select one or more related items",
+            description_msgid = "help_related_items",
             i18n_domain = "plone",
-            #visible={'view' : 'hidden',
-            #         #'edit' : ENABLE_RELATED_ITEMS and 'visible' or 'hidden'
-            #        },
+            
+            visible={'view' : 'hidden',
+                     #'edit' : ENABLE_RELATED_ITEMS and 'visible' or 'hidden'
+                    },
             )
         )
 
