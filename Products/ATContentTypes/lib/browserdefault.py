@@ -42,7 +42,7 @@ if HAS_PLONE2:
     from Products.CMFPlone.interfaces.BrowserDefault \
         import ISelectableBrowserDefault
 
-from Products.Archetypes.interfaces.templatemixin import ITemplateMixin 
+from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
 
 import types
 
@@ -56,7 +56,7 @@ BrowserDefaultSchema['layout'].widget.visible = {'view' : 'hidden',
 
 
 class BrowserDefaultMixin(TemplateMixin):
-    """ Allow the user to select a layout template (in the same way as 
+    """ Allow the user to select a layout template (in the same way as
         TemplateMixin in Archetypes does), and/or to set a contained
         object's id as a default_page (acting in the same way as index_html)
     """
@@ -65,9 +65,9 @@ class BrowserDefaultMixin(TemplateMixin):
         __implements__ = (ISelectableBrowserDefault, ITemplateMixin, )
     else:
         __implements__ = (ITemplateMixin, )
-    
+
     security = ClassSecurityInfo()
-        
+
     security.declareProtected(CMFCorePermissions.View, 'defaultView')
     def defaultView(self, request=None):
         """
@@ -78,17 +78,17 @@ class BrowserDefaultMixin(TemplateMixin):
             return self.getDefaultPage()
         else:
             return self.getLayout()
-    
+
     # Note that Plone's browserDefault is very scary. This method should delegate
     # to PloneTool.browserDefault() if at all possible. browserDefault() is
     # aware of IBrowserDefault and will do the right thing wrt. layouts and
-    # default pages. 
-    
+    # default pages.
+
     def __browser_default__(self, request):
         """
         Resolve what should be displayed when viewing this object without an
-        explicit template specified. If a default page is set, resolve and 
-        return that. If not, resolve and return the page template found by 
+        explicit template specified. If a default page is set, resolve and
+        return that. If not, resolve and return the page template found by
         getLayout().
         """
         # Delegate to PloneTool's version if we have it and we are a folder
@@ -135,8 +135,8 @@ class BrowserDefaultMixin(TemplateMixin):
         mtool = getToolByName(self, 'portal_membership')
         member = mtool.getAuthenticatedMember()
         return member.has_permission(ModifyViewTemplate, self)
-    
-    security.declareProtected(ModifyViewTemplate, 'getLayout')
+
+    security.declareProtected(ModifyViewTemplate, 'setDefaultPage')
     def setDefaultPage(self, objectId):
         """
         Set the default page to display in this (folderish) object. The objectId
@@ -155,7 +155,7 @@ class BrowserDefaultMixin(TemplateMixin):
             if objectId is not None:
                 self.manage_addProperty('default_page', objectId, 'string')
 
-    security.declareProtected(ModifyViewTemplate, 'getLayout')
+    security.declareProtected(ModifyViewTemplate, 'setLayout')
     def setLayout(self, layout):
         """
         Set the layout as the current view. 'layout' should be one of the list
@@ -169,8 +169,8 @@ class BrowserDefaultMixin(TemplateMixin):
     # def getDefaultLayout():
     #    """
     #    Get the default layout template.
-    #    """   
-        
+    #    """
+
     security.declarePublic('canSetLayout')
     def canSetLayout(self):
         """
@@ -179,11 +179,11 @@ class BrowserDefaultMixin(TemplateMixin):
         """
         if len(self.getAvailableLayouts()) <= 1:
             return False
-            
+
         mtool = getToolByName(self, 'portal_membership')
         member = mtool.getAuthenticatedMember()
         return member.has_permission(ModifyViewTemplate, self)
-        
+
     security.declareProtected(CMFCorePermissions.View, 'getAvailableLayouts')
     def getAvailableLayouts(self):
         """
@@ -191,5 +191,5 @@ class BrowserDefaultMixin(TemplateMixin):
         """
         return self._voc_templates()
 
-    
+
 InitializeClass(BrowserDefaultMixin)
