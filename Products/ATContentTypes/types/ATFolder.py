@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2004 AT Content Types development team
+#  Copyright (c) 2003-2005 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -51,8 +51,8 @@ class ATFolder(ATCTOrderedFolder):
     meta_type      = 'ATFolder'
     portal_type    = 'ATFolder'
     archetype_name = 'Folder'
-    immediate_view = 'view'
-    default_view   = 'view'
+    immediate_view = 'folder_listing'
+    default_view   = 'folder_listing'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'Folder', 'meta_type' : 'Plone Folder'}
     typeDescription= ''
