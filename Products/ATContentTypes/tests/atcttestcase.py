@@ -322,6 +322,7 @@ class ATCTFieldTestCase(BaseSchemaTest):
 from Products.Archetypes.tests.atsitetestcase import ATFunctionalSiteTestCase
 from Products.Archetypes.tests.attestcase import default_user
 from Products.Archetypes.tests.atsitetestcase import portal_owner
+import time
 
 class ATCTFuncionalTestCase(ATFunctionalSiteTestCase):
     """Integration tests for view and edit templates
@@ -337,11 +338,13 @@ class ATCTFuncionalTestCase(ATFunctionalSiteTestCase):
         sdm = self.app.session_data_manager
         sdm.setupHook()
         request.set('SESSION', sdm.getSessionData())
-            
+        
+        # basic data
         self.folder_url = self.folder.absolute_url()
         self.folder_path = '/%s' % self.folder.absolute_url(1)
         self.basic_auth = '%s:secret' % default_user
         self.owner_auth = '%s:secret' % portal_owner
+        
         # We want 401 responses, not redirects to a login page
         self.portal._delObject('cookie_authentication')
         
@@ -352,13 +355,32 @@ class ATCTFuncionalTestCase(ATFunctionalSiteTestCase):
         self.obj_url = self.obj.absolute_url()
         self.obj_path = '/%s' % self.obj.absolute_url(1)
         
+        # error log
+        from Products.SiteErrorLog.SiteErrorLog import temp_logs
+        temp_logs = {} # clean up log
+        self.error_log = self.getPortal().error_log
+        self.error_log._ignored_exceptions = ()
+
+    def assertStatusEqual(self, a, b, msg=''):
+        """Helper method that uses the error log to output useful debug infos
+        """
+        now = time.time()
+        if a != b:
+            entries = self.error_log.getLogEntries()
+            if entries:
+                msg = entries[0]['tb_text']
+            else:
+                if not msg:
+                    msg = 'no error log msg available'
+        self.failUnlessEqual(a, b, msg)
+        
     def test_createObject(self):
         # create an object using the createObject script
         response = self.publish(self.folder_path +
                                 '/createObject?type_name=%s' % self.portal_type,
                                 self.basic_auth)
 
-        self.assertEqual(response.getStatus(), 302) # Redirect to edit
+        self.assertStatusEqual(response.getStatus(), 302) # Redirect to edit
 
         # omit ?portal_status_message=...
         body = response.getBody().split('?')[0]
@@ -369,45 +391,45 @@ class ATCTFuncionalTestCase(ATFunctionalSiteTestCase):
         # Perform the redirect
         edit_form_path = body[len(self.app.REQUEST.SERVER_URL):]
         response = self.publish(edit_form_path, self.basic_auth)
-        self.assertEqual(response.getStatus(), 200) # OK
+        self.assertStatusEqual(response.getStatus(), 200) # OK
 
     def test_edit_view(self):
         # edit should work        
         response = self.publish('%s/atct_edit' % self.obj_path, self.basic_auth)
-        self.assertEqual(response.getStatus(), 200) # OK
+        self.assertStatusEqual(response.getStatus(), 200) # OK
 
     def test_metadata_edit_view(self):
         # metadata edit should work
         response = self.publish('%s/base_metadata' % self.obj_path, self.basic_auth)
-        self.assertEqual(response.getStatus(), 200) # OK
+        self.assertStatusEqual(response.getStatus(), 200) # OK
 
     def test_base_view(self):
         # base view should work
         response = self.publish('%s/base_view' % self.obj_path, self.basic_auth)
-        self.assertEqual(response.getStatus(), 200) # OK
+        self.assertStatusEqual(response.getStatus(), 200) # OK
 
     def test_templatemixin_view(self):
         # template mixin magic should work
         # XXX more tests?
         response = self.publish('%s/view' % self.obj_path, self.basic_auth)
-        self.assertEqual(response.getStatus(), 200) # OK
+        self.assertStatusEqual(response.getStatus(), 200) # OK
 
     def test_local_sharing_view(self):
         # sharing tab should work
         # XXX security tests?
         response = self.publish('%s/folder_localrole_form' % self.obj_path, self.basic_auth)
-        self.assertEqual(response.getStatus(), 200) # OK    
+        self.assertStatusEqual(response.getStatus(), 200) # OK    
 
     def test_workflow_view(self):
         # workflow tab should work
         response = self.publish('%s/content_status_history' % self.obj_path, self.basic_auth)
-        self.assertEqual(response.getStatus(), 200) # OK    
+        self.assertStatusEqual(response.getStatus(), 200) # OK    
     
     def test_additional_view(self):
         # additional views:
         for view in self.views:
             response = self.publish('%s/%s' % (self.obj_path, view), self.basic_auth)
-            self.assertEqual(response.getStatus(), 200, 
+            self.assertStatusEqual(response.getStatus(), 200, 
                 "%s: %s" % (view, response.getStatus())) # OK
 
 from Products.CMFCore.utils import getToolByName
@@ -415,7 +437,6 @@ from Products.CMFQuickInstallerTool.QuickInstallerTool import AlreadyInstalled
 from Products.Archetypes.tests.atsitetestcase import portal_name
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
-import time
 
 def setupATCT(app, id=portal_name, quiet=False):
     get_transaction().begin()
