@@ -1,6 +1,12 @@
 1.0-devel
 ======================
 
+ * Changed archetype names of criteria and removed the AT prefix.
+   [tiran]
+
+ * Added small unit tests for criteria and ATTopic. Better than nothing :)
+   [tiran]
+
  * Added translate tab when LinguaPlone is available at installation or
    reinstallation time.
    [tiran]

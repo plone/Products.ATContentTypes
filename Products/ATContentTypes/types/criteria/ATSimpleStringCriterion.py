@@ -63,7 +63,7 @@ class ATSimpleStringCriterion(ATBaseCriterion):
     security       = ClassSecurityInfo()
     schema         = ATSimpleStringCriterionSchema
     meta_type      = 'ATSimpleStringCriterion'
-    archetype_name = 'AT Simple String Criterion'
+    archetype_name = 'Simple String Criterion'
     typeDescription= ''
     typeDescMsgId  = ''
 

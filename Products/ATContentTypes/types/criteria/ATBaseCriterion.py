@@ -28,6 +28,7 @@ from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 
+from Products.Archetypes.ClassGen import generateClass
 from Products.ATContentTypes.types.criteria import registerCriterion
 from Products.ATContentTypes.types.criteria import ALL_INDICES
 from Products.ATContentTypes.types.criteria import DATE_INDICES
@@ -36,12 +37,37 @@ from Products.ATContentTypes.types.criteria import LIST_INDICES
 from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes.types.criteria.schemata import ATBaseCriterionSchema
 
+from Products.CMFCore.PortalContent import PortalContent
+from Products.Archetypes.interfaces.base import IBaseContent
 
-class ATBaseCriterion(BaseContentMixin):
+class NonRefCatalogContent(BaseContentMixin):
+    """Base class for content that is neither referenceable nor in the catalog
+    """
+   
+    isReferenceable = None
+
+    __implements__ = (PortalContent.__implements__, IATTopicCriterion,
+                      IBaseContent)
+    
+    # reference register / unregister methods
+    def _register(self, *args, **kwargs): pass
+    def _unregister(self, *args, **kwargs): pass
+    def _updateCatalog(self, *args, **kwargs): pass
+    def _referenceApply(self, *args, **kwargs): pass
+    def _uncatalogUID(self, *args, **kwargs): pass
+    def _uncatalogRefs(self, *args, **kwargs): pass
+    
+    # catalog methods
+    def indexObject(self, *args, **kwargs): pass
+    def unindexObject(self, *args, **kwargs): pass
+    def reindexObject(self, *args, **kwargs): pass
+
+class ATBaseCriterion(NonRefCatalogContent):
     """A basic criterion"""
-
-    __implements__ = BaseContentMixin.__implements__ + (IATTopicCriterion, )
+    
     security = ClassSecurityInfo()
+    
+    __implements__ = (IATTopicCriterion, NonRefCatalogContent.__implements__)
 
     schema = ATBaseCriterionSchema
     meta_type = 'ATBaseCriterion'
@@ -49,10 +75,6 @@ class ATBaseCriterion(BaseContentMixin):
     typeDescription= ''
     typeDescMsgId  = ''
     global_allow = 0
-
-    def __init__(self, id, field=None):
-        self.getField('id').set(self, id) # set is ok
-        self.getField('field').set(self, field)
 
     security.declareProtected(CMFCorePermissions.View, 'getId')
     def getId(self):
@@ -79,5 +101,8 @@ class ATBaseCriterion(BaseContentMixin):
         """
         raise NotImplementedError
 
+# because I don't register the class I've to generator it on my own. Otherwise
+# I'm not able to unit test it in the right way.
+generateClass(ATBaseCriterion)
 InitializeClass(ATBaseCriterion)
 # registerCriterion(ATBaseCriterion, ())

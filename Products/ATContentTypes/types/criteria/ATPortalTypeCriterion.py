@@ -65,7 +65,7 @@ class ATPortalTypeCriterion(ATBaseCriterion):
     security       = ClassSecurityInfo()
     schema         = ATPortalTypeCriterionSchema
     meta_type      = 'ATPortalTypeCriterion'
-    archetype_name = 'AT Portal Types Criterion'
+    archetype_name = 'Portal Types Criterion'
     typeDescription= ''
     typeDescMsgId  = ''
 

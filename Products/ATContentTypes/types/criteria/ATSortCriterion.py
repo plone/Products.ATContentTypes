@@ -60,7 +60,7 @@ class ATSortCriterion(ATBaseCriterion):
     security       = ClassSecurityInfo()
     schema         = ATSortCriterionSchema
     meta_type      = 'ATSortCriterion'
-    archetype_name = 'AT Sort Criterion'
+    archetype_name = 'Sort Criterion'
     typeDescription= ''
     typeDescMsgId  = ''
 

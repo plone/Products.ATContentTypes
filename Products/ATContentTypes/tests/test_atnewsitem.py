@@ -1,8 +1,4 @@
-"""Skeleton ATContentTypes tests
-
-Use this file as a skeleton for your own tests
-
-
+"""
 """
 
 __author__ = 'Christian Heimes'

@@ -83,7 +83,7 @@ class ATListCriterion(ATBaseCriterion):
     security       = ClassSecurityInfo()
     schema         = ATListCriterionSchema
     meta_type      = 'ATListCriterion'
-    archetype_name = 'AT List Criterion'
+    archetype_name = 'List Criterion'
     typeDescription= ''
     typeDescMsgId  = ''
 

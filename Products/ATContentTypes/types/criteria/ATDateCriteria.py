@@ -123,7 +123,7 @@ class ATDateCriteria(ATBaseCriterion):
     security       = ClassSecurityInfo()
     schema         = ATDateCriteriaSchema
     meta_type      = 'ATFriendlyDateCriteria'
-    archetype_name = 'AT Friendly Date Criteria'
+    archetype_name = 'Friendly Date Criteria'
     typeDescription= ''
     typeDescMsgId  = ''
 

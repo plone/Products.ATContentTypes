@@ -61,7 +61,7 @@ class ATSimpleIntCriterion(ATBaseCriterion):
     security       = ClassSecurityInfo()
     schema         = ATSimpleIntCriterionSchema
     meta_type      = 'ATSimpleIntCriterion'
-    archetype_name = 'AT Simple Int Criterion'
+    archetype_name = 'Simple Int Criterion'
     typeDescription= ''
     typeDescMsgId  = ''
 
