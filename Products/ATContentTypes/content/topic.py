@@ -482,6 +482,11 @@ class ATTopic(ATCTFolder):
         objs = [brain.getObject() for brain in brains]
         return [obj for obj in objs if obj is not None]
 
+    security.declareProtected(CMFCorePermissions.View, 'get_size')
+    def get_size(self):
+        """Returns 1 as topics have no size."""
+        return 1
+    
 registerATCT(ATTopic, PROJECTNAME)
 
 def modify_fti(fti):

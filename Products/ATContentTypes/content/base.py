@@ -658,6 +658,11 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
             #return OrderedBaseFolder.__browser_default__(self, request)
             return self, [self.getLayout(),]
 
+    security.declareProtected(CMFCorePermissions.View, 'get_size')
+    def get_size(self):
+        """Returns 1 as folders have no size."""
+        return 1
+
 InitializeClass(ATCTFolderMixin)
 
 
