@@ -1,0 +1,278 @@
+# ATContentTypes messages catalog.
+# These are the messages that ATContentTypes adds to the plone domain.
+msgid ""
+msgstr ""
+"Project-Id-Version: ATContentTypes CVS\n"
+"POT-Creation-Date: 2004-05-11 23:22+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: latin1 utf-8\n"
+"Domain: plone\n"
+
+msgid "Creator"
+msgstr ""
+
+
+msgid "Description"
+msgstr ""
+
+
+msgid "SearchableText"
+msgstr ""
+
+
+msgid "Subject"
+msgstr ""
+
+
+msgid "Title"
+msgstr ""
+
+
+msgid "Type"
+msgstr ""
+
+
+msgid "created"
+msgstr ""
+
+
+msgid "description_constrain_allowed_types"
+msgstr "Select one or more types, that should be allowed to add inside this folder and its subfolders. Choose nothing will allow all types."
+
+
+msgid "description_enable_constrain_allowed_types"
+msgstr ""
+
+
+msgid "effective"
+msgstr ""
+
+
+msgid "end"
+msgstr ""
+
+
+msgid "exact date value"
+msgstr ""
+
+
+msgid "exact integer value"
+msgstr ""
+
+
+msgid "exact text value"
+msgstr ""
+
+
+msgid "expires"
+msgstr ""
+
+
+msgid "help_date_criteria_operation"
+msgstr ""
+
+
+msgid "help_date_criteria_range"
+msgstr ""
+
+
+msgid "help_date_criteria_value"
+msgstr ""
+
+
+msgid "help_int_criteria_value"
+msgstr ""
+
+
+msgid "help_item_count"
+msgstr "If 'Limit Number of Items' is selected, only the first 'Number of Items' will be displayed "
+
+
+msgid "help_limit_number"
+msgstr "Toggles limitation of number of items displayed. If selected, only the first 'Number of Items' will be displayed."
+
+
+msgid "help_list_criteria_operator"
+msgstr ""
+
+
+msgid "help_list_criteria_value"
+msgstr ""
+
+
+msgid "help_string_criteria_value"
+msgstr ""
+
+
+# criterion_edit_form.cpt
+# These are the standard field names. No field_ possible. :/
+msgid "id"
+msgstr ""
+
+
+msgid "label_constrain_allowed_types"
+msgstr "Set allowed types"
+
+
+msgid "label_date_criteria_operation"
+msgstr ""
+
+
+msgid "label_date_criteria_range"
+msgstr ""
+
+
+msgid "label_date_criteria_value"
+msgstr ""
+
+
+# schema of ConstrainTypesMixin.py
+msgid "label_enable_constrain_allowed_types"
+msgstr "Overwrite allowed types"
+
+
+msgid "label_int_criteria_value"
+msgstr ""
+
+
+msgid "label_item_count"
+msgstr "Number of Items"
+
+
+# ATTopic
+msgid "label_limit_number"
+msgstr "Limit Number of Items"
+
+
+msgid "label_list_criteria_operator"
+msgstr ""
+
+
+msgid "label_list_criteria_value"
+msgstr ""
+
+
+msgid "label_string_criteria_value"
+msgstr ""
+
+
+msgid "logical AND or OR of list values"
+msgstr ""
+
+
+msgid "modified"
+msgstr ""
+
+
+msgid "path"
+msgstr ""
+
+
+msgid "portal types values"
+msgstr ""
+
+
+msgid "review_state"
+msgstr ""
+
+
+msgid "start"
+msgstr ""
+
+msgid "label_event_attendees"
+msgstr ""
+
+msgid "help_event_attendees"
+msgstr ""
+
+msgid "label_template_mixin"
+msgstr ""
+
+msgid "help_template_mixin"
+msgstr ""
+
+msgid "base_view"
+msgstr ""
+
+msgid "A simple string criterion"
+msgstr ""
+
+msgid "A date criteria"
+msgstr ""
+
+msgid "A list criterion"
+msgstr ""
+
+msgid "A portal_types criterion"
+msgstr ""
+
+msgid "A simple int criterion"
+msgstr ""
+
+msgid "Changes saved"
+msgstr ""
+
+msgid "Your changes have been saved."
+msgstr ""
+
+msgid "old"
+msgstr ""
+
+msgid "ahead"
+msgstr ""
+
+msgid "and"
+msgstr ""
+
+msgid "or"
+msgstr ""
+
+msgid "Now"
+msgstr ""
+
+msgid "1 Day"
+msgstr ""
+
+msgid "2 Days"
+msgstr ""
+
+msgid "5 Days"
+msgstr ""
+
+msgid "1 Week"
+msgstr ""
+
+msgid "2 Weeks"
+msgstr ""
+
+msgid "1 Month"
+msgstr ""
+
+msgid "3 Months"
+msgstr ""
+
+msgid "6 Months"
+msgstr ""
+
+msgid "1 Year"
+msgstr ""
+
+msgid "2 Years"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
+msgid  "max"
+msgstr ""
+
+msgid "within_day"
+msgstr ""

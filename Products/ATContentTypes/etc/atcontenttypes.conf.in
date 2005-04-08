@@ -1,0 +1,67 @@
+<mxtidy>
+    enable           yes
+    drop_font_tags   yes
+    drop_empty_paras yes
+    input_xml        no
+    output_xhtml     yes
+    quiet            yes
+    show_warnings    yes
+    indent_spaces    yes
+    word_2000        yes
+    wrap             72
+    tab_size         4
+    char_encoding    raw
+</mxtidy>
+
+<archetype ATDocument>
+  allow_document_upload yes
+  <contenttypes>
+    default text/html
+
+    allowed text/structured
+    allowed text/x-rst
+    allowed text/html
+    allowed text/plain
+    allowed text/plain-pre
+    allowed text/python-source
+  </contenttypes>
+</archetype>
+
+<archetype ATEvent>
+  allow_document_upload yes
+  <contenttypes>
+    default text/html
+
+    allowed text/structured
+    allowed text/x-rst
+    allowed text/html
+    allowed text/plain
+    allowed text/plain-pre
+  </contenttypes>
+</archetype>
+
+<archetype ATNewsItem>
+  max_size no
+  allow_document_upload yes
+  
+  <contenttypes>
+    default text/html
+    
+    allowed text/structured
+    allowed text/x-rst
+    allowed text/html
+    allowed text/plain
+    allowed text/plain-pre
+  </contenttypes>
+</archetype>
+
+<archetype ATFile>
+  # max_size 1MB
+  max_size no
+</archetype>
+
+<archetype ATImage>
+  # max_size 1MB
+  max_size no
+</archetype>
+
