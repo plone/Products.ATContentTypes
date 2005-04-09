@@ -23,6 +23,8 @@
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
+from Products.ATContentTypes.config import HAS_PLONE2
+
 from Interface import Interface
 from Interface import Attribute
 # BBB remove after we depend on AT 1.3.3
@@ -33,6 +35,12 @@ except ImportError:
 
 from Products.Archetypes.interfaces.base import IBaseContent
 from Products.Archetypes.interfaces.base import IBaseFolder
+
+try:
+    from Products.CMFPlone.interfaces.ConstrainTypes import \
+        ISelectableConstrainTypes as IPloneSelectableConstrainTypes
+except ImportError:
+    IPloneSelectableConstrainTypes = Interface
 
 class IATContentType(ITemplateMixin, IBaseContent):
     """Marker interface for AT Content Types
@@ -324,4 +332,8 @@ class IATCTTool(Interface):
     
 class IATCTTopicsTool(Interface):
     """Mixin class for providing features to customize the display of topics
+    """
+
+class ISelectableConstrainTypes(IPloneSelectableConstrainTypes):
+    """Marker interface based on IPloneSelectableConstrainTypes or Interface
     """

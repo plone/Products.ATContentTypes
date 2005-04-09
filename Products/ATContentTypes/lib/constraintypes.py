@@ -27,6 +27,7 @@ from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from Globals import InitializeClass
 from Acquisition import aq_parent
+from Acquisition import aq_inner
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore import CMFCorePermissions
@@ -45,11 +46,7 @@ from Products.Archetypes.public import DisplayList
 from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.criteria import _criterionRegistry
-
-from Products.ATContentTypes.config import HAS_PLONE2
-
-if HAS_PLONE2:
-    from Products.CMFPlone.interfaces.ConstrainTypes import ISelectableConstrainTypes
+from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
 
 # constants for enableConstrainMixin
 ACQUIRE = -1 # acquire locallyAllowedTypes from parent (default)
@@ -70,7 +67,7 @@ enableDisplayList = IntDisplayList((
 ConstrainTypesMixinSchema = Schema((
     IntegerField('constrainTypesMode',
         required = False,
-        default = ACQUIRE,
+        default_method = "_ct_defaultConstrainTypesMode",
         vocabulary = enableDisplayList,
         # XXX: AT doesn't supprt enforce on vocs with int display list
         #enforceVocabulary = True,
@@ -140,10 +137,7 @@ class ConstrainTypesMixin:
         constrain the addable types on a per-folder basis.
     """
 
-    if HAS_PLONE2:
-        __implements__ = (ISelectableConstrainTypes, )
-    else:
-        __implements__ = ()
+    __implements__ = (ISelectableConstrainTypes, )
 
     security = ClassSecurityInfo()
     
@@ -299,6 +293,17 @@ class ConstrainTypesMixin:
         constraint machinery. 
         """
         return [fti.getId() for fti in self.getDefaultAddableTypes()]
-            
-        
+
+    def _ct_defaultConstrainTypesMode(self):
+       """Configure constrainTypeMode depending on the parent
+      
+       ACQUIRE if parent support ISelectableConstrainTypes
+       DISABLE if not
+       """
+       parent = aq_parent(aq_inner(self))
+       if ISelectableConstrainTypes.isImplementedBy(parent):
+           return ACQUIRE            
+       else:
+           return DISABLED
+ 
 InitializeClass(ConstrainTypesMixin)
