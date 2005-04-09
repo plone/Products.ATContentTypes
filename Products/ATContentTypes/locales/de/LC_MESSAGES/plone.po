@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ATContentTypes CVS\n"
 "POT-Creation-Date: 2005-03-17 00:59+0000\n"
-"PO-Revision-Date: 2004-11-24 18:04+0100\n"
-"Last-Translator: Christian Theune <ct@gocept.com>\n"
+"PO-Revision-Date: 2005-04-09 22:23+0100\n"
+"Last-Translator: Hanno Schlichting <schlichting@bakb.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -18,99 +18,99 @@ msgstr ""
 "Domain: plone\n"
 
 msgid "1 Day"
-msgstr ""
+msgstr "ein Tag"
 
 
 msgid "1 Month"
-msgstr ""
+msgstr "ein Monat"
 
 
 msgid "1 Week"
-msgstr ""
+msgstr "eine Woche"
 
 
 msgid "1 Year"
-msgstr ""
+msgstr "ein Jahr"
 
 
 msgid "2 Days"
-msgstr ""
+msgstr "zwei Tage"
 
 
 msgid "2 Weeks"
-msgstr ""
+msgstr "zwei Wochen"
 
 
 msgid "2 Years"
-msgstr ""
+msgstr "zwei Jahre"
 
 
 msgid "3 Months"
-msgstr ""
+msgstr "drei Monate"
 
 
 msgid "5 Days"
-msgstr ""
+msgstr "fünf Tage"
 
 
 msgid "6 Months"
-msgstr ""
+msgstr "sechs Monate"
 
 
 msgid "A date criteria"
-msgstr ""
+msgstr "Ein Datumskriterium"
 
 
 msgid "A list criterion"
-msgstr ""
+msgstr "Ein Listenkriterium"
 
 
 msgid "A portal_types criterion"
-msgstr ""
+msgstr "Ein Artikeltypkriterium"
 
 
 msgid "A simple int criterion"
-msgstr ""
+msgstr "Ein einfaches Zahlenkriterium"
 
 
 msgid "A simple string criterion"
-msgstr ""
+msgstr "Ein einfaches Textkriterium"
 
 
 #: ../skins/ATContentTypes/criterion_edit_form.cpt
 #. <input class="context" i18n:attributes="value" name="form.button.AddCriterion" tabindex="" tal:attributes="tabindex tabindex/next;" type="submit" value="Add"/>
 msgid "Add"
-msgstr ""
+msgstr "Hinzufügen"
 
 
 #: ../skins/ATContentTypes/atct_album_image.pt
 #. <img alt="Back to album" i18n:attributes="alt title" tal:attributes="src string:$portal_url/folder_icon.gif" title="Back to album"/>
 msgid "Back to album"
-msgstr ""
+msgstr "Zurück zum Album"
 
 
 #: ../skins/ATContentTypes/criterion_edit_form.cpt
 #. <input class="standalone" i18n:attributes="value" name="form.button.Cancel" tabindex="" tal:attributes="tabindex tabindex/next;" type="submit" value="Cancel"/>
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 
 msgid "Changes saved"
-msgstr ""
+msgstr "Änderungen gespeichert."
 
 
 msgid "Creator"
-msgstr ""
+msgstr "Ersteller"
 
 
 msgid "Description"
-msgstr ""
+msgstr "Beschreibung"
 
 
 #: ../skins/ATContentTypes/atct_image_transform.pt
 #. <input class="context" i18n:attributes="value" type="submit" value="Execute"/>
 msgid "Execute"
-msgstr ""
+msgstr "Ausführen"
 
 
 msgid "Now"
@@ -120,14 +120,14 @@ msgstr ""
 #: ../skins/ATContentTypes/criterion_edit_form.cpt
 #. <input class="context" i18n:attributes="value" name="form.button.Remove" tabindex="" tal:attributes="tabindex tabindex/next;" type="submit" value="Remove"/>
 msgid "Remove"
-msgstr ""
+msgstr "Löschen"
 
 
 #: ../skins/ATContentTypes/criterion_edit_form.cpt
 #. <input class="context" i18n:attributes="value" name="form.button.Save" tabindex="" tal:attributes="tabindex tabindex/next;" type="submit" value="Save"/>
 #. <input class="context" i18n:attributes="value" name="form.button.SetSortCriterion" tabindex="" tal:attributes="tabindex tabindex/next;" type="submit" value="Save"/>
 msgid "Save"
-msgstr ""
+msgstr "Speichern"
 
 
 msgid "SearchableText"
@@ -135,19 +135,19 @@ msgstr ""
 
 
 msgid "Subject"
-msgstr ""
+msgstr "Betreff"
 
 
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 
 msgid "Your changes have been saved."
-msgstr ""
+msgstr "Ihre Änderungen wurden gespeichert."
 
 
 msgid "ahead"
@@ -155,7 +155,7 @@ msgstr ""
 
 
 msgid "and"
-msgstr ""
+msgstr "und"
 
 
 #: ../skins/ATContentTypes/atct_history.pt
@@ -164,7 +164,7 @@ msgstr ""
 #.  ${title}
 #. </h1>
 msgid "atct_history_changes_of"
-msgstr ""
+msgstr "Änderungen an ${title}"
 
 
 #: ../skins/ATContentTypes/atct_history.pt
@@ -172,7 +172,7 @@ msgstr ""
 #.  Changes in this revision
 #. </legend>
 msgid "atct_history_changes_revision"
-msgstr ""
+msgstr "Änderungen in dieser Revision"
 
 
 #: ../skins/ATContentTypes/atct_history.pt
@@ -180,7 +180,7 @@ msgstr ""
 #.  Comment
 #. </dt>
 msgid "atct_history_comment"
-msgstr ""
+msgstr "Kommentar"
 
 
 #: ../skins/ATContentTypes/atct_history.pt
@@ -191,7 +191,7 @@ msgstr ""
 #.  ${to}
 #. </h2>
 msgid "atct_history_comparison_between"
-msgstr ""
+msgstr "Vergleich zwischen ${from} und ${to}"
 
 
 #: ../skins/ATContentTypes/atct_history.pt
@@ -200,7 +200,7 @@ msgstr ""
 #.     and deleted content in red (strike-out text).
 #. </div>
 msgid "atct_history_lastchanges_description"
-msgstr ""
+msgstr "Zeigt die letzten Änderungen an diesem Artikel. Neuer Inhalt ist grün dargestellt; entfernter Inhalt ist rot und durchgestrichen."
 
 
 #: ../skins/ATContentTypes/atct_history.pt
@@ -208,7 +208,7 @@ msgstr ""
 #.        No changes available for this document
 #. </p>
 msgid "atct_history_lastchanges_notavailable"
-msgstr ""
+msgstr "Keine Änderungen an diesem Dokument verfügbar."
 
 
 #: ../skins/ATContentTypes/atct_history.pt
@@ -216,7 +216,7 @@ msgstr ""
 #.  User
 #. </dt>
 msgid "atct_history_user"
-msgstr ""
+msgstr "Benutzer"
 
 
 #: ../skins/ATContentTypes/atct_history.pt
@@ -227,7 +227,7 @@ msgstr ""
 #.     the history log was removed by the administrator.
 #. </div>
 msgid "atct_lastchanges_warning"
-msgstr ""
+msgstr "Diese Änderungshistorie wird geleert, sobald der Administrator dieser Website die zugrundeliegene Datenbank aufräumt (komprimiert). Sollte dieser Artikel keine Historie besitzen, so bedeutet dieses normalerweise, dass keine Änderungen an diesem Artikel gemacht wurden, seitdem die Datenbank zuletzt komprimiert wurde."
 
 
 msgid "base_view"
@@ -235,7 +235,7 @@ msgstr ""
 
 
 msgid "created"
-msgstr ""
+msgstr "erstellt"
 
 
 msgid "description_constrain_allowed_types"
@@ -283,7 +283,7 @@ msgstr ""
 #.         Up one level
 #. </a>
 msgid "go_to_parent_url"
-msgstr ""
+msgstr "Eine Ebene höher"
 
 
 #: ../skins/ATContentTypes/criterion_edit_form.cpt
@@ -292,7 +292,7 @@ msgstr ""
 #.  ${title}
 #. </span>
 msgid "heading_criteria_for"
-msgstr ""
+msgstr "Kriterien für ${title}"
 
 
 #: ../skins/ATContentTypes/criterion_edit_form.cpt
@@ -300,7 +300,7 @@ msgstr ""
 #. 		List Available Fields
 #. </div>
 msgid "help_criteria_field_name"
-msgstr ""
+msgstr "Bestehende Felder auflisten"
 
 
 #: ../skins/ATContentTypes/criterion_edit_form.cpt
@@ -494,7 +494,7 @@ msgstr ""
 
 
 msgid "or"
-msgstr ""
+msgstr "oder"
 
 
 msgid "path"
@@ -507,7 +507,7 @@ msgstr ""
 #.   photos in album
 #. </span>
 msgid "photos_in_album"
-msgstr ""
+msgstr "${num_photos} Photo(s) im Album"
 
 
 msgid "portal types values"
@@ -515,7 +515,7 @@ msgstr ""
 
 
 msgid "review_state"
-msgstr ""
+msgstr "Revisionsstatus"
 
 
 msgid "start"
