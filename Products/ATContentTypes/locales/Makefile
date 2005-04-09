@@ -4,12 +4,12 @@ MANUALPOT = manual.pot
 NEWPOTFILE = new-atct-plone.pot
 I18NDUDE = i18ndude
 #POFILES := $(wildcard *.po)
-POFILES := $(find . -name *.po)
+POFILES := $(find . -name '*.po')
 SKINS := `find ../skins -name '*.*pt'`
 
 all: $(POFILES)
 
-$(POFILES): $(POTFILE)
+$(POFILES): $(POTFILE) $(MANUALPOT)
 	$(I18NDUDE) sync --pot $< $@
 
 rebuild-pot:
