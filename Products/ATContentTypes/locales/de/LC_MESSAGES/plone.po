@@ -15,6 +15,7 @@ msgstr ""
 "Language-Code: de\n"
 "Language-Name: Deutsch\n"
 "Preferred-Encodings: latin1 utf-8\n"
+"X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 "Domain: plone\n"
 
 msgid "1 Day"
@@ -297,7 +298,7 @@ msgstr "Kriterien für ${title}"
 
 #: ../skins/ATContentTypes/criterion_edit_form.cpt
 #. <div class="formHelp" i18n:translate="help_criteria_field_name">
-#. 		List Available Fields
+#.      List Available Fields
 #. </div>
 msgid "help_criteria_field_name"
 msgstr "Bestehende Felder auflisten"
