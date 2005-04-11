@@ -49,7 +49,7 @@ GLOBALS = globals()
 INSTALL_LINGUA_PLONE = not True
 
 ## swallow PIL exceptions when resizing the image?
-SWALLOW_IMAGE_RESIZE_EXCEPTIONS = zconf.swallowImageResizeExceptions
+SWALLOW_IMAGE_RESIZE_EXCEPTIONS = zconf.swallowImageResizeExceptions.enable
 
 ## using special plone 2 stuff?
 try:
