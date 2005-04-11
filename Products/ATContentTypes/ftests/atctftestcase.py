@@ -102,7 +102,6 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
     def setupTestObject(self):
         # create test object
         self.obj_id = 'test_object'
-        self.folder.setLocallyAllowedTypes([self.portal_type])
         self.folder.invokeFactory(self.portal_type, self.obj_id, title=self.obj_id)
         self.obj = getattr(self.folder.aq_explicit, self.obj_id)
         self.obj_url = self.obj.absolute_url()
