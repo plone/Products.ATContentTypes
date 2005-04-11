@@ -13,6 +13,9 @@
     </description>
   </section>
 
+  <section type="feature" name="swallowImageResizeExceptions"
+   attribute="swallowImageResizeExceptions" required="yes" />
+
   <section type="archetype" name="ATDocument"
    attribute="ATDocument" required="yes" />
 

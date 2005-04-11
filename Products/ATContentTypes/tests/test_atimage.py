@@ -29,6 +29,8 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
+from Acquisition import aq_base
+
 from Products.CMFCore import CMFCorePermissions
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
@@ -134,7 +136,7 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         
         # test upload
         atct.setImage(TEST_GIF, mimetype='image/gif', filename='test.gif')
-        self.failUnlessEqual(atct.getImage(), TEST_GIF)
+        self.failUnlessEqual(atct.getImage().data, TEST_GIF)
         
         # test if all scales exist
         for scale in scales.keys():

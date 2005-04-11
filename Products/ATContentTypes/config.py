@@ -46,11 +46,10 @@ WWW_DIR = os.path.join(ATCT_DIR, 'www')
 
 GLOBALS = globals()
 
-INSTALL_LINGUA_PLONE = True
+INSTALL_LINGUA_PLONE = not True
 
 ## swallow PIL exceptions when resizing the image?
-#SWALLOW_IMAGE_RESIZE_EXCEPTIONS = True
-SWALLOW_IMAGE_RESIZE_EXCEPTIONS = False
+SWALLOW_IMAGE_RESIZE_EXCEPTIONS = zconf.swallowImageResizeExceptions
 
 ## using special plone 2 stuff?
 try:

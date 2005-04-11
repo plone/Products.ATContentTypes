@@ -13,6 +13,10 @@
     char_encoding    raw
 </mxtidy>
 
+<feature swallowImageResizeExceptions>
+  enable no 
+</feature>
+
 <archetype ATDocument>
   allow_document_upload yes
   <contenttypes>
