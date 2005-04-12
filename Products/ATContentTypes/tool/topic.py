@@ -9,7 +9,7 @@ from ExtensionClass import Base
 from Acquisition import aq_base
 
 from Products.ATContentTypes.permission import ChangeTopics, AddTopics
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import ManagePortal
 from Products.ATContentTypes.interfaces import IATCTTopicsTool
 
 from Products.Archetypes.public import DisplayList
@@ -99,7 +99,7 @@ class ATTopicsTool(Base):
         return criteria
             
     
-    security.declareProtected(CMFCorePermissions.ManagePortal,'addIndex')
+    security.declareProtected(ManagePortal,'addIndex')
     def addIndex(self, index, friendlyName='', description='', enabled=False, criteria=()):
         """ Add a new index along with descriptive information to the index 
             registry """
@@ -115,7 +115,7 @@ class ATTopicsTool(Base):
             
         self.topic_indexes[index]=objIndex
     
-    security.declareProtected(CMFCorePermissions.ManagePortal,'addMetadata')
+    security.declareProtected(ManagePortal,'addMetadata')
     def addMetadata(self, metadata, friendlyName='', description='', enabled=False):
         """ Add a new metadata field along with descriptive information to the
             metadata registry """
@@ -130,7 +130,7 @@ class ATTopicsTool(Base):
         self.topic_metadata[metadata]=objMeta
 
 
-    security.declareProtected(CMFCorePermissions.ManagePortal,'updateIndex')
+    security.declareProtected(ManagePortal,'updateIndex')
     def updateIndex(self, index, friendlyName=None, description=None, enabled=None, criteria=None):
         """ Updates an existing index in the registry, unrecognized values are 
             added """
@@ -146,7 +146,7 @@ class ATTopicsTool(Base):
         
         self.addIndex(index, friendlyName, description, enabled, criteria)
         
-    security.declareProtected(CMFCorePermissions.ManagePortal,'updateMetadata')
+    security.declareProtected(ManagePortal,'updateMetadata')
     def updateMetadata(self, metadata, friendlyName=None, description=None, enabled=None):
         """ Updates an existing metadata field in the registry, unrecognized values are 
             added """
@@ -160,14 +160,14 @@ class ATTopicsTool(Base):
         self.addMetadata(metadata, friendlyName, description, enabled)
 
 
-    security.declareProtected(CMFCorePermissions.ManagePortal,'removeIndex')
+    security.declareProtected(ManagePortal,'removeIndex')
     def removeIndex(self, index):
         """ Removes an existing index from the registry """
         if self.topic_indexes.has_key(index):
             del self.topic_indexes[index]
             self._p_changed=1            
     
-    security.declareProtected(CMFCorePermissions.ManagePortal,'removeMetadata')
+    security.declareProtected(ManagePortal,'removeMetadata')
     def removeMetadata(self, metadata):
         """ Removes an existing metadata field from the registry """
         if self.topic_metadata.has_key(metadata):
@@ -175,7 +175,7 @@ class ATTopicsTool(Base):
             self._p_changed=1
 
 
-    security.declareProtected(CMFCorePermissions.ManagePortal,'createInitialIndexes')
+    security.declareProtected(ManagePortal,'createInitialIndexes')
     def createInitialIndexes(self):
         """ create indexes for all indexes in the catalog """
         indexes = self.listCatalogFields()
@@ -186,7 +186,7 @@ class ATTopicsTool(Base):
                 self.addIndex(i, friendlyName='', enabled=enabled)
         return True
     
-    security.declareProtected(CMFCorePermissions.ManagePortal,'createInitialIndexes')
+    security.declareProtected(ManagePortal,'createInitialIndexes')
     def createInitialMetadata(self):
         """ create metadata for all indexes in the catalog """
         metas = self.listCatalogMetadata()
@@ -198,7 +198,7 @@ class ATTopicsTool(Base):
         return True
 
 
-    security.declareProtected(CMFCorePermissions.ManagePortal,'updateIndexesFromCatalog')
+    security.declareProtected(ManagePortal,'updateIndexesFromCatalog')
     def updateIndexesFromCatalog(self):
         """ check if there are new indexes or if indexes must be removed from 
             the collection because they do no longer exist in the catalog """
@@ -217,7 +217,7 @@ class ATTopicsTool(Base):
             if k not in indexes:
                 self.removeIndex(k)
 
-    security.declareProtected(CMFCorePermissions.ManagePortal,'updateMetadataFromCatalog')
+    security.declareProtected(ManagePortal,'updateMetadataFromCatalog')
     def updateMetadataFromCatalog(self):
         """ check if there are new metadata fields or if fields must be 
             removed from the collection because they do no longer exist in the 
@@ -358,7 +358,7 @@ class ATTopicsTool(Base):
             return index
         
     
-    security.declareProtected(CMFCorePermissions.ManagePortal,'getIndexes')
+    security.declareProtected(ManagePortal,'getIndexes')
     def getIndexes(self, enabledOnly='0'):
         """ Returns the full list of available indexes, optionally filtering 
             out those that are not marked enabled """
@@ -373,7 +373,7 @@ class ATTopicsTool(Base):
         indexes = [i[1] for i in indexes_dec]
         return indexes
         
-    security.declareProtected(CMFCorePermissions.ManagePortal,'getAllMetadata')
+    security.declareProtected(ManagePortal,'getAllMetadata')
     def getAllMetadata(self, enabledOnly='0'):
         """ Returns the full list of available metadata fields, optionally 
             filtering out those that are not marked enabled """
@@ -406,7 +406,7 @@ class ATTopicsTool(Base):
             raise AttributeError('Metadata ' + metadata + ' not found')
         
 
-    security.declareProtected(CMFCorePermissions.ManagePortal,'manage_SavePortalTopics')
+    security.declareProtected(ManagePortal,'manage_SavePortalTopics')
     def manage_saveTopicSetup(self, REQUEST=None):
         """ Set indexes and metadata from form """
         if REQUEST==None:
@@ -426,7 +426,7 @@ class ATTopicsTool(Base):
             
         return 1
 
-    security.declareProtected(CMFCorePermissions.ManagePortal,'manage_SavePortalTopicsTypes')
+    security.declareProtected(ManagePortal,'manage_SavePortalTopicsTypes')
     def manage_saveTopicSetupTypes(self, REQUEST=None):
         """ Set portal types from form """
         if REQUEST==None:

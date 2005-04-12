@@ -43,7 +43,8 @@ from Products.Archetypes.tests.attestcase import ATTestCase
 from Products.Archetypes.tests.atsitetestcase import ATSiteTestCase
 
 from Interface.Verify import verifyObject
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.interfaces.DublinCore import DublinCore as IDublinCore
 from Products.CMFCore.interfaces.DublinCore import MutableDublinCore as IMutableDublinCore
 from Products.Archetypes.interfaces.base import IBaseContent
@@ -245,9 +246,8 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnlessEqual(field.accessor, 'Description')
         self.failUnlessEqual(field.mutator, 'setDescription')
         self.failUnlessEqual(field.edit_accessor, 'getRawDescription')
-        self.failUnlessEqual(field.read_permission, CMFCorePermissions.View)
-        self.failUnlessEqual(field.write_permission,
-                             CMFCorePermissions.ModifyPortalContent)
+        self.failUnlessEqual(field.read_permission, View)
+        self.failUnlessEqual(field.write_permission, ModifyPortalContent)
         self.failUnlessEqual(field.generateMode, 'mVc')
         #self.failUnless(field.generateMode == 'veVc', field.generateMode)
         self.failUnlessEqual(field.force, '')
@@ -277,9 +277,8 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnlessEqual(field.accessor, 'getId')
         self.failUnlessEqual(field.mutator, 'setId')
         self.failUnlessEqual(field.edit_accessor, 'getRawId')
-        self.failUnlessEqual(field.read_permission, CMFCorePermissions.View)
-        self.failUnlessEqual(field.write_permission,
-                             CMFCorePermissions.ModifyPortalContent)
+        self.failUnlessEqual(field.read_permission, View)
+        self.failUnlessEqual(field.write_permission, ModifyPortalContent)
         self.failUnlessEqual(field.generateMode, 'veVc')
         self.failUnlessEqual(field.force, '')
         self.failUnlessEqual(field.type, 'string')
@@ -308,9 +307,8 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnlessEqual(field.accessor, 'getRelatedItems')
         self.failUnlessEqual(field.mutator, 'setRelatedItems')
         self.failUnlessEqual(field.edit_accessor, 'getRawRelatedItems')
-        self.failUnlessEqual(field.read_permission, CMFCorePermissions.View)
-        self.failUnlessEqual(field.write_permission,
-                             CMFCorePermissions.ModifyPortalContent)
+        self.failUnlessEqual(field.read_permission, View)
+        self.failUnlessEqual(field.write_permission, ModifyPortalContent)
         self.failUnlessEqual(field.generateMode, 'veVc')
         self.failUnlessEqual(field.force, '')
         self.failUnlessEqual(field.type, 'reference')
@@ -339,7 +337,7 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnlessEqual(field.mutator, 'setLayout')
         self.failUnlessEqual(field.edit_accessor, 'getRawLayout')
         self.failUnlessEqual(field.default_method, "getDefaultLayout")
-        self.failUnlessEqual(field.read_permission, CMFCorePermissions.View)
+        self.failUnlessEqual(field.read_permission, View)
         self.failUnlessEqual(field.write_permission,
                              ATCTPermissions.ModifyViewTemplate)
         self.failUnlessEqual(field.generateMode, 'veVc')

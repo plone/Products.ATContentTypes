@@ -25,7 +25,7 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATSortCriterion'
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.public import Schema
@@ -69,7 +69,7 @@ class ATSortCriterion(ATBaseCriterion):
 
     shortDesc      = 'Sort'
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = [('sort_on', self.Field())]
 

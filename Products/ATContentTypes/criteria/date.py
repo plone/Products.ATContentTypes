@@ -24,7 +24,7 @@ __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATDateCriteria'
 
 from DateTime import DateTime
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.public import Schema
@@ -130,7 +130,7 @@ class ATDateCriteria(ATBaseCriterion):
 
     shortDesc      = 'exact date value'
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         """Return a sequence of items to be used to build the catalog query.
         """

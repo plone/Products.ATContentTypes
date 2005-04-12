@@ -37,7 +37,8 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.CMFCore.utils import UniqueObject 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import format_stx
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.ActionProviderBase import ActionProviderBase
 
 from Products.Archetypes import listTypes
@@ -61,7 +62,7 @@ configlets = ({
     'name' : 'ATContentTypes Tool',
     'action' : 'string:${portal_url}/%s/atct_manageTopicSetup' % TOOLNAME,
     'category' : 'Products',
-    'permission' : CMFCorePermissions.ManagePortal,
+    'permission' : ManagePortal,
     'imageUrl' : 'tool_icon.gif'
     },
     )
@@ -101,49 +102,44 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
             #ActionProviderBase.manage_options + \
             #SimpleItem.manage_options
 
-    security.declareProtected(CMFCorePermissions.ManagePortal,
-                              'manage_imageScales')
+    security.declareProtected(ManagePortal, 'manage_imageScales')
     manage_imageScales = PageTemplateFile('imageScales', WWW_DIR)
     
-    security.declareProtected(CMFCorePermissions.ManagePortal,
-                              'manage_recatalog')
+    security.declareProtected(ManagePortal, 'manage_recatalog')
     manage_recatalog = PageTemplateFile('recatalog', WWW_DIR)
 
-    security.declareProtected(CMFCorePermissions.ManagePortal,
-                              'manage_typemigration')
+    security.declareProtected(ManagePortal, 'manage_typemigration')
     manage_typeMigration = PageTemplateFile('typeMigration', WWW_DIR)
 
-    security.declareProtected(CMFCorePermissions.ManagePortal,
-                              'manage_versionMigration')
+    security.declareProtected(ManagePortal, 'manage_versionMigration')
     manage_versionMigration = PageTemplateFile('versionMigration', WWW_DIR)
 
 
-    security.declareProtected(CMFCorePermissions.ManagePortal,
-                              'manage_overview')
+    security.declareProtected(ManagePortal, 'manage_overview')
     manage_overview = PageTemplateFile('overview', WWW_DIR)
     
     ## version code
 
-    security.declareProtected(CMFCorePermissions.ManagePortal, 'setVersionFromFS')
+    security.declareProtected(ManagePortal, 'setVersionFromFS')
     def setVersionFromFS(self):
         """Updates internal numversion and version from FS
         """
         self._numversion, self._version = self.getVersionFromFS()
     
-    security.declareProtected(CMFCorePermissions.ManagePortal, 'getVersionFromFS')
+    security.declareProtected(ManagePortal, 'getVersionFromFS')
     def getVersionFromFS(self):
         """Get numversion and version from FS
         """
         from Products.ATContentTypes import __pkginfo__ as pkginfo 
         return pkginfo.numversion, pkginfo.version
 
-    security.declareProtected(CMFCorePermissions.ManagePortal, 'getVersion')
+    security.declareProtected(ManagePortal, 'getVersion')
     def getVersion(self):
         """Get internal numversion and version
         """
         return self._numversion, self._version
  
-    security.declareProtected(CMFCorePermissions.View, 'needsVersionMigration')
+    security.declareProtected(View, 'needsVersionMigration')
     def needsVersionMigration(self):
         """Version migration is required when fs version != installed version
         """
@@ -170,22 +166,19 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
 
     ## recataloging code
 
-    security.declareProtected(CMFCorePermissions.ManagePortal,
-                              'getCMFTypesAreRecataloged')
+    security.declareProtected(ManagePortal, 'getCMFTypesAreRecataloged')
     def getCMFTypesAreRecataloged(self):
         """Get the is recatalog flag
         """
         return bool(self._cmfTypesAreRecataloged)
     
-    security.declareProtected(CMFCorePermissions.ManagePortal,
-                              'setCMFTypesAreRecataloged')
+    security.declareProtected(ManagePortal, 'setCMFTypesAreRecataloged')
     def setCMFTypesAreRecataloged(self, value=True):
         """set the is recatalog flag
         """
         self._cmfTypesAreRecataloged = value
 
-    security.declareProtected(CMFCorePermissions.ManagePortal,
-                              'recatalogCMFTypes')
+    security.declareProtected(ManagePortal, 'recatalogCMFTypes')
     def recatalogCMFTypes(self, remove=True):
         """Remove and recatalog all CMF core products + CMFPlone types
         """
@@ -212,8 +205,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
 
     # image scales
 
-    security.declareProtected(CMFCorePermissions.ManagePortal,
-                              'recreateImageScales')
+    security.declareProtected(ManagePortal, 'recreateImageScales')
     def recreateImageScales(self, portal_type=('Image', 'News Item', )):
         """Recreates AT Image scales (doesn't remove unused!)
         """
@@ -343,8 +335,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
 
     # utilities
 
-    security.declareProtected(CMFCorePermissions.ManagePortal,
-                              'getReadme')
+    security.declareProtected(ManagePortal, 'getReadme')
     def getReadme(self, stx_level=4):
         f = open(os.path.join(ATCT_DIR, 'README.txt'))
         return format_stx(f.read(), stx_level)

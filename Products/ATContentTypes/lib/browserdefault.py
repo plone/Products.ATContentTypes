@@ -31,7 +31,7 @@ from Globals import InitializeClass
 from Acquisition import aq_parent, aq_base
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
 
 from Products.Archetypes.TemplateMixin import TemplateMixin, TemplateMixinSchema
 
@@ -68,7 +68,7 @@ class BrowserDefaultMixin(TemplateMixin):
 
     security = ClassSecurityInfo()
 
-    security.declareProtected(CMFCorePermissions.View, 'defaultView')
+    security.declareProtected(View, 'defaultView')
     def defaultView(self, request=None):
         """
         Get the actual view to use. If a default page is set, its id will
@@ -99,7 +99,7 @@ class BrowserDefaultMixin(TemplateMixin):
         else:
             return self, [self.defaultView(request),]
 
-    security.declareProtected(CMFCorePermissions.View, 'getDefaultPage')
+    security.declareProtected(View, 'getDefaultPage')
     def getDefaultPage(self):
         """
         Return the id of the default page, or None if none is set. The default
@@ -112,7 +112,7 @@ class BrowserDefaultMixin(TemplateMixin):
             return None
         return default
 
-    security.declareProtected(CMFCorePermissions.View, 'getLayout')
+    security.declareProtected(View, 'getLayout')
     def getLayout(self, **kw):
         """
         Get the selected layout template. Note that a selected default page
@@ -184,7 +184,7 @@ class BrowserDefaultMixin(TemplateMixin):
         member = mtool.getAuthenticatedMember()
         return member.has_permission(ModifyViewTemplate, self)
 
-    security.declareProtected(CMFCorePermissions.View, 'getAvailableLayouts')
+    security.declareProtected(View, 'getAvailableLayouts')
     def getAvailableLayouts(self):
         """
         Get the layouts registered for this object.

@@ -59,7 +59,9 @@ from zExceptions import BadRequest
 from webdav.Lockable import ResourceLockedError
 from OFS.IOrderSupport import IOrderedContainer
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import ManageProperties
 from Products.CMFCore.utils import getToolByName
 
 from Products.ATContentTypes.lib.browserdefault import BrowserDefaultMixin
@@ -97,7 +99,7 @@ translate_actions = ({
     'id'          : 'translate',
     'name'        : 'Translate',
     'action'      : 'string:${object_url}/translate_item',
-    'permissions' : (CMFCorePermissions.ModifyPortalContent, ),
+    'permissions' : (ModifyPortalContent, ),
     'condition'   : 'not: object/isCanonical|nothing',
     },
     )
@@ -180,17 +182,17 @@ class ATCTMixin(BrowserDefaultMixin):
         'id'          : 'view',
         'name'        : 'View',
         'action'      : 'string:${object_url}/view',
-        'permissions' : (CMFCorePermissions.View,)
+        'permissions' : (View,)
          },
         {
         'id'          : 'edit',
         'name'        : 'Edit',
         'action'      : 'string:${object_url}/atct_edit',
-        'permissions' : (CMFCorePermissions.ModifyPortalContent,),
+        'permissions' : (ModifyPortalContent,),
          },
         )
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent,
+    security.declareProtected(ModifyPortalContent,
                               'initializeArchetype')
     def initializeArchetype(self, **kwargs):
         """called by the generated add* factory in types tool
@@ -212,7 +214,7 @@ class ATCTMixin(BrowserDefaultMixin):
                 raise
                 #_default_logger.log_exc()
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'markCreationFlag')
+    security.declareProtected(ModifyPortalContent, 'markCreationFlag')
     def markCreationFlag(self):
         """Sets flag on the instance to indicate that the object hasn't been
         saved properly (unset in content_edit); this will only be done if a REQUEST is
@@ -221,7 +223,7 @@ class ATCTMixin(BrowserDefaultMixin):
         if shasattr(self, 'REQUEST'):
             self._at_creation_flag = True
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'unmarkCreationFlag')
+    security.declareProtected(ModifyPortalContent, 'unmarkCreationFlag')
     def unmarkCreationFlag(self):
         """Remove creation flag
         """
@@ -235,14 +237,14 @@ class ATCTMixin(BrowserDefaultMixin):
                 log("unmarkCreationFlag: at_post_create_script not callable")
                 pass
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'checkCreationFlag')
+    security.declareProtected(ModifyPortalContent, 'checkCreationFlag')
     def checkCreationFlag(self):
         """returns True if the object has been fully saved, False otherwise
         """
         return getattr(aq_inner(self), '_at_creation_flag', False)
 
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'edit')
+    security.declareProtected(ModifyPortalContent, 'edit')
     def edit(self, *args, **kwargs):
         """Reimplementing edit() to have a compatibility method for the old
         cmf edit() method
@@ -266,7 +268,7 @@ class ATCTMixin(BrowserDefaultMixin):
         """
         raise NotImplementedError("cmf_edit method isn't implemented")
 
-    security.declareProtected(CMFCorePermissions.View, 'getObjPositionInParent')
+    security.declareProtected(View, 'getObjPositionInParent')
     def getObjPositionInParent(self):
         """Helper method for catalog based folder contents
         """
@@ -280,7 +282,7 @@ class ATCTMixin(BrowserDefaultMixin):
                 log_exc()
         return 0
         
-    security.declareProtected(CMFCorePermissions.View, 'getObjSize')
+    security.declareProtected(View, 'getObjSize')
     def getObjSize(self, obj=None, size=None):
         """Helper method for catalog based folder contents
         """
@@ -352,14 +354,14 @@ class ATCTContent(ATCTMixin, BaseContent):
           'id'          : 'external_edit',
           'name'        : 'External Edit',
           'action'      : 'string:${object_url}/external_edit',
-          'permissions' : (CMFCorePermissions.ModifyPortalContent,),
+          'permissions' : (ModifyPortalContent,),
           'visible'     : 0,
          },
         {
         'id'          : 'local_roles',
         'name'        : 'Sharing',
         'action'      : 'string:${object_url}/folder_localrole_form',
-        'permissions' : (CMFCorePermissions.ManageProperties,),
+        'permissions' : (ManageProperties,),
          },
         )
     )
@@ -378,13 +380,13 @@ class ATCTFileContent(ATCTContent):
         'id'          : 'download',
         'name'        : 'Download',
         'action'      : 'string:${object_url}/download',
-        'permissions' : (CMFCorePermissions.View,),
+        'permissions' : (View,),
         'condition'   : 'member', # don't show border for anon user
          },
         )
     )
 
-    security.declareProtected(CMFCorePermissions.View, 'download')
+    security.declareProtected(View, 'download')
     def download(self, REQUEST=None, RESPONSE=None):
         """Download the file (use default index_html)
         """
@@ -395,7 +397,7 @@ class ATCTFileContent(ATCTContent):
         field = self.getPrimaryField()
         return field.download(self, REQUEST, RESPONSE)
 
-    security.declareProtected(CMFCorePermissions.View, 'index_html')
+    security.declareProtected(View, 'index_html')
     def index_html(self, REQUEST=None, RESPONSE=None):
         """Make it directly viewable when entering the objects URL
         """
@@ -409,7 +411,7 @@ class ATCTFileContent(ATCTContent):
             return data.index_html(REQUEST, RESPONSE)
         # XXX what should be returned if no data is present?
 
-    security.declareProtected(CMFCorePermissions.View, 'get_data')
+    security.declareProtected(View, 'get_data')
     def get_data(self):
         """CMF compatibility method
         """
@@ -418,20 +420,20 @@ class ATCTFileContent(ATCTContent):
 
     data = ComputedAttribute(get_data, 1)
 
-    security.declareProtected(CMFCorePermissions.View, 'get_size')
+    security.declareProtected(View, 'get_size')
     def get_size(self):
         """CMF compatibility method
         """
         f = self.getPrimaryField()
         return f.get_size(self) or 0
 
-    security.declareProtected(CMFCorePermissions.View, 'size')
+    security.declareProtected(View, 'size')
     def size(self):
         """Get size (image_view.pt)
         """
         return self.get_size()
 
-    security.declareProtected(CMFCorePermissions.View, 'get_content_type')
+    security.declareProtected(View, 'get_content_type')
     def get_content_type(self):
         """CMF compatibility method
         """
@@ -451,7 +453,7 @@ class ATCTFileContent(ATCTContent):
         ##self.ZCacheable_set(None)
         ##self.http__refreshEtag()
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent,
+    security.declareProtected(ModifyPortalContent,
                               'manage_edit')
     def manage_edit(self, title, content_type, precondition='',
                     filedata=None, REQUEST=None):
@@ -509,7 +511,7 @@ class ATCTFileContent(ATCTContent):
         else:
             return False
 
-    security.declareProtected(CMFCorePermissions.View, 'post_validate')
+    security.declareProtected(View, 'post_validate')
     def post_validate(self, REQUEST=None, errors=None):
         """Validates upload file and id
         """
@@ -601,7 +603,7 @@ class ATCTFileContent(ATCTContent):
         mutator = self.getPrimaryField().getMutator(self)
         mutator(fh.read(), mimetype=mimetype, filename=filename)
 
-    security.declareProtected(CMFCorePermissions.View, 'getUploadURL')
+    security.declareProtected(View, 'getUploadURL')
     def getUrlUpload(self, **kwargs):
         """Always return the default value since we don't store the url
         """
@@ -627,13 +629,13 @@ class ATCTFolder(ATCTMixin, BaseFolder):
         'id'          : 'local_roles',
         'name'        : 'Sharing',
         'action'      : 'string:${object_url}/folder_localrole_form',
-        'permissions' : (CMFCorePermissions.ManageProperties,),
+        'permissions' : (ManageProperties,),
          },
         {
         'id'          : 'view',
         'name'        : 'View',
         'action'      : 'string:${folder_url}/',
-        'permissions' : (CMFCorePermissions.View,),
+        'permissions' : (View,),
          },
         )
     )
@@ -658,7 +660,7 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
             #return OrderedBaseFolder.__browser_default__(self, request)
             return self, [self.getLayout(),]
 
-    security.declareProtected(CMFCorePermissions.View, 'get_size')
+    security.declareProtected(View, 'get_size')
     def get_size(self):
         """Returns 1 as folders have no size."""
         return 1
@@ -679,18 +681,18 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
         'id'          : 'local_roles',
         'name'        : 'Sharing',
         'action'      : 'string:${object_url}/folder_localrole_form',
-        'permissions' : (CMFCorePermissions.ManageProperties,),
+        'permissions' : (ManageProperties,),
          },
         {
         'id'          : 'view',
         'name'        : 'View',
         'action'      : 'string:${folder_url}/',
-        'permissions' : (CMFCorePermissions.View,),
+        'permissions' : (View,),
          },
         )
     )
 
-    security.declareProtected(CMFCorePermissions.View, 'index_html')
+    security.declareProtected(View, 'index_html')
     def index_html(self):
        """Special case index_html"""
        if HAS_PLONE2:
@@ -734,18 +736,18 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
         'id'          : 'local_roles',
         'name'        : 'Sharing',
         'action'      : 'string:${object_url}/folder_localrole_form',
-        'permissions' : (CMFCorePermissions.ManageProperties,),
+        'permissions' : (ManageProperties,),
          },
         {
         'id'          : 'view',
         'name'        : 'View',
         'action'      : 'string:${folder_url}/',
-        'permissions' : (CMFCorePermissions.View,),
+        'permissions' : (View,),
          },
         )
     )
 
-    security.declareProtected(CMFCorePermissions.View, 'index_html')
+    security.declareProtected(View, 'index_html')
     def index_html(self):
         """
         BTree folders don't store objects as attributes, the

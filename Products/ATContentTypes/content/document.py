@@ -28,7 +28,8 @@ from types import TupleType
 import time
 
 from ZPublisher.HTTPRequest import HTTPRequest
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
@@ -101,20 +102,20 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
                             HistoryAwareMixin.actions
                            )
 
-    security.declareProtected(CMFCorePermissions.View, 'CookedBody')
+    security.declareProtected(View, 'CookedBody')
     def CookedBody(self, stx_level='ignored'):
         """CMF compatibility method
         """
         return self.getText()
 
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'EditableBody')
+    security.declareProtected(ModifyPortalContent, 'EditableBody')
     def EditableBody(self):
         """CMF compatibility method
         """
         return self.getRawText()
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent,
+    security.declareProtected(ModifyPortalContent,
                               'setFormat')
     def setFormat(self, value):
         """CMF compatibility method
@@ -133,7 +134,7 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
             value = translateMimetypeAlias(value)
         ATCTContent.setFormat(self, value)
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setText')
+    security.declareProtected(ModifyPortalContent, 'setText')
     def setText(self, value, **kwargs):
         """Body text mutator
 
@@ -232,7 +233,7 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
 
-    security.declareProtected(CMFCorePermissions.View, 'get_size')
+    security.declareProtected(View, 'get_size')
     def get_size(self):
         """Returns the size of the (raw) text field."""
         return len(self.getRawText()) or 1

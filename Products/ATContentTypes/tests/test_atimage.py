@@ -31,7 +31,8 @@ from Products.ATContentTypes.tests import atcttestcase
 
 from Acquisition import aq_base
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
@@ -170,10 +171,9 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setImage',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
-                        CMFCorePermissions.ModifyPortalContent,
+        self.failUnless(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)

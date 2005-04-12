@@ -24,7 +24,7 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.ATFavorite'
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
@@ -88,7 +88,7 @@ class ATFavorite(ATCTContent):
     security       = ClassSecurityInfo()
 
     # Support for preexisting api
-    security.declareProtected(CMFCorePermissions.View, 'getRemoteUrl')
+    security.declareProtected(View, 'getRemoteUrl')
     def getRemoteUrl(self):
         """returns the remote URL of the Link
         """
@@ -104,7 +104,7 @@ class ATFavorite(ATCTContent):
 
     remote_url = ComputedAttribute(getRemoteUrl, 1)
 
-    security.declareProtected(CMFCorePermissions.View, 'getIcon')
+    security.declareProtected(View, 'getIcon')
     def getIcon(self, relative_to_portal=0):
         """Instead of a static icon, like for Link objects, we want
         to display an icon based on what the Favorite links to.
@@ -115,7 +115,7 @@ class ATFavorite(ATCTContent):
         else:
             return 'favorite_broken_icon.gif'
 
-    security.declareProtected(CMFCorePermissions.View, 'getObject')
+    security.declareProtected(View, 'getObject')
     def getObject(self):
         """Return the actual object that the Favorite is
         linking to
@@ -138,7 +138,7 @@ class ATFavorite(ATCTContent):
             remote_url = kwargs.get('remote_url', None)
         self.update(remoteUrl = remote_url, **kwargs)
 
-    security.declareProtected(CMFCorePermissions.View, 'get_size')
+    security.declareProtected(View, 'get_size')
     def get_size(self):
         """Returns the size of the remote url."""
         return len(self.getRemoteUrl()) or 1
