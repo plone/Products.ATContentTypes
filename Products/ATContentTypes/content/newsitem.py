@@ -26,7 +26,7 @@ __old_name__ = 'Products.ATContentTypes.types.ATNewsItem'
 
 from AccessControl import ClassSecurityInfo
 
-from Products.CMFCore.permissions import View
+from Products.CMFCore import CMFCorePermissions
 
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import ImageField
@@ -132,7 +132,7 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
 
     security = ClassSecurityInfo()
 
-    security.declareProtected(View, 'tag')
+    security.declareProtected(CMFCorePermissions.View, 'tag')
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
         """

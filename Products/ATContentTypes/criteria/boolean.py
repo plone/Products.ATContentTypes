@@ -24,7 +24,7 @@ __author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATBooleanCriterion'
 
-from Products.CMFCore.permissions import View
+from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
@@ -67,7 +67,7 @@ class ATBooleanCriterion(ATBaseCriterion):
 
     shortDesc      = 'Boolean (true/false)'
 
-    security.declareProtected(View, 'getCriteriaItems')
+    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
         if self.getBool():

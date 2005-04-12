@@ -24,7 +24,7 @@ __docformat__ = 'restructuredtext'
 
 from Products.Archetypes.public import BaseContentMixin
 
-from Products.CMFCore.permissions import View
+from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 
@@ -87,7 +87,7 @@ class ATBaseCriterion(NonRefCatalogContent):
         self.getField('id').set(self, id)
         self.getField('field').set(self, field)
 
-    security.declareProtected(View, 'getId')
+    security.declareProtected(CMFCorePermissions.View, 'getId')
     def getId(self):
         """Get the object id"""
         return str(self.id)
@@ -97,16 +97,16 @@ class ATBaseCriterion(NonRefCatalogContent):
         """
         assert value == self.getId(), 'You are not allowed to change the id'
 
-    security.declareProtected(View, 'Type')
+    security.declareProtected(CMFCorePermissions.View, 'Type')
     def Type(self):
         return self.archetype_name
 
-    security.declareProtected(View, 'Description')
+    security.declareProtected(CMFCorePermissions.View, 'Description')
     def Description(self):
         lines = [ line.strip() for line in self.__doc__.splitlines() ]
         return ' '.join( [ line for line in lines if line ] )
 
-    security.declareProtected(View, 'getCriteriaItems')
+    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):
         """Return a sequence of items to be used to build the catalog query.
         """

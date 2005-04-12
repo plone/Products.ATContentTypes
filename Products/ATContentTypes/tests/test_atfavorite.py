@@ -29,8 +29,7 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore import CMFCorePermissions
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
@@ -153,9 +152,10 @@ class TestATFavoriteFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setRemoteUrl',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
+        self.failUnless(field.read_permission == CMFCorePermissions.View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission == ModifyPortalContent,
+        self.failUnless(field.write_permission ==
+                        CMFCorePermissions.ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)

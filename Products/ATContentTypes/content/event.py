@@ -26,8 +26,7 @@ __old_name__ = 'Products.ATContentTypes.types.ATEvent'
 
 from types import StringType
 
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.permissions import View
+from Products.CMFCore.CMFCorePermissions import ModifyPortalContent, View
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from DateTime import DateTime

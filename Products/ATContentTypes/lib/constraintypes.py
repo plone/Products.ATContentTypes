@@ -30,9 +30,7 @@ from Acquisition import aq_parent
 from Acquisition import aq_inner
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.permissions import AddPortalContent
-from Products.CMFCore.permissions import View
+from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.PortalFolder import PortalFolder
 
 from Products.Archetypes.public import Schema
@@ -146,7 +144,7 @@ class ConstrainTypesMixin:
     #
     # Sanity validator
     #
-    security.declareProtected(ModifyPortalContent, 
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 
                                 'validate_preferredTypes')
     def validate_preferredTypes(self, value):
         """Ensure that the preferred types is a subset of the allowed types.
@@ -167,7 +165,7 @@ class ConstrainTypesMixin:
     # Overrides + supplements for CMF types machinery
     #
 
-    security.declareProtected(View, 'getLocallyAllowedTypes') 
+    security.declareProtected(CMFCorePermissions.View, 'getLocallyAllowedTypes') 
     def getLocallyAllowedTypes(self):
         """If enableTypeRestrictions is ENABLE, return the list of types
         set. If it is ACQUIRE, get the types set on the parent so long
@@ -190,7 +188,7 @@ class ConstrainTypesMixin:
             raise ValueError, "Invalid value for enableAddRestriction" 
         
     
-    security.declareProtected(View, 
+    security.declareProtected(CMFCorePermissions.View, 
                                 'getImmediatelyAddableTypes') 
     def getImmediatelyAddableTypes(self):
         """Get the list of type ids which should be immediately addable.
@@ -236,7 +234,7 @@ class ConstrainTypesMixin:
         return [ fti for fti in ftis if fti.isConstructionAllowed(self) ]
 
     # overrides CMFCore's PortalFolder invokeFactory
-    security.declareProtected(AddPortalContent, 'invokeFactory')
+    security.declareProtected(CMFCorePermissions.AddPortalContent, 'invokeFactory')
     def invokeFactory(self, type_name, id, RESPONSE=None, *args, **kw):
         """Invokes the portal_types tool
         """

@@ -29,7 +29,7 @@ from types import TupleType
 from types import StringType
 from locale import strcoll
 
-from Products.CMFCore.permissions import View
+from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.CatalogTool import CatalogTool
 from AccessControl import ClassSecurityInfo
@@ -181,7 +181,7 @@ class ATTopic(ATCTFolder):
         #'id'          : 'view',
         #'name'        : 'View',
         #'action'      : 'string:${folder_url}/',
-        #'permissions' : (View,)
+        #'permissions' : (CMFCorePermissions.View,)
         #},
         {
         'id'          : 'edit',
@@ -374,7 +374,7 @@ class ATTopic(ATCTFolder):
             allowed = flat
         return allowed
 
-    security.declareProtected(View, 'buildQuery')
+    security.declareProtected(CMFCorePermissions.View, 'buildQuery')
     def buildQuery(self):
         """Construct a catalog query using our criterion objects.
         """
@@ -399,7 +399,7 @@ class ATTopic(ATCTFolder):
                 result[key] = value
         return result
 
-    security.declareProtected(View, 'queryCatalog')
+    security.declareProtected(CMFCorePermissions.View, 'queryCatalog')
     def queryCatalog(self, REQUEST=None, **kw):
         """Invoke the catalog using our criteria to augment any passed
             in query before calling the catalog.
@@ -455,7 +455,7 @@ class ATTopic(ATCTFolder):
             for cid in criterion_id:
                 self._delObject(cid)
 
-    security.declareProtected(View, 'getCriterion')
+    security.declareProtected(CMFCorePermissions.View, 'getCriterion')
     def getCriterion(self, criterion_id):
         """Get the criterion object.
         """
@@ -482,7 +482,7 @@ class ATTopic(ATCTFolder):
         objs = [brain.getObject() for brain in brains]
         return [obj for obj in objs if obj is not None]
 
-    security.declareProtected(View, 'get_size')
+    security.declareProtected(CMFCorePermissions.View, 'get_size')
     def get_size(self):
         """Returns 1 as topics have no size."""
         return 1

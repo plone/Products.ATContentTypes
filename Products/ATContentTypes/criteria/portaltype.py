@@ -23,7 +23,7 @@ __author__  = 'Godefroid Chapelle'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATPortalTypeCriterion'
 
-from Products.CMFCore.permissions import View
+from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
@@ -63,7 +63,7 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
 
     shortDesc      = 'portal types values'
 
-    security.declareProtected(View, 'getCriteriaItems')
+    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCurrentValues(self):
          """Return enabled portal types"""
          topic_tool = getToolByName(self, TOOLNAME)
@@ -71,7 +71,7 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
          portal_types = [t[1] or t[0] for t in portal_types]
          return DisplayList(zip(portal_types,portal_types))
 
-    security.declareProtected(View, 'getCriteriaItems')
+    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
 

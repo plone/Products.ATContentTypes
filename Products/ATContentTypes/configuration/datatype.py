@@ -22,7 +22,7 @@
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-from Products.CMFCore import permissions as CMFCorePermissions
+from Products.CMFCore import CMFCorePermissions
 from AccessControl import Permissions as ZopePermissions
 from ZConfig.datatypes import IdentifierConversion
 from ZConfig.datatypes import stock_datatypes

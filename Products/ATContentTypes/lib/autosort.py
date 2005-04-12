@@ -23,8 +23,7 @@ __docformat__ = 'restructuredtext'
 
 from ExtensionClass import Base
 from Globals import InitializeClass
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from OFS.IOrderSupport import IOrderedContainer
@@ -122,7 +121,7 @@ class AutoSortSupport(Base):
     _default_sort_folderish_first = True
     _default_sort_auto = True
 
-    security.declareProtected(ModifyPortalContent, 'setDefaultSorting')
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setDefaultSorting')
     def setDefaultSorting(self, key, reverse=_marker):
         """Set default sorting key and direction.
         """
@@ -130,43 +129,43 @@ class AutoSortSupport(Base):
         if reverse is not _marker:
             self._default_sort_reverse = bool(reverse)
     
-    security.declareProtected(View, 'getDefaultSorting')
+    security.declareProtected(CMFCorePermissions.View, 'getDefaultSorting')
     def getDefaultSorting(self):
         """Get default sorting key and direction.
         """
         return self._default_sort_key, self._default_sort_reverse
         
-    security.declareProtected(ModifyPortalContent, 'setSortFolderishFirst')
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setSortFolderishFirst')
     def setSortFolderishFirst(self, value):
         """Set the value for sorting folderish objects before ordinary items
         """
         self._default_sort_folderish_first = bool(value)
         
-    security.declareProtected(View, 'getSortFolderishFirst')
+    security.declareProtected(CMFCorePermissions.View, 'getSortFolderishFirst')
     def getSortFolderishFirst(self):
         """Get the value for sorting folderish objects before ordinary items
         """
         return self._default_sort_folderish_first
         
-    security.declareProtected(ModifyPortalContent, 'setSortReverse')
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setSortReverse')
     def setSortReverse(self, value):
         """Set reverse sort setting
         """
         self._default_sort_reverse = bool(value)
         
-    security.declareProtected(View, 'getSortReverse')
+    security.declareProtected(CMFCorePermissions.View, 'getSortReverse')
     def getSortReverse(self):
         """Get reverse sort setting
         """
         return self._default_sort_reverse
 
-    security.declareProtected(ModifyPortalContent, 'setSortAuto')
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setSortAuto')
     def setSortAuto(self, value):
        """Set auto sort setting
        """
        self._default_sort_auto = bool(value)
         
-    security.declareProtected(View, 'getSortAuto')
+    security.declareProtected(CMFCorePermissions.View, 'getSortAuto')
     def getSortAuto(self):
         """Get auto sort setting
         """
@@ -193,7 +192,7 @@ class AutoOrderSupport(AutoSortSupport, OrderedContainer):
         self.orderObjects(key, reverse)
         # TODO: folderish first is missing, use the catalog to resort it!
 
-    security.declareProtected(ModifyPortalContent, 'moveObject')
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'moveObject')
     def moveObject(self, id, position):
         obj_idx  = self.getObjectPosition(id)
         if obj_idx == position:

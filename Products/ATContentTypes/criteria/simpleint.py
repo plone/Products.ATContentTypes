@@ -22,7 +22,7 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATSimpleIntCriterion'
 
-from Products.CMFCore.permissions import View
+from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.public import Schema
@@ -104,7 +104,7 @@ class ATSimpleIntCriterion(ATBaseCriterion):
 
     shortDesc      = 'exact integer value'
 
-    security.declareProtected(View, 'getCriteriaItems')
+    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
         val = self.Value()
@@ -121,7 +121,7 @@ class ATSimpleIntCriterion(ATBaseCriterion):
 
         return tuple(result)
 
-    security.declareProtected(View, 'post_validate')
+    security.declareProtected(CMFCorePermissions.View, 'post_validate')
     def post_validate(self, REQUEST, errors):
         """Check that Value2 is set if range is set to min:max"""
         direction = REQUEST.get('direction', self.getDirection())

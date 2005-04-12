@@ -32,7 +32,7 @@ from Products.Archetypes.public import StringField
 from Products.Archetypes.public import StringWidget
 from Products.Archetypes.public import SelectionWidget
 
-from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore import CMFCorePermissions
 
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.lib.browserdefault import BrowserDefaultSchema
@@ -52,7 +52,7 @@ relatedItemsField = ReferenceField('relatedItems',
         multiValued = True,
         isMetadata = True,
         languageIndependent = False,
-        write_permission = ModifyPortalContent,
+        write_permission = CMFCorePermissions.ModifyPortalContent,
         widget = ReferenceBrowserWidget(
             allow_search = True,
             allow_browse = True,
