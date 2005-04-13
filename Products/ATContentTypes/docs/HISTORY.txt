@@ -10,7 +10,9 @@
    to identical (modulo an earliestTime() where it makes sense).  The
    inconsistency shouldn't be too important as the CMF date criteria was
    entirely inscrutable.  Also changed some strings for criteria descriptions
-   for consistency. Fixes bug #1181418 (http://sourceforge.net/tracker/index.php?func=detail&aid=1181418&group_id=55262&atid=645337)
+   for consistency. Fixes bug #1181418 (http://sourceforge.net/tracker/index.php?func=detail&aid=1181418&group_id=55262&atid=645337).
+   Thanks to Dean Jackson for filing this bug and devising a reasonably usable
+   UI.
    [alecm]
 
  * Made the portal_types criteria work properly with either Types or
