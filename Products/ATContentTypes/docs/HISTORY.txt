@@ -18,8 +18,9 @@
  * Made the portal_types criteria work properly with either Types or
    portal_types indexes.  Disabled types restrictions in TopicTool, now uses the
    new Plone 2.1 search blacklist for types (site_properties.unfriendly_types).
-   This creates a plone 2.1 dependency, as does a change in the
-   atct_subtopic_form which now uses a macro from plone 2.1.
+   This creates a plone 2.1 dependency. Also a change was made to the
+   atct_subtopic_form so that it now uses a macro from plone 2.1, this fixes
+   issue #1164541 (http://sourceforge.net/tracker/index.php?func=detail&aid=1164541&group_id=55262&atid=645337)
    [alecm]
 
  * Reworked linked select lists for criteria to use custom XMLHTTPRequest code,
