@@ -114,6 +114,7 @@ class ATTopicsTool(Base):
             objIndex = TopicIndex(index, friendlyName, description, enabled, criteria)
             
         self.topic_indexes[index]=objIndex
+        self._p_changed=1
     
     security.declareProtected(CMFCorePermissions.ManagePortal,'addMetadata')
     def addMetadata(self, metadata, friendlyName='', description='', enabled=False):
@@ -128,6 +129,7 @@ class ATTopicsTool(Base):
             objMeta = TopicIndex(metadata, friendlyName, description, enabled)
 
         self.topic_metadata[metadata]=objMeta
+        self._p_changed=1
 
 
     security.declareProtected(CMFCorePermissions.ManagePortal,'updateIndex')
@@ -165,7 +167,7 @@ class ATTopicsTool(Base):
         """ Removes an existing index from the registry """
         if self.topic_indexes.has_key(index):
             del self.topic_indexes[index]
-            self._p_changed=1            
+            self._p_changed=1
     
     security.declareProtected(CMFCorePermissions.ManagePortal,'removeMetadata')
     def removeMetadata(self, metadata):

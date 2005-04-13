@@ -270,7 +270,9 @@ class ATTopic(ATCTFolder):
         """Return a list of our criteria objects.
         """
         val = self.objectValues(self.listCriteriaMetaTypes())
-        val.sort()
+        # XXX Sorting results in inconsistent order. Leave them in the order
+        # they were added.
+        #val.sort()
         return val
 
     security.declareProtected(ChangeTopics, 'listSearchCriteria')
@@ -358,19 +360,20 @@ class ATTopic(ATCTFolder):
         tool = getToolByName(self, TOOLNAME)
         return tool.getMetadataDisplay(exclude)
 
-    def allowedCriteriaForField(self, field, flat_list=False):
-        """ Return all valid criteria for a given field, optionally include
-            descriptions in list in format [desc1, val1, desc2, val2] for 
-            javascript selector. """
+    security.declareProtected(CMFCorePermissions.View, 'allowedCriteriaForField')
+    def allowedCriteriaForField(self, field, string_list=False):
+        """ Return all valid criteria for a given field.  Optionally include
+            descriptions in list in format [(desc1, val1) , (desc2, val2)] for
+            javascript selector."""
         tool = getToolByName(self, TOOLNAME)
         criteria = tool.getIndex(field).criteria
         allowed = [crit for crit in criteria
                                 if self.validateAddCriterion(field, crit)]
-        if flat_list:
+        if string_list:
             flat = []
             for a in allowed:
                 desc = _criterionRegistry[a].shortDesc
-                flat.extend([desc,a])
+                flat.append((desc,a))
             allowed = flat
         return allowed
 

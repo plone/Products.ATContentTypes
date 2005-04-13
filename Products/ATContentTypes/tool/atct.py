@@ -59,7 +59,7 @@ configlets = ({
     'id' : TOOLNAME,
     'appId' : 'ATContentTypes',
     'name' : 'ATContentTypes Tool',
-    'action' : 'string:${portal_url}/%s/atct_manageTopicSetup' % TOOLNAME,
+    'action' : 'string:${portal_url}/%s/atct_manageTopicIndex' % TOOLNAME,
     'category' : 'Products',
     'permission' : CMFCorePermissions.ManagePortal,
     'imageUrl' : 'tool_icon.gif'
@@ -544,5 +544,10 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
         members = mt.getMembersFolder()
         if members is not None:
             members._setPortalTypeName('Large Plone Folder')
+
+    security.declarePrivate('getConfiglets')
+    def getConfiglets(self):
+        """ Returns the list of configlets for this tool """
+        return tuple(configlets)
             
 InitializeClass(ATCTTool)

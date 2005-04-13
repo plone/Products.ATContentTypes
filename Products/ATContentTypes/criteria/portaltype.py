@@ -66,9 +66,13 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCurrentValues(self):
          """Return enabled portal types"""
-         topic_tool = getToolByName(self, TOOLNAME)
-         portal_types = topic_tool.getAllowedPortalTypes()
-         portal_types = [t[1] or t[0] for t in portal_types]
+         plone_tool = getToolByName(self, 'plone_utils')
+         portal_types = plone_tool.getUserFriendlyTypes()
+         if self.Field() == 'Type':
+            types_tool = getToolByName(self, 'portal_types')
+            portal_types = [types_tool.getTypeInfo(t).Title() or t for t in portal_types]
+         else:
+            portal_types = [t for t in portal_types]
          return DisplayList(zip(portal_types,portal_types))
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')

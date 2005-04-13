@@ -56,18 +56,33 @@ DateOptions = IntDisplayList((
     ))
 
 CompareOperations = DisplayList((
-                    ('min', 'min')
-                  , ('max', 'max')
-                  , ('within_day', 'within_day')
+                    ('more', 'More than')
+                  , ('less', 'Less than')
+                  , ('within_day', 'On the day')
     ))
 
 RangeOperations = DisplayList((
-                    ('-', 'old')
-                  , ('+', 'ahead')
+                    ('-', 'ago')
+                  , ('+', 'in the future')
     ))
 
 
 ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
+    StringField('operation',
+                required=1,
+                mode="rw",
+                default=None,
+                write_permission=ChangeTopics,
+                vocabulary=CompareOperations,
+                enforceVocabulary=1,
+                widget=SelectionWidget(
+                    label="More or less",
+                    label_msgid="label_date_criteria_operation",
+                    description="",
+                    description_msgid="help_date_criteria_operation",
+                    i18n_domain="plone",
+                    format="select"),
+                ),
     IntegerField('value',
                 required=1,
                 mode="rw",
@@ -77,24 +92,10 @@ ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
                 default=None,
                 vocabulary=DateOptions,
                 widget=SelectionWidget(
-                    label="Date",
+                    label="Which day",
                     label_msgid="label_date_criteria_value",
-                    description="Reference date",
+                    description="",
                     description_msgid="help_date_criteria_value",
-                    i18n_domain="plone"),
-                ),
-    StringField('operation',
-                required=1,
-                mode="rw",
-                default=None,
-                write_permission=ChangeTopics,
-                vocabulary=CompareOperations,
-                enforceVocabulary=1,
-                widget=SelectionWidget(
-                    label="Operation name",
-                    label_msgid="label_date_criteria_operation",
-                    description="Operation applied to the values",
-                    description_msgid="help_date_criteria_operation",
                     i18n_domain="plone"),
                 ),
     StringField('dateRange',
@@ -105,18 +106,18 @@ ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
                 vocabulary=RangeOperations,
                 enforceVocabulary=1,
                 widget=SelectionWidget(
-                    label="date range",
+                    label="In the past or future",
                     label_msgid="label_date_criteria_range",
-                    description="Specify if the range is ahead of "
-                    "the reference date or not.",
+                    description="Ignore this if you selected Now above",
                     description_msgid="help_date_criteria_range",
-                    i18n_domain="plone"),
+                    i18n_domain="plone",
+                    format="select"),
                 ),
     ))
 
 
 class ATDateCriteria(ATBaseCriterion):
-    """A date criteria"""
+    """A relative date criterion"""
 
 
     __implements__ = ATBaseCriterion.__implements__ + (IATTopicSearchCriterion, )
@@ -128,7 +129,7 @@ class ATDateCriteria(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'exact date value'
+    shortDesc      = 'relative date'
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):
@@ -143,13 +144,26 @@ class ATDateCriteria(ATBaseCriterion):
                 value = -value
 
             date = DateTime() + value
+            current_date = DateTime()
 
             operation = self.getOperation()
             if operation == 'within_day':
-                range = ( date.earliestTime(), date.latestTime() )
-                return ( ( field, {'query': range, 'range': 'min:max'} ), )
-            else:
-                return ( ( field, {'query': date, 'range': operation} ), )
+                date_range = ( date.earliestTime(), date.latestTime() )
+                return ( ( field, {'query': date_range, 'range': 'min:max'} ), )
+            elif operation == 'more':
+                if value != 0:
+                    range_op = (self.getDateRange() == '-' and 'max') or 'min'
+                    return ( ( field, {'query': date.earliestTime(), 'range': range_op} ), )
+                else:
+                    return ( ( field, {'query': date, 'range': 'min'} ), )
+            elif operation == 'less':
+                if value != 0:
+                    date_range = (self.getDateRange() == '-' and
+                                  (date.earliestTime(), current_date)
+                                  ) or (current_date, date.latestTime())
+                    return ( ( field, {'query': date_range, 'range': 'min:max'} ), )
+                else:
+                    return ( ( field, {'query': date, 'range': 'max'} ), )
         else:
             return ()
 

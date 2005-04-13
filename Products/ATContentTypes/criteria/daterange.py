@@ -81,7 +81,7 @@ class ATDateRangeCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'date range value'
+    shortDesc      = 'date range'
 
     security.declareProtected(CMFCorePermissions.View, 'getValue')
     def Value(self):

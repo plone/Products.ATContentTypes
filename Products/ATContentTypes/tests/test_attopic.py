@@ -57,6 +57,8 @@ CRITERIA_SETUP = {'Integer Criterion':      #Meta Type
                   'String Criterion':
                         ('SearchableText',
                          'portal'),
+                  # within day should behave identically for both CMF and ATTopics
+                  # the others not so much. [alecm]
                   'Friendly Date Criterion':
                         ('start',
                          '10',
@@ -191,7 +193,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         query = topic.buildQuery()
         self.assertEquals( len( query ), 2 )
         self.assertEquals( query[ 'foo' ], 'bar' )
-        self.assertEquals( query[ 'baz' ], 43 )
+        self.assertEquals( query[ 'baz' ], {'query': 43} )
 
     def test_Nested( self ):
         topic = self._ATCT

@@ -117,7 +117,7 @@ class ATSimpleIntCriterion(ATBaseCriterion):
             if direction:
                 result.append((self.Field(), {'query': val,  'range': direction}))
             else:
-                result.append((self.Field(), val))
+                result.append((self.Field(), {'query': val}))
 
         return tuple(result)
 

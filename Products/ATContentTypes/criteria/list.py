@@ -88,7 +88,7 @@ class ATListCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'logical AND or OR of list values'
+    shortDesc      = 'list of values'
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):

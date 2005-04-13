@@ -104,8 +104,15 @@ class TopicMigrator(CMFItemMigrator):
             elif new_meta == 'ATSortCriterion':
                 new_crit.setReversed(old_crit.reversed)
             if new_meta == 'ATFriendlyDateCriteria':
-                new_crit.setOperation(old_crit.operation)
+                old_op = old_crit.operation
                 DATE_RANGE = ( old_crit.daterange == 'old' and '-') or '+'
+                if old_op == 'max':
+                    new_op = (DATE_RANGE == '-' and 'more') or 'less'
+                elif old_op == 'min':
+                    new_op = (DATE_RANGE == '-' and 'more') or 'less'
+                elif old_op == 'within_day':
+                    new_op = 'within_day'
+                new_crit.setOperation(new_op)
                 new_crit.setDateRange(DATE_RANGE)
             if new_meta == 'ATListCriterion':
                 new_crit.setOperator(old_crit.operator)

@@ -4,21 +4,13 @@
     i18n:domain="plone">
 <metal:head fill-slot="javascript_head_slot">
     <script type="text/javascript"
-            tal:attributes="src string:$portal_url/DynamicOptionList.js">
+            tal:attributes="src string:$portal_url/modifySelectList.js">
     </script>
+
     <script type="text/javascript">
-        var opt_list = new DynamicOptionList();
-        opt_list.addDependentFields("field","criterion_type");
-        opt_list.setFormName("criteria_select");
-        window.onload = initDynamicOptionLists
-    </script>
-</metal:head>
-
-<body>
-
-<div metal:fill-slot="main">
-
-    <script>
+        registerDynamicSelect('criteria_select','field','criterion_type','getValidCriteriaForIndex?index=');
+        if (window.addEventListener) window.addEventListener("load",dynamicSelectInit,false);
+        else if (window.attachEvent) window.attachEvent("onload", dynamicSelectInit);
         function showHelp(selectedItem, helpElementId){
              helpElement = document.getElementById(helpElementId);
              elementTooltip = selectedItem.title;
@@ -31,6 +23,11 @@
              if (helpElement) {helpElement.innerHTML = helpText;}
             }
     </script>
+</metal:head>
+
+<body>
+
+<div metal:fill-slot="main">
     
     <h1>
         <span i18n:translate="heading_criteria_for" tal:omit-tag="">
@@ -106,6 +103,7 @@
           method="post" 
           tal:attributes="action template/getId"
           tal:define="errors options/state/getErrors|nothing;
+                      fields here/listAvailableFields;
                      ">
 
 
@@ -129,24 +127,16 @@
                     id="field"
                     tabindex=""
                     onchange=""
-                    tal:define="fields here/listAvailableFields;"
                     tal:attributes="tabindex tabindex/next;
-                                    onchange string:javascript:showHelp(this.options[this.selectedIndex], 'fieldHelp');; opt_list.change(this);">
-
-                    <tal:options tal:repeat="field fields">
-                        <script type="text/javascript"
-                                tal:define="name python:field[0];
-                                    allowed python:here.allowedCriteriaForField(name, 1);
-                                    allowed_str python:'\''+'\',\''.join(allowed)+'\''"
-                                tal:content="string:opt_list.forValue('$name').addOptionsTextValue($allowed_str);;"/>
-
-                        <option value="" 
+                                    onchange string:javascript:changedSelection(this,'getValidCriteriaForIndex?index=','criterion_type','criteria_select');;showHelp(this.options[this.selectedIndex], 'fieldHelp');;;">
+                <tal:options tal:repeat="field fields">
+                    <option value=""
                             tal:define="explanation python:field[2]"
                             tal:attributes="value python:field[0];
                                             title python:explanation"
                             tal:content="python:field[1]">Field</option>
                     </tal:options>
-                </select>
+            </select>
 
             </div>
         
@@ -163,8 +153,6 @@
                     tabindex=""
                     tal:define="types here/listSearchCriteriaTypes;"
                     tal:attributes="tabindex tabindex/next;">
-
-                    <script>opt_list.printOptions("criterion_type")</script>
                     
                     <option value="" tal:repeat="type types"
                                      tal:attributes="value type/name"

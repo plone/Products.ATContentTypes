@@ -198,7 +198,13 @@ def installTool(self, out):
     # register tool as action provider, multiple installs are harmeless
     #actions_tool = getToolByName(self, 'portal_actions')
     #actions_tool.addActionProvider(TOOLNAME)
-    
+    group = 'atct|ATContentTypes|ATCT Setup'
+    cp = getToolByName(self, 'portal_controlpanel')
+    if 'atct' not in cp.getGroupIds():
+        cp.groups.append(group)
+    for configlet in tool.getConfiglets():
+        cp.unregisterConfiglet(configlet['id'])
+    cp.registerConfiglets(tool.getConfiglets())
     print >>out, "Installing %s and registering it as action provider" % TOOLNAME
     return tool
 

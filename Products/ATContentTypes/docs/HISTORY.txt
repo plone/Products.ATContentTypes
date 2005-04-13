@@ -1,6 +1,35 @@
 1.0-devel
 =====================
 
+ * Changed the behavior of the date criteria to make the meaning of
+   each field clearer.  Now queries like 'More than 2 weeks ago' can be used,
+   and will behave as expected.  This causes some inconsistency in importing
+   CMFTopics.  Queries that were of the form 'min' 'x days' 'ago' are now
+   'less than x days ago' which is a min:max query with an upper limit of now.
+   The same goes for 'max' 'x days' 'ahead', all other queries should be close
+   to identical (modulo an earliestTime() where it makes sense).  The
+   inconsistency shouldn't be too important as the CMF date criteria was
+   entirely inscrutable.  Also changed some strings for criteria descriptions
+   for consistency. Fixes bug #1181418 (http://sourceforge.net/tracker/index.php?func=detail&aid=1181418&group_id=55262&atid=645337)
+   [alecm]
+
+ * Made the portal_types criteria work properly with either Types or
+   portal_types indexes.  Disabled types restrictions in TopicTool, now uses the
+   new Plone 2.1 search blacklist for types (site_properties.unfriendly_types).
+   This creates a plone 2.1 dependency, as does a change in the
+   atct_subtopic_form which now uses a macro from plone 2.1.
+   [alecm]
+
+ * Reworked linked select lists for criteria to use custom XMLHTTPRequest code,
+   contained in modifySelectList.js.  I will eventually turn this into an AT
+   MasterSelectWidget for the master select of two linked select lists.
+   [alecm]
+
+ * Added and enabled configlet for Topics, and unit tests for the criteria.
+   Fixed a persistency bug in TopicsTool, and a sort bug the in criteria
+   listing.  Added Missing.MV as a possible false value for Boolean Criterion.
+   [alecm]
+
  * Removed some configuration vars from config.py and the ZConfig schema.
    [tiran]
 

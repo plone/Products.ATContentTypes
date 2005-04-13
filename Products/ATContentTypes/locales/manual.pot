@@ -223,10 +223,10 @@ msgstr ""
 msgid "Your changes have been saved."
 msgstr ""
 
-msgid "old"
+msgid "ago"
 msgstr ""
 
-msgid "ahead"
+msgid "in the future"
 msgstr ""
 
 msgid "and"
@@ -268,12 +268,12 @@ msgstr ""
 msgid "2 Years"
 msgstr ""
 
-msgid "min"
+msgid "More than"
 msgstr ""
 
-msgid  "max"
+msgid "Less than"
 msgstr ""
 
-msgid "within_day"
+msgid "On the day"
 msgstr ""
 
