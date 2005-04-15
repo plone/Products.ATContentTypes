@@ -47,6 +47,14 @@ from Products.ATContentTypes.content.image import ATCTImageTransform
 from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import relatedItemsField
+
+from Products.validation.config import validation
+from Products.validation.validators.SupplValidators import MaxSizeValidator
+from Products.validation import V_REQUIRED
+
+validation.register(MaxSizeValidator('checkNewsImageMaxSize',
+                                             maxsize=zconf.ATNewsItem.max_size))
+
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 
 ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
@@ -79,8 +87,8 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
                 'icon'    :  (32, 32),
                 'listing' :  (16, 16),
                },
-        validators = MaxSizeValidator('checkFileMaxSize',
-                                       maxsize=zconf.ATNewsItem.max_size),
+        validators = (('isNonEmptyFile', V_REQUIRED),
+                             ('checkNewsImageMaxSize', V_REQUIRED)),
         widget = ImageWidget(
             description = "Add an optional image by clicking the 'Browse' button. This will be shown in the news listing, and in the news item itself. It will automatically scale the picture you upload to a sensible size.",
             description_msgid = "help_image",
