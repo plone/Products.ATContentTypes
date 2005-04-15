@@ -118,7 +118,7 @@ class ATCTMixin(TemplateMixin):
     assocFileExt   = ()
     cmf_edit_kws   = ()
 
-    __implements__ = IATContentType
+    __implements__ = (IATContentType, TemplateMixin.__implements__)
 
     security       = ClassSecurityInfo()
 
