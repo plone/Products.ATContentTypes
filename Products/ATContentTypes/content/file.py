@@ -50,13 +50,19 @@ from Products.ATContentTypes.content.schemata import relatedItemsField
 from Products.ATContentTypes.content.schemata import urlUploadField
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 
+from Products.validation.config import validation
+from Products.validation import V_REQUIRED
+
+validation.register(MaxSizeValidator('checkFileMaxSize',
+                                            maxsize=zconf.ATFile.max_size))
+
 ATFileSchema = ATContentTypeSchema.copy() + Schema((
     FileField('file',
               required=True,
               primary=True,
               languageIndependent=True,
-              validators = MaxSizeValidator('checkFileMaxSize',
-                                            maxsize=zconf.ATFile.max_size),
+               validators = (('isNonEmptyFile', V_REQUIRED),
+                             ('checkFileMaxSize', V_REQUIRED)),
               widget = FileWidget(
                         #description = "Select the file to be added by clicking the 'Browse' button.",
                         #description_msgid = "help_file",

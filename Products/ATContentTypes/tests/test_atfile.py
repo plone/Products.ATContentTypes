@@ -173,7 +173,7 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
-        self.failUnless(field.validators == "(('checkFileMaxSize', V_REQUIRED))",
+        self.failUnless(field.validators == "(('isNonEmptyFile', V_REQUIRED), ('checkFileMaxSize', V_REQUIRED))",
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, FileWidget),
                         'Value is %s' % id(field.widget))

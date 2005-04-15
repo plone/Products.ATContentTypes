@@ -59,6 +59,13 @@ from Products.ATContentTypes.content.schemata import urlUploadField
 from Products.ATContentTypes.lib import exif
 from OFS.Image import Image as OFSImage
 
+from Products.validation.config import validation
+from Products.validation.validators.SupplValidators import MaxSizeValidator
+from Products.validation import V_REQUIRED
+
+validation.register(MaxSizeValidator('checkImageMaxSize',
+                                             maxsize=zconf.ATImage.max_size))
+
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 
 # the following code is based on the rotation code of Photo
@@ -121,8 +128,8 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
                        'icon'    :  (32, 32),
                        'listing' :  (16, 16),
                       },
-               validators = MaxSizeValidator('checkFileMaxSize',
-                                             maxsize=zconf.ATImage.max_size),
+               validators = (('isNonEmptyFile', V_REQUIRED),
+                             ('checkImageMaxSize', V_REQUIRED)),
                widget = ImageWidget(
                         #description = "Select the image to be added by clicking the 'Browse' button.",
                         #description_msgid = "help_image",

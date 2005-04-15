@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Fixed bug #3773 (http://members.plone.org/collector/3773) validation
+   check for empty/non-existant files/images.
+   [alecm]
+
  * Changed the behavior of the date criteria to make the meaning of
    each field clearer.  Now queries like 'More than 2 weeks ago' can be used,
    and will behave as expected.  This causes some inconsistency in importing
