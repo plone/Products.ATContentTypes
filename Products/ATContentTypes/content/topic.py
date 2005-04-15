@@ -440,13 +440,14 @@ class ATTopic(ATCTFolder):
 
     security.declareProtected(ChangeTopics, 'addCriterion')
     def addCriterion(self, field, criterion_type):
-        """Add a new search criterion.
+        """Add a new search criterion. Return the resulting object.
         """
         newid = 'crit__%s_%s' % (field, criterion_type)
         ct    = _criterionRegistry[criterion_type]
         crit  = ct(newid, field)
 
         self._setObject( newid, crit )
+        return self._getOb( newid )
 
     security.declareProtected(ChangeTopics, 'deleteCriterion')
     def deleteCriterion(self, criterion_id):

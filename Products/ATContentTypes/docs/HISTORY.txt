@@ -1,5 +1,8 @@
 1.0-devel
 =====================
+ * Made topic.addCriterion() return the newly added criterion object.  That
+   it didn't before made things hard for python product developers.
+   [alecm]
 
  * Fixed bug #3773 (http://members.plone.org/collector/3773) validation
    check for empty/non-existant files/images.
