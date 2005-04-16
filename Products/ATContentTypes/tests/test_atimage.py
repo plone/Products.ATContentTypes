@@ -144,13 +144,8 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
             self.failUnless(hasattr(aq_base(atct), name), name)
 
     def test_division_by_0_pil(self):
-        # PIL has a nasty bug when the image ratio is too extrem like 300x15:
-        # Module PIL.Image, line 1136, in save
-        # Module PIL.PngImagePlugin, line 510, in _save
-        # Module PIL.ImageFile, line 474, in _save
-        # SystemError: tile cannot extend outside image
+        # pil generates a division by zero error on some images
         atct = self._ATCT
-        #scales = atct.getField('image').getAvailableSizes(atct)
         
         # test upload
         TEST2_GIF = open(os.path.join(_here, 'test_DivisionError.jpg')).read()
