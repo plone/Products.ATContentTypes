@@ -337,7 +337,7 @@ class ATCTImageTransform(Base):
 InitializeClass(ATCTImageTransform)
 
 class ATImage(ATCTFileContent, ATCTImageTransform):
-    """An Archetypes derived version of CMFDefault's Image"""
+    """An image, which can be referenced in documents or displayed in an album."""
 
     schema         =  ATImageSchema
 
@@ -349,8 +349,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     default_view   = 'image_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Image', 'meta_type' : 'Portal Image'}
-    typeDescription= ("Using this form, you can enter details about the image, \n"
-                      "and upload an image if required.")
+    typeDescription= 'An image, which can be referenced in documents or displayed in an album.'
     typeDescMsgId  = 'description_edit_image'
     assocMimetypes = ('image/*', )
     assocFileExt   = ('jpg', 'jpeg', 'png', 'gif', )

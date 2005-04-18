@@ -82,7 +82,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
     portal_type = 'Document'
     cmf_portal_type = 'CMF Document'
     cmf_klass = Document
-    title = 'Document'
+    title = 'Page'
     meta_type = 'ATDocument'
     icon = 'document_icon.gif'
 

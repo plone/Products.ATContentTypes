@@ -205,7 +205,7 @@ ATEventSchema.addField(relatedItemsField)
 
 
 class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
-    """An Archetype derived version of CMFCalendar's Event"""
+    """Information about an upcoming event, which can be displayed in the calendar."""
 
     schema         =  ATEventSchema
 
@@ -217,7 +217,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
     immediate_view = 'event_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Event', 'meta_type' : 'CMF Event'}
-    typeDescription= 'Fill in the details of the event you want to add.'
+    typeDescription= 'Information about an upcoming event, which can be displayed in the calendar.'
     typeDescMsgId  = 'description_edit_event'
     assocMimetypes = ()
     assocFileExt   = ('event', )

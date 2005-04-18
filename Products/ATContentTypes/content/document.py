@@ -72,19 +72,19 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
 ATDocumentSchema.addField(relatedItemsField)
 
 class ATDocument(ATCTContent, HistoryAwareMixin):
-    """An Archetypes derived version of CMFDefault's Document"""
+    """A page in the portal, which can contain rich text."""
 
     schema         =  ATDocumentSchema
 
     content_icon   = 'document_icon.gif'
     meta_type      = 'ATDocument'
     portal_type    = 'Document'
-    archetype_name = 'Document'
+    archetype_name = 'Page'
     default_view   = 'document_view'
     immediate_view = 'document_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Document', 'meta_type' : 'Document'}
-    typeDescription= 'Fill in the details of this document.'
+    typeDescription= 'A page in the portal, which can contain rich text.'
     typeDescMsgId  = 'description_edit_document'
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
     assocFileExt   = ('txt', 'stx', 'rst', 'rest', 'py',)

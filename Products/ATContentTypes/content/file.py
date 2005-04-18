@@ -78,7 +78,7 @@ ATFileSchema.addField(relatedItemsField)
 
 
 class ATFile(ATCTFileContent):
-    """A Archetype derived version of CMFDefault's File"""
+    """An external file uploaded to the portal."""
 
     schema         =  ATFileSchema
 
@@ -90,8 +90,7 @@ class ATFile(ATCTFileContent):
     default_view   = 'file_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF File', 'meta_type' : 'Portal File'}
-    typeDescription= "Add the relevant details of the file to be added in the form below,\n" \
-                     "select the file with the 'Browse' button, and press 'Save'."
+    typeDescription= "An external file uploaded to the portal."
     typeDescMsgId  = 'description_edit_file'
     assocMimetypes = ('application/*', 'audio/*', 'video/*', )
     assocFileExt   = ()

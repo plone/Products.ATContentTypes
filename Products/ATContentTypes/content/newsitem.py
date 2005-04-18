@@ -113,8 +113,7 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
 ATNewsItemSchema.addField(relatedItemsField)
 
 class ATNewsItem(ATDocument, ATCTImageTransform):
-    """A AT news item based on AT Document
-    """
+    """An announcement that will show up on the news portlet and in the news listing."""
 
     schema         =  ATNewsItemSchema
 
@@ -126,9 +125,7 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
     default_view   = 'newsitem_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF News Item', 'meta_type' : 'News Item'}
-    typeDescription = ("A news item is a small piece of news that "
-                       "is published on the front page. "
-                       "Add the relevant details below, and press 'Save'.")
+    typeDescription = 'An announcement that will show up on the news portlet and in the news listing.'
     typeDescMsgId  = 'description_edit_news_item'
     assocMimetypes = ()
     assocFileExt   = ('news', )

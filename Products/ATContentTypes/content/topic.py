@@ -147,21 +147,19 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
 ATTopicSchema.addField(relatedItemsField)
 
 class ATTopic(ATCTFolder):
-    """A topic folder"""
+    """A stored search that can be used to display all items matching criteria you specify."""
 
     schema         =  ATTopicSchema
 
     content_icon   = 'topic_icon.gif'
     meta_type      = 'ATTopic'
     portal_type    = 'Topic'
-    archetype_name = 'Topic'
+    archetype_name = 'Magnet'
     immediate_view = 'atct_topic_view'
     default_view   = 'atct_topic_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Topic', 'meta_type' : 'Portal Topic'}
-    typeDescription= ("A topic is a pre-defined search, showing all "
-                      "items matching\n criteria you specify. "
-                      "Topics may also contain sub-topics.")
+    typeDescription= 'A stored search that can be used to display all items matching criteria you specify.'
     typeDescMsgId  = 'description_edit_topic'
     assocMimetypes = ()
     assocFileExt   = ()
