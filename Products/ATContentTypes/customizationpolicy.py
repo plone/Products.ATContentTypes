@@ -27,11 +27,20 @@ from StringIO import StringIO
 
 from Products.CMFPlone.Portal import addPolicy
 from Products.CMFCore.utils import getToolByName
+from Products.ATContentTypes.config import TOOLNAME
 from Products.CMFPlone.CustomizationPolicy import DefaultCustomizationPolicy
 from Products.Archetypes.customizationpolicy import ArchetypesSitePolicy
 from Products.Archetypes.utils import shasattr
 
-PRODUCTS = ('ATContentTypes', )
+PRODUCTS = ('ATReferenceBrowserWidget', 'ATContentTypes', )
+
+# Check for Plone 2.1
+try:
+    from Products.CMFPlone.migrations import v2_1
+except ImportError:
+    HAS_PLONE21 = False
+else:
+    HAS_PLONE21 = True
 
 class ATCTSitePolicy(ArchetypesSitePolicy):
     """Site policy for SA
@@ -68,17 +77,13 @@ class ATCTSitePolicy(ArchetypesSitePolicy):
         """
         # migrate content
         print >>out, 'Setting up ATContentTypes ...'
-        get_transaction().commit(1) # to copy&paste
-        if hasattr(portal, 'migrateFromCMFtoATCT'):
-            print >>out, '   Migrating from CMF to ATCT'
-            portal.migrateFromCMFtoATCT()
-        if hasattr(portal, 'switchCMF2ATCT'):
-            print >>out, '   Switching from CMF to ATCT'
-            try:
-                portal.switchCMF2ATCT(skip_rename=False)
-            except IndexError:
-                portal.switchCMF2ATCT(skip_rename=True)
+        get_transaction().commit(1)
+        tool = getToolByName(portal, TOOL_NAME)
+        tool.migrateToATCT()
         print >>out, 'Done\n'
-        
+
+
+    
 def registerPolicy(context):
-    addPolicy('ATContentTypes Site', ATCTSitePolicy())
+    if not HAS_PLONE21:
+        addPolicy('ATContentTypes Site', ATCTSitePolicy())
