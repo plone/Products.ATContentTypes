@@ -201,7 +201,7 @@ def installTool(self, out):
     group = 'atct|ATContentTypes|ATCT Setup'
     cp = getToolByName(self, 'portal_controlpanel')
     if 'atct' not in cp.getGroupIds():
-        cp.groups.append(group)
+        cp._updateProperty('groups', cp.groups+(group,))
     for configlet in tool.getConfiglets():
         cp.unregisterConfiglet(configlet['id'])
     cp.registerConfiglets(tool.getConfiglets())
