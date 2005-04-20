@@ -23,6 +23,9 @@
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
+from types import FileType
+from Acquisition import aq_base
+
 from Products.ATContentTypes.config import HAS_MX_TIDY
 from Products.ATContentTypes.config import MX_TIDY_ENABLED
 from Products.ATContentTypes.config import MX_TIDY_MIMETYPES
