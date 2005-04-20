@@ -1,5 +1,10 @@
 1.0-devel
 =====================
+ * Changed processForm to check for id confilicts using check_ids if available,
+   otherwise just parent.objectIds().  Also commit sub-transaction to make
+   rename work after portal_factory.
+   [alecm]
+
  * Made topic.addCriterion() return the newly added criterion object.  That
    it didn't before made things hard for python product developers.
    [alecm]
