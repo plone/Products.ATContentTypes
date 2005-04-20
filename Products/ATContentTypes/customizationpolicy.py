@@ -78,7 +78,7 @@ class ATCTSitePolicy(ArchetypesSitePolicy):
         # migrate content
         print >>out, 'Setting up ATContentTypes ...'
         get_transaction().commit(1)
-        tool = getToolByName(portal, TOOL_NAME)
+        tool = getToolByName(portal, TOOLNAME)
         tool.migrateToATCT()
         print >>out, 'Done\n'
 
