@@ -18,6 +18,6 @@ def null(portal):
 def registerMigrations():
     # so the basic concepts is you put a bunch of migrations in here
 
-    atct.registerUpgradePath('0.2',
-                             '1.0',
+    atct.registerUpgradePath('0.2.0-final ',
+                             '1.0.0-devel (CVS/Unreleased)',
                              v1.alphas.zero2_alpha1)

@@ -1,5 +1,9 @@
 from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.migration.atctmigrator import migrateAll
+from Products.ATContentTypes.config import TOOLNAME
+from Products.ATContentTypes.migration.atctmigrator import TopicMigrator
+from Products.ATContentTypes.migration.walker import useLevelWalker
+from Products.ATContentTypes.criteria import _criterionRegistry
 
 
 def zero2_alpha1(portal):
@@ -7,47 +11,19 @@ def zero2_alpha1(portal):
     """
     out = []
 
-    # Add unfriendly_types site property from plone 2.1 for ATTopic use
-    addUnfriendlyTypesSiteProperty(portal, out)
+    #Remove criteria from catalog
+    uncatalogCriteria(portal,out)
 
     # Migrate Date Criterion to new format
     updateDateCriteria(portal, out)
-    
+
     # Migrate Integer Criterion to new format
+    updateIntegerCriteria(portal,out)
     
-    # Migrate any lingering CMF types (Topics)
-    migrateCMFLeftovers(portal,out)
+    # Migrate any lingering CMF Topics
+    migrateCMFTopics(portal,out)
 
     return out
-
-
-def addUnfriendlyTypesSiteProperty(portal, out):
-    """Adds unfriendly_types site property."""
-    # Types which will be installed as "unfriendly" and thus hidden for search
-    # purposes
-    BASE_UNFRIENDLY_TYPES = ['ATBooleanCriterion',
-                             'ATDateCriteria',
-                             'ATDateRangeCriterion',
-                             'ATListCriterion',
-                             'ATPortalTypeCriterion',
-                             'ATReferenceCriterion',
-                             'ATSelectionCriterion',
-                             'ATSimpleIntCriterion',
-                             'ATSimpleStringCriterion',
-                             'ATSortCriterion',
-                             'Discussion Item',
-                             'Plone Site',
-                             'TempFolder']
-
-    propTool = getToolByName(portal, 'portal_properties', None)
-    if propTool is not None:
-        propSheet = getattr(propTool, 'site_properties', None)
-        if propSheet is not None:
-            if not propSheet.hasProperty('unfriendly_types'):
-                propSheet.manage_addProperty('unfriendly_types',
-                                             BASE_UNFRIENDLY_TYPES,
-                                             'lines')
-            out.append("Added 'unfriendly_types' property to site_properties.")
 
 def findAndAlterCriteria(portal, out, meta_type, func, **kwargs):
     """Searches for all objects of a given meta_type and performs a transformation
@@ -91,8 +67,39 @@ def updateIntegerCriterion(portal,obj,out):
 def updateIntegerCriteria(portal,out):
     findAndAlterCriteria(portal, out, 'ATSimpleIntCriterion',updateIntegerCriterion)
 
-def migrateCMFLeftovers(portal, out):
+def uncatalogCriteria(portal,out):
+    catalog = getToolByName(portal, 'portal_catalog', None)
+    if catalog is not None:
+        crits = catalog(meta_type=_criterionRegistry.listTypes())
+        if crits:
+            out.append('Uncataloging the ATCT criteria.')
+        for crit in crits:
+            catalog.unindexObject(crit.getObject())
+
+def migrateCMFTopics(portal, out):
     """Migrate any lingering CMF types"""
     out.append('Migrating remaining CMF Types, this may take a while.')
-    out.append(migrateAll(portal))
+    catalog = getToolByName(portal, 'portal_catalog', None)
+    pprop = getToolByName(portal, 'portal_properties', None)
+    atct = getToolByName(portal, TOOLNAME, None)
+    #Recatalog the CMF Topics if they were missed
+
+    #The portal type for CMF Topics has is now wrong we need to change it back
+    if catalog is not None:
+        if atct is not None:
+            atct.recatalogCMFTypes()
+        topics = catalog(meta_type=['Portal Topic'])
+        for brain in topics:
+            out.append('Changing portal_type for %s'%brain.getPath())
+            topic = brain.getObject()
+            topic._setPortalTypeName('CMF Topic')
+            catalog.reindexObject(topic,idxs=['portal_type', 'Type', 'meta_type', ])
+
+        kwargs = {}
+        try:
+            kwargs['default_language'] = pprop.aq_explicit.site_properties.default_language
+        except (AttributeError, KeyError):
+            kwargs['default_language'] = 'en'
+        out.append('*** Migrating Topics ***')
+        useLevelWalker(portal, TopicMigrator, out=out, **kwargs)
     out.append('CMF type migration finished')

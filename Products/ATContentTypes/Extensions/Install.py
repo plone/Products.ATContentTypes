@@ -146,10 +146,15 @@ def install(self, reinstall):
     print >>out, 'Adding additional action icons'
     registerActionIcons(self, out)
     
-    # step 12: update / create internal version info
+    # step 12: set initial version at 0.2 to ensure full migration
     nv, v = tool.getVersion()
     if not nv and not v:
-        tool.setVersionFromFS()
+        tool.setInstanceVersion('0.2.0-final ')
+
+    # step 13: run any migrations
+    print >>out, 'Migrating existing content to latest version'
+    migration_result = tool.upgrade(show_page=0)
+    print >>out, migration_result
     
     print >> out, 'Successfully installed %s' % PROJECTNAME
     return out.getvalue()

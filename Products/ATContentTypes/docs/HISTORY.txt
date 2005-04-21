@@ -1,5 +1,13 @@
 1.0-devel
 =====================
+ * Added version migration system mostly copied from plone.  Works automatically
+   during Plone 2.1 migration to bring plone 2.0 sites with ATCT 0.2 up to date
+   including changing and uncatalogging ATTopic criteria and migrating CMF Topics.
+   [alecm]
+
+ * Fixed a small bug in Topic migration introduced during the merge.
+   [alecm]
+
  * Made topic.addCriterion() return the newly added criterion object.  That
    it didn't before made things hard for python product developers.
    [alecm]

@@ -89,7 +89,7 @@ class EventMigrator(CMFItemMigrator):
 
 registerATCTMigrator(EventMigrator, event.ATEvent)
 
-class TopicMigrator(CMFItemMigrator):
+class TopicMigrator(CMFFolderMigrator):
     walker = CatalogWalker
     map = {'acquireCriteria' : 'setAcquireCriteria'}
 

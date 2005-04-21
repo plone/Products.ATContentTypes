@@ -20,14 +20,16 @@
 """
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 
-import os
+import os, sys, traceback
 from cStringIO import StringIO
 import time
 import urllib
+import zLOG
 
 from OFS.SimpleItem import SimpleItem
 from OFS.PropertyManager import PropertyManager
-from Globals import InitializeClass 
+from Globals import InitializeClass
+from ZODB.POSException import ConflictError
 from AccessControl import ClassSecurityInfo
 import Persistence
 from Acquisition import aq_base
@@ -70,7 +72,10 @@ _upgradePaths = {}
 
 def registerUpgradePath(oldversion, newversion, function):
     """ Basic register func """
-    _upgradePaths[oldversion.lower()] = [newversion.lower(), function]
+    _upgradePaths[oldversion] = [newversion, function]
+
+def log(message,summary='',severity=0):
+    zLOG.LOG('ATCT: ', severity, summary, message)
 
 class AlreadySwitched(RuntimeError): pass
 
@@ -138,7 +143,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
 
     security.declareProtected(CMFCorePermissions.ManagePortal, 'setInstanceVersion')
     def setInstanceVersion(self, version):
-        """ The version this instance of plone is on """
+        """ The version this instance of atct is on """
         self._version = version
 
         vers, rest = version.split(' ')
@@ -206,7 +211,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
     ##############################################################
 
     security.declareProtected(CMFCorePermissions.ManagePortal, 'upgrade')
-    def upgrade(self, REQUEST=None, dry_run=None, swallow_errors=1):
+    def upgrade(self, REQUEST=None, dry_run=None, swallow_errors=1, show_page=1):
         """ perform the upgrade """
         # keep it simple
         out = []
@@ -265,8 +270,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
                         "current version"), zLOG.PROBLEM))
             out.append(("Migration has failed", zLOG.PROBLEM))
         else:
-            out.append((("Your ZODB and Filesystem Plone "
-                         "instances are now up-to-date."), zLOG.INFO))
+            out.append((("Your ATCT instance is now up-to-date."), zLOG.INFO))
 
         # do this once all the changes have been done
         if self.needRecatalog():
@@ -289,10 +293,13 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
 
         # log all this to the ZLOG
         for msg, sev in out: log(msg, severity=sev)
+
+        if not show_page:
+            return out
         try:
             return self.manage_migrateResults(self, out=out)
-        except NameError:
-            pass
+        except (NameError, IOError):
+            return out
 
     ##############################################################
     # Private methods
