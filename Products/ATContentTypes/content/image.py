@@ -30,6 +30,7 @@ from urllib2 import URLError
 
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
+from AccessControl import Unauthorized
 from Acquisition import aq_parent
 from ComputedAttribute import ComputedAttribute
 from OFS.Image import Image
@@ -411,6 +412,8 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         """
         if name.startswith('image'):
             field = self.getField('image')
+            if not field.checkPermission('view', self):
+                raise Unauthorized, name
             if name == 'image':
                 return field.getScale(self)
             else:
