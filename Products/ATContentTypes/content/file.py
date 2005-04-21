@@ -35,6 +35,7 @@ from Products.Archetypes.public import Schema
 from Products.Archetypes.public import FileField
 from Products.Archetypes.public import FileWidget
 from Products.Archetypes.public import PrimaryFieldMarshaller
+from Products.Archetypes.public import AnnotationStorage
 from Products.Archetypes.BaseContent import BaseContent
 from Products.PortalTransforms.utils import TransformException
 
@@ -61,7 +62,8 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
               required=True,
               primary=True,
               languageIndependent=True,
-               validators = (('isNonEmptyFile', V_REQUIRED),
+              storage = AnnotationStorage(migrate=True),
+              validators = (('isNonEmptyFile', V_REQUIRED),
                              ('checkFileMaxSize', V_REQUIRED)),
               widget = FileWidget(
                         #description = "Select the file to be added by clicking the 'Browse' button.",

@@ -36,6 +36,7 @@ from Products.Archetypes.public import ImageWidget
 from Products.Archetypes.public import RichWidget
 from Products.Archetypes.public import StringWidget
 from Products.Archetypes.public import RFC822Marshaller
+from Products.Archetypes.public import AnnotationStorage
 
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.configuration import zconf
@@ -62,6 +63,7 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
         required = True,
         searchable = True,
         primary = True,
+        storage = AnnotationStorage(migrate=True),
         validators = ('isTidyHtmlWithCleanup',),
         #validators = ('isTidyHtml',),
         default_content_type = zconf.ATNewsItem.default_content_type,
@@ -78,6 +80,7 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
         ),
     ImageField('image',
         required = False,
+        torage = AnnotationStorage(migrate=True),
         languageIndependent = True,
         sizes= {'large'   : (768, 768),
                 'preview' : (400, 400),
@@ -151,5 +154,17 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
             self.setDescription(description)
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
+    
+    def __bobo_traverse__(self, REQUEST, name, RESPONSE=None):
+        """Transparent access to image scales
+        """
+        if name.startswith('image'):
+            field = self.getField('image')
+            if name == 'image':
+                return field.getScale(self)
+            else:
+                scalename = name[len('image_'):]
+                return field.getScale(self, scale=scalename)
+        return ATCTDocument.__bobo_traverse__(self, REQUEST, name, RESPONSE=None)
 
 registerATCT(ATNewsItem, PROJECTNAME)

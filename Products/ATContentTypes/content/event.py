@@ -43,6 +43,7 @@ from Products.Archetypes.public import MultiSelectionWidget
 from Products.Archetypes.public import RichWidget
 from Products.Archetypes.public import StringWidget
 from Products.Archetypes.public import RFC822Marshaller
+from Products.Archetypes.public import AnnotationStorage
 
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import PROJECTNAME
@@ -72,6 +73,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
               required=False,
               searchable=True,
               primary=True,
+              storage = AnnotationStorage(migrate=True),
               validators = ('isTidyHtmlWithCleanup',),
               #validators = ('isTidyHtml',),
               default_content_type = zconf.ATEvent.default_content_type,

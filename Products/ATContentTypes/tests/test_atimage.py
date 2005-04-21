@@ -31,6 +31,8 @@ from Products.ATContentTypes.tests import atcttestcase
 
 from Acquisition import aq_base
 
+from OFS.Image import Image as OFSImage
+
 from Products.CMFCore import CMFCorePermissions
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
@@ -132,16 +134,25 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         # Module PIL.ImageFile, line 474, in _save
         # SystemError: tile cannot extend outside image
         atct = self._ATCT
-        scales = atct.getField('image').getAvailableSizes(atct)
         
         # test upload
         atct.setImage(TEST_GIF, mimetype='image/gif', filename='test.gif')
         self.failUnlessEqual(atct.getImage().data, TEST_GIF)
         
+    def test_bobo_hook(self):
+        atct = self._ATCT
+        REQUEST = {'method' : 'GET'}
+        scales = atct.getField('image').getAvailableSizes(atct)
+        atct.setImage(TEST_GIF, mimetype='image/gif', filename='test.gif')
+        
+        img = atct.__bobo_traverse__(REQUEST, 'image')
+        self.failUnless(isinstance(img, OFSImage), img)
+        
         # test if all scales exist
         for scale in scales.keys():
             name = 'image_' + scale
-            self.failUnless(hasattr(aq_base(atct), name), name)
+            img = atct.__bobo_traverse__(REQUEST, name)
+            self.failUnless(isinstance(img, OFSImage), img)
 
     def test_division_by_0_pil(self):
         # pil generates a division by zero error on some images
@@ -188,9 +199,9 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'image', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
+        self.failUnless(isinstance(field.storage, AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
+        self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
         self.failUnless(field.validators == "(('isNonEmptyFile', V_REQUIRED), ('checkImageMaxSize', V_REQUIRED))",
