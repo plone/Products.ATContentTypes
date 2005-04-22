@@ -263,7 +263,7 @@ class ATTopic(ATCTFolder):
         val.sort()
         return val
 
-    security.declareProtected(ChangeTopics, 'listCriteria')
+    security.declareProtected(CMFCorePermissions.View, 'listCriteria')
     def listCriteria(self):
         """Return a list of our criteria objects.
         """
@@ -273,7 +273,7 @@ class ATTopic(ATCTFolder):
         #val.sort()
         return val
 
-    security.declareProtected(ChangeTopics, 'listSearchCriteria')
+    security.declareProtected(CMFCorePermissions.View, 'listSearchCriteria')
     def listSearchCriteria(self):
         """Return a list of our search criteria objects.
         """
@@ -351,7 +351,7 @@ class ATTopic(ATCTFolder):
         val.sort()
         return val
 
-    security.declareProtected(ChangeTopics, 'listMetaDataFields')
+    security.declareProtected(CMFCorePermissions.View, 'listMetaDataFields')
     def listMetaDataFields(self, exclude=True):
         """Return a list of metadata fields from portal_catalog.
         """

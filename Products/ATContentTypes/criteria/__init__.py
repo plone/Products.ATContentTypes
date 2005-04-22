@@ -133,3 +133,4 @@ from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
 from Products.ATContentTypes.criteria.simpleint import ATSimpleIntCriterion
 from Products.ATContentTypes.criteria.simplestring import ATSimpleStringCriterion
 from Products.ATContentTypes.criteria.sort import ATSortCriterion
+from Products.ATContentTypes.criteria.currentauthor import ATCurrentAuthorCriterion

@@ -1,5 +1,12 @@
 1.0-devel
 =====================
+ *Added new Current Author criterion which, when used with the Creator index,
+  gets all objects authored by the currently logged in user.  Also fixed some
+  permissions that were preventing normal users from viewing published topics.
+   Fixes issue #1176355 (https://sourceforge.net/tracker/?func=detail&aid=1176355&group_id=55262&atid=645337).
+   [alecm]
+
+
  * Changed processForm to check for id confilicts using check_ids if available,
    otherwise just parent.objectIds().  Also commit sub-transaction to make
    rename work after portal_factory.

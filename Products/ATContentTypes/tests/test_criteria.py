@@ -68,6 +68,8 @@ from Products.ATContentTypes.criteria.boolean import \
     ATBooleanCriterion
 from Products.ATContentTypes.criteria.portaltype import \
     ATPortalTypeCriterion
+from Products.ATContentTypes.criteria.currentauthor import \
+    ATCurrentAuthorCriterion
 tests = []
 
 class CriteriaTest(atcttestcase.ATCTSiteTestCase):
@@ -517,6 +519,37 @@ class TestATPortalTypeCriterion(CriteriaTest):
         self.failUnless('Simple String Criterion' not in self.dummy.getCurrentValues())
 
 tests.append(TestATPortalTypeCriterion)
+
+
+class TestATCurrentAuthorCriterion(CriteriaTest):
+    klass = ATCurrentAuthorCriterion
+    title = 'Current Author Criterion'
+    meta_type = 'ATCurrentAuthorCriterion'
+    portal_type = 'ATCurrentAuthorCriterion'
+
+    def afterSetUp(self):
+        CriteriaTest.afterSetUp(self)
+        self.portal.acl_users._doAddUser('member', 'secret', ['Member'], [])
+        self.portal.acl_users._doAddUser('reviewer', 'secret', ['Reviewer'], [])
+
+    def test_author_query(self):
+        self.dummy.field = 'creator'
+        self.login('member')
+        items = self.dummy.getCriteriaItems()
+        self.assertEquals(len(items),1)
+        query = items[0][1]
+        field = items[0][0]
+        self.assertEquals(field, 'creator')
+        self.assertEquals(query, 'member')
+        self.login('reviewer')
+        items = self.dummy.getCriteriaItems()
+        self.assertEquals(len(items),1)
+        query = items[0][1]
+        field = items[0][0]
+        self.assertEquals(field, 'creator')
+        self.assertEquals(query, 'reviewer')
+
+tests.append(TestATCurrentAuthorCriterion)
 
 
 if __name__ == '__main__':
