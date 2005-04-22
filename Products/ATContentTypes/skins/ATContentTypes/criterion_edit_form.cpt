@@ -36,6 +36,11 @@
         </span>
     </h1>
 
+        <p class="discreet"
+           tal:condition="not: here/listCriteria" i18n:translate="description_no_criteria_in_criteria_form">
+           No criteria defined yet. The search will not show any results.
+           Please add criteria below.
+        </p>
     <form action=""
           method="post"
           tal:attributes="action template/getId"

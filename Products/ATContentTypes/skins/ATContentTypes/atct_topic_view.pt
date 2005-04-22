@@ -153,8 +153,14 @@
         </tal:listing>
         
         <p class="discreet"
-           tal:condition="not: topicContents" i18n:translate="description_no_items_in_topic">
-         There are currently no results for this topic search.
+           tal:condition="python: not topicContents and here.listCriteria()" i18n:translate="description_no_items_in_topic">
+         There are currently no results for this search.
+        </p>
+        
+        <p class="discreet"
+           tal:condition="not: here/listCriteria" i18n:translate="description_no_criteria_in_topic">
+        There are currently no criteria on which to search.
+        Please add them using the 'criteria' tab.
         </p>
 
         </tal:topiccontents>
