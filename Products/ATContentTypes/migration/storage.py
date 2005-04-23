@@ -21,83 +21,24 @@ are permitted provided that the following conditions are met:
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-from copy import copy
-
-from Products.CMFCore.utils import getToolByName
-from Acquisition import aq_base
-from Acquisition import aq_parent
-from Acquisition import aq_inner
-
-from Products.ATContentTypes.config import TOOLNAME
-from Products.Archetypes.public import getAnnotation
-from Products.Archetypes.public import AT_ANN_STORAGE
-from Products.Archetypes.public import AT_MD_STORAGE
+from Products.Archetypes.Storage.annotation import migrateStorageOfType
+from Products.ATContentTypes.content.document import ATDocumentSchema
+from Products.ATContentTypes.content.event import ATEventSchema
+from Products.ATContentTypes.content.file import ATFileSchema
+from Products.ATContentTypes.content.image import ATImageSchema
+from Products.ATContentTypes.content.newsitem import ATNewsItemSchema
 
 _marker = object()
 
 MIGRATION_LIST = (
-    ('Document', ('text',), ()),
-    ('Event', ('text',), ()),
-    ('File', ('file',), ()),
-    ('Image', ('image',), ()),
-    ('News Item', ('text', 'image'), ()),
+    ('Document', ATDocumentSchema),
+    ('Event', ATEventSchema),
+    ('File', ATFileSchema),
+    ('Image', ATImageSchema),
+    ('News Item', ATNewsItemSchema),
     )
 
 def storageMigration(portal):
-    for portal_type, fields, md_fields in MIGRATION_LIST:
-        migrateStorageOfType(portal, portal_type, fields, md_fields)
+    for portal_type, schema in MIGRATION_LIST:
+        migrateStorageOfType(portal, portal_type, schema)
 
-def migrateStorageOfType(portal, portal_type, fields, md_fields):
-    """Migrate storage from attribute to annotation storage
-    
-    portal - portal
-    portal_type - portal type to migrate
-    fields - list of field names to migrate from attribute storage
-    md_fields - list of field names to migrate from metadata storage
-    """
-    catalog = getToolByName(portal, 'portal_catalog')
-    brains = catalog(Type = portal_type)
-    for brain in brains:
-        obj = brain.getObject()
-        if obj is None:
-            continue
-        
-        try: state = obj._p_changed
-        except: state = 0
-        
-        ann = getAnnotation(obj)
-        clean_obj = aq_base(obj)
-        attr2ann(clean_obj, ann, fields)
-        meta2ann(clean_obj, ann, md_fields)
-        
-        if state is None: obj._p_deactivate()
-
-def attr2ann(clean_obj, ann, fields):
-    """Attribute 2 annotation
-    """
-    for field in fields:
-        if not ann.hasSubkey(AT_ANN_STORAGE, field):
-            value = getattr(clean_obj, field, _marker)
-            if value is not _marker:
-                ann.setSubkey(AT_ANN_STORAGE, value, subkey=field)
-                delattr(obj, field)
-        else:
-            value = getattr(clean_obj, field, _marker)
-            if value is not _marker:
-                delattr(obj, field)
-    
-def meta2ann(clean_obj, ann, fields):
-    """metadata 2 annotation
-    """
-    md = clean_obj._md
-    for field in fields:
-        if not ann.hasSubkey(AT_MD_STORAGE, field):
-            value = md.get(field, _marker)
-            if value is not _marker:
-                ann.setSubkey(AT_MD_STORAGE, value, subkey=field)
-                del md[field]
-        else:
-            try:
-                del md[field]
-            except KeyError:
-                pass

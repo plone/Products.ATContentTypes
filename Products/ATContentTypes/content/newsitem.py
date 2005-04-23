@@ -165,6 +165,6 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
             else:
                 scalename = name[len('image_'):]
                 return field.getScale(self, scale=scalename)
-        return ATCTDocument.__bobo_traverse__(self, REQUEST, name, RESPONSE=None)
+        return ATDocument.__bobo_traverse__(self, REQUEST, name, RESPONSE=None)
 
 registerATCT(ATNewsItem, PROJECTNAME)
