@@ -37,6 +37,12 @@ class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
     portal_type = 'Image'
     views = ('image_view', 'download', 'atct_image_transform')
 
+    def test_url_returns_image(self):
+        import pdb; pdb.set_trace()
+        response = self.publish(self.obj_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) # OK
+        
+
 tests.append(TestATImageFunctional)
 
 if __name__ == '__main__':

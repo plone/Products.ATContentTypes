@@ -30,6 +30,7 @@ from urllib2 import URLError
 
 from Products.CMFCore import CMFCorePermissions
 from AccessControl import ClassSecurityInfo
+from AccessControl import Unauthorized
 from Acquisition import aq_parent
 from ComputedAttribute import ComputedAttribute
 from OFS.Image import Image
@@ -42,6 +43,7 @@ from Products.Archetypes.public import Schema
 from Products.Archetypes.public import ImageField
 from Products.Archetypes.public import ImageWidget
 from Products.Archetypes.public import PrimaryFieldMarshaller
+from Products.Archetypes.public import AnnotationStorage
 from Products.Archetypes.public import log_exc
 
 from Products.ATContentTypes.config import PROJECTNAME
@@ -119,6 +121,7 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
                required=True,
                primary=True,
                languageIndependent=True,
+               storage = AnnotationStorage(migrate=True),
                swallowResizeExceptions = SWALLOW_IMAGE_RESIZE_EXCEPTIONS,
                sizes= {'large'   : (768, 768),
                        'preview' : (400, 400),
@@ -403,5 +406,28 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         if title is not None:
             self.setTitle(title)
         self.reindexObject()
+        
+    def __bobo_traverse__(self, REQUEST, name, RESPONSE=None):
+        """Transparent access to image scales
+        """
+        if name.startswith('image'):
+            field = self.getField('image')
+            if not field.checkPermission('view', self):
+                raise Unauthorized, name
+            if name == 'image':
+                return field.getScale(self)
+            else:
+                scalename = name[len('image_'):]
+                if scalename in field.getAvailableSizes(self):
+                    return field.getScale(self, scale=scalename)
+        # split up id in name + extension
+        #id = self.getId()
+        #dot = id.rfind('.')
+        #if dot == -1:
+        #    name, ext = id, None
+        #else:
+        #    name = id[:dot]
+        #    ext = id[dot+1:]
+        return ATCTFileContent.__bobo_traverse__(self, REQUEST, name, RESPONSE=None)
 
 registerATCT(ATImage, PROJECTNAME)
