@@ -24,6 +24,7 @@ __author__  = ''
 __docformat__ = 'restructuredtext'
 
 from Products.Archetypes.public import *
+from Products.Archetypes.TemplateMixin import TemplateMixinSchema
 from DateTime import DateTime
 import Products.ATContentTypes.Validators
 from Products.ATContentTypes.Permissions import ChangeEvents
@@ -54,26 +55,7 @@ ATContentTypeBaseSchema = BaseSchema.copy()
 ATContentTypeBaseSchema['description'].isMetadata = False
 ATContentTypeBaseSchema['description'].schemata = 'default'
 
-ATContentTypeSchema = ATContentTypeBaseSchema + Schema((
-    # TemplateMixin
-    StringField('layout',
-                accessor="getLayout",
-                mutator="setLayout",
-                write_permission=TEMPLATE_MIXIN_PERMISSION,
-                default_method="getDefaultLayout",
-                vocabulary="_voc_templates",
-                #enforceVocabulary=True,
-                widget=SelectionWidget(
-                    description="Choose a template that will be used for viewing this item.",
-                    description_msgid = "help_template_mixin",
-                    label = "View template",
-                    label_msgid = "label_template_mixin",
-                    i18n_domain = "plone",
-                    visible={'view' : 'hidden',
-                             'edit' : ENABLE_TEMPLATE_MIXIN and 'visible' or 'hidden'},
-    )),
-    ))
-
+ATContentTypeSchema = ATContentTypeBaseSchema + TemplateMixinSchema
 
 ###
 # AT Content Type Document
