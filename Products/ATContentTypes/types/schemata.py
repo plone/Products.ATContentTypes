@@ -55,7 +55,10 @@ ATContentTypeBaseSchema = BaseSchema.copy()
 ATContentTypeBaseSchema['description'].isMetadata = False
 ATContentTypeBaseSchema['description'].schemata = 'default'
 
-ATContentTypeSchema = ATContentTypeBaseSchema + TemplateMixinSchema
+ATContentTypeSchema = ATContentTypeBaseSchema + TemplateMixinSchema.copy()
+ATContentTypeSchema['layout'].write_permission = TEMPLATE_MIXIN_PERMISSION
+ATContentTypeSchema['layout'].visible.update({'edit': ENABLE_TEMPLATE_MIXIN and \
+                                                     'visible' or 'hidden'})
 
 ###
 # AT Content Type Document
