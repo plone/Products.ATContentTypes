@@ -153,7 +153,7 @@ def install(self, reinstall):
 
     # step 13: run any migrations
     print >>out, 'Migrating existing content to latest version'
-    migration_result = tool.upgrade(show_page=0)
+    migration_result = tool.upgrade()
     print >>out, migration_result
     
     print >> out, 'Successfully installed %s' % PROJECTNAME

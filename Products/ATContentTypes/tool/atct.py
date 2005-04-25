@@ -106,7 +106,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
     manage_options =  (
             {'label' : 'Overview', 'action' : 'manage_overview'},
             {'label' : 'Type Migration', 'action' : 'manage_typeMigration'},
-            #{'label' : 'Version Migration', 'action' : 'manage_versionMigration'},
+            {'label' : 'Version Migration', 'action' : 'manage_versionMigration'},
             {'label' : 'Recatalog', 'action' : 'manage_recatalog'},
             {'label' : 'Image scales', 'action' : 'manage_imageScales'}
         ) + PropertyManager.manage_options + \
@@ -134,10 +134,6 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
     security.declareProtected(CMFCorePermissions.ManagePortal,
                               'manage_overview')
     manage_overview = PageTemplateFile('overview', WWW_DIR)
-    
-    security.declareProtected(CMFCorePermissions.ManagePortal,
-                              'manage_migrateResults')
-    manage_migrateResults = PageTemplateFile('manage_migrateResults', WWW_DIR)
     
     ## version code
 
@@ -208,22 +204,32 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
         """ Does this thing now need recataloging? """
         return self._needRecatalog
 
+    security.declareProtected(CMFCorePermissions.ManagePortal, 'knownVersions')
+    def knownVersions(self):
+        """ All known version ids, except current one """
+        return _upgradePaths.keys()
+
     ##############################################################
 
     security.declareProtected(CMFCorePermissions.ManagePortal, 'upgrade')
-    def upgrade(self, REQUEST=None, dry_run=None, swallow_errors=1, show_page=1):
+    def upgrade(self, REQUEST=None, dry_run=None, swallow_errors=1, force_instance_version=None):
         """ perform the upgrade """
         # keep it simple
         out = []
 
         self._check()
 
+        if force_instance_version is None:
+            instance_version = self.getVersion()[1]
+        else:
+            instance_version = force_instance_version
+
         if dry_run:
             out.append(("Dry run selected.", zLOG.INFO))
 
         # either get the forced upgrade instance or the current instance
         newv = getattr(REQUEST, "force_instance_version",
-                       self.getVersion()[1])
+                       instance_version)
 
         out.append(("Starting the migration from "
                     "version: %s" % newv, zLOG.INFO))
@@ -294,12 +300,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
         # log all this to the ZLOG
         for msg, sev in out: log(msg, severity=sev)
 
-        if not show_page:
-            return out
-        try:
-            return self.manage_migrateResults(self, out=out)
-        except (NameError, IOError):
-            return out
+        return out
 
     ##############################################################
     # Private methods
