@@ -20,14 +20,16 @@
 """
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 
-import os
+import os, sys, traceback
 from cStringIO import StringIO
 import time
 import urllib
+import zLOG
 
 from OFS.SimpleItem import SimpleItem
 from OFS.PropertyManager import PropertyManager
-from Globals import InitializeClass 
+from Globals import InitializeClass
+from ZODB.POSException import ConflictError
 from AccessControl import ClassSecurityInfo
 import Persistence
 from Acquisition import aq_base
@@ -66,6 +68,15 @@ configlets = ({
     },
     )
 
+_upgradePaths = {}
+
+def registerUpgradePath(oldversion, newversion, function):
+    """ Basic register func """
+    _upgradePaths[oldversion] = [newversion, function]
+
+def log(message,summary='',severity=0):
+    zLOG.LOG('ATCT: ', severity, summary, message)
+
 class AlreadySwitched(RuntimeError): pass
 
 class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
@@ -85,6 +96,8 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
     _cmfTypesAreRecataloged = False
     _numversion = ()
     _version = ''
+
+    _needRecatalog = 0
     
     __implements__ = (SimpleItem.__implements__, IATCTTool,
                       ActionProviderBase.__implements__,
@@ -93,7 +106,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
     manage_options =  (
             {'label' : 'Overview', 'action' : 'manage_overview'},
             {'label' : 'Type Migration', 'action' : 'manage_typeMigration'},
-            #{'label' : 'Version Migration', 'action' : 'manage_versionMigration'},
+            {'label' : 'Version Migration', 'action' : 'manage_versionMigration'},
             {'label' : 'Recatalog', 'action' : 'manage_recatalog'},
             {'label' : 'Image scales', 'action' : 'manage_imageScales'}
         ) + PropertyManager.manage_options + \
@@ -123,6 +136,17 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
     manage_overview = PageTemplateFile('overview', WWW_DIR)
     
     ## version code
+
+    security.declareProtected(CMFCorePermissions.ManagePortal, 'setInstanceVersion')
+    def setInstanceVersion(self, version):
+        """ The version this instance of atct is on """
+        self._version = version
+
+        vers, rest = version.split(' ')
+        major, minor, bugfix =  vers.split('.')
+        bugfix, release = bugfix.split('-')
+
+        self._numversion = (int(major), int(minor), int(bugfix), -199)
 
     security.declareProtected(CMFCorePermissions.ManagePortal, 'setVersionFromFS')
     def setVersionFromFS(self):
@@ -167,6 +191,127 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
                   },)
 
         return icons
+
+    security.declareProtected(CMFCorePermissions.ManagePortal, 'needRecatalog')
+    def needRecatalog(self):
+        """ Does this thing now need recataloging? """
+        return self._needRecatalog
+
+    security.declareProtected(CMFCorePermissions.ManagePortal, 'knownVersions')
+    def knownVersions(self):
+        """ All known version ids, except current one """
+        return _upgradePaths.keys()
+
+    ##############################################################
+
+    security.declareProtected(CMFCorePermissions.ManagePortal, 'upgrade')
+    def upgrade(self, REQUEST=None, dry_run=None, swallow_errors=1, force_instance_version=None):
+        """ perform the upgrade """
+        # keep it simple
+        out = []
+
+        self._check()
+
+        if force_instance_version is None:
+            instance_version = self.getVersion()[1]
+        else:
+            instance_version = force_instance_version
+
+        if dry_run:
+            out.append(("Dry run selected.", zLOG.INFO))
+
+        # either get the forced upgrade instance or the current instance
+        newv = getattr(REQUEST, "force_instance_version",
+                       instance_version)
+
+        out.append(("Starting the migration from "
+                    "version: %s" % newv, zLOG.INFO))
+        while newv is not None:
+            out.append(("Attempting to upgrade from: %s" % newv, zLOG.INFO))
+            try:
+                newv, msgs = self._upgrade(newv)
+                if msgs:
+                    for msg in msgs:
+                        # if string make list
+                        if type(msg) == type(''):
+                            msg = [msg,]
+                        # if no status, add one
+                        if len(msg) == 1:
+                            msg.append(zLOG.INFO)
+                        out.append(msg)
+                if newv is not None:
+                    out.append(("Upgrade to: %s, completed" % newv, zLOG.INFO))
+                    self.setInstanceVersion(newv)
+
+            except ConflictError:
+                raise
+            except:
+                out.append(("Upgrade aborted", zLOG.ERROR))
+                out.append(("Error type: %s" % sys.exc_type, zLOG.ERROR))
+                out.append(("Error value: %s" % sys.exc_value, zLOG.ERROR))
+                for line in traceback.format_tb(sys.exc_traceback):
+                    out.append((line, zLOG.ERROR))
+
+                # set newv to None
+                # to break the loop
+                newv = None
+                if not swallow_errors:
+                    for msg, sev in out: log(msg, severity=sev)
+                    raise
+                else:
+                    # abort transaction to safe the zodb
+                    get_transaction().abort()
+
+        out.append(("End of upgrade path, migration has finished", zLOG.INFO))
+
+        if self.needsVersionMigration():
+            out.append((("The upgrade path did NOT reach "
+                        "current version"), zLOG.PROBLEM))
+            out.append(("Migration has failed", zLOG.PROBLEM))
+        else:
+            out.append((("Your ATCT instance is now up-to-date."), zLOG.INFO))
+
+        # do this once all the changes have been done
+        if self.needRecatalog():
+            try:
+                self.portal_catalog.refreshCatalog()
+                self._needRecatalog = 0
+            except ConflictError:
+                raise
+            except:
+                out.append(("Exception was thrown while cataloging",
+                            zLOG.ERROR))
+                out += traceback.format_tb(sys.exc_traceback)
+                if not swallow_errors:
+                    for msg, sev in out: log(msg, severity=sev)
+                    raise
+
+        if dry_run:
+            out.append(("Dry run selected, transaction aborted", zLOG.INFO))
+            get_transaction().abort()
+
+        # log all this to the ZLOG
+        for msg, sev in out: log(msg, severity=sev)
+
+        return out
+
+    ##############################################################
+    # Private methods
+
+    def _check(self):
+        """ Are we inside an ATCT site?  This is probably silly and redundant."""
+        if getattr(self, TOOLNAME, []) == []:
+            raise AttributeError, 'You must be in an ATCT site to migrate.'
+
+    def _upgrade(self, version):
+        version = version.lower()
+        if not _upgradePaths.has_key(version):
+            return None, ("Migration completed at version %s" % version,)
+
+        newversion, function = _upgradePaths[version]
+        res = function(self.aq_parent)
+        return newversion, res
+
 
     ## recataloging code
 

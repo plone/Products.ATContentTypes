@@ -49,6 +49,7 @@ import Products.ATContentTypes.content
 import Products.ATContentTypes.criteria
 import Products.ATContentTypes.migration
 from Products.ATContentTypes.tool.atct import ATCTTool
+from Products.ATContentTypes import migration
 
 # BBB aliases
 import Products.ATContentTypes.modulealiases
@@ -60,6 +61,10 @@ wireAddPermissions()
 registerDirectory(SKINS_DIR,GLOBALS)
 
 def initialize(context):
+    # Setup migrations
+    migration.executeMigrations()
+    migration.registerMigrations()
+    
     # process our custom types
     
     ToolInit(

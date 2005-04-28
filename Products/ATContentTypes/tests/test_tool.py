@@ -146,6 +146,22 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         atct_actions_ids = [action.getId() for action in atctdoc.listActions()]
         self.failUnless(id in atct_actions_ids, atct_actions_ids)
 
+    def testMigrationFinished(self):
+        t = self.tool
+        self.assertEqual(t.getVersion(),
+                         t.getVersionFromFS(),
+                         'Migration failed')
+
+    def testNeedsVersionMigration(self):
+        t = self.tool
+        self.failIf(t.needsVersionMigration(),
+                    'Migration needs upgrading')
+
+    def testMigrationNeedsRecatalog(self):
+        t = self.tool
+        self.failIf(t.needRecatalog(),
+                    'Migration needs recataloging')
+
 tests.append(TestTool)
 
 if __name__ == '__main__':

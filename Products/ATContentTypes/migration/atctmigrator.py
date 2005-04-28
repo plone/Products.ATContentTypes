@@ -89,7 +89,7 @@ class EventMigrator(CMFItemMigrator):
 
 registerATCTMigrator(EventMigrator, event.ATEvent)
 
-class TopicMigrator(CMFItemMigrator):
+class TopicMigrator(CMFFolderMigrator):
     walker = CatalogWalker
     map = {'acquireCriteria' : 'setAcquireCriteria'}
 
@@ -109,9 +109,9 @@ class TopicMigrator(CMFItemMigrator):
                 if old_op == 'max':
                     new_op = (DATE_RANGE == '-' and 'more') or 'less'
                 elif old_op == 'min':
-                    new_op = (DATE_RANGE == '-' and 'more') or 'less'
-                elif old_op == 'within_day':
-                    new_op = 'within_day'
+                    new_op = (DATE_RANGE == '-' and 'less') or 'more'
+                else:
+                    new_op = old_op
                 new_crit.setOperation(new_op)
                 new_crit.setDateRange(DATE_RANGE)
             if new_meta == 'ATListCriterion':
