@@ -38,54 +38,11 @@
            tal:attributes="href string:${here_url}/asPDF/atct_topic_pdf_template/atct_topic_pdf">
                     Download PDF
         </a>
-        <tal:default condition="not:here/getCustomView|nothing">
-
-            <dl>
-            <tal:brain repeat="obj topicContents">
-                <dt metal:define-macro="list-item"
-                    tal:define="url obj/getURL;
-                                obj_type obj/portal_type;
-                                obj_typeinfo python: here.portal_types.getTypeInfo(obj_type);
-                                icon python:portal_url+'/'+ obj_typeinfo.getIcon();
-                                title_or_id python:obj.Title or obj.getId">
-                <a href="#" tal:attributes="href url">
-                    <img src="#"
-                     height="16"
-                     width="16"
-                     alt=""
-                     tal:attributes="src icon"/>
-                </a>
-
-                <a href="#" tal:condition="python:obj.portal_type not in ['Link', 'Image']"
-                            tal:attributes="href url"
-                            tal:content="title_or_id" />
-
-                <a href="#" tal:condition="python:obj.portal_type == 'Image'"
-                            tal:attributes="href string:${url}/view"
-                            tal:content="title_or_id" />
-
-                <a href="#" 
-                   tal:condition="python:obj.portal_type == 'Link'"
-                   tal:attributes="href obj/getRemoteUrl;"
-                   class="link-plain"
-                   tal:content="title_or_id" />
-
-                <span class="discreet"
-                      tal:condition="python:obj.portal_type == 'Event'">
-    
-                    &nbsp;
-                    <span tal:replace="obj/location">Oslo</span>,
-                    <span tal:replace="obj/start/ISO|obj/StartDate">from date</span> -
-                    <span tal:replace="obj/end/ISO|obj/EndDate">to date</span>
-
-                </span>
-                </dt>
-
-                <dd>
-                    <span tal:content="structure python:test(obj.Description, obj.Description, '&nbsp;')"> description </span>
-                </dd>
-            </tal:brain>
-            </dl>
+        <tal:default condition="not:here/getCustomView|nothing"
+                     define="folderContents topicContents">
+            <metal:listing metal:use-macro="here/folder_listing/macros/listing">
+                <metal:empty metal:fill-slot="no_items_in_listing"></metal:empty>
+            </metal:listing>
 
         </tal:default>
 
@@ -168,7 +125,8 @@
     </metal:body>
     <metal:body define-macro="folderlisting_macro">
         <tal:subtopics>
-            <h2>Sub-topics:</h2>
+            <h2
+           i18n:translate="sub_topics_heading">Sub-topics:</h2>
             <metal:list metal:use-macro="here/base/macros/folderlisting"/>
         </tal:subtopics>
     </metal:body>
@@ -176,4 +134,3 @@
 
 </body>
 </html>
-

@@ -488,7 +488,15 @@ class ATTopic(ATCTFolder):
     def get_size(self):
         """Returns 1 as topics have no size."""
         return 1
-    
+
+    security.declarePublic('canSetDefaultPage')
+    def canSetDefaultPage(self):
+        """
+        Override BrowserDefaultMixin because default page stuff doesn't make
+        sense for topics.
+        """
+        return False
+
 registerATCT(ATTopic, PROJECTNAME)
 
 def modify_fti(fti):
