@@ -250,10 +250,11 @@ class AutoOrderSupport(AutoSortSupport, OrderedContainer):
         # well for btrees isn't a huge issue, since btrees are more for
         # machines than humans.
 
-        cat = getToolByName(self, 'portal_catalog')
-        cataloged_objs = cat(path = {'query': '/'.join(self.getPhysicalPath()), 'depth': 1})
-        for brain in cataloged_objs:
-            obj = brain.getObject()
-            cat.indexObject(obj,['getObjPositionInParent',])
+        cat = getToolByName(self, 'portal_catalog', None)
+        if cat is not None:
+            cataloged_objs = cat(path = {'query': '/'.join(self.getPhysicalPath()), 'depth': 1})
+            for brain in cataloged_objs:
+                obj = brain.getObject()
+                cat.indexObject(obj,['getObjPositionInParent',])
 
 InitializeClass(AutoOrderSupport)
