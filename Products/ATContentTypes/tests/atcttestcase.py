@@ -50,6 +50,7 @@ from Products.Archetypes.interfaces.base import IBaseContent
 from Products.Archetypes.public import *
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.interfaces.referenceable import IReferenceable
+from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
 from Products.Archetypes.tests.test_baseschema import BaseSchemaTest
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes import permission as ATCTPermissions
@@ -157,7 +158,19 @@ class ATCTTypeTestCase(ATSiteTestCase):
         if not HAS_LINGUA_PLONE:
             return
         self.failUnless(ITranslatable.isImplementedBy(self._ATCT))
-        self.failUnless(verifyObject(ITranslatable, self._ATCT))       
+        self.failUnless(verifyObject(ITranslatable, self._ATCT)) 
+        
+    def test_implementsITemplateMixin(self):
+        self.failUnless(ITemplateMixin.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(ITemplateMixin, self._ATCT))
+    
+    def test_implementsSelectableBrowserDefault(self):
+        if not HAS_PLONE2:
+            return
+        from Products.CMFPlone.interfaces.BrowserDefault \
+            import ISelectableBrowserDefault   
+        self.failUnless(ISelectableBrowserDefault.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(ISelectableBrowserDefault, self._ATCT))
 
     def compareDC(self, first, second=None, **kwargs):
         """
