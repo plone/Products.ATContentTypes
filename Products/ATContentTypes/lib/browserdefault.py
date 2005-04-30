@@ -91,10 +91,10 @@ class BrowserDefaultMixin(TemplateMixin):
         return that. If not, resolve and return the page template found by
         getLayout().
         """
-        # Delegate to PloneTool's version if we have it and we are a folder
-        # else, use defaultView(), which will handle the folder/non-folder
+        # Delegate to PloneTool's version if we have it else, use
+        # defaultView(), which will handle the folder/non-folder
         # distinction for us
-        if self.isPrincipiaFolderish and HAS_PLONE2:
+        if HAS_PLONE2:
             return getToolByName(self, 'plone_utils').browserDefault(self)
         else:
             return self, [self.defaultView(request),]
