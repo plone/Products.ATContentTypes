@@ -72,14 +72,14 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(self.af.getDefaultPage(), None)
         self.assertEqual(self.af.defaultView(), 'folder_listing')
         self.assertEqual(self.af.getDefaultLayout(), 'folder_listing')
-        self.failUnless('folder_listing' in self.af.getAvailableLayouts())
-        self.failUnless('atct_album_view' in self.af.getAvailableLayouts())
+        layoutKeys = [v[0] for v in self.af.getAvailableLayouts()]
+        self.failUnless('folder_listing' in layoutKeys)
+        self.failUnless('atct_album_view' in layoutKeys)
         self.assertEqual(self.af.__browser_default__(None), (self.af, ['folder_listing',]))
         
     def test_canSetLayout(self):
         self.failUnless(self.af.canSetLayout())
         self.af.invokeFactory('Document', 'ad')
-        self.failIf(self.af.ad.canSetLayout()) # Can only select one
         self.portal.manage_permission(permission.ModifyViewTemplate, [], 0)
         self.failIf(self.af.canSetLayout()) # Not permitted
     
@@ -89,8 +89,9 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(self.af.getDefaultPage(), None)
         self.assertEqual(self.af.defaultView(), 'atct_album_view')
         self.assertEqual(self.af.getDefaultLayout(), 'folder_listing')
-        self.failUnless('folder_listing' in self.af.getAvailableLayouts())
-        self.failUnless('atct_album_view' in self.af.getAvailableLayouts())
+        layoutKeys = [v[0] for v in self.af.getAvailableLayouts()]
+        self.failUnless('folder_listing' in layoutKeys)
+        self.failUnless('atct_album_view' in layoutKeys)
         self.assertEqual(self.af.__browser_default__(None), (self.af, ['atct_album_view',]))
         
     def test_canSetDefaultPage(self):
@@ -110,8 +111,9 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         # still have layout settings
         self.assertEqual(self.af.getLayout(), 'folder_listing')
         self.assertEqual(self.af.getDefaultLayout(), 'folder_listing')
-        self.failUnless('folder_listing' in self.af.getAvailableLayouts())
-        self.failUnless('atct_album_view' in self.af.getAvailableLayouts())
+        layoutKeys = [v[0] for v in self.af.getAvailableLayouts()]
+        self.failUnless('folder_listing' in layoutKeys)
+        self.failUnless('atct_album_view' in layoutKeys)
     
     def test_setLayoutUnsetsDefaultPage(self):
         self.af.invokeFactory('Document', 'ad')

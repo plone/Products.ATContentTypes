@@ -175,11 +175,8 @@ class BrowserDefaultMixin(TemplateMixin):
     def canSetLayout(self):
         """
         Return True if the current authenticated user is permitted to select
-        a layout, and there is more than one layout to select.
+        a layout.
         """
-        if len(self.getAvailableLayouts()) <= 1:
-            return False
-
         mtool = getToolByName(self, 'portal_membership')
         member = mtool.getAuthenticatedMember()
         return member.has_permission(ModifyViewTemplate, self)
@@ -189,7 +186,14 @@ class BrowserDefaultMixin(TemplateMixin):
         """
         Get the layouts registered for this object.
         """
-        return self._voc_templates()
+        vocab = self._voc_templates()
+        
+        # Convert to the list-of-tuples required by the interface so that we're 
+        # not returning AT-specific DisplayLists
+        tuples = []
+        for id in vocab.keys():
+            tuples.append((id, vocab.getValue(id),))
+        return tuples
 
 
 InitializeClass(BrowserDefaultMixin)

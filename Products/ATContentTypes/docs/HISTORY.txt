@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * BrowserDefaultMixin.getAvailableLayouts() now returns a list of tuples
+   instead of a DisplayList. Required by interface change in Plone.
+   [optilude]
+
  * Added cool icons for vCal/iCal export and image rotation/flipping made by
    the legendary Vidar Anderson.
    [blacktar, tiran]
