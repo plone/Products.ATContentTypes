@@ -70,6 +70,8 @@ from Products.ATContentTypes.criteria.portaltype import \
     ATPortalTypeCriterion
 from Products.ATContentTypes.criteria.currentauthor import \
     ATCurrentAuthorCriterion
+from Products.ATContentTypes.criteria.path import \
+    ATPathCriterion
 tests = []
 
 class CriteriaTest(atcttestcase.ATCTSiteTestCase):
@@ -550,6 +552,32 @@ class TestATCurrentAuthorCriterion(CriteriaTest):
         self.assertEquals(query, 'reviewer')
 
 tests.append(TestATCurrentAuthorCriterion)
+
+
+class TestATPathCriterion(CriteriaTest):
+    klass = ATPathCriterion
+    title = 'Path Criterion'
+    meta_type = 'ATPathCriterion'
+    portal_type = 'ATPathCriterion'
+
+    def test_path_query(self):
+        self.dummy.field = 'path'
+        self.dummy.setValue(('/','/foo/bar'))
+        self.dummy.setRecurse(True)
+        items = self.dummy.getCriteriaItems()
+        self.assertEquals(len(items),1)
+        query = items[0][1]
+        field = items[0][0]
+        self.assertEquals(field, 'path')
+        self.assertEquals(query['query'], ('/','/foo/bar'))
+        self.assertEquals(query['depth'], 0)
+        self.dummy.setRecurse(False)
+        items = self.dummy.getCriteriaItems()
+        query = items[0][1]
+        self.assertEquals(query['depth'], 1)
+        
+
+tests.append(TestATPathCriterion)
 
 
 if __name__ == '__main__':

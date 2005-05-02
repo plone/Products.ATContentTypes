@@ -50,6 +50,7 @@ STRING_INDICES = ('FieldIndex', 'KeywordIndex', 'PathIndex', 'TextIndex',
 
 LIST_INDICES = ('FieldIndex', 'KeywordIndex', 'TopicIndex')
 FIELD_INDICES = ('FieldIndex',)
+PATH_INDICES = ('PathIndex','ExtendedPathIndex')
 
 class _CriterionRegistry(UserDict):
     """Registry for criteria """
@@ -134,3 +135,4 @@ from Products.ATContentTypes.criteria.simpleint import ATSimpleIntCriterion
 from Products.ATContentTypes.criteria.simplestring import ATSimpleStringCriterion
 from Products.ATContentTypes.criteria.sort import ATSortCriterion
 from Products.ATContentTypes.criteria.currentauthor import ATCurrentAuthorCriterion
+from Products.ATContentTypes.criteria.path import ATPathCriterion

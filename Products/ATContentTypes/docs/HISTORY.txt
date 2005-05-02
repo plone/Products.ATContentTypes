@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Added new path criterion for use with ExtendedPathIndex that allows users
+   to select paths to search in using a sitemap.
+   [alecm]
+
  * Add Topic to the list of allowed sub-objects for Topic during Migration.
    It was missing before because the class allowed_content_types property
    was being overwritten by the one from CMFTopics.
