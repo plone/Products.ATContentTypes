@@ -80,7 +80,7 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
         ),
     ImageField('image',
         required = False,
-        torage = AnnotationStorage(migrate=True),
+        storage = AnnotationStorage(migrate=True),
         languageIndependent = True,
         sizes= {'large'   : (768, 768),
                 'preview' : (400, 400),
