@@ -23,6 +23,9 @@ def alpha1_alpha2(portal):
     # Migrate any lingering CMF Topics
     migrateCMFTopics(portal,out)
 
+    # Add Topics to the list of allowed_content_types for topics
+    addSubTopicAllowed(portal,out)
+
     return out
 
 def findAndAlterCriteria(portal, out, meta_type, func, **kwargs):
@@ -84,7 +87,8 @@ def migrateCMFTopics(portal, out):
     atct = getToolByName(portal, TOOLNAME, None)
     #Recatalog the CMF Topics if they were missed
 
-    #The portal type for CMF Topics has is now wrong we need to change it back
+    # The portal type for CMF Topics was incorrectly altered by 0.2 migration
+    # we need to change it back
     if catalog is not None:
         if atct is not None:
             atct.recatalogCMFTypes()
@@ -103,3 +107,21 @@ def migrateCMFTopics(portal, out):
         out.append('*** Migrating Topics ***')
         useLevelWalker(portal, TopicMigrator, out=out, **kwargs)
     out.append('CMF type migration finished')
+
+
+def addSubTopicAllowed(portal,out):
+    """Add Topic to allowed_content_types for Topic.  It is not added
+       automatically because the CMF migration copies over the
+       allowed_content_types value from CMF Topics."""
+    ttool = getToolByName(portal, 'portal_types', None)
+    if ttool is not None:
+        topic_fti = ttool.getTypeInfo('Topic')
+        if topic_fti is not None:
+            old_allowed = topic_fti.allowed_content_types
+            if old_allowed and 'Topic' not in old_allowed:
+                new_allowed = old_allowed + ('Topic',)
+            else:
+                new_allowed = ('Topic',)
+            if not old_allowed or 'Topic' not in old_allowed:
+                topic_fti.manage_changeProperties(allowed_content_types=new_allowed)
+                out.append('Added Topic to Topic allowed types')

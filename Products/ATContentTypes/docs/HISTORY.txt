@@ -1,6 +1,11 @@
 1.0-devel
 =====================
 
+ * Add Topic to the list of allowed sub-objects for Topic during Migration.
+   It was missing before because the class allowed_content_types property
+   was being overwritten by the one from CMFTopics.
+   [alecm]
+
  * BrowserDefaultMixin.getAvailableLayouts() now returns a list of tuples
    instead of a DisplayList. Required by interface change in Plone.
    [optilude]

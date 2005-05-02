@@ -175,6 +175,12 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         query = topic.buildQuery()
         self.assertEquals( query, None )
 
+    def test_canContainSubtopics(self):
+        ttool = self.portal.portal_types
+        fti = ttool.getTypeInfo(self.portal_type)
+        self.failUnless(self.portal_type in fti.allowed_content_types,
+                        'Topics should be allowed to contain topics')
+
     def test_Simple( self ):
         topic = self._ATCT
 

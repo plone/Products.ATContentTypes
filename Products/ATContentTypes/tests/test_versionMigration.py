@@ -22,6 +22,7 @@ from Products.ATContentTypes.migration.v1.alphas import updateDateCriteria
 from Products.ATContentTypes.migration.v1.alphas import updateIntegerCriteria
 from Products.ATContentTypes.migration.v1.alphas import migrateCMFTopics
 from Products.ATContentTypes.migration.v1.alphas import uncatalogCriteria
+from Products.ATContentTypes.migration.v1.alphas import addSubTopicAllowed
 
 
 class MigrationTest(atcttestcase.ATCTSiteTestCase):
@@ -125,6 +126,31 @@ class TestMigrations_v1(MigrationTest):
         # Should not fail if portal_catalog is missing
         self.portal._delObject('portal_catalog')
         updateIntegerCriteria(self.portal,[])
+
+    def testAddSubTopicAllowed(self):
+        ttool = self.portal.portal_types
+        topic_fti = ttool.getTypeInfo('Topic')
+        topic_fti.manage_changeProperties(allowed_content_types=())
+        self.assertEqual(topic_fti.allowed_content_types, ())
+        addSubTopicAllowed(self.portal,[])
+        self.assertEqual(topic_fti.allowed_content_types, ('Topic',))
+
+    def testAddSubTopicAllowedTwice(self):
+        ttool = self.portal.portal_types
+        topic_fti = ttool.getTypeInfo('Topic')
+        topic_fti.manage_changeProperties(allowed_content_types=())
+        addSubTopicAllowed(self.portal,[])
+        addSubTopicAllowed(self.portal,[])
+        self.assertEqual(topic_fti.allowed_content_types, ('Topic',))
+
+    def testAddSubTopicAllowedNoTool(self):
+        self.portal._delObject('portal_types')
+        addSubTopicAllowed(self.portal,[])
+
+    def testAddSubTopicAllowedNoFTI(self):
+        ttool = self.portal.portal_types
+        ttool._delObject('Topic')
+        addSubTopicAllowed(self.portal,[])
 
 def test_suite():
     from unittest import TestSuite, makeSuite
