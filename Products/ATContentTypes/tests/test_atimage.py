@@ -167,6 +167,7 @@ tests.append(TestSiteATImage)
 
 class TestATImageFields(atcttestcase.ATCTFieldTestCase):
 
+
     def afterSetUp(self):
         atcttestcase.ATCTFieldTestCase.afterSetUp(self)
         self._dummy = self.createDummy(klass=ATImage)
@@ -216,6 +217,47 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
 
 
 tests.append(TestATImageFields)
+
+from Products.ATContentTypes.lib import exif
+TEST_CANONEYE_JPG = open(os.path.join(_here, 'CanonEye.jpg')).read()
+class TestSiteATImageExif(atcttestcase.ATCTTypeTestCase):
+
+    klass = ATImage
+    portal_type = 'Image'
+    cmf_portal_type = 'CMF Image'
+    cmf_klass = Image
+    title = 'Image'
+    meta_type = 'ATImage'
+    icon = 'image_icon.gif'
+
+    def test_broken_exif(self):
+
+        #EXIF data in images from Canon digicams breaks EXIF of 2005.05.12 with following exception
+        # 
+      	#2005-05-01T19:21:16 ERROR(200) Archetypes None
+        #Traceback (most recent call last):
+        #  File "/home/russ/cb/var/zope/Products/ATContentTypes/content/image.py", line 207, in getEXIF
+        #    exif_data = exif.process_file(img, debug=False, noclose=True)
+        #  File "/home/russ/cb/var/zope/Products/ATContentTypes/lib/exif.py", line 1013, in process_file
+        #    hdr.decode_maker_note()
+        #  File "/home/russ/cb/var/zope/Products/ATContentTypes/lib/exif.py", line 919, in decode_maker_note
+        #    dict=MAKERNOTE_CANON_TAGS)
+        #  File "/home/russ/cb/var/zope/Products/ATContentTypes/lib/exif.py", line 753, in dump_IFD
+        #    raise ValueError, \
+        #ValueError: unknown type 768 in tag 0x0100
+        #
+
+        # This test fails even with the 2005.05.12 exif version from 
+        #    http://home.cfl.rr.com/genecash/
+
+        atct = self._ATCT
+        atct.setImage(TEST_CANONEYE_JPG, mimetype='image/jpeg', filename='CanonImage.jpg')
+        canonImage = atct.getImageAsFile(scale=None)
+        exif_data = exif.process_file(canonImage, debug=False)        
+        # probably want to add some tests on returned data. Currently gives 
+        #  ValueError in process_file 
+
+tests.append(TestSiteATImageExif)
 
 if __name__ == '__main__':
     framework()
