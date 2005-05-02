@@ -1,0 +1,68 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+
+<body>
+
+<div metal:fill-slot="main" tal:define="image nocall:here; 
+                                        Iterator python:modules['Products.CMFPlone'].IndexIterator; 
+                                        tabindex python:Iterator();
+                                        size python:here.getObjSize(here)">
+
+    <div class="contentHeader">
+        <h1 tal:content="here/title_or_id">Title or id</h1> 
+    </div>
+
+    <img src="#" tal:replace="structure python:here.tag(scale='mini')" />
+
+    <p style="margin-top: 2em;" tal:content="here/Description">
+    Description
+    </p>
+    
+    <small>
+
+    <span i18n:translate="" tal:omit-tag="">Original size</span>:
+
+        <span tal:content="size">                        
+        File size
+        </span>            
+
+        <span tal:condition="not: size"
+              i18n:translate="">
+          (No file has been uploaded)
+        </span>
+
+    </small>
+    
+	
+    <div style="width: 3em; text-align: left;" class="label">
+      <span i18n:translate="">Transform</span>
+      
+      <div id="display_help"
+	   class="help"
+	   style="visibility:hidden; left:-18em;" i18n:translate="">
+        Select transformation method.
+      </div>
+    </div>
+    
+    <div class="field" tal:define="transforms image/getTransformMap">
+      <form tal:attributes="action string:${request/URL1}/transformImage">
+	    <select name="method" 
+		        tal:attributes="tabindex tabindex/next">
+          <option disabled="disabled" value="" i18n:translate="">Select method</option>
+          <option tal:repeat="trans transforms" 
+                  i18n:translate=""
+                  tal:attributes="value trans/value"
+                  tal:content="trans/name">1</option>
+	    </select>
+      <input class="context" type="submit" i18n:attributes="value" value="Execute" />
+      </form>
+    </div>
+
+</div>
+
+</body>
+
+</html>
+
