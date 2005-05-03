@@ -561,6 +561,7 @@ class TestATPathCriterion(CriteriaTest):
     portal_type = 'ATPathCriterion'
 
     def test_path_query(self):
+        # ensure that the path and recurse settings result in a proper query
         self.dummy.field = 'path'
         self.dummy.setValue(('/','/foo/bar'))
         self.dummy.setRecurse(True)
@@ -575,7 +576,12 @@ class TestATPathCriterion(CriteriaTest):
         items = self.dummy.getCriteriaItems()
         query = items[0][1]
         self.assertEquals(query['depth'], 1)
-        
+
+    def testDefaultPathValue(self):
+        # ensure that the default_method returns a sensible value (i.e. the
+        # folder containing the topic/criterion).
+        def_path = self.dummy.getCurrentPath()
+        self.assertEqual(def_path, ('/plone/Members/test_user_1_',))
 
 tests.append(TestATPathCriterion)
 

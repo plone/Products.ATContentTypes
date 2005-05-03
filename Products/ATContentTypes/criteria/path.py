@@ -67,7 +67,6 @@ ATPathCriterionSchema = ATBaseCriterionSchema + Schema((
                 accessor="Value",
                 mutator="setValue",
                 default_method='getCurrentPath',
-                vocabulary="getCurrentValues",
                 widget=SiteMapWidget(
                     label="Folders",
                     label_msgid="label_path_criteria_value",
@@ -105,7 +104,16 @@ class ATPathCriterion(ATBaseCriterion):
     def getCurrentPath(self):
         """ Returns the path of the parent object so that we know where we are
             in the sitemap """
-        return ('/'.join(self.aq_inner.aq_parent.getPhysicalPath()),)
+        portal = self.portal_url.getPortalObject()
+        nav_props = self.portal_properties.navtree_properties
+        nav_types = nav_props.getProperty('typesToList', None)
+        obj = self
+        while getattr(obj,'portal_type', None) not in nav_types and obj != portal:
+            try:
+                obj = obj.aq_inner.aq_parent
+            except AttributeError:
+                return ()
+        return ('/'.join(obj.getPhysicalPath()),)
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):
