@@ -132,14 +132,14 @@ def registerActionIcons(self, out):
     action_icons = ({
         'category'  : 'plone',
         'action_id' : 'ics',
-        'icon_expr' : 'icon_ical_export.png',
+        'icon_expr' : 'icon_export_ical.png',
         'title'     : 'iCalendar export',
         'priority'  : 0,
         },
         {
         'category'  : 'plone',
         'action_id' : 'vcs',
-        'icon_expr' : 'icon_vcal_export.png',
+        'icon_expr' : 'icon_export_vcal.png',
         'title'     : 'vCalendar export',
         'priority'  : 0,
         },
