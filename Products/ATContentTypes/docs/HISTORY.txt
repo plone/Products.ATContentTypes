@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Fixed #1196809 - Use getMutator(self) instead of mutator(self) in base.py.
+   [stefan]
+
  * Added new path criterion for use with ExtendedPathIndex that allows users
    to select paths to search in using a sitemap.
    [alecm]

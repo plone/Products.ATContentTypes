@@ -403,7 +403,7 @@ class ATCTFileContent(ATCTContent):
         kwargs = {}
         if content_type is not None:
             kwargs['mimetype'] = content_type
-        mutator = self.getPrimaryField().mutator(self)
+        mutator = self.getPrimaryField().getMutator(self)
         mutator(data, **kwargs)
         ##self.ZCacheable_invalidate()
         ##self.ZCacheable_set(None)
