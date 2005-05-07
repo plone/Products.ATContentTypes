@@ -136,8 +136,9 @@ def cleanupFilename(filename, encoding='utf-8'):
     result = u''
     for s in str(filename).decode(encoding):
         s = CHAR_MAPPING.get(s, s)
-        if s in GOOD_CHARS:
-            result += s
+        for c in s:
+            if c in GOOD_CHARS:
+                result += c
     return result.encode(encoding)
 
 def translateMimetypeAlias(alias):
