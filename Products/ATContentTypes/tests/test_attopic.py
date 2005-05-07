@@ -160,7 +160,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
     portal_type = 'Topic'
     cmf_portal_type = 'CMF Topic'
     cmf_klass = Topic
-    title = 'Magnet'
+    title = 'Smart Folder'
     meta_type = 'ATTopic'
     icon = 'topic_icon.gif'
 
