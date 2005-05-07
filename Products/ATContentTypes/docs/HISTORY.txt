@@ -1,11 +1,16 @@
 1.0-devel
 =====================
 
+ * Added a getCriteriaUniqueWidgetAttr method to topics to compile things like
+   'helper_js' in one place for the edit form.
+   [alecm]
+
  * Fixed #1196809 - Use getMutator(self) instead of mutator(self) in base.py.
    [stefan]
 
  * Added new path criterion for use with ExtendedPathIndex that allows users
-   to select paths to search in using a sitemap.
+   to select paths to search in using a sitemap.  This now uses the
+   lovely ATReferenceBrowserWidget.
    [alecm]
 
  * Add Topic to the list of allowed sub-objects for Topic during Migration.

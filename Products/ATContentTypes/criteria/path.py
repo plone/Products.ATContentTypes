@@ -29,10 +29,8 @@ from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.public import Schema
-from Products.Archetypes.public import LinesField, BooleanField
+from Products.Archetypes.public import BooleanField, ReferenceField
 from Products.Archetypes.public import BooleanWidget
-from Products.Archetypes.Widget import TypesWidget
-from Products.Archetypes.Registry import registerWidget
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import PATH_INDICES
@@ -40,34 +38,22 @@ from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
+from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 
 from types import StringType
 
-class SiteMapWidget(TypesWidget):
-    _properties = TypesWidget._properties.copy()
-    _properties.update({
-        'macro' : "sitemap_widget",
-        })
-    security = ClassSecurityInfo()
-
-registerWidget(SiteMapWidget,
-               title='Selection',
-               description=('Renders a plone site map, which '
-                            'from which a list of site paths can be selected '
-                            'with checkboxes'),
-               used_for=('Products.Archetypes.Field.StringField',
-                         'Products.Archetypes.Field.LinesField',)
-               )
-
 ATPathCriterionSchema = ATBaseCriterionSchema + Schema((
-    LinesField('value',
+    ReferenceField('value',
                 required=1,
                 mode="rw",
                 write_permission=ChangeTopics,
                 accessor="Value",
                 mutator="setValue",
-                default_method='getCurrentPath',
-                widget=SiteMapWidget(
+                allowed_types_method="getNavTypes",
+                multiValued=True,
+                relationship="paths",
+                widget=ReferenceBrowserWidget(
+                    allow_search=1,
                     label="Folders",
                     label_msgid="label_path_criteria_value",
                     description="Folders to search in.",
@@ -115,13 +101,19 @@ class ATPathCriterion(ATBaseCriterion):
                 return ()
         return ('/'.join(obj.getPhysicalPath()),)
 
+    def getNavTypes(self):
+        nav_props = self.portal_properties.navtree_properties
+        nav_types = nav_props.getProperty('typesToList', None)
+        return nav_types
+
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
         depth = (not self.Recurse() and 1) or 0
+        paths = ['/'.join(o.getPhysicalPath()) for o in self.Value()]
 
-        if self.Value() is not '':
-            result.append((self.Field(), {'query': self.Value(), 'depth': depth}))
+        if paths is not '':
+            result.append((self.Field(), {'query': paths, 'depth': depth}))
 
         return tuple( result )
 

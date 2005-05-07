@@ -497,6 +497,23 @@ class ATTopic(ATCTFolder):
         """
         return False
 
+    security.declarePublic('getCriterionUniqueWidgetAttributes')
+    def getCriteriaUniqueWidgetAttr(self, attr):
+        """Get a unique list values for a specific attribute for all widgets
+           on all criteria"""
+        criteria = self.listCriteria()
+        order = []
+        for crit in criteria:
+            fields = crit.Schema().fields()
+            for f in fields:
+                widget = f.widget
+                helper = getattr(widget, attr, None)
+                # We expect the attribute value to be a iterable.
+                if helper:
+                    [order.append(item) for item in helper
+                        if item not in order]
+        return order
+
 registerATCT(ATTopic, PROJECTNAME)
 
 def modify_fti(fti):
