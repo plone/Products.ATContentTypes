@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Updated exif lib
+   [russf]
+
  * Added default values for the index/metadata friendly names, descriptions,
    and criteria restrictions for Smart Folders using ZConfig.  Added the
    ability to have an index with no criteria (useful for sort only criteria).
