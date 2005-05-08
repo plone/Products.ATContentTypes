@@ -85,7 +85,7 @@ class ATPathCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'portal location'
+    shortDesc      = 'Location in portal'
 
     def getCurrentPath(self):
         """ Returns the path of the parent object so that we know where we are

@@ -102,7 +102,7 @@ class ATSimpleIntCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'exact integer value'
+    shortDesc      = 'Integer value or range'
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):

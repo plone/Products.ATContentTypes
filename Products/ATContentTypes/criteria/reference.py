@@ -46,7 +46,7 @@ class ATReferenceCriterion(ATSelectionCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'reference field select list'
+    shortDesc      = 'Select referenced content'
 
 
     def getCurrentValues(self):

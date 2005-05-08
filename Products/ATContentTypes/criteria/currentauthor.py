@@ -51,7 +51,7 @@ class ATCurrentAuthorCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'current user'
+    shortDesc      = 'Restrict to current user'
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):

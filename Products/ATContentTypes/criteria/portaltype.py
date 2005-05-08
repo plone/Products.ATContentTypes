@@ -61,7 +61,7 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'portal types values'
+    shortDesc      = 'Select content types'
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCurrentValues(self):

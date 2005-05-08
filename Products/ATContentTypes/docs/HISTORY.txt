@@ -1,6 +1,14 @@
 1.0-devel
 =====================
 
+ * Added default values for the index/metadata friendly names, descriptions,
+   and criteria restrictions for Smart Folders using ZConfig.  Added the
+   ability to have an index with no criteria (useful for sort only criteria).
+   Made the descriptions for the criteria types more sensible (I hope this
+   doesn't screw up existing translations, but the current names are terrible).
+   Also, added some missing criteria related strings to manual.pot.
+   [alecm]
+
  * Added a getCriteriaUniqueWidgetAttr method to topics to compile things like
    'helper_js' in one place for the edit form.
    [alecm]

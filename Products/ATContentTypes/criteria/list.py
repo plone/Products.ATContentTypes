@@ -88,7 +88,7 @@ class ATListCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'list of values'
+    shortDesc      = 'List of values'
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):

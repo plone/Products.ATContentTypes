@@ -68,7 +68,7 @@ class ATSimpleStringCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'exact text value'
+    shortDesc      = 'Text'
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):

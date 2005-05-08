@@ -129,7 +129,7 @@ class ATDateCriteria(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'relative date'
+    shortDesc      = 'Relative date'
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):

@@ -111,4 +111,56 @@
          datatype="boolean" default="yes" required="no" /> 
     
   </sectiontype>
+
+  <sectiontype name="metadata">
+    <description format="plain">
+        A single metadata element
+    </description>
+    <key name="name" attribute="name" datatype="string"
+         required="yes" />
+    <key name="friendlyName" attribute="friendlyName" datatype="string"
+         default="" required="no" />
+    <key name="description" attribute="description" datatype="string"
+         default="" required="no" />
+    <key name="enabled" attribute="enabled" datatype="boolean"
+         default="on" required="no" />
+  </sectiontype>
+
+  <sectiontype name="index">
+    <description format="plain">
+        A single metadata element
+    </description>
+    <key name="name" attribute="name" datatype="string"
+         required="yes" />
+    <key name="friendlyName" attribute="friendlyName" datatype="string"
+         default="" required="no" />
+    <key name="description" attribute="description" datatype="string"
+         default="" required="no" />
+    <key name="enabled" attribute="enabled" datatype="boolean"
+         default="on" required="no" />
+    <multikey name="criterion" attribute="criteria" datatype="string"
+         required="no">
+        <default>
+            criterion 
+        </default>
+    </multikey>
+  </sectiontype>
+
+  <sectiontype name="topic_tool">
+    <description format="plain">
+        Topic tool default values
+    </description>
+    <multisection name="*" attribute="metadata" type="metadata"
+             required="no" />
+    <multisection name="*" attribute="indexes" type="index"
+             required="no" />
+  </sectiontype>
+
+  <sectiontype name="atct_tool">
+    <description format="plain">
+        ATCT tool defaults
+    </description>
+    <section name="*" attribute="topic_tool" type="topic_tool"
+             required="no" />
+  </sectiontype>
 </component>

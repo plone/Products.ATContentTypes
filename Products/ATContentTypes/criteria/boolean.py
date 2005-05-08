@@ -66,7 +66,7 @@ class ATBooleanCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'boolean (true/false)'
+    shortDesc      = 'Boolean (True/False)'
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):

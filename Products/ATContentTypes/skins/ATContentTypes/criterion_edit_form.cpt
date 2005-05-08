@@ -160,7 +160,10 @@
                             tal:define="explanation python:field[2]"
                             tal:attributes="value python:field[0];
                                             title python:explanation"
-                            tal:content="python:field[1]">Field</option>
+                            tal:content="python:field[1]"
+                            tal:condition="python:here.allowedCriteriaForField(field[0])">
+                            Field
+                    </option>
                     </tal:options>
             </select>
 

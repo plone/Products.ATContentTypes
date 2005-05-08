@@ -60,17 +60,48 @@ msgid "end"
 msgstr ""
 
 
-msgid "exact date value"
+msgid "Relative date"
 msgstr ""
 
 
-msgid "exact integer value"
+msgid "Integer value or range"
 msgstr ""
 
 
-msgid "exact text value"
+msgid "Text"
 msgstr ""
 
+
+msgid "Select content types"
+msgstr ""
+
+
+msgid "logical AND or OR of list values"
+msgstr ""
+
+
+msgid "Date range"
+msgstr ""
+
+
+msgid "Location in portal"
+msgstr ""
+
+
+msgid "Select from list"
+msgstr ""
+
+
+msgid "Select referenced content"
+msgstr ""
+
+
+msgid "Boolean (True/False)"
+msgstr ""
+
+
+msgid "Restrict to current user"
+msgstr ""
 
 msgid "expires"
 msgstr ""
@@ -164,19 +195,11 @@ msgid "label_string_criteria_value"
 msgstr ""
 
 
-msgid "logical AND or OR of list values"
-msgstr ""
-
-
 msgid "modified"
 msgstr ""
 
 
 msgid "path"
-msgstr ""
-
-
-msgid "portal types values"
 msgstr ""
 
 
@@ -215,6 +238,24 @@ msgid "A portal_types criterion"
 msgstr ""
 
 msgid "A simple int criterion"
+msgstr ""
+
+msgid "A criterion that searches for the currently logged in user's id"
+msgstr ""
+
+msgid "A boolean criterion"
+msgstr ""
+
+msgid "A selection criterion"
+msgstr ""
+
+msgid "A reference criterion"
+msgstr ""
+
+msgid "A path criterion"
+msgstr ""
+
+msgid "A date range criterion"
 msgstr ""
 
 msgid "Changes saved"

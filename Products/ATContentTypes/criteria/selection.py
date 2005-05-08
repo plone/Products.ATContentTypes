@@ -70,7 +70,7 @@ class ATSelectionCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'select list'
+    shortDesc      = 'Select values from list'
 
 
     def getCurrentValues(self):
