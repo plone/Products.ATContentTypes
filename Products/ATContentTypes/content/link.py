@@ -48,12 +48,11 @@ ATLinkSchema = ATContentTypeSchema.copy() + Schema((
         required=True,
         searchable=True,
         primary=True,
+        default = "http://",
         # either mailto or an absolute url
         validators = (('isMailto', V_SUFFICIENT), ('isURL', V_REQUIRED),),
         widget = StringWidget(
-            # XXX description is wrong!
-            description=("The address of the location. Prefix is "
-                          "optional; if not provided, the link will be relative."),
+            description = "",
             description_msgid = "help_url",
             label = "URL",
             label_msgid = "label_url",

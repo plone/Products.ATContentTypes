@@ -51,8 +51,7 @@ ATFavoriteSchema = ATContentTypeSchema.copy() + Schema((
                 primary=True,
                 validators = (),
                 widget = StringWidget(
-                        description=("The address of the location. Prefix is "
-                                     "optional; if not provided, the link will be relative."),
+                        description=("Add http:// to link outside the portal."),
                         description_msgid = "help_url",
                         label = "URL",
                         label_msgid = "label_url",
