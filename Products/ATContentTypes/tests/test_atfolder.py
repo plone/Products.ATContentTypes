@@ -231,12 +231,14 @@ class TestAutoSortSupport(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(f.getSortAuto(), False)
 
     def test_strangeUnallowedIds(self):
-        """ Certain IDs give an error and are unusable
+        """ Certain IDs used to give an error and are unusable
 
         They're set in zope's lib/python/App/Product.py. Examples:
-        home, version, icon.
+        home, version. This test used to include 'icon', too, but that's
+        apparently really an id that's already been taken (instead of
+        a bug).
         """
-        strangeIds = ['home', 'version', 'icon']
+        strangeIds = ['home', 'version']
         for id in strangeIds:
             self.folder.invokeFactory('Folder', id)
             self.assert_(id in self.folder.objectIds())
