@@ -150,10 +150,10 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         if (value is None or value == ""):
             if not field.getRaw(self):
                 # set mimetype and file name although the fi
-                if 'mimetype' in kwargs:
+                if 'mimetype' in kwargs and kwargs['mimetype']:
                     field.setContentType(self, kwargs['mimetype'])
-                if 'filename' in kwargs:
-                    field.setContentType(self, kwargs['filename'])
+                if 'filename' in kwargs and kwargs['filename']:
+                    field.setFilename(self, kwargs['filename'])
             else:
                 return
 

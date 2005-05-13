@@ -90,7 +90,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         iface = IHistoryAware
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
-        
+
     def test_implementsTextContent(self):
         iface = ITextContent
         self.failUnless(iface.isImplementedBy(self._ATCT))
@@ -152,23 +152,32 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         new_id = 'WasATCT'
         self.folder.manage_renameObject(cur_id, new_id)
         doc = getattr(self.folder, new_id)
-        self.failUnless(str(doc.getField('text').getContentType(doc)) == "text/x-rst")
-        
+        field = doc.getField('text')
+        self.failUnless(str(field.getContentType(doc)) == "text/x-rst")
+
     def test_x_safe_html(self):
         doc = self._ATCT
         mimetypes = (
-            'text/html',
-            'text/stx',
-            #'text/x-rst', # <p>&lt;script&gt;I'm a nasty boy&lt;/script&gt;</p>
-            #'text/python-source', # syntax highlighting
-            #'text/plain', # <p>&lt;script&gt;I'm a nasty boy&lt;/script&gt;</p>
+            ('text/html', '<p>test</p>'),
+            # MTR doens't know about text/stx, and transforming
+            # doubles the tags. Yuck.
+            ('text/structured', '<p><p>test</p></p>\n'),
+            # XXX
+            # ('text/x-rst', ("<p>&lt;p&gt;test&lt;/p&gt;&lt;script&gt;"
+            #                 "I'm a nasty boy&lt;p&gt;nested&lt;/p&gt;"
+            #                 "&lt;/script&gt;</p>\n")),
+            # ('text/python-source', '<p>test</p>'),
+            # XXX
+            # ('text/plain', ("<p>&lt;p&gt;test&lt;/p&gt;&lt;script&gt;"
+            #                 "I'm a nasty boy&lt;p&gt;nested&lt;/p&gt;"
+            #                 "&lt;/script&gt;</p>\n")),
             )
-        for mimetype in mimetypes:
+        for mimetype, expected in mimetypes:
             # scrub html is removing unallowed tags
-            doc.setText("<p>test</p><script>I'm a nasty boy<p>nested</p></script>", mimetype=mimetype)
+            text = "<p>test</p><script>I'm a nasty boy<p>nested</p></script>"
+            doc.setText(text, mimetype=mimetype)
             txt = doc.getText()
-            self.failUnlessEqual(txt, '<p>test</p>', (txt, mimetype))
-
+            self.failUnlessEqual(txt, expected, (txt, expected, mimetype))
 
 tests.append(TestSiteATDocument)
 
@@ -177,6 +186,46 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
     def afterSetUp(self):
         atcttestcase.ATCTFieldTestCase.afterSetUp(self)
         self._dummy = self.createDummy(klass=ATDocument)
+
+    def test_text_field_mutator_filename(self):
+        dummy = self._dummy
+        field = dummy.getField('text')
+        mutator = field.getMutator(dummy)
+        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getContentType(dummy), 'text/html')
+        mutator('', filename='foo.txt')
+        self.assertEquals(field.getFilename(dummy), 'foo.txt')
+        self.assertEquals(field.getContentType(dummy), 'text/plain')
+
+    def test_text_field_mutator_mime(self):
+        dummy = self._dummy
+        field = dummy.getField('text')
+        mutator = field.getMutator(dummy)
+        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getContentType(dummy), 'text/html')
+        mutator('', mimetype='text/plain')
+        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getContentType(dummy), 'text/plain')
+
+    def test_text_field_mutator_none_mime(self):
+        dummy = self._dummy
+        field = dummy.getField('text')
+        mutator = field.getMutator(dummy)
+        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getContentType(dummy), 'text/html')
+        mutator('', mimetype=None)
+        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getContentType(dummy), 'text/plain')
+
+    def test_text_field_mutator_none_filename(self):
+        dummy = self._dummy
+        field = dummy.getField('text')
+        mutator = field.getMutator(dummy)
+        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getContentType(dummy), 'text/html')
+        mutator('', filename=None)
+        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getContentType(dummy), 'text/plain')
 
     def test_textField(self):
         dummy = self._dummy
