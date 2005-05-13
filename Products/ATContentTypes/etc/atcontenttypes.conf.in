@@ -323,18 +323,18 @@
     </metadata>
     <metadata>
       name EffectiveDate
-      friendlyName Effective Date (non-ISO)
+      friendlyName Effective Date
       description The time and date an item becomes publicly available
     </metadata>
     <metadata>
       name expires
-      friendlyName Expiration Date
+      friendlyName Expiration Date (non-ISO)
       description The time and date an item is no longer publicly available (non-ISO)
       enabled off
     </metadata>
     <metadata>
       name ExpirationDate
-      friendlyName Expiration Date (non-ISO)
+      friendlyName Expiration Date
       description The time and date an item is no longer publically available
     </metadata>
     <metadata>
