@@ -366,11 +366,11 @@ class ATTopicsTool(Base):
 
 
     security.declareProtected(CMFCorePermissions.ManagePortal,'getIndexes')
-    def getIndexes(self, enabledOnly='0'):
+    def getIndexes(self, enabledOnly=False):
         """ Returns the full list of available indexes, optionally filtering 
             out those that are not marked enabled """
         # first resync with the catalog
-        if  enabledOnly and enabledOnly != '0':
+        if  enabledOnly:
             indexes_dec = [(i.index.lower(), i.index) for i in self.getEnabledIndexes()] 
         else:
             self.updateIndexesFromCatalog()
@@ -381,14 +381,14 @@ class ATTopicsTool(Base):
         return indexes
 
     security.declareProtected(CMFCorePermissions.ManagePortal,'getAllMetadata')
-    def getAllMetadata(self, enabledOnly='0'):
+    def getAllMetadata(self, enabledOnly=False):
         """ Returns the full list of available metadata fields, optionally 
             filtering out those that are not marked enabled """
         # first resync with the catalog
-        if enabledOnly and enabledOnly != '0':
+        self.updateMetadataFromCatalog()
+        if enabledOnly:
             meta_dec = [(i.index.lower(), i.index) for i in self.getEnabledMetadata()]
         else:
-            self.updateMetadataFromCatalog()
             meta_dec = [(i.lower(), i) for i in self.topic_metadata.keys()]
 
         meta_dec.sort()

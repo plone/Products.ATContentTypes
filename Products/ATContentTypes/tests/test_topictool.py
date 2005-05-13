@@ -136,7 +136,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
            values"""
         t = self.tool
         t.addIndex(enabled = True, **index_def)
-        t.updateIndex(index_def['index'], criteria = (),
+        t.updateIndex(index_def['index'], criteria = None,
                       description = 'New Description')
         index = t.getIndex(index_def['index'])
         self.failUnless(index.criteria)

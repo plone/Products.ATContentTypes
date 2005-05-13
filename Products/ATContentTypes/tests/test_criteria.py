@@ -444,14 +444,16 @@ class TestATReferenceCriterion(CriteriaTest):
 
     #Same as list criterion but without operator and with special vocabulary
     def test_reference_query(self):
+        self.folder.invokeFactory('Document', 'doc1')
+        uid = self.folder.doc1.UID()
         self.dummy.field = 'Subject'
-        self.dummy.setValue(('1','2','3'))
+        self.dummy.setValue((uid,))
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
         query = items[0][1]
         field = items[0][0]
         self.assertEquals(field, 'Subject')
-        self.assertEquals(query, ('1','2','3'))
+        self.assertEquals(query, (uid,))
 
 tests.append(TestATReferenceCriterion)
 
@@ -562,15 +564,17 @@ class TestATPathCriterion(CriteriaTest):
 
     def test_path_query(self):
         # ensure that the path and recurse settings result in a proper query
+        self.folder.invokeFactory('Document', 'doc1')
+        uid = self.folder.doc1.UID()
         self.dummy.field = 'path'
-        self.dummy.setValue(('/','/foo/bar'))
+        self.dummy.setValue((uid,))
         self.dummy.setRecurse(True)
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
         query = items[0][1]
         field = items[0][0]
         self.assertEquals(field, 'path')
-        self.assertEquals(query['query'], ('/','/foo/bar'))
+        self.assertEquals(tuple(query['query']), ('/plone/Members/test_user_1_/doc1',))
         self.assertEquals(query['depth'], 0)
         self.dummy.setRecurse(False)
         items = self.dummy.getCriteriaItems()
@@ -585,6 +589,34 @@ class TestATPathCriterion(CriteriaTest):
 
 tests.append(TestATPathCriterion)
 
+class TestCriterionRegistry(atcttestcase.ATCTSiteTestCase):
+
+    def afterSetUp(self):
+        from Products.ATContentTypes.criteria import _criterionRegistry
+        atcttestcase.ATCTSiteTestCase.afterSetUp(self)
+        self.crit_registry = _criterionRegistry
+
+    def testRegisterCriteria(self):
+        # Ensure that the criteria registering and unregistering mechanism
+        # works as expected
+        # check if the expected criteria is there
+        self.failUnless(ATDateCriteria in self.crit_registry.listCriteria())
+        self.failUnless(self.crit_registry.indicesByCriterion('ATFriendlyDateCriteria'))
+        # remove and ensure that it was removed
+        self.crit_registry.unregister(ATDateCriteria)
+        self.failIf(ATDateCriteria in self.crit_registry.listCriteria())
+        # add and ensure that it was added
+        self.crit_registry.register(ATDateCriteria, ('Bogus Index',))
+        self.failUnless(ATDateCriteria in self.crit_registry.listCriteria())
+        self.assertEqual(self.crit_registry.indicesByCriterion('ATFriendlyDateCriteria'),
+                                                        ('Bogus Index',))
+
+    def testCriteriaIndexLookupOnBadIndex(self):
+        # Make sure we don't throw errors when someone has a non-default index
+        # type in their catalog.
+        self.crit_registry.criteriaByIndex('My Bad Index Type')
+
+tests.append(TestCriterionRegistry)
 
 if __name__ == '__main__':
     framework()

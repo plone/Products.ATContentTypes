@@ -1,6 +1,11 @@
 1.0-devel
 =====================
 
+ * Catch KeyErrors on third party index types in the catalog.  Fix bad import
+   of list criteria.  Fix some unit tests that I broke, and added some more
+   (CriterionRegistry) in penance.
+   [alecm]
+
  * Updated exif lib
    [russf]
 

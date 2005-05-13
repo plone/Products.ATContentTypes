@@ -295,7 +295,7 @@
     </metadata>
     <metadata>
       name created
-      friendlyName Creation Date
+      friendlyName Creation Date (non-ISO)
       description The time and date an item was created (non-ISO)
       enabled off
     </metadata>
@@ -306,7 +306,7 @@
     </metadata>
     <metadata>
       name modified
-      friendlyName Modification Date
+      friendlyName Modification Date (non-ISO)
       description The time and date an item was last modified (non-ISO)
       enabled off
     </metadata>
@@ -317,13 +317,13 @@
     </metadata>
     <metadata>
       name effective
-      friendlyName Effective Date
+      friendlyName Effective Date (non-ISO)
       description The time and date an item becomes publicly available (non-ISO)
       enabled off
     </metadata>
     <metadata>
       name EffectiveDate
-      friendlyName Effective Date
+      friendlyName Effective Date (non-ISO)
       description The time and date an item becomes publicly available
     </metadata>
     <metadata>
@@ -334,7 +334,7 @@
     </metadata>
     <metadata>
       name ExpirationDate
-      friendlyName Expiration Date
+      friendlyName Expiration Date (non-ISO)
       description The time and date an item is no longer publically available
     </metadata>
     <metadata>

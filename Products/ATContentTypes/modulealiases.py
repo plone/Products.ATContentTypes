@@ -42,7 +42,8 @@ from Products.ATContentTypes import criteria
 from Products.ATContentTypes.criteria import boolean
 from Products.ATContentTypes.criteria import date
 from Products.ATContentTypes.criteria import daterange
-from Products.ATContentTypes.criteria import list
+# do not import the module with a builtin name 'list' as this makes a mess
+from Products.ATContentTypes.criteria import list as list_criteria
 from Products.ATContentTypes.criteria import portaltype
 from Products.ATContentTypes.criteria import reference
 from Products.ATContentTypes.criteria import selection

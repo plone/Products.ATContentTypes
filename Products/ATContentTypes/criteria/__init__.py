@@ -73,24 +73,24 @@ class _CriterionRegistry(UserDict):
         #generateClass(criterion)
         registerType(criterion, PROJECTNAME)
 
-        id = criterion.meta_type
-        self[id] = criterion
+        crit_id = criterion.meta_type
+        self[crit_id] = criterion
         self.portaltypes[criterion.portal_type] = criterion
 
-        self.criterion2index[id] = indices
+        self.criterion2index[crit_id] = indices
         for index in indices:
             value = self.index2criterion.get(index, ())
-            self.index2criterion[index] = value + (id,)
+            self.index2criterion[index] = value + (crit_id,)
 
 
     def unregister(self, criterion):
-        id = criterion.meta_type
-        self.pop(id)
-        self.criterion2index.pop(id)
+        crit_id = criterion.meta_type
+        self.pop(crit_id)
+        self.criterion2index.pop(crit_id)
         for (index, value) in self.index2criterion.items():
             if id in value:
                 valuelist = list(value)
-                del valuelist[valuelist.index(id)]
+                del valuelist[valuelist.index(crit_id)]
                 self.index2criterion[index] = tuple(valuelist)
 
     def listTypes(self):
@@ -111,7 +111,10 @@ class _CriterionRegistry(UserDict):
         return self.criterion2index[criterion]
 
     def criteriaByIndex(self, index):
-        return self.index2criterion[index]
+        try:
+            return self.index2criterion[index]
+        except KeyError:
+            return ()
     
     def getPortalTypes(self):
         return tuple(self.portaltypes.keys())
