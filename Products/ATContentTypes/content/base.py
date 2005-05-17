@@ -282,7 +282,7 @@ class ATCTMixin(BrowserDefaultMixin):
         # automatically.
         plone_tool = getToolByName(self, 'plone_utils')
         title = self.Title()
-        new_id = plone_tool.titleToNormalizedId(self.Title())
+        new_id = plone_tool.normalizeString(self.Title())
 
         check_id = False
         if getattr(self, 'check_id', None) is not None:
