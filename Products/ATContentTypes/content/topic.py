@@ -147,7 +147,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
 ATTopicSchema.addField(relatedItemsField)
 
 class ATTopic(ATCTFolder):
-    """A stored search that can be used to display all items matching criteria you specify."""
+    """An automatically updated stored search that can be used to display items matching criteria you specify."""
 
     schema         =  ATTopicSchema
 
@@ -159,7 +159,7 @@ class ATTopic(ATCTFolder):
     default_view   = 'atct_topic_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Topic', 'meta_type' : 'Portal Topic'}
-    typeDescription= 'A stored search that can be used to display all items matching criteria you specify.'
+    typeDescription= 'An automatically updated stored search that can be used to display items matching criteria you specify.'
     typeDescMsgId  = 'description_edit_topic'
     assocMimetypes = ()
     assocFileExt   = ()
