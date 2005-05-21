@@ -34,10 +34,6 @@ __docformat__ = 'restructuredtext'
 from Testing import ZopeTestCase
 ZopeTestCase.installProduct('ATContentTypes')
 ZopeTestCase.installProduct('ATReferenceBrowserWidget')
-from Products.ATContentTypes.config import INSTALL_LINGUA_PLONE
-if INSTALL_LINGUA_PLONE and ZopeTestCase.hasProduct('LinguaPlone'):
-    ZopeTestCase.installProduct('PloneLanguageTool')
-    ZopeTestCase.installProduct('LinguaPlone')
 
 from Products.Archetypes.tests.attestcase import ATTestCase
 from Products.Archetypes.tests.atsitetestcase import ATSiteTestCase

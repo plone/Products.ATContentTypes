@@ -49,11 +49,14 @@ from Interface.Verify import verifyObject
 
 _here = os.path.dirname(__file__)
 TEST_GIF = open(os.path.join(_here, 'test.gif')).read()
+TEST_JPEG = open(os.path.join(_here, 'CanonEye.jpg')).read()
 
 def editCMF(obj):
+    obj.update_data(TEST_JPEG, content_type="image/jpeg")
     dcEdit(obj)
 
 def editATCT(obj):
+    obj.setImage(TEST_JPEG, content_type="image/jpeg")
     dcEdit(obj)
 
 tests = []
@@ -77,6 +80,16 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         iface = IATImage
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
+
+    def test_dcEdit(self):
+        #if not hasattr(self, '_cmf') or not hasattr(self, '_ATCT'):
+        #    return
+        old = self._cmf
+        new = self._ATCT
+        new.setImage(TEST_JPEG, content_type="image/jpeg")
+        dcEdit(old)
+        dcEdit(new)
+        self.compareDC(old, new)
 
     def test_edit(self):
         old = self._cmf
