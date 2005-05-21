@@ -43,7 +43,6 @@ from Products.ATContentTypes.config import WORKFLOW_FOLDER
 from Products.ATContentTypes.config import WORKFLOW_TOPIC
 from Products.ATContentTypes.config import WORKFLOW_CRITERIA
 from Products.ATContentTypes.config import WORKFLOW_DEFAULT
-from Products.ATContentTypes.config import INSTALL_LINGUA_PLONE
 from Products.ATContentTypes.config import GLOBALS
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.Extensions.utils import setupMimeTypes
@@ -96,10 +95,6 @@ def install(self, reinstall):
         qi.installProduct('ATReferenceBrowserWidget')
         print >>out, 'Install ATReferenceBrowserWidget'
     
-    if INSTALL_LINGUA_PLONE:
-        if 'LinguaPlone' in installable:
-            print >>out, 'Installing LinguaPlone as reqested'
-            qi.installProduct('LinguaPlone')
 
     # step 5: install skins before install types to make TemplateMixin happy
     install_subskin(self, out, GLOBALS)

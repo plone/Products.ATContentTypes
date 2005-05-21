@@ -29,7 +29,6 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from Products.ATContentTypes.config import _ATCT_UNIT_TEST_MODE
 from AccessControl import Unauthorized
 
 from Products.ATContentTypes.lib import constraintypes
@@ -57,9 +56,6 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.af = self.folder.af
         # portal_types object for ATCT folder
         self.at = self.tt.getTypeInfo(self.af)
-        
-    def test_000enabledforunittest(self):
-        self.failUnless(_ATCT_UNIT_TEST_MODE)
 
     def test_isMixedIn(self):
         self.failUnless(isinstance(self.af,

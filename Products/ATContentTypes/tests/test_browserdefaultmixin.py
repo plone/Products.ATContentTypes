@@ -29,7 +29,6 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from Products.ATContentTypes.config import _ATCT_UNIT_TEST_MODE
 from AccessControl import Unauthorized
 
 from Products.ATContentTypes.lib import browserdefault
@@ -55,9 +54,6 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.folder.invokeFactory(self.folder_type, id='af')
         # an ATCT folder
         self.af = self.folder.af
-        
-    def test_000enabledforunittest(self):
-        self.failUnless(_ATCT_UNIT_TEST_MODE)
 
     def test_isMixedIn(self):
         self.failUnless(isinstance(self.af,

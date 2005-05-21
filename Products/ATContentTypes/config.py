@@ -46,8 +46,6 @@ WWW_DIR = os.path.join(ATCT_DIR, 'www')
 
 GLOBALS = globals()
 
-INSTALL_LINGUA_PLONE = not True
-
 ## swallow PIL exceptions when resizing the image?
 SWALLOW_IMAGE_RESIZE_EXCEPTIONS = zconf.swallowImageResizeExceptions.enable
 
@@ -239,19 +237,9 @@ MIME_ALIAS = {
     'stx'   : 'text/structured',
     'html'  : 'text/html',
     'rest'  : 'text/x-rst',
+    'text/stx' : 'text/structured',
     'structured-text' : 'text/structured',
     'restructuredtext' : 'text/x-rst',
     'text/restructured' : 'text/x-rst',
     }
 
-## force enable some features for ATCT unit testing
-if os.environ.get('ZOPETESTCASE', False):
-    _ATCT_OLD_VALUES = {
-        'INSTALL_LINGUA_PLONE' : INSTALL_LINGUA_PLONE,
-        }
-    INSTALL_LINGUA_PLONE = True
-    _ATCT_UNIT_TEST_MODE = True
-    
-else:
-    _ATCT_UNIT_TEST_MODE = False
-    _ATCT_OLD_VALUES = {}
