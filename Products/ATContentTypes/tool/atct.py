@@ -60,11 +60,11 @@ SITE_TYPES = ('Portal Site', 'Plone Site',)
 configlets = ({
     'id' : TOOLNAME,
     'appId' : 'ATContentTypes',
-    'name' : 'ATContentTypes Tool',
+    'name' : 'Smart Folder Settings',
     'action' : 'string:${portal_url}/%s/atct_manageTopicIndex' % TOOLNAME,
-    'category' : 'Products',
+    'category' : 'Plone',
     'permission' : CMFCorePermissions.ManagePortal,
-    'imageUrl' : 'tool_icon.gif'
+    'imageUrl' : 'topic_icon.gif'
     },
     )
 

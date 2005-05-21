@@ -25,13 +25,13 @@
         <li class="selected">
         <a href=""
         tal:attributes="href string:${here/absolute_url}/${template/id}"
-        i18n:translate="label_topic_indexes">Topic Indexes</a>
+        i18n:translate="label_topic_indexes">Smart Folder Indexes</a>
         </li>
 
         <li class="">
         <a href=""
         tal:attributes="href string:${here/absolute_url}/atct_manageTopicMetadata"
-        i18n:translate="label_topic_metadata">Topic MetaData</a>
+        i18n:translate="label_topic_metadata">Smart Folder Metadata</a>
         </li>
     </ul>
 
@@ -41,7 +41,7 @@
     <!-- End of tabs -->
 
     <div class="documentContent">
-    <h1 i18:translate="">Topic setup</h1>
+    <h1 i18:translate="">Smart Folder Settings</h1>
     <a href=""
        class="link-parent"
        tal:attributes="href string: $portal_url/plone_control_panel"
@@ -49,7 +49,7 @@
        i18n:translate="label_up_to_plone_setup">
     Up to Plone Setup
     </a>    
-    <p i18n:translate="">Configure which indices will be displayed while creating criteria for topics, and how they will be displayed.</p>
+    <p i18n:translate="">Configure which indices will be displayed while creating criteria for Smart Folders, and how they will be displayed.</p>
     <form method="post" 
         name="manageTopicIndex"
         tal:define="errors options/state/getErrors;
