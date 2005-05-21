@@ -1,1 +1,1 @@
-1.0.0-devel (SVN/Unreleased)
+1.0.0-devel (snapshot 2005-05-21)
