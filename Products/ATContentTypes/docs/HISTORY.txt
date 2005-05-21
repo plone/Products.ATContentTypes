@@ -1,6 +1,13 @@
 1.0-devel
 =====================
 
+ * Disabled history tab
+   [tiran]
+
+ * Fixed a small bug in the exif support. The signatur of the process_file
+   method has changed.
+   [tiran]
+
  * Catch KeyErrors on third party index types in the catalog.  Fix bad import
    of list criteria.  Fix some unit tests that I broke, and added some more
    (CriterionRegistry) in penance.

@@ -174,6 +174,7 @@ class ATCTImageTransform(Base):
         f = self.getField('image')
         img = f.getScale(self, scale)
         # img.data contains the image as string or Pdata chain
+        # TODO: explicit check for Pdata or file handler
         if isinstance(img, OFSImage):
             data = str(img.data)
         else:
@@ -204,7 +205,9 @@ class ATCTImageTransform(Base):
             if img:
                 # some cameras are naughty :(
                 try:
-                    exif_data = exif.process_file(img, debug=False, noclose=True)
+                    img.seek(0)
+                    exif_data = exif.process_file(img, debug=False)
+                    img.close()
                 except:
                     log_exc()
                     exif_data = {}

@@ -1,6 +1,26 @@
 Known issues and errors
 =======================
 
+Images aren't working inline
+----------------------------
+
+http://sourceforge.net/tracker/index.php?func=detail&aid=1187859&group_id=55262&atid=645337
+
+NewsItem raised unauthorized error when image isn't added
+---------------------------------------------------------
+
+http://sourceforge.net/tracker/index.php?func=detail&aid=1200825&group_id=55262&atid=645337
+
+Size of object is wrong
+-----------------------
+
+http://sourceforge.net/tracker/index.php?func=detail&aid=1188042&group_id=55262&atid=645337
+
+Document history is not available
+---------------------------------
+
+http://sourceforge.net/tracker/index.php?func=detail&aid=1192319&group_id=55262&atid=645337
+
 Discussions aren't visible under Plone 2.0.x
 --------------------------------------------
 
@@ -32,3 +52,4 @@ The news template tries to access EditableBody which is a protected method.
 Replace the news template with with 
 http://svn.plone.org/plone/CMFPlone/branches/2.1/skins/plone_templates/news.pt
 The issue is fixed in CMFPlone 2.1
+

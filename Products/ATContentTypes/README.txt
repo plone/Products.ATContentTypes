@@ -54,7 +54,7 @@ Comparing CMF types with ATContentTypes
     o Events have a body text
     
     o Documents have a history tab to show the last changes as an unified
-      diff view using the ZODB history.
+      diff view using the ZODB history. (currently disabled)
 
 What is new in ATContentTypes 1.0
 
@@ -104,3 +104,4 @@ What is new in ATContentTypes 1.0
     schemata were moved to the module of their type classes. E.g. instead of
     importing ATDocumentSchema from types.schemata you have to import it from
     types.ATDocument.
+

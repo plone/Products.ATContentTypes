@@ -60,7 +60,8 @@ class HistoryAwareMixin:
         'id'          : 'history',
         'name'        : 'History',
         'action'      : 'string:${object_url}/atct_history',
-        'permissions' : (ATCTPermissions.ViewHistory, )
+        'permissions' : (ATCTPermissions.ViewHistory, ),
+        'visible' : False,
          },
     )
 
