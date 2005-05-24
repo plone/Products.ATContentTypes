@@ -409,28 +409,25 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         if title is not None:
             self.setTitle(title)
         self.reindexObject()
-        
+
     def __bobo_traverse__(self, REQUEST, name, RESPONSE=None):
         """Transparent access to image scales
         """
         if name.startswith('image'):
             field = self.getField('image')
-            if not field.checkPermission('view', self):
-                raise Unauthorized, name
+            image = None
             if name == 'image':
-                return field.getScale(self)
+                image = field.getScale(self)
             else:
                 scalename = name[len('image_'):]
                 if scalename in field.getAvailableSizes(self):
-                    return field.getScale(self, scale=scalename)
-        # split up id in name + extension
-        #id = self.getId()
-        #dot = id.rfind('.')
-        #if dot == -1:
-        #    name, ext = id, None
-        #else:
-        #    name = id[:dot]
-        #    ext = id[dot+1:]
+                    image = field.getScale(self, scale=scalename)
+            if image is not None and not isinstance(image, basestring):
+                # image might be None or '' for empty images
+                if not field.checkPermission('view', self):
+                    raise Unauthorized, name
+                return image
+        
         return ATCTFileContent.__bobo_traverse__(self, REQUEST, name, RESPONSE=None)
 
 registerATCT(ATImage, PROJECTNAME)

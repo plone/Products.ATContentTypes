@@ -160,11 +160,19 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
         """
         if name.startswith('image'):
             field = self.getField('image')
+            image = None
             if name == 'image':
-                return field.getScale(self)
+                image = field.getScale(self)
             else:
                 scalename = name[len('image_'):]
-                return field.getScale(self, scale=scalename)
+                if scalename in field.getAvailableSizes(self):
+                    image = field.getScale(self, scale=scalename)
+            if image is not None and not isinstance(image, basestring):
+                # image might be None or '' for empty images
+                if not field.checkPermission('view', self):
+                    raise Unauthorized, name
+                return image
+        
         return ATDocument.__bobo_traverse__(self, REQUEST, name, RESPONSE=None)
 
 registerATCT(ATNewsItem, PROJECTNAME)
