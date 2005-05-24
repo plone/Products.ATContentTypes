@@ -197,4 +197,4 @@ Migration from CMF Plone Types
 ==============================
 
 Migration from CMF Plone Types is no longer supported. There are some outdated
-migration scripts available in CVS.
+migration scripts available in SVN.

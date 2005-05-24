@@ -26,5 +26,5 @@ def registerMigrations():
                              '1.0.0-alpha2 ',
                              v1.alphas.alpha1_alpha2)
     atct.registerUpgradePath('1.0.0-alpha2 ',
-                             '1.0.0-devel (CVS/Unreleased)',
+                             '1.0.0-devel (SVN/Unreleased)',
                              null)

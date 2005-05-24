@@ -142,7 +142,7 @@ class TestATLinkFields(atcttestcase.ATCTFieldTestCase):
 
         self.failUnless(ILayerContainer.isImplementedBy(field))
         self.failUnless(field.required == 1, 'Value is %s' % field.required)
-        self.failUnless(field.default == '', 'Value is %s' % str(field.default))
+        self.failUnless(field.default == 'http://', 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
         self.failUnless(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
