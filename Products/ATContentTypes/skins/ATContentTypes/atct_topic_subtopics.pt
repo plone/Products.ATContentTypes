@@ -6,7 +6,7 @@
 <div metal:fill-slot="main">
 
         <tal:subtopics define="full_view python:False;
-                               view_title string:Sub-topics:">
+                               view_title string:Contained Smart Folders:">
             <metal:list metal:use-macro="here/folder_contents/macros/contents"/>
         </tal:subtopics>
 

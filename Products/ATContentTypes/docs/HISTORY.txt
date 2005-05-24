@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Localized date in Topic custom view.
+   [alecm]
+
  * Disabled history tab
    [tiran]
 

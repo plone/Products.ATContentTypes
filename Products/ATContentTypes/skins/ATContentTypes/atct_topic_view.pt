@@ -67,15 +67,9 @@
                                             obj_typeinfo python: here.portal_types.getTypeInfo(obj_type);
                                             icon python:portal_url+'/'+ obj_typeinfo.getIcon();
                                             title_or_id python:obj.Title or obj.getId">
-                        <tal:block define="value python: getattr(obj, field, None);
-                        dictish nocall:value/items|nothing;
-                        listish python:same_type(value,[]) or same_type(value,())">
-                            <td tal:condition="python: field != 'Title' and not (listish or dictish)"
-                                tal:content="value"/>
-                            <td tal:condition="python: field != 'Title' and listish"
-                                tal:content="python: ', '.join(value)"/>
-                            <td tal:condition="python: field != 'Title' and dictish"
-                                tal:content="python: ', '.join(['%s: %s'%(a,b) for a,b in value.items()])"/>
+                        <tal:block define="value python: getattr(obj, field, None)">
+                            <td tal:condition="python: field != 'Title'"
+                                tal:content="python:here.formatCatalogMetadata(value)"/>
                             <td tal:condition="python: field == 'Title'">
                                 <a href="#" tal:attributes="href url">
                                     <img src="#"
@@ -124,7 +118,7 @@
         </metal:listingmacro>
     </metal:body>
     <metal:body define-macro="folderlisting_macro">
-        <tal:subtopics>
+        <tal:subtopics condition="here/listSubtopics">
             <h2
            i18n:translate="sub_topics_heading">Sub-topics:</h2>
             <metal:list metal:use-macro="here/base/macros/folderlisting"/>

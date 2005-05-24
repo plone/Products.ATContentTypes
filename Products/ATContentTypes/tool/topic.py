@@ -402,7 +402,7 @@ class ATTopicsTool(Base):
         if self.topic_indexes.has_key(index):
             return self.topic_indexes[index]
         else:
-            raise AttributeError('Index ' + index + ' not found')   
+            raise AttributeError('Index ' + str(index) + ' not found')
 
     def getMetadata(self, metadata):
         """ Returns the TopicIndex object for a given metadata name """
@@ -410,7 +410,7 @@ class ATTopicsTool(Base):
         if self.topic_metadata.has_key(metadata):
             return self.topic_metadata[metadata]
         else:
-            raise AttributeError('Metadata ' + metadata + ' not found')
+            raise AttributeError('Metadata ' + str(metadata) + ' not found')
 
 
     security.declareProtected(CMFCorePermissions.ManagePortal,'manage_SavePortalTopics')
