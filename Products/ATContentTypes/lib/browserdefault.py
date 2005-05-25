@@ -99,6 +99,11 @@ class BrowserDefaultMixin(TemplateMixin):
         else:
             return self, [self.defaultView(request),]
 
+    # Inherited from TemplateMixin
+    # def __call__(self):
+    #     """Resolve the current layout template in the current aq context"""
+    #
+
     security.declareProtected(CMFCorePermissions.View, 'getDefaultPage')
     def getDefaultPage(self):
         """

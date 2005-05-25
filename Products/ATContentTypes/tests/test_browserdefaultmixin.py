@@ -71,7 +71,11 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         layoutKeys = [v[0] for v in self.af.getAvailableLayouts()]
         self.failUnless('folder_listing' in layoutKeys)
         self.failUnless('atct_album_view' in layoutKeys)
-        self.assertEqual(self.af.__browser_default__(None), (self.af, ['folder_listing',]))
+        
+        resolved = self.af.unrestrictedTraverse('folder_listing')()
+        browserDefault = self.af.__browser_default__(None)[1][0]
+        browserDefaultResolved = self.af.unrestrictedTraverse(browserDefault)()
+        self.assertEqual(resolved, browserDefaultResolved)
         
     def test_canSetLayout(self):
         self.failUnless(self.af.canSetLayout())
@@ -88,7 +92,11 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         layoutKeys = [v[0] for v in self.af.getAvailableLayouts()]
         self.failUnless('folder_listing' in layoutKeys)
         self.failUnless('atct_album_view' in layoutKeys)
-        self.assertEqual(self.af.__browser_default__(None), (self.af, ['atct_album_view',]))
+        
+        resolved = self.af.unrestrictedTraverse('atct_album_view')()
+        browserDefault = self.af.__browser_default__(None)[1][0]
+        browserDefaultResolved = self.af.unrestrictedTraverse(browserDefault)()
+        self.assertEqual(resolved, browserDefaultResolved)
         
     def test_canSetDefaultPage(self):
         self.failUnless(self.af.canSetDefaultPage())
@@ -119,7 +127,11 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.af.setLayout('folder_listing')
         self.assertEqual(self.af.getDefaultPage(), None)
         self.assertEqual(self.af.defaultView(), 'folder_listing')
-        self.assertEqual(self.af.__browser_default__(None), (self.af, ['folder_listing',]))
+        
+        resolved = self.af.unrestrictedTraverse('folder_listing')()
+        browserDefault = self.af.__browser_default__(None)[1][0]
+        browserDefaultResolved = self.af.unrestrictedTraverse(browserDefault)()
+        self.assertEqual(resolved, browserDefaultResolved)
 
 tests.append(TestBrowserDefaultMixin)
 
