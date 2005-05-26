@@ -192,8 +192,8 @@ class BrowserDefaultMixin(TemplateMixin):
         Get the layouts registered for this object.
         """
         vocab = self._voc_templates()
-        
-        # Convert to the list-of-tuples required by the interface so that we're 
+
+        # Convert to the list-of-tuples required by the interface so that we're
         # not returning AT-specific DisplayLists
         tuples = []
         for id in vocab.keys():

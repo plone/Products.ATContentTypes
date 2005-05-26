@@ -40,56 +40,56 @@ _marker = object()
 class IAutoSortSupport(Interface):
     """Interface for auto sorting
     """
-    
+
     _default_sort_key = Attribute('Sort key, default: Title')
     _default_sort_reverse = Attribute('Reverse, default: False')
     _default_sort_folderish_first = Attribute('Sort folderish first, default: True')
     # auto sort flag is required to make tpValues happy
     _default_sort_auto = Attribute('Enable auto, default: True')
-    
+
     def setDefaultSorting(key, reverse=_marker):
         """Set default sorting key and direction.
         """
-    
+
     def getDefaultSorting():
         """Get default sorting key and direction.
-        
+
         Return sort_on attribute, reverse
         sort_on attribute is either an attribute or method name
         """
-        
+
     def setSortFolderishFirst(value):
         """Set the value for sorting folderish objects before ordinary items
         """
-        
+
     def getSortFolderishFirst():
         """Get the value for sorting folderish objects before ordinary items
         """
-        
+
     def setSortReverse(value):
         """Set reverse sort setting
         """
-        
+
     def getSortReverse():
         """Get reverse sort setting
         """
-        
+
     def setSortAuto(value):
        """Set auto sort setting
        """
-        
+
     def getSortAuto():
         """Get auto sort setting
         """
-    
+
 class IAutoOrderSupport(IAutoSortSupport, IOrderedContainer, IZopeOrderedContainer):
     """Interface for auto sorting and auto ordering
     """
-    
+
     def autoOrderItems():
         """Auto order all containing items according to the settings
         """
-    
+
     def moveObjectsByDelta(ids, delta, subset_ids=None, disable_auto_sort=True):
         """Move specified sub-objects by delta.
 
@@ -98,24 +98,24 @@ class IAutoOrderSupport(IAutoSortSupport, IOrderedContainer, IZopeOrderedContain
 
     def manage_renameObject(id, new_id, REQUEST=None):
         """Rename a particular sub-object without changing its position.
-        
+
         Overwritten to keep auto sort
         """
-        
+
     def manage_afterAdd(item, container):
         """after add hook
-        
+
         Overwritten to auto sort items
         """
 
 # implementation
 
 class AutoSortSupport(Base):
-    
+
     __implements__ = (IAutoSortSupport, )
-    
+
     security = ClassSecurityInfo()
-    
+
     _default_sort_key = 'Title'
     _default_sort_reverse = False
     _default_sort_folderish_first = True
@@ -128,31 +128,31 @@ class AutoSortSupport(Base):
         self._default_sort_key = key
         if reverse is not _marker:
             self._default_sort_reverse = bool(reverse)
-    
+
     security.declareProtected(CMFCorePermissions.View, 'getDefaultSorting')
     def getDefaultSorting(self):
         """Get default sorting key and direction.
         """
         return self._default_sort_key, self._default_sort_reverse
-        
+
     security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setSortFolderishFirst')
     def setSortFolderishFirst(self, value):
         """Set the value for sorting folderish objects before ordinary items
         """
         self._default_sort_folderish_first = bool(value)
-        
+
     security.declareProtected(CMFCorePermissions.View, 'getSortFolderishFirst')
     def getSortFolderishFirst(self):
         """Get the value for sorting folderish objects before ordinary items
         """
         return self._default_sort_folderish_first
-        
+
     security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setSortReverse')
     def setSortReverse(self, value):
         """Set reverse sort setting
         """
         self._default_sort_reverse = bool(value)
-        
+
     security.declareProtected(CMFCorePermissions.View, 'getSortReverse')
     def getSortReverse(self):
         """Get reverse sort setting
@@ -164,7 +164,7 @@ class AutoSortSupport(Base):
        """Set auto sort setting
        """
        self._default_sort_auto = bool(value)
-        
+
     security.declareProtected(CMFCorePermissions.View, 'getSortAuto')
     def getSortAuto(self):
         """Get auto sort setting
@@ -175,11 +175,11 @@ InitializeClass(AutoSortSupport)
 
 
 class AutoOrderSupport(AutoSortSupport, OrderedContainer):
-    
+
     __implements__ = (IAutoOrderSupport, )
-    
+
     security = ClassSecurityInfo()
-    
+
     security.declarePrivate('autoOrderItems')
     def autoOrderItems():
         """Auto order all containing items according to the settings
@@ -188,7 +188,7 @@ class AutoOrderSupport(AutoSortSupport, OrderedContainer):
             return
         key, reverse = self.getDefaultSorting()
         folderish_first = self.getSortFolderishFirst()
-        
+
         self.orderObjects(key, reverse)
         # TODO: folderish first is missing, use the catalog to resort it!
 
@@ -205,7 +205,7 @@ class AutoOrderSupport(AutoSortSupport, OrderedContainer):
         metadata.insert(position, obj_meta)
         self._objects = tuple(metadata)
         self._reindexOnReorder()
-    
+
     def moveObjectsByDelta(self, ids, delta, subset_ids=None, disable_auto_sort=True):
         """Move specified sub-objects by delta.
 
@@ -217,7 +217,7 @@ class AutoOrderSupport(AutoSortSupport, OrderedContainer):
 
     def manage_renameObject(self, id, new_id, REQUEST=None):
         """Rename a particular sub-object without changing its position.
-        
+
         Overwritten to keep auto sort
         """
         old_position = self.getObjectPosition(id)
@@ -226,11 +226,11 @@ class AutoOrderSupport(AutoSortSupport, OrderedContainer):
         self.moveObjectToPosition(new_id, old_position)
         self.setSortAuto(old_sort_auto)
         return result
-        
+
     security.declarePrivate('manage_afterAdd')
     def manage_afterAdd(self, item, container):
         """after add hook
-        
+
         Overwritten to auto sort items
         CAUTION: Make sure that you call this method explictly!
         """

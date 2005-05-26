@@ -125,7 +125,7 @@ class CalendarSupportMixin:
         'category'    : 'document_actions',
          },
     )
-    
+
     _at_action_icons = ({
         'category'  : 'plone',
         'action_id' : 'ics',

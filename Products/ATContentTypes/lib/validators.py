@@ -184,7 +184,7 @@ class NonEmptyFileValidator:
     def __call__(self, value, *args, **kwargs):
         instance = kwargs.get('instance', None)
         field    = kwargs.get('field', None)
-        
+
         # calculate size
         if isinstance(value, FileUpload) or type(value) is FileType \
           or hasattr(aq_base(value), 'tell'):
