@@ -33,14 +33,14 @@ IGNORED_COLUMNS = IGNORED_FIELDS + ('effective', 'expires', 'created', 'modified
     'getRemoteUrl', 'getIcon')
 
 class TopicIndex(SimpleItem, Persistence.Persistent):
-    
+
     def __init__(self, index, friendlyName='', description='', enabled=False, criteria=()):
         self.index = index
         self.friendlyName=friendlyName
         self.description = description
         self.enabled=enabled
         self.criteria=tuple(criteria)
-        
+
 
 class ATTopicsTool(Base):
     """ This tool makes it possible to manage the indexes that are used
@@ -50,11 +50,11 @@ class ATTopicsTool(Base):
     __implements__ = (IATCTTopicsTool,)
 
     security       = ClassSecurityInfo()
-    
+
     # is used in ATPortalTypeCriterion to control which types are allowed to search with
     # until this is fixed in CMF or whatever, this is the way to go.
     allowed_portal_types = []
-    
+
     id = TOOLNAME
     meta_type= 'ATTopics Tool'
     title = 'ATTopics Tool'
@@ -111,7 +111,7 @@ class ATTopicsTool(Base):
 
     security.declareProtected(CMFCorePermissions.ManagePortal,'addIndex')
     def addIndex(self, index, friendlyName='', description='', enabled=False, criteria=None):
-        """ Add a new index along with descriptive information to the index 
+        """ Add a new index along with descriptive information to the index
             registry """
         if criteria is None: criteria = self.getCriteriaForIndex(index)
         if self.topic_indexes.has_key(index):
@@ -144,7 +144,7 @@ class ATTopicsTool(Base):
 
     security.declareProtected(CMFCorePermissions.ManagePortal,'updateIndex')
     def updateIndex(self, index, friendlyName=None, description=None, enabled=None, criteria=None):
-        """ Updates an existing index in the registry, unrecognized values are 
+        """ Updates an existing index in the registry, unrecognized values are
             added """
         indexes = self.topic_indexes
         if friendlyName == None:
@@ -160,7 +160,7 @@ class ATTopicsTool(Base):
 
     security.declareProtected(CMFCorePermissions.ManagePortal,'updateMetadata')
     def updateMetadata(self, metadata, friendlyName=None, description=None, enabled=None):
-        """ Updates an existing metadata field in the registry, unrecognized values are 
+        """ Updates an existing metadata field in the registry, unrecognized values are
             added """
         meta = self.topic_metadata
         if friendlyName == None:
@@ -211,17 +211,17 @@ class ATTopicsTool(Base):
 
     security.declareProtected(CMFCorePermissions.ManagePortal,'updateIndexesFromCatalog')
     def updateIndexesFromCatalog(self):
-        """ check if there are new indexes or if indexes must be removed from 
+        """ check if there are new indexes or if indexes must be removed from
             the collection because they do no longer exist in the catalog """
-        
+
         indexes = self.listCatalogFields()
-        
+
         # first add new indexes
         for i in indexes:
             if not self.topic_indexes.has_key(i):
                 enabled = (i not in IGNORED_FIELDS and True) or False
                 self.addIndex(i, friendlyName='', enabled=enabled)
-                
+
         # now check the other way round
         keys = self.topic_indexes.keys()
         for k in keys:
@@ -230,8 +230,8 @@ class ATTopicsTool(Base):
 
     security.declareProtected(CMFCorePermissions.ManagePortal,'updateMetadataFromCatalog')
     def updateMetadataFromCatalog(self):
-        """ check if there are new metadata fields or if fields must be 
-            removed from the collection because they do no longer exist in the 
+        """ check if there are new metadata fields or if fields must be
+            removed from the collection because they do no longer exist in the
             catalog """
 
         metas = self.listCatalogMetadata()
@@ -247,8 +247,8 @@ class ATTopicsTool(Base):
         for k in keys:
             if k not in metas:
                 self.removeMetadata(k)
-        
-    
+
+
     security.declarePrivate('listCatalogFields')
     def listCatalogFields(self):
         """ Return a list of fields from portal_catalog. """
@@ -256,7 +256,7 @@ class ATTopicsTool(Base):
         available = pcatalog.indexes()
         val = [ field for field in available ]
         val.sort()
-        return val        
+        return val
 
     security.declarePrivate('listCatalogMetadata')
     def listCatalogMetadata(self):
@@ -277,7 +277,7 @@ class ATTopicsTool(Base):
         return all_types
 
     def getAllowedPortalTypes(self, populate_for_end_usage=1):
-        """ Return all portal_types as an (id,title) tuple that are allowed 
+        """ Return all portal_types as an (id,title) tuple that are allowed
             to search with """
         all_types = self.getAllPortalTypes()
 
@@ -342,7 +342,7 @@ class ATTopicsTool(Base):
 
 
     def getEnabledFields(self):
-        """ Returns a list of tuples containing the index name, friendly name, 
+        """ Returns a list of tuples containing the index name, friendly name,
             and description for each enabled index. """
         enabledIndexes = self.getEnabledIndexes()
 
@@ -356,8 +356,8 @@ class ATTopicsTool(Base):
 
 
     def getFriendlyName(self, index):
-        """ Returns the friendly name for a given index name, or the given 
-            index if the firendlyname is empty or the index is not recognized 
+        """ Returns the friendly name for a given index name, or the given
+            index if the firendlyname is empty or the index is not recognized
         """
         if self.topic_indexes.has_key(index):
             return self.getIndex(index).friendlyName or index
@@ -367,11 +367,11 @@ class ATTopicsTool(Base):
 
     security.declareProtected(CMFCorePermissions.ManagePortal,'getIndexes')
     def getIndexes(self, enabledOnly=False):
-        """ Returns the full list of available indexes, optionally filtering 
+        """ Returns the full list of available indexes, optionally filtering
             out those that are not marked enabled """
         # first resync with the catalog
         if  enabledOnly:
-            indexes_dec = [(i.index.lower(), i.index) for i in self.getEnabledIndexes()] 
+            indexes_dec = [(i.index.lower(), i.index) for i in self.getEnabledIndexes()]
         else:
             self.updateIndexesFromCatalog()
             indexes_dec = [(i.lower(), i) for i in self.topic_indexes.keys()]
@@ -382,7 +382,7 @@ class ATTopicsTool(Base):
 
     security.declareProtected(CMFCorePermissions.ManagePortal,'getAllMetadata')
     def getAllMetadata(self, enabledOnly=False):
-        """ Returns the full list of available metadata fields, optionally 
+        """ Returns the full list of available metadata fields, optionally
             filtering out those that are not marked enabled """
         # first resync with the catalog
         self.updateMetadataFromCatalog()

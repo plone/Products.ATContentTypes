@@ -85,7 +85,7 @@ class BaseMigrator:
     """Migrates an object to the new type
 
     The base class has the following attributes:
-    
+
      * src_portal_type
        The portal type name the migration is migrating *from*
      * src_portal_type
@@ -101,7 +101,7 @@ class BaseMigrator:
      * old
        The old object which has to be migrated
      * new
-       The new object created by the migration 
+       The new object created by the migration
      * parent
        The folder where the old objects lives
      * orig_id
@@ -111,7 +111,7 @@ class BaseMigrator:
      * new_id
        The id of the new object while and after the migration
      * kwargs
-       A dict of additional keyword arguments applied to the migrator  
+       A dict of additional keyword arguments applied to the migrator
     """
     src_portal_type = None
     src_meta_type = None
@@ -230,11 +230,11 @@ class BaseMigrator:
                 self.new._delProperty(id)
             LOG("property: " + str(self.new.getProperty(id)))
             __traceback_info__ = (self.new, id, value, type)
-             
+
             # continue if the object already has this attribute
             if getattr(aq_base(self.new), id, _marker) is not _marker:
                 continue
-             
+
             self.new.manage_addProperty(id, value, type)
 
     def migrate_owner(self):
@@ -311,10 +311,10 @@ class BaseMigrator:
         Must be implemented by the real Migrator
         """
         raise NotImplementedError
-    
+
     def rollback(self):
         """Roles the migration back
-        
+
         * Removes the migrated object
         * Puts the old object back in place
         """
@@ -409,7 +409,7 @@ class ItemMigrationMixin:
         if IOrderedContainer.isImplementedBy(self.parent):
             self._position = self.parent.getObjectPosition(self.old_id)
             self.parent.moveObject(self.new_id, self._position)
-            
+
     def rollback(self):
         """Roles the migration back
         """
@@ -449,7 +449,7 @@ class FolderMigrationMixin(ItemMigrationMixin):
                 log('WARNING: BrokenObject in %s' % \
                     self.old.absolute_url(1))
                 #continue
-            
+
             if orderAble:
                 try:
                     orderMap[id] = self.old.getObjectPosition(id)
@@ -461,7 +461,7 @@ class FolderMigrationMixin(ItemMigrationMixin):
                     LOG(msg)
                     orderAble=0
             self.new._setObject(id, aq_base(obj), set_owner=0)
-        
+
         # reorder items
         if orderAble:
             for id, pos in orderMap.items():
