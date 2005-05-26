@@ -78,9 +78,9 @@ ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
                 widget=SelectionWidget(
                     label="More or less",
                     label_msgid="label_date_criteria_operation",
-                    description="",
+                    description="Select the date criteria operation.",
                     description_msgid="help_date_criteria_operation",
-                    i18n_domain="plone",
+                    i18n_domain="atcontenttypes",
                     format="select"),
                 ),
     IntegerField('value',
@@ -94,9 +94,9 @@ ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
                 widget=SelectionWidget(
                     label="Which day",
                     label_msgid="label_date_criteria_value",
-                    description="",
+                    description="Select the date criteria value.",
                     description_msgid="help_date_criteria_value",
-                    i18n_domain="plone"),
+                    i18n_domain="atcontenttypes"),
                 ),
     StringField('dateRange',
                 required=1,
@@ -108,9 +108,9 @@ ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
                 widget=SelectionWidget(
                     label="In the past or future",
                     label_msgid="label_date_criteria_range",
-                    description="Ignore this if you selected Now above",
+                    description="Select the date criteria range. Ignore this if you selected 'Now' above.",
                     description_msgid="help_date_criteria_range",
-                    i18n_domain="plone",
+                    i18n_domain="atcontenttypes",
                     format="select"),
                 ),
     ))
