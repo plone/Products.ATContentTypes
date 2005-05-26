@@ -69,22 +69,22 @@ ConstrainTypesMixinSchema = Schema((
         required = False,
         default_method = "_ct_defaultConstrainTypesMode",
         vocabulary = enableDisplayList,
-        # XXX: AT doesn't supprt enforce on vocs with int display list
+        # XXX: AT doesn't support enforce on vocabs with int display list
         #enforceVocabulary = True,
         languageIndependent = True,
         write_permissions = ATCTPermissions.ModifyConstrainTypes,
         widget = SelectionWidget(
-            label = 'Types addable in folder',
-            label_msgid = 'label_enable_constrain_allowed_types',
-            description = '',
-            description_msgid = 'description_enable_constrain_allowed_types',
-            i18n_domain = 'plone',
+            label = 'Constrain types mode',
+            label_msgid = 'label_contrain_types_mode',
+            description = 'Select the constraint type mode for this folder.',
+            description_msgid = 'description_constrain_types_mode',
+            i18n_domain = 'atcontenttypes',
             visible = {'view' : 'hidden',
-                       'edit' : 'hidden'
+                       'edit' : 'hidden',
                       },
-            )
+            ),
         ),
-        
+
     LinesField('locallyAllowedTypes',
         vocabulary = '_ct_vocabularyPossibleTypes',
         enforceVocabulary = True,
@@ -100,13 +100,13 @@ ConstrainTypesMixinSchema = Schema((
             description = 'Select the types which will be addable inside this '
                           'folder.',
             description_msgid = 'description_constrain_allowed_types',
-            i18n_domain = 'plone',
+            i18n_domain = 'atcontenttypes',
             visible = {'view' : 'hidden',
-                      'edit' : 'hidden'
+                       'edit' : 'hidden',
                       },
-            )
+            ),
         ),
-        
+
      LinesField('immediatelyAddableTypes',
         vocabulary = '_ct_vocabularyPossibleTypes',
         enforceVocabulary = True,
@@ -124,11 +124,11 @@ ConstrainTypesMixinSchema = Schema((
                           'in the list above will be addable from a separate '
                           'form.',
             description_msgid = 'description_constrain_preferred_types',
-            i18n_domain = 'plone',
+            i18n_domain = 'atcontenttypes',
             visible = {'view' : 'hidden',
-                      'edit' : 'hidden'
+                       'edit' : 'hidden',
                       },
-            )
+            ),
         ),
     ))
 
@@ -140,32 +140,32 @@ class ConstrainTypesMixin:
     __implements__ = (ISelectableConstrainTypes, )
 
     security = ClassSecurityInfo()
-    
+
     #
     # Sanity validator
     #
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 
+    security.declareProtected(CMFCorePermissions.ModifyPortalContent,
                                 'validate_preferredTypes')
     def validate_preferredTypes(self, value):
         """Ensure that the preferred types is a subset of the allowed types.
         """
         allowed = self.getField('locallyAllowedTypes').get(self)
         preferred = value.split('\n')
-        
+
         disallowed = []
         for p in preferred:
             if not p in allowed:
                 disallowed.append(p)
-    
+
         if disallowed:
             return "The following types are not permitted: %s" % \
                         ','.join(disallowed)
-    
+
     #
     # Overrides + supplements for CMF types machinery
     #
 
-    security.declareProtected(CMFCorePermissions.View, 'getLocallyAllowedTypes') 
+    security.declareProtected(CMFCorePermissions.View, 'getLocallyAllowedTypes')
     def getLocallyAllowedTypes(self):
         """If enableTypeRestrictions is ENABLE, return the list of types
         set. If it is ACQUIRE, get the types set on the parent so long
@@ -173,7 +173,7 @@ class ConstrainTypesMixin:
         DISABLE: return the types allowable in the item.
         """
         mode = self.getConstrainTypesMode()
-        
+
         if mode == DISABLED:
             return [fti.getId() for fti in self.getDefaultAddableTypes()]
         elif mode == ENABLED:
@@ -185,11 +185,11 @@ class ConstrainTypesMixin:
             else:
                 return parent.getLocallyAllowedTypes()
         else:
-            raise ValueError, "Invalid value for enableAddRestriction" 
-        
-    
-    security.declareProtected(CMFCorePermissions.View, 
-                                'getImmediatelyAddableTypes') 
+            raise ValueError, "Invalid value for enableAddRestriction"
+
+
+    security.declareProtected(CMFCorePermissions.View,
+                                'getImmediatelyAddableTypes')
     def getImmediatelyAddableTypes(self):
         """Get the list of type ids which should be immediately addable.
         If enableTypeRestrictions is ENABLE, return the list set; if it is
@@ -197,7 +197,7 @@ class ConstrainTypesMixin:
         all type ids allowable on the item.
         """
         mode = self.getConstrainTypesMode()
-        
+
         if mode == DISABLED:
             return [fti.getId() for fti in \
                         PortalFolder.allowedContentTypes(self)]
@@ -211,7 +211,7 @@ class ConstrainTypesMixin:
             else:
                 return parent.getImmediatelyAddableTypes()
         else:
-            raise ValueError, "Invalid value for enableAddRestriction" 
+            raise ValueError, "Invalid value for enableAddRestriction"
 
     # overrides CMFCore's PortalFolder allowedTypes
     def allowedContentTypes(self):
@@ -219,14 +219,14 @@ class ConstrainTypesMixin:
         """
         mode = self.getConstrainTypesMode()
         parent = self.aq_inner.aq_parent
-        
+
         # Short circuit if we are disabled or acquiring from non-compatible
         # parent
-        
+
         if mode == DISABLED or \
                 (parent and parent.portal_types != self.portal_types):
             return PortalFolder.allowedContentTypes(self)
-        
+
         globalTypes = self.getDefaultAddableTypes()
         allowed = list(self.getLocallyAllowedTypes())
         ftis = [ fti for fti in globalTypes if fti.getId() in allowed ]
@@ -240,22 +240,22 @@ class ConstrainTypesMixin:
         """
         mode = self.getConstrainTypesMode()
         parent = self.aq_inner.aq_parent
-        
+
         # Short circuit if we are disabled or acquiring from non-compatible
         # parent
-        
+
         if mode == DISABLED or \
                 (parent and parent.portal_types != self.portal_types):
-            return PortalFolder.invokeFactory(self, type_name, id, 
+            return PortalFolder.invokeFactory(self, type_name, id,
                                                 RESPONSE=None, *args, **kw)
-            
+
         if not type_name in [fti.getId() for fti in self.allowedContentTypes()]:
             raise Unauthorized('Disallowed subobject type: %s' % type_name)
 
         pt = getToolByName( self, 'portal_types' )
         args = (type_name, self, id, RESPONSE) + args
         return pt.constructContent(*args, **kw)
-    
+
     security.declarePrivate('getDefaultAllowTypes')
     def getDefaultAddableTypes(self):
         """returns a list of normally allowed objects as ftis
@@ -289,21 +289,21 @@ class ConstrainTypesMixin:
     # Default method for type lists
     security.declarePrivate('_ct_defaultAddableTypeIds')
     def _ct_defaultAddableTypeIds(self):
-        """Get a list of types which are addable in the ordinary case w/o the 
-        constraint machinery. 
+        """Get a list of types which are addable in the ordinary case w/o the
+        constraint machinery.
         """
         return [fti.getId() for fti in self.getDefaultAddableTypes()]
 
     def _ct_defaultConstrainTypesMode(self):
        """Configure constrainTypeMode depending on the parent
-      
+
        ACQUIRE if parent support ISelectableConstrainTypes
        DISABLE if not
        """
        parent = aq_parent(aq_inner(self))
        if ISelectableConstrainTypes.isImplementedBy(parent):
-           return ACQUIRE            
+           return ACQUIRE
        else:
            return DISABLED
- 
+
 InitializeClass(ConstrainTypesMixin)
