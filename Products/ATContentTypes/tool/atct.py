@@ -449,7 +449,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
             ttool.manage_delObjects(cmf_orig_pt)
             result.append('Removing ATCT: %s' % cmf_orig_pt)
             __traceback_info__ = 'Error converting %s to %s in enableCMFTypes'%(
-                                            str(cmf_orig_pt), str(cmf_bak_pt))
+                                            str(cmf_bak_pt), str(cmf_orig_pt))
             self._changePortalTypeName(cmf_bak_pt, cmf_orig_pt, global_allow=False)
             result.append('Renamed %s to %s' % (cmf_bak_pt, cmf_orig_pt))
         return ''.join(result)
