@@ -414,6 +414,8 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
                 continue
             cmf_orig_pt = klass.portal_type
             cmf_bak_pt = ntf.get('portal_type')
+            __traceback_info__ = 'Error converting %s to %s in disableCMFTypes'%(
+                                            str(cmf_orig_pt), str(cmf_bak_pt))
             self._changePortalTypeName(cmf_orig_pt, cmf_bak_pt, global_allow=False)
             result.append('Renamed %s to %s' % (cmf_orig_pt, cmf_bak_pt))
         return ''.join(result)
@@ -446,6 +448,8 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
             cmf_bak_pt = ntf.get('portal_type')
             ttool.manage_delObjects(cmf_orig_pt)
             result.append('Removing ATCT: %s' % cmf_orig_pt)
+            __traceback_info__ = 'Error converting %s to %s in enableCMFTypes'%(
+                                            str(cmf_orig_pt), str(cmf_bak_pt))
             self._changePortalTypeName(cmf_bak_pt, cmf_orig_pt, global_allow=False)
             result.append('Renamed %s to %s' % (cmf_bak_pt, cmf_orig_pt))
         return ''.join(result)
@@ -466,6 +470,8 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
                 continue
             atct_pt = klass.portal_type
             cmf_bak_pt = ntf.get('portal_type')
+            __traceback_info__ = 'Error converting %s to %s in copyCMFTypes'%(
+                                            str(cmf_bak_pt), str(atct_pt))
             self._copyFTIFlags(ptfrom=cmf_bak_pt, ptto=atct_pt)
     
     def isCMFdisabled(self):
