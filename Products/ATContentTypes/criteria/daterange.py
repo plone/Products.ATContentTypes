@@ -64,7 +64,7 @@ ATDateRangeCriterionSchema = ATBaseCriterionSchema + Schema((
                 widget=CalendarWidget(
                     label="End Date",
                     label_msgid="label_date_range_criteria_end",
-                    description="The beginning of the date range to search",
+                    description="The ending of the date range to search.",
                     description_msgid="help_date_range_criteria_end",
                     i18n_domain="plone"),
                 ),
