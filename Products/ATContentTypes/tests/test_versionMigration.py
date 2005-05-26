@@ -23,6 +23,7 @@ from Products.ATContentTypes.migration.v1.alphas import updateIntegerCriteria
 from Products.ATContentTypes.migration.v1.alphas import migrateCMFTopics
 from Products.ATContentTypes.migration.v1.alphas import uncatalogCriteria
 from Products.ATContentTypes.migration.v1.alphas import addSubTopicAllowed
+from Products.ATContentTypes.migration.v1.betas import fixFolderlistingAction
 
 
 class MigrationTest(atcttestcase.ATCTSiteTestCase):
@@ -151,6 +152,24 @@ class TestMigrations_v1(MigrationTest):
         ttool = self.portal.portal_types
         ttool._delObject('Topic')
         addSubTopicAllowed(self.portal,[])
+
+    def testFixFolderlistingAction(self):
+        fixFolderlistingAction(self.portal, [])
+        self.assertEqual(self.portal.portal_types['Folder'].getActionById('folderlisting'), 'view')
+        self.assertEqual(self.portal.portal_types['Plone Site'].getActionById('folderlisting'), 'view')
+        self.assertEqual(self.portal.portal_types['Large Plone Folder'].getActionById('folderlisting'), 'view')
+        self.assertEqual(self.portal.portal_types['Topic'].getActionById('folderlisting'), 'view')
+        
+    def testFixFolderlistingActionTwice(self):
+        fixFolderlistingAction(self.portal, [])
+        self.assertEqual(self.portal.portal_types['Folder'].getActionById('folderlisting'), 'view')
+        self.assertEqual(self.portal.portal_types['Plone Site'].getActionById('folderlisting'), 'view')
+        self.assertEqual(self.portal.portal_types['Large Plone Folder'].getActionById('folderlisting'), 'view')
+        self.assertEqual(self.portal.portal_types['Topic'].getActionById('folderlisting'), 'view')
+        
+    def testFixFolderlistingActionNoTool(self):
+        self.portal._delObject('portal_types')
+        fixFolderlistingAction(self.portal, [])
 
 def test_suite():
     from unittest import TestSuite, makeSuite

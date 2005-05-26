@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Updated folderlisting actions to work properly with optiludes new
+   browserdefault behavior.
+   [alecm]
+
  * Localized date in Topic custom view.
    [alecm]
 

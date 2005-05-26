@@ -594,6 +594,14 @@ class ATCTFolder(ATCTMixin, BaseFolder):
         'action'      : 'string:${folder_url}/',
         'permissions' : (CMFCorePermissions.View,),
          },
+        {
+        'id'          : 'folderlisting',
+        'name'        : 'Folder Listing',
+        'action'      : 'string:${folder_url}/view',
+        'permissions' : (CMFCorePermissions.View,),
+        'category'    : 'folder',
+        'visible'     : False
+         },
         )
     )
 
@@ -645,6 +653,14 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
         'name'        : 'View',
         'action'      : 'string:${folder_url}/',
         'permissions' : (CMFCorePermissions.View,),
+         },
+        {
+        'id'          : 'folderlisting',
+        'name'        : 'Folder Listing',
+        'action'      : 'string:${folder_url}/view',
+        'permissions' : (CMFCorePermissions.View,),
+        'category'    : 'folder',
+        'visible'     : False
          },
         )
     )
@@ -700,6 +716,14 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
         'name'        : 'View',
         'action'      : 'string:${folder_url}/',
         'permissions' : (CMFCorePermissions.View,),
+         },
+        {
+        'id'          : 'folderlisting',
+        'name'        : 'Folder Listing',
+        'action'      : 'string:${folder_url}/view',
+        'permissions' : (CMFCorePermissions.View,),
+        'category'    : 'folder',
+        'visible'     : False
          },
         )
     )

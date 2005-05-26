@@ -72,7 +72,7 @@ _upgradePaths = {}
 
 def registerUpgradePath(oldversion, newversion, function):
     """ Basic register func """
-    _upgradePaths[oldversion] = [newversion, function]
+    _upgradePaths[oldversion.lower()] = [newversion.lower(), function]
 
 def log(message,summary='',severity=0):
     zLOG.LOG('ATCT: ', severity, summary, message)
@@ -159,7 +159,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
         """Get numversion and version from FS
         """
         from Products.ATContentTypes import __pkginfo__ as pkginfo 
-        return pkginfo.numversion, pkginfo.version
+        return pkginfo.numversion, pkginfo.version.lower()
 
     security.declareProtected(CMFCorePermissions.ManagePortal, 'getVersion')
     def getVersion(self):
@@ -305,8 +305,11 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
 
     def _upgrade(self, version):
         version = version.lower()
+        # Handle silly spaces after version names
         if not _upgradePaths.has_key(version):
-            return None, ("Migration completed at version %s" % version,)
+            version=version+" "
+            if not _upgradePaths.has_key(version):
+                return None, ("Migration completed at version %s" % version,)
 
         newversion, function = _upgradePaths[version]
         res = function(self.aq_parent)

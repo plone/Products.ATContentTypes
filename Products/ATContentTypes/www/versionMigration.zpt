@@ -38,7 +38,7 @@
     <form action="" tal:attributes="action template/getId">
         <input type="hidden" name="submitted" value="1" />
         <p>
-            If you're <em>absolutely</em> sure your Plone instance is not <span tal:replace="python:here.getVersionFromFS()[1]"/>, choose the version you think it is below and click "force migrate". This will force the migration procedure from that version. <em>You should not normally need to do this.</em>
+            If you're <em>absolutely</em> sure your ATCT instance is not <span tal:replace="python:here.getVersion()[1]"/>, choose the version you think it is below and click "force migrate". This will force the migration procedure from that version. <em>You should not normally need to do this.</em>
         </p>
 
         <select name="force_instance_version">

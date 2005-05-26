@@ -149,13 +149,12 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
     def testMigrationFinished(self):
         t = self.tool
         self.assertEqual(t.getVersion(),
-                         t.getVersionFromFS(),
-                         'Migration failed')
+                         t.getVersionFromFS())
 
     def testNeedsVersionMigration(self):
         t = self.tool
         self.failIf(t.needsVersionMigration(),
-                    'Migration needs upgrading')
+                    'Migration needs upgrading, currently: %s'%str(t.getVersion()))
 
     def testMigrationNeedsRecatalog(self):
         t = self.tool
