@@ -1,16 +1,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
       lang="en"
       metal:use-macro="here/prefs_main_template/macros/master"
-      i18n:domain="SimpleVocabularies">
+      i18n:domain="plone">
 
   <metal:block fill-slot="top_slot"
-             tal:define="dummy python:request.set('disable_border',1)" />
-
-
+               tal:define="dummy python:request.set('disable_border',1)" />
 
 <body>
 
-  
 <div metal:fill-slot="prefs_configlet_main"
      tal:define="errors python:request.get('errors', {});
                  props python:here.portal_properties;">
@@ -19,64 +16,77 @@
 
 <div class="documentEditable">
 
-
     <!-- simulating views on the topics pages until we have real objects. -->
-    <ul class="contentViews">
+    <ul class="contentViews"
+        i18n:domain="atcontenttypes">
         <li class="">
-        <a href=""
-        tal:attributes="href string:${here/absolute_url}/atct_manageTopicIndex"
-        i18n:translate="label_topic_indexes">Smart Folder Indexes</a>
+          <a href=""
+             tal:attributes="href string:${here/absolute_url}/atct_manageTopicIndex"
+             i18n:translate="label_topic_indexes">Smart Folder Indexes</a>
         </li>
 
         <li class="selected">
-        <a href=""
-        tal:attributes="href string:${here/absolute_url}/${template/id}"
-        i18n:translate="label_topic_metadata">Smart Folder MetaData</a>
+          <a href=""
+             tal:attributes="href string:${here/absolute_url}/${template/id}"
+             i18n:translate="label_topic_metadata">Smart Folder MetaData</a>
         </li>
     </ul>
 
     <div class="contentActions">
-    &nbsp;
-    </div>        
+        &nbsp;
+    </div>
+
     <!-- End of tabs -->
 
     <div class="documentContent">
-    <h1 i18:translate="">Smart Folder Settings</h1>
+
+    <h1 i18n:domain="atcontenttypes"
+        i18n:translate="heading_smart_folder_settings">
+        Smart Folder Settings
+    </h1>
+
     <a href=""
        class="link-parent"
        tal:attributes="href string: $portal_url/plone_control_panel"
-       i18n:domain="plone"
        i18n:translate="label_up_to_plone_setup">
-    Up to Site Setup
-    </a>    
-    <p i18n:translate="">Configure which metadata will be available for Smart Folder views.</p>
-    <form method="post" 
-        name="manageTopicMetadata"
-        tal:define="errors options/state/getErrors;
-                    atct_tool here/portal_atct;
-                    all_types atct_tool/getAllPortalTypes;
-                    allowed_types python:atct_tool.getAllowedPortalTypes(populate_for_end_usage=0);
-                    allowed_ids python:[a[0] for a in allowed_types];"
-        tal:attributes="action python:here.absolute_url()+'/'+template.id">
+        Up to Site Setup
+    </a>
+
+    <p i18n:domain="atcontenttypes"
+       i18n:translate="description_configure_available_metadata">
+        Configure which metadata will be available for Smart Folder views.
+    </p>
+
+    <form method="post"
+          name="manageTopicMetadata"
+          i18n:domain="atcontenttypes"
+          tal:define="errors options/state/getErrors;
+                      atct_tool here/portal_atct;
+                      all_types atct_tool/getAllPortalTypes;
+                      allowed_types python:atct_tool.getAllowedPortalTypes(populate_for_end_usage=0);
+                      allowed_ids python:[a[0] for a in allowed_types];"
+          tal:attributes="action python:here.absolute_url()+'/'+template.id">
+
           <input type="hidden" name="form.submitted" value="1" />
           <input type="hidden" name="sub" value="1" />
-          
+
           <tal:indices tal:define="enabledOnly python:request.get('showEnabledOnly', '0');
                               indexes python:atct_tool.getIndexes(enabledOnly=enabledOnly);
                               metadata python:atct_tool.getAllMetadata(enabledOnly=enabledOnly)">
-          
-          <h3 i18n:translate="">
-            Metadata (fields for display)
+
+          <h3 i18n:translate="heading_metadata_fields_for_display">
+              Metadata (fields for display)
           </h3>
-            <table class="listing" border="0" cellpadding="0" cellspacing="0" style=""
-                  tal:define="bgcolor string:background-color:${here/base_properties/evenRowBackgroundColor};
-                              border_color here/base_properties/globalBorderColor"
-                  tal:attributes="style string:border:1px solid ${border_color}">
+
+          <table class="listing" border="0" cellpadding="0" cellspacing="0" style=""
+                 tal:define="bgcolor string:background-color:${here/base_properties/evenRowBackgroundColor};
+                             border_color here/base_properties/globalBorderColor"
+                 tal:attributes="style string:border:1px solid ${border_color}">
             <thead>
-                <th>Catalog metadata</th>
-                <th>Enable</th>
-                <th>Friendly name</th>
-                <th>Explanation</th>
+                <th i18n:translate="listingheader_catalog_metadata">Catalog metadata</th>
+                <th i18n:translate="listingheader_enable">Enable</th>
+                <th i18n:translate="listingheader_friendly_name">Friendly name</th>
+                <th i18n:translate="listingheader_explanation">Explanation</th>
             </thead>
             <tbody>
             <tal:indexes tal:repeat="index metadata">
@@ -95,7 +105,7 @@
                                                value indexObj/index"/>
                     </td>
                     <td>
-                        <input type="checkbox" 
+                        <input type="checkbox"
                                value=""
                                name=""
                                id=""
@@ -125,7 +135,7 @@
                     </td>
 
                 </tr>
-                
+
                 </tal:object>
             </tal:indexes>
             </tbody>
@@ -135,10 +145,11 @@
                    type="submit"
                    name="form.button.metadata_save"
                    value="Save"
+                   i18n:domain="plone"
                    i18n:attributes="value"
                    tal:attributes="tabindex tabindex/next;"
                    />
-       </tal:indices> 
+       </tal:indices>
 
     </form>
     </div>
