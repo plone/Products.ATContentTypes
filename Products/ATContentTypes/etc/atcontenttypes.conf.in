@@ -233,6 +233,13 @@
       description An item's title transformed for sorting
       enabled on
     </index>
+    <index>
+      name getRawRelatedItems
+      friendlyName Related To
+      description Find items related to the selected items
+      criterion ATReferenceCriterion
+      enabled on
+    </index>
 
 
     <metadata>

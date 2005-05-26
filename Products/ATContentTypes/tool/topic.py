@@ -193,7 +193,7 @@ class ATTopicsTool(Base):
         indexes = self.listCatalogFields()
         for i in indexes:
             if not self.topic_indexes.has_key(i):
-                enabled = (i not in IGNORED_FIELDS and True) or False
+                enabled = False
                 self.addIndex(i, friendlyName='', enabled=enabled)
         return True
 
@@ -204,7 +204,7 @@ class ATTopicsTool(Base):
 
         for i in metas:
             if not self.topic_metadata.has_key(i):
-                enabled = (i not in IGNORED_COLUMNS and True) or False
+                enabled = False
                 self.addMetadata(i, friendlyName='', enabled=enabled)
         return True
 
@@ -215,12 +215,22 @@ class ATTopicsTool(Base):
             the collection because they do no longer exist in the catalog """
 
         indexes = self.listCatalogFields()
+        configured_indexes = {}
+        for index in tool_config.indexes:
+            configured_indexes[index.name]=(getattr(index,'friendlyName',None),
+                                            getattr(index,'description',None),
+                                            getattr(index,'enabled',None),
+                                            getattr(index,'criteria',None))
 
         # first add new indexes
         for i in indexes:
             if not self.topic_indexes.has_key(i):
-                enabled = (i not in IGNORED_FIELDS and True) or False
-                self.addIndex(i, friendlyName='', enabled=enabled)
+                enabled = False
+                defaults = (configured_indexes.has_key(i) and
+                                        configured_indexes[i]) or ('','',enabled,None)
+                self.addIndex(i, friendlyName=defaults[0],
+                              description=defaults[1], enabled=defaults[2],
+                              criteria=defaults[3])
 
         # now check the other way round
         keys = self.topic_indexes.keys()
@@ -235,12 +245,20 @@ class ATTopicsTool(Base):
             catalog """
 
         metas = self.listCatalogMetadata()
+        configured_metadata = {}
+        for meta in tool_config.metadata:
+            configured_metadata[meta.name]=(getattr(meta,'friendlyName',None),
+                                            getattr(meta,'description',None),
+                                            getattr(meta,'enabled',None))
 
         # first add new indexes
         for i in metas:
             if not self.topic_metadata.has_key(i):
-                enabled = (i not in IGNORED_COLUMNS and True) or False
-                self.addMetadata(i, friendlyName='', enabled=enabled)
+                enabled = False
+                defaults = (configured_metadata.has_key(i) and
+                                        configured_metadata[i]) or ('','',enabled)
+                self.addMetadata(i, friendlyName=defaults[0],
+                                 description=defaults[1], enabled=defaults[2])
 
         # now check the other way round
         keys = self.topic_metadata.keys()

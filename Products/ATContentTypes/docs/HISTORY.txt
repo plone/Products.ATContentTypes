@@ -1,6 +1,21 @@
 1.0-devel
 =====================
 
+ * Added index for relatedItems, and migration to install it into already
+   installed instances.
+   [alecm]
+
+ * Made the tool check if a config entry is available whenever it finds a new
+   index, so that it is automatically enabled if desirable, and to minimize
+   the need for migrations.
+   [alecm]
+
+ * Disabled all indexes in criteria form by default, only those with
+   default values are automatically enabled.  This prevents things like ZWiki
+   from messing up our nice edit form.  They can be enabled and prettified in
+   the tool.
+   [alecm]
+
  * Spring i18n cleanup:
    * changed i18n:domain from plone to atcontenttypes
    * added missing i18n markup

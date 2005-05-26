@@ -52,6 +52,7 @@ relatedItemsField = ReferenceField('relatedItems',
         multiValued = True,
         isMetadata = True,
         languageIndependent = False,
+        index = 'KeywordIndex',
         write_permission = CMFCorePermissions.ModifyPortalContent,
         widget = ReferenceBrowserWidget(
             allow_search = True,

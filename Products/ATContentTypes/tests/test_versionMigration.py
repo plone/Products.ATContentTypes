@@ -24,6 +24,8 @@ from Products.ATContentTypes.migration.v1.alphas import migrateCMFTopics
 from Products.ATContentTypes.migration.v1.alphas import uncatalogCriteria
 from Products.ATContentTypes.migration.v1.alphas import addSubTopicAllowed
 from Products.ATContentTypes.migration.v1.betas import fixFolderlistingAction
+from Products.ATContentTypes.migration.v1.betas import reindexCatalog
+from Products.ATContentTypes.migration.v1.betas import addRelatedItemsIndex
 
 
 class MigrationTest(atcttestcase.ATCTSiteTestCase):
@@ -170,6 +172,35 @@ class TestMigrations_v1(MigrationTest):
     def testFixFolderlistingActionNoTool(self):
         self.portal._delObject('portal_types')
         fixFolderlistingAction(self.portal, [])
+
+    def testAddRelatedItemsIndex(self):
+        # Should add getRawRelatedItems index
+        self.catalog.delIndex('getRawRelatedItems')
+        addRelatedItemsIndex(self.portal, [])
+        index = self.catalog._catalog.getIndex('getRawRelatedItems')
+        self.assertEqual(index.__class__.__name__, 'KeywordIndex')
+
+    def testAddRelatedItemsIndexTwice(self):
+        # Should not fail if migrated again
+        self.catalog.delIndex('getRawRelatedItems')
+        addRelatedItemsIndex(self.portal, [])
+        addRelatedItemsIndex(self.portal, [])
+        index = self.catalog._catalog.getIndex('getRawRelatedItems')
+        self.assertEqual(index.__class__.__name__, 'KeywordIndex')
+
+    def testAddRelatedItemsIndexNoCatalog(self):
+        # Should not fail if portal_catalog is missing
+        self.portal._delObject('portal_catalog')
+        addRelatedItemsIndex(self.portal, [])
+
+    def testReindexCatalog(self):
+        # Should rebuild the catalog
+        self.folder.invokeFactory('Document', id='doc', title='Foo')
+        self.folder.doc.setTitle('Bar')
+        self.assertEqual(len(self.catalog(Title='Foo')), 1)
+        reindexCatalog(self.portal, [])
+        self.assertEqual(len(self.catalog(Title='Foo')), 0)
+        self.assertEqual(len(self.catalog(Title='Bar')), 1)
 
 def test_suite():
     from unittest import TestSuite, makeSuite

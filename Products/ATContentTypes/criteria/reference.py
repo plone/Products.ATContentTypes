@@ -57,7 +57,7 @@ class ATReferenceCriterion(ATSelectionCriterion):
         brains = uid_cat(UID=options, sort_on='Title')
         display = [((b.Title or b.id).lower(), b.UID, b.Title or b.id) for b in brains]
         display.sort()
-        display_list = DisplayList([(b[1], b[2]) for d in display])
+        display_list = DisplayList([(d[1], d[2]) for d in display])
 
         return display_list
 

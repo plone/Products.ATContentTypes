@@ -452,7 +452,7 @@ class TestATReferenceCriterion(CriteriaTest):
 
     #Same as list criterion but without operator and with special vocabulary
     def test_reference_query(self):
-        self.dummy.Schema()['field'].set(self.dummy,'Subject')
+        self.dummy.Schema()['field'].set(self.dummy,'getRawRelatedItems')
         self.folder.invokeFactory('Document', 'doc1')
         uid = self.folder.doc1.UID()
         self.dummy.setValue((uid,))
@@ -460,8 +460,25 @@ class TestATReferenceCriterion(CriteriaTest):
         self.assertEquals(len(items),1)
         query = items[0][1]
         field = items[0][0]
-        self.assertEquals(field, 'Subject')
+        self.assertEquals(field, 'getRawRelatedItems')
         self.assertEquals(query, (uid,))
+
+    def test_reference_vocab(self):
+        self.dummy.Schema()['field'].set(self.dummy,'getRawRelatedItems')
+        self.folder.invokeFactory('Document', 'doc1')
+        self.folder.invokeFactory('Document', 'doc2')
+        uid1 = self.folder.doc1.UID()
+        uid2 = self.folder.doc2.UID()
+        self.folder.doc1.setRelatedItems([uid2])
+        self.folder.doc2.setRelatedItems([uid1])
+        self.folder.doc1.reindexObject()
+        self.folder.doc2.reindexObject()
+        vocab = self.dummy.getCurrentValues()
+        self.assertEquals(len(vocab),2)
+        self.failUnless(uid1 in vocab.keys())
+        self.failUnless(uid2 in vocab.keys())
+        self.failUnless('doc1' in vocab.values())
+        self.failUnless('doc2' in vocab.values())
 
 tests.append(TestATReferenceCriterion)
 

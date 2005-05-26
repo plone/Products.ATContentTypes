@@ -133,6 +133,11 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
                 result = cat(id=id)
                 l = len(result)
                 self.failUnlessEqual(l, 0, (id, l, result))
+ 
+    def test_adds_related_items_catalog_index(self):
+        self.assertEqual(self.cat.Indexes['getRawRelatedItems'].__class__.__name__,
+                         'KeywordIndex')
+        
     
 tests.append(TestInstallation)
 

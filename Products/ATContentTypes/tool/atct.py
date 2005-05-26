@@ -657,8 +657,8 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
             except: state = 0
             __traceback_info__ = (obj, getattr(obj, '__class__', 'no class'),
                                   getattr(obj, 'meta_type', 'no metatype'),
-                                  getattr(obj, 'getPhysicalPath', None) is not None and obj.getPhysicalPath() or 'no context',
-                                  old, new)
+                                  (getattr(obj, 'getPhysicalPath', None) is not None and
+                                  obj.getPhysicalPath()) or 'no context')
             obj._setPortalTypeName(new_name)
             obj.reindexObject(idxs=['portal_type', 'Type', 'meta_type', ])
             if state is None: obj._p_deativate()
