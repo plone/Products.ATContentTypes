@@ -33,6 +33,7 @@ from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.CatalogTool import CatalogTool
 from AccessControl import ClassSecurityInfo
+from AccessControl import Unauthorized
 from Acquisition import aq_parent
 from Acquisition import aq_inner
 
@@ -392,9 +393,9 @@ class ATTopic(ATCTFolder):
                 # parent = aq_parent(self)
                 parent = aq_parent(aq_inner(self))
                 result.update(parent.buildQuery())
-            except AttributeError: # oh well, can't find parent, or it isn't a Topic.
+            except (AttributeError, Unauthorized): # oh well, can't find parent, or it isn't a Topic.
                 pass
-            
+
         for criterion in criteria:
             for key, value in criterion.getCriteriaItems():
                 result[key] = value

@@ -165,7 +165,7 @@ class TestATDateCriteria(CriteriaTest):
     def test_LessThanPast(self):
         # A query of the form 'Less than 14 days ago' should generate a min:max
         # query with a start 14 days in the past and an end in the present
-        self.dummy.field = 'created'
+        self.dummy.Schema()['field'].set(self.dummy,'created')
         self.dummy.setOperation('less')
         self.dummy.setDateRange('-')
         self.dummy.setValue('14')
@@ -186,7 +186,7 @@ class TestATDateCriteria(CriteriaTest):
         # A query of the form 'Less than 14 days in the future' should generate
         # a min:max query with an end 14 days in the future and a start in the
         # present
-        self.dummy.field = 'created'
+        self.dummy.Schema()['field'].set(self.dummy,'created')
         self.dummy.setOperation('less')
         self.dummy.setDateRange('+')
         self.dummy.setValue('14')
@@ -204,7 +204,7 @@ class TestATDateCriteria(CriteriaTest):
     def test_MoreThanPast(self):
         # A query of the form 'More than 14 days ago' should generate a max
         # query with the value set to a date 14 days in the past.
-        self.dummy.field = 'created'
+        self.dummy.Schema()['field'].set(self.dummy,'created')
         self.dummy.setOperation('more')
         self.dummy.setDateRange('-')
         self.dummy.setValue('14')
@@ -218,7 +218,7 @@ class TestATDateCriteria(CriteriaTest):
     def test_MoreThanFuture(self):
         # A query of the form 'More than 14 days in the future' should generate
         # a min query with the value set to a date 14 days in the future.
-        self.dummy.field = 'created'
+        self.dummy.Schema()['field'].set(self.dummy,'created')
         self.dummy.setOperation('more')
         self.dummy.setDateRange('+')
         self.dummy.setValue('14')
@@ -233,7 +233,7 @@ class TestATDateCriteria(CriteriaTest):
         # A query of the form 'More than Now' should generate
         # a min query with the value set to the present, regardless of the
         # past future setting.
-        self.dummy.field = 'created'
+        self.dummy.Schema()['field'].set(self.dummy,'created')
         self.dummy.setOperation('more')
         self.dummy.setDateRange('+')
         self.dummy.setValue('0')
@@ -252,7 +252,7 @@ class TestATDateCriteria(CriteriaTest):
         # A query of the form 'Less than Now' should generate
         # a max query with the value set to the present, regardless of the
         # past future setting.
-        self.dummy.field = 'created'
+        self.dummy.Schema()['field'].set(self.dummy,'created')
         self.dummy.setOperation('less')
         self.dummy.setDateRange('+')
         self.dummy.setValue('0')
@@ -277,7 +277,7 @@ class TestATListCriterion(CriteriaTest):
     portal_type = 'ATListCriterion'
 
     def test_list_query(self):
-        self.dummy.field = 'Subject'
+        self.dummy.Schema()['field'].set(self.dummy,'Subject')
         self.dummy.setOperator('or')
         self.dummy.setValue(('1','2','3'))
         items = self.dummy.getCriteriaItems()
@@ -298,7 +298,7 @@ class TestATSimpleIntCriterion(CriteriaTest):
     portal_type = 'ATSimpleIntCriterion'
 
     def test_base_int_query(self):
-        self.dummy.field = 'getObjPositionInParent'
+        self.dummy.Schema()['field'].set(self.dummy,'getObjPositionInParent')
         self.dummy.setDirection('')
         self.dummy.setValue(12)
         items = self.dummy.getCriteriaItems()
@@ -309,7 +309,7 @@ class TestATSimpleIntCriterion(CriteriaTest):
         self.assertEquals(query['query'], 12)
 
     def test_int_min(self):
-        self.dummy.field = 'getObjPositionInParent'
+        self.dummy.Schema()['field'].set(self.dummy,'getObjPositionInParent')
         self.dummy.setDirection('min')
         self.dummy.setValue(12)
         items = self.dummy.getCriteriaItems()
@@ -319,7 +319,7 @@ class TestATSimpleIntCriterion(CriteriaTest):
         self.assertEquals(query['range'], 'min')
 
     def test_int_max(self):
-        self.dummy.field = 'getObjPositionInParent'
+        self.dummy.Schema()['field'].set(self.dummy,'getObjPositionInParent')
         self.dummy.setDirection('max')
         self.dummy.setValue(12)
         items = self.dummy.getCriteriaItems()
@@ -329,7 +329,7 @@ class TestATSimpleIntCriterion(CriteriaTest):
         self.assertEquals(query['range'], 'max')
 
     def test_int_between(self):
-        self.dummy.field = 'getObjPositionInParent'
+        self.dummy.Schema()['field'].set(self.dummy,'getObjPositionInParent')
         self.dummy.setDirection('min:max')
         self.dummy.setValue(12)
         self.dummy.setValue2(17)
@@ -349,7 +349,7 @@ class TestATSimpleStringCriterion(CriteriaTest):
     portal_type = 'ATSimpleStringCriterion'
 
     def test_string_query(self):
-        self.dummy.field = 'Subject'
+        self.dummy.Schema()['field'].set(self.dummy,'Subject')
         self.dummy.setValue('a*')
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
@@ -368,7 +368,7 @@ class TestATSortCriterion(CriteriaTest):
     portal_type = 'ATSortCriterion'
 
     def test_sort_query(self):
-        self.dummy.field = 'getObjPositionInParent'
+        self.dummy.Schema()['field'].set(self.dummy,'getObjPositionInParent')
         self.dummy.setReversed(False)
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
@@ -376,7 +376,7 @@ class TestATSortCriterion(CriteriaTest):
         self.assertEquals(items[0][1], 'getObjPositionInParent')
 
     def test_list_query_reversed(self):
-        self.dummy.field = 'getObjPositionInParent'
+        self.dummy.Schema()['field'].set(self.dummy,'getObjPositionInParent')
         self.dummy.setReversed(True)
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),2)
@@ -396,7 +396,7 @@ class TestATSelectionCriterion(CriteriaTest):
 
     #Same as list criterion but without operator and with special vocabulary
     def test_selection_query(self):
-        self.dummy.field = 'Subject'
+        self.dummy.Schema()['field'].set(self.dummy,'Subject')
         self.dummy.setValue(('1','2','3'))
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
@@ -407,8 +407,16 @@ class TestATSelectionCriterion(CriteriaTest):
 
     def test_vocabulary(self):
         #Should return some ids
-        self.dummy.field = 'getId'
+        self.dummy.Schema()['field'].set(self.dummy,'getId')
         self.failUnless(self.dummy.getCurrentValues())
+
+    def test_vocabulary_sorted(self):
+        #Should return sorted ids
+        self.dummy.Schema()['field'].set(self.dummy,'getId')
+        orig_vocab = [a.lower() for a in list(self.dummy.getCurrentValues())]
+        sorted_vocab = orig_vocab[:]
+        sorted_vocab.sort()
+        self.assertEqual(orig_vocab,sorted_vocab)
 
 tests.append(TestATSelectionCriterion)
 
@@ -420,7 +428,7 @@ class TestATDateRangeCriterion(CriteriaTest):
     portal_type = 'ATDateRangeCriterion'
 
     def test_date_range_query(self):
-        self.dummy.field = 'created'
+        self.dummy.Schema()['field'].set(self.dummy,'created')
         now = DateTime()
         self.dummy.setStart(now)
         self.dummy.setEnd(now+5)
@@ -444,9 +452,9 @@ class TestATReferenceCriterion(CriteriaTest):
 
     #Same as list criterion but without operator and with special vocabulary
     def test_reference_query(self):
+        self.dummy.Schema()['field'].set(self.dummy,'Subject')
         self.folder.invokeFactory('Document', 'doc1')
         uid = self.folder.doc1.UID()
-        self.dummy.field = 'Subject'
         self.dummy.setValue((uid,))
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
@@ -465,7 +473,7 @@ class TestATBooleanCriterion(CriteriaTest):
     portal_type = 'ATBooleanCriterion'
     
     def test_boolean_query_true(self):
-        self.dummy.field = 'isPrincipiaFolderish'
+        self.dummy.Schema()['field'].set(self.dummy,'isPrincipiaFolderish')
         self.dummy.setBool(True)
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
@@ -475,7 +483,7 @@ class TestATBooleanCriterion(CriteriaTest):
         self.assertEquals(query, [1,True,'1','True'])
     
     def test_boolean_query_false(self):
-        self.dummy.field = 'isPrincipiaFolderish'
+        self.dummy.Schema()['field'].set(self.dummy,'isPrincipiaFolderish')
         self.dummy.setBool(False)
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
@@ -495,7 +503,7 @@ class TestATPortalTypeCriterion(CriteriaTest):
 
     #Same as list criterion but without operator and with special vocabulary
     def test_portaltype_query(self):
-        self.dummy.field = 'portal_type'
+        self.dummy.Schema()['field'].set(self.dummy,'portal_type')
         self.dummy.setValue(('Document','Folder','Topic'))
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
@@ -506,17 +514,26 @@ class TestATPortalTypeCriterion(CriteriaTest):
 
     def test_vocabulary(self):
         #Should return standard types, but not blacklisted types
-        self.dummy.field = 'portal_type'
+        self.dummy.Schema()['field'].set(self.dummy,'portal_types')
         self.failUnless('Document' in self.dummy.getCurrentValues())
         self.failUnless('ATSimpleStringCriterion' not in self.dummy.getCurrentValues())
+
+    def test_vocabulary_sorts_by_type(self):
+        #Should return standard types, but not blacklisted types
+        self.dummy.Schema()['field'].set(self.dummy,'Type')
+        vocab = list(self.dummy.getCurrentValues())
+        self.failUnless(vocab.index('Page') > vocab.index('Event'))
+        self.dummy.Schema()['field'].set(self.dummy,'portal_types')
+        vocab = list(self.dummy.getCurrentValues())
+        self.failUnless(vocab.index('Document')< vocab.index('Event'))
 
     def test_types_v_portaltypes(self):
         #Using the Types index as field should cause the vocabulary to use the
         #type Title rather than the type name
-        self.dummy.field = 'portal_type'
+        self.dummy.Schema()['field'].set(self.dummy,'portal_type')
         self.failUnless('Large Plone Folder' in self.dummy.getCurrentValues())
         self.failUnless('Large Folder' not in self.dummy.getCurrentValues())
-        self.dummy.field = 'Type'
+        self.dummy.Schema()['field'].set(self.dummy,'Type')
         self.failUnless('Large Plone Folder' not in self.dummy.getCurrentValues())
         self.failUnless('Large Folder' in self.dummy.getCurrentValues())
         #ensure that blacklisted types aren't here either
@@ -537,7 +554,7 @@ class TestATCurrentAuthorCriterion(CriteriaTest):
         self.portal.acl_users._doAddUser('reviewer', 'secret', ['Reviewer'], [])
 
     def test_author_query(self):
-        self.dummy.field = 'creator'
+        self.dummy.Schema()['field'].set(self.dummy,'creator')
         self.login('member')
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
@@ -564,9 +581,9 @@ class TestATPathCriterion(CriteriaTest):
 
     def test_path_query(self):
         # ensure that the path and recurse settings result in a proper query
+        self.dummy.Schema()['field'].set(self.dummy,'path')
         self.folder.invokeFactory('Document', 'doc1')
         uid = self.folder.doc1.UID()
-        self.dummy.field = 'path'
         self.dummy.setValue((uid,))
         self.dummy.setRecurse(True)
         items = self.dummy.getCriteriaItems()
@@ -584,6 +601,7 @@ class TestATPathCriterion(CriteriaTest):
     def testDefaultPathValue(self):
         # ensure that the default_method returns a sensible value (i.e. the
         # folder containing the topic/criterion).
+        self.dummy.Schema()['field'].set(self.dummy,'path')
         def_path = self.dummy.getCurrentPath()
         self.assertEqual(def_path, ('/plone/Members/test_user_1_',))
 

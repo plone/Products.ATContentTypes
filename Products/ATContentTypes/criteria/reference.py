@@ -55,7 +55,9 @@ class ATReferenceCriterion(ATSelectionCriterion):
         options = catalog.uniqueValuesFor(self.Field())
 
         brains = uid_cat(UID=options, sort_on='Title')
-        display_list = DisplayList([(b.UID, b.Title or b.id) for b in brains])
+        display = [((b.Title or b.id).lower(), b.UID, b.Title or b.id) for b in brains]
+        display.sort()
+        display_list = DisplayList([(b[1], b[2]) for d in display])
 
         return display_list
 

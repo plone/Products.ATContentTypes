@@ -1,12 +1,19 @@
 1.0-devel
 =====================
 
+ * Made portal_type, selection, and reference criteria return reasonably
+   sorted lists.
+   [alecm]
+
  * Updated folderlisting actions to work properly with optiludes new
    browserdefault behavior.
    [alecm]
 
  * Localized date in Topic custom view.
    [alecm]
+
+1.0-alpha2
+=====================
 
  * Disabled history tab
    [tiran]
@@ -265,6 +272,9 @@
    Oliver Baltzer and me. I'm unable to determine the other coders. Please
    write me an email if you want credits for your great work!
    [tiran]
+
+1.0-alpha1
+=====================
 
  * Refactored huge parts of the migration suite. More later
    [tiran]
