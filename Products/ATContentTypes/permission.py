@@ -53,7 +53,7 @@ ViewHistory = "ATContentTypes: View history"
 setDefaultRoles(ViewHistory, ('Manager', ))
 
 UploadViaURL = "ATContentTypes: Upload via url"
-setDefaultRoles(ViewHistory, ('UploadViaURL', ))
+setDefaultRoles(UploadViaURL, ('Manager', ))
 
 permissions = {}
 def wireAddPermissions():
