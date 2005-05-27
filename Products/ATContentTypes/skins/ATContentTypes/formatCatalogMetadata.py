@@ -29,9 +29,21 @@ if same_type(value, '') and value[4:-1:3] == '-- ::':
 
 if shasattr(value, 'items'):
     # For dictionaries return a string of the form 'key1: value1, key2: value2' 
-    return ', '.join(['%s: %s'%(a,b) for a,b in value.items()])
+    value = ', '.join(['%s: %s'%(a,b) for a,b in value.items()])
 if same_type(value,[]) or same_type(value,()):
     # Return list as comma separated values
-    return ', '.join(value)
+    value = ', '.join(value)
 
-return value
+pt = context.portal_properties
+site_props = getattr(pt, 'site_properties', None)
+if site_props is not None:
+    max_length = site_props.getProperty(
+        'search_results_description_length', 160  )
+    ellipsis = site_props.getProperty('ellipsis', '...' )
+else:
+    max_length = 160
+    ellipsis = '...'
+if len(value) < max_length:
+    return value
+else:
+    return value[:max_length] + ellipsis
