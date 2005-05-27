@@ -56,6 +56,8 @@ class Walker:
         self.portal = portal
         self.src_portal_type = self.migrator.src_portal_type
         self.dst_portal_type = self.migrator.dst_portal_type
+        self.src_meta_type = self.migrator.src_meta_type
+        self.dst_meta_type = self.migrator.dst_meta_type
         self.subtransaction = self.migrator.subtransaction
         self.out = []
 
@@ -154,7 +156,7 @@ class CatalogWalker(Walker):
                              Language = catalog.uniqueValuesFor('Language'),
                             )
         else:
-            brains = catalog(portal_type = self.src_portal_type)
+            brains = catalog(portal_type = self.src_portal_type, meta_type = self.src_meta_type)
 
         for brain in brains:
             obj = brain.getObject()
@@ -199,7 +201,7 @@ class CatalogWalkerWithLevel(Walker):
                              Language = catalog.uniqueValuesFor('Language'),
                             )
         else:
-            brains = catalog(portal_type = self.src_portal_type)
+            brains = catalog(portal_type = self.src_portal_type, meta_type = self.src_meta_type)
         
         if len(brains) == 0:
             # no objects left, stop iteration

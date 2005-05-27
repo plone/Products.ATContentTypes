@@ -414,9 +414,10 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
                 continue
             cmf_orig_pt = klass.portal_type
             cmf_bak_pt = ntf.get('portal_type')
+            cmf_mt = ntf.get('meta_type')
             __traceback_info__ = 'Error converting %s to %s in disableCMFTypes'%(
                                             str(cmf_orig_pt), str(cmf_bak_pt))
-            self._changePortalTypeName(cmf_orig_pt, cmf_bak_pt, global_allow=False)
+            self._changePortalTypeName(cmf_orig_pt, cmf_bak_pt, global_allow=False, metatype=cmf_mt)
             result.append('Renamed %s to %s' % (cmf_orig_pt, cmf_bak_pt))
         return ''.join(result)
     
@@ -446,11 +447,12 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
                 continue
             cmf_orig_pt = klass.portal_type
             cmf_bak_pt = ntf.get('portal_type')
+            cmf_mt = ntf.get('meta_type')
             ttool.manage_delObjects(cmf_orig_pt)
             result.append('Removing ATCT: %s' % cmf_orig_pt)
             __traceback_info__ = 'Error converting %s to %s in enableCMFTypes'%(
                                             str(cmf_bak_pt), str(cmf_orig_pt))
-            self._changePortalTypeName(cmf_bak_pt, cmf_orig_pt, global_allow=False)
+            self._changePortalTypeName(cmf_bak_pt, cmf_orig_pt, global_allow=False, metatype=cmf_mt)
             result.append('Renamed %s to %s' % (cmf_bak_pt, cmf_orig_pt))
         return ''.join(result)
     
@@ -632,7 +634,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
  
     
     def _changePortalTypeName(self, old_name, new_name, global_allow=None,
-        title=None):
+        title=None, metatype=None):
         """Changes the portal type name of an object
         
         * Changes the id of the portal type inside portal types
@@ -647,8 +649,11 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
             new_type.manage_changeProperties(global_allow=global_allow)
         if title is not None:
             new_type.manage_changeProperties(title=title)
-        
-        brains = cat(portal_type = old_name)
+
+        if metatype is not None:
+            brains = cat(portal_type = old_name, meta_type = metatype)
+        else:
+            brains = cat(portal_type = old_name)
         for brain in brains:
             obj = brain.getObject()
             if not obj:

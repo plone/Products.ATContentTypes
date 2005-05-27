@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Fixes for migration of cataloged non-contentish objects.  Now checking
+   meta_type and portal_type before migration steps.
+   [alecm]
+
  * Fixed http://members.plone.org/collector/3804 added validation of filename
    when appropriate using check_id if available.
    [alecm]

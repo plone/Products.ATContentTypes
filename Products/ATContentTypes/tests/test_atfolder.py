@@ -131,8 +131,34 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
         self.compareAfterMigration(migrated, mod=mod, created=created)
         self.compareDC(migrated, title=title, description=description)
-        
+
         # TODO: more tests
+
+    def test_migrator_doesnt_migrate_non_contentish_sub_objects(self):
+        # Test that we don't try to migrate conteaind non-content objects
+        old = self._cmf
+        id  = old.getId()
+
+        # edit
+        editCMF(old)
+        title       = old.Title()
+        description = old.Description()
+        mod         = old.ModificationDate()
+        created     = old.CreationDate()
+
+        # Add non-contentish subobject to inherit portal_type from parent
+        factory = old.manage_addProduct['PythonScripts']
+        factory.manage_addPythonScript('index_html')
+        index = old.index_html
+
+        # Catalog it so that migration thinks it's a folder.
+        self.portal.portal_catalog.indexObject(index)
+
+        # migration will raise an error if it attempts to incorrectly migrate
+        # the index_html
+        get_transaction().commit(1)
+        m = FolderMigrator(index)
+        m(unittest=1)
 
     def test_implements_autoorder(self):
         self.failUnless(IAutoOrderSupport.isImplementedBy(self._ATCT))

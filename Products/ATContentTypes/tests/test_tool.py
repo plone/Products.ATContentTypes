@@ -95,15 +95,48 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
 
         brains = cat(meta_type=mt)
         #self.failUnless(len(brains) > 0)
-        
+
         brains = cat(portal_type=pt)
         #self.failUnless(len(brains) > 0)
-        
+
     def test_recatalogCMFTypes(self):
         # just to make sure it is callable
         t = self.tool
         t.recatalogCMFTypes()
-        
+
+    def test_enableCMFTypes(self):
+        t = self.tool
+        # login as manager
+        self.setRoles(['Manager', 'Member'])
+        t.enableCMFTypes()
+        self.failUnlessEqual(t.isCMFdisabled(), False)
+
+    def XXX_test_disableCMFTypes(self):
+        # Currently fails inexplicably
+        t = self.tool
+        # login as manager
+        self.setRoles(['Manager', 'Member'])
+        t.enableCMFTypes()
+        t.disableCMFTypes()
+        self.failUnlessEqual(t.isCMFdisabled(), True)
+
+    def test_disableCMFTypes_with_non_contentish_cataloged_object(self):
+        t = self.tool
+        # login as manager
+        self.setRoles(['Manager', 'Member'])
+
+        # Add non-contentish subobject to inherit portal_type from parent
+        factory = self.folder.manage_addProduct['PythonScripts']
+        factory.manage_addPythonScript('index_html')
+        index = self.folder.index_html
+
+        # Catalog it so that migration thinks it's a folder.
+        self.portal.portal_catalog.indexObject(index)
+
+        t.enableCMFTypes()
+        # This shouldn't fail with AttributeError: _setPortalTypeName
+        t.disableCMFTypes()
+
     def test_interface(self):
         t = self.tool
         self.failUnless(IATCTTool.isImplementedBy(t))
