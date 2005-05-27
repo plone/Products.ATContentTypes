@@ -1,3 +1,4 @@
+# -*- coding: latin1 -*- 
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
 #  Copyright (c) 2003-2005 AT Content Types development team
@@ -35,6 +36,8 @@ from Testing import ZopeTestCase
 ZopeTestCase.installProduct('ATContentTypes')
 ZopeTestCase.installProduct('ATReferenceBrowserWidget')
 
+import os
+
 from Products.Archetypes.tests.attestcase import ATTestCase
 from Products.Archetypes.tests.atsitetestcase import ATSiteTestCase
 
@@ -59,6 +62,7 @@ from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 from Products.CMFCore.utils import getToolByName
+from Testing.ZopeTestCase.functional import Functional
 
 # BBB remove import from PloneLanguageTool later
 try:
@@ -66,9 +70,13 @@ try:
 except ImportError:
     from Products.PloneLanguageTool.interfaces import ITranslatable
 
+test_home = os.path.dirname(__file__) 
 
 class ATCTSiteTestCase(ATSiteTestCase):
     pass
+
+class ATCTFunctionalSiteTestCase(Functional, ATCTSiteTestCase):
+    __implements__ = Functional.__implements__ + ATCTSiteTestCase.__implements__    
 
 class ATCTTypeTestCase(ATSiteTestCase):
     """AT Content Types test

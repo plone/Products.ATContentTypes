@@ -1,0 +1,20 @@
+id: test-news-item
+title: test news item
+allowDiscussion: None
+subject: 
+description: test news item description
+contributors: 
+creators: tiran
+effectiveDate: None
+expirationDate: None
+language: 
+rights: 
+creation_date: 2005/05/27 18:16:04.429 GMT+2
+modification_date: 2005/05/27 18:16:04.603 GMT+2
+layout: newsitem_view
+image: <img src="http://localhost:11090/testsite/test-news-item/image" alt="test news item" title="test news item" />
+imageCaption: an image caption
+relatedItems: 
+Content-Type: text/html
+
+<em>a test news item</em>

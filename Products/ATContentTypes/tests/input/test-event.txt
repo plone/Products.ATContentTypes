@@ -1,0 +1,28 @@
+id: test-event
+title: test event
+allowDiscussion: None
+subject: Meeting
+description: event description
+contributors: 
+creators: tiran
+effectiveDate: None
+expirationDate: None
+language: 
+rights: 
+creation_date: 2005/05/27 18:14:12.151 GMT+2
+modification_date: 2005/05/27 18:14:12.359 GMT+2
+layout: event_view
+startDate: 2005/05/01 08:00:00 GMT+2
+endDate: 2005/05/02 10:30:00 GMT+2
+location: event location
+attendees: a user
+  another user
+eventType: Meeting
+eventUrl: http://example.org/event
+contactName: John Dow
+contactEmail: user@example.org
+contactPhone: +1 234 567890
+relatedItems: 
+Content-Type: text/html
+
+<em>event announcement</em>

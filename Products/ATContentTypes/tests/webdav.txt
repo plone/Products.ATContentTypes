@@ -1,0 +1,65 @@
+============
+WebDAV tests
+============
+
+ATContentTypes supports WebDAV and FTP uploads with small differences
+from ordinary AT based content types.
+
+First, we are going to setup an environment so we can test that stuff
+is acquired or not acquired at the right times. The code is based on
+Sidneys tests for Archetypes.
+
+  >>> import os
+  >>> from Products.Archetypes.tests.attestcase import user_name
+  >>> from Products.Archetypes.tests.attestcase import user_password
+  >>> from Products.Archetypes.tests.atsitetestcase import portal_name
+  >>> from Products.ATContentTypes.tests.atcttestcase import test_home
+  
+  Input directory with test files
+  >>> input_dir = os.path.join(test_home, 'input')
+
+  CMF and Plone sites may have different default titles so we set one
+  >>> self.setRoles(['Manager'])
+  >>> self.portal.setTitle('Portal Title')
+  >>> self.setRoles(['Member'])
+  
+  Use the member's home folder as play ground for the tests
+  >>> folder = self.folder
+  >>> fpath = '/'.join(folder.getPhysicalPath())    
+
+WebDAV PUT
+==========
+
+ATContentTypes registers several file extensions and mimetypes in the content
+type registry. WebDAV and FTP uploads should create the rigt content types.
+
+Document
+--------
+  >>> #  ... Content-Type: text/html; charset="utf-8"
+  >>> input = open(os.path.join(input_dir, 'test-document.txt'))
+  >>> print http(r"""
+  ... PUT /%s/test-document HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ... Depth: 0
+  ...
+  ... %s
+  ... """ % (fpath, user_name, user_password, input.read()))
+  HTTP/1.1 201 Created
+  ...
+
+  >>> document = self.folder['test-document']
+  >>> print document.getPortalTypeName()
+  Document
+
+  >>> print document.Title()
+  test document
+
+  >>> print document.getText()
+  <em>test document body text</em>
+  <BLANKLINE>
+  
+  >>> print document.Description()
+  test document description
+  
+  >>> print document.getContentType()
+  text/html
