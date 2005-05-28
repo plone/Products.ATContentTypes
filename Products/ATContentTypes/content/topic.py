@@ -196,7 +196,7 @@ class ATTopic(ATCTFolder):
          },
         {
         'id'          : 'subtopics',
-        'name'        : 'Subtopics',
+        'name'        : 'Subfolders',
         'action'      : 'string:${folder_url}/atct_topic_subtopics',
         'permissions' : (ChangeTopics,)
         },

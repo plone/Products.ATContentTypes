@@ -96,12 +96,15 @@
           <table class="listing" border="0" cellpadding="0" cellspacing="0" style=""
                   tal:define="bgcolor string:background-color:${here/base_properties/evenRowBackgroundColor};
                               border_color here/base_properties/globalBorderColor"
-                  tal:attributes="style string:border:1px solid ${border_color}">
+                  tal:attributes="style string:border:1px solid ${border_color}"
+                  summary="Indices configuration" i18n:attributes="summary summary_indices_configuration;">
             <thead>
-                <th i18n:translate="listingheader_catalog_index">Catalog index</th>
-                <th i18n:translate="listingheader_enable">Enable</th>
-                <th i18n:translate="listingheader_friendly_name">Friendly name</th>
-                <th i18n:translate="listingheader_explanation">Explanation</th>
+                <tr>
+                    <th i18n:translate="listingheader_catalog_index">Catalog index</th>
+                    <th i18n:translate="listingheader_enable">Enable</th>
+                    <th i18n:translate="listingheader_friendly_name">Friendly name</th>
+                    <th i18n:translate="listingheader_explanation">Explanation</th>
+                </tr>
             </thead>
             <tbody>
             <tal:metadata tal:repeat="index indexes">
@@ -163,7 +166,7 @@
                         <span i18n:translate="label_help_text">
                             Help Text:
                         </span>
-                        <textarea columns="50" rows="2" type="text"
+                        <textarea cols="50" rows="2" type="text"
                                value=""
                                name="index.description:records"
                                id=""

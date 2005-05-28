@@ -31,7 +31,7 @@
       </div>
 
       <a tal:condition="image/size" tal:attributes="href string:${image/absolute_url}/view">
-          <img src="#" tal:replace="structure python:image.tag(scale=photo_display)" />
+          <img src="#" alt="" tal:replace="structure python:image.tag(scale=photo_display)" />
       </a>
 
       <p style="margin-top: 2em;" tal:content="structure image/Description">
@@ -42,7 +42,7 @@
 
     <metal:block fill-slot="documentActions" tal:define="b_start python:request.get('b_start', 0)">
       <a href="" tal:attributes="href string:${request/URL1}/view?b_start=$b_start">
-        <img alt="Back to album"
+        <img src="#" alt="Back to album"
              title="Back to album"
              tal:attributes="src string:$portal_url/folder_icon.gif"
              i18n:attributes="alt title" />

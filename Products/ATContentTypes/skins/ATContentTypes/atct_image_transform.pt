@@ -14,7 +14,7 @@
         <h1 tal:content="here/title_or_id">Title or id</h1>
     </div>
 
-    <img src="#" tal:replace="structure python:here.tag(scale='mini')" />
+    <img src="#" alt="" tal:replace="structure python:here.tag(scale='mini')" />
 
     <p style="margin-top: 2em;" tal:content="here/Description">
         Description

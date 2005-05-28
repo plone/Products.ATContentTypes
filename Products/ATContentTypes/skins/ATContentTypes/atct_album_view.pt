@@ -3,13 +3,16 @@
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="plone">
 
+<head>
+
+    <metal:block fill-slot="css_slot">
+        <style type="text/css" media="screen"
+               tal:content="string:@import url($portal_url/atcontenttypes.css);"></style>
+    </metal:block>
+
+</head>
+
 <body>
-
-<metal:block fill-slot="css_slot">
-    <style type="text/css" media="screen"
-           tal:content="string:@import url($portal_url/atcontenttypes.css);"></style>
-</metal:block>
-
 
 <div metal:fill-slot="main"
      tal:define="result python:here.atctListAlbum(images=1, folders=1, subimages=0, others=1);
@@ -39,7 +42,7 @@
                     <dt>
                         <a tal:define="id python:int(b_start)+int(repeat['image'].number()-1)"
                            tal:attributes="href string:${here/absolute_url}/atct_album_image?b_start=$id">
-                            <img tal:replace="structure python:image.tag(scale='thumb', title=image.Description())" />
+                            <img src="" alt="" tal:replace="structure python:image.tag(scale='thumb', title=image.Description())" />
                         </a>
                     </dt>
                     <dd tal:content="image/title_or_id">
@@ -59,7 +62,7 @@
                     <dt>
                         <a tal:condition="number_of_images"
                            tal:attributes="href string:${album/absolute_url}/view">
-                            <img tal:replace="structure python:random_image.tag(scale='thumb', title=album.Description())" />
+                            <img src="" alt="" tal:replace="structure python:random_image.tag(scale='thumb', title=album.Description())" />
                         </a>
                         <a tal:condition="not:number_of_images"
                            tal:attributes="href string:${album/absolute_url}/view" class="photoAlbumEmpty">

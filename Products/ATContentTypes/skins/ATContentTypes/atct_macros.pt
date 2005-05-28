@@ -4,7 +4,7 @@
       i18n:domain="plone">
 
 <body>
-<table>
+<table summary="criteria">
 <tr>
 <metal:criterion metal:define-macro="criterion_edit">
    <tal:define-block tal:define="

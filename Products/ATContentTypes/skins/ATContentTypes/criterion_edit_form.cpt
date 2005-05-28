@@ -72,9 +72,12 @@
                       errors options/state/getErrors|nothing"
           tal:condition="criteria">
 
-        <table class="listing" style="font-size: 100%">
+        <table class="listing" style="font-size: 100%"
+               summary="Criteria configuration"
+               i18n:attributes="summary summary_criteria_configuration;"
+               i18n:domain="atcontenttypes">
 
-            <thead i18n:domain="atcontenttypes">
+            <thead>
                 <tr>
                    <th>&nbsp;</th>
                    <th i18n:translate="table_criteria_field">Field</th>
@@ -87,7 +90,7 @@
                     <tr tal:define="oddrow repeat/criterion/odd;"
                         tal:attributes="class python:test(oddrow, 'even', 'odd')"
                         style="vertical-align: top;">
-                      <span metal:use-macro="here/atct_macros/macros/criterion_edit" />
+                      <td metal:use-macro="here/atct_macros/macros/criterion_edit" />
                     </tr>
                 </tal:criteria>
             </tbody>
