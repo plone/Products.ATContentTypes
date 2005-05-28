@@ -1,6 +1,11 @@
 1.0-devel
 =====================
 
+ * Added method utils.moveFieldInSchema to move fields around in a schema 
+   easily. Used this to close UI collector issue 90 - getting the 
+   allowDiscussion field to the bottom of the edit forms for most content types.
+   [optilude]
+
  * Fixes for migration of cataloged non-contentish objects.  Now checking
    meta_type and portal_type before migration steps.
    [alecm]

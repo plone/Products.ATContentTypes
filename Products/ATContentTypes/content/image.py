@@ -58,6 +58,7 @@ from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import relatedItemsField
 from Products.ATContentTypes.content.schemata import urlUploadField
+from Products.ATContentTypes.utils import moveFieldInSchema
 from Products.ATContentTypes.lib import exif
 from OFS.Image import Image as OFSImage
 
@@ -147,6 +148,8 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
 ATImageSchema.addField(urlUploadField)
 ATImageSchema.addField(relatedItemsField)
 
+# Move allowDiscussion from metadata schemata to last field of default
+moveFieldInSchema(ATImageSchema, 'allowDiscussion', -1, 'default')
 
 class ATCTImageTransform(Base):
     """Base class for images containing transformation and exif functions
