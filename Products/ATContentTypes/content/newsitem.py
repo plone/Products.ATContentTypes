@@ -140,8 +140,6 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
 
     __implements__ = ATDocument.__implements__, IATNewsItem
     
-    actions = updateActions(ATDocument, ATCTImageTransform.actions)
-
     security = ClassSecurityInfo()
 
     security.declareProtected(CMFCorePermissions.View, 'tag')
