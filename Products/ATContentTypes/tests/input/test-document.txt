@@ -1,19 +1,18 @@
-id: test-document
 title: test document
 allowDiscussion: 1
-subject: test keyword
+subject: test keyword 1
+  test keyword 2
 description: test document description
 contributors: John Dow
   Example User
-creators: tiran
+creators: test_user_1_
 effectiveDate: 2005/01/01
 expirationDate: 2005/02/01
 language: de
 rights: GPL
-creation_date: 2005/05/27 18:16:56.086 GMT+2
-modification_date: 2005/05/27 18:18:23.103 GMT+2
+creation_date: 2005/05/27 00:00:00 GMT
+modification_date: 2005/05/27 01:00:00 GMT
 layout: document_view
 relatedItems: 
-Content-Type: text/html
 
 <em>test document body text</em>

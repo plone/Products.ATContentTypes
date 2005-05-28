@@ -35,11 +35,16 @@ type registry. WebDAV and FTP uploads should create the rigt content types.
 
 Document
 --------
-  >>> #  ... Content-Type: text/html; charset="utf-8"
+
   >>> input = open(os.path.join(input_dir, 'test-document.txt'))
+  
+  Create object by content type
+  
+  >>> input.seek(0)
   >>> print http(r"""
   ... PUT /%s/test-document HTTP/1.1
   ... Authorization: Basic %s:%s
+  ... Content-Type: text/html; charset="utf-8"
   ... Depth: 0
   ...
   ... %s
@@ -48,6 +53,8 @@ Document
   ...
 
   >>> document = self.folder['test-document']
+  >>> input.seek(0)
+  
   >>> print document.getPortalTypeName()
   Document
 
@@ -63,3 +70,169 @@ Document
   
   >>> print document.getContentType()
   text/html
+  
+  >>> print document.Subject()
+  ('test keyword 1', 'test keyword 2')
+  
+  >>> print document.Contributors()
+  ('John Dow', 'Example User')
+  
+  >>> print document.Creators()
+  ('test_user_1_',)
+  
+  >>> print document.EffectiveDate()
+  2005-01-01 00:00:00
+  
+  >>> print document.ExpirationDate()
+  2005-02-01 00:00:00
+  
+  >>> print document.Language()
+  de
+  
+  >>> print document.Rights()
+  GPL
+  
+  >>> print document.getLayout()
+  document_view
+  
+  >>> del document
+  
+  
+  Create object by file extension
+  
+  >>> print http(r"""
+  ... PUT /%s/test-document2.txt HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ... Depth: 0
+  ...
+  ... %s
+  ... """ % (fpath, user_name, user_password, "a test"))
+  HTTP/1.1 201 Created
+  ...
+
+  >>> document = self.folder['test-document2.txt']
+  >>> input.seek(0)
+  
+  >>> print document.getPortalTypeName()
+  Document
+
+  >>> print document.Title()
+  test-document2.txt
+  
+  >>> print document.getText()
+  <p>a test</p>
+  
+  >>> del document
+  
+Event
+-----
+
+File
+----
+
+Image
+-----
+
+  >>> input = open(os.path.join(test_home, 'test.gif'), 'rb')
+  
+  Create an object by content type
+  
+  >>> input.seek(0)
+  >>> print http(r"""
+  ... PUT /%s/test-image HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ... Content-Type: image/gif
+  ... Depth: 0
+  ...
+  ... %s
+  ... """ % (fpath, user_name, user_password, input.read()))
+  HTTP/1.1 201 Created
+  ...
+
+  >>> image = self.folder['test-image']
+  
+  >>> print image.getPortalTypeName()
+  Image
+
+  manage_afterPUT sets the Title according to the file name
+  
+  >>> print image.Title()
+  test-image
+  
+  >>> input.seek(0)
+  >>> print str(image.getImage()).strip() == str(input.read()).strip()
+  True
+  
+  >>> print image.getContentType()
+  image/gif
+  
+  >>> del image
+  
+  
+  Create an object by extension
+  
+  >>> input.seek(0)
+  >>> print http(r"""
+  ... PUT /%s/test-image.gif HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ... Depth: 0
+  ...
+  ... %s
+  ... """ % (fpath, user_name, user_password, input.read()))
+  HTTP/1.1 201 Created
+  ...
+
+  >>> image = self.folder['test-image.gif']
+  
+  >>> print image.getPortalTypeName()
+  Image
+  
+  >>> print image.Title()
+  test-image.gif
+  
+  >>> print image.getContentType()
+  image/gif
+
+  >>> del image
+
+  Now test the name mangeling. White spaces are replaces by a dash.
+  
+  >>> input.seek(0)
+  >>> print http(r"""
+  ... PUT /%s/test%%20my%%20image.gif HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ... Depth: 0
+  ...
+  ... %s
+  ... """ % (fpath, user_name, user_password, input.read()))
+  HTTP/1.1 201 Created
+  ...
+
+  >>> image = self.folder['test-my-image.gif']
+  
+  >>> self.folder.objectIds()
+  
+  >>> print image.getPortalTypeName()
+  Image
+  
+  >>> print image.Title()
+  test my image.gif
+  
+  >>> print image.getContentType()
+  image/gif
+
+Link
+----
+
+News Item
+---------
+
+WebDAV MKCOL
+============
+
+Folder
+------
+
+BTreeFolder
+-----------
+  

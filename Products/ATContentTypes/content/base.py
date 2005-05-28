@@ -322,6 +322,17 @@ class ATCTContent(ATCTMixin, BaseContent):
          },
         )
     )
+    
+    security.declarePrivate('manage_afterPUT')    
+    def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
+                        filename, REQUEST, RESPONSE):
+        """After webdav/ftp PUT method
+        
+        Set title according to the id on webdav/ftp PUTs.
+        """
+        title = self.Title()
+        if not title:
+            self.setTitle(self.getId())
 
 InitializeClass(ATCTContent)
 
@@ -559,6 +570,21 @@ class ATCTFileContent(ATCTContent):
         """Always return the default value since we don't store the url
         """
         return self.getField('urlUpload').default
+        
+    security.declarePrivate('manage_afterPUT')    
+    def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
+                        filename, REQUEST, RESPONSE):
+        """After webdav/ftp PUT method
+        
+        Set the title according to the uploaded filename if the title is empty or
+        set it to the id if no filename is given.
+        """
+        title = self.Title()
+        if not title:
+            if filename:
+                self.setTitle(filename)
+            else:
+                self.setTitle(self.getId())
 
 InitializeClass(ATCTFileContent)
 
@@ -623,6 +649,16 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
     def get_size(self):
         """Returns 1 as folders have no size."""
         return 1
+        
+    security.declarePrivate('manage_afterMKCOL')
+    def manage_afterMKCOL(self, id, result, REQUEST=None, RESPONSE=None):
+        """After MKCOL handler
+        
+        Set title according to the id
+        """
+        title = self.Title()
+        if not title:
+            self.setTitle(self.getId())
 
 InitializeClass(ATCTFolderMixin)
 
