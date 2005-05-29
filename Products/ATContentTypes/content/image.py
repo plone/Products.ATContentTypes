@@ -47,6 +47,7 @@ from Products.Archetypes.public import AnnotationStorage
 from Products.Archetypes.public import log_exc
 
 from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.content.base import registerATCT
@@ -57,6 +58,7 @@ from Products.ATContentTypes.content.base import InvalidContentType
 from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import relatedItemsField
+from Products.ATContentTypes.content.schemata import excludeFromNavField
 from Products.ATContentTypes.content.schemata import urlUploadField
 from Products.ATContentTypes.utils import moveFieldInSchema
 from Products.ATContentTypes.lib import exif
@@ -147,6 +149,9 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
     )
 ATImageSchema.addField(urlUploadField)
 ATImageSchema.addField(relatedItemsField)
+
+if HAS_PLONE2:
+    ATImageSchema.addField(excludeFromNavField)
 
 # Move allowDiscussion from metadata schemata to last field of default
 moveFieldInSchema(ATImageSchema, 'allowDiscussion', -1, 'default')

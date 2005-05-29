@@ -41,12 +41,14 @@ from Products.Archetypes.public import AnnotationStorage
 
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import updateActions
 from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import relatedItemsField
+from Products.ATContentTypes.content.schemata import excludeFromNavField
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument
 from Products.ATContentTypes.utils import moveFieldInSchema
@@ -73,6 +75,9 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
     ), marshall=RFC822Marshaller()
     )
 ATDocumentSchema.addField(relatedItemsField)
+
+if HAS_PLONE2:
+    ATDocumentSchema.addField(excludeFromNavField)
 
 # Move allowDiscussion from metadata schemata to last field of default
 moveFieldInSchema(ATDocumentSchema, 'allowDiscussion', -1, 'default')

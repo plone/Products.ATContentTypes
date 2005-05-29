@@ -39,6 +39,7 @@ from Products.Archetypes.public import RFC822Marshaller
 from Products.Archetypes.public import AnnotationStorage
 
 from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import translateMimetypeAlias
@@ -48,6 +49,7 @@ from Products.ATContentTypes.content.image import ATCTImageTransform
 from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import relatedItemsField
+from Products.ATContentTypes.content.schemata import excludeFromNavField
 from Products.ATContentTypes.utils import moveFieldInSchema
 
 from Products.validation.config import validation
@@ -115,6 +117,9 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
     ), marshall=RFC822Marshaller()
     )
 ATNewsItemSchema.addField(relatedItemsField)
+
+if HAS_PLONE2:
+    ATNewsItemSchema.addField(excludeFromNavField)
 
 # Move allowDiscussion from metadata schemata to last field of default
 moveFieldInSchema(ATNewsItemSchema, 'allowDiscussion', -1, 'default')

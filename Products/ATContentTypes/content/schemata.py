@@ -31,6 +31,8 @@ from Products.Archetypes.public import ReferenceField
 from Products.Archetypes.public import StringField
 from Products.Archetypes.public import StringWidget
 from Products.Archetypes.public import SelectionWidget
+from Products.Archetypes.public import BooleanField
+from Products.Archetypes.public import BooleanWidget
 
 from Products.CMFCore import CMFCorePermissions
 
@@ -87,6 +89,24 @@ urlUploadField = StringField('urlUpload',
                      'edit' : 'hidden'},
             ),
         )
+
+excludeFromNavField = BooleanField('exclude_from_nav', # Plone depends on this being the name
+        required = False,
+        languageIndependent = True,
+        accessor = 'excludeFromNav',
+        editAccessor = 'getRawExcludeFromNav',
+        mutator = 'setExcludeFromNav',
+        schemata = 'metadata', # moved to 'default' for folders
+        widget = BooleanWidget(
+            description="If selected, this item will not appear in the navigation tree",
+            description_msgid = "help_exclude_from_nav",
+            label = "Exclude from navigation",
+            label_msgid = "label_exclude_from_nav",
+            i18n_domain = "plone",
+            visible={'view' : 'hidden',
+                     'edit' : 'visible'},
+        ),
+    )
 
 ATContentTypeSchema = ATContentTypeBaseSchema + BrowserDefaultSchema
 

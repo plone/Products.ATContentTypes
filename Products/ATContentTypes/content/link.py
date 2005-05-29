@@ -37,11 +37,13 @@ from Products.validation import V_SUFFICIENT
 from Products.validation import V_REQUIRED
 
 from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.interfaces import IATLink
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import relatedItemsField
+from Products.ATContentTypes.content.schemata import excludeFromNavField
 from Products.ATContentTypes.utils import moveFieldInSchema
 
 ATLinkSchema = ATContentTypeSchema.copy() + Schema((
@@ -60,6 +62,9 @@ ATLinkSchema = ATContentTypeSchema.copy() + Schema((
             i18n_domain = "plone")),
     ))
 ATLinkSchema.addField(relatedItemsField)
+
+if HAS_PLONE2:
+    ATLinkSchema.addField(excludeFromNavField)
 
 # Move allowDiscussion from metadata schemata to last field of default
 moveFieldInSchema(ATLinkSchema, 'allowDiscussion', -1, 'default')

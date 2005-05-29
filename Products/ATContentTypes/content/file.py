@@ -40,6 +40,7 @@ from Products.Archetypes.BaseContent import BaseContent
 from Products.PortalTransforms.utils import TransformException
 
 from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import ICONMAP
 from Products.ATContentTypes import permission as ATCTPermissions
@@ -48,6 +49,7 @@ from Products.ATContentTypes.content.base import ATCTFileContent
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import relatedItemsField
+from Products.ATContentTypes.content.schemata import excludeFromNavField
 from Products.ATContentTypes.content.schemata import urlUploadField
 from Products.ATContentTypes.utils import moveFieldInSchema
 from Products.validation.validators.SupplValidators import MaxSizeValidator
@@ -78,6 +80,9 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
     )
 ATFileSchema.addField(urlUploadField)
 ATFileSchema.addField(relatedItemsField)
+
+if HAS_PLONE2:
+    ATFileSchema.addField(excludeFromNavField)
 
 # Move allowDiscussion from metadata schemata to last field of default
 moveFieldInSchema(ATFileSchema, 'allowDiscussion', -1, 'default')

@@ -47,12 +47,14 @@ from Products.Archetypes.public import AnnotationStorage
 
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import updateActions
 from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import relatedItemsField
+from Products.ATContentTypes.content.schemata import excludeFromNavField
 from Products.ATContentTypes.lib.calendarsupport import CalendarSupportMixin
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.permission import ChangeEvents
@@ -197,6 +199,9 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
     ), marshall = RFC822Marshaller()
     )
 ATEventSchema.addField(relatedItemsField)
+
+if HAS_PLONE2:
+    ATEventSchema.addField(excludeFromNavField)
 
 # Move allowDiscussion from metadata schemata to last field of default
 moveFieldInSchema(ATEventSchema, 'allowDiscussion', -1, 'default')

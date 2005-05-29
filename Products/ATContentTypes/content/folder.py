@@ -27,6 +27,7 @@ __old_name__ = 'Products.ATContentTypes.types.ATFolder'
 from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTOrderedFolder
 from Products.ATContentTypes.content.base import ATCTBTreeFolder
@@ -34,6 +35,7 @@ from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import relatedItemsField
+from Products.ATContentTypes.content.schemata import excludeFromNavField
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
 from Products.ATContentTypes.lib.autosort import AutoSortSupport
 from Products.ATContentTypes.lib.autosort import AutoOrderSupport
@@ -43,6 +45,13 @@ ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 
 ATFolderSchema.addField(relatedItemsField)
 ATBTreeFolderSchema.addField(relatedItemsField)
+
+if HAS_PLONE2:
+    defaultExcludeFromNavField = excludeFromNavField.copy()
+    defaultExcludeFromNavField.schemata = 'default'
+    ATFolderSchema.addField(defaultExcludeFromNavField)
+    ATBTreeFolderSchema.addField(defaultExcludeFromNavField)
+
 
 class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
     """A folder which can contain other items."""
