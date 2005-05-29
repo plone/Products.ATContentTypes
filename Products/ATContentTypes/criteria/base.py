@@ -82,7 +82,6 @@ class ATBaseCriterion(NonRefCatalogContent):
                 field = id
             id = oid
         assert id
-        assert field
         NonRefCatalogContent.__init__(self, id)
         self.getField('id').set(self, id)
         self.getField('field').set(self, field)
