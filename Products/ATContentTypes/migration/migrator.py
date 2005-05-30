@@ -446,7 +446,7 @@ class FolderMigrationMixin(ItemMigrationMixin):
             obj = getattr(self.old.aq_inner.aq_explicit, id)
             # Broken object support. Maybe we are able to migrate them?
             if isinstance(obj, BrokenClass):
-                log('WARNING: BrokenObject in %s' % \
+                LOG('WARNING: BrokenObject in %s' % \
                     self.old.absolute_url(1))
                 #continue
 
