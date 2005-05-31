@@ -5,6 +5,7 @@ from Products.ATContentTypes.migration.atctmigrator import TopicMigrator
 from Products.ATContentTypes.migration.walker import useLevelWalker
 from Products.ATContentTypes.criteria import _criterionRegistry
 from Products.CMFCore.Expression import Expression
+from Products.ATContentTypes.config import TOOLNAME
 
 
 def alpha2_beta1(portal):
@@ -19,6 +20,9 @@ def alpha2_beta1(portal):
     # Fix folderlisting action for folderish types
     reindex += addRelatedItemsIndex(portal, out)
 
+    # Rename the topics configlet
+    renameTopicsConfiglet(portal, out)
+
     # ADD NEW STUFF BEFORE THIS LINE!
 
     # Rebuild catalog
@@ -27,7 +31,11 @@ def alpha2_beta1(portal):
 
     return out
 
+
 def fixFolderlistingAction(portal, out):
+    """Fixes the folder listing action for folderish ATCT types to make it
+       work properly with the new browser default magic
+    """
     typesTool = getToolByName(portal, 'portal_types', None)
     if typesTool is not None:
         folderFTI = getattr(typesTool, 'Folder', None)
@@ -103,6 +111,7 @@ def fixFolderlistingAction(portal, out):
                                     visible=0)
             out.append("Set target expresion of folderlisting action for 'Folder' to 'view'")
 
+
 def addRelatedItemsIndex(portal, out):
     """Adds the getRawRelatedItems KeywordIndex."""
     catalog = getToolByName(portal, 'portal_catalog', None)
@@ -123,6 +132,7 @@ def addRelatedItemsIndex(portal, out):
         return 1 # Ask for reindexing
     return 0
 
+
 def reindexCatalog(portal, out):
     """Rebuilds the portal_catalog."""
     catalog = getToolByName(portal, 'portal_catalog', None)
@@ -133,3 +143,18 @@ def reindexCatalog(portal, out):
         catalog.refreshCatalog(clear=1)
         catalog.threshold = old_threshold
         out.append("Reindexed portal_catalog.")
+
+
+def renameTopicsConfiglet(portal, out):
+    """Update the name of the Topics configlet"""
+    tool = getToolByName(portal, TOOLNAME, None)
+    if tool is not None:
+        group = 'atct|ATContentTypes|ATCT Setup'
+        cp = getToolByName(portal, 'portal_controlpanel', None)
+        if cp is not None:
+            if 'atct' not in cp.getGroupIds():
+                cp._updateProperty('groups', tuple(cp.groups)+(group,))
+            for configlet in tool.getConfiglets():
+                cp.unregisterConfiglet(configlet['id'])
+            cp.registerConfiglets(tool.getConfiglets())
+    out.append("Renamed Smart Folder configlet")

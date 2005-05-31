@@ -26,6 +26,7 @@ from Products.ATContentTypes.migration.v1.alphas import addSubTopicAllowed
 from Products.ATContentTypes.migration.v1.betas import fixFolderlistingAction
 from Products.ATContentTypes.migration.v1.betas import reindexCatalog
 from Products.ATContentTypes.migration.v1.betas import addRelatedItemsIndex
+from Products.ATContentTypes.migration.v1.betas import renameTopicsConfiglet
 
 
 class MigrationTest(atcttestcase.ATCTSiteTestCase):
@@ -201,6 +202,40 @@ class TestMigrations_v1(MigrationTest):
         reindexCatalog(self.portal, [])
         self.assertEqual(len(self.catalog(Title='Foo')), 0)
         self.assertEqual(len(self.catalog(Title='Bar')), 1)
+
+    def testRenameTopicsConfiglet(self):
+        # Should rename the Topics Configlet
+        tool = getToolByName(self.portal, TOOLNAME, None)
+        cp = getToolByName(self.portal, 'portal_controlpanel', None)
+        configlets = tool.getConfiglets()
+        topic_configlet = [c for c in configlets if c['name'] == 'Smart Folder Settings'][0]
+        topic_configlet = topic_configlet.copy()
+        topic_configlet['name'] = 'Old Name'
+        cp.unregisterConfiglet(topic_configlet['id'])
+        cp.registerConfiglets((topic_configlet,))
+        cp_action = [a for a in cp.listActions() if a.id == TOOLNAME][0]
+        self.assertEqual(cp_action.title, 'Old Name')
+        renameTopicsConfiglet(self.portal, [])
+        cp_action = [a for a in cp.listActions() if a.id == TOOLNAME][0]
+        self.assertEqual(cp_action.title, 'Smart Folder Settings')
+
+    def testRenameTopicsConfigletTwice(self):
+        # Should not fail if migrated again
+        cp = getToolByName(self.portal, 'portal_controlpanel', None)
+        renameTopicsConfiglet(self.portal, [])
+        renameTopicsConfiglet(self.portal, [])
+        cp_action = [a for a in cp.listActions() if a.id == TOOLNAME][0]
+        self.assertEqual(cp_action.title, 'Smart Folder Settings')
+
+    def testRenameTopicsConfigletNoTool(self):
+        # Should not fail if portal_atct is missing
+        self.portal._delObject('portal_atct')
+        renameTopicsConfiglet(self.portal, [])
+
+    def testRenameTopicsConfigletNoCP(self):
+        # # Should not fail if portal_controlpanel is missing
+        self.portal._delObject('portal_controlpanel')
+        renameTopicsConfiglet(self.portal, [])
 
 def test_suite():
     from unittest import TestSuite, makeSuite

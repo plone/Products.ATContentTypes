@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Added migration to change the name of the TOpic configlet.
+   [alecm]
+
  * Fixed http://members.plone.org/collector/4076, adding exclude_from_nav to
    all content schemas.
    [optilude]
