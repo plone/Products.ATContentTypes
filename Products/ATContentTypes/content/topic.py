@@ -349,7 +349,7 @@ class ATTopic(ATCTFolder):
                ]
         return val
 
-    security.declareProtected(ChangeTopics, 'listSubtopics')
+    security.declareProtected(CMFCorePermissions.View, 'listSubtopics')
     def listSubtopics(self):
         """Return a list of our subtopics.
         """
