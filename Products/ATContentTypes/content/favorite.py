@@ -76,7 +76,7 @@ class ATFavorite(ATCTContent):
     filter_content_types  = True
     allowed_content_types = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Favorite', 'meta_type' : 'Favorite'}
-    typeDescription = 'A placeholder item linking to a "favorite" object in the portal.'
+    typeDescription = 'A placeholder item linking to a favorite object in the portal.'
     typeDescMsgId  = 'description_edit_favorite'
     assocMimetypes = ()
     assocFileExt   = ('fav', )
