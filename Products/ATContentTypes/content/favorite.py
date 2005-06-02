@@ -60,7 +60,7 @@ ATFavoriteSchema = ATContentTypeSchema.copy() + Schema((
 ATFavoriteSchema.addField(relatedItemsField)
 
 class ATFavorite(ATCTContent):
-    """A placeholder item linking to a "favorite" object in the portal."""
+    """A placeholder item linking to a favorite object in the portal."""
 
     schema         =  ATFavoriteSchema
 
