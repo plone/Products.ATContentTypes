@@ -60,7 +60,6 @@ from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import relatedItemsField
 from Products.ATContentTypes.content.schemata import excludeFromNavField
 from Products.ATContentTypes.content.schemata import urlUploadField
-from Products.ATContentTypes.utils import moveFieldInSchema
 from Products.ATContentTypes.lib import exif
 from OFS.Image import Image as OFSImage
 
@@ -152,9 +151,6 @@ ATImageSchema.addField(relatedItemsField)
 
 if HAS_PLONE2:
     ATImageSchema.addField(excludeFromNavField)
-
-# Move allowDiscussion from metadata schemata to last field of default
-moveFieldInSchema(ATImageSchema, 'allowDiscussion', -1, 'default')
 
 class ATCTImageTransform(Base):
     """Base class for images containing transformation and exif functions

@@ -59,7 +59,6 @@ from Products.ATContentTypes.lib.calendarsupport import CalendarSupportMixin
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.permission import ChangeEvents
 from Products.ATContentTypes.utils import DT2dt
-from Products.ATContentTypes.utils import moveFieldInSchema
 
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
     DateTimeField('startDate',
@@ -202,9 +201,6 @@ ATEventSchema.addField(relatedItemsField)
 
 if HAS_PLONE2:
     ATEventSchema.addField(excludeFromNavField)
-
-# Move allowDiscussion from metadata schemata to last field of default
-moveFieldInSchema(ATEventSchema, 'allowDiscussion', -1, 'default')
 
 class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
     """Information about an upcoming event, which can be displayed in the calendar."""

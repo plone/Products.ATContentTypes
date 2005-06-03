@@ -51,7 +51,6 @@ from Products.ATContentTypes.content.schemata import relatedItemsField
 from Products.ATContentTypes.content.schemata import excludeFromNavField
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument
-from Products.ATContentTypes.utils import moveFieldInSchema
 
 ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
     TextField('text',
@@ -78,9 +77,6 @@ ATDocumentSchema.addField(relatedItemsField)
 
 if HAS_PLONE2:
     ATDocumentSchema.addField(excludeFromNavField)
-
-# Move allowDiscussion from metadata schemata to last field of default
-moveFieldInSchema(ATDocumentSchema, 'allowDiscussion', -1, 'default')
 
 class ATDocument(ATCTContent, HistoryAwareMixin):
     """A page in the portal, which can contain rich text."""

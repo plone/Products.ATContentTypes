@@ -51,7 +51,6 @@ from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import relatedItemsField
 from Products.ATContentTypes.content.schemata import excludeFromNavField
 from Products.ATContentTypes.content.schemata import urlUploadField
-from Products.ATContentTypes.utils import moveFieldInSchema
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 
 from Products.validation.config import validation
@@ -83,9 +82,6 @@ ATFileSchema.addField(relatedItemsField)
 
 if HAS_PLONE2:
     ATFileSchema.addField(excludeFromNavField)
-
-# Move allowDiscussion from metadata schemata to last field of default
-moveFieldInSchema(ATFileSchema, 'allowDiscussion', -1, 'default')
 
 class ATFile(ATCTFileContent):
     """An external file uploaded to the portal."""

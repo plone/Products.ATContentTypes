@@ -50,7 +50,6 @@ from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import relatedItemsField
 from Products.ATContentTypes.content.schemata import excludeFromNavField
-from Products.ATContentTypes.utils import moveFieldInSchema
 
 from Products.validation.config import validation
 from Products.validation.validators.SupplValidators import MaxSizeValidator
@@ -120,9 +119,6 @@ ATNewsItemSchema.addField(relatedItemsField)
 
 if HAS_PLONE2:
     ATNewsItemSchema.addField(excludeFromNavField)
-
-# Move allowDiscussion from metadata schemata to last field of default
-moveFieldInSchema(ATNewsItemSchema, 'allowDiscussion', -1, 'default')
 
 class ATNewsItem(ATDocument, ATCTImageTransform):
     """An announcement that will show up on the news portlet and in the news listing."""

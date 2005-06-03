@@ -44,7 +44,6 @@ from Products.ATContentTypes.interfaces import IATLink
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import relatedItemsField
 from Products.ATContentTypes.content.schemata import excludeFromNavField
-from Products.ATContentTypes.utils import moveFieldInSchema
 
 ATLinkSchema = ATContentTypeSchema.copy() + Schema((
     StringField('remoteUrl',
@@ -65,9 +64,6 @@ ATLinkSchema.addField(relatedItemsField)
 
 if HAS_PLONE2:
     ATLinkSchema.addField(excludeFromNavField)
-
-# Move allowDiscussion from metadata schemata to last field of default
-moveFieldInSchema(ATLinkSchema, 'allowDiscussion', -1, 'default')
 
 class ATLink(ATCTContent):
     """A link to an external resource."""
