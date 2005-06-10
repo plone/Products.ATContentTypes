@@ -297,16 +297,14 @@ class ATCTMixin(BrowserDefaultMixin):
             get_transaction().commit(1)
             self.setId(new_id)
             
-    def _exclude_from_nav(self):
-        """Attribute accessor for excludeFromNav field
+    def exclude_from_nav(self):
+        """Accessor for excludeFromNav field
         """
         field = self.getField('excludeFromNav')
         if field is not None:
             return field.get(self)
         else:
             return False
-
-     exclude_from_nav = ComputedAttribute(_exclude_from_nav, 1)
 
 InitializeClass(ATCTMixin)
 
