@@ -354,6 +354,13 @@ class ATTopic(ATCTFolder):
         val.sort()
         return val
 
+    security.declareProtected(CMFCorePermissions.View, 'listSubtopics')
+    def hasSubtopics(self):
+        """Returns true if subtopics have been created on this topic.
+        """
+        val = self.objectIds(self.meta_type)
+        return not not val
+
     security.declareProtected(CMFCorePermissions.View, 'listMetaDataFields')
     def listMetaDataFields(self, exclude=True):
         """Return a list of metadata fields from portal_catalog.

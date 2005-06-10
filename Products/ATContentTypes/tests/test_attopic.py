@@ -303,7 +303,15 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.failUnlessEqual(old_query, migrated.buildQuery(),
                             'Build Query mismatch: %s / %s' % \
                                 (old_query, migrated.buildQuery()))
-        
+
+    def test_hasSubTopics(self):
+        """ Ensure that has subtopics returns True if there are subtopics,
+            false otherwise
+        """
+        topic = self._ATCT
+        self.failUnlessEqual(topic.hasSubtopics(), False)
+        topic.invokeFactory('Smart Folder', 'subtopic')
+        self.failUnlessEqual(topic.hasSubtopics(), True)
 
 tests.append(TestSiteATTopic)
 

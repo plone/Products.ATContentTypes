@@ -124,7 +124,7 @@
     </metal:body>
 
     <metal:body define-macro="folderlisting_macro">
-        <tal:subtopics condition="here/listSubtopics">
+        <tal:subtopics condition="here/hasSubtopics">
             <h2 i18n:domain="atcontenttypes"
                 i18n:translate="sub_topics_heading">
                 Sub-topics:
