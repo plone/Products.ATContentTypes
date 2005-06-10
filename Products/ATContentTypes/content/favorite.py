@@ -57,7 +57,7 @@ ATFavoriteSchema = ATContentTypeSchema.copy() + Schema((
                         label_msgid = "label_url",
                         i18n_domain = "plone")),
     ))
-finalizeATCTSchema(ATFavoriteSchema)
+finalizeATCTSchema(ATFavoriteSchema, moveDiscussion=False)
 
 class ATFavorite(ATCTContent):
     """A placeholder item linking to a favorite object in the portal."""

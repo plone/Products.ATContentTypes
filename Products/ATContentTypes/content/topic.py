@@ -146,7 +146,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                         i18n_domain = "plone"),
                  ),
     ))
-finalizeATCTSchema(ATTopicSchema, folderish=True)
+finalizeATCTSchema(ATTopicSchema, folderish=True, moveDiscussion=False)
 
 
 class ATTopic(ATCTFolder):

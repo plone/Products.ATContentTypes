@@ -110,15 +110,21 @@ urlUploadField = StringField('urlUpload',
             ),
         )
         
-def finalizeATCTSchema(schema, folderish=False):
+def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
     """Finalizes an ATCT type schema to alter some fields
     """
     schema.moveField('relatedItems', pos='bottom')
     #if not HAS_PLONE2:
     #    del schema['excludeFromNav']
-    schema.moveField('excludeFromNav', after='relatedItems')
+    
     if folderish:
         schema['excludeFromNav'].schemata = 'default'
+        schema.moveField('excludeFromNav', after='relatedItems')
+    else:
+        schema.moveField('excludeFromNav', after='allowDiscussion')
+    if moveDiscussion:
+        schema['allowDiscussion'].schemata = 'default'
+        schema.moveField('allowDiscussion', pos='bottom')
     return schema
     
 

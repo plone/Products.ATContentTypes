@@ -42,8 +42,8 @@ from Products.ATContentTypes.lib.autosort import AutoOrderSupport
 ATFolderSchema      = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 
-finalizeATCTSchema(ATFolderSchema, folderish=True)
-finalizeATCTSchema(ATBTreeFolderSchema, folderish=True)
+finalizeATCTSchema(ATFolderSchema, folderish=True, moveDiscussion=False)
+finalizeATCTSchema(ATBTreeFolderSchema, folderish=True, moveDiscussion=False)
 
 
 class ATFolder(AutoOrderSupport, ATCTOrderedFolder):

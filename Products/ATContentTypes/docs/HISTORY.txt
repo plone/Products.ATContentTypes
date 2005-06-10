@@ -1,6 +1,11 @@
 1.0-devel
 =====================
 
+ * Moved around some fields. excludeFromNav is on the property sheet expect for
+   folderish items and discussion is on the main sheet expecpt for folderish and
+   Favorite.
+   [tiran]
+
  * Added finalizeATCTSchema function to move the fields in the right position
    [tiran]
 
