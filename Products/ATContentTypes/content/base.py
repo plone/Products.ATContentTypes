@@ -296,6 +296,17 @@ class ATCTMixin(BrowserDefaultMixin):
             # portal_factory!
             get_transaction().commit(1)
             self.setId(new_id)
+            
+    def _exclude_from_nav(self):
+        """Attribute accessor for excludeFromNav field
+        """
+        field = self.getField('excludeFromNav')
+        if field is not None:
+            return field.get(self)
+        else:
+            return False
+
+     exclude_from_nav = ComputedAttribute(_exclude_from_nav, 1)
 
 InitializeClass(ATCTMixin)
 
