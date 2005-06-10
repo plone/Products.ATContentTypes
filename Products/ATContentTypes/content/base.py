@@ -342,7 +342,11 @@ class ATCTFileContent(ATCTContent):
     The file field *must* be the exclusive primary field
     """
 
-    security       = ClassSecurityInfo()
+    # the precondition attribute is required to make ATFile and ATImage compatible
+    # with OFS.Image.*. The precondition feature is (not yet) supported.
+    precondition = ''
+
+    security = ClassSecurityInfo()
     actions = updateActions(ATCTContent,
         ({
         'id'          : 'download',
@@ -696,11 +700,13 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
     )
 
     security.declareProtected(CMFCorePermissions.View, 'index_html')
-    def index_html(self):
+    def index_html(self, REQUEST=None, RESPONSE=None):
        """Special case index_html"""
+       request = REQUEST
+       if request is None:
+           request = getattr(self, 'REQUEST', None) 
        if HAS_PLONE2:
            # COPIED FROM CMFPLONE 2.1
-           request = getattr(self, 'REQUEST', None)
            if request and request.has_key('REQUEST_METHOD'):
                if (request.maybe_webdav_client and
                    request['REQUEST_METHOD'] in  ['PUT']):
@@ -759,7 +765,7 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
     )
 
     security.declareProtected(CMFCorePermissions.View, 'index_html')
-    def index_html(self):
+    def index_html(self, REQUEST=None, RESPONSE=None):
         """
         BTree folders don't store objects as attributes, the
         implementation of index_html method in PloneFolder assumes

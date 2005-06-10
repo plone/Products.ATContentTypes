@@ -103,7 +103,7 @@ class ATFile(ATCTFileContent):
     security       = ClassSecurityInfo()
 
     security.declareProtected(CMFCorePermissions.View, 'index_html')
-    def index_html(self, REQUEST, RESPONSE):
+    def index_html(self, REQUEST=None, RESPONSE=None):
         """Download the file
         """
         field = self.getPrimaryField()
