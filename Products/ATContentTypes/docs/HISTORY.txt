@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Added finalizeATCTSchema function to move the fields in the right position
+   [tiran]
+
  * Fixed http://plone.org/collector/4127 permission incorrect on
    listSubtopics.
    [alecm]

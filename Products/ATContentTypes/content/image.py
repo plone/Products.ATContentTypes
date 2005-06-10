@@ -57,8 +57,7 @@ from Products.ATContentTypes.content.base import updateActions
 from Products.ATContentTypes.content.base import InvalidContentType
 from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
-from Products.ATContentTypes.content.schemata import excludeFromNavField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.content.schemata import urlUploadField
 from Products.ATContentTypes.lib import exif
 from OFS.Image import Image as OFSImage
@@ -146,11 +145,8 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
 
     ), marshall=PrimaryFieldMarshaller()
     )
-ATImageSchema.addField(urlUploadField)
-ATImageSchema.addField(relatedItemsField)
-
-if HAS_PLONE2:
-    ATImageSchema.addField(excludeFromNavField)
+#ATImageSchema.addField(urlUploadField)
+finalizeATCTSchema(ATImageSchema)
 
 class ATCTImageTransform(Base):
     """Base class for images containing transformation and exif functions

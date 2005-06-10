@@ -48,8 +48,7 @@ from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
-from Products.ATContentTypes.content.schemata import excludeFromNavField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.content.schemata import urlUploadField
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 
@@ -77,11 +76,8 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
                         show_content_type = False,)),
     ), marshall=PrimaryFieldMarshaller()
     )
-ATFileSchema.addField(urlUploadField)
-ATFileSchema.addField(relatedItemsField)
-
-if HAS_PLONE2:
-    ATFileSchema.addField(excludeFromNavField)
+#ATFileSchema.addField(urlUploadField)
+finalizeATCTSchema(ATFileSchema)
 
 class ATFile(ATCTFileContent):
     """An external file uploaded to the portal."""

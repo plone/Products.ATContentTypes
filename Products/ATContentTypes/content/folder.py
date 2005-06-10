@@ -34,8 +34,7 @@ from Products.ATContentTypes.content.base import ATCTBTreeFolder
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
-from Products.ATContentTypes.content.schemata import excludeFromNavField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
 from Products.ATContentTypes.lib.autosort import AutoSortSupport
 from Products.ATContentTypes.lib.autosort import AutoOrderSupport
@@ -43,14 +42,8 @@ from Products.ATContentTypes.lib.autosort import AutoOrderSupport
 ATFolderSchema      = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 
-ATFolderSchema.addField(relatedItemsField)
-ATBTreeFolderSchema.addField(relatedItemsField)
-
-if HAS_PLONE2:
-    defaultExcludeFromNavField = excludeFromNavField.copy()
-    defaultExcludeFromNavField.schemata = 'default'
-    ATFolderSchema.addField(defaultExcludeFromNavField)
-    ATBTreeFolderSchema.addField(defaultExcludeFromNavField)
+finalizeATCTSchema(ATFolderSchema, folderish=True)
+finalizeATCTSchema(ATBTreeFolderSchema, folderish=True)
 
 
 class ATFolder(AutoOrderSupport, ATCTOrderedFolder):

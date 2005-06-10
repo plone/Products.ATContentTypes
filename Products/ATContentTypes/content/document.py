@@ -47,8 +47,7 @@ from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import updateActions
 from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
-from Products.ATContentTypes.content.schemata import excludeFromNavField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument
 
@@ -73,10 +72,7 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
                         allow_file_upload = zconf.ATDocument.allow_document_upload)),
     ), marshall=RFC822Marshaller()
     )
-ATDocumentSchema.addField(relatedItemsField)
-
-if HAS_PLONE2:
-    ATDocumentSchema.addField(excludeFromNavField)
+finalizeATCTSchema(ATDocumentSchema)
 
 class ATDocument(ATCTContent, HistoryAwareMixin):
     """A page in the portal, which can contain rich text."""

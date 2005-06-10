@@ -25,8 +25,11 @@ __docformat__ = 'restructuredtext'
 
 from DateTime import DateTime
 
+from Products.ATContentTypes.config import HAS_PLONE2
+
 from Products.Archetypes.public import BaseSchema
 from Products.Archetypes.public import Schema
+from Products.Archetypes.public import MetadataSchema
 from Products.Archetypes.public import ReferenceField
 from Products.Archetypes.public import StringField
 from Products.Archetypes.public import StringWidget
@@ -43,13 +46,8 @@ from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import Reference
 
 # for ATContentTypes we want to have the description in the edit view
 # just like CMF
-ATContentTypeBaseSchema = BaseSchema.copy()
-ATContentTypeBaseSchema['id'].validators = ('isValidId',)
-ATContentTypeBaseSchema['id'].searchable = True
-ATContentTypeBaseSchema['id'].widget.macro = 'zid'
-ATContentTypeBaseSchema['description'].schemata = 'default'
-
-relatedItemsField = ReferenceField('relatedItems',
+ATContentTypeBaseSchema = BaseSchema.copy() + Schema((
+    ReferenceField('relatedItems',
         relationship = 'relatesTo', 
         multiValued = True,
         isMetadata = True,
@@ -71,7 +69,29 @@ relatedItemsField = ReferenceField('relatedItems',
                      #'edit' : ENABLE_RELATED_ITEMS and 'visible' or 'hidden'
                     },
             )
-        )
+        ),
+    ),) + MetadataSchema((
+    BooleanField('excludeFromNav',
+        required = False,
+        languageIndependent = True,
+        schemata = 'metadata', # moved to 'default' for folders
+        widget = BooleanWidget(
+            description="If selected, this item will not appear in the navigation tree",
+            description_msgid = "help_exclude_from_nav",
+            label = "Exclude from navigation",
+            label_msgid = "label_exclude_from_nav",
+            i18n_domain = "plone",
+            visible={'view' : 'hidden',
+                     'edit' : 'visible'},
+            ),
+        ),
+    ),)
+    
+ATContentTypeBaseSchema['id'].validators = ('isValidId',)
+ATContentTypeBaseSchema['id'].searchable = True
+ATContentTypeBaseSchema['id'].widget.macro = 'zid'
+ATContentTypeBaseSchema['description'].schemata = 'default'
+
 
 urlUploadField = StringField('urlUpload',
         required = False,
@@ -89,24 +109,18 @@ urlUploadField = StringField('urlUpload',
                      'edit' : 'hidden'},
             ),
         )
-
-excludeFromNavField = BooleanField('exclude_from_nav', # Plone depends on this being the name
-        required = False,
-        languageIndependent = True,
-        accessor = 'excludeFromNav',
-        editAccessor = 'getRawExcludeFromNav',
-        mutator = 'setExcludeFromNav',
-        schemata = 'metadata', # moved to 'default' for folders
-        widget = BooleanWidget(
-            description="If selected, this item will not appear in the navigation tree",
-            description_msgid = "help_exclude_from_nav",
-            label = "Exclude from navigation",
-            label_msgid = "label_exclude_from_nav",
-            i18n_domain = "plone",
-            visible={'view' : 'hidden',
-                     'edit' : 'visible'},
-        ),
-    )
+        
+def finalizeATCTSchema(schema, folderish=False):
+    """Finalizes an ATCT type schema to alter some fields
+    """
+    schema.moveField('relatedItems', pos='bottom')
+    #if not HAS_PLONE2:
+    #    del schema['excludeFromNav']
+    schema.moveField('excludeFromNav', after='relatedItems')
+    if folderish:
+        schema['excludeFromNav'].schemata = 'default'
+    return schema
+    
 
 ATContentTypeSchema = ATContentTypeBaseSchema + BrowserDefaultSchema
 

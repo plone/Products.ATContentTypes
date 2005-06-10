@@ -48,8 +48,7 @@ from Products.ATContentTypes.content.document import ATDocument
 from Products.ATContentTypes.content.image import ATCTImageTransform
 from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
-from Products.ATContentTypes.content.schemata import excludeFromNavField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
 from Products.validation.config import validation
 from Products.validation.validators.SupplValidators import MaxSizeValidator
@@ -115,10 +114,7 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
         ),
     ), marshall=RFC822Marshaller()
     )
-ATNewsItemSchema.addField(relatedItemsField)
-
-if HAS_PLONE2:
-    ATNewsItemSchema.addField(excludeFromNavField)
+finalizeATCTSchema(ATNewsItemSchema)
 
 class ATNewsItem(ATDocument, ATCTImageTransform):
     """An announcement that will show up on the news portlet and in the news listing."""

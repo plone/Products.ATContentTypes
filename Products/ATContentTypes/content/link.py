@@ -42,8 +42,7 @@ from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.interfaces import IATLink
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
-from Products.ATContentTypes.content.schemata import excludeFromNavField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
 ATLinkSchema = ATContentTypeSchema.copy() + Schema((
     StringField('remoteUrl',
@@ -60,10 +59,7 @@ ATLinkSchema = ATContentTypeSchema.copy() + Schema((
             label_msgid = "label_url",
             i18n_domain = "plone")),
     ))
-ATLinkSchema.addField(relatedItemsField)
-
-if HAS_PLONE2:
-    ATLinkSchema.addField(excludeFromNavField)
+finalizeATCTSchema(ATLinkSchema)
 
 class ATLink(ATCTContent):
     """A link to an external resource."""

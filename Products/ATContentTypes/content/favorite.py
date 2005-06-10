@@ -41,7 +41,7 @@ from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.interfaces import IATFavorite
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
 ATFavoriteSchema = ATContentTypeSchema.copy() + Schema((
     StringField('remoteUrl',
@@ -57,7 +57,7 @@ ATFavoriteSchema = ATContentTypeSchema.copy() + Schema((
                         label_msgid = "label_url",
                         i18n_domain = "plone")),
     ))
-ATFavoriteSchema.addField(relatedItemsField)
+finalizeATCTSchema(ATFavoriteSchema)
 
 class ATFavorite(ATCTContent):
     """A placeholder item linking to a favorite object in the portal."""

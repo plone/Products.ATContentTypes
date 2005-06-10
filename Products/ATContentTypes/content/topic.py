@@ -54,8 +54,7 @@ from Products.ATContentTypes.criteria import _criterionRegistry
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.permission import AddTopics
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
-from Products.ATContentTypes.content.schemata import excludeFromNavField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATTopic
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces import IATTopicSortCriterion
@@ -147,10 +146,8 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                         i18n_domain = "plone"),
                  ),
     ))
-ATTopicSchema.addField(relatedItemsField)
+finalizeATCTSchema(ATTopicSchema, folderish=True)
 
-if HAS_PLONE2:
-    ATTopicSchema.addField(excludeFromNavField)
 
 class ATTopic(ATCTFolder):
     """An automatically updated stored search that can be used to display items matching criteria you specify."""

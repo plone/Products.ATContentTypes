@@ -53,8 +53,7 @@ from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import updateActions
 from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
-from Products.ATContentTypes.content.schemata import excludeFromNavField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.calendarsupport import CalendarSupportMixin
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.permission import ChangeEvents
@@ -197,10 +196,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                         i18n_domain = "plone")),
     ), marshall = RFC822Marshaller()
     )
-ATEventSchema.addField(relatedItemsField)
-
-if HAS_PLONE2:
-    ATEventSchema.addField(excludeFromNavField)
+finalizeATCTSchema(ATEventSchema)
 
 class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
     """Information about an upcoming event, which can be displayed in the calendar."""
