@@ -95,7 +95,7 @@
 
     <tal:listing condition="otherContents"
                  define="global getObjSize nocall:here/getObjSize;
-                         global toPortalTime nocall:here/toPortalTime;">
+                         global toLocalizedTime nocall:here/toLocalizedTime;">
 
       <dl>
           <tal:entry tal:repeat="obj otherContents">

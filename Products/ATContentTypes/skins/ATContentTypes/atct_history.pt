@@ -41,9 +41,9 @@
 
       <h2 i18n:translate="atct_history_comparison_between">
           Comparison between
-          <span i18n:name="from" tal:content="python:here.toPortalTime(history['oldTime'], 1)" />
+          <span i18n:name="from" tal:content="python:here.toLocalizedTime(history['oldTime'], 1)" />
           and
-          <span i18n:name="to" tal:content="python:here.toPortalTime(history['newTime'], 1)" />
+          <span i18n:name="to" tal:content="python:here.toLocalizedTime(history['newTime'], 1)" />
       </h2>
 
       <dl>
