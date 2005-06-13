@@ -36,7 +36,7 @@ from OFS.Image import Image as OFSImage
 from Products.CMFCore import CMFCorePermissions
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
-from Products.ATContentTypes.tests.utils import dcEdit
+from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
 import time
 
 from Products.ATContentTypes.content.image import ATImage
@@ -47,9 +47,9 @@ from Products.ATContentTypes.interfaces import IATImage
 from Products.CMFDefault.Image import Image
 from Interface.Verify import verifyObject
 
-_here = os.path.dirname(__file__)
-TEST_GIF = open(os.path.join(_here, 'test.gif'), 'rb').read()
-TEST_JPEG = open(os.path.join(_here, 'CanonEye.jpg'), 'rb').read()
+TEST_GIF = open(os.path.join(PACKAGE_HOME, 'test.gif'), 'rb').read()
+TEST2_GIF = open(os.path.join(PACKAGE_HOME, 'test_DivisionError.jpg'), 'rb').read()
+TEST_JPEG = open(os.path.join(PACKAGE_HOME, 'CanonEye.jpg'), 'rb').read()
 
 def editCMF(obj):
     obj.update_data(TEST_JPEG, content_type="image/jpeg")
@@ -172,7 +172,6 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         atct = self._ATCT
         
         # test upload
-        TEST2_GIF = open(os.path.join(_here, 'test_DivisionError.jpg'), 'rb').read()
         atct.setImage(TEST2_GIF, mimetype='image/gif', filename='test_DivisionError.jpg')
         self.failUnlessEqual(atct.getImage().data, TEST2_GIF)
         
@@ -232,7 +231,7 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
 tests.append(TestATImageFields)
 
 from Products.ATContentTypes.lib import exif
-TEST_CANONEYE_JPG = open(os.path.join(_here, 'CanonEye.jpg'), 'rb').read()
+TEST_CANONEYE_JPG = open(os.path.join(PACKAGE_HOME, 'CanonEye.jpg'), 'rb').read()
 class TestSiteATImageExif(atcttestcase.ATCTTypeTestCase):
 
     klass = ATImage

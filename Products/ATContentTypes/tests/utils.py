@@ -17,12 +17,14 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 from AccessControl import ClassSecurityInfo
-from Globals import InitializeClass
+from Globals import InitializeClass, package_home
 from UserDict import UserDict
 import ExtensionClass
 from Acquisition import Implicit
 from ZPublisher.BeforeTraverse import registerBeforeTraverse
 from Persistence import Persistent
+
+PACKAGE_HOME = package_home(globals())
 
 class FakeRequestSession(ExtensionClass.Base, UserDict):
     """Dummy dict like object with set method for SESSION and REQUEST
