@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Fixed some tests on Windows. Image files must be opened with 'rb'.
+   [hannosch]
+
  * Moved around some fields. excludeFromNav is on the property sheet expect for
    folderish items and discussion is on the main sheet expecpt for folderish and
    Favorite.

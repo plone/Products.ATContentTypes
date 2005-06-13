@@ -310,7 +310,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         """
         topic = self._ATCT
         self.failUnlessEqual(topic.hasSubtopics(), False)
-        topic.invokeFactory('Smart Folder', 'subtopic')
+        topic.invokeFactory('Topic', 'subtopic')
         self.failUnlessEqual(topic.hasSubtopics(), True)
 
 tests.append(TestSiteATTopic)

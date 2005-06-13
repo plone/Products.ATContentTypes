@@ -48,8 +48,8 @@ from Products.CMFDefault.Image import Image
 from Interface.Verify import verifyObject
 
 _here = os.path.dirname(__file__)
-TEST_GIF = open(os.path.join(_here, 'test.gif')).read()
-TEST_JPEG = open(os.path.join(_here, 'CanonEye.jpg')).read()
+TEST_GIF = open(os.path.join(_here, 'test.gif'), 'rb').read()
+TEST_JPEG = open(os.path.join(_here, 'CanonEye.jpg'), 'rb').read()
 
 def editCMF(obj):
     obj.update_data(TEST_JPEG, content_type="image/jpeg")
@@ -172,7 +172,7 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         atct = self._ATCT
         
         # test upload
-        TEST2_GIF = open(os.path.join(_here, 'test_DivisionError.jpg')).read()
+        TEST2_GIF = open(os.path.join(_here, 'test_DivisionError.jpg'), 'rb').read()
         atct.setImage(TEST2_GIF, mimetype='image/gif', filename='test_DivisionError.jpg')
         self.failUnlessEqual(atct.getImage().data, TEST2_GIF)
         
@@ -232,7 +232,7 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
 tests.append(TestATImageFields)
 
 from Products.ATContentTypes.lib import exif
-TEST_CANONEYE_JPG = open(os.path.join(_here, 'CanonEye.jpg')).read()
+TEST_CANONEYE_JPG = open(os.path.join(_here, 'CanonEye.jpg'), 'rb').read()
 class TestSiteATImageExif(atcttestcase.ATCTTypeTestCase):
 
     klass = ATImage
