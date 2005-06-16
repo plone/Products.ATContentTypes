@@ -44,6 +44,7 @@ from Products.Archetypes.public import LinesField
 from Products.Archetypes.public import BooleanWidget
 from Products.Archetypes.public import IntegerWidget
 from Products.Archetypes.public import InAndOutWidget
+from Products.Archetypes.public import DisplayList
 
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import HAS_PLONE2
@@ -358,7 +359,7 @@ class ATTopic(ATCTFolder):
         return tool.getMetadataDisplay(exclude)
 
     security.declareProtected(CMFCorePermissions.View, 'allowedCriteriaForField')
-    def allowedCriteriaForField(self, field, string_list=False):
+    def allowedCriteriaForField(self, field, display_list=False):
         """ Return all valid criteria for a given field.  Optionally include
             descriptions in list in format [(desc1, val1) , (desc2, val2)] for
             javascript selector."""
@@ -366,12 +367,12 @@ class ATTopic(ATCTFolder):
         criteria = tool.getIndex(field).criteria
         allowed = [crit for crit in criteria
                                 if self.validateAddCriterion(field, crit)]
-        if string_list:
+        if display_list:
             flat = []
             for a in allowed:
                 desc = _criterionRegistry[a].shortDesc
-                flat.append((desc,a))
-            allowed = flat
+                flat.append((a,desc))
+            allowed = DisplayList(flat)
         return allowed
 
     security.declareProtected(CMFCorePermissions.View, 'buildQuery')

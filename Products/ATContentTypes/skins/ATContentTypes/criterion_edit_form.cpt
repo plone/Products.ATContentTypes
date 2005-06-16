@@ -29,9 +29,7 @@
     </script>
 
     <script type="text/javascript">
-        registerDynamicSelect('criteria_select','field','criterion_type','getValidCriteriaForIndex?index=');
-        if (window.addEventListener) window.addEventListener("load",dynamicSelectInit,false);
-        else if (window.attachEvent) window.attachEvent("onload", dynamicSelectInit);
+        registerDynamicSelect('criteria_select','field','criterion_type','getValidCriteriaForIndex','index');
         function showHelp(selectedItem, helpElementId){
              helpElement = document.getElementById(helpElementId);
              elementTooltip = selectedItem.title;
@@ -156,7 +154,7 @@
                         tabindex=""
                         onchange=""
                         tal:attributes="tabindex tabindex/next;
-                                        onchange string:javascript:changedSelection(this,'getValidCriteriaForIndex?index=','criterion_type','criteria_select');;showHelp(this.options[this.selectedIndex], 'fieldHelp');;;">
+                                        onchange string:javascript:showHelp(this.options[this.selectedIndex], 'fieldHelp');;;">
                 <tal:options tal:repeat="field fields">
                     <option value=""
                             tal:define="explanation python:field[2]"
