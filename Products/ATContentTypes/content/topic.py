@@ -76,10 +76,8 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 widget=BooleanWidget(
                         label="Inherit Criteria",
                         label_msgid="label_inherit_criteria",
-                        description=("Toggles inheritance of criteria. For example, if you "
-                                     "have specified that only items from the last three days "
-                                     "should be shown in a Topic above the current one, this "
-                                     "Topic will also have that criterion automatically."),
+                        description=("Narrow down the search results from the parent Smart Folder(s) "
+                                     "by using the criteria from this Smart Folder."),
                         description_msgid="help_inherit_criteria",
                         i18n_domain = "plone"),
                 ),
@@ -89,11 +87,10 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 default=False,
                 write_permission = ChangeTopics,
                 widget=BooleanWidget(
-                        label="Limit Number of Items",
+                        label="Limit Search Results",
                         label_msgid="label_limit_number",
-                        description=("Toggles limitation of number of items displayed. "
-                                     "If selected, only the first 'Number of Items' "
-                                     "will be displayed."),
+                        description=("If selected, only the 'Number of Items' "
+                                     "indicated below will be displayed."),
                         description_msgid="help_limit_number",
                         i18n_domain = "plone"),
                 ),
@@ -105,10 +102,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 widget=IntegerWidget(
                         label="Number of Items",
                         label_msgid="label_item_count",
-                        description="If 'Limit Number of Items' is "
-                        "selected, only the first "
-                        "'Number of Items' will be "
-                        "displayed ",
+                        description="",
                         description_msgid="help_item_count",
                         i18n_domain = "plone"),
                  ),
@@ -118,13 +112,10 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 default=False,
                 write_permission = ChangeTopics,
                 widget=BooleanWidget(
-                        label="Use Custom View",
+                        label="Display as Table",
                         label_msgid="label_custom_view",
-                        description="Toggles the view used to display the "
-                        "search results.  If selected, the view will use a "
-                        "table with fields determined by the values selected "
-                        "in 'Custom View Fields', otherwise the default "
-                        "listing will be used.",
+                        description="Columns in the table are controlled by "
+                        "'Table Columns' below.",
                         description_msgid="help_custom_view",
                         i18n_domain = "plone"),
                  ),
@@ -136,12 +127,10 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 enforceVocabulary=True,
                 write_permission = ChangeTopics,
                 widget=InAndOutWidget(
-                        label="Custom View Fields",
+                        label="Table Columns",
                         label_msgid="label_custom_view_fields",
-                        description="If 'Use Custom View' is "
-                        "selected, the view will use a table with fields "
-                        "determined by the values selected in "
-                        "'Custom View Fields'.",
+                        description="Select which fields to display when "
+                        "'Display as Table' is checked.",
                         description_msgid="help_custom_view_fields",
                         i18n_domain = "plone"),
                  ),
