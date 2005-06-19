@@ -86,6 +86,14 @@ from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
 DEBUG = True
 
+try:
+    from Products.CMFDynamicViewFTI.fti import DynamicViewTypeInformation
+except ImportError:
+    from Products.CMFCore.TypesTool import FactoryTypeInformation
+    fti_meta_type = FactoryTypeInformation.meta_type
+else:
+    fti_meta_type = DynamicViewTypeInformation.meta_type
+
 class InvalidContentType(Exception):
     """Invalid content type (uploadFromURL)
     """
@@ -167,6 +175,12 @@ class ATCTMixin(BrowserDefaultMixin):
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()
+    
+    _at_fti_meta_type = fti_meta_type
+    aliases = {
+        '(Default)' : '(dynamic view)',
+        'view' : '(dynamic view)',
+        }
     
     # see SkinnedFolder.__call__
     isDocTemp = False 
@@ -350,6 +364,10 @@ class ATCTFileContent(ATCTContent):
 
     The file field *must* be the exclusive primary field
     """
+    
+    # default for images and file is to show the image or file w/o page
+    aliases = ATCTContent.aliases.copy()
+    aliases['(Default)'] = 'index_html'
 
     # the precondition attribute is required to make ATFile and ATImage compatible
     # with OFS.Image.*. The precondition feature is (not yet) supported.
