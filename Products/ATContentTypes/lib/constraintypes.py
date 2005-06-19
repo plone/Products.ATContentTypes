@@ -132,6 +132,24 @@ ConstrainTypesMixinSchema = Schema((
         ),
     ))
 
+def parentPortalTypeEqual(obj):
+    """Compares the portal type of obj to the portal type of its parent
+    
+    Return values:
+        None - no acquisition context / parent available
+        False - unequal
+        True - equal
+    """
+    parent = aq_parent(aq_inner(obj))
+    if parent is None:
+        return None # no context
+    parent_type = getattr(parent.aq_explicit, 'portal_type', None)
+    obj_type = getattr(obj.aq_explicit, 'portal_type')
+    if obj_type and parent_type == obj_type:
+        return True
+    return False
+
+
 class ConstrainTypesMixin:
     """ Gives the user with given rights the possibility to
         constrain the addable types on a per-folder basis.
@@ -179,10 +197,11 @@ class ConstrainTypesMixin:
         elif mode == ENABLED:
             return self.getField('locallyAllowedTypes').get(self)
         elif mode == ACQUIRE:
-            parent = self.aq_inner.aq_parent
-            if not parent or parent.portal_type != self.portal_type:
+            #if not parent or parent.portal_type != self.portal_type:
+            if not parentPortalTypeEqual(self):
                 return [fti.getId() for fti in self.getDefaultAddableTypes()]
             else:
+                parent = aq_parent(aq_inner(self))
                 return parent.getLocallyAllowedTypes()
         else:
             raise ValueError, "Invalid value for enableAddRestriction"
@@ -204,11 +223,12 @@ class ConstrainTypesMixin:
         elif mode == ENABLED:
             return self.getField('immediatelyAddableTypes').get(self)
         elif mode == ACQUIRE:
-            parent = self.aq_inner.aq_parent
-            if not parent or parent.portal_type != self.portal_type:
+            #if not parent or parent.portal_type != self.portal_type:
+            if not parentPortalTypeEqual(self):
                 return [fti.getId() for fti in \
                         PortalFolder.allowedContentTypes(self)]
             else:
+                parent = aq_parent(aq_inner(self))
                 return parent.getImmediatelyAddableTypes()
         else:
             raise ValueError, "Invalid value for enableAddRestriction"
@@ -218,13 +238,13 @@ class ConstrainTypesMixin:
         """returns constrained allowed types as list of fti's
         """
         mode = self.getConstrainTypesMode()
-        parent = self.aq_inner.aq_parent
 
         # Short circuit if we are disabled or acquiring from non-compatible
         # parent
 
-        if mode == DISABLED or \
-                (parent and parent.portal_types != self.portal_types):
+        #if mode == DISABLED or \
+        #        (parent and parent.portal_types != self.portal_types):
+        if mode == DISABLED or not parentPortalTypeEqual(self):
             return PortalFolder.allowedContentTypes(self)
 
         globalTypes = self.getDefaultAddableTypes()
@@ -239,13 +259,13 @@ class ConstrainTypesMixin:
         """Invokes the portal_types tool
         """
         mode = self.getConstrainTypesMode()
-        parent = self.aq_inner.aq_parent
 
         # Short circuit if we are disabled or acquiring from non-compatible
         # parent
 
-        if mode == DISABLED or \
-                (parent and parent.portal_types != self.portal_types):
+        #if mode == DISABLED or \
+        #        (parent and parent.portal_types != self.portal_types):
+        if mode == DISABLED or not parentPortalTypeEqual(self):
             return PortalFolder.invokeFactory(self, type_name, id,
                                                 RESPONSE=None, *args, **kw)
 
