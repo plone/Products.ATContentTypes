@@ -438,7 +438,10 @@ class FolderMigrationMixin(ItemMigrationMixin):
 
         It seems to work for me very well :)
         """
-        orderAble = IOrderedContainer.isImplementedBy(self.old)
+        # in CMF 1.5 Topic is orderable while ATCT's Topic is not orderable
+        # order objects only when old *and* are orderable 
+        orderAble = IOrderedContainer.isImplementedBy(self.old) and \
+                    IOrderedContainer.isImplementedBy(self.new)
         orderMap = {}
 
         # using objectIds() should be safe with BrokenObjects

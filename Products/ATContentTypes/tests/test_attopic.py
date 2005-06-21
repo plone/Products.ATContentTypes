@@ -43,6 +43,7 @@ from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.migration.atctmigrator import CRIT_MAP, REV_CRIT_MAP
 from Products.ATContentTypes.interfaces import IATTopic
 from Interface.Verify import verifyObject
+from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
 
 ACQUIRE  = True
 LIMIT    = False
@@ -168,6 +169,11 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         iface = IATTopic
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
+        
+    def test_isNotOrdered(self):
+        iface = IZopeOrderedContainer
+        self.failIf(iface.isImplementedBy(self._ATCT))
+        self.failIf(iface.isImplementedByInstancesOf(self.klass))
 
     def test_Empty( self ):
         topic = self._ATCT

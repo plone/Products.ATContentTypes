@@ -31,7 +31,10 @@ from Acquisition import aq_inner
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore import CMFCorePermissions
-from Products.CMFCore.PortalFolder import PortalFolder
+try:
+    from Products.CMFCore.PortalFolder import PortalFolderBase as PortalFolder
+except:
+    from Products.CMFCore.PortalFolder import PortalFolder
 
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import LinesField

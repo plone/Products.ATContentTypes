@@ -185,6 +185,10 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         iface = ISelectableConstrainTypes
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
+    
+    def test_isNotOrdered(self):
+        iface = IZopeOrderedContainer
+        self.failIf(iface.isImplementedBy(self._ATCT))
 
     def test_edit(self):
         old = self._cmf
