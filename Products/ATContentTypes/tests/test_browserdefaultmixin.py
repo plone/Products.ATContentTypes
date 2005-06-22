@@ -120,15 +120,16 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.failUnless('atct_album_view' in layoutKeys)
     
     def test_setLayoutUnsetsDefaultPage(self):
+        layout = 'atct_album_view'
         self.af.invokeFactory('Document', 'ad')
         self.af.setDefaultPage('ad')
         self.assertEqual(self.af.getDefaultPage(), 'ad')
         self.assertEqual(self.af.defaultView(), 'ad')
-        self.af.setLayout('folder_listing')
+        self.af.setLayout(layout)
         self.assertEqual(self.af.getDefaultPage(), None)
-        self.assertEqual(self.af.defaultView(), 'folder_listing')
+        self.assertEqual(self.af.defaultView(), layout)
         
-        resolved = self.af.unrestrictedTraverse('folder_listing')()
+        resolved = self.af.unrestrictedTraverse(layout)()
         browserDefault = self.af.__browser_default__(None)[1][0]
         browserDefaultResolved = self.af.unrestrictedTraverse(browserDefault)()
         self.assertEqual(resolved, browserDefaultResolved)

@@ -11,7 +11,6 @@ rights:
 creation_date: 2005/05/27 00:00:00 GMT
 modification_date: 2005/05/27 01:00:00 GMT
 layout: newsitem_view
-image: <img src="http://localhost:11090/testsite/test-news-item/image" alt="test news item" title="test news item" />
 imageCaption: an image caption
 relatedItems: 
 Content-Type: text/html

@@ -53,3 +53,9 @@ Replace the news template with with
 http://svn.plone.org/plone/CMFPlone/branches/2.1/skins/plone_templates/news.pt
 The issue is fixed in CMFPlone 2.1
 
+WebDAV/marshaller errors with NewsItem
+--------------------------------------
+
+The RFC822 marshaller marshals the image field as <img src=... />
+TODO: Not fixed
+

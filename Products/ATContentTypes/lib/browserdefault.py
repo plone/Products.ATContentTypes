@@ -25,6 +25,8 @@ the ISelectableBrowserDefault interface from CMFPlone.
 __author__  = 'Martin Aspeli <optilude@gmx.net>'
 __docformat__ = 'plaintext'
 
+import types
+
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 
@@ -44,7 +46,14 @@ if HAS_PLONE2:
 
 from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
 
-import types
+try:
+    from Products.CMFDynamicViewFTI.fti import DynamicViewTypeInformation
+except ImportError:
+    from Products.CMFCore.TypesTool import FactoryTypeInformation
+    fti_meta_type = FactoryTypeInformation.meta_type
+else:
+    fti_meta_type = DynamicViewTypeInformation.meta_type
+
 
 # Set up our schema
 BrowserDefaultSchema = TemplateMixinSchema.copy()
@@ -60,11 +69,23 @@ class BrowserDefaultMixin(TemplateMixin):
         TemplateMixin in Archetypes does), and/or to set a contained
         object's id as a default_page (acting in the same way as index_html)
     """
-
     if HAS_PLONE2:
         __implements__ = (ISelectableBrowserDefault, ITemplateMixin, )
     else:
         __implements__ = (ITemplateMixin, )
+        
+    _at_fti_meta_type = fti_meta_type
+    aliases = {
+        '(Default)' : '(dynamic view)',
+        'view' : '(dynamic view)',
+        'index.html' : '(dynamic view)',
+        'edit' : 'atct_edit',
+        'gethtml' : '',
+        'mkdir' : '',
+        }
+    
+    default_view = "base_view"
+    suppl_views = ()
 
     security = ClassSecurityInfo()
 

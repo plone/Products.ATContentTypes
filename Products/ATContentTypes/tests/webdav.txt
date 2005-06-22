@@ -301,8 +301,6 @@ Image
   
   >>> image = self.folder['test my image.gif']
   
-  >>> self.folder.objectIds()
-  
   >>> print image.getPortalTypeName()
   Image
   

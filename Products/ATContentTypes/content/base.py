@@ -68,14 +68,7 @@ from Products.Archetypes.debug import _zlogger
 from Products.Archetypes.utils import shasattr
 from Products.Archetypes.public import log_exc
 
-# BBB CMFPlone 2.0.x
-try:
-    from Products.CMFPlone.interfaces.Translatable import ITranslatable
-except ImportError:
-    try:
-        from Products.PloneLanguageTool.interfaces import ITranslatable
-    except ImportError:
-        ITranslatable = None
+from Products.CMFPlone.interfaces.Translatable import ITranslatable
 
 from Products.ATContentTypes.config import CHAR_MAPPING
 from Products.ATContentTypes.config import GOOD_CHARS
@@ -85,14 +78,6 @@ from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
 DEBUG = True
-
-try:
-    from Products.CMFDynamicViewFTI.fti import DynamicViewTypeInformation
-except ImportError:
-    from Products.CMFCore.TypesTool import FactoryTypeInformation
-    fti_meta_type = FactoryTypeInformation.meta_type
-else:
-    fti_meta_type = DynamicViewTypeInformation.meta_type
 
 class InvalidContentType(Exception):
     """Invalid content type (uploadFromURL)
@@ -115,10 +100,9 @@ def registerATCT(class_, project):
     """
     assert IATContentType.isImplementedByInstancesOf(class_)
     
-    # this should go into LinguaPlone!
-    # BBB remove is not None test later
-    if ITranslatable is not None and ITranslatable.isImplementedByInstancesOf(class_):
-        class_.actions = updateActions(class_, translate_actions)
+    # TODO: this should go into LinguaPlone!
+    #if ITranslatable is not None and ITranslatable.isImplementedByInstancesOf(class_):
+    #    class_.actions = updateActions(class_, translate_actions)
         
     registerType(class_, project)
 
@@ -176,13 +160,9 @@ class ATCTMixin(BrowserDefaultMixin):
     assocFileExt   = ()
     cmf_edit_kws   = ()
     
-    _at_fti_meta_type = fti_meta_type
-    aliases = {
-        '(Default)' : '(dynamic view)',
-        'view' : '(dynamic view)',
-        }
+    # aliases for CMF method aliases is defined in browser default
     
-    # see SkinnedFolder.__call__
+    # BBB see SkinnedFolder.__call__
     isDocTemp = False 
 
     __implements__ = (IATContentType, BrowserDefaultMixin.__implements__)
