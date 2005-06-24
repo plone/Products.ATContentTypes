@@ -137,6 +137,9 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
     def test_adds_related_items_catalog_index(self):
         self.assertEqual(self.cat.Indexes['getRawRelatedItems'].__class__.__name__,
                          'KeywordIndex')
+
+    def test_api_import(self):
+        import Products.ATContentTypes.atct
         
     
 tests.append(TestInstallation)
