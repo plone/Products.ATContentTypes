@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Added syndication support to Smart Folders.
+   [alecm]
+
  * Fixed some tests on Windows. Image files must be opened with 'rb'.
    [hannosch]
 

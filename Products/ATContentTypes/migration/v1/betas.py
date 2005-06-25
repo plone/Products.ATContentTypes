@@ -1,12 +1,14 @@
 from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.migration.atctmigrator import migrateAll
-from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.migration.atctmigrator import TopicMigrator
 from Products.ATContentTypes.migration.walker import useLevelWalker
 from Products.ATContentTypes.criteria import _criterionRegistry
+from Products.ATContentTypes.content.topic import ATTopic
 from Products.CMFCore.Expression import Expression
 from Products.ATContentTypes.config import TOOLNAME
+from Products.ATContentTypes.config import PROJECTNAME
 
+from Products.Archetypes.ArchetypeTool import fixActionsForType
 
 def alpha2_beta1(portal):
     """1.0-alpha2 -> 1.0-beta1
@@ -22,6 +24,9 @@ def alpha2_beta1(portal):
 
     # Rename the topics configlet
     renameTopicsConfiglet(portal, out)
+
+    # Update topic actions
+    addTopicSyndicationAction(portal, out)
 
     # ADD NEW STUFF BEFORE THIS LINE!
 
@@ -158,3 +163,13 @@ def renameTopicsConfiglet(portal, out):
                 cp.unregisterConfiglet(configlet['id'])
             cp.registerConfiglets(tool.getConfiglets())
     out.append("Renamed Smart Folder configlet")
+
+
+def addTopicSyndicationAction(portal, out):
+    """Update the Topic actions"""
+    #Do this the lazy way by using fix_actions
+    typesTool = getToolByName(portal, 'portal_types', None)
+    topicFTI = getattr(typesTool, 'Topic', None)
+    if typesTool is not None and topicFTI is not None:
+        fixActionsForType(ATTopic, typesTool)
+        out.append("Updated Topic actions")

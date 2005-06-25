@@ -27,6 +27,7 @@ from Products.ATContentTypes.migration.v1.betas import fixFolderlistingAction
 from Products.ATContentTypes.migration.v1.betas import reindexCatalog
 from Products.ATContentTypes.migration.v1.betas import addRelatedItemsIndex
 from Products.ATContentTypes.migration.v1.betas import renameTopicsConfiglet
+from Products.ATContentTypes.migration.v1.betas import addTopicSyndicationAction
 
 
 class MigrationTest(atcttestcase.ATCTSiteTestCase):
@@ -38,6 +39,15 @@ class MigrationTest(atcttestcase.ATCTSiteTestCase):
         fti = ttool.getTypeInfo(portal_type)
         fti.constructInstance(context, id)
         return getattr(context.aq_inner.aq_explicit, id)
+
+    def removeActionFromType(self, type_name, action_id):
+        # Removes an action from a portal type
+        tool = getattr(self.portal, 'portal_types')
+        info = tool.getTypeInfo(type_name)
+        typeob = getattr(tool, info.getId())
+        actions = info.listActions()
+        actions = [x for x in actions if x.id != action_id]
+        typeob._actions = tuple(actions)
 
 
 class TestMigrations_v1(MigrationTest):
@@ -236,6 +246,49 @@ class TestMigrations_v1(MigrationTest):
         # # Should not fail if portal_controlpanel is missing
         self.portal._delObject('portal_controlpanel')
         renameTopicsConfiglet(self.portal, [])
+
+    def testReindexCatalog(self):
+        # Should rebuild the catalog
+        self.folder.invokeFactory('Document', id='doc', title='Foo')
+        self.folder.doc.setTitle('Bar')
+        self.assertEqual(len(self.catalog(Title='Foo')), 1)
+        reindexCatalog(self.portal, [])
+        self.assertEqual(len(self.catalog(Title='Foo')), 0)
+        self.assertEqual(len(self.catalog(Title='Bar')), 1)
+
+    def testAddTopicsSyndicationAction(self):
+        # Should add the syndication action to Topics
+        typesTool = getToolByName(self.portal, 'portal_types', None)
+        self.removeActionFromType('Topic', 'syndication')
+        self.failIf('syndication' in [x.id for x in
+                                        typesTool.Topic.listActions()])
+        addTopicSyndicationAction(self.portal, [])
+        self.failUnless('syndication' in [x.id for x in
+                                        typesTool.Topic.listActions()])
+
+    def testAddTopicSyndicationActionTwice(self):
+        # Should not fail if migrated again
+        typesTool = getToolByName(self.portal, 'portal_types', None)
+        self.removeActionFromType('Topic', 'syndication')
+        self.failIf('syndication' in [x.id for x in
+                                        typesTool.Topic.listActions()])
+        addTopicSyndicationAction(self.portal, [])
+        addTopicSyndicationAction(self.portal, [])
+        self.assertEqual(len([x.id for x in
+                                        typesTool.Topic.listActions()
+                                        if x.id == 'syndication']), 1)
+
+    def testAddTopicSyndicationActionNoTool(self):
+        # Should not fail if portal_types is missing
+        self.portal._delObject('portal_types')
+        addTopicSyndicationAction(self.portal, [])
+
+    def testAddTopicSyndicationActionTypeMissing(self):
+        # Should not fail if Topic type is missing, should add type and
+        # action
+        typesTool = getToolByName(self.portal, 'portal_types', None)
+        self.portal.portal_types._delObject('Topic')
+        addTopicSyndicationAction(self.portal, [])
 
 def test_suite():
     from unittest import TestSuite, makeSuite

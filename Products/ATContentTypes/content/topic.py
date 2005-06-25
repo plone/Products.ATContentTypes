@@ -192,6 +192,13 @@ class ATTopic(ATCTFolder):
         'action'      : 'string:${folder_url}/atct_topic_subtopics',
         'permissions' : (ChangeTopics,)
         },
+        {
+        'id'          : 'syndication',
+        'name'        : 'Syndication',
+        'action'      : 'string:${folder_url}/synPropertiesForm',
+        'condition'   : 'python: portal.portal_syndication.isSiteSyndicationAllowed()',
+        'permissions' : (CMFCorePermissions.ManageProperties,)
+        },
        )
     )
 
@@ -435,6 +442,9 @@ class ATTopic(ATCTFolder):
         if limit:
             return results[:max_items]
         return results
+
+    security.declareProtected(CMFCorePermissions.View, 'queryCatalog')
+    synContentValues = queryCatalog
 
     security.declareProtected(ChangeTopics, 'addCriterion')
     def addCriterion(self, field, criterion_type):
