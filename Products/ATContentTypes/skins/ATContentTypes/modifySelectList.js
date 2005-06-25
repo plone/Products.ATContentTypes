@@ -6,9 +6,39 @@ function getInputElementToModify(form_name, element_id) {
     var cur_form = document.forms[form_name];
     if (typeof(cur_form)=="undefined") { alert("The form "+form_name+" could not be found in the document."); return;}
     var slave_field = cur_form[element_id];
-    if (typeof(slave_field)=="undefined") { alert("Select box "+element_id+" could not be found in the form "+form_name); return;}
+    if (typeof(slave_field)=="undefined") { alert("Slave field "+element_id+" could not be found in the form "+form_name); return;}
     return slave_field;
 }
+
+function modifySlaveField(responseText, cur_sel) {
+    switch (cur_sel['action']) {
+    case "vocabulary":
+        modifyList(responseText, cur_sel);
+        break;
+    case "value":
+        modifySlaveValue(responseText, cur_sel);
+        break;
+    default:
+        //should not get here
+    }
+}
+
+function modifySlaveValue(responseText, cur_sel) {
+    var cur_elem = getInputElementToModify(cur_sel["form"], cur_sel["slave"]);
+    cur_elem.value = responseText
+    //Handle select boxes in all browsers
+    if (cur_elem.options) {
+        for (var i=0; i < cur_elem.options.length; i++) {
+            if (cur_elem.options[i].value == responseText) {
+                cur_elem.selectedIndex = i
+            }
+        }
+    }
+    //pass a bogus event and the real element
+    changeOnSelect('',cur_elem);
+    if (cur_elem.onchange) cur_elem.onchange();
+}
+
 
 function modifyList(list_text, cur_sel) {
     var cur_elem = getInputElementToModify(cur_sel["form"], cur_sel["slave"]);
@@ -24,13 +54,8 @@ function modifyList(list_text, cur_sel) {
         newOpt.defaultSelected = false;
         cur_elem.options[cur_elem.options.length] = newOpt;
     }
-    var slave_list = _master_elements[cur_sel["form"]+'|'+cur_sel["slave"]];
-    if (typeof(slave_list)!="undefined") {
-        for (var i=0; i < slave_list.length; i++) {
-            var slave_sel = _registry[cur_sel["form"]+'|'+cur_sel["slave"]+'|'+slave_list[i]];
-            changeOnSelect(cur_elem, slave_sel["slave"], slave_sel["form"]);
-        }
-    }
+    //pass a bogus event and the real element
+    changeOnSelect('',cur_elem);
     if (cur_elem.onchange) cur_elem.onchange();
 }
 
@@ -41,7 +66,7 @@ function getNewOptions(selectInput, cur_key) {
         cur_sel["last_val"] = selectInput.value;
         var result = cur_sel["_cache"][selectInput.value];
         if (typeof(result)!="undefined") {
-            modifyList(result,cur_sel);
+            modifySlaveField(result,cur_sel);
             return;
         }
         var change_func = new Function("selectProcessRequestChange('"+cur_key+"','"+selectInput.value+"');")
@@ -58,7 +83,7 @@ function selectProcessRequestChange(cur_key, selectValue) {
     if (selectRequest.readyState==4) {
         if (selectRequest.status==200) {
             if (typeof(cur_sel)!="undefined") {
-                modifyList(selectRequest.responseText, cur_sel);
+                modifySlaveField(selectRequest.responseText, cur_sel);
                 cur_sel["_cache"][selectValue] = selectRequest.responseText;
             }
         } else {
@@ -67,27 +92,65 @@ function selectProcessRequestChange(cur_key, selectValue) {
     }
 }
 
-function changeOnSelect(master_element, element_id, form_name) {
+function changeOnSelect(ev, master_element) {
+    if (! master_element) var master_element = this;
     var selectInput = master_element;
     var form_name = master_element.form.name;
-    var cur_elem = getInputElementToModify(form_name, element_id);
-    if (typeof(cur_elem)!="undefined") {
-        var cur_key = form_name+'|'+selectInput.id+'|'+element_id;
-        var cur_sel = _registry[cur_key];
-        if (cur_sel["action"] == "vocabulary") {
-            //Change slave vocabulary
-            getNewOptions(selectInput, cur_key);
-        } else {
-            var should_hide = inArray(cur_sel["values"], selectInput.value)
-            //We have a hiding value disable or hide
-            if (cur_sel["action"] == "disable") {
-                if (should_hide) cur_elem.disabled = true;
-                else cur_elem.disabled = false;
-            } else if (cur_sel["action"] == "hide") {
-                //We want to hide the whole field not just the widget
-                cur_elem = document.getElementById('archetypes-fieldname-'+element_id);
-                if (should_hide) cur_elem.style.visibility="hidden";
-                else cur_elem.style.visibility="visible";
+    var master_key = form_name+'|'+selectInput.id;
+    var key_list = _master_elements[master_key];
+    if (typeof(key_list)!="undefined") {
+        for (var i=0; i < key_list.length; i++) {
+            var cur_key = key_list[i];
+            var cur_sel = _registry[cur_key];
+            if (typeof(cur_sel)!="undefined") {
+                var element_id = cur_sel["slave"];
+                switch (cur_sel["action"]) {
+                    case "vocabulary":
+                    case "value":
+                        var cur_elem = getInputElementToModify(form_name, element_id);
+                        //Change slave vocabulary
+                        getNewOptions(selectInput, cur_key);
+                        break;
+                    default:
+                        var should_hide = inArray(cur_sel["values"], selectInput.value)
+                        //We need to look at the whole field because some widgets are
+                        //quite complex.
+                        var field_elem = document.getElementById('archetypes-fieldname-'+element_id);
+                        if (cur_sel["action"] == "disable") {
+                            disableField(field_elem, should_hide);
+                        } else if (cur_sel["action"] == "hide") {
+                            hideField(field_elem, should_hide);
+                        }
+                }
+            }
+        }
+    }
+}
+
+function disableField(field_elem, should_hide) {
+    // Special handling for complex widgets
+    if (typeof(field_elem.disabled)!="undefined") field_elem.disabled=should_hide;
+    //walk the tree to get disablable elements
+    if (field_elem.childNodes) {
+        for (var i=0;i < field_elem.childNodes.length;i++) {
+            var child = field_elem.childNodes[i]
+                if (typeof(child.disabled)!="undefined" || child.childNodes) disableField(child, should_hide);
+        }
+    }
+}
+
+function hideField(field_elem, should_hide) {
+    // Special handling for complex widgets
+    if (should_hide) var vis = "hidden";
+    else var vis = "visible";
+
+    if (field_elem.style) {
+        field_elem.style.visibility=vis;
+        //walk the tree to get INPUT element which are explicitly visible
+        if (field_elem.childNodes) {
+            for (var i=0;i < field_elem.childNodes.length;i++) {
+                var child = field_elem.childNodes[i]
+                if (child.nodeName == "INPUT" || child.childNodes) hideField(child, should_hide);
             }
         }
     }
@@ -100,58 +163,69 @@ function inArray(list, value) {
     return false;
 }
 
-function registerDynamicSelect(form_name, master_id, slave_id, vocab_method, param, base_url) {
-    if (base_url) var url = base_url+'/getXMLSelectVocab?method='+vocab_method+'&param='+param+'&value=';
-    else var url = 'getXMLSelectVocab?method='+vocab_method+'&param='+param+'&value=';
+function registerDynamicSelect(form_name, master_id, slave_id, action, vocab_method, param, base_url) {
+    var url;
+    switch (action) {
+    case "value":
+        url = 'getXMLSlaveValue?method='+vocab_method+'&param='+param+'&value=';
+        break;
+    case "vocabulary":
+        url = 'getXMLSelectVocab?method='+vocab_method+'&param='+param+'&value=';
+        break;
+    default:
+        // should not happen
+        alert("registerDynamicSelect: invalid action " + action);
+    }
+    if (base_url) 
+        url = base_url + '/' + url;
     var select_desc = new Object();
-    var key = form_name+'|'+master_id+'|'+slave_id
+    var key = form_name+'|'+master_id+'|'+slave_id+'|vocabulary'
+    var master_key = form_name+'|'+master_id;
     select_desc["form"] = form_name;
     select_desc["master"] = master_id;
     select_desc["slave"] = slave_id;
-    select_desc["action"] = "vocabulary";
+    select_desc["action"] = action;
     select_desc["url"] = url;
     select_desc["last_val"] = "";
     select_desc["_cache"] = new Object();
     select_desc["_request"] = new XMLHttpRequest();
     _registry[key] = select_desc;
-    _all_keys.push(key);
     var all_children = _master_elements[form_name+'|'+master_id];
     if (typeof(all_children)=="undefined") all_children = new Array();
-    all_children.push(slave_id);
-    _master_elements[form_name+'|'+master_id] = all_children;
+    all_children.push(key);
+    _master_elements[master_key] = all_children;
+    _all_keys.push(master_key);
 }
 
 function registerHideOnSelect(form_name, master_id, slave_id, hide_action, hide_values) {
     var select_desc = new Object();
-    var key = form_name+'|'+master_id+'|'+slave_id
+    var key = form_name+'|'+master_id+'|'+slave_id+'|'+hide_action;
+    var master_key = form_name+'|'+master_id;
     select_desc["form"] = form_name;
     select_desc["master"] = master_id;
     select_desc["slave"] = slave_id;
     select_desc["action"] = hide_action;
     select_desc["values"] = hide_values;
     _registry[key] = select_desc;
-    _all_keys.push(key);
     var all_children = _master_elements[form_name+'|'+master_id];
     if (typeof(all_children)=="undefined") all_children = new Array();
-    all_children.push(slave_id);
-    _master_elements[form_name+'|'+master_id] = all_children;
-}
-
-function generateHandler(master, sel) {
-    changeOnSelect(master, sel["slave"], sel["form"]);
-    return new Function("changeOnSelect(this,'"+sel["slave"]+"','"+sel["form"]+"');");
+    all_children.push(key);
+    _master_elements[master_key] = all_children;
+    _all_keys.push(master_key);
 }
 
 function dynamicSelectInit() {
     for (var i=0; i < _all_keys.length; i++) {
-        var cur_select = _registry[_all_keys[i]];
-        var master = getInputElementToModify(cur_select["form"],cur_select["master"]);
-        var change_func = generateHandler(master, cur_select);
+        var key_list = _master_elements[_all_keys[i]];
+        //just get the first one for a given master.
+        var cur_sel = _registry[key_list[0]];
+        var master = getInputElementToModify(cur_sel["form"],cur_sel["master"]);
         if (master.addEventListener) {
-            master.addEventListener('change', change_func, false);
+            master.addEventListener('change', changeOnSelect, false);
         } else if (master.attachEvent) {
-            master.attachEvent('onchange', change_func);
+            master.attachEvent('onchange', changeOnSelect);
         }
+        changeOnSelect('',master);
     }
 }
 
