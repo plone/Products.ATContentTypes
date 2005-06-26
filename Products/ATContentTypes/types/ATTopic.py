@@ -350,7 +350,7 @@ class ATTopic(ATCTFolder):
         """Getter for syndacation support
         """
         syn_tool = getToolByName(self, 'portal_syndication')
-        limit = syn_tool.getMaxItems(self)
+        limit = int(syn_tool.getMaxItems(self))
         brains = self.queryCatalog(sort_limit=limit)[:limit]
         return [brain.getObject() for brain in brains]
 
