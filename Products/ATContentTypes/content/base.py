@@ -721,7 +721,10 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
                    return ReplaceableWrapper(NullResource(self, 'index_html'))
            # Acquire from parent
            _target = aq_parent(aq_inner(self)).aq_acquire('index_html')
-           return ReplaceableWrapper(aq_base(_target).__of__(self))
+           if _target is None:
+               return ReplaceableWrapper(NullResource(self, 'index_html'))
+           else:
+               return ReplaceableWrapper(aq_base(_target).__of__(self))
        else:
            return OrderedBaseFolder.index_html(self)
 

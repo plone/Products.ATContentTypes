@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Changed index_html method on ATCTOrderedFolder to gracefully handle
+   situation where acquisition of index_html attribute returns None.
+   [rafrombrc]]
+
  * Added syndication support to Smart Folders.
    [alecm]
 
