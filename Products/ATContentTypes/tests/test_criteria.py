@@ -615,13 +615,6 @@ class TestATPathCriterion(CriteriaTest):
         query = items[0][1]
         self.assertEquals(query['depth'], 1)
 
-    def testDefaultPathValue(self):
-        # ensure that the default_method returns a sensible value (i.e. the
-        # folder containing the topic/criterion).
-        self.dummy.Schema()['field'].set(self.dummy,'path')
-        def_path = self.dummy.getCurrentPath()
-        self.assertEqual(def_path, ('/plone/Members/test_user_1_',))
-
 tests.append(TestATPathCriterion)
 
 class TestCriterionRegistry(atcttestcase.ATCTSiteTestCase):

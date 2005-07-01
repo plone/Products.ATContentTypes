@@ -58,7 +58,10 @@ ATPathCriterionSchema = ATBaseCriterionSchema + Schema((
                     label_msgid="label_path_criteria_value",
                     description="Folders to search in.",
                     description_msgid="help_path_criteria_value",
-                    i18n_domain="plone"),
+                    i18n_domain="plone",
+                    base_query={'is_folderish':True},
+                    restrict_browse=True,
+                    startup_directory='../'),
                 ),
     BooleanField('recurse',
                 mode="rw",
@@ -87,23 +90,9 @@ class ATPathCriterion(ATBaseCriterion):
 
     shortDesc      = 'Location in portal'
 
-    def getCurrentPath(self):
-        """ Returns the path of the parent object so that we know where we are
-            in the sitemap """
-        portal = self.portal_url.getPortalObject()
-        nav_props = self.portal_properties.navtree_properties
-        nav_types = nav_props.getProperty('typesToList', None)
-        obj = self
-        while getattr(obj,'portal_type', None) not in nav_types and obj != portal:
-            try:
-                obj = obj.aq_inner.aq_parent
-            except AttributeError:
-                return ()
-        return ('/'.join(obj.getPhysicalPath()),)
-
     def getNavTypes(self):
-        nav_props = self.portal_properties.navtree_properties
-        nav_types = nav_props.getProperty('typesToList', None)
+        ptool = self.plone_utils
+        nav_types = ptool.typesToList()
         return nav_types
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')

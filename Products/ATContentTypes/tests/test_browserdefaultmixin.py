@@ -122,6 +122,18 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.failUnless('folder_listing' in layoutKeys)
         self.failUnless('atct_album_view' in layoutKeys)
 
+    def test_setDefaultPageUpdatesCatalog(self):
+        # Ensure that Default page changes update the catalog
+        cat = self.portal.portal_catalog
+        self.af.invokeFactory('Document', 'ad')
+        self.af.invokeFactory('Document', 'other')
+        self.assertEqual(len(cat(getId=['ad','other'],is_default_page=True)), 0)
+        self.af.setDefaultPage('ad')
+        self.assertEqual(len(cat(getId='ad',is_default_page=True)), 1)
+        self.af.setDefaultPage('other')
+        self.assertEqual(len(cat(getId='other',is_default_page=True)), 1)
+        self.assertEqual(len(cat(getId='ad',is_default_page=True)), 0)
+    
     def test_setLayoutUnsetsDefaultPage(self):
         layout = 'atct_album_view'
         self.af.invokeFactory('Document', 'ad')
