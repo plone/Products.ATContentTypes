@@ -28,7 +28,7 @@ from Products.ATContentTypes.migration.v1.betas import reindexCatalog
 from Products.ATContentTypes.migration.v1.betas import addRelatedItemsIndex
 from Products.ATContentTypes.migration.v1.betas import renameTopicsConfiglet
 from Products.ATContentTypes.migration.v1.betas import addTopicSyndicationAction
-
+from Products.ATContentTypes.migration.v1.betas import fixViewActions
 
 class MigrationTest(atcttestcase.ATCTSiteTestCase):
 
@@ -247,6 +247,7 @@ class TestMigrations_v1(MigrationTest):
         self.portal._delObject('portal_controlpanel')
         renameTopicsConfiglet(self.portal, [])
 
+<<<<<<< .working
     def testReindexCatalog(self):
         # Should rebuild the catalog
         self.folder.invokeFactory('Document', id='doc', title='Foo')
@@ -290,6 +291,38 @@ class TestMigrations_v1(MigrationTest):
         self.portal.portal_types._delObject('Topic')
         addTopicSyndicationAction(self.portal, [])
 
+=======
+    def testFixViewActions(self):
+        fixViewActions(self.portal, [])
+        for t in ('Document', 'Event', 'Favorite', 'Link', 'News Item'):
+            fti = getattr(self.portal.portal_types, t)
+            for a in fti.listActions():
+                if a.getId() == 'view':
+                    self.assertEqual(a.getActionExpression(), 'string:${object_url}')
+
+    def testFixViewActionsNoTool(self):
+        self.portal._delObject('portal_types')
+        fixViewActions(self.portal, [])
+
+    def testFixViewActionNoType(self):
+        self.portal.portal_types._delObject('Document')
+        fixViewActions(self.portal, [])
+        for t in ('Event', 'Favorite', 'Link', 'News Item'):
+            fti = getattr(self.portal.portal_types, t)
+            for a in fti.listActions():
+                if a.getId() == 'view':
+                    self.assertEqual(a.getActionExpression(), 'string:${object_url}')
+
+    def testFixViewActionsTwice(self):
+        fixViewActions(self.portal, [])
+        fixViewActions(self.portal, [])
+        for t in ('Document', 'Favorite', 'Link', 'News Item'):
+            fti = getattr(self.portal.portal_types, t)
+            for a in fti.listActions():
+                if a.getId() == 'view':
+                    self.assertEqual(a.getActionExpression(), 'string:${object_url}')
+
+>>>>>>> .merge-right.r9294
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()

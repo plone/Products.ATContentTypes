@@ -96,7 +96,7 @@ def install(self, reinstall):
         print >>out, 'Install ATReferenceBrowserWidget'
     
 
-    # step 5: install skins before install types to make TemplateMixin happy
+    # step 5: install skins
     install_subskin(self, out, GLOBALS)
 
     # step 6: install types

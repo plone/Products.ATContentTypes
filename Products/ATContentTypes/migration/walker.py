@@ -58,7 +58,6 @@ class Walker:
         self.dst_portal_type = self.migrator.dst_portal_type
         self.src_meta_type = self.migrator.src_meta_type
         self.dst_meta_type = self.migrator.dst_meta_type
-        self.subtransaction = self.migrator.subtransaction
         self.out = []
 
     def go(self, **kwargs):
@@ -117,11 +116,14 @@ class Walker:
             else:
                 LOG('done')
                 self.out[-1]+='done'
-            if self.subtransaction and \
-              (len(self.out) % self.subtransaction) == 0:
+            if migrator.subtransaction and \
+              (len(self.out) % migrator.subtransaction) == 0:
                 # submit a subtransaction after every X (default 30)
                 # migrated objects to safe your butt
-                get_transaction().commit(1)
+                if migrator.full_transaction:
+                    get_transaction().commit()
+                else:
+                    get_transaction().commit(1)
                 LOG('comitted...')
 
     def getOutput(self):

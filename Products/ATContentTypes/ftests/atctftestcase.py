@@ -149,8 +149,8 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         response = self.publish('%s/base_view' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
 
-    def test_templatemixin_view(self):
-        # template mixin magic should work
+    def test_dynamic_view(self):
+        # dynamic view magic should work
         response = self.publish('%s/view' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
 

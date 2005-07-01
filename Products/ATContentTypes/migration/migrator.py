@@ -117,12 +117,11 @@ class BaseMigrator:
     src_meta_type = None
     dst_portal_type = None
     dst_meta_type = None
-    map      = {}
-
-    subtransaction = 100
+    map = {}
+    canRoleback = True
 
     def __init__(self, obj, src_portal_type = None, dst_portal_type = None,
-                 **kwargs):
+                 subtransaction = 30, full_transaction = False, **kwargs):
         self.old = aq_inner(obj)
         self.orig_id = self.old.getId()
         self.old_id = '%s_MIGRATION_' % self.orig_id
@@ -133,6 +132,8 @@ class BaseMigrator:
             self.src_portal_type = src_portal_type
         if dst_portal_type is not None:
             self.dst_portal_type = dst_portal_type
+        self.subtransaction = subtransaction
+        self.full_transaction = full_transaction
         self.kwargs = kwargs
 
         # safe id generation
@@ -159,7 +160,7 @@ class BaseMigrator:
                 if callable(method):
                     lastmethods.append(method)
 
-        afterChange = methods+[self.custom]+lastmethods
+        afterChange = methods+[self.custom, self.finalize]+lastmethods
         return (beforeChange, afterChange, )
 
     def migrate(self, unittest=0):
@@ -319,6 +320,12 @@ class BaseMigrator:
         * Puts the old object back in place
         """
         raise NotImplementedError
+        
+    def finalize(self):
+        """Finalize construction (called between)
+        """
+        fti = self.new.getTypeInfo()
+        fti._finishConstruction(self.new)
 
 class BaseCMFMigrator(BaseMigrator):
     """Base migrator for CMF objects
@@ -364,7 +371,7 @@ class BaseCMFMigrator(BaseMigrator):
             self.new.talkback = talkback
 
     def beforeChange_storeDates(self):
-        """Safe creation date and modification date
+        """Save creation date and modification date
         """
         self.old_creation_date = self.old.CreationDate()
         self.old_mod_date = self.old.ModificationDate()
@@ -407,12 +414,17 @@ class ItemMigrationMixin:
         """Reorder the new object in its parent
         """
         if IOrderedContainer.isImplementedBy(self.parent):
-            self._position = self.parent.getObjectPosition(self.old_id)
-            self.parent.moveObject(self.new_id, self._position)
+            try:
+                self._position = self.parent.getObjectPosition(self.old_id)
+                self.parent.moveObject(self.new_id, self._position)
+            except ValueError:
+                pass
 
     def rollback(self):
         """Roles the migration back
         """
+        if not self.canRollback:
+            raise RuntimeError, "%s doesn't support rollbacks" % self.__class__
         if getattr(self, '_removed', False):
             raise RuntimeError, "Can't rollback after the old object is removed"
         ids = self.parent.objectIds()
@@ -429,20 +441,23 @@ class FolderMigrationMixin(ItemMigrationMixin):
     """Migrates a folderish object
     """
     isFolderish = True
-
-    def migrate_children(self):
-        """Copy childish objects from the old folder to the new one
-
-        I don't know wether it works or fails due the ExtensionClass, ZODB and
-        acquisition stuff of zope
-
-        It seems to work for me very well :)
+    canRollback = False
+    
+    def beforeChange_storeSubojects(self):
+        """store subobjects from old folder
+        
+        This methods gets all subojects from the old folder and removes them from the
+        old. It also preservers the folder order in a dict.
+        
+        For performance reasons the objects are removed from the old folder before it
+        is renamed. Elsewise the objects would be reindex more often.
         """
         # in CMF 1.5 Topic is orderable while ATCT's Topic is not orderable
         # order objects only when old *and* are orderable 
         orderAble = IOrderedContainer.isImplementedBy(self.old) and \
                     IOrderedContainer.isImplementedBy(self.new)
         orderMap = {}
+        subobjs = {}
 
         # using objectIds() should be safe with BrokenObjects
         for id in self.old.objectIds():
@@ -460,13 +475,33 @@ class FolderMigrationMixin(ItemMigrationMixin):
                     out = StringIO()
                     t, e, tb = sys.exc_info()
                     traceback.print_exc(tb, out)
-                    msg = "Broken OrderSupport::\n %s\n %s\n %s\n" %( t, e,  out.getvalue())
+                    msg = "Broken OrderSupport:\n %s\n %s\n %s\n" %( t, e,  out.getvalue())
                     LOG(msg)
                     orderAble=0
-            self.new._setObject(id, aq_base(obj), set_owner=0)
+            subobjs[id] = aq_base(obj)
+            # delOb doesn't call manage_afterAdd which safes some time because it
+            # doesn't unindex an object. The migrate children method uses _setObject
+            # later. This methods indexes the object again and so updates all
+            # catalogs.
+            #self.old._delObject(id)
+            self.old._delOb(id)
+        
+        self.orderMap = orderMap
+        self.subobjs = subobjs
+        self.orderAble = orderAble
+
+    def migrate_children(self):
+        """Copy childish objects from the old folder to the new one
+        """
+        subobjs = self.subobjs
+        for id, obj in subobjs.items():
+            # we have to use _setObject instead of _setOb because it adds the object
+            # to folder._objects but also reindexes all objects.
+            self.new._setObject(id, obj, set_owner=0)
 
         # reorder items
-        if orderAble:
+        if self.orderAble:
+            orderMap = self.orderMap
             for id, pos in orderMap.items():
                 self.new.moveObjectToPosition(id, pos)
 

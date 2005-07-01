@@ -135,7 +135,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         
         
     def test_acquireFromHetereogenousParent(self):
-        
+    
         # Let folder use a restricted set of types
         self.portal.portal_types.Folder.filter_content_types = 1
         self.portal.portal_types.Folder.allowed_content_types = \
@@ -166,7 +166,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         
         # Fail - we didn't acquire this, really, since we can't acquire
         # from parent folder of different type
-        self.assertRaises(Unauthorized, inner.invokeFactory, 'CMF Folder', 'a')
+        self.assertRaises((Unauthorized, ValueError), inner.invokeFactory, 'CMF Folder', 'a')
         self.failIf('CMF Folder' in inner.getLocallyAllowedTypes())
         try:
             # Will be OK, since we've got global defaults since we can't

@@ -43,10 +43,10 @@ setDefaultRoles(ChangeTopics, CHANGE_TOPIC_ROLES)
 ChangeEvents = 'Change portal events'
 setDefaultRoles(ChangeEvents, ('Manager', 'Owner',))
 
-ModifyConstrainTypes = "ATContentTypes: Modify constrain types"
+ModifyConstrainTypes = "Modify constrain types"
 setDefaultRoles(ModifyConstrainTypes, ('Manager', 'Owner'))
 
-ModifyViewTemplate = "ATContentTypes: Modify view template"
+ModifyViewTemplate = "Modify view template"
 setDefaultRoles(ModifyViewTemplate, ('Manager', 'Owner'))
 
 ViewHistory = "ATContentTypes: View history"

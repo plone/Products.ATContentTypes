@@ -1071,6 +1071,7 @@ def process_file(file, debug=0):
         endian=file.read(1)
         file.read(1)
         offset=0
+        fake_exif=0
     elif data[0:2] == '\xFF\xD8':
         # it's a JPEG file
         # skip JFIF style header(s)

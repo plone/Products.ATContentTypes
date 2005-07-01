@@ -7,7 +7,7 @@ from Products.ATContentTypes.content.topic import ATTopic
 from Products.CMFCore.Expression import Expression
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import PROJECTNAME
-
+from Products.CMFCore.Expression import Expression
 from Products.Archetypes.ArchetypeTool import fixActionsForType
 
 def alpha2_beta1(portal):
@@ -27,6 +27,9 @@ def alpha2_beta1(portal):
 
     # Update topic actions
     addTopicSyndicationAction(portal, out)
+
+    # Fix up view actions - with CMFDynamicViewFTI, we don't need /view anymore
+    fixViewActions(portal, out)
 
     # ADD NEW STUFF BEFORE THIS LINE!
 
@@ -173,3 +176,17 @@ def addTopicSyndicationAction(portal, out):
     if typesTool is not None and topicFTI is not None:
         fixActionsForType(ATTopic, typesTool)
         out.append("Updated Topic actions")
+    out.append("Renamed Smart Folder configlet")
+
+def fixViewActions(portal, out):
+    """Make view actions for types except File and Image not use /view"""
+    portal_types = getToolByName(portal, 'portal_types', None)
+    if portal_types is not None:
+        for t in ('Document', 'Event', 'Favorite', 'Link', 'News Item'):
+            fti = portal_types.getTypeInfo(t)
+            if fti is not None:
+                for action in fti.listActions():
+                    if action.getId() == 'view':
+                        if action.getActionExpression().endswith('/view'):
+                            action.setActionExpression(Expression('string:${object_url}'))
+                            out.append("Made %s not use /view for view action" % t)

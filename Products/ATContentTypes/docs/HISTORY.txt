@@ -8,6 +8,14 @@
  * Added syndication support to Smart Folders.
    [alecm]
 
+ * Fixing up aliases and actions for CMF 1.5-style browser-default code, using
+   CMFDynamicViewFTI.
+   [optilude]
+
+ * Some code related to browser default is moved to CMFDynamicViewFTI. All
+   new versions of ATCT depend on this product now.
+   [tiran]
+
  * Fixed some tests on Windows. Image files must be opened with 'rb'.
    [hannosch]
 

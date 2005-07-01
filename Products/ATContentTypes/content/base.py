@@ -61,7 +61,7 @@ from webdav.Lockable import ResourceLockedError
 from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 
-from Products.ATContentTypes.lib.browserdefault import BrowserDefaultMixin
+from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.Archetypes.debug import _default_logger
 from Products.Archetypes.debug import _zlogger
@@ -99,11 +99,10 @@ def registerATCT(class_, project):
     One reason to use it is to hide the lingua plone related magic.
     """
     assert IATContentType.isImplementedByInstancesOf(class_)
-    
     # TODO: this should go into LinguaPlone!
     #if ITranslatable is not None and ITranslatable.isImplementedByInstancesOf(class_):
     #    class_.actions = updateActions(class_, translate_actions)
-        
+
     registerType(class_, project)
 
 def updateActions(klass, actions):
@@ -119,6 +118,18 @@ def updateActions(klass, actions):
             actions.append(kaction)
 
     return tuple(actions)
+
+def updateAliases(klass, aliases):
+    """Merge the method aliases from a class with a dict of aliases
+    """
+    oldAliases = copy(klass.aliases)
+
+    for aliasId, aliasTarget in oldAliases.items():
+        if aliasId not in aliases:
+            aliases[aliasId] = aliasTarget
+
+    return aliases
+
 
 def cleanupFilename(filename, encoding='utf-8'):
     """Removes bad chars from file names to make them a good id
@@ -159,11 +170,20 @@ class ATCTMixin(BrowserDefaultMixin):
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()
+<<<<<<< .working
     
     # aliases for CMF method aliases is defined in browser default
     
     # BBB see SkinnedFolder.__call__
     isDocTemp = False 
+=======
+    _at_rename_after_creation = True # rename object according to the title?
+>>>>>>> .merge-right.r9294
+
+    # aliases for CMF method aliases is defined in browser default
+
+    # BBB see SkinnedFolder.__call__
+    isDocTemp = False
 
     __implements__ = (IATContentType, BrowserDefaultMixin.__implements__)
 
@@ -172,16 +192,33 @@ class ATCTMixin(BrowserDefaultMixin):
     actions = ({
         'id'          : 'view',
         'name'        : 'View',
-        'action'      : 'string:${object_url}/view',
+        'action'      : 'string:${object_url}',
         'permissions' : (CMFCorePermissions.View,)
          },
         {
         'id'          : 'edit',
         'name'        : 'Edit',
-        'action'      : 'string:${object_url}/atct_edit',
+        'action'      : 'string:${object_url}/edit',
+        'permissions' : (CMFCorePermissions.ModifyPortalContent,),
+         },
+        {
+        'id'          : 'metadata',
+        'name'        : 'Properties',
+        'action'      : 'string:${object_url}/properties',
         'permissions' : (CMFCorePermissions.ModifyPortalContent,),
          },
         )
+
+    aliases = {
+        '(Default)'  : '(dynamic view)',
+        'view'       : '(dynamic view)',
+        'index.html' : '(dynamic view)',
+        'edit'       : 'atct_edit',
+        'properties' : 'base_metadata',
+        'sharing'    : 'folder_localrole_form',
+        'gethtml'    : '',
+        'mkdir'      : '',
+        }
 
     security.declareProtected(CMFCorePermissions.ModifyPortalContent,
                               'initializeArchetype')
@@ -193,47 +230,17 @@ class ATCTMixin(BrowserDefaultMixin):
         """
         try:
             self.initializeLayers()
+            self.markCreationFlag()
             self.setDefaults()
             if kwargs:
                 self.edit(**kwargs)
             self._signature = self.Schema().signature()
-            self.markCreationFlag()
         except Exception, msg:
             _zlogger.log_exc()
             if DEBUG and str(msg) not in ('SESSION',):
                 # debug code
                 raise
                 #_default_logger.log_exc()
-
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'markCreationFlag')
-    def markCreationFlag(self):
-        """Sets flag on the instance to indicate that the object hasn't been
-        saved properly (unset in content_edit); this will only be done if a REQUEST is
-        present to ensure that objects created programmatically are considered fully created.
-        """
-        if shasattr(self, 'REQUEST'):
-            self._at_creation_flag = True
-
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'unmarkCreationFlag')
-    def unmarkCreationFlag(self):
-        """Remove creation flag
-        """
-        if shasattr(aq_inner(self), '_at_creation_flag'):
-            self._at_creation_flag = False
-        post_create = getattr(self, 'at_post_create_script', False)
-        if post_create:
-            try:
-                post_create()
-            except TypeError:
-                log("unmarkCreationFlag: at_post_create_script not callable")
-                pass
-
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'checkCreationFlag')
-    def checkCreationFlag(self):
-        """returns True if the object has been fully saved, False otherwise
-        """
-        return getattr(aq_inner(self), '_at_creation_flag', False)
-
 
     security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'edit')
     def edit(self, *args, **kwargs):
@@ -243,7 +250,7 @@ class ATCTMixin(BrowserDefaultMixin):
         if len(args) != 0:
             # use cmf edit method
             return self.cmf_edit(*args, **kwargs)
-        
+
         # if kwargs is containing a key that is also in the list of cmf edit
         # keywords then we have to use the cmf_edit comp. method
         cmf_edit_kws = getattr(aq_inner(self).aq_explicit, 'cmf_edit_kws', ())
@@ -259,38 +266,6 @@ class ATCTMixin(BrowserDefaultMixin):
         """
         raise NotImplementedError("cmf_edit method isn't implemented")
 
-    def processForm(self, data=1, metadata=0, REQUEST=None, values=None):
-        """Process the schema looking for data in the form, replace autogenerated id with name derived from object title."""
-        new_object = self.checkCreationFlag()
-
-        self._processForm(data=data, metadata=metadata,
-                          REQUEST=REQUEST, values=values)
-
-        # the following line should perhaps be moved to
-        # AT/acripts/artcheypes/validate_integrity/py so
-        # that the creation flag is unset only when the object is fully verified
-        self.unmarkCreationFlag()
-
-        # the following should be placed in BaseObject._processForm() so
-        # that types that wish to override processForm will get this behavior
-        # automatically.
-        plone_tool = getToolByName(self, 'plone_utils')
-        title = self.Title()
-        new_id = plone_tool.normalizeString(self.Title())
-
-        check_id = False
-        if getattr(self, 'check_id', None) is not None:
-            check_id = self.check_id(new_id,required=1,alternative_id=self.getId())
-        else:
-            # If check_id is not available just look for conflicting ids
-            check_id = new_id in self.aq_inner.aq_parent.objectIds()
-
-        if title and new_object and self.isIDAutoGenerated() and not check_id:
-            # Can't rename without a subtransaction commit when using
-            # portal_factory!
-            get_transaction().commit(1)
-            self.setId(new_id)
-            
     def exclude_from_nav(self):
         """Accessor for excludeFromNav field
         """
@@ -320,13 +295,13 @@ class ATCTContent(ATCTMixin, BaseContent):
         {
         'id'          : 'local_roles',
         'name'        : 'Sharing',
-        'action'      : 'string:${object_url}/folder_localrole_form',
+        'action'      : 'string:${object_url}/sharing',
         'permissions' : (CMFCorePermissions.ManageProperties,),
          },
         )
     )
-    
-    security.declarePrivate('manage_afterPUT')    
+
+    security.declarePrivate('manage_afterPUT')
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
                         filename, REQUEST, RESPONSE):
         """After webdav/ftp PUT method
@@ -344,10 +319,6 @@ class ATCTFileContent(ATCTContent):
 
     The file field *must* be the exclusive primary field
     """
-    
-    # default for images and file is to show the image or file w/o page
-    aliases = ATCTContent.aliases.copy()
-    aliases['(Default)'] = 'index_html'
 
     # the precondition attribute is required to make ATFile and ATImage compatible
     # with OFS.Image.*. The precondition feature is (not yet) supported.
@@ -356,6 +327,12 @@ class ATCTFileContent(ATCTContent):
     security = ClassSecurityInfo()
     actions = updateActions(ATCTContent,
         ({
+        'id'          : 'view',
+        'name'        : 'View',
+        'action'      : 'string:${object_url}/view',
+        'permissions' : (CMFCorePermissions.View,)
+         },
+         {
         'id'          : 'download',
         'name'        : 'Download',
         'action'      : 'string:${object_url}/download',
@@ -364,6 +341,12 @@ class ATCTFileContent(ATCTContent):
          },
         )
     )
+
+    aliases = updateAliases(ATCTMixin,
+        {
+        '(Default)' : 'index_html',
+        'view'      : '(selected layout)',
+        })
 
     security.declareProtected(CMFCorePermissions.View, 'download')
     def download(self, REQUEST=None, RESPONSE=None):
@@ -480,16 +463,6 @@ class ATCTFileContent(ATCTContent):
                 get_transaction().commit(1)
                 self.setId(clean_filename)
 
-    def _isIDAutoGenerated(self, id):
-        """Avoid busting setDefaults if we don't have a proper acquisition context
-        """
-        skinstool = getToolByName(self, 'portal_skins')
-        script = getattr(skinstool.aq_explicit, 'isIDAutoGenerated', None)
-        if script:
-            return script(id)
-        else:
-            return False
-
     security.declareProtected(CMFCorePermissions.View, 'post_validate')
     def post_validate(self, REQUEST=None, errors=None):
         """Validates upload file and id
@@ -581,8 +554,8 @@ class ATCTFileContent(ATCTContent):
         """Always return the default value since we don't store the url
         """
         return self.getField('urlUpload').default
-        
-    security.declarePrivate('manage_afterPUT')    
+
+    security.declarePrivate('manage_afterPUT')
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
                         filename, REQUEST, RESPONSE):
         """After webdav/ftp PUT method
@@ -616,7 +589,7 @@ class ATCTFolder(ATCTMixin, BaseFolder):
         ({
         'id'          : 'local_roles',
         'name'        : 'Sharing',
-        'action'      : 'string:${object_url}/folder_localrole_form',
+        'action'      : 'string:${object_url}/sharing',
         'permissions' : (CMFCorePermissions.ManageProperties,),
          },
         {
@@ -624,14 +597,6 @@ class ATCTFolder(ATCTMixin, BaseFolder):
         'name'        : 'View',
         'action'      : 'string:${folder_url}/',
         'permissions' : (CMFCorePermissions.View,),
-         },
-        {
-        'id'          : 'folderlisting',
-        'name'        : 'Folder Listing',
-        'action'      : 'string:${folder_url}/view',
-        'permissions' : (CMFCorePermissions.View,),
-        'category'    : 'folder',
-        'visible'     : False
          },
         )
     )
@@ -660,7 +625,7 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
     def get_size(self):
         """Returns 1 as folders have no size."""
         return 1
-        
+
     security.declarePrivate('manage_afterMKCOL')
     def manage_afterMKCOL(self, id, result, REQUEST=None, RESPONSE=None):
         """After MKCOL handler
@@ -686,7 +651,7 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
         ({
         'id'          : 'local_roles',
         'name'        : 'Sharing',
-        'action'      : 'string:${object_url}/folder_localrole_form',
+        'action'      : 'string:${object_url}/sharing',
         'permissions' : (CMFCorePermissions.ManageProperties,),
          },
         {
@@ -694,14 +659,6 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
         'name'        : 'View',
         'action'      : 'string:${folder_url}/',
         'permissions' : (CMFCorePermissions.View,),
-         },
-        {
-        'id'          : 'folderlisting',
-        'name'        : 'Folder Listing',
-        'action'      : 'string:${folder_url}/view',
-        'permissions' : (CMFCorePermissions.View,),
-        'category'    : 'folder',
-        'visible'     : False
          },
         )
     )
@@ -754,7 +711,7 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
         ({
         'id'          : 'local_roles',
         'name'        : 'Sharing',
-        'action'      : 'string:${object_url}/folder_localrole_form',
+        'action'      : 'string:${object_url}/sharing',
         'permissions' : (CMFCorePermissions.ManageProperties,),
          },
         {
@@ -762,14 +719,6 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
         'name'        : 'View',
         'action'      : 'string:${folder_url}/',
         'permissions' : (CMFCorePermissions.View,),
-         },
-        {
-        'id'          : 'folderlisting',
-        'name'        : 'Folder Listing',
-        'action'      : 'string:${folder_url}/view',
-        'permissions' : (CMFCorePermissions.View,),
-        'category'    : 'folder',
-        'visible'     : False
          },
         )
     )

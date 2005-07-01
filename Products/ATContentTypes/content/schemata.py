@@ -40,13 +40,12 @@ from Products.Archetypes.public import BooleanWidget
 from Products.CMFCore import CMFCorePermissions
 
 from Products.ATContentTypes import permission as ATCTPermissions
-from Products.ATContentTypes.lib.browserdefault import BrowserDefaultSchema
 
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 
 # for ATContentTypes we want to have the description in the edit view
 # just like CMF
-ATContentTypeBaseSchema = BaseSchema.copy() + Schema((
+ATContentTypeSchema = BaseSchema.copy() + Schema((
     ReferenceField('relatedItems',
         relationship = 'relatesTo', 
         multiValued = True,
@@ -87,11 +86,13 @@ ATContentTypeBaseSchema = BaseSchema.copy() + Schema((
         ),
     ),)
     
-ATContentTypeBaseSchema['id'].validators = ('isValidId',)
-ATContentTypeBaseSchema['id'].searchable = True
-ATContentTypeBaseSchema['id'].widget.macro = 'zid'
-ATContentTypeBaseSchema['description'].schemata = 'default'
+ATContentTypeSchema['id'].validators = ('isValidId',)
+ATContentTypeSchema['id'].searchable = True
+ATContentTypeSchema['id'].widget.macro = 'zid'
+ATContentTypeSchema['description'].schemata = 'default'
 
+# BBB
+ATContentTypeBaseSchema = ATContentTypeSchema
 
 urlUploadField = StringField('urlUpload',
         required = False,
@@ -126,8 +127,6 @@ def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
         schema['allowDiscussion'].schemata = 'default'
         schema.moveField('allowDiscussion', pos='bottom')
     return schema
-    
 
-ATContentTypeSchema = ATContentTypeBaseSchema + BrowserDefaultSchema
 
 __all__ = ('ATContentTypeSchema', 'relatedItemsField',)

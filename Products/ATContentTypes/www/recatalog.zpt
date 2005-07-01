@@ -25,10 +25,13 @@
     </fieldset>
     
     <h4>Set recatalog at install time option</h4>
-    <fieldset>
-      <p>TODO explain me</p>
+    <fieldset tal:define="recat here.getCMFTypesAreRecataloged()">
+      <p>ATContentTypes is recataloging all CMF based types at install time. You can change the behavior below.</p>
+      <p>Current setting: 
+        <tal:block tal:condition="not: recat">CMF types are going to be recataloged.</tal:block>
+        <tal:block tal:condition="recat">CMF types will <b>not</b> be recataloged.</tal:block>
       <input type="submit" name="setRecatalogInstall" value=""
-         tal:attributes="value python: here.getCMFTypesAreRecataloged() and 'enable' or 'disable'" />
+         tal:attributes="value python: recat and 'enable' or 'disable'" />
     </fieldset>
     
     <h4>Recatalog ATContentTypes types</h4>
