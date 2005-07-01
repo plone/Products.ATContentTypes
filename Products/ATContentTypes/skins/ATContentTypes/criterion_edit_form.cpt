@@ -29,7 +29,7 @@
     </script>
 
     <script type="text/javascript">
-        registerDynamicSelect('criteria_select','field','criterion_type','getValidCriteriaForIndex','index');
+        registerDynamicSelect('criteria_select','field','criterion_type', 'vocabulary','getValidCriteriaForIndex','index');
         function showHelp(selectedItem, helpElementId){
              helpElement = document.getElementById(helpElementId);
              elementTooltip = selectedItem.title;

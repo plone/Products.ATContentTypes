@@ -58,6 +58,8 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.folder.invokeFactory(self.folder_type, id='af')
         # an ATCT folder
         self.af = self.folder.af
+        # Needed because getFolderContents needs to clone the REQUEST
+        self.app.REQUEST.set('PARENTS', [self.app])
 
     def test_isMixedIn(self):
         self.failUnless(isinstance(self.af,
@@ -133,7 +135,10 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.af.setDefaultPage('other')
         self.assertEqual(len(cat(getId='other',is_default_page=True)), 1)
         self.assertEqual(len(cat(getId='ad',is_default_page=True)), 0)
-    
+        self.af.setDefaultPage(None)
+        self.assertEqual(len(cat(getId=['ad','other'],is_default_page=True)), 0)
+        
+
     def test_setLayoutUnsetsDefaultPage(self):
         layout = 'atct_album_view'
         self.af.invokeFactory('Document', 'ad')

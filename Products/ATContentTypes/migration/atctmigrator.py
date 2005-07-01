@@ -30,7 +30,7 @@ from Products.ATContentTypes.migration.walker import useLevelWalker
 from Products.ATContentTypes.migration.migrator import CMFItemMigrator
 from Products.ATContentTypes.migration.migrator import CMFFolderMigrator
 from Products.CMFCore.utils import getToolByName
-from Acquisition import aq_parent
+from Acquisition import aq_parent, aq_base
 
 from Products.ATContentTypes.content import document
 from Products.ATContentTypes.content import event
@@ -94,7 +94,9 @@ class TopicMigrator(CMFFolderMigrator):
     map = {'acquireCriteria' : 'setAcquireCriteria'}
 
     def custom(self):
-        for old_crit in self.old.listCriteria():
+        for old_crit in self.new.objectValues(CRIT_MAP.keys()):
+            self.new._delObject(old_crit.getId())
+            old_crit = aq_base(old_crit)
             old_meta = old_crit.meta_type
             new_meta = CRIT_MAP[old_meta]
             self.new.addCriterion(old_crit.field or old_crit.index, new_meta)

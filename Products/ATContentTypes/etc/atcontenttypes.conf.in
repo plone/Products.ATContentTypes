@@ -240,6 +240,20 @@
       criterion ATReferenceCriterion
       enabled on
     </index>
+    <index>
+      name is_folderish
+      friendlyName Folder-like
+      description Find items that can contain other objects
+      criterion ATBooleanCriterion
+      enabled off
+    </index>
+    <index>
+      name is_default_page
+      friendlyName Default Page
+      description Find that are the default view for their containing folder.
+      criterion ATBooleanCriterion
+      enabled off
+    </index>
 
 
     <metadata>
@@ -256,10 +270,6 @@
     <metadata>
       name id
       friendlyName Short Name (duplicate)
-      enabled off
-    </metadata>
-    <metadata>
-      name is_folderish
       enabled off
     </metadata>
     <metadata>
