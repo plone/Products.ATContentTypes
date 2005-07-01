@@ -247,7 +247,6 @@ class TestMigrations_v1(MigrationTest):
         self.portal._delObject('portal_controlpanel')
         renameTopicsConfiglet(self.portal, [])
 
-<<<<<<< .working
     def testReindexCatalog(self):
         # Should rebuild the catalog
         self.folder.invokeFactory('Document', id='doc', title='Foo')
@@ -291,7 +290,6 @@ class TestMigrations_v1(MigrationTest):
         self.portal.portal_types._delObject('Topic')
         addTopicSyndicationAction(self.portal, [])
 
-=======
     def testFixViewActions(self):
         fixViewActions(self.portal, [])
         for t in ('Document', 'Event', 'Favorite', 'Link', 'News Item'):
@@ -322,7 +320,6 @@ class TestMigrations_v1(MigrationTest):
                 if a.getId() == 'view':
                     self.assertEqual(a.getActionExpression(), 'string:${object_url}')
 
->>>>>>> .merge-right.r9294
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()

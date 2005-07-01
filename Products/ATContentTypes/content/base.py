@@ -170,15 +170,12 @@ class ATCTMixin(BrowserDefaultMixin):
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()
-<<<<<<< .working
     
     # aliases for CMF method aliases is defined in browser default
     
     # BBB see SkinnedFolder.__call__
     isDocTemp = False 
-=======
     _at_rename_after_creation = True # rename object according to the title?
->>>>>>> .merge-right.r9294
 
     # aliases for CMF method aliases is defined in browser default
 

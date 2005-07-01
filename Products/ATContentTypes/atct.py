@@ -28,7 +28,6 @@ from Products.ATContentTypes.content.base import ATCTFolder
 from Products.ATContentTypes.content.base import ATCTOrderedFolder
 from Products.ATContentTypes.content.base import ATCTBTreeFolder
 
-from Products.ATContentTypes.content.schemata import relatedItemsField
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
 from Products.ATContentTypes.content.document import ATDocument
