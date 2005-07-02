@@ -487,7 +487,8 @@ class FolderMigrationMixin(ItemMigrationMixin):
             self.old._delOb(id)
             # We need to take care to remove the relevant ids from _objects
             # otherwise objectValues breaks.
-            self.old._objects = tuple([o for o in self.old._objects if o['id'] != id])
+            if getattr(self.old, '_objects', None) is not None:
+                self.old._objects = tuple([o for o in self.old._objects if o['id'] != id])
 
         self.orderMap = orderMap
         self.subobjs = subobjs
