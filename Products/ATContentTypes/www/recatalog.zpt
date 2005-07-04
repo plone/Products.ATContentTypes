@@ -25,7 +25,7 @@
     </fieldset>
     
     <h4>Set recatalog at install time option</h4>
-    <fieldset tal:define="recat here.getCMFTypesAreRecataloged()">
+    <fieldset tal:define="recat here/getCMFTypesAreRecataloged">
       <p>ATContentTypes is recataloging all CMF based types at install time. You can change the behavior below.</p>
       <p>Current setting: 
         <tal:block tal:condition="not: recat">CMF types are going to be recataloged.</tal:block>
