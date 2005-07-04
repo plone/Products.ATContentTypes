@@ -1,4 +1,6 @@
+from Products.Archetypes import listTypes
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.TypesTool import FactoryTypeInformation
 from Products.ATContentTypes.migration.atctmigrator import migrateAll
 from Products.ATContentTypes.migration.atctmigrator import TopicMigrator
 from Products.ATContentTypes.migration.walker import useLevelWalker
@@ -7,7 +9,6 @@ from Products.ATContentTypes.content.topic import ATTopic
 from Products.CMFCore.Expression import Expression
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.CMFCore.Expression import Expression
 from Products.Archetypes.ArchetypeTool import fixActionsForType
 
 def alpha2_beta1(portal):
@@ -30,6 +31,9 @@ def alpha2_beta1(portal):
 
     # Fix up view actions - with CMFDynamicViewFTI, we don't need /view anymore
     fixViewActions(portal, out)
+
+    # switch FTIs to DynamicFTIs
+    switchToDynamicFTI(portal, out)
 
     # ADD NEW STUFF BEFORE THIS LINE!
 
@@ -190,3 +194,42 @@ def fixViewActions(portal, out):
                         if action.getActionExpression().endswith('/view'):
                             action.setActionExpression(Expression('string:${object_url}'))
                             out.append("Made %s not use /view for view action" % t)
+
+def switchToDynamicFTI(portal, out):
+    """Replace old FTIs with DynamicFTIs."""
+    typesTool = getToolByName(portal, 'portal_types', None)
+    atctTool = getToolByName(portal, 'portal_atct', None)
+    if typesTool is not None and atctTool is not None:
+        typeInfo = listTypes(PROJECTNAME)
+        for rti in typeInfo:
+            klass = rti['klass']
+            ti = typesTool.getTypeInfo(klass.portal_type)
+            if ti is None:
+                continue
+
+            typeinfo_name = "%s: %s" % (PROJECTNAME, klass.meta_type)
+
+            # get the meta type of the FTI from the class, use the default FTI as default
+            fti_meta_type = getattr(klass, '_at_fti_meta_type', None)
+            if not fti_meta_type:
+                fti_meta_type = FactoryTypeInformation.meta_type
+
+            # do we have to change at all
+            if ti.meta_type == fti_meta_type:
+                continue
+
+            # delete the old fti
+            typesTool._delObject(klass.portal_type)
+
+            typesTool.manage_addTypeInformation(fti_meta_type,
+                                                id=klass.portal_type,
+                                                typeinfo_name=typeinfo_name)
+
+            new_ti = getattr(typesTool, klass.portal_type, None)
+            if new_ti is not None:
+                # Set the human readable title explicitly
+                new_ti.title = klass.archetype_name
+                atctTool._copyFTIFlags(ti, new_ti)
+            out.append("Switched FTI to DynamicFTI for %s" % klass.portal_type)
+    
+        out.append("Switched FTIs to DynamicFTIs")

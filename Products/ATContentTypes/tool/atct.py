@@ -678,8 +678,10 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
         * actions
         """
         ttool = getToolByName(self, 'portal_types')
-        ptfrom = getattr(ttool.aq_explicit, ptfrom)
-        ptto = getattr(ttool.aq_explicit, ptto)
+        if isinstance(ptfrom, str):
+            ptfrom = getattr(ttool.aq_explicit, ptfrom)
+        if isinstance(ptto, str):
+            ptto = getattr(ttool.aq_explicit, ptto)
         kw = {}
         for flag in flags:
             kw[flag] = getattr(ptfrom.aq_explicit, flag)

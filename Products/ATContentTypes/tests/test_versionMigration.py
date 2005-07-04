@@ -11,6 +11,7 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
+from Products.CMFDynamicViewFTI import DynamicViewTypeInformation
 from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.interfaces import IATCTTool
@@ -29,6 +30,7 @@ from Products.ATContentTypes.migration.v1.betas import addRelatedItemsIndex
 from Products.ATContentTypes.migration.v1.betas import renameTopicsConfiglet
 from Products.ATContentTypes.migration.v1.betas import addTopicSyndicationAction
 from Products.ATContentTypes.migration.v1.betas import fixViewActions
+from Products.ATContentTypes.migration.v1.betas import switchToDynamicFTI
 
 class MigrationTest(atcttestcase.ATCTSiteTestCase):
 
@@ -319,6 +321,20 @@ class TestMigrations_v1(MigrationTest):
             for a in fti.listActions():
                 if a.getId() == 'view':
                     self.assertEqual(a.getActionExpression(), 'string:${object_url}')
+
+    def testFixViewActionNoType(self):
+        self.portal.portal_types._delObject('Document')
+        switchToDynamicFTI(self.portal, [])
+        for t in ('Event', 'Favorite', 'Link', 'News Item'):
+            fti = getattr(self.portal.portal_types, t)
+            self.assertEqual(fti.meta_type, DynamicViewTypeInformation.meta_type)
+
+    def testFixViewActionsTwice(self):
+        switchToDynamicFTI(self.portal, [])
+        switchToDynamicFTI(self.portal, [])
+        for t in ('Document', 'Favorite', 'Link', 'News Item'):
+            fti = getattr(self.portal.portal_types, t)
+            self.assertEqual(fti.meta_type, DynamicViewTypeInformation.meta_type)
 
 def test_suite():
     from unittest import TestSuite, makeSuite

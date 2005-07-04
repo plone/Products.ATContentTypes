@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Added migration to DynamicFTIs.
+   [fschulze]
+
  * Changed index_html method on ATCTOrderedFolder to gracefully handle
    situation where acquisition of index_html attribute returns None.
    [rafrombrc]
