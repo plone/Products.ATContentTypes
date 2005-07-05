@@ -14,7 +14,7 @@
 </mxtidy>
 
 <feature swallowImageResizeExceptions>
-  enable no 
+  enable yes 
 </feature>
 
 <archetype ATDocument>
