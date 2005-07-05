@@ -61,7 +61,7 @@ ATContentTypeSchema = BaseSchema.copy() + Schema((
 
             label = "Related Item(s)",
             label_msgid = "label_related_items",
-            description = " ",
+            description = "",
             description_msgid = "help_related_items",
             i18n_domain = "plone",
             visible={'view' : 'hidden',
