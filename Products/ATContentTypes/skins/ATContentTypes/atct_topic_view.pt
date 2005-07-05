@@ -35,7 +35,9 @@
             <tal:listing condition="topicContents">
             <a style='text-align: right' href="#"
                tal:condition="nocall: here/asPDF|nothing"
-               tal:attributes="href string:${here_url}/asPDF/atct_topic_pdf_template/atct_topic_pdf">
+               tal:attributes="href string:${here_url}/asPDF/atct_topic_pdf_template/atct_topic_pdf"
+               i18n:translate="label_download_as_pdf"
+               i18n:domain="atcontenttypes">
                 Download PDF
             </a>
 
@@ -52,11 +54,13 @@
 
                 <table class="listing"
                        summary="Content listing"
-                       cellpadding="0" cellspacing="0" width="100%">
+                       cellpadding="0" cellspacing="0" width="100%"
+                       i18n:attributes="summary summary_content_listing;">
                      <thead>
                         <tr>
                             <th tal:repeat="field here/getCustomViewFields"
-                                tal:content="python:vocab.getValue(field, field)"/>
+                                tal:content="python:vocab.getValue(field, field)"
+                                i18n:translate=""/>
                         </tr>
                      </thead>
                      <tbody>

@@ -23,6 +23,7 @@
     <small>
 
         <span i18n:translate="label_original_size"
+              i18n:domain="atcontenttypes"
               tal:omit-tag="">Original size</span>:
 
         <span tal:content="size">
@@ -30,6 +31,7 @@
         </span>
 
         <span tal:condition="not: size"
+              i18n:domain="atcontenttypes"
               i18n:translate="label_no_file_uploaded">
           (No file has been uploaded)
         </span>
@@ -66,7 +68,7 @@
         <input class="context"
                type="submit"
                i18n:domain="atcontenttypes"
-               i18n:attributes="value"
+               i18n:attributes="value label_execute;"
                value="Execute" />
       </form>
     </div>

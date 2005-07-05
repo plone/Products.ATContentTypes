@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
       lang="en-US"
       metal:use-macro="here/main_template/macros/master"
-      i18n:domain="plone">
+      i18n:domain="atcontenttypes">
 
   <body>
 
@@ -45,7 +45,7 @@
         <img src="#" alt="Back to album"
              title="Back to album"
              tal:attributes="src string:$portal_url/folder_icon.gif"
-             i18n:attributes="alt title" />
+             i18n:attributes="alt label_back_to_album; title title_back_to_album;" />
       </a>
     </metal:block>
 

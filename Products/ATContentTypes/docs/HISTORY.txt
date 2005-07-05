@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Added some additional i18n markup.
+   [hannosch]
+
  * Don't run version migration when installing the first time. People should run it
    after type migration.
    [tiran]

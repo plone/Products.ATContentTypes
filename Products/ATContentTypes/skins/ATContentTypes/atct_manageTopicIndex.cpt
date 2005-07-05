@@ -113,7 +113,7 @@
 
                 <tr class="" tal:attributes="class python:test(oddrow, 'even', 'odd')">
                     <td>
-                        <span tal:content="indexObj/index"/>
+                        <span tal:content="indexObj/index" i18n:translate="" i18n:domain="plone"/>
                         <input type="hidden"
                                value=""
                                name=""
@@ -142,7 +142,9 @@
                                tal:attributes="name string:index.friendlyName:records;
                                                id string:${indexObj/index}_friendlyName;
                                                value indexObj/friendlyName;
-                                               tabindex tabindex/next;"/>
+                                               tabindex tabindex/next;"
+                               i18n:attributes="value"
+                               i18n:domain="plone"/>
                     </td>
                     <td>
                         <span i18n:translate="label_allowed_criteria">
@@ -160,7 +162,9 @@
                             <option tal:repeat="criterion python:atct_tool.getCriteriaForIndex(indexObj.index, as_dict= True)"
                                     tal:attributes="value criterion/name;
                                                     selected python:test(criterion['name'] in indexObj.criteria, 'selected', None);"
-                                    tal:content="criterion/description"/>
+                                    tal:content="criterion/description"
+                                    i18n:translate=""
+                                    i18n:domain="plone"/>
                         </select>
                         <br/>
                         <span i18n:translate="label_help_text">
@@ -172,7 +176,9 @@
                                id=""
                                tal:attributes="id string:${indexObj/index}_description;
                                                tabindex tabindex/next;"
-                               tal:content="indexObj/description"></textarea>
+                               tal:content="indexObj/description"
+                               i18n:translate=""
+                               i18n:domain="plone"></textarea>
                     </td>
 
                 </tr>
@@ -187,7 +193,7 @@
                    name="form.button.index_save"
                    value="Save"
                    i18n:domain="plone"
-                   i18n:attributes="value"
+                   i18n:attributes="value label_save;"
                    tal:attributes="tabindex tabindex/next;"
                    />
        </tal:indices>

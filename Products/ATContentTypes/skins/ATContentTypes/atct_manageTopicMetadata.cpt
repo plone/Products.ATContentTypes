@@ -98,7 +98,7 @@
 
                 <tr class="" tal:attributes="class python:test(oddrow, 'even', 'odd')">
                     <td>
-                        <span tal:content="indexObj/index"/>
+                        <span tal:content="indexObj/index" i18n:translate="" i18n:domain="plone"/>
                         <input type="hidden"
                                value=""
                                name=""
@@ -125,7 +125,9 @@
                                size="10"
                                tal:attributes="name string:metadata.friendlyName:records;
                                                value indexObj/friendlyName;
-                                               tabindex tabindex/next;"/>
+                                               tabindex tabindex/next;"
+                               i18n:attributes="value"
+                               i18n:domain="plone"/>
                     </td>
                     <td>
                         <textarea cols="30" rows="4" type="text"
@@ -134,7 +136,9 @@
                                id=""
                                tal:attributes="name string:metadata.description:records;
                                                tabindex tabindex/next;"
-                               tal:content="indexObj/description"></textarea>
+                               tal:content="indexObj/description"
+                               i18n:translate=""
+                               i18n:domain="plone"></textarea>
                     </td>
 
                 </tr>
@@ -149,7 +153,7 @@
                    name="form.button.metadata_save"
                    value="Save"
                    i18n:domain="plone"
-                   i18n:attributes="value"
+                   i18n:attributes="value label_save;"
                    tal:attributes="tabindex tabindex/next;"
                    />
        </tal:indices>
