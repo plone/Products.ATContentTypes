@@ -221,23 +221,11 @@ def migrateAll(portal):
         useLevelWalker(portal, migrator, out=out, **kwargs)
         get_transaction().commit(1)
                 
-    #out.append('\nCommitting full transaction')
     #get_transaction().commit()
-    #get_transaction().begin()
 
     wf = getToolByName(catalog, 'portal_workflow')
     LOG('starting wf migration')
     count = wf.updateRoleMappings()
-    #out.append('\n\n*** Workflow: %d object(s) updated. ***\n' % count)
     out.append('Workflow: %d object(s) updated.' % count)
     
-    #out.append('\nCommitting full transaction')
-    #get_transaction().commit()
-    #get_transaction().begin()
-    
-    #LOG('starting catalog update')
-    #ct = getToolByName(catalog, 'portal_catalog')
-    #ct.refreshCatalog(clear=1)
-    #out.append('Portal catalog updated.')
-
     return '\n'.join(out)

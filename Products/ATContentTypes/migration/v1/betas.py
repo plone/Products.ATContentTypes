@@ -196,40 +196,57 @@ def fixViewActions(portal, out):
                             out.append("Made %s not use /view for view action" % t)
 
 def switchToDynamicFTI(portal, out):
-    """Replace old FTIs with DynamicFTIs."""
-    typesTool = getToolByName(portal, 'portal_types', None)
-    atctTool = getToolByName(portal, 'portal_atct', None)
-    if typesTool is not None and atctTool is not None:
-        typeInfo = listTypes(PROJECTNAME)
-        for rti in typeInfo:
-            klass = rti['klass']
-            ti = typesTool.getTypeInfo(klass.portal_type)
-            if ti is None:
-                continue
-
-            typeinfo_name = "%s: %s" % (PROJECTNAME, klass.meta_type)
-
-            # get the meta type of the FTI from the class, use the default FTI as default
-            fti_meta_type = getattr(klass, '_at_fti_meta_type', None)
-            if not fti_meta_type:
-                fti_meta_type = FactoryTypeInformation.meta_type
-
-            # do we have to change at all
-            if ti.meta_type == fti_meta_type:
-                continue
-
-            # delete the old fti
-            typesTool._delObject(klass.portal_type)
-
-            typesTool.manage_addTypeInformation(fti_meta_type,
-                                                id=klass.portal_type,
-                                                typeinfo_name=typeinfo_name)
-
-            new_ti = getattr(typesTool, klass.portal_type, None)
-            if new_ti is not None:
-                # Set the human readable title explicitly
-                new_ti.title = klass.archetype_name
-                atctTool._copyFTIFlags(ti, new_ti)
-            out.append("Switched FTI to DynamicFTI for %s" % klass.portal_type)
+    """Replace old FTIs with DynamicFTIs.
     
-        out.append("Switched FTIs to DynamicFTIs")
+    TODO: Make two methods out of this method. One should have the signatur:
+      convertToDynamicFTI(portal, portal_type)
+    and should be placed in CMFDynamicViewFTI
+    """
+    typesTool = getToolByName(portal, 'portal_types')
+    atctTool = getToolByName(portal, 'portal_atct')
+    
+    typeInfo = listTypes(PROJECTNAME)
+    for rti in typeInfo:
+        klass = rti['klass']
+        portal_type = rti['portal_type']
+        name = rti['name']
+        meta_type = rti['meta_type']
+        package = rti['package']
+        
+        ti = typesTool.getTypeInfo(portal_type)
+        if ti is None:
+            continue
+
+        typeinfo_name="%s: %s (%s)" % (package, name, meta_type)
+
+        # get the meta type of the FTI from the class, use the default FTI as default
+        fti_meta_type = getattr(klass, '_at_fti_meta_type', 
+                                FactoryTypeInformation.meta_type)
+
+        if ti.meta_type == fti_meta_type:
+            continue
+
+        # copy all data like actions and properties
+        actions = []
+        for action in getattr(ti, '_actions', ()):
+            actions.append(action.copy())
+        actions = tuple(actions)
+        properties = ti.propdict()
+        
+        # delete the old fti and create a new one
+        typesTool._delObject(portal_type)
+
+        typesTool.manage_addTypeInformation(fti_meta_type,
+                                            id=portal_type,
+                                            typeinfo_name=typeinfo_name)
+
+        # assign actions and properties from the old fti
+        # NOTE: aliases are ignored and security settings are not copied
+        new_ti = typesTool[portal_type]
+        new_ti._actions = actions
+        new_ti.manage_changeProperties(**properties)
+        
+
+        out.append("Switched FTI to DynamicFTI for %s" % klass.portal_type)
+
+    out.append("Switched FTIs to DynamicFTIs")
