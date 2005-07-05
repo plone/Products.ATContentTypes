@@ -517,7 +517,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
         ftis = []
         for fti in ttool.objectValues():
             product = getattr(aq_base(fti), 'product', None)
-            if product in CMF_PRODUCTS:
+            if product in products:
                 if fti.getId() not in SITE_TYPES:
                     ftis.append(fti)
         return ftis
