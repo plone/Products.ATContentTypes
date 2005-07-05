@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Disabled full catalog updated after type migration. If people need it they could
+   do it after migration.
+   [tiran]
+
  * Added migration to DynamicFTIs.
    [fschulze]
 

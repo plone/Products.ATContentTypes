@@ -214,10 +214,12 @@ def migrateAll(portal):
         out.append('*** Migrating %s to %s ***' % (migrator.src_portal_type, migrator.dst_portal_type))
         w = CatalogWalker(migrator, catalog)
         out.append(w.go(**kwargs))
+        get_transaction().commit(1)
     for migrator in folderMigrators:
         #out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.src_portal_type, migrator.dst_portal_type))
         out.append('*** Migrating %s to %s ***' % (migrator.src_portal_type, migrator.dst_portal_type))
         useLevelWalker(portal, migrator, out=out, **kwargs)
+        get_transaction().commit(1)
                 
     #out.append('\nCommitting full transaction')
     #get_transaction().commit()
@@ -233,9 +235,9 @@ def migrateAll(portal):
     #get_transaction().commit()
     #get_transaction().begin()
     
-    LOG('starting catalog update')
-    ct = getToolByName(catalog, 'portal_catalog')
-    ct.refreshCatalog(clear=1)
-    out.append('Portal catalog updated.')
+    #LOG('starting catalog update')
+    #ct = getToolByName(catalog, 'portal_catalog')
+    #ct.refreshCatalog(clear=1)
+    #out.append('Portal catalog updated.')
 
     return '\n'.join(out)
