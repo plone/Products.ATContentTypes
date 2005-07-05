@@ -139,6 +139,8 @@ class BaseMigrator:
         # safe id generation
         while hasattr(aq_base(self.parent), self.old_id):
             self.old_id+='X'
+        #print "%s (%s -> %s)" % (old.absolute_url(1), self.src_portal_type,
+        #                         self.dst_portal_type)
 
     def getMigrationMethods(self):
         """Calculates a nested list of callables used to migrate the old object
