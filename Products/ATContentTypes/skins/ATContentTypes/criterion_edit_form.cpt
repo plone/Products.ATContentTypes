@@ -104,7 +104,7 @@
                  value="Save"
                  name="form.button.Save"
                  tabindex=""
-                 i18n:attributes="value"
+                 i18n:attributes="value label_save;"
                  tal:attributes="tabindex tabindex/next;"
                  />
           <input class="context"
@@ -112,7 +112,7 @@
                  value="Remove"
                  name="form.button.Remove"
                  tabindex=""
-                 i18n:attributes="value"
+                 i18n:attributes="value label_remove;"
                  tal:attributes="tabindex tabindex/next;"
                  />
           <input class="standalone"
@@ -120,7 +120,7 @@
                  value="Cancel"
                  name="form.button.Cancel"
                  tabindex=""
-                 i18n:attributes="value"
+                 i18n:attributes="value label_cancel;"
                  tal:attributes="tabindex tabindex/next;"
                  />
         </div>
@@ -161,7 +161,9 @@
                             tal:attributes="value python:field[0];
                                             title python:explanation"
                             tal:content="python:field[1]"
-                            tal:condition="python:here.allowedCriteriaForField(field[0])">
+                            tal:condition="python:here.allowedCriteriaForField(field[0])"
+                            i18n:translate=""
+                            i18n:domain="plone">
                             Field
                     </option>
                 </tal:options>
@@ -186,6 +188,7 @@
                     <option value="" tal:repeat="type types"
                                      tal:attributes="value type/name"
                                      i18n:translate=""
+                                     i18n:domain="plone"
                                      tal:content="type/description">Type</option>
 
                 </select>
@@ -201,7 +204,7 @@
                        name="form.button.AddCriterion"
                        tabindex=""
                        i18n:domain="plone"
-                       i18n:attributes="value"
+                       i18n:attributes="value label_add;"
                        tal:attributes="tabindex tabindex/next;"
                        />
             </div>
@@ -247,7 +250,9 @@
                                  tal:attributes="value python:field[0];
                                                  selected python:here.hasSortCriterion() and here.getSortCriterion().field==field[0];
                                                  title explanation"
-                                 tal:content="python:field[1]">Field</option>
+                                 tal:content="python:field[1]"
+                                 i18n:translate=""
+                                 i18n:domain="plone">Field</option>
                      </tal:block>
                 </select>
 
@@ -278,7 +283,7 @@
                        value="Save"
                        name="form.button.SetSortCriterion"
                        tabindex=""
-                       i18n:attributes="value"
+                       i18n:attributes="value label_save;"
                        i18n:domain="plone"
                        tal:attributes="tabindex tabindex/next;"
                        />
