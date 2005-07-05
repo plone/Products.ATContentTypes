@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Don't run version migration when installing the first time. People should run it
+   after type migration.
+   [tiran]
+
  * Disabled full catalog updated after type migration. If people need it they could
    do it after migration.
    [tiran]

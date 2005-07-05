@@ -147,9 +147,10 @@ def install(self, reinstall):
         tool.setInstanceVersion('0.2.0-final ')
 
     # step 13: run any migrations
-    print >>out, 'Migrating existing content to latest version'
-    migration_result = tool.upgrade()
-    print >>out, migration_result
+    if reinstall:
+        print >>out, 'Migrating existing content to latest version'
+        migration_result = tool.upgrade()
+        print >>out, migration_result
     
     print >> out, 'Successfully installed %s' % PROJECTNAME
     return out.getvalue()
