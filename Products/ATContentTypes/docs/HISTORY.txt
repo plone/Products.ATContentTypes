@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Renamed max_size config option to max_file_size. Added max_image_dimension
+   config option to set the maximum border for the original size of an image.
+   [tiran]
+
  * Added some additional i18n markup.
    [hannosch]
 

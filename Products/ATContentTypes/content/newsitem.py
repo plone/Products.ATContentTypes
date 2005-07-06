@@ -55,7 +55,7 @@ from Products.validation.validators.SupplValidators import MaxSizeValidator
 from Products.validation import V_REQUIRED
 
 validation.register(MaxSizeValidator('checkNewsImageMaxSize',
-                                             maxsize=zconf.ATNewsItem.max_size))
+                                     maxsize=zconf.ATNewsItem.max_file_size))
 
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 
@@ -83,6 +83,7 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
         required = False,
         storage = AnnotationStorage(migrate=True),
         languageIndependent = True,
+        max_size = zconf.ATNewsItem.max_image_dimension,
         sizes= {'large'   : (768, 768),
                 'preview' : (400, 400),
                 'mini'    : (200, 200),

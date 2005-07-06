@@ -18,7 +18,9 @@
 </feature>
 
 <archetype ATDocument>
+  # enable upload of documents
   allow_document_upload yes
+
   <contenttypes>
     default text/html
 
@@ -32,7 +34,9 @@
 </archetype>
 
 <archetype ATEvent>
+  # enable upload of documents
   allow_document_upload yes
+
   <contenttypes>
     default text/html
 
@@ -45,9 +49,16 @@
 </archetype>
 
 <archetype ATNewsItem>
-  max_size no
-  allow_document_upload yes
+  # maximum file size in byte, kb or mb
+  max_file_size no
   
+  # maximum image dimension (w, h)
+  # 0,0 means no rescaling of the original image
+  max_image_dimension 0,0
+  
+  # enable upload of documents
+  allow_document_upload yes
+
   <contenttypes>
     default text/html
     
@@ -60,13 +71,16 @@
 </archetype>
 
 <archetype ATFile>
-  # max_size 1MB
-  max_size no
+  # maximum file size in byte, kb or mb
+  max_file_size no
 </archetype>
 
 <archetype ATImage>
-  # max_size 1MB
-  max_size no
+  # maximum file size in byte, kb or mb
+  max_file_size no
+  # maximum image dimension (w, h)
+  # 0,0 means no rescaling of the original image
+  max_image_dimension 0,0
 </archetype>
 
 <atct_tool>

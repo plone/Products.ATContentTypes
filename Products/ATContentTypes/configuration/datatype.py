@@ -72,11 +72,35 @@ def identifier_none(value):
 def byte_size_in_mb(value):
     """Byte size handler for max size validator
     """
-    if isinstance(value, str) and value.lower() == 'no':
+    if value.lower() == 'no':
         return 0.0
     byte_size = stock_datatypes["byte-size"]
     v = byte_size(value)
     return float(v) / (1024.0**2)
+
+def image_dimension(value):
+    """Image dimension data type
+    
+    Splits a value of "200, 400" into two ints of (200, 400)
+    """    
+    if value.count(',') != 1:
+        raise ValueError, "Width and height must be seperated by a comma"
+    w, h = value.split(',')
+    w = int(w)
+    h = int(h)
+    return (w, h)
+
+def image_dimension_or_no(value):
+    """Image dimension data type with support for no
+    
+    Either "no" or (0, 0) results into None
+    """
+    if value.lower() == 'no':
+        return None
+    w, h = image_dimension(value)
+    if (w, h) == (0, 0):
+        return None
+    return (w, h)
 
 class BaseFactory(object):
     """Basic factory
@@ -123,7 +147,8 @@ class Archetype(BaseFactory):
     
     def _parse(self):
         sec = self._section
-        self.set('max_size', sec.max_size)
+        self.set('max_file_size', sec.max_file_size)
+        self.set('max_image_dimension', sec.max_image_dimension)
         self.set('allow_document_upload', sec.allow_document_upload)
         
         ct = sec.contenttypes
@@ -143,4 +168,4 @@ class Feature(BaseFactory):
     
     def _parse(self):
         sec = self._section
-        self.set('enable', sec.enable)        
+        self.set('enable', sec.enable)

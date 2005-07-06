@@ -56,7 +56,7 @@ from Products.validation.config import validation
 from Products.validation import V_REQUIRED
 
 validation.register(MaxSizeValidator('checkFileMaxSize',
-                                            maxsize=zconf.ATFile.max_size))
+                                     maxsize=zconf.ATFile.max_file_size))
 
 ATFileSchema = ATContentTypeSchema.copy() + Schema((
     FileField('file',

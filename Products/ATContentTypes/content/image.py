@@ -67,7 +67,7 @@ from Products.validation.validators.SupplValidators import MaxSizeValidator
 from Products.validation import V_REQUIRED
 
 validation.register(MaxSizeValidator('checkImageMaxSize',
-                                             maxsize=zconf.ATImage.max_size))
+                                     maxsize=zconf.ATImage.max_file_size))
 
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 
@@ -124,6 +124,7 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
                languageIndependent=True,
                storage = AnnotationStorage(migrate=True),
                swallowResizeExceptions = SWALLOW_IMAGE_RESIZE_EXCEPTIONS,
+               max_size = zconf.ATImage.max_image_dimension,
                sizes= {'large'   : (768, 768),
                        'preview' : (400, 400),
                        'mini'    : (200, 200),
