@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Couple of bug fixes in the FTI->FTI w/ dynamic views migration
+   [rafrombrc]
+
  * Renamed max_size config option to max_file_size. Added max_image_dimension
    config option to set the maximum border for the original size of an image.
    [tiran]

@@ -229,9 +229,9 @@ def switchToDynamicFTI(portal, out):
         # copy all data like actions and properties
         actions = []
         for action in getattr(ti, '_actions', ()):
-            actions.append(action.copy())
+            actions.append(action._getCopy(action))
         actions = tuple(actions)
-        properties = ti.propdict()
+        properties = dict(ti.propertyItems())
         
         # delete the old fti and create a new one
         typesTool._delObject(portal_type)
