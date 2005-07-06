@@ -88,7 +88,6 @@ ATContentTypeSchema = BaseSchema.copy() + Schema((
     
 ATContentTypeSchema['id'].validators = ('isValidId',)
 ATContentTypeSchema['id'].searchable = True
-ATContentTypeSchema['id'].widget.macro = 'zid'
 ATContentTypeSchema['description'].schemata = 'default'
 
 # BBB
