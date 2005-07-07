@@ -204,7 +204,6 @@ class AutoOrderSupport(AutoSortSupport, OrderedContainer):
         obj_meta = metadata.pop(obj_idx)
         metadata.insert(position, obj_meta)
         self._objects = tuple(metadata)
-        self._reindexOnReorder()
 
     def moveObjectsByDelta(self, ids, delta, subset_ids=None, disable_auto_sort=True):
         """Move specified sub-objects by delta.
@@ -213,7 +212,6 @@ class AutoOrderSupport(AutoSortSupport, OrderedContainer):
         """
         OrderedContainer.moveObjectsByDelta(self, ids, delta, subset_ids=subset_ids)
         self.setSortAuto(disable_auto_sort)
-        self._reindexOnReorder()
 
     def manage_renameObject(self, id, new_id, REQUEST=None):
         """Rename a particular sub-object without changing its position.
@@ -224,6 +222,8 @@ class AutoOrderSupport(AutoSortSupport, OrderedContainer):
         old_sort_auto = self.getSortAuto()
         result = OrderedBaseFolder.manage_renameObject(self, id, new_id, REQUEST)
         self.moveObjectToPosition(new_id, old_position)
+        putils = getToolByName(self, 'plone_utils')
+        putils.reindexOnReorder(self)
         self.setSortAuto(old_sort_auto)
         return result
 
@@ -238,23 +238,5 @@ class AutoOrderSupport(AutoSortSupport, OrderedContainer):
         # we need a proper event system to make it work
         #if item.aq_inner.aq_parent == self:
         #    self.autoOrderItems()
-
-    security.declarePrivate('_reindexOnReorder')
-    def _reindexOnReorder(self):
-        """Catalog ordering support
-        """
-
-        # For now we will just reindex all objects in the folder. Later we may
-        # optimize to only reindex the objs that got moved. Ordering is more
-        # for humans than machines, therefore the fact that this won't scale
-        # well for btrees isn't a huge issue, since btrees are more for
-        # machines than humans.
-
-        cat = getToolByName(self, 'portal_catalog', None)
-        if cat is not None:
-            cataloged_objs = cat(path = {'query': '/'.join(self.getPhysicalPath()), 'depth': 1})
-            for brain in cataloged_objs:
-                obj = brain.getObject()
-                cat.indexObject(obj,['getObjPositionInParent',])
 
 InitializeClass(AutoOrderSupport)
