@@ -636,7 +636,7 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
         new = getattr(self, id)
         title = new.Title()
         if not title.strip():
-            new.setTitle(id)
+            new.update(title=id)
 
 InitializeClass(ATCTFolderMixin)
 
