@@ -68,24 +68,6 @@ def fixFolderlistingAction(portal, out):
                                     'folder',
                                     visible=0)
             out.append("Set target expresion of folderlisting action for 'Folder' to 'view'")
-        siteFTI = getattr(typesTool, 'Plone Site', None)
-        if siteFTI is not None:
-            haveFolderListing = False
-            for action in siteFTI.listActions():
-                if action.getId() == 'folderlisting':
-                    action.setActionExpression(Expression('string:${folder_url}/view'))
-                    action.condition = ''
-                    haveFolderListing = True
-                    break
-            if not haveFolderListing:
-                siteFTI.addAction('folderlisting',
-                                    'Folder view',
-                                    'string:${folder_url}/view',
-                                    '',
-                                    'View',
-                                    'folder',
-                                    visible=0)
-            out.append("Set target expresion of folderlisting action for 'Plone Site' to 'view'")
         topicFTI = getattr(typesTool, 'Topic', None)
         if topicFTI is not None:
             haveFolderListing = False
