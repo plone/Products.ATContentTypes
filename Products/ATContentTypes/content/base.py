@@ -484,7 +484,9 @@ class ATCTFileContent(ATCTContent):
             check_id = self.check_id(used_id,required=1)
         else:
             # If check_id is not available just look for conflicting ids
-            check_id = used_id in self.aq_inner.aq_parent.objectIds() and 'Id %s conflicts with an existing item'%used_id or False
+            parent = aq_parent(aq_inner(self))
+            check_id = used_id in parent.objectIds() and \
+                       'Id %s conflicts with an existing item'% used_id or False
         if check_id and used_id == id:
             errors['id'] = check_id
             REQUEST.form['id'] = used_id
@@ -629,9 +631,12 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
         
         Set title according to the id
         """
-        title = self.Title()
-        if not title:
-            self.setTitle(self.getId())
+        # manage_afterMKCOL is called in the context of the parent folder, *not* in
+        # the context of the new folder!
+        new = getattr(self, id)
+        title = new.Title()
+        if not title.strip():
+            new.setTitle(id)
 
 InitializeClass(ATCTFolderMixin)
 
