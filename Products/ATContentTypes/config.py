@@ -93,6 +93,14 @@ else:
     HAS_LINGUA_PLONE = True
     del registerType
 
+try:
+    from PIL import Image
+except ImportError:
+    HAS_PIL = False
+else:
+    HAS_PIL = True
+    
+
 ## workflow mapping for the installer
 WORKFLOW_DEFAULT  = '(Default)'
 WORKFLOW_FOLDER   = 'folder_workflow'

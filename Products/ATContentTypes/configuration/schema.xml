@@ -16,6 +16,9 @@
   <section type="feature" name="swallowImageResizeExceptions"
    attribute="swallowImageResizeExceptions" required="yes" />
 
+  <section type="pil_config" name="*"
+   attribute="pil_config" required="yes" />
+
   <section type="archetype" name="ATDocument"
    attribute="ATDocument" required="yes" />
 

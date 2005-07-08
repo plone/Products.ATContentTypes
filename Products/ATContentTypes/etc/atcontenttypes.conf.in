@@ -17,6 +17,11 @@
   enable no 
 </feature>
 
+<pil_config>
+    quality 90
+    resize_algo antialias
+</pil_config>
+
 <archetype ATDocument>
   # enable upload of documents
   allow_document_upload yes

@@ -165,4 +165,26 @@
     <section name="*" attribute="topic_tool" type="topic_tool"
              required="no" />
   </sectiontype>
+  
+  <sectiontype name="pil_config" attribute="pil_config" keytype="identifier">
+    <description format="plain">
+        PIL configuration for resizing and rotation
+    </description>
+    <key name="quality" datatype="integer" required="no" default="90">
+      <description>
+        Quality settings (0-100)
+      </description>
+    </key>
+    <key name="resize_algo" datatype="pil-algo" required="no" default="antialias">
+      <description>
+        filter algorithm for resizing: 'NEAREST', 'BILINEAR', 'BICUBIC', 'ANTIALIAS'
+      </description>
+    </key>
+    <!--key name="rotation_algo" datatype="pil-algo" required="no" default="bicubic">
+      <description>
+        filter algorithm for rotation: 'NEAREST', 'BILINEAR', 'BICUBIC'
+      </description>
+    </key-->
+  </sectiontype>
 </component>
+

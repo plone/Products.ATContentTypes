@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Moved ATCTImageTransform class to lib
+
+ * Added configuration options for PIL quality and resize algo.
+
  * Fix Image and File migration by renaming migrate_dc to last_migrate_dc, as
    the content_type metadata can't be set until the file is transferred.
    [alecm]

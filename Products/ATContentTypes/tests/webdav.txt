@@ -248,7 +248,7 @@ Image
   test-image
   
   >>> input.seek(0)
-  >>> print str(image.getImage()) == input.read()
+  >>> print str(image.getImage().data) == input.read()
   True
   
   >>> print image.getContentType()

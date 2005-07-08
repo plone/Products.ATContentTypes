@@ -101,6 +101,21 @@ def image_dimension_or_no(value):
     if (w, h) == (0, 0):
         return None
     return (w, h)
+    
+def pil_algo(value):
+    """Get PIL image filter algo from PIL.Image
+    """
+    try:
+        import PIL.Image
+    except ImportError:
+        return None
+    
+    value = value.upper()
+    available = ('NEAREST', 'BILINEAR', 'BICUBIC', 'ANTIALIAS')
+    if value not in available:
+        raise ValueError, "unknown algo %s" % value
+    import PIL.Image
+    return getattr(PIL.Image, value)
 
 class BaseFactory(object):
     """Basic factory
