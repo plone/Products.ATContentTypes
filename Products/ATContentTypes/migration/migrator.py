@@ -326,8 +326,35 @@ class BaseMigrator:
     def finalize(self):
         """Finalize construction (called between)
         """
+        ob = self.new
         fti = self.new.getTypeInfo()
-        fti._finishConstruction(self.new)
+        # This calls notifyWorkflowCreated which resets the migrated workflow
+        # fti._finishConstruction(self.new)
+        
+        # BBB This seems unnecessary, but it's what the above method does,
+        # and it's quick and can't hurt anything.
+        if hasattr(ob, '_setPortalTypeName'):
+            ob._setPortalTypeName(fti.getId())
+
+        # Update permissions to match migrated workflow state
+        # It may be better to just call the recursive RoleMapping update after
+        # all migrations are done.
+        wf_tool = getToolByName(self.new, 'portal_workflow')
+        # Build list of updateable workflows
+        wfs = {}
+        for id in wf_tool.objectIds():
+            wf = wf_tool.getWorkflowById(id)
+            if hasattr(aq_base(wf), 'updateRoleMappingsFor'):
+                wfs[id] = wf
+        # Update Role map for object
+        wf_ids = wf_tool.getChainFor(ob)
+        for wf_id in wf_ids:
+            wf = wfs.get(wf_id, None)
+            if wf is not None:
+                wf.updateRoleMappingsFor(ob)
+
+        # Reindex
+        self.new.reindexObject()
 
 class BaseCMFMigrator(BaseMigrator):
     """Base migrator for CMF objects

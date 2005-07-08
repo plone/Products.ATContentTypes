@@ -138,6 +138,8 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         self.compareAfterMigration(migrated, mod=mod, created=created)
         self.compareDC(migrated, title=title, description=description)
 
+        self.assertEquals(migrated.Schema()['text'].getContentType(migrated),
+                            'text/structured')
         self.failUnless(migrated.CookedBody() == body, 'Body mismatch: %s / %s' \
                         % (migrated.CookedBody(), body))
 

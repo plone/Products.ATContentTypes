@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Fixed finalize migration so that it doesn't reinitialize the workflow
+   state.  Added unit tests for workflow, local_role, and owner migration.
+   [alecm]
+
  * Using migration code from DynamicViewFTI instead of own FTI migration code
    [tiran]
 
@@ -9,10 +13,6 @@
 
  * Added configuration options for PIL quality and resize algo.
    [tiran]
-
- * Fix Image and File migration by renaming migrate_dc to last_migrate_dc, as
-   the content_type metadata can't be set until the file is transferred.
-   [alecm]
 
  * Couple of bug fixes in the FTI->FTI w/ dynamic views migration
    [rafrombrc]
