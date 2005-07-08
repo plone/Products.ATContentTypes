@@ -32,9 +32,6 @@ def alpha2_beta1(portal):
     # Fix up view actions - with CMFDynamicViewFTI, we don't need /view anymore
     fixViewActions(portal, out)
 
-    # switch FTIs to DynamicFTIs
-    switchToDynamicFTI(portal, out)
-
     # ADD NEW STUFF BEFORE THIS LINE!
 
     # Rebuild catalog
@@ -177,58 +174,3 @@ def fixViewActions(portal, out):
                             action.setActionExpression(Expression('string:${object_url}'))
                             out.append("Made %s not use /view for view action" % t)
 
-def switchToDynamicFTI(portal, out):
-    """Replace old FTIs with DynamicFTIs.
-    
-    TODO: Make two methods out of this method. One should have the signatur:
-      convertToDynamicFTI(portal, portal_type)
-    and should be placed in CMFDynamicViewFTI
-    """
-    typesTool = getToolByName(portal, 'portal_types')
-    atctTool = getToolByName(portal, 'portal_atct')
-    
-    typeInfo = listTypes(PROJECTNAME)
-    for rti in typeInfo:
-        klass = rti['klass']
-        portal_type = rti['portal_type']
-        name = rti['name']
-        meta_type = rti['meta_type']
-        package = rti['package']
-        
-        ti = typesTool.getTypeInfo(portal_type)
-        if ti is None:
-            continue
-
-        typeinfo_name="%s: %s (%s)" % (package, name, meta_type)
-
-        # get the meta type of the FTI from the class, use the default FTI as default
-        fti_meta_type = getattr(klass, '_at_fti_meta_type', 
-                                FactoryTypeInformation.meta_type)
-
-        if ti.meta_type == fti_meta_type:
-            continue
-
-        # copy all data like actions and properties
-        actions = []
-        for action in getattr(ti, '_actions', ()):
-            actions.append(action._getCopy(action))
-        actions = tuple(actions)
-        properties = dict(ti.propertyItems())
-        
-        # delete the old fti and create a new one
-        typesTool._delObject(portal_type)
-
-        typesTool.manage_addTypeInformation(fti_meta_type,
-                                            id=portal_type,
-                                            typeinfo_name=typeinfo_name)
-
-        # assign actions and properties from the old fti
-        # NOTE: aliases are ignored and security settings are not copied
-        new_ti = typesTool[portal_type]
-        new_ti._actions = actions
-        new_ti.manage_changeProperties(**properties)
-        
-
-        out.append("Switched FTI to DynamicFTI for %s" % klass.portal_type)
-
-    out.append("Switched FTIs to DynamicFTIs")

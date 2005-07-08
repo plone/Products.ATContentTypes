@@ -49,6 +49,8 @@ from Products.ATContentTypes.Extensions.utils import setupMimeTypes
 from Products.ATContentTypes.Extensions.utils import registerTemplates
 from Products.ATContentTypes.Extensions.utils import registerActionIcons
 
+from Products.CMFDynamicViewFTI.migrate import migrateFTIs
+
 def install(self, reinstall):
     out = StringIO()
 
@@ -110,21 +112,9 @@ def install(self, reinstall):
         print >>out, 'Copying FTI flags like allow_discussion'
         tool.copyFTIFlags()
     
-    # step 8: register switch methods to toggle old plonetypes on/off
-    # BBB remove these two dummy methods
-    #manage_addExternalMethod(self,'switchATCT2CMF',
-    #    'DUMMY: Set reenable CMF type',
-    #    PROJECTNAME+'.Install',
-    #    'dummyExternalMethod')
-    #manage_addExternalMethod(self,'switchCMF2ATCT',
-    #    'DUMMY: Set ATCT as default content types ',
-    #    PROJECTNAME+'.Install',
-    #    'dummyExternalMethod')
-    #
-    #manage_addExternalMethod(self,'migrateFromCMFtoATCT',
-    #    'Migrate from CMFDefault types to ATContentTypes',
-    #    PROJECTNAME+'.migrateFromCMF',
-    #    'migrate')
+    # step 8: migrate FTIs  to DynamicViewFTIs
+    migrated = migrateFTIs(self, product=PROJECTNAME)
+    print >>out, "Switch to DynamicViewFTI: %s" % ', '.join(migrated)
 
     # step 9: changing workflow
     if not reinstall:
