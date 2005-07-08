@@ -164,7 +164,8 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         try:
             m(unittest=1)
         except Exception, e:
-            self.fail('Error raised in Folder migration of non-content sub-object: %s'%e)
+            import sys, traceback
+            self.fail('Error raised in Folder migration of non-content sub-object: %s \n %s'%(e,''.join(traceback.format_tb(sys.exc_traceback))))
 
     def test_implements_autoorder(self):
         self.failUnless(IAutoOrderSupport.isImplementedBy(self._ATCT))
@@ -255,7 +256,8 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         try:
             m(unittest=1)
         except Exception, e:
-            self.fail("Failed migrating subobject of LargePloneFolder: %s"%e)
+            import sys, traceback
+            self.fail("Failed migrating subobject of LargePloneFolder: %s \n %s"%(e,''.join(traceback.format_tb(sys.exc_traceback))))
 
 
 tests.append(TestSiteATBTreeFolder)
