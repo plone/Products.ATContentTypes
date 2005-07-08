@@ -333,7 +333,7 @@ class BaseCMFMigrator(BaseMigrator):
     """Base migrator for CMF objects
     """
 
-    def last_migrate_dc(self):
+    def migrate_dc(self):
         """Migrates dublin core metadata
            This needs to be done after custom migrations, as you cannot
            setContentType on Images and Files until there is an object stored.
