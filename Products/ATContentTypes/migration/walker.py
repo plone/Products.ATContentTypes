@@ -155,10 +155,12 @@ class CatalogWalker(Walker):
         if HAS_LINGUA_PLONE and 'Language' in catalog.indexes():
             # usage of Language is required for LinguaPlone
             brains = catalog(portal_type = self.src_portal_type,
+                             meta_type = self.src_meta_type,
                              Language = catalog.uniqueValuesFor('Language'),
                             )
         else:
-            brains = catalog(portal_type = self.src_portal_type, meta_type = self.src_meta_type)
+            brains = catalog(portal_type = self.src_portal_type,
+                             meta_type = self.src_meta_type)
 
         for brain in brains:
             obj = brain.getObject()
