@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Fix Image and File migration by renaming migrate_dc to last_migrate_dc, as
+   the content_type metadata can't be set until the file is transferred.
+   [alecm]
+
  * Couple of bug fixes in the FTI->FTI w/ dynamic views migration
    [rafrombrc]
 

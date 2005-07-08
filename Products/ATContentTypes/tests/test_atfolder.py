@@ -29,6 +29,7 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests import atcttestcase
+from Acquisition import aq_base
 
 from Products.CMFCore import CMFCorePermissions
 from Products.Archetypes.interfaces.layer import ILayerContainer
@@ -40,7 +41,9 @@ from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATBTreeFolder
 from Products.ATContentTypes.content.folder import ATFolderSchema
 from Products.ATContentTypes.tests.utils import TidyHTMLValidator
-from Products.ATContentTypes.migration.atctmigrator import FolderMigrator
+from Products.ATContentTypes.migration.atctmigrator import FolderMigrator, \
+                                                        LargeFolderMigrator, \
+                                                        DocumentMigrator
 from Products.CMFPlone.PloneFolder import PloneFolder
 from Products.CMFPlone.LargePloneFolder import LargePloneFolder
 from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
@@ -158,11 +161,14 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         # the index_html
         get_transaction().commit(1)
         m = FolderMigrator(index)
-        m(unittest=1)
+        try:
+            m(unittest=1)
+        except Exception, e:
+            self.fail('Error raised in Folder migration of non-content sub-object: %s'%e)
 
     def test_implements_autoorder(self):
         self.failUnless(IAutoOrderSupport.isImplementedBy(self._ATCT))
-        self.failUnless(verifyObject(IAutoOrderSupport, self._ATCT)) 
+        self.failUnless(verifyObject(IAutoOrderSupport, self._ATCT))
 
 tests.append(TestSiteATFolder)
 
@@ -199,6 +205,57 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
                         % (old.Title(), new.Title()))
         self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
                         % (old.Description(), new.Description()))
+
+    def test_migration(self):
+        old = self._cmf
+        id  = old.getId()
+
+        # edit
+        editCMF(old)
+        title       = old.Title()
+        description = old.Description()
+        mod         = old.ModificationDate()
+        created     = old.CreationDate()
+
+        # Add subobject to test child migration
+        old.invokeFactory('Document','bogus')
+        bogus = old.bogus
+
+        # migrated (needs subtransaction to work)
+        get_transaction().commit(1)
+        m = LargeFolderMigrator(old)
+        m(unittest=1)
+
+        self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
+        migrated = getattr(self.folder, id)
+
+        self.compareAfterMigration(migrated, mod=mod, created=created)
+        self.compareDC(migrated, title=title, description=description)
+        self.assertEqual(aq_base(migrated.bogus), aq_base(bogus))
+
+    def test_subobj_migration(self):
+        old = self._cmf
+        id  = old.getId()
+
+        # edit
+        editCMF(old)
+        title       = old.Title()
+        description = old.Description()
+        mod         = old.ModificationDate()
+        created     = old.CreationDate()
+
+        # Add subobject to test child migration
+        
+        bogus = self._createType(old, 'CMF Document', 'bogus')
+        bogus = old.bogus
+
+        # migrated (needs subtransaction to work)
+        get_transaction().commit(1)
+        m = DocumentMigrator(bogus)
+        try:
+            m(unittest=1)
+        except Exception, e:
+            self.fail("Failed migrating subobject of LargePloneFolder: %s"%e)
 
 
 tests.append(TestSiteATBTreeFolder)

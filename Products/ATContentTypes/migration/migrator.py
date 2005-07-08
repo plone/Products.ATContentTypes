@@ -335,6 +335,8 @@ class BaseCMFMigrator(BaseMigrator):
 
     def migrate_dc(self):
         """Migrates dublin core metadata
+           This needs to be done after custom migrations, as you cannot
+           setContentType on Images and Files until there is an object stored.
         """
         # doesn't work!
         # shure? works for me
@@ -503,6 +505,8 @@ class FolderMigrationMixin(ItemMigrationMixin):
         for id, obj in subobjs.items():
             # we have to use _setObject instead of _setOb because it adds the object
             # to folder._objects but also reindexes all objects.
+            __traceback_info__ = __traceback_info__ = ('migrate_children',
+                          self.old, self.orig_id, 'Migrating subobject %s'%id)
             self.new._setObject(id, obj, set_owner=0)
 
         # reorder items

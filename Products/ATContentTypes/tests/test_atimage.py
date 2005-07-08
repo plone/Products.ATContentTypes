@@ -242,6 +242,16 @@ class TestSiteATImageExif(atcttestcase.ATCTTypeTestCase):
     meta_type = 'ATImage'
     icon = 'image_icon.gif'
 
+    def test_dcEdit(self):
+        #if not hasattr(self, '_cmf') or not hasattr(self, '_ATCT'):
+        #    return
+        old = self._cmf
+        new = self._ATCT
+        new.setImage(TEST_JPEG, content_type="image/jpeg")
+        dcEdit(old)
+        dcEdit(new)
+        self.compareDC(old, new)
+
     def test_broken_exif(self):
 
         #EXIF data in images from Canon digicams breaks EXIF of 2005.05.12 with following exception
