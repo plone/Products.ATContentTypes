@@ -68,7 +68,8 @@ def initialize(context):
     
     ToolInit(
         'ATContentTypes tools', 
-        tools=(ATCTTool,), 
+        tools=(ATCTTool,),
+        product_name='ATContentTypes',
         icon='tool.gif', ).initialize(context) 
 
     listOfTypes = listTypes(PROJECTNAME)
