@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Made atct_album_view use the catalog like other listings, and reuse the
+   nice macro from folder_listing.
+   [alecm]
+
  * Zope2.7 compatibility again:
     o replaced import transaction with from Products.CMFPlone import transaction
    [hannosch]

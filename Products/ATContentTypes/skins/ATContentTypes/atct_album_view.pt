@@ -27,7 +27,7 @@
         Document actions (print, sendto etc)
     </div>
 
-    <h1 tal:content="here/title_or_id" class="documentFirstHeading">Title or id</h1>
+    <h1 tal:content="here/pretty_title_or_id" class="documentFirstHeading">Title or id</h1>
 
     <div tal:content="here/Description" tal:condition="here/Description" class="documentDescription">
         Description
@@ -45,7 +45,7 @@
                             <img src="" alt="" tal:replace="structure python:image.tag(scale='thumb', title=image.Description())" />
                         </a>
                     </dt>
-                    <dd tal:content="image/title_or_id">
+                    <dd tal:content="image/pretty_title_or_id">
                        Title
                     </dd>
                 </dl>
@@ -61,17 +61,17 @@
                 <dl i18n:domain="atcontenttypes">
                     <dt>
                         <a tal:condition="number_of_images"
-                           tal:attributes="href string:${album/absolute_url}/view">
-                            <img src="" alt="" tal:replace="structure python:random_image.tag(scale='thumb', title=album.Description())" />
+                           tal:attributes="href album/getURL">
+                            <img src="" alt="" tal:replace="structure python:random_image.tag(scale='thumb', title=album.Description)" />
                         </a>
                         <a tal:condition="not:number_of_images"
-                           tal:attributes="href string:${album/absolute_url}/view" class="photoAlbumEmpty">
+                           tal:attributes="href album/getURL" class="photoAlbumEmpty">
                           <span i18n:translate="text_empty_album"
                                 tal:omit-tag="">Empty album</span>
                         </a>
                     </dt>
                     <dd>
-                        <span tal:content="album/title_or_id">Title</span>
+                        <span tal:content="album/pretty_title_or_id">Title</span>
                         <span>(<span i18n:translate="photos_in_album" tal:omit-tag=""><tal:number
                                      i18n:name="num_photos" content="number_of_images" />
                                      photos in album</span>)</span>
@@ -94,53 +94,12 @@
          metal:use-macro="here/batch_macros/macros/navigation" />
 
     <tal:listing condition="otherContents"
-                 define="global getObjSize nocall:here/getObjSize;
-                         global toLocalizedTime nocall:here/toLocalizedTime;">
+                 define="folderContents otherContents">
+        <metal:listing metal:use-macro="here/folder_listing/macros/listing">
+            <metal:empty metal:fill-slot="no_items_in_listing"></metal:empty>
+        </metal:listing>
 
-      <dl>
-          <tal:entry tal:repeat="obj otherContents">
-
-          <dt metal:define-macro="list-item"
-              tal:define="url python: obj.absolute_url()+test(obj.isPrincipiaFolderish,'/','');
-                          icon python: obj.getIcon(1)">
-              <a href="#" tal:attributes="href url">
-                  <img src="" alt=""
-                       tal:attributes="src string:${utool}/${icon};alt here/title" />
-              </a>
-
-              <a href="#" tal:condition="python: obj.portal_type not in ['Link', 'Image']"
-                          tal:attributes="href url"
-                          tal:content="obj/title_or_id" />
-
-              <a href="#" tal:condition="python: obj.portal_type == 'Image'"
-                          tal:attributes="href python: url + '/view'"
-                          tal:content="obj/title_or_id" />
-
-              <a href="#"
-                 class="link-plain"
-                 tal:condition="python: obj.portal_type == 'Link'"
-                 tal:attributes="href obj/getRemoteUrl;"
-                 tal:content="obj/title_or_id" />
-
-              <span class="discreet"
-                    tal:condition="python: obj.portal_type == 'Event'">
-                  &nbsp;
-                  <span tal:replace="obj/location">Oslo</span>,
-                  <span tal:replace="python: obj.start().ISO()">from date</span> -
-                  <span tal:replace="python: obj.end().ISO()">to date</span>
-
-              </span>
-          </dt>
-
-          <dd>
-              <span tal:content="python:test(obj.Description(), obj.Description(), '&nbsp;')">
-                  description
-              </span>
-          </dd>
-          </tal:entry>
-      </dl>
-
-  </tal:listing>
+    </tal:listing>
 
 </div>
 
