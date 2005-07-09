@@ -145,16 +145,11 @@ class TestTypeMigrations(atcttestcase.ATCTTypeTestCase):
         getWFstate = self.wf.getInfoFor
         old_wf = getWFstate(self.old, 'review_state', None)
         self.login('user1')
-        self.failIf(self.pm.checkPermission('View',self.old))
         self.login()
         self.migrateObject()
 
         self.assertEquals(getWFstate(self.migrated, 'review_state', None),
                                 old_wf)
-
-        # check transfer of permissions
-        self.login('user1')
-        self.failIf(self.pm.checkPermission('View',self.migrated))
 
     def test_owner_migration(self):
         user = self.portal.acl_users.getUser('user1')
@@ -162,6 +157,24 @@ class TestTypeMigrations(atcttestcase.ATCTTypeTestCase):
         self.migrateObject()
 
         self.assertEquals(self.migrated.owner_info()['id'],'user1')
+
+    def test_workflow_permissions(self):
+        # permissions are updated after site migration completion
+        self.wf.doActionFor(self.old, 'hide')
+        getWFstate = self.wf.getInfoFor
+        old_wf = getWFstate(self.old, 'review_state', None)
+        self.login('user1')
+        self.failIf(self.pm.checkPermission('View',self.old))
+        self.login()
+        transaction.commit(1)
+        self.portal.portal_atct.migrateToATCT(self.portal)
+        transaction.commit(1)
+
+        self.migrated = getattr(self.folder, self.id)
+
+        # check transfer of permissions
+        self.login('user1')
+        self.failIf(self.pm.checkPermission('View',self.migrated))
 
 
 tests.append(TestTypeMigrations)
