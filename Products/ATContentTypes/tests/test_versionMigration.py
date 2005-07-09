@@ -273,8 +273,10 @@ class TestMigrations_v1(MigrationTest):
         self.removeActionFromType('Topic', 'syndication')
         self.failIf('syndication' in [x.id for x in
                                         typesTool.Topic.listActions()])
-        addTopicSyndicationAction(self.portal, [])
-        addTopicSyndicationAction(self.portal, [])
+        ret1 = addTopicSyndicationAction(self.portal, [])
+        ret2 = addTopicSyndicationAction(self.portal, [])
+        self.assertEqual(ret1, 1)
+        self.assertEqual(ret2, 0)
         self.assertEqual(len([x.id for x in
                                         typesTool.Topic.listActions()
                                         if x.id == 'syndication']), 1)

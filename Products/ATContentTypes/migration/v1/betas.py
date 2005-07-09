@@ -157,9 +157,11 @@ def addTopicSyndicationAction(portal, out):
     typesTool = getToolByName(portal, 'portal_types', None)
     topicFTI = getattr(typesTool, 'Topic', None)
     if typesTool is not None and topicFTI is not None:
-        fixActionsForType(ATTopic, typesTool)
-        out.append("Updated Topic actions")
-    out.append("Renamed Smart Folder configlet")
+        if 'syndication' not in [x.id for x in topicFTI.listActions()]:
+            fixActionsForType(ATTopic, typesTool)
+            out.append("Updated Topic actions")
+            return 1
+    return 0
 
 def fixViewActions(portal, out):
     """Make view actions for types except File and Image not use /view"""
