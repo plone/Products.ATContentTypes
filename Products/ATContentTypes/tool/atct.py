@@ -699,8 +699,9 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
         
         elapse = time.time()
         c_elapse = time.clock()
-        
-        results = self.ZopeFindAndApply(portal,
+
+        if mt:
+            results = self.ZopeFindAndApply(portal,
                                         obj_metatypes=mt,
                                         search_sub=1,
                                         REQUEST=self.REQUEST,

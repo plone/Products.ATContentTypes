@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Don't catalog all types in _catalogTypesByMetatype it the passed list is
+   empty.
+   [jenner, alecm]
+
  * Modified templates to use the new pretty_title_or_id feature from plone.
    [alecm]
 
