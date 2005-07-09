@@ -57,7 +57,7 @@ from ExtensionClass import Base
 from OFS import ObjectManager
 from zExceptions import BadRequest
 from webdav.Lockable import ResourceLockedError
-import transaction
+from Products.CMFPlone import transaction
 
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent

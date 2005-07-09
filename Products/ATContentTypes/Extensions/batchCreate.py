@@ -23,7 +23,7 @@
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-import transaction
+from Products.CMFPlone import transaction
 
 DEPTH=5
 OBJ_PER_FOLDER=20

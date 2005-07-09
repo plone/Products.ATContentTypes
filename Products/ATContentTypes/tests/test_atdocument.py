@@ -45,7 +45,7 @@ from Products.ATContentTypes.interfaces import IHistoryAware
 from Products.ATContentTypes.interfaces import ITextContent
 from Products.ATContentTypes.interfaces import IATDocument
 from Interface.Verify import verifyObject
-import transaction
+from Products.CMFPlone import transaction
 
 example_stx = """
 Header

@@ -32,7 +32,7 @@ from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.tool.atct import ATCTTool
 from Products.CMFCore.utils import getToolByName
-import transaction
+from Products.CMFPlone import transaction
 
 tests = []
 

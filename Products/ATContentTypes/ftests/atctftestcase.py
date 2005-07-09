@@ -43,7 +43,7 @@ from Products.Archetypes.tests.atsitetestcase import portal_owner
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
-import transaction
+from Products.CMFPlone import transaction
 
 class IntegrationTestCase(ATFunctionalSiteTestCase):
 

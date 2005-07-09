@@ -48,7 +48,7 @@ from Interface.Verify import verifyObject
 from Products.Archetypes.public import Schema, BaseSchema, BaseContent, \
                                        TextField, RichWidget
 from Products.ATContentTypes.config import PROJECTNAME
-import transaction
+from Products.CMFPlone import transaction
 
 
 example_stx = """

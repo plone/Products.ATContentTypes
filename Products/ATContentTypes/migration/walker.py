@@ -32,7 +32,7 @@ from Products.ATContentTypes.migration.common import registerWalker
 from ZODB.POSException import ConflictError
 from Products.CMFCore.utils import getToolByName
 from Acquisition import aq_parent
-import transaction
+from Products.CMFPlone import transaction
 
 LOG = logging.getLogger('ATCT.migration')
 

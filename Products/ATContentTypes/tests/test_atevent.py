@@ -51,7 +51,7 @@ from DateTime import DateTime
 from Products.ATContentTypes.interfaces import ICalendarSupport
 from Products.ATContentTypes.interfaces import IATEvent
 from Interface.Verify import verifyObject
-import transaction
+from Products.CMFPlone import transaction
 
 LOCATION = 'my location'
 EV_TYPE  = 'Meeting'

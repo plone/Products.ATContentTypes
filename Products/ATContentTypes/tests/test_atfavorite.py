@@ -43,7 +43,7 @@ from Products.ATContentTypes.migration.atctmigrator import FavoriteMigrator
 from Products.ATContentTypes.interfaces import IATFavorite
 from Products.CMFDefault.Favorite import Favorite
 from Interface.Verify import verifyObject
-import transaction
+from Products.CMFPlone import transaction
 
 URL='/test/url'
 

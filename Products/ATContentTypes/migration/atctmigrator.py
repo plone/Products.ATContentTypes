@@ -34,7 +34,7 @@ from Products.ATContentTypes.migration.migrator import CMFFolderMigrator
 from Products.CMFCore.utils import getToolByName
 from Acquisition import aq_parent
 from Acquisition import aq_base
-import transaction
+from Products.CMFPlone import transaction
 
 from Products.ATContentTypes.content import document
 from Products.ATContentTypes.content import event

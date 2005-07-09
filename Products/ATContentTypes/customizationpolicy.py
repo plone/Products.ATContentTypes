@@ -31,7 +31,7 @@ from Products.ATContentTypes.config import TOOLNAME
 from Products.CMFPlone.CustomizationPolicy import DefaultCustomizationPolicy
 from Products.Archetypes.customizationpolicy import ArchetypesSitePolicy
 from Products.Archetypes.utils import shasattr
-import transaction
+from Products.CMFPlone import transaction
 
 PRODUCTS = ('ATReferenceBrowserWidget', 'ATContentTypes', )
 

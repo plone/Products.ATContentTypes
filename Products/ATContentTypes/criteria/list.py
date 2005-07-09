@@ -59,7 +59,7 @@ ATListCriterionSchema = ATBaseCriterionSchema + Schema((
                     label_msgid="label_list_criteria_value",
                     description="Values, each on its own line.",
                     description_msgid="help_list_criteria_value",
-                    i18n_domain="plone"),
+                    i18n_domain="atcontenttypes"),
                 ),
     StringField('operator',
                 required=1,
@@ -73,7 +73,7 @@ ATListCriterionSchema = ATBaseCriterionSchema + Schema((
                     description="Operator used to join the tests "
                     "on each value.",
                     description_msgid="help_list_criteria_operator",
-                    i18n_domain="plone"),
+                    i18n_domain="atcontenttypes"),
                 ),
     ))
 

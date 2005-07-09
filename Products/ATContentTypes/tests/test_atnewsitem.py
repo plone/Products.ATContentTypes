@@ -51,7 +51,7 @@ from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.CMFDefault.NewsItem import NewsItem
 from Interface.Verify import verifyObject
-import transaction
+from Products.CMFPlone import transaction
 
 tests = []
 

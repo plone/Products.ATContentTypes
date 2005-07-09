@@ -44,7 +44,7 @@ from Products.ATContentTypes.migration.atctmigrator import CRIT_MAP, REV_CRIT_MA
 from Products.ATContentTypes.interfaces import IATTopic
 from Interface.Verify import verifyObject
 from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
-import transaction
+from Products.CMFPlone import transaction
 
 
 ACQUIRE  = True

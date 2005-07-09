@@ -64,7 +64,7 @@ from Products.ATContentTypes.tests.utils import DummySessionDataManager
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 from Products.CMFCore.utils import getToolByName
 from Testing.ZopeTestCase.functional import Functional
-import transaction
+from Products.CMFPlone import transaction
 
 # BBB remove import from PloneLanguageTool later
 try:

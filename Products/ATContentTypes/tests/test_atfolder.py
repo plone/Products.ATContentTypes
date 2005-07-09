@@ -53,7 +53,7 @@ from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.lib.autosort import IAutoSortSupport
 from Products.ATContentTypes.lib.autosort import IAutoOrderSupport
 from Interface.Verify import verifyObject
-import transaction
+from Products.CMFPlone import transaction
 
 from Products.CMFPlone.interfaces.ConstrainTypes import ISelectableConstrainTypes
 

@@ -36,7 +36,7 @@ import Persistence
 from Acquisition import aq_base
 import AccessControl.Owned
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-import transaction
+from Products.CMFPlone import transaction
 
 from Products.CMFCore.utils import UniqueObject 
 from Products.CMFCore.utils import getToolByName

@@ -49,7 +49,7 @@ from Products.ATContentTypes.tests.utils import RequiredURLValidator
 from Products.ATContentTypes.interfaces import IATLink
 from Products.CMFDefault.Link import Link
 from Interface.Verify import verifyObject
-import transaction
+from Products.CMFPlone import transaction
 
 
 URL='http://www.example.org/'

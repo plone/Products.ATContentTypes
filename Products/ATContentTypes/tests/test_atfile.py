@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
 #  Copyright (c) 2003-2005 AT Content Types development team
@@ -45,7 +45,7 @@ from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.interfaces import IFileContent
 from Products.CMFDefault.File import File
 from Interface.Verify import verifyObject
-import transaction
+from Products.CMFPlone import transaction
 
 file_text = """
 foooooo

@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Zope2.7 compatibility again:
+    o replaced import transaction with from Products.CMFPlone import transaction
+   [hannosch]
+
  * some minor i18n tweaks
    [hannosch]
 

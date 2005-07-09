@@ -47,7 +47,7 @@ from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage
 from Products.CMFDefault.Image import Image
 from Interface.Verify import verifyObject
-import transaction
+from Products.CMFPlone import transaction
 
 TEST_GIF = open(os.path.join(PACKAGE_HOME, 'test.gif'), 'rb').read()
 TEST2_GIF = open(os.path.join(PACKAGE_HOME, 'test_DivisionError.jpg'), 'rb').read()
