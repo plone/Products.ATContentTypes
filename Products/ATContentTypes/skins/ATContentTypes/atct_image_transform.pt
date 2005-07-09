@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
       lang="en-US"
       metal:use-macro="here/main_template/macros/master"
-      i18n:domain="plone">
+      i18n:domain="atcontenttypes">
 
 <body>
 
@@ -23,7 +23,6 @@
     <small>
 
         <span i18n:translate="label_original_size"
-              i18n:domain="atcontenttypes"
               tal:omit-tag="">Original size</span>:
 
         <span tal:content="size">
@@ -31,7 +30,6 @@
         </span>
 
         <span tal:condition="not: size"
-              i18n:domain="atcontenttypes"
               i18n:translate="label_no_file_uploaded">
           (No file has been uploaded)
         </span>
@@ -40,7 +38,6 @@
 
 
     <div style="width: 3em; text-align: left;"
-         i18n:domain="atcontenttypes"
          class="label">
       <span i18n:translate="label_transform">Transform</span>
       <div id="display_help"
@@ -52,7 +49,6 @@
     </div>
 
     <div class="field"
-         i18n:domain="atcontenttypes"
          tal:define="transforms image/getTransformMap">
       <form tal:attributes="action string:${request/URL1}/transformImage">
         <select name="method"
@@ -67,7 +63,6 @@
         </select>
         <input class="context"
                type="submit"
-               i18n:domain="atcontenttypes"
                i18n:attributes="value label_execute;"
                value="Execute" />
       </form>

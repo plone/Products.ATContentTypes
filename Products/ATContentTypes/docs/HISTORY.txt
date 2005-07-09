@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * some minor i18n tweaks
+   [hannosch]
+
  * Updated INSTALL.txt for CMF 1.5. Zope 2.8 and more
    [tiran]
 

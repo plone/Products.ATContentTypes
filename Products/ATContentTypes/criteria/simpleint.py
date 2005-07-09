@@ -60,7 +60,7 @@ ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
                     label_msgid="label_int_criteria_value",
                     description="An integer number.",
                     description_msgid="help_int_criteria_value",
-                    i18n_domain="plone"),
+                    i18n_domain="atcontenttypes"),
                 ),
     IntegerField('value2',
                 required=0,
@@ -74,7 +74,7 @@ ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
                     label_msgid="label_int_criteria_value2",
                     description="An integer number used as the maximum value if the between direction is selected.",
                     description_msgid="help_int_criteria_value2",
-                    i18n_domain="plone"),
+                    i18n_domain="atcontenttypes"),
                 ),
     StringField('direction',
                 required=0,
@@ -88,7 +88,7 @@ ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
                     label_msgid="label_int_criteria_direction",
                     description="Specify whether you want to find values lesser than, greater than, equal to, or between the chosen value(s).",
                     description_msgid="help_int_criteria_direction",
-                    i18n_domain="plone"),
+                    i18n_domain="atcontenttypes"),
                 ),
     ))
 

@@ -154,7 +154,8 @@
                         tabindex=""
                         onchange=""
                         tal:attributes="tabindex tabindex/next;
-                                        onchange string:javascript:showHelp(this.options[this.selectedIndex], 'fieldHelp');;;">
+                                        onchange string:javascript:showHelp(this.options[this.selectedIndex], 'fieldHelp');"
+                        i18n:domain="plone">
                 <tal:options tal:repeat="field fields">
                     <option value=""
                             tal:define="explanation python:field[2]"
@@ -162,8 +163,7 @@
                                             title python:explanation"
                             tal:content="python:field[1]"
                             tal:condition="python:here.allowedCriteriaForField(field[0])"
-                            i18n:translate=""
-                            i18n:domain="plone">
+                            i18n:translate="">
                             Field
                     </option>
                 </tal:options>
@@ -183,12 +183,12 @@
                     id="criterion_type"
                     tabindex=""
                     tal:define="types here/listSearchCriteriaTypes;"
-                    tal:attributes="tabindex tabindex/next;">
+                    tal:attributes="tabindex tabindex/next;"
+                    i18n:domain="plone">
 
                     <option value="" tal:repeat="type types"
                                      tal:attributes="value type/name"
                                      i18n:translate=""
-                                     i18n:domain="plone"
                                      tal:content="type/description">Type</option>
 
                 </select>
@@ -244,15 +244,15 @@
                              tal:attributes="selected python:not here.hasSortCriterion();"
                              i18n:translate="no_sort_order">No sort order</option>
 
-                     <tal:block tal:repeat="field  fields">
+                     <tal:block tal:repeat="field fields"
+                                i18n:domain="plone">
                          <option value=""
                                  tal:define="explanation python:field[2]"
                                  tal:attributes="value python:field[0];
                                                  selected python:here.hasSortCriterion() and here.getSortCriterion().field==field[0];
                                                  title explanation"
                                  tal:content="python:field[1]"
-                                 i18n:translate=""
-                                 i18n:domain="plone">Field</option>
+                                 i18n:translate="">Field</option>
                      </tal:block>
                 </select>
 
