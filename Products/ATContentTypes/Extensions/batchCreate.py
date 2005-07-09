@@ -23,6 +23,8 @@
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
+import transaction
+
 DEPTH=5
 OBJ_PER_FOLDER=20
 id = 'batch_%(type)s_%(no)d'
@@ -46,6 +48,7 @@ eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim.
 """
 content_type = 'text/x-rst'
 
+
 def batchCreate(self):
     """Creates a bunch of objects for testing purpose
     """
@@ -65,6 +68,6 @@ def batchCreate(self):
             #document.setTitle(did)
             #document.edit(text, content_type)
             print fno, dno
-        get_transaction().commit(1)
+        transaction.commit(1)
         print fno
         base = folder

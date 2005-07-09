@@ -26,7 +26,8 @@ __docformat__ = 'restructuredtext'
 
 from cStringIO import StringIO
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 from ExtensionClass import Base
 from DateTime import DateTime
@@ -81,7 +82,7 @@ class ATCTImageTransform(Base):
         'id'          : 'transform',
         'name'        : 'Transform',
         'action'      : 'string:${object_url}/atct_image_transform',
-        'permissions' : (CMFCorePermissions.ModifyPortalContent,),
+        'permissions' : (ModifyPortalContent,),
         'condition'   : 'object/hasPIL',
          },
         )
@@ -108,7 +109,7 @@ class ATCTImageTransform(Base):
     # image related code like exif and rotation
     # partly based on CMFPhoto
     
-    security.declareProtected(CMFCorePermissions.View, 'getEXIF')
+    security.declareProtected(View, 'getEXIF')
     def getEXIF(self, refresh=False):
         """Get the exif informations of the file
         
@@ -144,7 +145,7 @@ class ATCTImageTransform(Base):
             setattr(self, cache, exif_data)
         return exif_data
 
-    security.declareProtected(CMFCorePermissions.View, 'getEXIFOrientation')
+    security.declareProtected(View, 'getEXIFOrientation')
     def getEXIFOrientation(self):
         """Get the rotation and mirror orientation from the EXIF data
         
@@ -177,6 +178,7 @@ class ATCTImageTransform(Base):
        
         return (mirror, rotation)
     
+    security.declareProtected(View, 'getEXIFOrigDate')
     def getEXIFOrigDate(self):
         """Get the EXIF DateTimeOriginal from the image (or None)
         """
@@ -190,8 +192,7 @@ class ATCTImageTransform(Base):
             log_exc()
             return None
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 
-                              'transformImage')
+    security.declareProtected(ModifyPortalContent, 'transformImage')
     def transformImage(self, method, REQUEST=None):
         """
         Transform an Image:
@@ -233,8 +234,7 @@ class ATCTImageTransform(Base):
         if REQUEST:
              REQUEST.RESPONSE.redirect(target)
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 
-                              'autoTransformImage')
+    security.declareProtected(ModifyPortalContent, 'autoTransformImage')
     def autoTransformImage(self, REQUEST=None):
         """Auto transform image according to EXIF data
         
@@ -249,13 +249,13 @@ class ATCTImageTransform(Base):
         if REQUEST:
              REQUEST.RESPONSE.redirect(target)
              
-    security.declareProtected(CMFCorePermissions.View, 'getTransformMap')
+    security.declareProtected(View, 'getTransformMap')
     def getTransformMap(self):
         """Get map for tranforming the image
         """
         return [{'name' : n, 'value' : v} for v, n in TRANSPOSE_MAP.items()]
     
-    security.declareProtected(CMFCorePermissions.View, 'hasPIL')
+    security.declareProtected(View, 'hasPIL')
     def hasPIL(self):
         """Is PIL installed?
         """

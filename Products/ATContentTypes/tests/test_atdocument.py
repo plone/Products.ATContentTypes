@@ -29,7 +29,8 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
@@ -44,6 +45,7 @@ from Products.ATContentTypes.interfaces import IHistoryAware
 from Products.ATContentTypes.interfaces import ITextContent
 from Products.ATContentTypes.interfaces import IATDocument
 from Interface.Verify import verifyObject
+import transaction
 
 example_stx = """
 Header
@@ -127,10 +129,10 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         time.sleep(1.0)
 
         # migrated (needs subtransaction to work)
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = DocumentMigrator(old)
         m(unittest=1)
-        get_transaction().commit(1)
+        transaction.commit(1)
 
         self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
         migrated = getattr(self.folder, id)
@@ -148,7 +150,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         doc.setText(example_rest, mimetype="text/x-rst")
         self.failUnless(str(doc.getField('text').getContentType(doc)) == "text/x-rst")
         #make sure we have _p_jar
-        get_transaction().commit(1)
+        transaction.commit(1)
 
         cur_id = 'ATCT'
         new_id = 'WasATCT'
@@ -248,10 +250,9 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setText',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
-                        CMFCorePermissions.ModifyPortalContent,
+        self.failUnless(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)

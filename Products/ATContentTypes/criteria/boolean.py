@@ -25,7 +25,8 @@ __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATBooleanCriterion'
 from Missing import MV
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
@@ -68,7 +69,7 @@ class ATBooleanCriterion(ATBaseCriterion):
 
     shortDesc      = 'Boolean (True/False)'
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
         if self.getBool():

@@ -24,7 +24,8 @@ __author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATDateRangeCriterion'
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
@@ -83,11 +84,11 @@ class ATDateRangeCriterion(ATBaseCriterion):
 
     shortDesc      = 'Date range'
 
-    security.declareProtected(CMFCorePermissions.View, 'getValue')
+    security.declareProtected(View, 'getValue')
     def Value(self):
         return (self.getStart(), self.getEnd())
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
 

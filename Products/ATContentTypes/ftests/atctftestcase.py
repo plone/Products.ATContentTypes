@@ -43,6 +43,7 @@ from Products.Archetypes.tests.atsitetestcase import portal_owner
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
+import transaction
 
 class IntegrationTestCase(ATFunctionalSiteTestCase):
 
@@ -257,7 +258,7 @@ from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 
 def setupEditors(app, id=portal_name, quiet=False):
-    get_transaction().begin()
+    transaction.begin()
     _start = time.time()
     portal = app[id]
 
@@ -284,7 +285,7 @@ def setupEditors(app, id=portal_name, quiet=False):
             if not quiet: ZopeTestCase._print('Epoz already installed ... \n')
 
     noSecurityManager()
-    get_transaction().commit()
+    transaction.commit()
     if not quiet: ZopeTestCase._print('done (%.3fs)\n' % (time.time()-_start,))
 
 app = ZopeTestCase.app()

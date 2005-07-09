@@ -33,7 +33,8 @@ from Acquisition import aq_base
 
 from OFS.Image import Image as OFSImage
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
@@ -46,6 +47,7 @@ from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage
 from Products.CMFDefault.Image import Image
 from Interface.Verify import verifyObject
+import transaction
 
 TEST_GIF = open(os.path.join(PACKAGE_HOME, 'test.gif'), 'rb').read()
 TEST2_GIF = open(os.path.join(PACKAGE_HOME, 'test_DivisionError.jpg'), 'rb').read()
@@ -113,7 +115,7 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         created     = old.CreationDate()
 
         # migrated (needs subtransaction to work)
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = ImageMigrator(old)
         m(unittest=1)
 
@@ -203,10 +205,9 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setImage',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
-                        CMFCorePermissions.ModifyPortalContent,
+        self.failUnless(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)

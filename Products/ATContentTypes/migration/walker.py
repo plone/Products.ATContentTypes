@@ -21,14 +21,20 @@ are permitted provided that the following conditions are met:
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-from Products.ATContentTypes.migration.common import LOG
+import sys
+import logging
+import traceback
+
+#from Products.ATContentTypes.migration.common import LOG
 from Products.ATContentTypes.migration.common import HAS_LINGUA_PLONE
 from Products.ATContentTypes.migration.common import StdoutStringIO
 from Products.ATContentTypes.migration.common import registerWalker
-import sys
-import traceback
+from ZODB.POSException import ConflictError
 from Products.CMFCore.utils import getToolByName
 from Acquisition import aq_parent
+import transaction
+
+LOG = logging.getLogger('ATCT.migration')
 
 class StopWalking(Exception):
     pass
@@ -84,20 +90,26 @@ class Walker:
         """Migrates the objects in the ist objs
         """
         for obj in objs:
-            msg=('Migrating %s from %s to %s ... ' %
+            msg=('Migrating %s (%s -> %s)' %
                             ('/'.join(obj.getPhysicalPath()),
                              self.src_portal_type, self.dst_portal_type, ))
-            LOG(msg)
+            LOG.log("TRACE", msg)
             self.out.append(msg)
 
             migrator = self.migrator(obj, **kwargs)
+            
+            ##savepoint = transaction.savepoint()
+            
             try:
                 # run the migration
                 migrator.migrate()
-                #raise ValueError, "MyError"
+            except ConflictError:
+                raise
             except: # except all!
-                # aborting transaction
-                get_transaction().abort()
+                LOG.error("Failed migration for object %s (%s -> %s)" %
+                           ('/'.join(obj.getPhysicalPath()),
+                            self.src_portal_type, self.dst_portal_type
+                           ), exc_info = sys.exc_info()) 
 
                 # printing exception
                 out = StdoutStringIO()
@@ -106,25 +118,27 @@ class Walker:
 
                 error = MigrationError(obj, migrator, tb)
                 msg = str(error)
-                LOG(msg)
                 self.out[-1]+=msg
-                print msg
+                
+                ## Rollback to savepoint
+                #savepoint.rollback()
 
                 # stop migration process after an error
                 # the transaction was already aborted by the migrator itself
+                # aborting transaction
+                transaction.abort()
                 raise MigrationError(obj, migrator, tb)
-            else:
-                LOG('done')
-                self.out[-1]+='done'
+                
             if migrator.subtransaction and \
               (len(self.out) % migrator.subtransaction) == 0:
                 # submit a subtransaction after every X (default 30)
                 # migrated objects to safe your butt
                 if migrator.full_transaction:
-                    get_transaction().commit()
+                    transaction.commit()
+                    LOG.debug('Transaction comitted...')
                 else:
-                    get_transaction().commit(1)
-                LOG('comitted...')
+                    transaction.commit(1)
+                    LOG.debug('Subtransaction comitted...')
 
     def getOutput(self):
         """Get migration notes
@@ -149,7 +163,7 @@ class CatalogWalker(Walker):
         :return: objects (with acquisition wrapper) that needs migration
         :rtype: generator
         """
-        LOG("src_portal_type: " + str(self.src_portal_type))
+        #("src_portal_type: " + str(self.src_portal_type))
         catalog = self.catalog
 
         if HAS_LINGUA_PLONE and 'Language' in catalog.indexes():
@@ -177,7 +191,7 @@ class CatalogWalkerWithLevel(Walker):
     """Walker using the catalog but only returning objects for a specific depth
     """
     
-    def __init__(self, migrator, catalog, depth=2, max_depth=50):
+    def __init__(self, migrator, catalog, depth=2, max_depth=100):
         portal = aq_parent(catalog)
         Walker.__init__(self, migrator, portal)
         self.catalog = catalog
@@ -192,20 +206,22 @@ class CatalogWalkerWithLevel(Walker):
         """
         depth = self.depth
         if depth > self.max_depth:
-            LOG("CatalogWalkerWithLeve: depth limit of %s reached. STOPPING"
+            LOG.error("CatalogWalkerWithLeve: depth limit of %s reached. STOPPING"
                  % depth)
             raise StopWalking
         
-        LOG("src_portal_type: %s, level %s" % (self.src_portal_type, depth))
+        #LOG("src_portal_type: %s, level %s" % (self.src_portal_type, depth))
         catalog = self.catalog
 
         if HAS_LINGUA_PLONE and 'Language' in catalog.indexes():
             # usage of Language is required for LinguaPlone
             brains = catalog(portal_type = self.src_portal_type,
+                             meta_type = self.src_meta_type,
                              Language = catalog.uniqueValuesFor('Language'),
                             )
         else:
-            brains = catalog(portal_type = self.src_portal_type, meta_type = self.src_meta_type)
+            brains = catalog(portal_type = self.src_portal_type,
+                             meta_type = self.src_meta_type)
         
         if len(brains) == 0:
             # no objects left, stop iteration
@@ -228,7 +244,8 @@ class CatalogWalkerWithLevel(Walker):
                 # safe my butt
                 if state is None: obj._p_deactivate()
             else:
-                LOG("Stale brain found at %s" % brain.getPath())
+                pass
+                #LOG("Stale brain found at %s" % brain.getPath())
 
 registerWalker(CatalogWalkerWithLevel)    
 

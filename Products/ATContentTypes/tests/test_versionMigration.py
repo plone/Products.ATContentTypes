@@ -30,7 +30,8 @@ from Products.ATContentTypes.migration.v1.betas import addRelatedItemsIndex
 from Products.ATContentTypes.migration.v1.betas import renameTopicsConfiglet
 from Products.ATContentTypes.migration.v1.betas import addTopicSyndicationAction
 from Products.ATContentTypes.migration.v1.betas import fixViewActions
-from Products.ATContentTypes.migration.v1.betas import switchToDynamicFTI
+
+from Products.CMFDynamicViewFTI.migrate import migrateFTIs
 
 class MigrationTest(atcttestcase.ATCTSiteTestCase):
 
@@ -322,14 +323,14 @@ class TestMigrations_v1(MigrationTest):
 
     def testFixViewActionNoType(self):
         self.portal.portal_types._delObject('Document')
-        switchToDynamicFTI(self.portal, [])
+        migrateFTIs(self.portal, product="ATContentTypes")
         for t in ('Event', 'Favorite', 'Link', 'News Item'):
             fti = getattr(self.portal.portal_types, t)
             self.assertEqual(fti.meta_type, DynamicViewTypeInformation.meta_type)
 
     def testFixViewActionsTwice(self):
-        switchToDynamicFTI(self.portal, [])
-        switchToDynamicFTI(self.portal, [])
+        migrateFTIs(self.portal, product="ATContentTypes")
+        migrateFTIs(self.portal, product="ATContentTypes")
         for t in ('Document', 'Favorite', 'Link', 'News Item'):
             fti = getattr(self.portal.portal_types, t)
             self.assertEqual(fti.meta_type, DynamicViewTypeInformation.meta_type)

@@ -22,6 +22,7 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 from copy import copy
+import logging
 
 from Products.CMFCore.utils import getToolByName
 from Acquisition import aq_base
@@ -38,6 +39,8 @@ from Products.ATContentTypes.migration.common import _createObjectByType
 import sys, traceback
 from StringIO import StringIO
 from warnings import warn
+
+LOG = logging.getLogger('ATCT.migration')
 
 _marker = []
 
@@ -118,7 +121,6 @@ class BaseMigrator:
     dst_portal_type = None
     dst_meta_type = None
     map = {}
-    canRoleback = True
 
     def __init__(self, obj, src_portal_type = None, dst_portal_type = None,
                  subtransaction = 30, full_transaction = False, **kwargs):
@@ -139,8 +141,10 @@ class BaseMigrator:
         # safe id generation
         while hasattr(aq_base(self.parent), self.old_id):
             self.old_id+='X'
-        #print "%s (%s -> %s)" % (old.absolute_url(1), self.src_portal_type,
-        #                         self.dst_portal_type)
+        
+        msg = "%s (%s -> %s)" % (self.old.absolute_url(1), self.src_portal_type,
+                                 self.dst_portal_type)
+        #LOG.debug(msg)
 
     def getMigrationMethods(self):
         """Calculates a nested list of callables used to migrate the old object
@@ -218,20 +222,20 @@ class BaseMigrator:
             return None
 
         for id in self.old.propertyIds():
-            LOG("propertyid: " + str(id))
+            #LOG("propertyid: " + str(id))
             if id in ('title', 'description'):
                 # migrated by dc
                 continue
             if id in ('content_type', ):
                 # has to be taken care of separately
-                LOG("property with id: %s not migrated" % str(id))
+                #LOG("property with id: %s not migrated" % str(id))
                 continue
             value = self.old.getProperty(id)
             type = self.old.getPropertyType(id)
-            LOG("value: " + str(value) + "; type: " + str(type))
+            #LOG("value: " + str(value) + "; type: " + str(type))
             if self.new.hasProperty(id):
                 self.new._delProperty(id)
-            LOG("property: " + str(self.new.getProperty(id)))
+            #LOG("property: " + str(self.new.getProperty(id)))
             __traceback_info__ = (self.new, id, value, type)
 
             # continue if the object already has this attribute
@@ -247,13 +251,13 @@ class BaseMigrator:
         if hasattr(aq_base(self.old), 'getWrappedOwner'):
             owner = self.old.getWrappedOwner()
             self.new.changeOwnership(owner)
-            LOG("changing owner via changeOwnership: %s" % str(self.old.getWrappedOwner()))
+            #LOG("changing owner via changeOwnership: %s" % str(self.old.getWrappedOwner()))
         else:
             # fallback
             # not very nice but at least it works
             # trying to get/set the owner via getOwner(), changeOwnership(...)
             # did not work, at least not with plone 1.x, at 1.0.1, zope 2.6.2
-            LOG("changing owner via property _owner: %s" % str(self.old.getOwner(info = 1)))
+            #LOG("changing owner via property _owner: %s" % str(self.old.getOwner(info = 1)))
             self.new._owner = self.old.getOwner(info = 1)
 
     def migrate_localroles(self):
@@ -287,7 +291,7 @@ class BaseMigrator:
             new.newmethod(oldmethod())
         """
         for oldKey, newKey in self.map.items():
-            LOG("oldKey: " + str(oldKey) + ", newKey: " + str(newKey))
+            #LOG("oldKey: " + str(oldKey) + ", newKey: " + str(newKey))
             if not newKey:
                 newKey = oldKey
             oldVal = getattr(self.old, oldKey)
@@ -314,14 +318,6 @@ class BaseMigrator:
         Must be implemented by the real Migrator
         """
         raise NotImplementedError
-
-    def rollback(self):
-        """Roles the migration back
-
-        * Removes the migrated object
-        * Puts the old object back in place
-        """
-        raise NotImplementedError
         
     def finalize(self):
         """Finalize construction (called between)
@@ -336,25 +332,25 @@ class BaseMigrator:
         if hasattr(ob, '_setPortalTypeName'):
             ob._setPortalTypeName(fti.getId())
 
-        # Update permissions to match migrated workflow state
-        # It may be better to just call the recursive RoleMapping update after
-        # all migrations are done.
-        wf_tool = getToolByName(self.new, 'portal_workflow')
-        # Build list of updateable workflows
-        wfs = {}
-        for id in wf_tool.objectIds():
-            wf = wf_tool.getWorkflowById(id)
-            if hasattr(aq_base(wf), 'updateRoleMappingsFor'):
-                wfs[id] = wf
-        # Update Role map for object
-        wf_ids = wf_tool.getChainFor(ob)
-        for wf_id in wf_ids:
-            wf = wfs.get(wf_id, None)
-            if wf is not None:
-                wf.updateRoleMappingsFor(ob)
-
-        # Reindex
-        self.new.reindexObject()
+#        # Update permissions to match migrated workflow state
+#        # It may be better to just call the recursive RoleMapping update after
+#        # all migrations are done.
+#        wf_tool = getToolByName(self.new, 'portal_workflow')
+#        # Build list of updateable workflows
+#        wfs = {}
+#        for id in wf_tool.objectIds():
+#            wf = wf_tool.getWorkflowById(id)
+#            if hasattr(aq_base(wf), 'updateRoleMappingsFor'):
+#                wfs[id] = wf
+#        # Update Role map for object
+#        wf_ids = wf_tool.getChainFor(ob)
+#        for wf_id in wf_ids:
+#            wf = wfs.get(wf_id, None)
+#            if wf is not None:
+#                wf.updateRoleMappingsFor(ob)
+#
+#        # Reindex
+#        self.new.reindexObject()
 
 class BaseCMFMigrator(BaseMigrator):
     """Base migrator for CMF objects
@@ -365,16 +361,10 @@ class BaseCMFMigrator(BaseMigrator):
            This needs to be done after custom migrations, as you cannot
            setContentType on Images and Files until there is an object stored.
         """
-        # doesn't work!
-        # shure? works for me
         for accessor, mutator in METADATA_MAPPING:
             oldAcc = getattr(self.old, accessor)
             newMut = getattr(self.new, mutator)
-            #newAcc = getattr(self.new, accessor)
             oldValue = oldAcc()
-            if accessor is 'Language' and not oldValue:
-                # fix empty values in Language DC data set
-                oldValue = self.kwargs.get('default_language', 'en')
             newMut(oldValue)
 
     def migrate_workflow(self):
@@ -423,8 +413,8 @@ class ItemMigrationMixin:
     def renameOld(self):
         """Renames the old object
         """
-        LOG("renameOld | orig_id: " + str(self.orig_id) + "; old_id: " + str(self.old_id))
-        LOG(str(self.old.absolute_url()))
+        #LOG("renameOld | orig_id: " + str(self.orig_id) + "; old_id: " + str(self.old_id))
+        #LOG(str(self.old.absolute_url(1)))
         unrestricted_rename(self.parent, self.orig_id, self.old_id)
         #self.parent.manage_renameObject(self.orig_id, self.old_id)
 
@@ -437,7 +427,6 @@ class ItemMigrationMixin:
     def remove(self):
         """Removes the old item
         """
-        self._removed = True
         if REMOVE_OLD:
             self.parent.manage_delObjects([self.old_id])
 
@@ -451,28 +440,10 @@ class ItemMigrationMixin:
             except ValueError:
                 pass
 
-    def rollback(self):
-        """Roles the migration back
-        """
-        if not self.canRollback:
-            raise RuntimeError, "%s doesn't support rollbacks" % self.__class__
-        if getattr(self, '_removed', False):
-            raise RuntimeError, "Can't rollback after the old object is removed"
-        ids = self.parent.objectIds()
-        if self.old_id not in ids:
-            # the backup isn't there - nothing to do
-            return
-        if self.new_id in ids:
-            self.parent.manage_delObjects([self.new_id,])
-        unrestricted_rename(self.parent, self.old_id, self.orig_id)
-        if hasattr(self, '_position'):
-            self.parent.moveObject(self.orig_id, self._position)
-
 class FolderMigrationMixin(ItemMigrationMixin):
     """Migrates a folderish object
     """
     isFolderish = True
-    canRollback = False
     
     def beforeChange_storeSubojects(self):
         """store subobjects from old folder
@@ -495,19 +466,14 @@ class FolderMigrationMixin(ItemMigrationMixin):
             obj = getattr(self.old.aq_inner.aq_explicit, id)
             # Broken object support. Maybe we are able to migrate them?
             if isinstance(obj, BrokenClass):
-                LOG('WARNING: BrokenObject in %s' % \
-                    self.old.absolute_url(1))
+                LOG.warning('BrokenObject in %s' % self.old.absolute_url(1))
                 #continue
 
             if orderAble:
                 try:
                     orderMap[id] = self.old.getObjectPosition(id)
                 except AttributeError:
-                    out = StringIO()
-                    t, e, tb = sys.exc_info()
-                    traceback.print_exc(tb, out)
-                    msg = "Broken OrderSupport:\n %s\n %s\n %s\n" %( t, e,  out.getvalue())
-                    LOG(msg)
+                    LOG.debug("Broken OrderSupport", exc_info=sys.exc_info())
                     orderAble=0
             subobjs[id] = aq_base(obj)
             # delOb doesn't call manage_afterAdd which safes some time because it

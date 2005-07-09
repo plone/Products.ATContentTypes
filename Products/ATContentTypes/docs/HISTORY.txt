@@ -1,6 +1,22 @@
 1.0-devel
 =====================
 
+ * Updated INSTALL.txt for CMF 1.5. Zope 2.8 and more
+   [tiran]
+
+ * CMF 1.5 / Zope2.8 compatibility:
+    o replaced CMFCorePermissions with permissions
+    o replaced get_transaction() with transaction
+    o removed product argument from TooolInit()
+    o logging.getLogger() and LOG.debug() etc.
+   [tiran]
+
+ * Greatly enhanced logging during migration.
+   [tiran]
+
+ * Chunked migration in smaller pieces. To be continued!
+   [tiran]
+
  * Fixed finalize migration so that it doesn't reinitialize the workflow
    state.  Added unit tests for workflow, local_role, and owner migration.
    [alecm]

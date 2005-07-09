@@ -32,6 +32,7 @@ from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.tool.atct import ATCTTool
 from Products.CMFCore.utils import getToolByName
+import transaction
 
 tests = []
 
@@ -108,7 +109,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         cmf_prods = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFCalendar')
 
         qi.uninstallProducts(('ATContentTypes',))
-        get_transaction().commit(1)
+        transaction.commit(1)
 
         tids = ttool.objectIds()
         for id in cmf_ids:

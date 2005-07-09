@@ -21,16 +21,20 @@ are permitted provided that the following conditions are met:
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
+import logging
+from cStringIO import StringIO
+
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.migration.common import registerATCTMigrator
-from Products.ATContentTypes.migration.common import LOG
 from Products.ATContentTypes.migration.walker import CatalogWalker
 from Products.ATContentTypes.migration.walker import CatalogWalkerWithLevel
 from Products.ATContentTypes.migration.walker import useLevelWalker
 from Products.ATContentTypes.migration.migrator import CMFItemMigrator
 from Products.ATContentTypes.migration.migrator import CMFFolderMigrator
 from Products.CMFCore.utils import getToolByName
-from Acquisition import aq_parent, aq_base
+from Acquisition import aq_parent
+from Acquisition import aq_base
+import transaction
 
 from Products.ATContentTypes.content import document
 from Products.ATContentTypes.content import event
@@ -42,6 +46,8 @@ from Products.ATContentTypes.content import link
 from Products.ATContentTypes.content import newsitem
 from Products.ATContentTypes.content import topic
 from Products.ATContentTypes.content.base import translateMimetypeAlias
+
+LOG = logging.getLogger('ATCT.migration')
 
 CRIT_MAP = {'Integer Criterion': 'ATSimpleIntCriterion',
                 'String Criterion': 'ATSimpleStringCriterion',
@@ -201,31 +207,39 @@ def migrateAll(portal):
     # first fix Members folder
     kwargs = {}
     catalog = getToolByName(portal, 'portal_catalog')
-    pprop = getToolByName(portal, 'portal_properties')
     atct = getToolByName(portal, TOOLNAME)
-    try:
-        kwargs['default_language'] = pprop.aq_explicit.site_properties.default_language
-    except (AttributeError, KeyError):
-        kwargs['default_language'] = 'en'
-        
-    out = []
-    for migrator in migrators:
-        #out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.src_portal_type, migrator.dst_portal_type))
-        out.append('*** Migrating %s to %s ***' % (migrator.src_portal_type, migrator.dst_portal_type))
-        w = CatalogWalker(migrator, catalog)
-        out.append(w.go(**kwargs))
-        get_transaction().commit(1)
-    for migrator in folderMigrators:
-        #out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.src_portal_type, migrator.dst_portal_type))
-        out.append('*** Migrating %s to %s ***' % (migrator.src_portal_type, migrator.dst_portal_type))
-        useLevelWalker(portal, migrator, out=out, **kwargs)
-        get_transaction().commit(1)
-                
-    #get_transaction().commit()
-
-    wf = getToolByName(catalog, 'portal_workflow')
-    LOG('starting wf migration')
-    count = wf.updateRoleMappings()
-    out.append('Workflow: %d object(s) updated.' % count)
     
-    return '\n'.join(out)
+    LOG.debug('Starting ATContentTypes type migration')
+        
+    out = StringIO()
+    for migrator in migrators:
+        msg = '--> Migrating %s to %s' % (migrator.src_portal_type,
+                                          migrator.dst_portal_type)
+        print >> out, msg
+        LOG.debug(msg)
+        
+        w = CatalogWalker(migrator, catalog)
+        output = w.go(**kwargs)
+        print >>out, '\n'.join(output)
+        
+        LOG.debug('done')
+        transaction.commit(1)
+    
+    for migrator in folderMigrators:
+        msg = '--> Migrating %s to %s' % (migrator.src_portal_type,
+                                          migrator.dst_portal_type)
+        print >> out, msg
+        LOG.debug(msg)
+        
+        output = []
+        useLevelWalker(portal, migrator, out=output, **kwargs)
+        print >>out, '\n'.join(output)
+        
+        LOG.debug('done')
+        transaction.commit(1)
+                
+    #transaction.commit()
+    
+    LOG.debug('Finished ATContentTypes type migration')
+    
+    return out.getvalue()

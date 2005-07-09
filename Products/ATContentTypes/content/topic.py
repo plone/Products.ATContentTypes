@@ -29,7 +29,9 @@ from types import TupleType
 from types import StringType
 from locale import strcoll
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import ManageProperties
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.CatalogTool import CatalogTool
 from AccessControl import ClassSecurityInfo
@@ -172,7 +174,7 @@ class ATTopic(ATCTFolder):
         #'id'          : 'view',
         #'name'        : 'View',
         #'action'      : 'string:${folder_url}/',
-        #'permissions' : (CMFCorePermissions.View,)
+        #'permissions' : (View,)
         #},
         {
         'id'          : 'edit',
@@ -197,7 +199,7 @@ class ATTopic(ATCTFolder):
         'name'        : 'Syndication',
         'action'      : 'string:${folder_url}/synPropertiesForm',
         'condition'   : 'python: portal.portal_syndication.isSiteSyndicationAllowed()',
-        'permissions' : (CMFCorePermissions.ManageProperties,)
+        'permissions' : (ManageProperties,)
         },
        )
     )
@@ -263,7 +265,7 @@ class ATTopic(ATCTFolder):
         val.sort()
         return val
 
-    security.declareProtected(CMFCorePermissions.View, 'listCriteria')
+    security.declareProtected(View, 'listCriteria')
     def listCriteria(self):
         """Return a list of our criteria objects.
         """
@@ -273,7 +275,7 @@ class ATTopic(ATCTFolder):
         #val.sort()
         return val
 
-    security.declareProtected(CMFCorePermissions.View, 'listSearchCriteria')
+    security.declareProtected(View, 'listSearchCriteria')
     def listSearchCriteria(self):
         """Return a list of our search criteria objects.
         """
@@ -343,7 +345,7 @@ class ATTopic(ATCTFolder):
                ]
         return val
 
-    security.declareProtected(CMFCorePermissions.View, 'listSubtopics')
+    security.declareProtected(View, 'listSubtopics')
     def listSubtopics(self):
         """Return a list of our subtopics.
         """
@@ -351,21 +353,21 @@ class ATTopic(ATCTFolder):
         val.sort()
         return val
 
-    security.declareProtected(CMFCorePermissions.View, 'listSubtopics')
+    security.declareProtected(View, 'listSubtopics')
     def hasSubtopics(self):
         """Returns true if subtopics have been created on this topic.
         """
         val = self.objectIds(self.meta_type)
         return not not val
 
-    security.declareProtected(CMFCorePermissions.View, 'listMetaDataFields')
+    security.declareProtected(View, 'listMetaDataFields')
     def listMetaDataFields(self, exclude=True):
         """Return a list of metadata fields from portal_catalog.
         """
         tool = getToolByName(self, TOOLNAME)
         return tool.getMetadataDisplay(exclude)
 
-    security.declareProtected(CMFCorePermissions.View, 'allowedCriteriaForField')
+    security.declareProtected(View, 'allowedCriteriaForField')
     def allowedCriteriaForField(self, field, display_list=False):
         """ Return all valid criteria for a given field.  Optionally include
             descriptions in list in format [(desc1, val1) , (desc2, val2)] for
@@ -382,7 +384,7 @@ class ATTopic(ATCTFolder):
             allowed = DisplayList(flat)
         return allowed
 
-    security.declareProtected(CMFCorePermissions.View, 'buildQuery')
+    security.declareProtected(View, 'buildQuery')
     def buildQuery(self):
         """Construct a catalog query using our criterion objects.
         """
@@ -407,7 +409,7 @@ class ATTopic(ATCTFolder):
                 result[key] = value
         return result
 
-    security.declareProtected(CMFCorePermissions.View, 'queryCatalog')
+    security.declareProtected(View, 'queryCatalog')
     def queryCatalog(self, REQUEST=None, **kw):
         """Invoke the catalog using our criteria to augment any passed
             in query before calling the catalog.
@@ -443,7 +445,7 @@ class ATTopic(ATCTFolder):
             return results[:max_items]
         return results
 
-    security.declareProtected(CMFCorePermissions.View, 'queryCatalog')
+    security.declareProtected(View, 'queryCatalog')
     synContentValues = queryCatalog
 
     security.declareProtected(ChangeTopics, 'addCriterion')
@@ -467,7 +469,7 @@ class ATTopic(ATCTFolder):
             for cid in criterion_id:
                 self._delObject(cid)
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriterion')
+    security.declareProtected(View, 'getCriterion')
     def getCriterion(self, criterion_id):
         """Get the criterion object.
         """
@@ -494,7 +496,7 @@ class ATTopic(ATCTFolder):
         objs = [brain.getObject() for brain in brains]
         return [obj for obj in objs if obj is not None]
 
-    security.declareProtected(CMFCorePermissions.View, 'get_size')
+    security.declareProtected(View, 'get_size')
     def get_size(self):
         """Returns 1 as topics have no size."""
         return 1

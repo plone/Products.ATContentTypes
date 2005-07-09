@@ -37,7 +37,8 @@ from Products.Archetypes.public import SelectionWidget
 from Products.Archetypes.public import BooleanField
 from Products.Archetypes.public import BooleanWidget
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 
 from Products.ATContentTypes import permission as ATCTPermissions
 
@@ -52,7 +53,7 @@ ATContentTypeSchema = BaseSchema.copy() + Schema((
         isMetadata = True,
         languageIndependent = False,
         index = 'KeywordIndex',
-        write_permission = CMFCorePermissions.ModifyPortalContent,
+        write_permission = ModifyPortalContent,
         widget = ReferenceBrowserWidget(
             allow_search = True,
             allow_browse = True,

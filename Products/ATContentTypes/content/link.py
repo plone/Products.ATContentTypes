@@ -26,7 +26,8 @@ __old_name__ = 'Products.ATContentTypes.types.ATLink'
 
 import urlparse
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.public import Schema
@@ -84,7 +85,7 @@ class ATLink(ATCTContent):
 
     security       = ClassSecurityInfo()
     
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setRemoteUrl')
+    security.declareProtected(ModifyPortalContent, 'setRemoteUrl')
     def setRemoteUrl(self, value, **kwargs):
         """remute url mutator
         
@@ -95,7 +96,7 @@ class ATLink(ATCTContent):
             value = urlparse.urlunparse(urlparse.urlparse(value))
         self.getField('remoteUrl').set(self, value, **kwargs)
 
-    security.declareProtected(CMFCorePermissions.View, 'remote_url')
+    security.declareProtected(View, 'remote_url')
     def remote_url(self):
         """CMF compatibility method
         """
@@ -107,7 +108,7 @@ class ATLink(ATCTContent):
             remote_url = kwargs.get('remote_url', None)
         self.update(remoteUrl = remote_url, **kwargs)
 
-    security.declareProtected(CMFCorePermissions.View, 'get_size')
+    security.declareProtected(View, 'get_size')
     def get_size(self):
         """Return the size of the remote url."""
         return len(self.getRemoteUrl()) or 1

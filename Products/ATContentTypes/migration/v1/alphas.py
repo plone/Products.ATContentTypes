@@ -100,10 +100,6 @@ def migrateCMFTopics(portal, out):
             catalog.reindexObject(topic,idxs=['portal_type', 'Type', 'meta_type', ])
 
         kwargs = {}
-        try:
-            kwargs['default_language'] = pprop.aq_explicit.site_properties.default_language
-        except (AttributeError, KeyError):
-            kwargs['default_language'] = 'en'
         out.append('*** Migrating Topics ***')
         useLevelWalker(portal, TopicMigrator, out=out, **kwargs)
     out.append('CMF type migration finished')

@@ -26,8 +26,6 @@ __old_name__ = 'Products.ATContentTypes.types.ATNewsItem'
 
 from AccessControl import ClassSecurityInfo
 
-from Products.CMFCore import CMFCorePermissions
-
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import ImageField
 from Products.Archetypes.public import StringField
@@ -49,6 +47,9 @@ from Products.ATContentTypes.content.image import ATCTImageTransform
 from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 
 from Products.validation.config import validation
 from Products.validation.validators.SupplValidators import MaxSizeValidator
@@ -140,7 +141,7 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
     
     security = ClassSecurityInfo()
 
-    security.declareProtected(CMFCorePermissions.View, 'tag')
+    security.declareProtected(View, 'tag')
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
         """

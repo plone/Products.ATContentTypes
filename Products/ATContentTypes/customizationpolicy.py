@@ -31,6 +31,7 @@ from Products.ATContentTypes.config import TOOLNAME
 from Products.CMFPlone.CustomizationPolicy import DefaultCustomizationPolicy
 from Products.Archetypes.customizationpolicy import ArchetypesSitePolicy
 from Products.Archetypes.utils import shasattr
+import transaction
 
 PRODUCTS = ('ATReferenceBrowserWidget', 'ATContentTypes', )
 
@@ -77,7 +78,7 @@ class ATCTSitePolicy(ArchetypesSitePolicy):
         """
         # migrate content
         print >>out, 'Setting up ATContentTypes ...'
-        get_transaction().commit(1)
+        transaction.commit(1)
         tool = getToolByName(portal, TOOLNAME)
         tool.migrateToATCT()
         print >>out, 'Done\n'

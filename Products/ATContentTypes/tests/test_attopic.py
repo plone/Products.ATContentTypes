@@ -30,7 +30,7 @@ from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.tests.utils import dcEdit
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 
@@ -44,6 +44,8 @@ from Products.ATContentTypes.migration.atctmigrator import CRIT_MAP, REV_CRIT_MA
 from Products.ATContentTypes.interfaces import IATTopic
 from Interface.Verify import verifyObject
 from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
+import transaction
+
 
 ACQUIRE  = True
 LIMIT    = False
@@ -283,7 +285,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         old_query = convert_old_catalog_query(old.buildQuery())
 
         # migrated (needs subtransaction to work)
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = TopicMigrator(old)
         m(unittest=1)
         
@@ -346,7 +348,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setAcquireCriteria',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission == ChangeTopics,
                         'Value is %s' % field.write_permission)
@@ -386,7 +388,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setLimitNumber',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission == ChangeTopics,
                         'Value is %s' % field.write_permission)
@@ -426,7 +428,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setItemCount',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission == ChangeTopics,
                         'Value is %s' % field.write_permission)
@@ -468,7 +470,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setCustomView',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission == ChangeTopics,
                         'Value is %s' % field.write_permission)
@@ -510,7 +512,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setCustomViewFields',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission == ChangeTopics,
                         'Value is %s' % field.write_permission)

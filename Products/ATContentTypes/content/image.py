@@ -25,7 +25,8 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.ATImage'
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from Acquisition import aq_parent
@@ -122,7 +123,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
 
     security       = ClassSecurityInfo()
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setImage')
+    security.declareProtected(ModifyPortalContent, 'setImage')
     def setImage(self, value, **kwargs):
         """Set id to uploaded id
         """
@@ -130,7 +131,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         # set exif because rotation might screw up the exif data
         self.getEXIF(refresh=kwargs.get('refresh_exif', True))
 
-    security.declareProtected(CMFCorePermissions.View, 'tag')
+    security.declareProtected(View, 'tag')
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
         """
@@ -141,16 +142,16 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         """
         return self.tag()
     
-    security.declareProtected(CMFCorePermissions.View, 'getSize')
+    security.declareProtected(View, 'getSize')
     def getSize(self, scale=None):
         field = self.getField('image')
         return field.getSize(self, scale=scale)
     
-    security.declareProtected(CMFCorePermissions.View, 'getWidth')
+    security.declareProtected(View, 'getWidth')
     def getWidth(self, scale=None):
         return self.getSize(scale)[0]
 
-    security.declareProtected(CMFCorePermissions.View, 'getHeight')
+    security.declareProtected(View, 'getHeight')
     def getHeight(self, scale=None):
         return self.getSize(scale)[1]
     

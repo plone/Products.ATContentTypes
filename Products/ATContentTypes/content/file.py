@@ -25,7 +25,8 @@ __old_name__ = 'Products.ATContentTypes.types.ATFile'
 
 from urllib import quote
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_parent
@@ -102,14 +103,14 @@ class ATFile(ATCTFileContent):
 
     security       = ClassSecurityInfo()
 
-    security.declareProtected(CMFCorePermissions.View, 'index_html')
+    security.declareProtected(View, 'index_html')
     def index_html(self, REQUEST=None, RESPONSE=None):
         """Download the file
         """
         field = self.getPrimaryField()
         return field.download(self)
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setFile')
+    security.declareProtected(ModifyPortalContent, 'setFile')
     def setFile(self, value, **kwargs):
         """Set id to uploaded id
         """
@@ -154,7 +155,7 @@ class ATFile(ATCTFileContent):
                 res = res[1:]
             return res
 
-    security.declareProtected(CMFCorePermissions.View, 'icon')
+    security.declareProtected(View, 'icon')
     def icon(self):
         """for ZMI
         """

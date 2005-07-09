@@ -24,7 +24,8 @@ __author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATPathCriterion'
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
@@ -95,7 +96,7 @@ class ATPathCriterion(ATBaseCriterion):
         nav_types = ptool.typesToList()
         return nav_types
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
         depth = (not self.Recurse() and 1) or 0

@@ -23,7 +23,8 @@ __author__  = 'Godefroid Chapelle'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATPortalTypeCriterion'
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
@@ -63,7 +64,7 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
 
     shortDesc      = 'Select content types'
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCurrentValues(self):
          """Return enabled portal types"""
          plone_tool = getToolByName(self, 'plone_utils')
@@ -81,7 +82,7 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
          portal_types = [p[1] for p in portal_types]
          return DisplayList(zip(portal_types,portal_types))
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
 

@@ -23,7 +23,8 @@ __author__  = 'Alec Mitchell <apm13@columbia.edu>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATCurrentAuthorCriterion'
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
@@ -53,7 +54,7 @@ class ATCurrentAuthorCriterion(ATBaseCriterion):
 
     shortDesc      = 'Restrict to current user'
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
 

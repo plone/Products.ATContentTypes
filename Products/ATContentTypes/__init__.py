@@ -38,7 +38,6 @@ else:
 
 from Products.CMFCore.utils import ContentInit
 from Products.CMFCore.utils import ToolInit
-from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.DirectoryView import registerDirectory
 
 # import all content types, migration and validators
@@ -69,8 +68,7 @@ def initialize(context):
     
     ToolInit(
         'ATContentTypes tools', 
-        tools=(ATCTTool,),  
-        product_name='ATContentTypes', 
+        tools=(ATCTTool,), 
         icon='tool.gif', ).initialize(context) 
 
     listOfTypes = listTypes(PROJECTNAME)

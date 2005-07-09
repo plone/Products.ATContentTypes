@@ -30,7 +30,10 @@ from Acquisition import aq_parent
 from Acquisition import aq_inner
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import AddPortalContent
+# BBB
 try:
     from Products.CMFCore.PortalFolder import PortalFolderBase as PortalFolder
 except:
@@ -165,8 +168,7 @@ class ConstrainTypesMixin:
     #
     # Sanity validator
     #
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent,
-                                'validate_preferredTypes')
+    security.declareProtected(ModifyPortalContent, 'validate_preferredTypes')
     def validate_preferredTypes(self, value):
         """Ensure that the preferred types is a subset of the allowed types.
         """
@@ -186,7 +188,7 @@ class ConstrainTypesMixin:
     # Overrides + supplements for CMF types machinery
     #
 
-    security.declareProtected(CMFCorePermissions.View, 'getLocallyAllowedTypes')
+    security.declareProtected(View, 'getLocallyAllowedTypes')
     def getLocallyAllowedTypes(self):
         """If enableTypeRestrictions is ENABLE, return the list of types
         set. If it is ACQUIRE, get the types set on the parent so long
@@ -210,8 +212,7 @@ class ConstrainTypesMixin:
             raise ValueError, "Invalid value for enableAddRestriction"
 
 
-    security.declareProtected(CMFCorePermissions.View,
-                                'getImmediatelyAddableTypes')
+    security.declareProtected(View, 'getImmediatelyAddableTypes')
     def getImmediatelyAddableTypes(self):
         """Get the list of type ids which should be immediately addable.
         If enableTypeRestrictions is ENABLE, return the list set; if it is
@@ -257,7 +258,7 @@ class ConstrainTypesMixin:
         return [ fti for fti in ftis if fti.isConstructionAllowed(self) ]
 
     # overrides CMFCore's PortalFolder invokeFactory
-    security.declareProtected(CMFCorePermissions.AddPortalContent, 'invokeFactory')
+    security.declareProtected(AddPortalContent, 'invokeFactory')
     def invokeFactory(self, type_name, id, RESPONSE=None, *args, **kw):
         """Invokes the portal_types tool
         """

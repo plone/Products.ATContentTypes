@@ -23,7 +23,8 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATListCriterion'
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.public import Schema
@@ -90,7 +91,7 @@ class ATListCriterion(ATBaseCriterion):
 
     shortDesc      = 'List of values'
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         # filter out empty strings
         result = []

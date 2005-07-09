@@ -53,6 +53,7 @@ from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.lib.autosort import IAutoSortSupport
 from Products.ATContentTypes.lib.autosort import IAutoOrderSupport
 from Interface.Verify import verifyObject
+import transaction
 
 from Products.CMFPlone.interfaces.ConstrainTypes import ISelectableConstrainTypes
 
@@ -125,7 +126,7 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         created     = old.CreationDate()
 
         # migrated (needs subtransaction to work)
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = FolderMigrator(old)
         m(unittest=1)
 
@@ -159,7 +160,7 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
         # migration will raise an error if it attempts to incorrectly migrate
         # the index_html
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = FolderMigrator(index)
         try:
             m(unittest=1)
@@ -223,7 +224,7 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         bogus = old.bogus
 
         # migrated (needs subtransaction to work)
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = LargeFolderMigrator(old)
         m(unittest=1)
 
@@ -251,7 +252,7 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         bogus = old.bogus
 
         # migrated (needs subtransaction to work)
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = DocumentMigrator(bogus)
         try:
             m(unittest=1)

@@ -48,6 +48,8 @@ from Interface.Verify import verifyObject
 from Products.Archetypes.public import Schema, BaseSchema, BaseContent, \
                                        TextField, RichWidget
 from Products.ATContentTypes.config import PROJECTNAME
+import transaction
+
 
 example_stx = """
 Header
@@ -110,10 +112,10 @@ class TestTypeMigrations(atcttestcase.ATCTTypeTestCase):
         self.body        = self.old.CookedBody(stx_level=2)
 
         # migrated (needs subtransaction to work)
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = DocumentMigrator(self.old)
         m(unittest=1)
-        get_transaction().commit(1)
+        transaction.commit(1)
 
         self.migrated = getattr(self.folder, self.id)
 
