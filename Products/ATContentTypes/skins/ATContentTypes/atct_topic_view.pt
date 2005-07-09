@@ -72,7 +72,7 @@
                                                 obj_type obj/portal_type;
                                                 obj_typeinfo python: here.portal_types.getTypeInfo(obj_type);
                                                 icon python:portal_url+'/'+ obj_typeinfo.getIcon();
-                                                title_or_id python:obj.Title or obj.getId">
+                                                title_or_id obj/pretty_title_or_id">
                             <tal:block define="value python: getattr(obj, field, None)">
                                 <td tal:condition="python: field != 'Title'"
                                     tal:content="python:here.formatCatalogMetadata(value)"/>

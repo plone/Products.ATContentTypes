@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Modified templates to use the new pretty_title_or_id feature from plone.
+   [alecm]
+
  * Made atct_album_view use the catalog like other listings, and reuse the
    nice macro from folder_listing.
    [alecm]

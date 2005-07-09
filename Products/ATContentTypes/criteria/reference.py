@@ -53,10 +53,11 @@ class ATReferenceCriterion(ATSelectionCriterion):
     def getCurrentValues(self):
         catalog = getToolByName(self, 'portal_catalog')
         uid_cat = getToolByName(self, 'uid_catalog')
+        putils = getToolByName(self, 'plone_utils')
         options = catalog.uniqueValuesFor(self.Field())
 
-        brains = uid_cat(UID=options, sort_on='Title')
-        display = [((b.Title or b.id).lower(), b.UID, b.Title or b.id) for b in brains]
+        brains = uid_cat(UID=options, sort_on='sortable_title')
+        display = [((putils.pretty_title_or_id(b)).lower(), b.UID, b.Title or b.id) for b in brains]
         display.sort()
         display_list = DisplayList([(d[1], d[2]) for d in display])
 

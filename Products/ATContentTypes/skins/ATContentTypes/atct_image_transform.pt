@@ -11,7 +11,7 @@
                                         size python:here.getObjSize(here)">
 
     <div class="contentHeader">
-        <h1 tal:content="here/title_or_id">Title or id</h1>
+        <h1 tal:content="here/pretty_title_or_id">Title or id</h1>
     </div>
 
     <img src="#" alt="" tal:replace="structure python:here.tag(scale='mini')" />

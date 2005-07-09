@@ -18,7 +18,7 @@
                      tabindex python:Iterator()">
 
       <div class="contentHeader">
-        <h1 tal:content="image/title_or_id">Title or id</h1>
+        <h1 tal:content="image/pretty_title_or_id">Title or id</h1>
       </div>
 
       <div metal:use-macro="here/batch_macros/macros/navigation"></div>
