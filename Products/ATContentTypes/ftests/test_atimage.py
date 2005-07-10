@@ -29,8 +29,12 @@ if __name__ == '__main__':
 
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.ftests import atctftestcase
+from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
+from AccessControl import Unauthorized
 
 tests = []
+
+TEST_JPEG = open(os.path.join(PACKAGE_HOME, 'CanonEye.jpg'), 'rb').read()
 
 class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
     
@@ -41,6 +45,22 @@ class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
         #import pdb; pdb.set_trace()
         response = self.publish(self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
+        
+    def test_bobo_hook_security(self):
+        # Make sure that users with 'View' permission can use the
+        # bobo_traversed image scales, even if denied to anonymous
+        self.obj.setImage(TEST_JPEG, content_type="image/jpeg")
+        dcEdit(self.obj)
+        response1 = self.publish(self.obj_path+'/image', self.basic_auth)
+        self.assertStatusEqual(response1.getStatus(), 200) # OK
+        # deny access to anonymous
+        self.obj.manage_permission('View', ['Manager','Member'],0)
+        response2 = self.publish(self.obj_path+'/image', self.basic_auth)
+        # Should be allowed for member
+        self.assertStatusEqual(response2.getStatus(), 200) # OK
+        # Should fail for anonymous
+        response3 = self.publish(self.obj_path+'/image')
+        self.assertStatusEqual(response3.getStatus(), 401)
         
 
 tests.append(TestATImageFunctional)

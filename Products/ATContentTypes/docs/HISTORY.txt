@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Fixed __bobo_traverse__ in ATImage, security check was unnecessary and
+   required anonymous to have 'View' in order for anyone to use it.
+   [alecm]
+
  * Yet another migration optimization: Added catalogpatch to the migration
    system. The patch is altering portal_catalog.catalog_object and
    uncatalog_object. Read migration/catalogpatch.py for more informations.

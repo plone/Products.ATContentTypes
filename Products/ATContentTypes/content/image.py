@@ -180,8 +180,6 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
                     image = field.getScale(self, scale=scalename)
             if image is not None and not isinstance(image, basestring):
                 # image might be None or '' for empty images
-                if not field.checkPermission('view', self):
-                    raise Unauthorized, name
                 return image
         
         return ATCTFileContent.__bobo_traverse__(self, REQUEST, name, RESPONSE=None)

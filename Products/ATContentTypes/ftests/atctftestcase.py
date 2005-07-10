@@ -127,8 +127,9 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         response = self.publish(edit_form_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
         temp_id = body.split('/')[-2]
-        new_obj = getattr(self.folder.aq_explicit, temp_id)
-        self.failUnlessEqual(self.obj.checkCreationFlag(), True) # object is not yet edited
+        # object is in portal_factory by default
+        # new_obj = getattr(self.folder.portal_factory, temp_id)
+        # self.failUnlessEqual(self.obj.checkCreationFlag(), True) # object is not yet edited
         
 
     def check_newly_created(self):
