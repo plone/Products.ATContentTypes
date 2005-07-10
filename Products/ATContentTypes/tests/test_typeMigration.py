@@ -30,6 +30,7 @@ from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
 from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
@@ -175,6 +176,19 @@ class TestTypeMigrations(atcttestcase.ATCTTypeTestCase):
         # check transfer of permissions
         self.login('user1')
         self.failIf(self.pm.checkPermission('View',self.migrated))
+
+    def test_migration_with_missing_FTIs(self):
+        # migration shouldn't fail when CMF FTIs are missing
+        ttool = getToolByName(self.portal, 'portal_types')
+        # Remove Large Plone Folder
+        ttool.manage_delObjects(['Large Plone Folder'])
+
+        transaction.commit(1)
+        try:
+            self.portal.portal_atct.migrateContentTypesToATCT()
+        except Exception, e:
+            import sys, traceback
+            self.fail('Failed to migrate types when an expected FTI is missing: %s \n %s'%(e,''.join(traceback.format_tb(sys.exc_traceback))))
 
 
 tests.append(TestTypeMigrations)
