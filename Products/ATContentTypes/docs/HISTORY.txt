@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Fixed last bit of http://plone.org/collector/3060  Don't let missing CMF
+   types crash portal_atct.disableCMFTypes().
+   [alecm]
+
  * Enhanced migration code:
     o CatalogWalkerWithLevel is now based on ExtendedPathIndex
       and behaves like CatalogWalker.

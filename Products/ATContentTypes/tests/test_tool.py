@@ -143,6 +143,23 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         # This shouldn't fail with AttributeError: _setPortalTypeName
         t.disableCMFTypes()
 
+    def test_disableCMFTypes_with_missing_FTIs(self):
+        # Don't crash when expected types are not installed
+        t = self.tool
+        # login as manager
+        self.setRoles(['Manager', 'Member'])
+
+        t.enableCMFTypes()
+        # Remove Large Plone Folder
+        self.portal.portal_types.manage_delObjects(['Large Plone Folder'])
+
+        # This shouldn't fail with AttributeError: _setPortalTypeName
+        try:
+            t.disableCMFTypes()
+        except Exception, e:
+            import sys, traceback
+            self.fail('Failed to disable CMF types when an expected type is missing: %s \n %s'%(e,''.join(traceback.format_tb(sys.exc_traceback))))
+
     def test_interface(self):
         t = self.tool
         self.failUnless(IATCTTool.isImplementedBy(t))

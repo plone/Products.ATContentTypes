@@ -427,9 +427,10 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
             cmf_mt = ntf.get('meta_type')
             __traceback_info__ = 'Error converting %s to %s in disableCMFTypes'%(
                                             str(cmf_orig_pt), str(cmf_bak_pt))
-            self._changePortalTypeName(cmf_orig_pt, cmf_bak_pt, global_allow=False,
+            error = self._changePortalTypeName(cmf_orig_pt, cmf_bak_pt, global_allow=False,
                                        metatype=cmf_mt)
-            result.append('Renamed %s to %s' % (cmf_orig_pt, cmf_bak_pt))
+            if not error:
+                result.append('Renamed %s to %s' % (cmf_orig_pt, cmf_bak_pt))
         return ''.join(result)
     
     security.declareProtected(ManagePortal, 'enableCMFTypes')
@@ -742,15 +743,20 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
     def _changePortalTypeName(self, old_name, new_name, global_allow=None,
         title=None, metatype=None):
         """Changes the portal type name of an object
-        
+
         * Changes the id of the portal type inside portal types
         * Updates the catalog indexes and metadata
         """
         LOG_MIGRATION.log("TRACE", "Changing portal type name from %s to %s" % 
                             (old_name, new_name))
-        
+
         cat = getToolByName(self, 'portal_catalog')
         ttool = getToolByName(self, 'portal_types')
+
+        # Make sure the type we wish to rename exists
+        orig_type = getattr(ttool.aq_explicit, old_name, None)
+        if orig_type is None:
+            return 1
 
         ttool.manage_renameObject(old_name, new_name)
         new_type = getattr(ttool.aq_explicit, new_name)
@@ -776,6 +782,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
             obj._setPortalTypeName(new_name)
             obj.reindexObject(idxs=['portal_type', 'Type', 'meta_type', ])
             if state is None: obj._p_deativate()
+        return 0
             
     def _copyFTIFlags(self, ptfrom, ptto, flags = ('filter_content_types',
                       'allowed_content_types', 'allow_discussion')):
