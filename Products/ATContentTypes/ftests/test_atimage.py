@@ -41,6 +41,11 @@ class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
     portal_type = 'Image'
     views = ('image_view', 'download', 'atct_image_transform')
 
+    def afterSetUp(self):
+        atctftestcase.ATCTIntegrationTestCase.afterSetUp(self)
+        self.obj.setImage(TEST_JPEG, content_type="image/jpeg")
+        dcEdit(self.obj)
+
     def test_url_returns_image(self):
         #import pdb; pdb.set_trace()
         response = self.publish(self.obj_path, self.basic_auth)
@@ -49,8 +54,6 @@ class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
     def test_bobo_hook_security(self):
         # Make sure that users with 'View' permission can use the
         # bobo_traversed image scales, even if denied to anonymous
-        self.obj.setImage(TEST_JPEG, content_type="image/jpeg")
-        dcEdit(self.obj)
         response1 = self.publish(self.obj_path+'/image', self.basic_auth)
         self.assertStatusEqual(response1.getStatus(), 200) # OK
         # deny access to anonymous

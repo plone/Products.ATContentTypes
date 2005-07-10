@@ -70,6 +70,9 @@ class IntegrationTestCase(ATFunctionalSiteTestCase):
         temp_logs = {} # clean up log
         self.error_log = self.getPortal().error_log
         self.error_log._ignored_exceptions = ()
+
+        # disable portal_factory as it's a nuisance here
+        self.portal.portal_factory.manage_setPortalFactoryTypes(listOfTypeIds=[])
         
         # object
         self.setupTestObject()
@@ -127,9 +130,9 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         response = self.publish(edit_form_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
         temp_id = body.split('/')[-2]
-        # object is in portal_factory by default
-        # new_obj = getattr(self.folder.portal_factory, temp_id)
-        # self.failUnlessEqual(self.obj.checkCreationFlag(), True) # object is not yet edited
+
+        new_obj = getattr(self.folder.portal_factory, temp_id)
+        self.failUnlessEqual(self.obj.checkCreationFlag(), True) # object is not yet edited
         
 
     def check_newly_created(self):
@@ -231,17 +234,20 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         
         self.failUnless(hasattr(self.obj.aq_explicit, 'talkback'))
 
-    def test_templateMixinContext(self):
+    def test_dynamicViewContext(self):
         # register and add a testing template (it's a script)
         self.setRoles(['Manager', 'Member'])
-        at = getToolByName(self.portal, 'archetype_tool')
-        at.registerTemplate('unittestGetTitleOf')
-        at._templates[self.portal_type] += ['unittestGetTitleOf']
-        self.obj.setLayout('unittestGetTitleOf')
-        self.setRoles(['Member'])
         
+        ttool = self.portal.portal_types
+        fti = getattr(ttool, self.portal_type)
+        view_methods = fti.getAvailableViewMethods(self.obj) + ('unittestGetTitleOf',)
+        fti.manage_changeProperties(view_methods=view_methods)
+        
+        self.obj.setLayout('unittestGetTitleOf')
         self.folder.setTitle('the folder')
         self.obj.setTitle('the obj')
+
+        self.setRoles(['Member'])
         
         response = self.publish('%s/view' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK

@@ -5,7 +5,7 @@
 ##bind namespace=
 ##bind script=script
 ##bind subpath=traverse_subpath
-##parameters=foo, bar
+##parameters=
 
 return "%s,%s,%s,%s" % (context.title_or_id(), context.aq_parent.title_or_id(),\
  context.aq_inner.title_or_id(), context.aq_inner.aq_parent.title_or_id())
