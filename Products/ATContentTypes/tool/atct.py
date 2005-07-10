@@ -795,9 +795,12 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
         """
         ttool = getToolByName(self, 'portal_types')
         if isinstance(ptfrom, str):
-            ptfrom = getattr(ttool.aq_explicit, ptfrom)
+            ptfrom = getattr(ttool.aq_explicit, ptfrom, None)
         if isinstance(ptto, str):
-            ptto = getattr(ttool.aq_explicit, ptto)
+            ptto = getattr(ttool.aq_explicit, ptto, None)
+        # Don't error if we are missing an FTI
+        if ptfrom is None or ptto is None:
+            return 1
         kw = {}
         for flag in flags:
             kw[flag] = getattr(ptfrom.aq_explicit, flag)

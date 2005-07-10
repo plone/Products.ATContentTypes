@@ -181,10 +181,23 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         cmfdoc.manage_changeProperties(allow_discussion=True)
         t.copyFTIFlags()
         self.failUnlessEqual(atctdoc.allow_discussion, True)
-        
+
         cmfdoc.manage_changeProperties(allow_discussion=False)
         t.copyFTIFlags()
         self.failUnlessEqual(atctdoc.allow_discussion, False)
+        
+    def test_copyftiflags_with_missing_FTIs(self):
+        t = self.tool
+        ttool = getToolByName(self.portal, 'portal_types')
+        # Remove Large Plone Folder
+        ttool.manage_delObjects(['Large Plone Folder'])
+
+        try:
+            t.copyFTIFlags()
+        except Exception, e:
+            import sys, traceback
+            self.fail('Failed to copy FTI properties when an expected type is missing: %s \n %s'%(e,''.join(traceback.format_tb(sys.exc_traceback))))
+        
         
     def test_copyactions(self):
         t = self.tool
