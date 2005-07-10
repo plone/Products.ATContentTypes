@@ -1,6 +1,19 @@
 1.0-devel
 =====================
 
+ * Enhanced migration code:
+    o CatalogWalkerWithLevel is now based on ExtendedPathIndex
+      and behaves like CatalogWalker.
+    o Added walker arguments for transaction size, full transactions.
+      and savepoints. The migration system can use ZODB savepoints to
+      roll back to a sane point.
+    o Migrators are also registered by (src,dst) meta_type.
+    o The new function migratePortalType() can be used to migrate a single
+      content type by just passing the src and dst portal type to the
+      function. Both portal types must be registerd in portal_types and a
+      migration from src to dst meta_type must exist.
+   [tiran]
+
  * Don't catalog all types in _catalogTypesByMetatype it the passed list is
    empty.
    [jenner, alecm]

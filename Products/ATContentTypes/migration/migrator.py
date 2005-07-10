@@ -91,16 +91,16 @@ class BaseMigrator:
 
      * src_portal_type
        The portal type name the migration is migrating *from*
-     * src_portal_type
+       Can be overwritten in the constructor
+     * src_meta_type
        The meta type of the src object
      * dst_portal_type
        The portal type name the migration is migrating *to*
-     * dst_portal_type
+       Can be overwritten in the constructor
+     * dst_meta_type
        The meta type of the dst object
      * map
        A dict which maps old attributes/function names to new
-     * subtransaction
-       Commit a subtransaction after X migrations
      * old
        The old object which has to be migrated
      * new
@@ -123,7 +123,7 @@ class BaseMigrator:
     map = {}
 
     def __init__(self, obj, src_portal_type = None, dst_portal_type = None,
-                 subtransaction = 30, full_transaction = False, **kwargs):
+                 **kwargs):
         self.old = aq_inner(obj)
         self.orig_id = self.old.getId()
         self.old_id = '%s_MIGRATION_' % self.orig_id
@@ -134,8 +134,6 @@ class BaseMigrator:
             self.src_portal_type = src_portal_type
         if dst_portal_type is not None:
             self.dst_portal_type = dst_portal_type
-        self.subtransaction = subtransaction
-        self.full_transaction = full_transaction
         self.kwargs = kwargs
 
         # safe id generation
@@ -427,8 +425,7 @@ class ItemMigrationMixin:
     def remove(self):
         """Removes the old item
         """
-        if REMOVE_OLD:
-            self.parent.manage_delObjects([self.old_id])
+        self.parent.manage_delObjects([self.old_id])
 
     def reorder(self):
         """Reorder the new object in its parent

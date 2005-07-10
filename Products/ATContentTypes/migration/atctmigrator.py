@@ -26,9 +26,9 @@ from cStringIO import StringIO
 
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.migration.common import registerATCTMigrator
+from Products.ATContentTypes.migration.common import getMigrator
 from Products.ATContentTypes.migration.walker import CatalogWalker
 from Products.ATContentTypes.migration.walker import CatalogWalkerWithLevel
-from Products.ATContentTypes.migration.walker import useLevelWalker
 from Products.ATContentTypes.migration.migrator import CMFItemMigrator
 from Products.ATContentTypes.migration.migrator import CMFFolderMigrator
 from Products.CMFCore.utils import getToolByName
@@ -58,7 +58,7 @@ CRIT_MAP = {'Integer Criterion': 'ATSimpleIntCriterion',
 REV_CRIT_MAP = dict([[v,k] for k,v in CRIT_MAP.items()])
 
 class DocumentMigrator(CMFItemMigrator):
-    walker = CatalogWalker
+    walkerClass = CatalogWalker
     map = {'text' : 'setText'}
 
     def custom(self):
@@ -69,7 +69,7 @@ class DocumentMigrator(CMFItemMigrator):
 registerATCTMigrator(DocumentMigrator, document.ATDocument)
 
 class EventMigrator(CMFItemMigrator):
-    walker = CatalogWalker
+    walkerClass = CatalogWalker
     map = {
             'location'      : 'setLocation',
             'Subject'       : 'setEventType',
@@ -96,7 +96,7 @@ class EventMigrator(CMFItemMigrator):
 registerATCTMigrator(EventMigrator, event.ATEvent)
 
 class TopicMigrator(CMFFolderMigrator):
-    walker = CatalogWalker
+    walkerClass = CatalogWalker
     map = {'acquireCriteria' : 'setAcquireCriteria'}
 
     def custom(self):
@@ -138,7 +138,7 @@ class TopicMigrator(CMFFolderMigrator):
 registerATCTMigrator(TopicMigrator, topic.ATTopic)
 
 class FileMigrator(CMFItemMigrator):
-    walker = CatalogWalker
+    walkerClass = CatalogWalker
     # mapped in custom()
     # map = { 'file' : 'setFile' }
 
@@ -150,7 +150,7 @@ class FileMigrator(CMFItemMigrator):
 registerATCTMigrator(FileMigrator, file.ATFile)
 
 class ImageMigrator(CMFItemMigrator):
-    walker = CatalogWalker
+    walkerClass = CatalogWalker
     # mapped in custom()
     # map = {'image':'setImage'}
 
@@ -164,13 +164,13 @@ class ImageMigrator(CMFItemMigrator):
 registerATCTMigrator(ImageMigrator, image.ATImage)
 
 class LinkMigrator(CMFItemMigrator):
-    walker = CatalogWalker
+    walkerClass = CatalogWalker
     map = {'remote_url' : 'setRemoteUrl'}
 
 registerATCTMigrator(LinkMigrator, link.ATLink)
 
 class FavoriteMigrator(LinkMigrator):
-    walker = CatalogWalker
+    walkerClass = CatalogWalker
     # see LinkMigrator
     # map = {'remote_url' : 'setRemoteUrl'}
     pass
@@ -178,20 +178,20 @@ class FavoriteMigrator(LinkMigrator):
 registerATCTMigrator(FavoriteMigrator, favorite.ATFavorite)
 
 class NewsItemMigrator(DocumentMigrator):
-    walker = CatalogWalker
+    walkerClass = CatalogWalker
     # see DocumentMigrator
     map = {'text' : 'setText'}
 
 registerATCTMigrator(NewsItemMigrator, newsitem.ATNewsItem)
 
 class FolderMigrator(CMFFolderMigrator):
-    walker = CatalogWalkerWithLevel
+    walkerClass = CatalogWalkerWithLevel
     map = {}
 
 registerATCTMigrator(FolderMigrator, folder.ATFolder)
 
 class LargeFolderMigrator(CMFFolderMigrator):
-    walker = CatalogWalkerWithLevel
+    walkerClass = CatalogWalkerWithLevel
     # no other attributes to migrate
     map = {}
 
@@ -203,43 +203,68 @@ migrators = (DocumentMigrator, EventMigrator, FavoriteMigrator, FileMigrator,
 
 folderMigrators = ( FolderMigrator, LargeFolderMigrator, TopicMigrator,)
 
-def migrateAll(portal):
-    # first fix Members folder
-    kwargs = {}
-    catalog = getToolByName(portal, 'portal_catalog')
-    atct = getToolByName(portal, TOOLNAME)
-    
+def migrateAll(portal, **kwargs):
     LOG.debug('Starting ATContentTypes type migration')
+    
+    kwargs = kwargs.copy()
+    for remove in ('src_portal_type', 'dst_portal_type'):
+        if remove in kwargs:
+            del kwarg[remove]
         
     out = StringIO()
-    for migrator in migrators:
-        msg = '--> Migrating %s to %s' % (migrator.src_portal_type,
-                                          migrator.dst_portal_type)
-        print >> out, msg
-        LOG.debug(msg)
-        
-        w = CatalogWalker(migrator, catalog)
-        output = w.go(**kwargs)
-        print >>out, '\n'.join(output)
-        
-        LOG.debug('done')
-        transaction.commit(1)
-    
-    for migrator in folderMigrators:
-        msg = '--> Migrating %s to %s' % (migrator.src_portal_type,
-                                          migrator.dst_portal_type)
-        print >> out, msg
-        LOG.debug(msg)
-        
-        output = []
-        useLevelWalker(portal, migrator, out=output, **kwargs)
-        print >>out, '\n'.join(output)
-        
-        LOG.debug('done')
-        transaction.commit(1)
-                
+    for migrator in migrators+folderMigrators:
+        src_portal_type = migrator.src_portal_type
+        dst_portal_type = migrator.dst_portal_type
+        migratePortalType(portal, src_portal_type, dst_portal_type, out=out,
+                      migrator=migrator, **kwargs)
+                    
     #transaction.commit()
     
     LOG.debug('Finished ATContentTypes type migration')
     
     return out.getvalue()
+
+def migratePortalType(portal, src_portal_type, dst_portal_type, out=None,
+                      migrator=None, **kwargs):
+    """Migrate from src portal type to dst portal type
+    
+    Additional **kwargs are applied to the walker
+    """
+    if not out:
+        out = StringIO()
+        
+    # migrators are also registered by (src meta type, dst meta type)
+    # let's find the right migrator for us
+    ttool = getToolByName(portal, 'portal_types')
+    src = ttool.getTypeInfo(src_portal_type)
+    dst = ttool.getTypeInfo(dst_portal_type)
+    if src is None or dst is None:
+        raise ValueError, "Unknown src or dst portal type: %s -> %s" % (
+                           src_portal_type, dst_portal_type,)
+    
+    key = (src.Metatype(), dst.Metatype())
+    migratorFromRegistry = getMigrator(key)
+    if migratorFromRegistry is None:
+        raise ValueError, "No registered migrator for '%s' found" % key
+    
+    if migrator is not None:
+        # got a migrator, make sure it is the right one
+        if migrator is not migratorFromRegistry:
+            raise ValueError, "ups"
+    else:
+        migrator = migratorFromRegistry 
+
+    Walker = migrator.walkerClass
+    
+    msg = '--> Migrating %s to %s with %s' % (src_portal_type,
+           dst_portal_type, Walker.__name__)
+    print >> out, msg
+    LOG.debug(msg)
+    
+    walk = Walker(portal, migrator, src_portal_type=src_portal_type,
+                  dst_portal_type=dst_portal_type, **kwargs)
+    walk.go()
+    print >>out, walk.getOutput()
+        
+    LOG.debug('<-- Migrating %s to %s done' % (src_portal_type, dst_portal_type))
+    return out
