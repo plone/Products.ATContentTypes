@@ -169,7 +169,7 @@ class Walker:
                          '/'.join(obj.getPhysicalPath()), src_portal_type,
                          dst_portal_type )
                 # printing exception
-                f = StdoutStringIO()
+                f = StringIO()
                 traceback.print_exc(limit=None, file=f)
                 tb = f.getvalue()
                 
@@ -233,7 +233,8 @@ class CatalogWalker(Walker):
         }
 
         if HAS_LINGUA_PLONE and 'Language' in catalog.indexes():
-            query['Language'] = catalog.uniqueValuesFor('Language')
+            #query['Language'] = catalog.uniqueValuesFor('Language')
+            query['Language'] = 'all'
 
         for brain in catalog(query):
             obj = brain.getObject()
@@ -280,7 +281,8 @@ class CatalogWalkerWithLevel(Walker):
         }
 
         if HAS_LINGUA_PLONE and 'Language' in catalog.indexes():
-            query['Language'] = catalog.uniqueValuesFor('Language')
+            #query['Language'] = catalog.uniqueValuesFor('Language')
+            query['Language'] = 'all'
                                                         
         while True:
             if depth > max_depth:
