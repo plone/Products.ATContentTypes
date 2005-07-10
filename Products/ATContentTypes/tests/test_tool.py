@@ -104,6 +104,12 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         t = self.tool
         t.recatalogCMFTypes()
 
+    def test__catalogTypesByMetatypeDoesNotGiveResultsForEmptyInput(self):
+        # just to make sure it returns an empty list and
+        # doesn't catalog all objects on the site
+        t = self.tool
+        self.assertEqual(t._catalogTypesByMetatype([])[0], [])
+
     def test_enableCMFTypes(self):
         t = self.tool
         # login as manager
