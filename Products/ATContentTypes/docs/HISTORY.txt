@@ -1,6 +1,13 @@
 1.0-devel
 =====================
 
+ * Yet another migration optimization: Added catalogpatch to the migration
+   system. The patch is altering portal_catalog.catalog_object and
+   uncatalog_object. Read migration/catalogpatch.py for more informations.
+   The catalog patch can be enabled by passing use_catalog_patch=True to
+   the migration functions.
+   [tiran]
+
  * Fixed last bit of http://plone.org/collector/3060  Don't let missing CMF
    types crash portal_atct.disableCMFTypes().
    [alecm]

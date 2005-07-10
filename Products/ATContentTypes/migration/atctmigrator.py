@@ -31,6 +31,9 @@ from Products.ATContentTypes.migration.walker import CatalogWalker
 from Products.ATContentTypes.migration.walker import CatalogWalkerWithLevel
 from Products.ATContentTypes.migration.migrator import CMFItemMigrator
 from Products.ATContentTypes.migration.migrator import CMFFolderMigrator
+from Products.ATContentTypes.migration.catalogpatch import applyCatalogPatch
+from Products.ATContentTypes.migration.catalogpatch import removeCatalogPatch
+
 from Products.CMFCore.utils import getToolByName
 from Acquisition import aq_parent
 from Acquisition import aq_base
@@ -232,7 +235,7 @@ def migrateAll(portal, **kwargs):
     return out.getvalue()
 
 def migratePortalType(portal, src_portal_type, dst_portal_type, out=None,
-                      migrator=None, **kwargs):
+                      migrator=None, use_catalog_patch=False, **kwargs):
     """Migrate from src portal type to dst portal type
     
     Additional **kwargs are applied to the walker
@@ -270,8 +273,17 @@ def migratePortalType(portal, src_portal_type, dst_portal_type, out=None,
     
     walk = Walker(portal, migrator, src_portal_type=src_portal_type,
                   dst_portal_type=dst_portal_type, **kwargs)
-    walk.go()
-    print >>out, walk.getOutput()
-        
+    # wrap catalog patch inside a try/finally clause to make sure that the catalog
+    # is unpatched under *any* circumstances (hopely)
+    try:
+        if use_catalog_patch:
+            applyCatalogPatch(portal)
+        walk.go()
+    finally:
+        if use_catalog_patch:
+            removeCatalogPatch(portal)
+    
+    print >>out, walk.getOutput()       
     LOG.debug('<-- Migrating %s to %s done' % (src_portal_type, dst_portal_type))
+    
     return out
