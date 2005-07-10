@@ -690,8 +690,15 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
         by zcatalog's ZopeFindAndApply method. It may take a very (!) long
         time to find all objects.
         """
-        LOG_MIGRATION.debug('Catalog object by metatypes %s using ZopeFindAndApply' %
-                            ', '.join(mt))
+        if not mt:
+            # XXX: I consider passing an empty mt argument as bug
+            return [], 0, 0
+        
+        if not isinstance(mt, (list, tuple)):
+            mt = (mt, )
+        
+        LOG_MIGRATION.debug('Catalog object by metatypes %s using '
+                            'ZopeFindAndApply' %  ', '.join(mt))
         
         cat = getToolByName(self, 'portal_catalog')
         portal = getToolByName(self, 'portal_url').getPortalObject()
@@ -701,8 +708,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
         c_elapse = time.clock()
         results = []
 
-        if mt:
-            results = self.ZopeFindAndApply(portal,
+        results = self.ZopeFindAndApply(portal,
                                         obj_metatypes=mt,
                                         search_sub=1,
                                         REQUEST=self.REQUEST,
