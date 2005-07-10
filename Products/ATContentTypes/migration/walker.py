@@ -88,6 +88,7 @@ class Walker:
     def __init__(self, portal, migrator, src_portal_type=None, dst_portal_type=None,
                  **kwargs):
         self.portal = portal
+        self.catalog = getToolByName(portal, 'portal_catalog')
         self.migrator = migrator
         if src_portal_type is None:
             self.src_portal_type = self.migrator.src_portal_type
@@ -118,7 +119,15 @@ class Walker:
         :return: migration notes
         :rtype: list of strings
         """
-        self.migrate(self.walk(), **kwargs)
+        # catalog subtransaction conflict w/ savepoints because a subtransaction
+        # destroys all existing savepoints.
+        # XXX: what about uid and reference catalog?
+        old_threshold = getattr(self.catalog, 'threshold', None)
+        self.catalog.threshold = None
+        try:
+            self.migrate(self.walk(), **kwargs)
+        finally:
+            self.catalog.threshold = old_threshold
 
     __call__ = go
 
@@ -177,11 +186,16 @@ class Walker:
                 errors.append({'msg' : msg, 'tb' : tb, 'counter': counter})
                 
                 if use_savepoint:
-                    # Rollback to savepoint
-                    LOG.info("Rolling back to last safe point")
-                    prin >>out, msg
-                    print >>out, tb
-                    savepoint.rollback()
+                    if savepoint.valid:
+                        # Rollback to savepoint
+                        LOG.info("Rolling back to last safe point")
+                        print >>out, msg
+                        print >>out, tb
+                        savepoint.rollback()
+                        continue
+                    else:
+                        LOG.error("Savepoint is invalid. Probably a subtransaction "
+                            "was committed. Unable to roll back!")
                 #  stop migration process after an error
                 # aborting transaction
                 transaction.abort()
@@ -213,12 +227,6 @@ class Walker:
 class CatalogWalker(Walker):
     """Walker using portal_catalog
     """
-
-    def __init__(self, portal, migrator, src_portal_type=None, dst_portal_type=None,
-                 **kwargs):
-        Walker.__init__(self, portal, migrator, src_portal_type, dst_portal_type,
-                        **kwargs)
-        self.catalog = getToolByName(portal, 'portal_catalog')
 
     def walk(self):
         """Walks around and returns all objects which needs migration
@@ -256,8 +264,7 @@ class CatalogWalkerWithLevel(Walker):
     def __init__(self, portal, migrator, src_portal_type=None, dst_portal_type=None,
                  depth=1, max_depth=100, **kwargs):
         Walker.__init__(self, portal, migrator, src_portal_type, dst_portal_type,
-                        **kwargs)
-        self.catalog = getToolByName(portal, 'portal_catalog')    
+                        **kwargs) 
         self.depth=depth
         self.max_depth = max_depth
 

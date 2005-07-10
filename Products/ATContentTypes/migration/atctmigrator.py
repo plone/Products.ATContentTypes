@@ -219,8 +219,8 @@ def migrateAll(portal, **kwargs):
         src_portal_type = migrator.src_portal_type
         dst_portal_type = migrator.dst_portal_type
         ttool = getToolByName(portal, 'portal_types')
-        if (getattr(ttool, src_portal_type, None) is None or
-                getattr(ttool, dst_portal_type, None) is None):
+        if (ttool.getTypeInfo(src_portal_type) is None or
+           ttool.getTypeInfo(dst_portal_type) is None):
             
             LOG.debug('Missing FTI for %s or %s'%(src_portal_type, dst_portal_type))
             print >>out, ("Couldn't migrate src_portal_type due to missing FTI")
