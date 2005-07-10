@@ -220,7 +220,8 @@ def migrateAll(portal, **kwargs):
                 getattr(ttool, dst_portal_type, None) is None):
             
             LOG.debug('Missing FTI for %s or %s'%(src_portal_type, dst_portal_type))
-            return 1
+            print >>out, ("Couldn't migrate src_portal_type due to missing FTI")
+            continue
         migratePortalType(portal, src_portal_type, dst_portal_type, out=out,
                       migrator=migrator, **kwargs)
                     

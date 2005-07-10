@@ -185,7 +185,7 @@ class TestTypeMigrations(atcttestcase.ATCTTypeTestCase):
 
         transaction.commit(1)
         try:
-            self.portal.portal_atct.migrateContentTypesToATCT()
+            self.portal.portal_atct.migrateToATCT()
         except Exception, e:
             import sys, traceback
             self.fail('Failed to migrate types when an expected FTI is missing: %s \n %s'%(e,''.join(traceback.format_tb(sys.exc_traceback))))
