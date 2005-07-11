@@ -208,6 +208,9 @@ folderMigrators = ( FolderMigrator, LargeFolderMigrator, TopicMigrator,)
 
 def migrateAll(portal, **kwargs):
     LOG.debug('Starting ATContentTypes type migration')
+    #kwargs['use_catalog_patch'] = True
+    #kwargs['use_savepoint'] = True
+    #kwargs['transaction_size'] = 20
     
     kwargs = kwargs.copy()
     for remove in ('src_portal_type', 'dst_portal_type'):
@@ -268,6 +271,13 @@ def migratePortalType(portal, src_portal_type, dst_portal_type, out=None,
     
     msg = '--> Migrating %s to %s with %s' % (src_portal_type,
            dst_portal_type, Walker.__name__)
+    if use_catalog_patch:
+        msg+=', using catalog patch'
+    if kwargs.get('use_savepoint', False):
+        msg+=', using savepoints'
+    if kwargs.get('full_transaction', False):
+        msg+=', using full transactions'
+    
     print >> out, msg
     LOG.debug(msg)
     

@@ -37,6 +37,10 @@ __docformat__ = 'restructuredtext'
 # uncatalog_object(). There is no need to patch these methods.
 
 import logging
+from types import MethodType as instancemethod
+# instancemethod(function, instance, class)
+# Create an instance method object.
+
 from Products.CMFCore.utils import getToolByName
 from Acquisition import aq_base
 
@@ -61,31 +65,32 @@ def applyCatalogPatch(portal):
     """Patch catalog
     """
     catalog = getToolByName(portal, 'portal_catalog')
+    klass = catalog.__class__
     LOG.info('Patching catalog_object and uncatalog_object of %s' %
              catalog.absolute_url(1))
-    if hasattr(aq_base(catalog), '_atct_catalog_object'):
+    if hasattr(klass, '_atct_catalog_object'):
         raise RuntimeError, "%s already has _atct_catalog_object"
-    if hasattr(aq_base(catalog), '_atct_uncatalog_object'):
+    if hasattr(klass, '_atct_uncatalog_object'):
         raise RuntimeError, "%s already has _atct_uncatalog_object"
     
-    catalog._atct_catalog_object = catalog.catalog_object.im_func
-    catalog.catalog_object = catalog_object
+    klass._atct_catalog_object = klass.catalog_object.im_func
+    klass.catalog_object = instancemethod(catalog_object, None, klass)
     
-    catalog._atct_uncatalog_object = catalog.uncatalog_object.im_func
-    catalog.uncatalog_object = uncatalog_object
+    klass._atct_uncatalog_object = klass.uncatalog_object.im_func
+    klass.uncatalog_object = instancemethod(uncatalog_object, None, klass)
     
 def removeCatalogPatch(portal):
     """Unpatch catalog
     """    
     catalog = getToolByName(portal, 'portal_catalog')
-    catalog = catalog.__class__
+    klass = catalog.__class__
     LOG.info('Unpatching catalog_object and uncatalog_object of %s' %
              catalog.absolute_url(1))
     
-    if hasattr(aq_base(catalog), '_atct_catalog_object'):
-        catalog.catalog_object = catalog._atct_catalog_object.im_func
-        del catalog._atct_catalog_object
+    if hasattr(klass, '_atct_catalog_object'):
+        klass.catalog_object = klass._atct_catalog_object.im_func
+        del klass._atct_catalog_object
     
-    if hasattr(aq_base(catalog), '_atct_uncatalog_object'):
-        catalog.uncatalog_object = catalog._atct_uncatalog_object.im_func
-        del catalog._atct_uncatalog_object
+    if hasattr(klass, '_atct_uncatalog_object'):
+        klass.uncatalog_object = klass._atct_uncatalog_object.im_func
+        del klass._atct_uncatalog_object
