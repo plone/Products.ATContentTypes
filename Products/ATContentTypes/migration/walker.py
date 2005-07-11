@@ -116,18 +116,24 @@ class Walker:
         """runner
 
         Call it to start the migration
-        :return: migration notes
-        :rtype: list of strings
         """
         # catalog subtransaction conflict w/ savepoints because a subtransaction
         # destroys all existing savepoints.
-        # XXX: what about uid and reference catalog?
-        old_threshold = getattr(self.catalog, 'threshold', None)
-        self.catalog.threshold = None
+        # disable subtransactions for all known catalogs and restore them later
+        old_thresholds = {}
+        for id in ('portal_catalog', 'uid_catalog', 'reference_catalog'):
+            catalog = getToolByName(self.portal, id, None)
+            if catalog is None:
+                continue
+            old_thresholds[id] = getattr(self.catalog, 'threshold', None)    
+            catalog.threshold = None
+        
         try:
             self.migrate(self.walk(), **kwargs)
         finally:
-            self.catalog.threshold = old_threshold
+            for id, threshold in old_thresholds.items():
+                catalog = getToolByName(self.portal, id)
+                catalog.threshold = threshold
 
     __call__ = go
 
