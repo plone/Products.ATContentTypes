@@ -40,19 +40,16 @@ class StopWalking(StopIteration):
     pass
 
 class MigrationError(RuntimeError):
-    def __init__(self, obj, migrator, traceback):
+    def __init__(self, path, migrator, traceback):
         self.src_portal_type = migrator.src_portal_type
         self.dst_portal_type = migrator.dst_portal_type
         self.tb = traceback
-        if hasattr(obj, 'absolute_url'):
-            self.id = obj.absolute_url(1)
-        else:
-            self.id = repr(obj)
-
+        self.path = path
+        
     def __str__(self):
-        return "MigrationError for obj %s (%s -> %s):\n" \
-               "%s" % (self.id, self.src_portal_type, self.dst_portal_type, self.tb)
-
+        return "MigrationError for obj at %s (%s -> %s):\n%s" % (self.path, 
+                    self.src_portal_type, self.dst_portal_type, self.tb)
+        
 class Walker:
     """Walks through the system and migrates every object it finds
     
@@ -123,17 +120,17 @@ class Walker:
         old_thresholds = {}
         for id in ('portal_catalog', 'uid_catalog', 'reference_catalog'):
             catalog = getToolByName(self.portal, id, None)
-            if catalog is None:
-                continue
-            old_thresholds[id] = getattr(self.catalog, 'threshold', None)    
-            catalog.threshold = None
+            if catalog is not None:
+                old_thresholds[id] = getattr(self.catalog, 'threshold', None)    
+                catalog.threshold = None
         
         try:
             self.migrate(self.walk(), **kwargs)
         finally:
             for id, threshold in old_thresholds.items():
-                catalog = getToolByName(self.portal, id)
-                catalog.threshold = threshold
+                catalog = getToolByName(self.portal, id, None)
+                if catalog is not None:
+                    catalog.threshold = threshold
 
     __call__ = go
 
@@ -162,9 +159,9 @@ class Walker:
             savepoint = transaction.savepoint()
         
         for obj in objs:
-            msg=('Migrating %s (%s -> %s)' %
-                            ('/'.join(obj.getPhysicalPath()),
-                             src_portal_type, dst_portal_type, ))
+            objpath = '/'.join(obj.getPhysicalPath())
+            msg = 'Migrating %s (%s -> %s)' % (objpath, src_portal_type,
+                                               dst_portal_type)
             LOG.debug(msg)
             print >>out, msg
             counter+=1
@@ -180,15 +177,14 @@ class Walker:
             except ConflictError:
                 raise
             except: # except all!
-                msg = "Failed migration for object %s (%s -> %s)" %  (
-                         '/'.join(obj.getPhysicalPath()), src_portal_type,
-                         dst_portal_type )
+                msg = "Failed migration for object %s (%s -> %s)" %  (objpath, 
+                           src_portal_type, dst_portal_type)
                 # printing exception
                 f = StringIO()
                 traceback.print_exc(limit=None, file=f)
                 tb = f.getvalue()
                 
-                LOG.error(msg, exc_info = sys.exc_info())
+                LOG.error(msg, exc_info = True)
                 errors.append({'msg' : msg, 'tb' : tb, 'counter': counter})
                 
                 if use_savepoint:
@@ -198,14 +194,17 @@ class Walker:
                         print >>out, msg
                         print >>out, tb
                         savepoint.rollback()
+                        # XXX: savepoints are invalidated once they are used
+                        savepoint = transaction.savepoint()
                         continue
                     else:
                         LOG.error("Savepoint is invalid. Probably a subtransaction "
                             "was committed. Unable to roll back!")
                 #  stop migration process after an error
                 # aborting transaction
+                LOG.error("FATAL: Migration has failied, aborting transaction!")
                 transaction.abort()
-                raise MigrationError(obj, migrator, tb)
+                raise MigrationError(objpath, migrator, tb)
                 
             if counter % transaction_size == 0:
                 if full_transaction:
@@ -287,6 +286,7 @@ class CatalogWalkerWithLevel(Walker):
         max_depth = self.max_depth
         catalog = self.catalog
         root = '/'.join(self.portal.getPhysicalPath())
+        rootlen = len(root)
         query = {
             'portal_type' : self.src_portal_type,
             'meta_type' : self.src_meta_type,
@@ -302,6 +302,13 @@ class CatalogWalkerWithLevel(Walker):
                 raise StopWalking
             query['path']['depth'] = depth
             for brain in catalog(query):
+                # depth 'n' returns objects with depth of 'n' and *smaller*
+                # but we want to migrate only object with a depth of 
+                # exactly 'n'
+                relpath = brain.getPath()[rootlen:]
+                if not relpath.count('/') == depth:
+                    continue
+                
                 obj = brain.getObject()
                 try: state = obj._p_changed
                 except: state = 0

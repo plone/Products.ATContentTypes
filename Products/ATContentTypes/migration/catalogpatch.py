@@ -69,9 +69,9 @@ def applyCatalogPatch(portal):
     LOG.info('Patching catalog_object and uncatalog_object of %s' %
              catalog.absolute_url(1))
     if hasattr(klass, '_atct_catalog_object'):
-        raise RuntimeError, "%s already has _atct_catalog_object"
+        raise RuntimeError, "%s already has _atct_catalog_object" % catalog
     if hasattr(klass, '_atct_uncatalog_object'):
-        raise RuntimeError, "%s already has _atct_uncatalog_object"
+        raise RuntimeError, "%s already has _atct_uncatalog_object" % catalog
     
     klass._atct_catalog_object = klass.catalog_object.im_func
     klass.catalog_object = instancemethod(catalog_object, None, klass)
@@ -79,13 +79,17 @@ def applyCatalogPatch(portal):
     klass._atct_uncatalog_object = klass.uncatalog_object.im_func
     klass.uncatalog_object = instancemethod(uncatalog_object, None, klass)
     
-def removeCatalogPatch(portal):
+    return klass
+    
+def removeCatalogPatch(klass):
     """Unpatch catalog
-    """    
-    catalog = getToolByName(portal, 'portal_catalog')
-    klass = catalog.__class__
-    LOG.info('Unpatching catalog_object and uncatalog_object of %s' %
-             catalog.absolute_url(1))
+    
+    removeCatalogPatch must be called with the catalog class and not with the portal
+    as argument. If migration fails the transaction is aborted explictly. The portal
+    doesn't exist any longer and the method would be unable to acquire the
+    portal_catalog.
+    """
+    LOG.info('Unpatching catalog_object and uncatalog_object')
     
     if hasattr(klass, '_atct_catalog_object'):
         klass.catalog_object = klass._atct_catalog_object.im_func

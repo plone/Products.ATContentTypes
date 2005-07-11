@@ -470,7 +470,7 @@ class FolderMigrationMixin(ItemMigrationMixin):
                 try:
                     orderMap[id] = self.old.getObjectPosition(id)
                 except AttributeError:
-                    LOG.debug("Broken OrderSupport", exc_info=sys.exc_info())
+                    LOG.debug("Broken OrderSupport", exc_info=True)
                     orderAble=0
             subobjs[id] = aq_base(obj)
             # delOb doesn't call manage_afterAdd which safes some time because it

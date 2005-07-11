@@ -287,11 +287,11 @@ def migratePortalType(portal, src_portal_type, dst_portal_type, out=None,
     # is unpatched under *any* circumstances (hopely)
     try:
         if use_catalog_patch:
-            applyCatalogPatch(portal)
+            catalog_class = applyCatalogPatch(portal)
         walk.go()
     finally:
         if use_catalog_patch:
-            removeCatalogPatch(portal)
+            removeCatalogPatch(catalog_class)
     
     print >>out, walk.getOutput()       
     LOG.debug('<-- Migrating %s to %s done' % (src_portal_type, dst_portal_type))
