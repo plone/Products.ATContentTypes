@@ -513,7 +513,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
         elapse, c_elapse, count = self.migrationUpdateWorkflowRoleMapping()
         out += '\n\nWorkflow: %d object(s) updated.\n' % count
         elapse, c_elapse = self.migrationRefreshPortalCatalog()
-        out+= self.upgrade()
+        self.upgrade()
         return out
     
     security.declareProtected(ManagePortal, 'migrateContentTypesToATCT')
