@@ -47,7 +47,6 @@ class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
         dcEdit(self.obj)
 
     def test_url_returns_image(self):
-        #import pdb; pdb.set_trace()
         response = self.publish(self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
         

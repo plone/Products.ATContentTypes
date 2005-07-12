@@ -1,6 +1,16 @@
 1.0-devel
 =====================
 
+ * Disabled text/x-python and text/plain-pre by default. Customize the
+   atcontenttypes.conf if you need them.
+   [tiran]
+   
+ * Removed relatedItems field from folderish objects.
+   [tiran]
+   
+ * Made download tab for File and Image invisible.
+   [tiran]
+
  * Fixed __bobo_traverse__ in ATImage, security check was unnecessary and
    required anonymous to have 'View' in order for anyone to use it.
    [alecm]

@@ -46,31 +46,7 @@ from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import Reference
 
 # for ATContentTypes we want to have the description in the edit view
 # just like CMF
-ATContentTypeSchema = BaseSchema.copy() + Schema((
-    ReferenceField('relatedItems',
-        relationship = 'relatesTo', 
-        multiValued = True,
-        isMetadata = True,
-        languageIndependent = False,
-        index = 'KeywordIndex',
-        write_permission = ModifyPortalContent,
-        widget = ReferenceBrowserWidget(
-            allow_search = True,
-            allow_browse = True,
-            show_indexes = False,
-            force_close_on_insert = True,
-
-            label = "Related Item(s)",
-            label_msgid = "label_related_items",
-            description = "",
-            description_msgid = "help_related_items",
-            i18n_domain = "plone",
-            visible={'view' : 'hidden',
-                     #'edit' : ENABLE_RELATED_ITEMS and 'visible' or 'hidden'
-                    },
-            )
-        ),
-    ),) + MetadataSchema((
+ATContentTypeSchema = BaseSchema.copy() + MetadataSchema((
     BooleanField('excludeFromNav',
         required = False,
         languageIndependent = True,
@@ -86,7 +62,7 @@ ATContentTypeSchema = BaseSchema.copy() + Schema((
             ),
         ),
     ),)
-    
+
 ATContentTypeSchema['id'].validators = ('isValidId',)
 ATContentTypeSchema['id'].searchable = True
 ATContentTypeSchema['description'].schemata = 'default'
@@ -110,18 +86,39 @@ urlUploadField = StringField('urlUpload',
                      'edit' : 'hidden'},
             ),
         )
-        
+
+relatedItemsField = ReferenceField('relatedItems',
+        relationship = 'relatesTo', 
+        multiValued = True,
+        isMetadata = True,
+        languageIndependent = False,
+        index = 'KeywordIndex',
+        write_permission = ModifyPortalContent,
+        widget = ReferenceBrowserWidget(
+            allow_search = True,
+            allow_browse = True,
+            show_indexes = False,
+            force_close_on_insert = True,
+
+            label = "Related Item(s)",
+            label_msgid = "label_related_items",
+            description = "",
+            description_msgid = "help_related_items",
+            i18n_domain = "plone",
+            visible={'view' : 'hidden' },
+            )
+        )
+
+
 def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
     """Finalizes an ATCT type schema to alter some fields
     """
-    schema.moveField('relatedItems', pos='bottom')
-    #if not HAS_PLONE2:
-    #    del schema['excludeFromNav']
-    
     if folderish:
         schema['excludeFromNav'].schemata = 'default'
-        schema.moveField('excludeFromNav', after='relatedItems')
+        schema.moveField('excludeFromNav', pos='bottom')
     else:
+        schema.addField(relatedItemsField)
+        schema.moveField('relatedItems', pos='bottom')
         schema.moveField('excludeFromNav', after='allowDiscussion')
     if moveDiscussion:
         schema['allowDiscussion'].schemata = 'default'

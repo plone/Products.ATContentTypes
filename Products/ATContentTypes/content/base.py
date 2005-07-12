@@ -338,6 +338,7 @@ class ATCTFileContent(ATCTContent):
         'action'      : 'string:${object_url}/download',
         'permissions' : (View,),
         'condition'   : 'member', # don't show border for anon user
+        'visible'     :  False,
          },
         )
     )
