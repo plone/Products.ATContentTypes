@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Added Five/Zope3 interface bridges
+   [tiran]
+
  * Disabled text/x-python and text/plain-pre by default. Customize the
    atcontenttypes.conf if you need them.
    [tiran]
