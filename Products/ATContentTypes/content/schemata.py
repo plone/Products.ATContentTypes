@@ -105,7 +105,8 @@ relatedItemsField = ReferenceField('relatedItems',
             description = "",
             description_msgid = "help_related_items",
             i18n_domain = "plone",
-            visible={'view' : 'hidden' },
+            visible={'view' : 'hidden',
+                     'edit' : 'visible' },
             )
         )
 
@@ -113,16 +114,17 @@ relatedItemsField = ReferenceField('relatedItems',
 def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
     """Finalizes an ATCT type schema to alter some fields
     """
+    schema.addField(relatedItemsField)
+    schema.moveField('relatedItems', pos='bottom')
     if folderish:
         schema['excludeFromNav'].schemata = 'default'
-        schema.moveField('excludeFromNav', pos='bottom')
+        schema.moveField('excludeFromNav', after='relatedItems')
     else:
-        schema.addField(relatedItemsField)
-        schema.moveField('relatedItems', pos='bottom')
         schema.moveField('excludeFromNav', after='allowDiscussion')
+        schema['relatedItems'].widget.visible['edit'] = 'invisible'
     if moveDiscussion:
         schema['allowDiscussion'].schemata = 'default'
-        schema.moveField('allowDiscussion', pos='bottom')
+        schema.moveField('allowDiscussion', after='relatedItems')
     return schema
 
 
