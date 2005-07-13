@@ -1,0 +1,80 @@
+$ export SUPPRESS_ATCT_INSTALLATION="YES"
+$ bin/zopectl fg
+
+* migrate catalogs to 2.8
+
+* migrate to Plone 2.1
+
+* add an "ATContentTypes tools" portal_atct tool
+
+* reacatalog cmf types
+
+* disabled recataloging
+
+* stop zope
+
+$ unset SUPPRESS_ATCT_INSTALLATION
+$ bin/zopectl debug
+
+import some functions and modules
+>>> from Products.CMFPlone import transaction
+>>> from Products.ATContentTypes.migration.atctmigrator import migratePortalType
+>>> from AccessControl.SecurityManagement import newSecurityManager
+>>> from ZPublisher.BaseRequest import BaseRequest
+
+we need the portal and some tools
+>>> portal = app.testsite
+>>> qiTool = portal.portal_quickinstaller
+>>> tTool = portal.portal_types
+>>> uf = portal.acl_users
+
+log in as manager (copied from ZopeTestCase)
+>>> user = f.getUserById('YOUR_MANAGER')
+>>> user = user.__of__(uf)
+>>> newSecurityManager(None, user)
+
+As you can see, ATContentTypes is not installed yet.
+>>> tTool.objectIds()
+['Document', 'Image', 'File', 'Link', 'News Item', 'Favorite',
+'Discussion Item', 'Topic', 'Folder', 'Large Plone Folder',
+'Event', 'TempFolder', 'Plone Site']
+
+Reinstall Archetypes just to make sure it is in a sane state
+>>> qiTool.reinstallProducts(('MimetypesRegistry',))
+>>> qiTool.reinstallProducts(('PortalTransforms',))
+>>> qiTool.reinstallProducts(('Archetypes',))
+
+Commit a transaction. The debug command line interface doesn't commit
+transactions for you!
+>>> transaction.commit()
+
+Now we can install ATContentTypes. On a large site it may take very long.
+Youl will see a lot of debug informations from the logger first and at last
+some informations from the quick installer.
+>>> print qiTool.installProduct('ATContentTypes')
+
+>>> transaction.commit()
+
+>>> tTool.objectIds()
+['Discussion Item', 'TempFolder', 'Plone Site', 'CMF Image', 'CMF Topic',
+ 'CMF Large Plone Folder', 'CMF Document', 'CMF Favorite', 'CMF Event', 
+ 'CMF Folder', 'CMF Link', 'CMF News Item', 'CMF File', 'ATPathCriterion',
+ 'ATBooleanCriterion', 'Image', 'Topic', 'ATSelectionCriterion',
+ 'Large Plone Folder', 'Document', 'ATSimpleStringCriterion', 
+ 'ATCurrentAuthorCriterion', 'ATDateCriteria', 'Favorite', 'Event', 
+ 'ATReferenceCriterion', 'ATSimpleIntCriterion', 'ATListCriterion', 'Folder',
+ 'Link', 'News Item', 'ATPortalTypeCriterion', 'ATDateRangeCriterion',
+ 'ATSortCriterion', 'File']  
+ 
+Now we can start to migrate objects. Because some code doesn't work w/o
+a valid REQUEST we have to fake one in every transaction.
+>>> app.REQUEST= BaseRequest()
+>>> out = migratePortalType(portal, 'CMF Document', 'Document', use_savepoint=True, use_catalog_patch=True)
+
+>>> print out.getvalue()
+--> Migrating CMF Document to Document with CatalogWalker, using catalog patch, using savepoints
+Migrating /testsite/front-page (CMF Document -> Document)
+
+>>> transaction.commit()
+
+TODO: logging!
