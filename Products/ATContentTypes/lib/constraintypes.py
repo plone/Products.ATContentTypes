@@ -324,7 +324,13 @@ class ConstrainTypesMixin:
        ACQUIRE if parent support ISelectableConstrainTypes
        DISABLE if not
        """
-       parent = aq_parent(aq_inner(self))
+       portal_factory = getToolByName(self, 'portal_factory', None)
+       if portal_factory and portal_factory.isTemporary(self):
+           # created by portal_factory
+           parent = aq_parent(aq_parent(aq_parent(aq_inner(self))))
+       else:
+           parent = aq_parent(aq_inner(self))
+
        if ISelectableConstrainTypes.isImplementedBy(parent):
            return ACQUIRE
        else:

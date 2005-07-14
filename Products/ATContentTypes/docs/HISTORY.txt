@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * made constraintypes default AQUIRE mode works with portal_factory
+   [panjunyong]
+
  * Added Five/Zope3 interface bridges
    [tiran]
 
