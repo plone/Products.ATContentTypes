@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Readded a seperate _cleanupFilename method for ATCTFileContent to make it 
+   better for patch.
+   [panjunyong]
+
  * Fixed http://plone.org/collector/4218 ATCT now uses normalizeString from
    PloneTool. ATCT's cleanupFilename method has been removed.
    [hannosch]
