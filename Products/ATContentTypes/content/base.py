@@ -274,6 +274,7 @@ class ATCTContent(ATCTMixin, BaseContent):
           'id'          : 'external_edit',
           'name'        : 'External Edit',
           'action'      : 'string:${object_url}/external_edit',
+          'condition'   : 'object/externalEditorEnabled',
           'permissions' : (ModifyPortalContent,),
           'visible'     : 0,
          },
