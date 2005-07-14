@@ -186,14 +186,16 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
 
 tests.append(TestATFileFields)
 
-class TestCleanupFilename(unittest.TestCase):
+class TestNormalizeFilename(atcttestcase.ATCTSiteTestCase):
 
-    def test_cleanup_filename(self):
-        from Products.ATContentTypes.content.base import cleanupFilename
+    def afterSetUp(self):
+        self.utils = self.portal.plone_utils
+
+    def test_normalize_filename(self):
         text = 'Νίκος Τζάνος'
-        self.assertEquals(cleanupFilename(text, 'utf-8'), 'Nikos_Tzanos')
+        self.assertEquals(self.utils.normalizeString(text), 'nikos-tzanos')
 
-tests.append(TestCleanupFilename)
+tests.append(TestNormalizeFilename)
 
 
 if __name__ == '__main__':

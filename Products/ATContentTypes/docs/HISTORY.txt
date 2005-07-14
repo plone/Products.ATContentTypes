@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Fixed http://plone.org/collector/4218 ATCT now uses normalizeString from
+   PloneTool. ATCT's cleanupFilename method has been removed.
+   [hannosch]
+
  * Fixed http://plone.org/collector/4170 Link checking is crazy and [ 1197068 ]
    [hannosch]
 
