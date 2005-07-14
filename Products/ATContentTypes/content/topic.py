@@ -526,6 +526,18 @@ class ATTopic(ATCTFolder):
                         if item not in order]
         return order
 
+    # Beware hack ahead
+    security.declarePublic('displayContentsTab')
+    def displayContentsTab(self, *args, **kwargs):
+        """Only display a contents tab when we are the default page
+           because we have our own"""
+        putils = getToolByName(self, 'plone_utils', None)
+        if putils is not None:
+            if putils.isDefaultPage(self):
+                script = putils.displayContentsTab.__of__(self)
+                return script()
+        return False
+
 registerATCT(ATTopic, PROJECTNAME)
 
 def modify_fti(fti):

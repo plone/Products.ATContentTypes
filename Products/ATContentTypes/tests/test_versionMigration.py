@@ -30,6 +30,7 @@ from Products.ATContentTypes.migration.v1.betas import addRelatedItemsIndex
 from Products.ATContentTypes.migration.v1.betas import renameTopicsConfiglet
 from Products.ATContentTypes.migration.v1.betas import addTopicSyndicationAction
 from Products.ATContentTypes.migration.v1.betas import fixViewActions
+from Products.ATContentTypes.migration.v1.betas import removeTopicFolderContentsAction
 
 from Products.CMFDynamicViewFTI.migrate import migrateFTIs
 
@@ -51,6 +52,13 @@ class MigrationTest(atcttestcase.ATCTSiteTestCase):
         actions = info.listActions()
         actions = [x for x in actions if x.id != action_id]
         typeob._actions = tuple(actions)
+
+    def addActionToType(self, type_name, action_id, category):
+        # Removes an action from a portal type
+        tool = getattr(self.portal, 'portal_types')
+        info = tool.getTypeInfo(type_name)
+        typeob = getattr(tool, info.getId())
+        typeob.addAction(action_id, action_id, '', '', '', category)
 
 
 class TestMigrations_v1(MigrationTest):
@@ -287,8 +295,7 @@ class TestMigrations_v1(MigrationTest):
         addTopicSyndicationAction(self.portal, [])
 
     def testAddTopicSyndicationActionTypeMissing(self):
-        # Should not fail if Topic type is missing, should add type and
-        # action
+        # Should not fail if Topic type is missing
         typesTool = getToolByName(self.portal, 'portal_types', None)
         self.portal.portal_types._delObject('Topic')
         addTopicSyndicationAction(self.portal, [])
@@ -336,6 +343,38 @@ class TestMigrations_v1(MigrationTest):
         for t in ('Document', 'Favorite', 'Link', 'News Item'):
             fti = getattr(self.portal.portal_types, t)
             self.assertEqual(fti.meta_type, DynamicViewTypeInformation.meta_type)
+
+    def testRemoveTopicFolderContentsAction(self):
+        # Should remove folder contents action from Topics
+        typesTool = getToolByName(self.portal, 'portal_types', None)
+        self.addActionToType('Topic', 'folderContents', 'object')
+        self.failUnless('folderContents' in [x.id for x in
+                                        typesTool.Topic.listActions()])
+        ret1 = removeTopicFolderContentsAction(self.portal, [])
+        self.failIf(len([x.id for x in typesTool.Topic.listActions()
+                                        if x.id == 'folderContents']))
+
+    def testRemoveTopicFolderContentsActionTwice(self):
+        # Should not fail if migrated again
+        typesTool = getToolByName(self.portal, 'portal_types', None)
+        self.addActionToType('Topic', 'folderContents', 'object')
+        self.failUnless('folderContents' in [x.id for x in
+                                        typesTool.Topic.listActions()])
+        ret1 = removeTopicFolderContentsAction(self.portal, [])
+        ret2 = removeTopicFolderContentsAction(self.portal, [])
+        self.failIf(len([x.id for x in typesTool.Topic.listActions()
+                                        if x.id == 'folderContents']))
+
+    def testRemoveTopicFolderContentsActionNoTool(self):
+        # Should not fail if portal_types is missing
+        self.portal._delObject('portal_types')
+        removeTopicFolderContentsAction(self.portal, [])
+
+    def testRemoveTopicFolderContentsActionTypeMissing(self):
+        # Should not fail if Topic type is missing
+        typesTool = getToolByName(self.portal, 'portal_types', None)
+        self.portal.portal_types._delObject('Topic')
+        removeTopicFolderContentsAction(self.portal, [])
 
 def test_suite():
     from unittest import TestSuite, makeSuite

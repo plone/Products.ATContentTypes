@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Clean up multiple Topic folder_contents tabs.
+   [alecm]
+
  * Readded a seperate _cleanupFilename method for ATCTFileContent to make it 
    better for patch.
    [panjunyong]

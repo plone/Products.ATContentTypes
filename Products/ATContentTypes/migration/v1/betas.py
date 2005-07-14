@@ -32,6 +32,9 @@ def alpha2_beta1(portal):
     # Fix up view actions - with CMFDynamicViewFTI, we don't need /view anymore
     fixViewActions(portal, out)
 
+    # Remove folderContents action from Topics
+    removeTopicFolderContentsAction(portal, out)
+
     # ADD NEW STUFF BEFORE THIS LINE!
 
     # Rebuild catalog
@@ -175,4 +178,21 @@ def fixViewActions(portal, out):
                         if action.getActionExpression().endswith('/view'):
                             action.setActionExpression(Expression('string:${object_url}'))
                             out.append("Made %s not use /view for view action" % t)
+
+
+def removeTopicFolderContentsAction(portal, out):
+    """Remove unnecessary folderContents action from Topics"""
+    REMOVE_ACTIONS=('folderContents',)
+    idxs = []
+    idx = 0
+    portal_types = getToolByName(portal, 'portal_types', None)
+    if portal_types is not None:
+        fti = getattr(portal_types, 'Topic', None)
+        if fti is not None:
+            for action in fti.listActions():
+                if action.getId() in REMOVE_ACTIONS:
+                    idxs.append(idx)
+                    out.append("Removed action %s from Topic FTI"%action.getId())
+                idx += 1
+            fti.deleteActions(idxs)
 
