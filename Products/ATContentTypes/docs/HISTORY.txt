@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Fixed http://plone.org/collector/4170 Link checking is crazy and [ 1197068 ]
+   [hannosch]
+
  * made constraintypes default AQUIRE mode works with portal_factory
    [panjunyong]
 

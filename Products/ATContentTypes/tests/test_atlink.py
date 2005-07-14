@@ -45,7 +45,6 @@ import time
 from Products.ATContentTypes.content.link import ATLink
 from Products.ATContentTypes.content.link import ATLinkSchema
 from Products.ATContentTypes.migration.atctmigrator import LinkMigrator
-from Products.ATContentTypes.tests.utils import RequiredURLValidator
 from Products.ATContentTypes.interfaces import IATLink
 from Products.CMFDefault.Link import Link
 from Interface.Verify import verifyObject
@@ -171,7 +170,7 @@ class TestATLinkFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
-        self.failUnless(field.validators == RequiredURLValidator,
+        self.failUnless(field.validators == (),
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, StringWidget),
                         'Value is %s' % id(field.widget))

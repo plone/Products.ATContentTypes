@@ -51,8 +51,8 @@ ATLinkSchema = ATContentTypeSchema.copy() + Schema((
         searchable=True,
         primary=True,
         default = "http://",
-        # either mailto or an absolute url
-        validators = (('isMailto', V_SUFFICIENT), ('isURL', V_REQUIRED),),
+        # either mailto, absolute url or relative url
+        validators = (),
         widget = StringWidget(
             description = "",
             description_msgid = "help_url",
@@ -63,7 +63,7 @@ ATLinkSchema = ATContentTypeSchema.copy() + Schema((
 finalizeATCTSchema(ATLinkSchema)
 
 class ATLink(ATCTContent):
-    """A link to an external resource."""
+    """A link to an internal or external resource."""
 
     schema         =  ATLinkSchema
 
@@ -75,7 +75,7 @@ class ATLink(ATCTContent):
     default_view   = 'link_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Link', 'meta_type' : 'Link'}
-    typeDescription= 'A link to an external resource.'
+    typeDescription= 'A link to an internal or external resource.'
     typeDescMsgId  = 'description_edit_link_item'
     assocMimetypes = ()
     assocFileExt   = ('link', 'url', )
