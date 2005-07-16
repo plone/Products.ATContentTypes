@@ -10,15 +10,15 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase
 
 from Products.ATContentTypes.tests.atcttestcase import ATCTFunctionalSiteTestCase 
-
 from Products.CMFCore.utils import getToolByName
+
+FILES = ['webdav.txt', 'http_access.txt']
 
 def test_suite():
     import unittest
     suite = unittest.TestSuite()
     from Testing.ZopeTestCase import FunctionalDocFileSuite as FileSuite
-    files = ['webdav.txt']
-    for file in files:
+    for file in FILES:
         suite.addTest(FileSuite(file, package="Products.ATContentTypes.tests",
                                 test_class=ATCTFunctionalSiteTestCase)
                      )

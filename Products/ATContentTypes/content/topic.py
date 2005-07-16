@@ -38,6 +38,9 @@ from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from Acquisition import aq_parent
 from Acquisition import aq_inner
+from zExceptions import MethodNotAllowed
+from zExceptions import NotFound
+from webdav.Resource import Resource as WebdavResoure
 
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import BooleanField
@@ -537,6 +540,32 @@ class ATTopic(ATCTFolder):
                 script = putils.displayContentsTab.__of__(self)
                 return script()
         return False
+
+    def HEAD(self, REQUEST, RESPONSE):
+        """Retrieve resource information without a response body.
+        
+        An empty Topic returns 404 NotFound while a topic w/ a criterion returns
+        200 OK.
+        """
+        self.dav__init(REQUEST, RESPONSE)
+        criteria = self.listCriteria()
+        acquire = self.getAcquireCriteria()
+        if not criteria:
+            if not acquire:
+                # no criteria found
+                raise NotFound, 'The requested resource is empty.'
+            else:
+                # try to acquire a query
+                parent = aq_parent(aq_inner(self))
+                try:
+                    query = parent.buildQuery()
+                except (AttributeError, KeyError):
+                    raise NotFound, 'The requested resource is empty.'
+                else:
+                    if not query:
+                        raise NotFound, 'The requested resource is empty.'
+
+        return WebdavResoure.HEAD(self, REQUEST, RESPONSE)
 
 registerATCT(ATTopic, PROJECTNAME)
 

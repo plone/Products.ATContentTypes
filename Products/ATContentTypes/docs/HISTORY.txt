@@ -1,6 +1,13 @@
 1.0-devel
 =====================
 
+ * Added http access functionl http tests.
+   [tiran]
+
+ * Added HEAD() method to Topic. If the topic has at least one criterion or
+   it can acquire a query 200 OK is return else 404 NotFound
+   [tiran]
+
  * Fixed [Plone] 4295/ 1 Request "ATCT and related items fields".
    [tiran]
 

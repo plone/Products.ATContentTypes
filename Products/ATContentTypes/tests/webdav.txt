@@ -25,7 +25,10 @@ Sidneys tests for Archetypes.
   
   Use the member's home folder as play ground for the tests
   >>> folder = self.folder
-  >>> fpath = '/'.join(folder.getPhysicalPath())    
+  >>> fpath = '/'.join(folder.getPhysicalPath())
+  
+  Plone's default error message template is too verbose and far too long
+  >>> portal.default_error_message = None
 
 WebDAV PUT
 ==========
