@@ -73,6 +73,8 @@ from Products.Archetypes.public import log_exc
 
 from Products.CMFPlone.interfaces.Translatable import ITranslatable
 
+from Products.ATContentTypes.config import CHAR_MAPPING
+from Products.ATContentTypes.config import GOOD_CHARS
 from Products.ATContentTypes.config import MIME_ALIAS
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixin
 from Products.ATContentTypes.interfaces import IATContentType
@@ -131,6 +133,24 @@ def updateAliases(klass, aliases):
 
     return aliases
 
+def cleanupFilename(filename, context=None, encoding='utf-8'):
+    """Removes bad chars from file names to make them a good id
+    """
+    if not filename:
+        return
+    if context is not None:
+        plone_utils = getToolByName(context, 'plone_utils', None)
+        if plone_utils is not None:
+            return plone_utils.normalizeString(filename)
+    
+    # no context or plone_utils
+    result = u''
+    for s in str(filename).decode(encoding):
+        s = CHAR_MAPPING.get(s, s)
+        for c in s:
+            if c in GOOD_CHARS:
+                result += c
+    return result.encode(encoding)
 
 def translateMimetypeAlias(alias):
     """Maps old CMF content types to real mime types
@@ -161,14 +181,11 @@ class ATCTMixin(BrowserDefaultMixin):
     
     # aliases for CMF method aliases is defined in browser default
     
-    # BBB see SkinnedFolder.__call__
+    # flag to show that the object is a temporary object
     isDocTemp = False 
     _at_rename_after_creation = True # rename object according to the title?
 
     # aliases for CMF method aliases is defined in browser default
-
-    # BBB see SkinnedFolder.__call__
-    isDocTemp = False
 
     __implements__ = (IATContentType, BrowserDefaultMixin.__implements__)
 
@@ -424,10 +441,12 @@ class ATCTFileContent(ATCTContent):
             message="Saved changes."
             return self.manage_main(self,REQUEST,manage_tabs_message=message)
 
-    def _cleanupFilename(self, filename):
-        """a seperate method to make it better for patch
-	"""
-        return getToolByName(self, 'plone_utils').normalizeString(filename)
+    def _cleanupFilename(self, filename, encoding=None):
+        """Cleans the filename from unwanted or evil chars
+        """
+        if encoding is None:
+            encoding = self.getCharset()
+        return cleanupFilename(filename, context=self, encoding=encoding)
 
     def _setATCTFileContent(self, value, **kwargs):
         """Set id to uploaded id

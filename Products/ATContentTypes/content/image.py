@@ -45,6 +45,7 @@ from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
+from Products.ATContentTypes.content.base import cleanupFilename
 from Products.ATContentTypes.content.base import updateActions
 from Products.ATContentTypes.content.base import InvalidContentType
 from Products.ATContentTypes.interfaces import IATImage

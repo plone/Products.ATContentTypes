@@ -325,7 +325,7 @@ class ConstrainTypesMixin:
        DISABLE if not
        """
        portal_factory = getToolByName(self, 'portal_factory', None)
-       if portal_factory and portal_factory.isTemporary(self):
+       if portal_factory is not None and portal_factory.isTemporary(self):
            # created by portal_factory
            parent = aq_parent(aq_parent(aq_parent(aq_inner(self))))
        else:

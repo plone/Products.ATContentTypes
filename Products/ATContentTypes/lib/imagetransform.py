@@ -24,6 +24,7 @@ were taken from CMFPhoto.
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
+import logging
 from cStringIO import StringIO
 
 from Products.CMFCore.permissions import View
@@ -36,7 +37,6 @@ from Globals import InitializeClass
 from Products.ATContentTypes.lib import exif
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import HAS_PIL
-from Products.Archetypes.public import log_exc
 
 from OFS.Image import Image as OFSImage
 
@@ -44,6 +44,7 @@ from OFS.Image import Image as OFSImage
 if HAS_PIL:
     import PIL.Image
 
+LOG = logging.getLogger('ATCT.image')
 
 # transpose constants, taken from PIL.Image to maintain compatibilty
 FLIP_LEFT_RIGHT = 0
@@ -124,14 +125,14 @@ class ATCTImageTransform(Base):
         
         if exif_data is None or not isinstance(exif_data, dict):
             img = self.getImageAsFile(scale=None)
-            if img:
+            if img is not None:
                 # some cameras are naughty :(
                 try:
                     img.seek(0)
                     exif_data = exif.process_file(img, debug=False)
                     img.close()
                 except:
-                    log_exc()
+                    LOG.error('Failed to process EXIF information', exc_info=True)
                     exif_data = {}
                 # remove some unwanted elements lik thumb nails
                 for key in ('JPEGThumbnail', 'TIFFThumbnail'):
@@ -183,14 +184,14 @@ class ATCTImageTransform(Base):
         """Get the EXIF DateTimeOriginal from the image (or None)
         """
         exif_data = self.getEXIF()
-        # some cameras are naughty ...
-        try:
-            raw_date = exif_data.get('EXIF DateTimeOriginal', None)
-            if raw_date is not None:
+        raw_date = exif_data.get('EXIF DateTimeOriginal', None)
+        if raw_date is not None:
+            # some cameras are naughty ...
+            try:
                 return DateTime(str(raw_date))
-        except:
-            log_exc()
-            return None
+            except:
+                LOG.error('Failed to parse exif date %s' % raw_date, exc_info=True)
+        return None
 
     security.declareProtected(ModifyPortalContent, 'transformImage')
     def transformImage(self, method, REQUEST=None):
@@ -215,7 +216,7 @@ class ATCTImageTransform(Base):
         image = self.getImageAsFile()
         image2 = StringIO()
         
-        if image:
+        if image is not None:
             img = PIL.Image.open(image)
             del image
             fmt = img.format
@@ -242,12 +243,15 @@ class ATCTImageTransform(Base):
         """
         target = self.absolute_url() + '/atct_image_transform'
         mirror, rotation = self.getEXIFOrientation()
+        transform = None
         if rotation:
-            transform = AUTO_ROTATE_MAP.get(rotation)
-            if transform:
+            transform = AUTO_ROTATE_MAP.get(rotation, None)
+            if transform is not None:
                 self.transformImage(transform)
         if REQUEST:
              REQUEST.RESPONSE.redirect(target)
+        else:
+            return mirror, rotation, transform
              
     security.declareProtected(View, 'getTransformMap')
     def getTransformMap(self):

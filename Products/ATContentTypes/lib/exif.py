@@ -89,6 +89,9 @@
 # 15-FEB-04 CEC Finally fixed bit shift warning by converting Y to 0L.
 #
 
+import logging
+LOG = logging.getLogger('exif')
+
 # field type descriptions as (length, abbreviation, full name) tuples
 FIELD_TYPES=(
     (0, 'X',  'Proprietary'), # no such type
@@ -1146,7 +1149,10 @@ def process_file(file, debug=0):
 
     # deal with MakerNote contained in EXIF IFD
     if hdr.tags.has_key('EXIF MakerNote'):
-        hdr.decode_maker_note()
+        try:
+            hdr.decode_maker_note()
+        except:
+            LOG.error('Failed to parse EXIF MakerNote', exc_info=True)
 
     # Sometimes in a TIFF file, a JPEG thumbnail is hidden in the MakerNote
     # since it's not allowed in a uncompressed TIFF IFD

@@ -32,6 +32,7 @@ from DateTime import DateTime
 from Persistence import PersistentMapping
 from OFS.Uninstalled import BrokenClass
 from OFS.IOrderSupport import IOrderedContainer
+from ZODB.POSException import ConflictError
 
 from Products.ATContentTypes.migration.common import *
 from Products.ATContentTypes.migration.common import _createObjectByType
@@ -220,27 +221,25 @@ class BaseMigrator:
             return None
 
         for id in self.old.propertyIds():
-            #LOG("propertyid: " + str(id))
-            if id in ('title', 'description'):
-                # migrated by dc
-                continue
-            if id in ('content_type', ):
-                # has to be taken care of separately
-                #LOG("property with id: %s not migrated" % str(id))
+            if id in ('title', 'description', 'content_type', ):
+                # migrated by dc or other
                 continue
             value = self.old.getProperty(id)
-            type = self.old.getPropertyType(id)
-            #LOG("value: " + str(value) + "; type: " + str(type))
+            typ = self.old.getPropertyType(id)
+            __traceback_info__ = (self.new, id, value, typ)
             if self.new.hasProperty(id):
                 self.new._delProperty(id)
-            #LOG("property: " + str(self.new.getProperty(id)))
-            __traceback_info__ = (self.new, id, value, type)
-
+            
             # continue if the object already has this attribute
             if getattr(aq_base(self.new), id, _marker) is not _marker:
                 continue
-
-            self.new.manage_addProperty(id, value, type)
+            try:
+                self.new.manage_addProperty(id, value, typ)
+            except ConflictError:
+                raise
+            except:
+                LOG.error('Failed to set property %s type %s to %s at object %s' %
+                          (id, typ, value, self.new), exc_info=True)
 
     def migrate_owner(self):
         """Migrates the zope owner
@@ -249,13 +248,11 @@ class BaseMigrator:
         if hasattr(aq_base(self.old), 'getWrappedOwner'):
             owner = self.old.getWrappedOwner()
             self.new.changeOwnership(owner)
-            #LOG("changing owner via changeOwnership: %s" % str(self.old.getWrappedOwner()))
         else:
             # fallback
             # not very nice but at least it works
             # trying to get/set the owner via getOwner(), changeOwnership(...)
             # did not work, at least not with plone 1.x, at 1.0.1, zope 2.6.2
-            #LOG("changing owner via property _owner: %s" % str(self.old.getOwner(info = 1)))
             self.new._owner = self.old.getOwner(info = 1)
 
     def migrate_localroles(self):
@@ -324,31 +321,12 @@ class BaseMigrator:
         fti = self.new.getTypeInfo()
         # This calls notifyWorkflowCreated which resets the migrated workflow
         # fti._finishConstruction(self.new)
-        
-        # BBB This seems unnecessary, but it's what the above method does,
-        # and it's quick and can't hurt anything.
+
+        # _setPortalTypeName is required to
         if hasattr(ob, '_setPortalTypeName'):
             ob._setPortalTypeName(fti.getId())
 
-#        # Update permissions to match migrated workflow state
-#        # It may be better to just call the recursive RoleMapping update after
-#        # all migrations are done.
-#        wf_tool = getToolByName(self.new, 'portal_workflow')
-#        # Build list of updateable workflows
-#        wfs = {}
-#        for id in wf_tool.objectIds():
-#            wf = wf_tool.getWorkflowById(id)
-#            if hasattr(aq_base(wf), 'updateRoleMappingsFor'):
-#                wfs[id] = wf
-#        # Update Role map for object
-#        wf_ids = wf_tool.getChainFor(ob)
-#        for wf_id in wf_ids:
-#            wf = wfs.get(wf_id, None)
-#            if wf is not None:
-#                wf.updateRoleMappingsFor(ob)
-#
-#        # Reindex
-#        self.new.reindexObject()
+        #self.new.reindexObject(['meta_type', 'portal_type'], update_metadata=False)
 
 class BaseCMFMigrator(BaseMigrator):
     """Base migrator for CMF objects
@@ -434,8 +412,11 @@ class ItemMigrationMixin:
             try:
                 self._position = self.parent.getObjectPosition(self.old_id)
                 self.parent.moveObject(self.new_id, self._position)
-            except ValueError:
-                pass
+            except ConflictError:
+                raise
+            except:
+                LOG.error('Failed to reorder object %s in %s' % (self.new,
+                          self.parent), exc_info=True)
 
 class FolderMigrationMixin(ItemMigrationMixin):
     """Migrates a folderish object
@@ -474,15 +455,15 @@ class FolderMigrationMixin(ItemMigrationMixin):
                     orderAble=0
             subobjs[id] = aq_base(obj)
             # delOb doesn't call manage_afterAdd which safes some time because it
-            # doesn't unindex an object. The migrate children method uses _setObject
-            # later. This methods indexes the object again and so updates all
-            # catalogs.
-            #self.old._delObject(id)
+            # doesn't unindex an object. The migrate children method uses
+            # _setObject later. This methods indexes the object again and
+            # so updates all catalogs.
             self.old._delOb(id)
             # We need to take care to remove the relevant ids from _objects
             # otherwise objectValues breaks.
             if getattr(self.old, '_objects', None) is not None:
-                self.old._objects = tuple([o for o in self.old._objects if o['id'] != id])
+                self.old._objects = tuple([o for o in self.old._objects
+                                           if o['id'] != id])
 
         self.orderMap = orderMap
         self.subobjs = subobjs
