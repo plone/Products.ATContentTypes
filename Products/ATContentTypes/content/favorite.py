@@ -139,9 +139,4 @@ class ATFavorite(ATCTContent):
             remote_url = kwargs.get('remote_url', None)
         self.update(remoteUrl = remote_url, **kwargs)
 
-    security.declareProtected(View, 'get_size')
-    def get_size(self):
-        """Returns the size of the remote url."""
-        return len(self.getRemoteUrl()) or 1
-
 registerATCT(ATFavorite, PROJECTNAME)

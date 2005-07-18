@@ -26,12 +26,6 @@ import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
-def editCMF(obj):
-    dcEdit(obj)
-
-def editATCT(obj):
-    dcEdit(obj)
-
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
@@ -54,6 +48,15 @@ from Interface.Verify import verifyObject
 from Products.CMFPlone import transaction
 
 tests = []
+
+TEXT = "lorum ipsum"
+
+def editCMF(obj):
+    dcEdit(obj)
+
+def editATCT(obj):
+    dcEdit(obj)
+    obj.setText(TEXT)
 
 class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
 
@@ -116,6 +119,10 @@ class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
 
         # XXX more
 
+    def test_get_size(self):
+        atct = self._ATCT
+        editATCT(atct)
+        self.failUnlessEqual(atct.get_size(), len(TEXT))
 
 tests.append(TestSiteATNewsItem)
 

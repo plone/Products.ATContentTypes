@@ -276,6 +276,15 @@ class ATCTMixin(BrowserDefaultMixin):
             return field.get(self)
         else:
             return False
+            
+    security.declareProtected(View, 'get_size')
+    def get_size(self):
+        """ZMI / Plone get size method
+        """
+        f = self.getPrimaryField()
+        if f is None:
+            return "n/a"
+        return f.get_size(self) or 0
 
 InitializeClass(ATCTMixin)
 
@@ -385,13 +394,6 @@ class ATCTFileContent(ATCTContent):
         return str(getattr(data, 'data', data))
 
     data = ComputedAttribute(get_data, 1)
-
-    security.declareProtected(View, 'get_size')
-    def get_size(self):
-        """CMF compatibility method
-        """
-        f = self.getPrimaryField()
-        return f.get_size(self) or 0
 
     security.declareProtected(View, 'size')
     def size(self):
@@ -613,6 +615,11 @@ class ATCTFolder(ATCTMixin, BaseFolder):
          },
         )
     )
+
+    security.declareProtected(View, 'get_size')
+    def get_size(self):
+        """Returns 1 as folders have no size."""
+        return 1
 
 InitializeClass(ATCTFolder)
 

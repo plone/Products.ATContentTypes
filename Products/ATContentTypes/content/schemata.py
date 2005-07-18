@@ -70,23 +70,6 @@ ATContentTypeSchema['description'].schemata = 'default'
 # BBB
 ATContentTypeBaseSchema = ATContentTypeSchema
 
-urlUploadField = StringField('urlUpload',
-        required = False,
-        mode = 'w', # write only field
-        languageIndependent = True,
-        validators = ('isURL',),
-        write_permission = ATCTPermissions.UploadViaURL,
-        widget = StringWidget(
-            description="Upload a file from another server by url.",
-            description_msgid = "help_upload_url",
-            label = "Upload from server",
-            label_msgid = "label_upload_url",
-            i18n_domain = "plone",
-            visible={'view' : 'hidden',
-                     'edit' : 'hidden'},
-            ),
-        )
-
 relatedItemsField = ReferenceField('relatedItems',
         relationship = 'relatesTo', 
         multiValued = True,

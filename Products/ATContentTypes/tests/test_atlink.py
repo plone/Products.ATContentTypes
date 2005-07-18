@@ -26,12 +26,6 @@ import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
-def editCMF(obj):
-    dcEdit(obj)
-
-def editATCT(obj):
-    dcEdit(obj)
-
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
@@ -129,6 +123,11 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
 
         self.failUnless(migrated.getRemoteUrl() == url, 'URL mismatch: %s / %s' \
                         % (migrated.getRemoteUrl(), url))
+
+    def test_get_size(self):
+        atct = self._ATCT
+        editATCT(atct)
+        self.failUnlessEqual(atct.get_size(), len(URL))
 
 tests.append(TestSiteATLink)
 

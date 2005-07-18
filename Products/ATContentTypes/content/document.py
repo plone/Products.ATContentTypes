@@ -236,11 +236,6 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
 
-    security.declareProtected(View, 'get_size')
-    def get_size(self):
-        """Returns the size of the (raw) text field."""
-        return len(self.getRawText()) or 1
-
     def deferring(self):
         """
         """

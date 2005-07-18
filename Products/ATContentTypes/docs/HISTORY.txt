@@ -1,6 +1,13 @@
 1.0-devel
 =====================
 
+ * General get_size fixes. The get_size() method returns either the size
+   of the primary field or 1 for folders.
+   [tiran]
+
+ * Moved not yet implemented URL upload feature out of the main code.
+   [tiran]
+
  * Fixed constraintypes's allowedContentTypes and invokeFactory to make
    ENABLED mode work when the portal_type is different with parent's.
    [panjunyong]

@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
 #  Copyright (c) 2003-2005 AT Content Types development team
@@ -133,6 +133,11 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         self.failIfEqual(migrated.data, None)
         self.failIfEqual(migrated.data, '')
         # TODO: more tests
+
+    def test_get_size(self):
+        atct = self._ATCT
+        editATCT(atct)
+        self.failUnlessEqual(atct.get_size(), len(file_text))
 
 tests.append(TestSiteATFile)
 

@@ -108,9 +108,4 @@ class ATLink(ATCTContent):
             remote_url = kwargs.get('remote_url', None)
         self.update(remoteUrl = remote_url, **kwargs)
 
-    security.declareProtected(View, 'get_size')
-    def get_size(self):
-        """Return the size of the remote url."""
-        return len(self.getRemoteUrl()) or 1
-
 registerATCT(ATLink, PROJECTNAME)

@@ -126,6 +126,10 @@ class TestSiteATFavorite(atcttestcase.ATCTTypeTestCase):
         self.failUnless(migrated.getRemoteUrl() == url, 'URL mismatch: %s / %s' \
                         % (migrated.getRemoteUrl(), url))
 
+    def test_get_size(self):
+        atct = self._ATCT
+        editATCT(atct)
+        self.failUnlessEqual(atct.get_size(), len(URL))
 
 tests.append(TestSiteATFavorite)
 

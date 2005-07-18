@@ -47,11 +47,9 @@ from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
 from Products.ATContentTypes.content.base import cleanupFilename
 from Products.ATContentTypes.content.base import updateActions
-from Products.ATContentTypes.content.base import InvalidContentType
 from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.content.schemata import urlUploadField
 from Products.ATContentTypes.lib.imagetransform import ATCTImageTransform
 
 from Products.validation.config import validation
@@ -94,7 +92,7 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
 
     ), marshall=PrimaryFieldMarshaller()
     )
-#ATImageSchema.addField(urlUploadField)
+
 finalizeATCTSchema(ATImageSchema)
 
 

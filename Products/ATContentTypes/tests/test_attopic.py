@@ -321,6 +321,10 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         topic.invokeFactory('Topic', 'subtopic')
         self.failUnlessEqual(topic.hasSubtopics(), True)
 
+    def test_get_size(self):
+        atct = self._ATCT
+        self.failUnlessEqual(atct.get_size(), 1)
+
 tests.append(TestSiteATTopic)
 
 class TestATTopicFields(atcttestcase.ATCTFieldTestCase):

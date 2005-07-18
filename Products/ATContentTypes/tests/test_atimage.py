@@ -51,7 +51,11 @@ from Products.CMFPlone import transaction
 
 TEST_GIF = open(os.path.join(PACKAGE_HOME, 'test.gif'), 'rb').read()
 TEST2_GIF = open(os.path.join(PACKAGE_HOME, 'test_DivisionError.jpg'), 'rb').read()
-TEST_JPEG = open(os.path.join(PACKAGE_HOME, 'CanonEye.jpg'), 'rb').read()
+TEST_JPEG_FILE = open(os.path.join(PACKAGE_HOME, 'CanonEye.jpg'), 'rb')
+TEST_JPEG_FILE.seek(0, 2)
+TEST_JPEG_LEN = TEST_JPEG_FILE.tell()
+TEST_JPEG_FILE.seek(0)
+TEST_JPEG = TEST_JPEG_FILE.read()
 
 def editCMF(obj):
     obj.update_data(TEST_JPEG, content_type="image/jpeg")
@@ -176,7 +180,14 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         # test upload
         atct.setImage(TEST2_GIF, mimetype='image/gif', filename='test_DivisionError.jpg')
         self.failUnlessEqual(atct.getImage().data, TEST2_GIF)
-        
+
+
+    def test_get_size(self):
+        atct = self._ATCT
+        editATCT(atct)
+	self.failUnlessEqual(len(TEST_JPEG), TEST_JPEG_LEN)
+        self.failUnlessEqual(atct.get_size(), TEST_JPEG_LEN)
+
 tests.append(TestSiteATImage)
 
 class TestATImageFields(atcttestcase.ATCTFieldTestCase):

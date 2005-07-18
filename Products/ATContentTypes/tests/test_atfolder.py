@@ -172,6 +172,10 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         self.failUnless(IAutoOrderSupport.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(IAutoOrderSupport, self._ATCT))
 
+    def test_get_size(self):
+        atct = self._ATCT
+        self.failUnlessEqual(atct.get_size(), 1)
+
 tests.append(TestSiteATFolder)
 
 class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
@@ -260,6 +264,9 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
             import sys, traceback
             self.fail("Failed migrating subobject of LargePloneFolder: %s \n %s"%(e,''.join(traceback.format_tb(sys.exc_traceback))))
 
+    def test_get_size(self):
+        atct = self._ATCT
+        self.failUnlessEqual(atct.get_size(), 1)
 
 tests.append(TestSiteATBTreeFolder)
 

@@ -50,7 +50,6 @@ from Products.ATContentTypes.content.base import ATCTFileContent
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.content.schemata import urlUploadField
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 
 from Products.validation.config import validation
@@ -77,7 +76,6 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
                         show_content_type = False,)),
     ), marshall=PrimaryFieldMarshaller()
     )
-#ATFileSchema.addField(urlUploadField)
 finalizeATCTSchema(ATFileSchema)
 
 class ATFile(ATCTFileContent):

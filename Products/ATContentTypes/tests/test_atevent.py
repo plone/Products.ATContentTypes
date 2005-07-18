@@ -64,6 +64,7 @@ C_EMAIL  = 'john@example.org'
 EV_ATTENDEES = ('john@doe.com',
                 'john@doe.org',
                 'john@example.org')
+TEXT = "lorem ipsum"
 
 def editCMF(obj):
     dcEdit(obj)
@@ -87,6 +88,7 @@ def editATCT(obj):
     obj.setContactPhone(C_PHONE)
     obj.setContactEmail(C_EMAIL)
     obj.setAttendees(EV_ATTENDEES)
+    obj.setText(TEXT)
 
 
 tests = []
@@ -225,6 +227,11 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         e1.edit(startDate = day29, endDate=day30, title='event')
         e2.edit(startDate = day29, endDate=day30, title='evenz')
         self.failUnlessEqual(cmp(e1, e2), -1)  # e1 < e2
+
+    def test_get_size(self):
+        atct = self._ATCT
+        editATCT(atct)
+        self.failUnlessEqual(atct.get_size(), len(TEXT))
 
 tests.append(TestSiteATEvent)
 

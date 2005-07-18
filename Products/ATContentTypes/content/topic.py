@@ -499,11 +499,6 @@ class ATTopic(ATCTFolder):
         objs = [brain.getObject() for brain in brains]
         return [obj for obj in objs if obj is not None]
 
-    security.declareProtected(View, 'get_size')
-    def get_size(self):
-        """Returns 1 as topics have no size."""
-        return 1
-
     security.declarePublic('canSetDefaultPage')
     def canSetDefaultPage(self):
         """

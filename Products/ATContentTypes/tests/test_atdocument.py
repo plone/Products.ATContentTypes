@@ -182,6 +182,11 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
             doc.setText(text, mimetype=mimetype)
             txt = doc.getText()
             self.failUnlessEqual(txt, expected, (txt, expected, mimetype))
+            
+    def test_get_size(self):
+        atct = self._ATCT
+        editATCT(atct)
+        self.failUnlessEqual(atct.get_size(), len(example_stx))
 
 tests.append(TestSiteATDocument)
 

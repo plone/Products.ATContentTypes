@@ -394,9 +394,4 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
             info = kwargs
         ATCTContent.update(self, **info)
 
-    security.declareProtected(View, 'get_size')
-    def get_size(self):
-        """Returns the size of the event description field."""
-        return len(self.getText()) or 1
-
 registerATCT(ATEvent, PROJECTNAME)
