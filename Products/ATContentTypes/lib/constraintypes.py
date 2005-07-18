@@ -333,7 +333,8 @@ class ConstrainTypesMixin:
        else:
            parent = aq_parent(aq_inner(self))
 
-       if ISelectableConstrainTypes.isImplementedBy(parent):
+       if ISelectableConstrainTypes.isImplementedBy(parent) and \
+                                                parentPortalTypeEqual(self):
            return ACQUIRE
        else:
            return DISABLED

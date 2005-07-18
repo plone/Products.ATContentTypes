@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * ConstrainTypes should default to disabled unless the parent object is of
+   the same portal type.
+   [alecm]
+
  * General get_size fixes. The get_size() method returns either the size
    of the primary field or 1 for folders.
    [tiran]
