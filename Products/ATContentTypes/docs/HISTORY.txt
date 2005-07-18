@@ -1,6 +1,10 @@
 1.0-devel
 =====================
 
+ * Fixed constraintypes's allowedContentTypes and invokeFactory to make
+   ENABLED mode work when the portal_type is different with parent's.
+   [panjunyong]
+
  * Added http access functionl http tests.
    [tiran]
 
