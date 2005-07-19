@@ -11,6 +11,9 @@ from ZODB.POSException import ConflictError
 from Products.CMFPlone.utils import base_hasattr, safe_callable
 from AccessControl import Unauthorized
 
+if value is None:
+    return ''
+
 if same_type(value, DateTime()):
     return context.toLocalizedTime(value.ISO(), long_format = long_format)
 
@@ -40,7 +43,7 @@ if items is not None and safe_callable(items):
     value = ', '.join(['%s: %s'%(a,b) for a,b in items()])
 if same_type(value,[]) or same_type(value,()):
     # Return list as comma separated values
-    value = ', '.join(value)
+    value = ', '.join([str(v) for v in value])
 
 value = str(value)
 
@@ -56,4 +59,4 @@ else:
 if len(value) < max_length:
     return value
 else:
-    return value[:max_length] + ellipsis
+    return '%s%s'%(value[:max_length],ellipsis)
