@@ -257,7 +257,6 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         
         self.failUnlessEqual(output, ['the obj', 'the folder', 'the obj', 'the folder'])
 
-
 from Products.CMFCore.utils import getToolByName
 from Products.CMFQuickInstallerTool.QuickInstallerTool import AlreadyInstalled
 from Products.Archetypes.tests.atsitetestcase import portal_name
