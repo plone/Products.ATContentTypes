@@ -175,6 +175,9 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
     def test_get_size(self):
         atct = self._ATCT
         self.failUnlessEqual(atct.get_size(), 1)
+        
+    def test_schema_marshall(self):
+        pass
 
 tests.append(TestSiteATFolder)
 
@@ -267,6 +270,9 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
     def test_get_size(self):
         atct = self._ATCT
         self.failUnlessEqual(atct.get_size(), 1)
+
+    def test_schema_marshall(self):
+        pass
 
 tests.append(TestSiteATBTreeFolder)
 

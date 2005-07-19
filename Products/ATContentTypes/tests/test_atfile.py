@@ -134,10 +134,12 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         self.failIfEqual(migrated.data, '')
         # TODO: more tests
 
-    def test_get_size(self):
+    def test_schema_marshall(self):
         atct = self._ATCT
-        editATCT(atct)
-        self.failUnlessEqual(atct.get_size(), len(file_text))
+        schema = atct.Schema()
+        marshall = schema.getLayerImpl('marshall')
+        self.failUnless(isinstance(marshall, PrimaryFieldMarshaller), marshall)
+
 
 tests.append(TestSiteATFile)
 

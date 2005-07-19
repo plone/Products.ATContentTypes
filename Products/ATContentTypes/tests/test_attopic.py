@@ -325,6 +325,9 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         atct = self._ATCT
         self.failUnlessEqual(atct.get_size(), 1)
 
+    def test_schema_marshall(self):
+        pass
+
 tests.append(TestSiteATTopic)
 
 class TestATTopicFields(atcttestcase.ATCTFieldTestCase):

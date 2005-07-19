@@ -223,6 +223,12 @@ class ATCTTypeTestCase(ATSiteTestCase):
         # TODO: not a real test
         self._ATCT.getObjPositionInParent()
 
+    def test_schema_marshall(self):
+        atct = self._ATCT
+        schema = atct.Schema()
+        marshall = schema.getLayerImpl('marshall')
+        self.failUnless(isinstance(marshall, RFC822Marshaller), marshall)
+
     def beforeTearDown(self):
         self.logout()
 

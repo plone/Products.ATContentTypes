@@ -1,6 +1,13 @@
 1.0-devel
 =====================
 
+ * Fixed get_size for ATImage. It should return only the file size of the
+   original image.
+   [tiran]
+
+ * HEAD fixes for folder based content types.
+   [tiran]
+
  * Fixed permission issue in formatCatalogMetadata.py.
    [alecm]
 

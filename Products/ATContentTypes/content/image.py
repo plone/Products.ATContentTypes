@@ -30,8 +30,10 @@ from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from Acquisition import aq_parent
+from Acquisition import aq_base
 from ComputedAttribute import ComputedAttribute
 from Globals import InitializeClass
+from OFS.Image import Image as OFSImage
 
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import ImageField
@@ -133,13 +135,25 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
         """
-        return self.getField('image').tag(self, **kwargs)
+        img = self.getField('image').tag(self, **kwargs)
     
     def __str__(self):
         """cmf compatibility
         """
         return self.tag()
     
+    security.declareProtected(View, 'get_size')
+    def get_size(self):
+        """ZMI / Plone get size method
+        
+        BBB: ImageField.get_size() returns the size of the original image + all 
+        scales but we want only the size of the original image.
+        """
+        img = self.getImage()
+        if not getattr(aq_base(img), 'get_size', False):
+            return "n/a"
+        return img.get_size()
+        
     security.declareProtected(View, 'getSize')
     def getSize(self, scale=None):
         field = self.getField('image')

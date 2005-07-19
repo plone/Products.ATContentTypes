@@ -25,6 +25,7 @@ Sidneys tests for Archetypes.
   
   Use the member's home folder as play ground for the tests
   >>> folder = self.folder
+  >>> folder.setTitle('test folder')
   >>> fpath = '/'.join(folder.getPhysicalPath())    
   
   We need the portal, too
@@ -51,7 +52,21 @@ For the test we have to remove the object 'index_html' if it is in the
 folder.
   
   >>> if 'index_html' in folder.objectIds():
-  ...     folder.manage_delObjects(('index_html',)) 
+  ...     folder.manage_delObjects('index_html')
+  
+  ATFfolder's HEAD method is using defaultView to acquire a view method. Check
+  the viewMethod first.
+  
+  >>> view_id = folder.defaultView()
+  >>> view_id
+  'folder_listing'
+  >>> view_method = getattr(folder, view_id)
+  >>> view_method
+  <FSPageTemplate at ...>
+  >>> view_method.HEAD
+  <bound method FSPageTemplate.HEAD of ...>
+  
+  Check HEAD w/o an index_html object
   
   >>> print http(r"""
   ... HEAD /%s HTTP/1.1
@@ -59,6 +74,9 @@ folder.
   ... """ % (fpath, user_name, user_password))
   HTTP/1.1 200 OK
   ...
+  
+  HEAD works with an object named index_html, too. The browserdefault code
+  returns the index_html object and its HEAD method is caleld
   
   >>> folder.invokeFactory('Document', id='index_html')
   'index_html'
@@ -70,7 +88,37 @@ folder.
   ... Authorization: Basic %s:%s
   ... """ % (fpath, user_name, user_password))
   HTTP/1.1 200 OK
-  ...  
+  ...
+  
+  Remove index_html for the following tests since index_html overrules every
+  view in set with browser default
+  >>> folder.manage_delObjects('index_html')
+  
+  For the following tests we have to add two view methods to the FTI. The FTI
+  doesn't return view methods unless they are registered.
+  
+  >>> pt_tool = self.portal.portal_types
+  >>> ti = pt_tool[folder.portal_type]
+  >>> ti.view_methods += ('non_existing_layout',) 
+  
+  HEAD returns NotFound if the view method can't be acquired. To show the
+  behavior the layout is set to a non existing template.
+  
+  >>> folder.setLayout('non_existing_layout')
+  >>> folder.defaultView()
+  'non_existing_layout'
+  >>> getattr(folder, folder.defaultView())
+  Traceback (most recent call last):
+  ...
+  AttributeError: ...
+  
+  >>> print http(r"""
+  ... HEAD /%s HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ... """ % (fpath, user_name, user_password))
+  HTTP/1.1 404 Not Found
+  ...
+
 
 Smart Folders
 -------------
@@ -170,4 +218,4 @@ Test HEAD for the portal root object
   ... Authorization: Basic %s:%s
   ... """ % (ppath, user_name, user_password))
   HTTP/1.1 200 OK
-  ...  
+  ...

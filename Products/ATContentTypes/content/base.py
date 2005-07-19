@@ -24,8 +24,6 @@ __docformat__ = 'restructuredtext'
 
 
 from copy import copy
-import urllib2
-import urlparse
 
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 if HAS_LINGUA_PLONE:
@@ -42,9 +40,6 @@ else:
     from Products.Archetypes.public import registerType
 
 from Products.ATContentTypes.config import HAS_PLONE2
-if HAS_PLONE2:
-    from Products.CMFPlone.PloneFolder import ReplaceableWrapper
-    from webdav.NullResource import NullResource
 
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
@@ -54,9 +49,12 @@ from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ExtensionClass import Base
-from OFS import ObjectManager
+from Globals import REPLACEABLE
 from zExceptions import BadRequest
 from webdav.Lockable import ResourceLockedError
+from webdav.NullResource import NullResource
+from zExceptions import MethodNotAllowed
+from zExceptions import NotFound
 from Products.CMFPlone import transaction
 
 from Products.CMFCore.permissions import View
@@ -82,19 +80,21 @@ from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
 DEBUG = True
 
-class InvalidContentType(Exception):
-    """Invalid content type (uploadFromURL)
-    """
+if HAS_PLONE2:
+    # the browser default checks for isinstance()
+    from Products.CMFPlone.PloneFolder import ReplaceableWrapper
+else:
+    class ReplaceableWrapper:
+        """A wrapper around an object to make it replaceable
+        """
+        def __init__(self, ob):
+            self.__ob = ob
+    
+        def __getattr__(self, name):
+            if name == '__replaceable__':
+                return REPLACEABLE
+            return getattr(self.__ob, name)
 
-# XXX this should go into LinguaPlone!
-translate_actions = ({
-    'id'          : 'translate',
-    'name'        : 'Translate',
-    'action'      : 'string:${object_url}/translate_item',
-    'permissions' : (ModifyPortalContent, ),
-    'condition'   : 'not: object/isCanonical|nothing',
-    },
-    )
 
 def registerATCT(class_, project):
     """Registers an ATContentTypes based type
@@ -102,10 +102,6 @@ def registerATCT(class_, project):
     One reason to use it is to hide the lingua plone related magic.
     """
     assert IATContentType.isImplementedByInstancesOf(class_)
-    # TODO: this should go into LinguaPlone!
-    #if ITranslatable is not None and ITranslatable.isImplementedByInstancesOf(class_):
-    #    class_.actions = updateActions(class_, translate_actions)
-
     registerType(class_, project)
 
 def updateActions(klass, actions):
@@ -638,7 +634,6 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
         if HAS_PLONE2:
             return getToolByName(self, 'plone_utils').browserDefault(self)
         else:
-            #return OrderedBaseFolder.__browser_default__(self, request)
             return self, [self.getLayout(),]
 
     security.declareProtected(View, 'get_size')
@@ -658,6 +653,25 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
         title = new.Title()
         if not title.strip():
             new.update(title=id)
+
+    security.declareProtected(View, 'HEAD')
+    def HEAD(self, REQUEST, RESPONSE):
+        """Overwrite HEAD method for HTTP HEAD requests
+        
+        Returns 404 Not Found if the default view can't be acquired or 405
+        Method not allowed if the default view has no HEAD method.
+        """
+        view_id = self.getDefaultPage() or self.getLayout()
+        view_method = getattr(self, view_id, None)
+        if view_method is None:
+            # view method couldn't be acquired
+            raise NotFound, "View method %s for requested resource is not " \
+                             "available." % view_id
+        if getattr(aq_base(view_method), 'HEAD', None) is not None:
+            # view method has a HEAD method
+            return view_method.__of__(self).HEAD(REQUEST, RESPONSE)
+        else:
+            raise MethodNotAllowed, 'Method not supported for this resource.' 
 
 InitializeClass(ATCTFolderMixin)
 
@@ -688,36 +702,26 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
 
     security.declareProtected(View, 'index_html')
     def index_html(self, REQUEST=None, RESPONSE=None):
-       """Special case index_html"""
-       request = REQUEST
-       if request is None:
-           request = getattr(self, 'REQUEST', None) 
-       if HAS_PLONE2:
-           # COPIED FROM CMFPLONE 2.1
-           if request and request.has_key('REQUEST_METHOD'):
-               if (request.maybe_webdav_client and
-                   request['REQUEST_METHOD'] in  ['PUT']):
-                   # Very likely a WebDAV client trying to create something
-                   return ReplaceableWrapper(NullResource(self, 'index_html'))
-           # Acquire from parent
-           _target = aq_parent(aq_inner(self)).aq_acquire('index_html')
-           if _target is None:
-               return ReplaceableWrapper(NullResource(self, 'index_html'))
-           else:
-               return ReplaceableWrapper(aq_base(_target).__of__(self))
-       else:
-           return OrderedBaseFolder.index_html(self)
+        """Special case index_html"""
+        request = REQUEST
+        if request is None:
+            request = getattr(self, 'REQUEST', None) 
+        if request and request.has_key('REQUEST_METHOD'):
+            if request.maybe_webdav_client:
+                method = request['REQUEST_METHOD']
+                if method in ('PUT',):
+                    # Very likely a WebDAV client trying to create something
+                    return ReplaceableWrapper(NullResource(self, 'index_html'))
+                elif method in ('GET', 'HEAD', 'POST'):
+                    # Do nothing, let it go and acquire.
+                    pass
+                else:
+                    raise AttributeError, 'index_html'
+        # Acquire from parent
+        _target = aq_parent(aq_inner(self)).aq_acquire('index_html')
+        return ReplaceableWrapper(aq_base(_target).__of__(self))
 
     index_html = ComputedAttribute(index_html, 1)
-
-    def __browser_default__(self, request):
-        """ Set default so we can return whatever we want instead
-        of index_html """
-        if HAS_PLONE2:
-            return getToolByName(self, 'plone_utils').browserDefault(self)
-        else:
-            #return OrderedBaseFolder.__browser_default__(self, request)
-            return self, [self.getLayout(),]
 
 InitializeClass(ATCTOrderedFolder)
 
@@ -760,21 +764,9 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
         if _target is not None:
             return _target
         _target = aq_parent(aq_inner(self)).aq_acquire('index_html')
-        if HAS_PLONE2:
-            return ReplaceableWrapper(aq_base(_target).__of__(self))
-        else:
-            return aq_base(_target).__of__(self)
+        return ReplaceableWrapper(aq_base(_target).__of__(self))
 
     index_html = ComputedAttribute(index_html, 1)
-
-    def __browser_default__(self, request):
-        """ Set default so we can return whatever we want instead
-        of index_html """
-        if HAS_PLONE2:
-            return getToolByName(self, 'plone_utils').browserDefault(self)
-        else:
-            #return OrderedBaseFolder.__browser_default__(self, request)
-            return self, [self.getLayout(),]
 
 InitializeClass(ATCTBTreeFolder)
 
