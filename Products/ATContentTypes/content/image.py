@@ -135,7 +135,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
         """
-        img = self.getField('image').tag(self, **kwargs)
+        return self.getField('image').tag(self, **kwargs)
     
     def __str__(self):
         """cmf compatibility
