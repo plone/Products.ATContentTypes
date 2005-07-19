@@ -31,7 +31,8 @@ import unittest
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
@@ -44,6 +45,7 @@ from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.interfaces import IFileContent
 from Products.CMFDefault.File import File
 from Interface.Verify import verifyObject
+from Products.CMFPlone import transaction
 
 file_text = """
 foooooo
@@ -117,7 +119,7 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         time.sleep(1.5)
 
         # migrated (needs subtransaction to work)
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = FileMigrator(old)
         m(unittest=1)
 
@@ -131,6 +133,13 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         self.failIfEqual(migrated.data, None)
         self.failIfEqual(migrated.data, '')
         # TODO: more tests
+
+    def test_schema_marshall(self):
+        atct = self._ATCT
+        schema = atct.Schema()
+        marshall = schema.getLayerImpl('marshall')
+        self.failUnless(isinstance(marshall, PrimaryFieldMarshaller), marshall)
+
 
 tests.append(TestSiteATFile)
 
@@ -159,21 +168,20 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setFile',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
-                        CMFCorePermissions.ModifyPortalContent,
+        self.failUnless(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'file', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
+        self.failUnless(isinstance(field.storage, AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
+        self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
-        self.failUnless(field.validators == "(('checkFileMaxSize', V_REQUIRED))",
+        self.failUnless(field.validators == "(('isNonEmptyFile', V_REQUIRED), ('checkFileMaxSize', V_REQUIRED))",
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, FileWidget),
                         'Value is %s' % id(field.widget))

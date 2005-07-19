@@ -28,7 +28,7 @@ import quopri # quoted printable
 from DateTime import DateTime
 from Globals import InitializeClass
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.interfaces import ICalendarSupport
@@ -114,18 +114,18 @@ class CalendarSupportMixin:
         'id'          : 'ics',
         'name'        : 'iCalendar',
         'action'      : 'string:${object_url}/ics_view',
-        'permissions' : (CMFCorePermissions.View, ),
+        'permissions' : (View, ),
         'category'    : 'document_actions',
          },
          {
         'id'          : 'vcs',
         'name'        : 'vCalendar',
         'action'      : 'string:${object_url}/vcs_view',
-        'permissions' : (CMFCorePermissions.View, ),
+        'permissions' : (View, ),
         'category'    : 'document_actions',
          },
     )
-    
+
     _at_action_icons = ({
         'category'  : 'plone',
         'action_id' : 'ics',
@@ -142,7 +142,7 @@ class CalendarSupportMixin:
         },
         )
 
-    security.declareProtected(CMFCorePermissions.View, 'getICal')
+    security.declareProtected(View, 'getICal')
     def getICal(self):
         """get iCal data
         """
@@ -173,7 +173,7 @@ class CalendarSupportMixin:
         return out.getvalue()
 
 
-    security.declareProtected(CMFCorePermissions.View, 'ics_view')
+    security.declareProtected(View, 'ics_view')
     def ics_view(self, REQUEST, RESPONSE):
         """iCalendar output
         """
@@ -185,7 +185,7 @@ class CalendarSupportMixin:
         out.write(ICS_FOOTER)
         return n2rn(out.getvalue())
 
-    security.declareProtected(CMFCorePermissions.View, 'getVCal')
+    security.declareProtected(View, 'getVCal')
     def getVCal(self):
         """get vCal data
         """
@@ -211,7 +211,7 @@ class CalendarSupportMixin:
         # Insert missing code here :]
         return n2rn(out.getvalue())
 
-    security.declareProtected(CMFCorePermissions.View, 'vcs_view')
+    security.declareProtected(View, 'vcs_view')
     def vcs_view(self, REQUEST, RESPONSE):
         """vCalendar output
         """

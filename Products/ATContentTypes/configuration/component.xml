@@ -105,10 +105,86 @@
     <section name="*" attribute="contenttypes" type="contenttypes"
        required="no" />
        
-    <key name="max_size" attribute="max_size" datatype="byte-size-in-mb"
+    <key name="max_file_size" attribute="max_file_size" datatype="byte-size-in-mb"
          default="0" required="no" />
+    <key name="max_image_dimension" attribute="max_image_dimension"
+         datatype="image-dimension-or-no" default="no" required="no" />
     <key name="allow_document_upload" attribute="allow_document_upload"
          datatype="boolean" default="yes" required="no" /> 
     
   </sectiontype>
+
+  <sectiontype name="metadata">
+    <description format="plain">
+        A single metadata element
+    </description>
+    <key name="name" attribute="name" datatype="string"
+         required="yes" />
+    <key name="friendlyName" attribute="friendlyName" datatype="string"
+         default="" required="no" />
+    <key name="description" attribute="description" datatype="string"
+         default="" required="no" />
+    <key name="enabled" attribute="enabled" datatype="boolean"
+         default="on" required="no" />
+  </sectiontype>
+
+  <sectiontype name="index">
+    <description format="plain">
+        A single metadata element
+    </description>
+    <key name="name" attribute="name" datatype="string"
+         required="yes" />
+    <key name="friendlyName" attribute="friendlyName" datatype="string"
+         default="" required="no" />
+    <key name="description" attribute="description" datatype="string"
+         default="" required="no" />
+    <key name="enabled" attribute="enabled" datatype="boolean"
+         default="on" required="no" />
+    <multikey name="criterion" attribute="criteria" datatype="string"
+         required="no">
+        <default>
+            criterion 
+        </default>
+    </multikey>
+  </sectiontype>
+
+  <sectiontype name="topic_tool">
+    <description format="plain">
+        Topic tool default values
+    </description>
+    <multisection name="*" attribute="metadata" type="metadata"
+             required="no" />
+    <multisection name="*" attribute="indexes" type="index"
+             required="no" />
+  </sectiontype>
+
+  <sectiontype name="atct_tool">
+    <description format="plain">
+        ATCT tool defaults
+    </description>
+    <section name="*" attribute="topic_tool" type="topic_tool"
+             required="no" />
+  </sectiontype>
+  
+  <sectiontype name="pil_config" attribute="pil_config" keytype="identifier">
+    <description format="plain">
+        PIL configuration for resizing and rotation
+    </description>
+    <key name="quality" datatype="integer" required="no" default="90">
+      <description>
+        Quality settings (0-100)
+      </description>
+    </key>
+    <key name="resize_algo" datatype="pil-algo" required="no" default="antialias">
+      <description>
+        filter algorithm for resizing: 'NEAREST', 'BILINEAR', 'BICUBIC', 'ANTIALIAS'
+      </description>
+    </key>
+    <!--key name="rotation_algo" datatype="pil-algo" required="no" default="bicubic">
+      <description>
+        filter algorithm for rotation: 'NEAREST', 'BILINEAR', 'BICUBIC'
+      </description>
+    </key-->
+  </sectiontype>
 </component>
+

@@ -23,8 +23,10 @@
 __author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATBooleanCriterion'
+from Missing import MV
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
@@ -65,15 +67,15 @@ class ATBooleanCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'Boolean (true/false)'
+    shortDesc      = 'Boolean (True/False)'
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
         if self.getBool():
             value = [1,True,'1','True']
         else:
-            value = [0,'',False,'0','False', None, (), [], {}]
+            value = [0,'',False,'0','False', None, (), [], {}, MV]
         result.append((self.Field(), value))
 
         return tuple( result )

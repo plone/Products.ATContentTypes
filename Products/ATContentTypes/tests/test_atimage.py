@@ -29,10 +29,15 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from Products.CMFCore import CMFCorePermissions
+from Acquisition import aq_base
+
+from OFS.Image import Image as OFSImage
+
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
-from Products.ATContentTypes.tests.utils import dcEdit
+from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
 import time
 
 from Products.ATContentTypes.content.image import ATImage
@@ -40,16 +45,26 @@ from Products.ATContentTypes.content.image import ATImageSchema
 from Products.ATContentTypes.migration.atctmigrator import ImageMigrator
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage
+from Products.ATContentTypes.lib import exif
 from Products.CMFDefault.Image import Image
 from Interface.Verify import verifyObject
+from Products.CMFPlone import transaction
 
-_here = os.path.dirname(__file__)
-TEST_GIF = open(os.path.join(_here, 'test.gif')).read()
+TEST_CANONEYE_JPG = open(os.path.join(PACKAGE_HOME, 'CanonEye.jpg'), 'rb').read()
+TEST_GIF = open(os.path.join(PACKAGE_HOME, 'test.gif'), 'rb').read()
+TEST2_GIF = open(os.path.join(PACKAGE_HOME, 'test_DivisionError.jpg'), 'rb').read()
+TEST_JPEG_FILE = open(os.path.join(PACKAGE_HOME, 'CanonEye.jpg'), 'rb')
+TEST_JPEG_FILE.seek(0, 2)
+TEST_JPEG_LEN = TEST_JPEG_FILE.tell()
+TEST_JPEG_FILE.seek(0)
+TEST_JPEG = TEST_JPEG_FILE.read()
 
 def editCMF(obj):
+    obj.update_data(TEST_JPEG, content_type="image/jpeg")
     dcEdit(obj)
 
 def editATCT(obj):
+    obj.setImage(TEST_JPEG, content_type="image/jpeg")
     dcEdit(obj)
 
 tests = []
@@ -74,6 +89,16 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
+    def test_dcEdit(self):
+        #if not hasattr(self, '_cmf') or not hasattr(self, '_ATCT'):
+        #    return
+        old = self._cmf
+        new = self._ATCT
+        new.setImage(TEST_JPEG, content_type="image/jpeg")
+        dcEdit(old)
+        dcEdit(new)
+        self.compareDC(old, new)
+
     def test_edit(self):
         old = self._cmf
         new = self._ATCT
@@ -96,7 +121,7 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         created     = old.CreationDate()
 
         # migrated (needs subtransaction to work)
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = ImageMigrator(old)
         m(unittest=1)
 
@@ -130,20 +155,88 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         # Module PIL.ImageFile, line 474, in _save
         # SystemError: tile cannot extend outside image
         atct = self._ATCT
-        scales = atct.getField('image').getAvailableSizes(atct)
         
         # test upload
         atct.setImage(TEST_GIF, mimetype='image/gif', filename='test.gif')
-        self.failUnlessEqual(atct.getImage(), TEST_GIF)
+        self.failUnlessEqual(atct.getImage().data, TEST_GIF)
+        
+    def test_bobo_hook(self):
+        atct = self._ATCT
+        REQUEST = {'method' : 'GET'}
+        scales = atct.getField('image').getAvailableSizes(atct)
+        atct.setImage(TEST_GIF, mimetype='image/gif', filename='test.gif')
+        
+        img = atct.__bobo_traverse__(REQUEST, 'image')
+        self.failUnless(isinstance(img, OFSImage), img)
         
         # test if all scales exist
         for scale in scales.keys():
             name = 'image_' + scale
-            self.failUnless(hasattr(aq_base(atct), name), name)
+            img = atct.__bobo_traverse__(REQUEST, name)
+            self.failUnless(isinstance(img, OFSImage), img)
+
+    def test_division_by_0_pil(self):
+        # pil generates a division by zero error on some images
+        atct = self._ATCT
+        
+        # test upload
+        atct.setImage(TEST2_GIF, mimetype='image/gif', filename='test_DivisionError.jpg')
+        self.failUnlessEqual(atct.getImage().data, TEST2_GIF)
+
+
+    def test_get_size(self):
+        atct = self._ATCT
+        editATCT(atct)
+        self.failUnlessEqual(len(TEST_JPEG), TEST_JPEG_LEN)
+        self.failUnlessEqual(atct.get_size(), TEST_JPEG_LEN)
+        
+    def test_schema_marshall(self):
+        atct = self._ATCT
+        schema = atct.Schema()
+        marshall = schema.getLayerImpl('marshall')
+        self.failUnless(isinstance(marshall, PrimaryFieldMarshaller), marshall)
+
+    def test_dcEdit(self):
+        #if not hasattr(self, '_cmf') or not hasattr(self, '_ATCT'):
+        #    return
+        old = self._cmf
+        new = self._ATCT
+        new.setImage(TEST_JPEG, content_type="image/jpeg")
+        dcEdit(old)
+        dcEdit(new)
+        self.compareDC(old, new)
+
+    def test_broken_exif(self):
+
+        #EXIF data in images from Canon digicams breaks EXIF of 2005.05.12 with following exception
+        # 
+          #2005-05-01T19:21:16 ERROR(200) Archetypes None
+        #Traceback (most recent call last):
+        #  File "/home/russ/cb/var/zope/Products/ATContentTypes/content/image.py", line 207, in getEXIF
+        #    exif_data = exif.process_file(img, debug=False, noclose=True)
+        #  File "/home/russ/cb/var/zope/Products/ATContentTypes/lib/exif.py", line 1013, in process_file
+        #    hdr.decode_maker_note()
+        #  File "/home/russ/cb/var/zope/Products/ATContentTypes/lib/exif.py", line 919, in decode_maker_note
+        #    dict=MAKERNOTE_CANON_TAGS)
+        #  File "/home/russ/cb/var/zope/Products/ATContentTypes/lib/exif.py", line 753, in dump_IFD
+        #    raise ValueError, \
+        #ValueError: unknown type 768 in tag 0x0100
+        #
+
+        # This test fails even with the 2005.05.12 exif version from 
+        #    http://home.cfl.rr.com/genecash/
+
+        atct = self._ATCT
+        atct.setImage(TEST_CANONEYE_JPG, mimetype='image/jpeg', filename='CanonImage.jpg')
+        canonImage = atct.getImageAsFile(scale=None)
+        exif_data = exif.process_file(canonImage, debug=False)        
+        # probably want to add some tests on returned data. Currently gives 
+        #  ValueError in process_file 
 
 tests.append(TestSiteATImage)
 
 class TestATImageFields(atcttestcase.ATCTFieldTestCase):
+
 
     def afterSetUp(self):
         atcttestcase.ATCTFieldTestCase.afterSetUp(self)
@@ -168,21 +261,20 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setImage',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
-                        CMFCorePermissions.ModifyPortalContent,
+        self.failUnless(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'image', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
+        self.failUnless(isinstance(field.storage, AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
+        self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
-        self.failUnless(field.validators == "(('checkFileMaxSize', V_REQUIRED))",
+        self.failUnless(field.validators == "(('isNonEmptyFile', V_REQUIRED), ('checkImageMaxSize', V_REQUIRED))",
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, ImageWidget),
                         'Value is %s' % id(field.widget))
@@ -194,6 +286,7 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
 
 
 tests.append(TestATImageFields)
+
 
 if __name__ == '__main__':
     framework()

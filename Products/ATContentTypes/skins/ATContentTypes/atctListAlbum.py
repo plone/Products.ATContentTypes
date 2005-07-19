@@ -8,23 +8,30 @@
 ##parameters=images=0, folders=0, subimages=0, others=0
 
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import base_hasattr
 
 result = {}
 
 if images:
-    result['images'] = context.folderlistingFolderContents(contentFilter={'Type':('Image',)})
+    result['images'] = context.getFolderContents(contentFilter={'Type':('Image',)},full_objects=True)
 if folders:
-    result['folders'] = context.folderlistingFolderContents(contentFilter={'Type':('Folder',)})
+    # We don't need the full objects for the folders
+    result['folders'] = context.getFolderContents(contentFilter={'Type':('Folder',)})
 if subimages:
-    catalog = getToolByName(context, 'portal_catalog')
-    path = '/'.join(context.getPhysicalPath())
-    result['subimages'] = catalog(portal_type='Image', path=path)
+    #Handle brains or objects
+    if base_hasattr(context, 'getPath'):
+        path = context.getPath()
+    else:
+        path = '/'.join(context.getPhysicalPath())
+    # Explicitly set path to remove default depth
+    result['subimages'] = context.getFolderContents(contentFilter={'Type':('Image',), 'path':path})
 if others:
     allowedContentTypes = context.allowedContentTypes()
-    filtered = [type.getId() for type in allowedContentTypes
-                if type.getId() not in ('Image', 'Folder',) ]
+    filtered = [type.title_or_id() for type in allowedContentTypes
+                if type.title_or_id() not in ('Image', 'Folder',) ]
     if filtered:
-        result['others'] = context.folderlistingFolderContents(contentFilter={'Type':filtered})
+        # We don't need the full objects for the folder_listing
+        result['others'] = context.getFolderContents(contentFilter={'Type':filtered})
     else:
         result['others'] = ()
 

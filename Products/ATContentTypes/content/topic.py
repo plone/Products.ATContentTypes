@@ -29,12 +29,18 @@ from types import TupleType
 from types import StringType
 from locale import strcoll
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import ManageProperties
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.CatalogTool import CatalogTool
 from AccessControl import ClassSecurityInfo
+from AccessControl import Unauthorized
 from Acquisition import aq_parent
 from Acquisition import aq_inner
+from zExceptions import MethodNotAllowed
+from zExceptions import NotFound
+from webdav.Resource import Resource as WebdavResoure
 
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import BooleanField
@@ -43,8 +49,10 @@ from Products.Archetypes.public import LinesField
 from Products.Archetypes.public import BooleanWidget
 from Products.Archetypes.public import IntegerWidget
 from Products.Archetypes.public import InAndOutWidget
+from Products.Archetypes.public import DisplayList
 
 from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFolder
 from Products.ATContentTypes.content.base import updateActions
@@ -52,7 +60,7 @@ from Products.ATContentTypes.criteria import _criterionRegistry
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.permission import AddTopics
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATTopic
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces import IATTopicSortCriterion
@@ -74,10 +82,8 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 widget=BooleanWidget(
                         label="Inherit Criteria",
                         label_msgid="label_inherit_criteria",
-                        description=("Toggles inheritance of criteria. For example, if you "
-                                     "have specified that only items from the last three days "
-                                     "should be shown in a Topic above the current one, this "
-                                     "Topic will also have that criterion automatically."),
+                        description=("Narrow down the search results from the parent Smart Folder(s) "
+                                     "by using the criteria from this Smart Folder."),
                         description_msgid="help_inherit_criteria",
                         i18n_domain = "plone"),
                 ),
@@ -87,11 +93,10 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 default=False,
                 write_permission = ChangeTopics,
                 widget=BooleanWidget(
-                        label="Limit Number of Items",
+                        label="Limit Search Results",
                         label_msgid="label_limit_number",
-                        description=("Toggles limitation of number of items displayed. "
-                                     "If selected, only the first 'Number of Items' "
-                                     "will be displayed."),
+                        description=("If selected, only the 'Number of Items' "
+                                     "indicated below will be displayed."),
                         description_msgid="help_limit_number",
                         i18n_domain = "plone"),
                 ),
@@ -103,10 +108,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 widget=IntegerWidget(
                         label="Number of Items",
                         label_msgid="label_item_count",
-                        description="If 'Limit Number of Items' is "
-                        "selected, only the first "
-                        "'Number of Items' will be "
-                        "displayed ",
+                        description="",
                         description_msgid="help_item_count",
                         i18n_domain = "plone"),
                  ),
@@ -116,13 +118,10 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 default=False,
                 write_permission = ChangeTopics,
                 widget=BooleanWidget(
-                        label="Use Custom View",
+                        label="Display as Table",
                         label_msgid="label_custom_view",
-                        description="Toggles the view used to display the "
-                        "search results.  If selected, the view will use a "
-                        "table with fields determined by the values selected "
-                        "in 'Custom View Fields', otherwise the default "
-                        "listing will be used.",
+                        description="Columns in the table are controlled by "
+                        "'Table Columns' below.",
                         description_msgid="help_custom_view",
                         i18n_domain = "plone"),
                  ),
@@ -134,34 +133,31 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 enforceVocabulary=True,
                 write_permission = ChangeTopics,
                 widget=InAndOutWidget(
-                        label="Custom View Fields",
+                        label="Table Columns",
                         label_msgid="label_custom_view_fields",
-                        description="If 'Use Custom View' is "
-                        "selected, the view will use a table with fields "
-                        "determined by the values selected in "
-                        "'Custom View Fields'.",
+                        description="Select which fields to display when "
+                        "'Display as Table' is checked.",
                         description_msgid="help_custom_view_fields",
                         i18n_domain = "plone"),
                  ),
     ))
-ATTopicSchema.addField(relatedItemsField)
+finalizeATCTSchema(ATTopicSchema, folderish=True, moveDiscussion=False)
+
 
 class ATTopic(ATCTFolder):
-    """A topic folder"""
+    """An automatically updated stored search that can be used to display items matching criteria you specify."""
 
     schema         =  ATTopicSchema
 
     content_icon   = 'topic_icon.gif'
     meta_type      = 'ATTopic'
     portal_type    = 'Topic'
-    archetype_name = 'Topic'
+    archetype_name = 'Smart Folder'
     immediate_view = 'atct_topic_view'
     default_view   = 'atct_topic_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Topic', 'meta_type' : 'Portal Topic'}
-    typeDescription= ("A topic is a pre-defined search, showing all "
-                      "items matching\n criteria you specify. "
-                      "Topics may also contain sub-topics.")
+    typeDescription= 'An automatically updated stored search that can be used to display items matching criteria you specify.'
     typeDescMsgId  = 'description_edit_topic'
     assocMimetypes = ()
     assocFileExt   = ()
@@ -181,7 +177,7 @@ class ATTopic(ATCTFolder):
         #'id'          : 'view',
         #'name'        : 'View',
         #'action'      : 'string:${folder_url}/',
-        #'permissions' : (CMFCorePermissions.View,)
+        #'permissions' : (View,)
         #},
         {
         'id'          : 'edit',
@@ -197,9 +193,16 @@ class ATTopic(ATCTFolder):
          },
         {
         'id'          : 'subtopics',
-        'name'        : 'Subtopics',
+        'name'        : 'Subfolders',
         'action'      : 'string:${folder_url}/atct_topic_subtopics',
         'permissions' : (ChangeTopics,)
+        },
+        {
+        'id'          : 'syndication',
+        'name'        : 'Syndication',
+        'action'      : 'string:${folder_url}/synPropertiesForm',
+        'condition'   : 'python: portal.portal_syndication.isSiteSyndicationAllowed()',
+        'permissions' : (ManageProperties,)
         },
        )
     )
@@ -265,15 +268,17 @@ class ATTopic(ATCTFolder):
         val.sort()
         return val
 
-    security.declareProtected(ChangeTopics, 'listCriteria')
+    security.declareProtected(View, 'listCriteria')
     def listCriteria(self):
         """Return a list of our criteria objects.
         """
         val = self.objectValues(self.listCriteriaMetaTypes())
-        val.sort()
+        # XXX Sorting results in inconsistent order. Leave them in the order
+        # they were added.
+        #val.sort()
         return val
 
-    security.declareProtected(ChangeTopics, 'listSearchCriteria')
+    security.declareProtected(View, 'listSearchCriteria')
     def listSearchCriteria(self):
         """Return a list of our search criteria objects.
         """
@@ -343,7 +348,7 @@ class ATTopic(ATCTFolder):
                ]
         return val
 
-    security.declareProtected(ChangeTopics, 'listSubtopics')
+    security.declareProtected(View, 'listSubtopics')
     def listSubtopics(self):
         """Return a list of our subtopics.
         """
@@ -351,30 +356,38 @@ class ATTopic(ATCTFolder):
         val.sort()
         return val
 
-    security.declareProtected(ChangeTopics, 'listMetaDataFields')
+    security.declareProtected(View, 'listSubtopics')
+    def hasSubtopics(self):
+        """Returns true if subtopics have been created on this topic.
+        """
+        val = self.objectIds(self.meta_type)
+        return not not val
+
+    security.declareProtected(View, 'listMetaDataFields')
     def listMetaDataFields(self, exclude=True):
         """Return a list of metadata fields from portal_catalog.
         """
         tool = getToolByName(self, TOOLNAME)
         return tool.getMetadataDisplay(exclude)
 
-    def allowedCriteriaForField(self, field, flat_list=False):
-        """ Return all valid criteria for a given field, optionally include
-            descriptions in list in format [desc1, val1, desc2, val2] for 
-            javascript selector. """
+    security.declareProtected(View, 'allowedCriteriaForField')
+    def allowedCriteriaForField(self, field, display_list=False):
+        """ Return all valid criteria for a given field.  Optionally include
+            descriptions in list in format [(desc1, val1) , (desc2, val2)] for
+            javascript selector."""
         tool = getToolByName(self, TOOLNAME)
         criteria = tool.getIndex(field).criteria
         allowed = [crit for crit in criteria
                                 if self.validateAddCriterion(field, crit)]
-        if flat_list:
+        if display_list:
             flat = []
             for a in allowed:
                 desc = _criterionRegistry[a].shortDesc
-                flat.extend([desc,a])
-            allowed = flat
+                flat.append((a,desc))
+            allowed = DisplayList(flat)
         return allowed
 
-    security.declareProtected(CMFCorePermissions.View, 'buildQuery')
+    security.declareProtected(View, 'buildQuery')
     def buildQuery(self):
         """Construct a catalog query using our criterion objects.
         """
@@ -391,15 +404,15 @@ class ATTopic(ATCTFolder):
                 # parent = aq_parent(self)
                 parent = aq_parent(aq_inner(self))
                 result.update(parent.buildQuery())
-            except AttributeError: # oh well, can't find parent, or it isn't a Topic.
+            except (AttributeError, Unauthorized): # oh well, can't find parent, or it isn't a Topic.
                 pass
-            
+
         for criterion in criteria:
             for key, value in criterion.getCriteriaItems():
                 result[key] = value
         return result
 
-    security.declareProtected(CMFCorePermissions.View, 'queryCatalog')
+    security.declareProtected(View, 'queryCatalog')
     def queryCatalog(self, REQUEST=None, **kw):
         """Invoke the catalog using our criteria to augment any passed
             in query before calling the catalog.
@@ -435,15 +448,19 @@ class ATTopic(ATCTFolder):
             return results[:max_items]
         return results
 
+    security.declareProtected(View, 'queryCatalog')
+    synContentValues = queryCatalog
+
     security.declareProtected(ChangeTopics, 'addCriterion')
     def addCriterion(self, field, criterion_type):
-        """Add a new search criterion.
+        """Add a new search criterion. Return the resulting object.
         """
         newid = 'crit__%s_%s' % (field, criterion_type)
         ct    = _criterionRegistry[criterion_type]
         crit  = ct(newid, field)
 
         self._setObject( newid, crit )
+        return self._getOb( newid )
 
     security.declareProtected(ChangeTopics, 'deleteCriterion')
     def deleteCriterion(self, criterion_id):
@@ -455,7 +472,7 @@ class ATTopic(ATCTFolder):
             for cid in criterion_id:
                 self._delObject(cid)
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriterion')
+    security.declareProtected(View, 'getCriterion')
     def getCriterion(self, criterion_id):
         """Get the criterion object.
         """
@@ -477,16 +494,74 @@ class ATTopic(ATCTFolder):
         """Getter for syndacation support
         """
         syn_tool = getToolByName(self, 'portal_syndication')
-        limit = syn_tool.getMaxItems(self)
+        limit = int(syn_tool.getMaxItems(self))
         brains = self.queryCatalog(sort_limit=limit)[:limit]
         objs = [brain.getObject() for brain in brains]
         return [obj for obj in objs if obj is not None]
 
-    security.declareProtected(CMFCorePermissions.View, 'get_size')
-    def get_size(self):
-        """Returns 1 as topics have no size."""
-        return 1
-    
+    security.declarePublic('canSetDefaultPage')
+    def canSetDefaultPage(self):
+        """
+        Override BrowserDefaultMixin because default page stuff doesn't make
+        sense for topics.
+        """
+        return False
+
+    security.declarePublic('getCriterionUniqueWidgetAttributes')
+    def getCriteriaUniqueWidgetAttr(self, attr):
+        """Get a unique list values for a specific attribute for all widgets
+           on all criteria"""
+        criteria = self.listCriteria()
+        order = []
+        for crit in criteria:
+            fields = crit.Schema().fields()
+            for f in fields:
+                widget = f.widget
+                helper = getattr(widget, attr, None)
+                # We expect the attribute value to be a iterable.
+                if helper:
+                    [order.append(item) for item in helper
+                        if item not in order]
+        return order
+
+    # Beware hack ahead
+    security.declarePublic('displayContentsTab')
+    def displayContentsTab(self, *args, **kwargs):
+        """Only display a contents tab when we are the default page
+           because we have our own"""
+        putils = getToolByName(self, 'plone_utils', None)
+        if putils is not None:
+            if putils.isDefaultPage(self):
+                script = putils.displayContentsTab.__of__(self)
+                return script()
+        return False
+
+    def HEAD(self, REQUEST, RESPONSE):
+        """Retrieve resource information without a response body.
+        
+        An empty Topic returns 404 NotFound while a topic w/ a criterion returns
+        200 OK.
+        """
+        self.dav__init(REQUEST, RESPONSE)
+        criteria = self.listCriteria()
+        acquire = self.getAcquireCriteria()
+        if not criteria:
+            if not acquire:
+                # no criteria found
+                raise NotFound, 'The requested resource is empty.'
+            else:
+                # try to acquire a query
+                parent = aq_parent(aq_inner(self))
+                try:
+                    query = parent.buildQuery()
+                except (AttributeError, KeyError):
+                    raise NotFound, 'The requested resource is empty.'
+                else:
+                    if not query:
+                        raise NotFound, 'The requested resource is empty.'
+
+        return WebdavResoure.HEAD(self, REQUEST, RESPONSE)
+
 registerATCT(ATTopic, PROJECTNAME)
 
 def modify_fti(fti):

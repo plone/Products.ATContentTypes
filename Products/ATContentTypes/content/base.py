@@ -24,8 +24,6 @@ __docformat__ = 'restructuredtext'
 
 
 from copy import copy
-import urllib2
-import urlparse
 
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 if HAS_LINGUA_PLONE:
@@ -42,9 +40,6 @@ else:
     from Products.Archetypes.public import registerType
 
 from Products.ATContentTypes.config import HAS_PLONE2
-if HAS_PLONE2:
-    from Products.CMFPlone.PloneFolder import ReplaceableWrapper
-    from webdav.NullResource import NullResource
 
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
@@ -54,30 +49,27 @@ from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ExtensionClass import Base
-from OFS import ObjectManager
+from Globals import REPLACEABLE
 from zExceptions import BadRequest
 from webdav.Lockable import ResourceLockedError
-from OFS.IOrderSupport import IOrderedContainer
+from webdav.NullResource import NullResource
+from zExceptions import MethodNotAllowed
+from zExceptions import NotFound
+from Products.CMFPlone import transaction
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import ManageProperties
 from Products.CMFCore.utils import getToolByName
 
-from Products.ATContentTypes.lib.browserdefault import BrowserDefaultMixin
+from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.Archetypes.debug import _default_logger
 from Products.Archetypes.debug import _zlogger
 from Products.Archetypes.utils import shasattr
 from Products.Archetypes.public import log_exc
-from Products.CMFPlone import base_hasattr
 
-# BBB CMFPlone 2.0.x
-try:
-    from Products.CMFPlone.interfaces.Translatable import ITranslatable
-except ImportError:
-    try:
-        from Products.PloneLanguageTool.interfaces import ITranslatable
-    except ImportError:
-        ITranslatable = None
+from Products.CMFPlone.interfaces.Translatable import ITranslatable
 
 from Products.ATContentTypes.config import CHAR_MAPPING
 from Products.ATContentTypes.config import GOOD_CHARS
@@ -88,19 +80,21 @@ from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
 DEBUG = True
 
-class InvalidContentType(Exception):
-    """Invalid content type (uploadFromURL)
-    """
+if HAS_PLONE2:
+    # the browser default checks for isinstance()
+    from Products.CMFPlone.PloneFolder import ReplaceableWrapper
+else:
+    class ReplaceableWrapper:
+        """A wrapper around an object to make it replaceable
+        """
+        def __init__(self, ob):
+            self.__ob = ob
+    
+        def __getattr__(self, name):
+            if name == '__replaceable__':
+                return REPLACEABLE
+            return getattr(self.__ob, name)
 
-# XXX this should go into LinguaPlone!
-translate_actions = ({
-    'id'          : 'translate',
-    'name'        : 'Translate',
-    'action'      : 'string:${object_url}/translate_item',
-    'permissions' : (CMFCorePermissions.ModifyPortalContent, ),
-    'condition'   : 'not: object/isCanonical|nothing',
-    },
-    )
 
 def registerATCT(class_, project):
     """Registers an ATContentTypes based type
@@ -108,12 +102,6 @@ def registerATCT(class_, project):
     One reason to use it is to hide the lingua plone related magic.
     """
     assert IATContentType.isImplementedByInstancesOf(class_)
-    
-    # this should go into LinguaPlone!
-    # BBB remove is not None test later
-    if ITranslatable is not None and ITranslatable.isImplementedByInstancesOf(class_):
-        class_.actions = updateActions(class_, translate_actions)
-        
     registerType(class_, project)
 
 def updateActions(klass, actions):
@@ -130,16 +118,34 @@ def updateActions(klass, actions):
 
     return tuple(actions)
 
-def cleanupFilename(filename, encoding='utf-8'):
+def updateAliases(klass, aliases):
+    """Merge the method aliases from a class with a dict of aliases
+    """
+    oldAliases = copy(klass.aliases)
+
+    for aliasId, aliasTarget in oldAliases.items():
+        if aliasId not in aliases:
+            aliases[aliasId] = aliasTarget
+
+    return aliases
+
+def cleanupFilename(filename, context=None, encoding='utf-8'):
     """Removes bad chars from file names to make them a good id
     """
     if not filename:
         return
+    if context is not None:
+        plone_utils = getToolByName(context, 'plone_utils', None)
+        if plone_utils is not None:
+            return plone_utils.normalizeString(filename)
+    
+    # no context or plone_utils
     result = u''
     for s in str(filename).decode(encoding):
         s = CHAR_MAPPING.get(s, s)
-        if s in GOOD_CHARS:
-            result += s
+        for c in s:
+            if c in GOOD_CHARS:
+                result += c
     return result.encode(encoding)
 
 def translateMimetypeAlias(alias):
@@ -169,8 +175,13 @@ class ATCTMixin(BrowserDefaultMixin):
     assocFileExt   = ()
     cmf_edit_kws   = ()
     
-    # see SkinnedFolder.__call__
+    # aliases for CMF method aliases is defined in browser default
+    
+    # flag to show that the object is a temporary object
     isDocTemp = False 
+    _at_rename_after_creation = True # rename object according to the title?
+
+    # aliases for CMF method aliases is defined in browser default
 
     __implements__ = (IATContentType, BrowserDefaultMixin.__implements__)
 
@@ -179,18 +190,35 @@ class ATCTMixin(BrowserDefaultMixin):
     actions = ({
         'id'          : 'view',
         'name'        : 'View',
-        'action'      : 'string:${object_url}/view',
-        'permissions' : (CMFCorePermissions.View,)
+        'action'      : 'string:${object_url}',
+        'permissions' : (View,)
          },
         {
         'id'          : 'edit',
         'name'        : 'Edit',
-        'action'      : 'string:${object_url}/atct_edit',
-        'permissions' : (CMFCorePermissions.ModifyPortalContent,),
+        'action'      : 'string:${object_url}/edit',
+        'permissions' : (ModifyPortalContent,),
+         },
+        {
+        'id'          : 'metadata',
+        'name'        : 'Properties',
+        'action'      : 'string:${object_url}/properties',
+        'permissions' : (ModifyPortalContent,),
          },
         )
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent,
+    aliases = {
+        '(Default)'  : '(dynamic view)',
+        'view'       : '(dynamic view)',
+        'index.html' : '(dynamic view)',
+        'edit'       : 'atct_edit',
+        'properties' : 'base_metadata',
+        'sharing'    : 'folder_localrole_form',
+        'gethtml'    : '',
+        'mkdir'      : '',
+        }
+
+    security.declareProtected(ModifyPortalContent,
                               'initializeArchetype')
     def initializeArchetype(self, **kwargs):
         """called by the generated add* factory in types tool
@@ -200,11 +228,11 @@ class ATCTMixin(BrowserDefaultMixin):
         """
         try:
             self.initializeLayers()
+            self.markCreationFlag()
             self.setDefaults()
             if kwargs:
                 self.edit(**kwargs)
             self._signature = self.Schema().signature()
-            self.markCreationFlag()
         except Exception, msg:
             _zlogger.log_exc()
             if DEBUG and str(msg) not in ('SESSION',):
@@ -212,37 +240,7 @@ class ATCTMixin(BrowserDefaultMixin):
                 raise
                 #_default_logger.log_exc()
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'markCreationFlag')
-    def markCreationFlag(self):
-        """Sets flag on the instance to indicate that the object hasn't been
-        saved properly (unset in content_edit); this will only be done if a REQUEST is
-        present to ensure that objects created programmatically are considered fully created.
-        """
-        if shasattr(self, 'REQUEST'):
-            self._at_creation_flag = True
-
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'unmarkCreationFlag')
-    def unmarkCreationFlag(self):
-        """Remove creation flag
-        """
-        if shasattr(aq_inner(self), '_at_creation_flag'):
-            self._at_creation_flag = False
-        post_create = getattr(self, 'at_post_create_script', False)
-        if post_create:
-            try:
-                post_create()
-            except TypeError:
-                log("unmarkCreationFlag: at_post_create_script not callable")
-                pass
-
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'checkCreationFlag')
-    def checkCreationFlag(self):
-        """returns True if the object has been fully saved, False otherwise
-        """
-        return getattr(aq_inner(self), '_at_creation_flag', False)
-
-
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'edit')
+    security.declareProtected(ModifyPortalContent, 'edit')
     def edit(self, *args, **kwargs):
         """Reimplementing edit() to have a compatibility method for the old
         cmf edit() method
@@ -250,7 +248,7 @@ class ATCTMixin(BrowserDefaultMixin):
         if len(args) != 0:
             # use cmf edit method
             return self.cmf_edit(*args, **kwargs)
-        
+
         # if kwargs is containing a key that is also in the list of cmf edit
         # keywords then we have to use the cmf_edit comp. method
         cmf_edit_kws = getattr(aq_inner(self).aq_explicit, 'cmf_edit_kws', ())
@@ -266,77 +264,23 @@ class ATCTMixin(BrowserDefaultMixin):
         """
         raise NotImplementedError("cmf_edit method isn't implemented")
 
-    security.declareProtected(CMFCorePermissions.View, 'getObjPositionInParent')
-    def getObjPositionInParent(self):
-        """Helper method for catalog based folder contents
+    def exclude_from_nav(self):
+        """Accessor for excludeFromNav field
         """
-        parent = self.aq_inner.aq_parent
-        if IOrderedContainer.isImplementedBy(parent):
-            try:
-                return parent.getObjectPosition(self.getId())
-            except ConflictError:
-                raise
-            except:
-                log_exc()
-        return 0
-        
-    security.declareProtected(CMFCorePermissions.View, 'getObjSize')
-    def getObjSize(self, obj=None, size=None):
-        """Helper method for catalog based folder contents
+        field = self.getField('excludeFromNav')
+        if field is not None:
+            return field.get(self)
+        else:
+            return False
+            
+    security.declareProtected(View, 'get_size')
+    def get_size(self):
+        """ZMI / Plone get size method
         """
-        if not obj:
-            obj = self
-        
-        const = {'kB':1024,
-                 'MB':1024*1024,
-                 'GB':1024*1024*1024
-                }
-        order = ('GB', 'MB', 'kB')
-        smaller = order[-1]
-        
-        # allow arbitrary sizes to be passed through,
-        # if there is no size, but there is an object
-        # look up the object, this maintains backwards 
-        # compatibility
-        if size is None and base_hasattr(obj, 'get_size'):
-            size=obj.get_size()
-        
-        # if the size is a float, then make it an int
-        # happens for large files
-        try:
-            size = int(size)
-        except (ValueError, TypeError):
-            pass
-        
-        if not size:
-            return '0 %s' % smaller
-        
-        if isinstance(size, (int, long)):
-            if size < const[smaller]:
-                return '1 %s' % smaller
-            for c in order:
-                if size/const[c] > 0:
-                    break
-            return '%.1f %s' % (float(size/float(const[c])), c)
-        return size
-
-    def processForm(self, data=1, metadata=0, REQUEST=None, values=None):
-        """Process the schema looking for data in the form, replace autogenerated id with name derived from object title."""
-        new_object = self.checkCreationFlag()
-
-        self._processForm(data=data, metadata=metadata,
-                          REQUEST=REQUEST, values=values)
-        # the following line should perhaps be moved AT/acripts/artcheypes/validate_integrity/py so
-        # that the creation flag is unset only when the object is fully verified
-        self.unmarkCreationFlag()
-
-        # the following should be placed in BaseObject._processForm() so that types that wish to
-        # override processForm will get this behavior automatically.
-        plone_tool = getToolByName(self, 'plone_utils')
-        title = self.Title()
-        new_id = plone_tool.titleToNormalizedId(self.Title())
-        if title and new_object and self.isIDAutoGenerated():
-            self.setId(new_id)
+        f = self.getPrimaryField()
+        if f is None:
+            return "n/a"
+        return f.get_size(self) or 0
 
 InitializeClass(ATCTMixin)
 
@@ -352,17 +296,29 @@ class ATCTContent(ATCTMixin, BaseContent):
           'id'          : 'external_edit',
           'name'        : 'External Edit',
           'action'      : 'string:${object_url}/external_edit',
-          'permissions' : (CMFCorePermissions.ModifyPortalContent,),
+          'condition'   : 'object/externalEditorEnabled',
+          'permissions' : (ModifyPortalContent,),
           'visible'     : 0,
          },
         {
         'id'          : 'local_roles',
         'name'        : 'Sharing',
-        'action'      : 'string:${object_url}/folder_localrole_form',
-        'permissions' : (CMFCorePermissions.ManageProperties,),
+        'action'      : 'string:${object_url}/sharing',
+        'permissions' : (ManageProperties,),
          },
         )
     )
+
+    security.declarePrivate('manage_afterPUT')
+    def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
+                        filename, REQUEST, RESPONSE):
+        """After webdav/ftp PUT method
+        
+        Set title according to the id on webdav/ftp PUTs.
+        """
+        title = self.Title()
+        if not title:
+            self.setTitle(self.getId())
 
 InitializeClass(ATCTContent)
 
@@ -372,19 +328,36 @@ class ATCTFileContent(ATCTContent):
     The file field *must* be the exclusive primary field
     """
 
-    security       = ClassSecurityInfo()
+    # the precondition attribute is required to make ATFile and ATImage compatible
+    # with OFS.Image.*. The precondition feature is (not yet) supported.
+    precondition = ''
+
+    security = ClassSecurityInfo()
     actions = updateActions(ATCTContent,
         ({
+        'id'          : 'view',
+        'name'        : 'View',
+        'action'      : 'string:${object_url}/view',
+        'permissions' : (View,)
+         },
+         {
         'id'          : 'download',
         'name'        : 'Download',
         'action'      : 'string:${object_url}/download',
-        'permissions' : (CMFCorePermissions.View,),
+        'permissions' : (View,),
         'condition'   : 'member', # don't show border for anon user
+        'visible'     :  False,
          },
         )
     )
 
-    security.declareProtected(CMFCorePermissions.View, 'download')
+    aliases = updateAliases(ATCTMixin,
+        {
+        '(Default)' : 'index_html',
+        'view'      : '(selected layout)',
+        })
+
+    security.declareProtected(View, 'download')
     def download(self, REQUEST=None, RESPONSE=None):
         """Download the file (use default index_html)
         """
@@ -395,7 +368,7 @@ class ATCTFileContent(ATCTContent):
         field = self.getPrimaryField()
         return field.download(self, REQUEST, RESPONSE)
 
-    security.declareProtected(CMFCorePermissions.View, 'index_html')
+    security.declareProtected(View, 'index_html')
     def index_html(self, REQUEST=None, RESPONSE=None):
         """Make it directly viewable when entering the objects URL
         """
@@ -409,7 +382,7 @@ class ATCTFileContent(ATCTContent):
             return data.index_html(REQUEST, RESPONSE)
         # XXX what should be returned if no data is present?
 
-    security.declareProtected(CMFCorePermissions.View, 'get_data')
+    security.declareProtected(View, 'get_data')
     def get_data(self):
         """CMF compatibility method
         """
@@ -418,20 +391,13 @@ class ATCTFileContent(ATCTContent):
 
     data = ComputedAttribute(get_data, 1)
 
-    security.declareProtected(CMFCorePermissions.View, 'get_size')
-    def get_size(self):
-        """CMF compatibility method
-        """
-        f = self.getPrimaryField()
-        return f.get_size(self) or 0
-
-    security.declareProtected(CMFCorePermissions.View, 'size')
+    security.declareProtected(View, 'size')
     def size(self):
         """Get size (image_view.pt)
         """
         return self.get_size()
 
-    security.declareProtected(CMFCorePermissions.View, 'get_content_type')
+    security.declareProtected(View, 'get_content_type')
     def get_content_type(self):
         """CMF compatibility method
         """
@@ -445,13 +411,13 @@ class ATCTFileContent(ATCTContent):
         kwargs = {}
         if content_type is not None:
             kwargs['mimetype'] = content_type
-        mutator = self.getPrimaryField().mutator(self)
+        mutator = self.getPrimaryField().getMutator(self)
         mutator(data, **kwargs)
         ##self.ZCacheable_invalidate()
         ##self.ZCacheable_set(None)
         ##self.http__refreshEtag()
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent,
+    security.declareProtected(ModifyPortalContent,
                               'manage_edit')
     def manage_edit(self, title, content_type, precondition='',
                     filedata=None, REQUEST=None):
@@ -473,6 +439,13 @@ class ATCTFileContent(ATCTContent):
             message="Saved changes."
             return self.manage_main(self,REQUEST,manage_tabs_message=message)
 
+    def _cleanupFilename(self, filename, encoding=None):
+        """Cleans the filename from unwanted or evil chars
+        """
+        if encoding is None:
+            encoding = self.getCharset()
+        return cleanupFilename(filename, context=self, encoding=encoding)
+
     def _setATCTFileContent(self, value, **kwargs):
         """Set id to uploaded id
         """
@@ -481,7 +454,7 @@ class ATCTFileContent(ATCTContent):
         field.set(self, value, **kwargs) # set is ok
         if self._isIDAutoGenerated(self.getId()):
             filename = field.getFilename(self, fromBaseUnit=False)
-            clean_filename = cleanupFilename(filename, self.getCharset())
+            clean_filename = self._cleanupFilename(filename)
             request_id = self.REQUEST.form.get('id')
             if request_id and not self._isIDAutoGenerated(request_id):
                 # request contains an id
@@ -496,74 +469,60 @@ class ATCTFileContent(ATCTContent):
                 # got a clean file name - rename it
                 # apply subtransaction. w/o a subtransaction renaming fails when
                 # the type is created using portal_factory
-                get_transaction().commit(1)
+                transaction.commit(1)
                 self.setId(clean_filename)
 
-    def _isIDAutoGenerated(self, id):
-        """Avoid busting setDefaults if we don't have a proper acquisition context
-        """
-        skinstool = getToolByName(self, 'portal_skins')
-        script = getattr(skinstool.aq_explicit, 'isIDAutoGenerated', None)
-        if script:
-            return script(id)
-        else:
-            return False
-
-    security.declareProtected(CMFCorePermissions.View, 'post_validate')
+    security.declareProtected(View, 'post_validate')
     def post_validate(self, REQUEST=None, errors=None):
         """Validates upload file and id
         """
         id     = REQUEST.form.get('id')
-        parent = aq_parent(self)
-        parent_ids = parent.objectIds()
         field  = self.getPrimaryField()
         f_name = field.getName()
         upload = REQUEST.form.get('%s_file' % f_name, None)
         filename = getattr(upload, 'filename', None)
-        clean_filename = cleanupFilename(filename, self.getCharset())
+        clean_filename = self._cleanupFilename(filename)
+        used_id = (id and not self._isIDAutoGenerated(id)) and id or clean_filename
 
         if upload:
             # the file may have already been read by a
             # former method
             upload.seek(0)
 
-        if not id and clean_filename == self.getId():
-            # already renamed - ok
+        if not used_id:
             return
-        elif id == self.getId():
-            # id available and already renamed
-            return
-        elif id and id not in parent_ids:
-            # id available and id not used
-            return
-        elif clean_filename in parent_ids or id in parent_ids:
-            # failure
-            used_id = id and id or clean_filename
-            errors[f_name] = 'You have to upload the file again'
-            errors['id'] = 'Id %s is already in use' % used_id
-            REQUEST.form['id'] = used_id
+
+        if getattr(self, 'check_id', None) is not None:
+            check_id = self.check_id(used_id,required=1)
         else:
-            # everything ok
-            pass
-        
+            # If check_id is not available just look for conflicting ids
+            parent = aq_parent(aq_inner(self))
+            check_id = used_id in parent.objectIds() and \
+                       'Id %s conflicts with an existing item'% used_id or False
+        if check_id and used_id == id:
+            errors['id'] = check_id
+            REQUEST.form['id'] = used_id
+        elif check_id:
+            errors[f_name] = check_id
+
     security.declarePrivate('loadFileFromURL')
     def loadFileFromURL(self, url, contenttypes=()):
         """Loads a file from an url using urllib2
-        
+
         You can use contenttypes to restrict uploaded content types like:
             ('image',) for all image content types
             ('image/jpeg', 'image/png') only jpeg and png
-        
+
         May raise an urllib2.URLError based exception or InvalidContentType
-        
+
         returns file_handler, mimetype, filename, size_in_bytes
         """
         fh = urllib2.urlopen(url)
-        
+
         info = fh.info()
         mimetype = info.get('content-type', 'application/octetstream')
         size = info.get('content-length', None)
-        
+
         # scheme, netloc, path, parameters, query, fragment
         path = urlparse.urlparse(fh.geturl())[2]
         if path.endswith('/'):
@@ -571,7 +530,7 @@ class ATCTFileContent(ATCTContent):
         else:
             pos = -1
         filename = path.split('/')[pos]
-        
+
         success = False
         for ct in contenttypes:
             if ct.find('/') == -1:
@@ -586,7 +545,7 @@ class ATCTFileContent(ATCTContent):
             success = True
         if not success:
             raise InvalidContentType, mimetype
-        
+
         return fh, mimetype, filename, size
 
     security.declareProtected(ATCTPermissions.UploadViaURL, 'setUploadURL')
@@ -601,18 +560,33 @@ class ATCTFileContent(ATCTContent):
         mutator = self.getPrimaryField().getMutator(self)
         mutator(fh.read(), mimetype=mimetype, filename=filename)
 
-    security.declareProtected(CMFCorePermissions.View, 'getUploadURL')
+    security.declareProtected(View, 'getUploadURL')
     def getUrlUpload(self, **kwargs):
         """Always return the default value since we don't store the url
         """
         return self.getField('urlUpload').default
+
+    security.declarePrivate('manage_afterPUT')
+    def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
+                        filename, REQUEST, RESPONSE):
+        """After webdav/ftp PUT method
+        
+        Set the title according to the uploaded filename if the title is empty or
+        set it to the id if no filename is given.
+        """
+        title = self.Title()
+        if not title:
+            if filename:
+                self.setTitle(filename)
+            else:
+                self.setTitle(self.getId())
 
 InitializeClass(ATCTFileContent)
 
 
 class ATCTFolder(ATCTMixin, BaseFolder):
     """Base class for folderish AT Content Types (but not for folders)
-    
+
     DO NOT USE this base class for folders but only for folderish objects like
     AT Topic. It doesn't support constrain types!
     """
@@ -626,17 +600,22 @@ class ATCTFolder(ATCTMixin, BaseFolder):
         ({
         'id'          : 'local_roles',
         'name'        : 'Sharing',
-        'action'      : 'string:${object_url}/folder_localrole_form',
-        'permissions' : (CMFCorePermissions.ManageProperties,),
+        'action'      : 'string:${object_url}/sharing',
+        'permissions' : (ManageProperties,),
          },
         {
         'id'          : 'view',
         'name'        : 'View',
         'action'      : 'string:${folder_url}/',
-        'permissions' : (CMFCorePermissions.View,),
+        'permissions' : (View,),
          },
         )
     )
+
+    security.declareProtected(View, 'get_size')
+    def get_size(self):
+        """Returns 1 as folders have no size."""
+        return 1
 
 InitializeClass(ATCTFolder)
 
@@ -655,13 +634,44 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
         if HAS_PLONE2:
             return getToolByName(self, 'plone_utils').browserDefault(self)
         else:
-            #return OrderedBaseFolder.__browser_default__(self, request)
             return self, [self.getLayout(),]
 
-    security.declareProtected(CMFCorePermissions.View, 'get_size')
+    security.declareProtected(View, 'get_size')
     def get_size(self):
         """Returns 1 as folders have no size."""
         return 1
+
+    security.declarePrivate('manage_afterMKCOL')
+    def manage_afterMKCOL(self, id, result, REQUEST=None, RESPONSE=None):
+        """After MKCOL handler
+        
+        Set title according to the id
+        """
+        # manage_afterMKCOL is called in the context of the parent folder, *not* in
+        # the context of the new folder!
+        new = getattr(self, id)
+        title = new.Title()
+        if not title.strip():
+            new.update(title=id)
+
+    security.declareProtected(View, 'HEAD')
+    def HEAD(self, REQUEST, RESPONSE):
+        """Overwrite HEAD method for HTTP HEAD requests
+        
+        Returns 404 Not Found if the default view can't be acquired or 405
+        Method not allowed if the default view has no HEAD method.
+        """
+        view_id = self.getDefaultPage() or self.getLayout()
+        view_method = getattr(self, view_id, None)
+        if view_method is None:
+            # view method couldn't be acquired
+            raise NotFound, "View method %s for requested resource is not " \
+                             "available." % view_id
+        if getattr(aq_base(view_method), 'HEAD', None) is not None:
+            # view method has a HEAD method
+            return view_method.__of__(self).HEAD(REQUEST, RESPONSE)
+        else:
+            raise MethodNotAllowed, 'Method not supported for this resource.' 
 
 InitializeClass(ATCTFolderMixin)
 
@@ -678,45 +688,40 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
         ({
         'id'          : 'local_roles',
         'name'        : 'Sharing',
-        'action'      : 'string:${object_url}/folder_localrole_form',
-        'permissions' : (CMFCorePermissions.ManageProperties,),
+        'action'      : 'string:${object_url}/sharing',
+        'permissions' : (ManageProperties,),
          },
         {
         'id'          : 'view',
         'name'        : 'View',
         'action'      : 'string:${folder_url}/',
-        'permissions' : (CMFCorePermissions.View,),
+        'permissions' : (View,),
          },
         )
     )
 
-    security.declareProtected(CMFCorePermissions.View, 'index_html')
-    def index_html(self):
-       """Special case index_html"""
-       if HAS_PLONE2:
-           # COPIED FROM CMFPLONE 2.1
-           request = getattr(self, 'REQUEST', None)
-           if request and request.has_key('REQUEST_METHOD'):
-               if (request.maybe_webdav_client and
-                   request['REQUEST_METHOD'] in  ['PUT']):
-                   # Very likely a WebDAV client trying to create something
-                   return ReplaceableWrapper(NullResource(self, 'index_html'))
-           # Acquire from parent
-           _target = aq_parent(aq_inner(self)).aq_acquire('index_html')
-           return ReplaceableWrapper(aq_base(_target).__of__(self))
-       else:
-           return OrderedBaseFolder.index_html(self)
-       
-    index_html = ComputedAttribute(index_html, 1)
+    security.declareProtected(View, 'index_html')
+    def index_html(self, REQUEST=None, RESPONSE=None):
+        """Special case index_html"""
+        request = REQUEST
+        if request is None:
+            request = getattr(self, 'REQUEST', None) 
+        if request and request.has_key('REQUEST_METHOD'):
+            if request.maybe_webdav_client:
+                method = request['REQUEST_METHOD']
+                if method in ('PUT',):
+                    # Very likely a WebDAV client trying to create something
+                    return ReplaceableWrapper(NullResource(self, 'index_html'))
+                elif method in ('GET', 'HEAD', 'POST'):
+                    # Do nothing, let it go and acquire.
+                    pass
+                else:
+                    raise AttributeError, 'index_html'
+        # Acquire from parent
+        _target = aq_parent(aq_inner(self)).aq_acquire('index_html')
+        return ReplaceableWrapper(aq_base(_target).__of__(self))
 
-    def __browser_default__(self, request):
-        """ Set default so we can return whatever we want instead
-        of index_html """
-        if HAS_PLONE2:
-            return getToolByName(self, 'plone_utils').browserDefault(self)
-        else:
-            #return OrderedBaseFolder.__browser_default__(self, request)
-            return self, [self.getLayout(),]
+    index_html = ComputedAttribute(index_html, 1)
 
 InitializeClass(ATCTOrderedFolder)
 
@@ -733,20 +738,20 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
         ({
         'id'          : 'local_roles',
         'name'        : 'Sharing',
-        'action'      : 'string:${object_url}/folder_localrole_form',
-        'permissions' : (CMFCorePermissions.ManageProperties,),
+        'action'      : 'string:${object_url}/sharing',
+        'permissions' : (ManageProperties,),
          },
         {
         'id'          : 'view',
         'name'        : 'View',
         'action'      : 'string:${folder_url}/',
-        'permissions' : (CMFCorePermissions.View,),
+        'permissions' : (View,),
          },
         )
     )
 
-    security.declareProtected(CMFCorePermissions.View, 'index_html')
-    def index_html(self):
+    security.declareProtected(View, 'index_html')
+    def index_html(self, REQUEST=None, RESPONSE=None):
         """
         BTree folders don't store objects as attributes, the
         implementation of index_html method in PloneFolder assumes
@@ -759,21 +764,9 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
         if _target is not None:
             return _target
         _target = aq_parent(aq_inner(self)).aq_acquire('index_html')
-        if HAS_PLONE2:
-            return ReplaceableWrapper(aq_base(_target).__of__(self))
-        else:
-            return aq_base(_target).__of__(self)
+        return ReplaceableWrapper(aq_base(_target).__of__(self))
 
     index_html = ComputedAttribute(index_html, 1)
-
-    def __browser_default__(self, request):
-        """ Set default so we can return whatever we want instead
-        of index_html """
-        if HAS_PLONE2:
-            return getToolByName(self, 'plone_utils').browserDefault(self)
-        else:
-            #return OrderedBaseFolder.__browser_default__(self, request)
-            return self, [self.getLayout(),]
 
 InitializeClass(ATCTBTreeFolder)
 

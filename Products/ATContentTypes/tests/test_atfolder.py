@@ -29,6 +29,7 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests import atcttestcase
+from Acquisition import aq_base
 
 from Products.CMFCore import CMFCorePermissions
 from Products.Archetypes.interfaces.layer import ILayerContainer
@@ -40,7 +41,9 @@ from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATBTreeFolder
 from Products.ATContentTypes.content.folder import ATFolderSchema
 from Products.ATContentTypes.tests.utils import TidyHTMLValidator
-from Products.ATContentTypes.migration.atctmigrator import FolderMigrator
+from Products.ATContentTypes.migration.atctmigrator import FolderMigrator, \
+                                                        LargeFolderMigrator, \
+                                                        DocumentMigrator
 from Products.CMFPlone.PloneFolder import PloneFolder
 from Products.CMFPlone.LargePloneFolder import LargePloneFolder
 from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
@@ -50,6 +53,7 @@ from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.lib.autosort import IAutoSortSupport
 from Products.ATContentTypes.lib.autosort import IAutoOrderSupport
 from Interface.Verify import verifyObject
+from Products.CMFPlone import transaction
 
 from Products.CMFPlone.interfaces.ConstrainTypes import ISelectableConstrainTypes
 
@@ -122,7 +126,7 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         created     = old.CreationDate()
 
         # migrated (needs subtransaction to work)
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = FolderMigrator(old)
         m(unittest=1)
 
@@ -131,12 +135,49 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
         self.compareAfterMigration(migrated, mod=mod, created=created)
         self.compareDC(migrated, title=title, description=description)
-        
+
         # TODO: more tests
+
+    def test_migrator_doesnt_migrate_non_contentish_sub_objects(self):
+        # Test that we don't try to migrate conteaind non-content objects
+        old = self._cmf
+        id  = old.getId()
+
+        # edit
+        editCMF(old)
+        title       = old.Title()
+        description = old.Description()
+        mod         = old.ModificationDate()
+        created     = old.CreationDate()
+
+        # Add non-contentish subobject to inherit portal_type from parent
+        factory = old.manage_addProduct['PythonScripts']
+        factory.manage_addPythonScript('index_html')
+        index = old.index_html
+
+        # Catalog it so that migration thinks it's a folder.
+        self.portal.portal_catalog.indexObject(index)
+
+        # migration will raise an error if it attempts to incorrectly migrate
+        # the index_html
+        transaction.commit(1)
+        m = FolderMigrator(index)
+        try:
+            m(unittest=1)
+        except Exception, e:
+            import sys, traceback
+            self.fail('Error raised in Folder migration of non-content sub-object: %s \n %s'%(e,''.join(traceback.format_tb(sys.exc_traceback))))
 
     def test_implements_autoorder(self):
         self.failUnless(IAutoOrderSupport.isImplementedBy(self._ATCT))
-        self.failUnless(verifyObject(IAutoOrderSupport, self._ATCT)) 
+        self.failUnless(verifyObject(IAutoOrderSupport, self._ATCT))
+
+    def test_get_size(self):
+        atct = self._ATCT
+        self.failUnlessEqual(atct.get_size(), 1)
+        
+    def test_schema_marshall(self):
+        pass
 
 tests.append(TestSiteATFolder)
 
@@ -159,6 +200,10 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         iface = ISelectableConstrainTypes
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
+    
+    def test_isNotOrdered(self):
+        iface = IZopeOrderedContainer
+        self.failIf(iface.isImplementedBy(self._ATCT))
 
     def test_edit(self):
         old = self._cmf
@@ -170,6 +215,64 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
                         % (old.Description(), new.Description()))
 
+    def test_migration(self):
+        old = self._cmf
+        id  = old.getId()
+
+        # edit
+        editCMF(old)
+        title       = old.Title()
+        description = old.Description()
+        mod         = old.ModificationDate()
+        created     = old.CreationDate()
+
+        # Add subobject to test child migration
+        old.invokeFactory('Document','bogus')
+        bogus = old.bogus
+
+        # migrated (needs subtransaction to work)
+        transaction.commit(1)
+        m = LargeFolderMigrator(old)
+        m(unittest=1)
+
+        self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
+        migrated = getattr(self.folder, id)
+
+        self.compareAfterMigration(migrated, mod=mod, created=created)
+        self.compareDC(migrated, title=title, description=description)
+        self.assertEqual(aq_base(migrated.bogus), aq_base(bogus))
+
+    def test_subobj_migration(self):
+        old = self._cmf
+        id  = old.getId()
+
+        # edit
+        editCMF(old)
+        title       = old.Title()
+        description = old.Description()
+        mod         = old.ModificationDate()
+        created     = old.CreationDate()
+
+        # Add subobject to test child migration
+        
+        bogus = self._createType(old, 'CMF Document', 'bogus')
+        bogus = old.bogus
+
+        # migrated (needs subtransaction to work)
+        transaction.commit(1)
+        m = DocumentMigrator(bogus)
+        try:
+            m(unittest=1)
+        except Exception, e:
+            import sys, traceback
+            self.fail("Failed migrating subobject of LargePloneFolder: %s \n %s"%(e,''.join(traceback.format_tb(sys.exc_traceback))))
+
+    def test_get_size(self):
+        atct = self._ATCT
+        self.failUnlessEqual(atct.get_size(), 1)
+
+    def test_schema_marshall(self):
+        pass
 
 tests.append(TestSiteATBTreeFolder)
 
@@ -229,6 +332,19 @@ class TestAutoSortSupport(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(f.getSortFolderishFirst(), False)
         self.failUnlessEqual(f.getSortReverse(), True)
         self.failUnlessEqual(f.getSortAuto(), False)
+
+    def test_strangeUnallowedIds(self):
+        """ Certain IDs used to give an error and are unusable
+
+        They're set in zope's lib/python/App/Product.py. Examples:
+        home, version. This test used to include 'icon', too, but that's
+        apparently really an id that's already been taken (instead of
+        a bug).
+        """
+        strangeIds = ['home', 'version']
+        for id in strangeIds:
+            self.folder.invokeFactory('Folder', id)
+            self.assert_(id in self.folder.objectIds())
 
     # TODO: more tests
 

@@ -28,7 +28,8 @@ from types import TupleType
 import time
 
 from ZPublisher.HTTPRequest import HTTPRequest
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
@@ -37,15 +38,17 @@ from Products.Archetypes.public import Schema
 from Products.Archetypes.public import TextField
 from Products.Archetypes.public import RichWidget
 from Products.Archetypes.public import RFC822Marshaller
+from Products.Archetypes.public import AnnotationStorage
 
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import updateActions
 from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument
 
@@ -54,37 +57,38 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
               required=True,
               searchable=True,
               primary=True,
+              storage = AnnotationStorage(migrate=True),
               validators = ('isTidyHtmlWithCleanup',),
               #validators = ('isTidyHtml',),
               default_content_type = zconf.ATDocument.default_content_type,
               default_output_type = 'text/x-html-safe',
               allowable_content_types = zconf.ATDocument.allowed_content_types,
               widget = RichWidget(
-                        description = "The body text of the document.",
+                        description = "",
                         description_msgid = "help_body_text",
-                        label = "Body text",
+                        label = "Body Text",
                         label_msgid = "label_body_text",
                         rows = 25,
                         i18n_domain = "plone",
                         allow_file_upload = zconf.ATDocument.allow_document_upload)),
     ), marshall=RFC822Marshaller()
     )
-ATDocumentSchema.addField(relatedItemsField)
+finalizeATCTSchema(ATDocumentSchema)
 
 class ATDocument(ATCTContent, HistoryAwareMixin):
-    """An Archetypes derived version of CMFDefault's Document"""
+    """A page in the portal, which can contain rich text."""
 
     schema         =  ATDocumentSchema
 
     content_icon   = 'document_icon.gif'
     meta_type      = 'ATDocument'
     portal_type    = 'Document'
-    archetype_name = 'Document'
+    archetype_name = 'Page'
     default_view   = 'document_view'
     immediate_view = 'document_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Document', 'meta_type' : 'Document'}
-    typeDescription= 'Fill in the details of this document.'
+    typeDescription= 'A page in the portal, which can contain rich text.'
     typeDescMsgId  = 'description_edit_document'
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
     assocFileExt   = ('txt', 'stx', 'rst', 'rest', 'py',)
@@ -101,20 +105,20 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
                             HistoryAwareMixin.actions
                            )
 
-    security.declareProtected(CMFCorePermissions.View, 'CookedBody')
+    security.declareProtected(View, 'CookedBody')
     def CookedBody(self, stx_level='ignored'):
         """CMF compatibility method
         """
         return self.getText()
 
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'EditableBody')
+    security.declareProtected(ModifyPortalContent, 'EditableBody')
     def EditableBody(self):
         """CMF compatibility method
         """
         return self.getRawText()
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent,
+    security.declareProtected(ModifyPortalContent,
                               'setFormat')
     def setFormat(self, value):
         """CMF compatibility method
@@ -133,7 +137,7 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
             value = translateMimetypeAlias(value)
         ATCTContent.setFormat(self, value)
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setText')
+    security.declareProtected(ModifyPortalContent, 'setText')
     def setText(self, value, **kwargs):
         """Body text mutator
 
@@ -148,10 +152,10 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         if (value is None or value == ""):
             if not field.getRaw(self):
                 # set mimetype and file name although the fi
-                if 'mimetype' in kwargs:
+                if 'mimetype' in kwargs and kwargs['mimetype']:
                     field.setContentType(self, kwargs['mimetype'])
-                if 'filename' in kwargs:
-                    field.setContentType(self, kwargs['filename'])
+                if 'filename' in kwargs and kwargs['filename']:
+                    field.setFilename(self, kwargs['filename'])
             else:
                 return
 
@@ -231,11 +235,6 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         assert file == '', 'file currently not supported' # XXX
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
-
-    security.declareProtected(CMFCorePermissions.View, 'get_size')
-    def get_size(self):
-        """Returns the size of the (raw) text field."""
-        return len(self.getRawText()) or 1
 
     def deferring(self):
         """

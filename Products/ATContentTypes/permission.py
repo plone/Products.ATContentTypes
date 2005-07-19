@@ -21,8 +21,7 @@
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-from Products.CMFCore import CMFCorePermissions
-from Products.CMFCore.CMFCorePermissions import setDefaultRoles
+from Products.CMFCore.permissions import setDefaultRoles
 from Products.Archetypes.public import listTypes
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.interfaces import IATTopic
@@ -43,17 +42,17 @@ setDefaultRoles(ChangeTopics, CHANGE_TOPIC_ROLES)
 ChangeEvents = 'Change portal events'
 setDefaultRoles(ChangeEvents, ('Manager', 'Owner',))
 
-ModifyConstrainTypes = "ATContentTypes: Modify constrain types"
+ModifyConstrainTypes = "Modify constrain types"
 setDefaultRoles(ModifyConstrainTypes, ('Manager', 'Owner'))
 
-ModifyViewTemplate = "ATContentTypes: Modify view template"
+ModifyViewTemplate = "Modify view template"
 setDefaultRoles(ModifyViewTemplate, ('Manager', 'Owner'))
 
 ViewHistory = "ATContentTypes: View history"
 setDefaultRoles(ViewHistory, ('Manager', ))
 
 UploadViaURL = "ATContentTypes: Upload via url"
-setDefaultRoles(ViewHistory, ('UploadViaURL', ))
+setDefaultRoles(UploadViaURL, ('Manager', ))
 
 permissions = {}
 def wireAddPermissions():

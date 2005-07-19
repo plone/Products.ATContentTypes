@@ -24,27 +24,7 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 import sys
-from Products.Archetypes.debug import log as at_log
 from Products.CMFCore.utils import getToolByName
-from StringIO import StringIO
-import sys
-
-DEBUG      = False
-REMOVE_OLD = True
-
-def LOG(logmessage):
-    """ wrap archetypes log method
-    """
-    if DEBUG:
-        at_log(logmessage)
-
-class StdoutStringIO(StringIO):
-    """StringIO that also writes to stdout
-    """
-    
-    def write(self, s):
-        print >> sys.stdout, str(s),
-        StringIO.write(self, s)
         
 ## LinguaPlone addon?
 try:
@@ -67,6 +47,8 @@ def _createObjectByType(type_name, container, id, *args, **kw):
     This method uses some code from
     CMFCore.TypesTool.FactoryTypeInformation.constructInstance
     to create the object without security checks.
+    
+    It doesn't finish the construction and so doesn't reinitializes the workflow.
     """
     id = str(id)
     typesTool = getToolByName(container, 'portal_types')
@@ -85,7 +67,11 @@ def _createObjectByType(type_name, container, id, *args, **kw):
     m(id, *args, **kw)
     ob = container._getOb( id )
     
-    return fti._finishConstruction(ob)
+    if hasattr(ob, '_setPortalTypeName'):
+        ob._setPortalTypeName(fti.getId())
+    
+    return ob
+    #return fti._finishConstruction(ob)
 
 from Acquisition import aq_base, aq_inner, aq_parent
 from App.Dialogs import MessageDialog
@@ -154,6 +140,11 @@ class MigratorRegistry(Registry):
         cls.src_meta_type = for_cls._atct_newTypeFor['meta_type']
         cls.dst_portal_type = for_cls.portal_type
         cls.dst_meta_type = for_cls.meta_type
+        
+        key = (cls.src_meta_type, cls.dst_meta_type)
+        assert key not in self
+        self[key] = cls
+        
         self.register(cls)
 
 class WalkerRegistry(Registry):
@@ -165,6 +156,7 @@ _migratorRegistry = MigratorRegistry()
 registerMigrator = _migratorRegistry.register
 registerATCTMigrator = _migratorRegistry.registerATCT
 listMigrators = _migratorRegistry.items
+getMigrator = _migratorRegistry.get
 
 _walkerRegistry = WalkerRegistry()
 registerWalker = _walkerRegistry.register

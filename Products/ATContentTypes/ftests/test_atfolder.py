@@ -37,8 +37,8 @@ class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
     portal_type = 'Folder'
     views = ('folder_listing', 'atct_album_view', )
 
-    def test_templatemixin_view_without_view(self):
-        # template mixin should work
+    def test_dynamic_view_without_view(self):
+        # dynamic view mixin should work
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) #
         
@@ -55,6 +55,12 @@ class TestATBTreeFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
 
     portal_type = 'Large Plone Folder'
     views = ('folder_listing', 'atct_album_view', )
+
+    def afterSetUp(self):
+        # enable global allow for BTree Folder
+        fti = getattr(self.portal.portal_types, self.portal_type)
+        fti.manage_changeProperties(global_allow=1)
+        atctftestcase.ATCTIntegrationTestCase.afterSetUp(self)
 
     def test_templatemixin_view_without_view(self):
         # template mixin magic should work

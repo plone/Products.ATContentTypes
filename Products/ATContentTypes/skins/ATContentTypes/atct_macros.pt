@@ -4,7 +4,7 @@
       i18n:domain="plone">
 
 <body>
-<table>
+<table summary="criteria">
 <tr>
 <metal:criterion metal:define-macro="criterion_edit">
    <tal:define-block tal:define="
@@ -29,9 +29,9 @@
                />
       </td>
       
-      <td style="padding: 0.5em;" i18n:translate="">
-         <span tal:replace="python:index.friendlyName or index.index" />
-         <div class="formHelp" tal:content="index/description"/>
+      <td style="padding: 0.5em;">
+         <span tal:content="python:index.friendlyName or index.index" i18n:translate="" />
+         <div class="formHelp" tal:content="index/description" i18n:translate="" />
       </td>
       <td style="padding: 0.5em;">
 

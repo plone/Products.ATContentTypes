@@ -30,7 +30,7 @@ from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.tests.utils import dcEdit
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 
@@ -43,6 +43,9 @@ from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.migration.atctmigrator import CRIT_MAP, REV_CRIT_MAP
 from Products.ATContentTypes.interfaces import IATTopic
 from Interface.Verify import verifyObject
+from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
+from Products.CMFPlone import transaction
+
 
 ACQUIRE  = True
 LIMIT    = False
@@ -57,6 +60,8 @@ CRITERIA_SETUP = {'Integer Criterion':      #Meta Type
                   'String Criterion':
                         ('SearchableText',
                          'portal'),
+                  # within day should behave identically for both CMF and ATTopics
+                  # the others not so much. [alecm]
                   'Friendly Date Criterion':
                         ('start',
                          '10',
@@ -158,7 +163,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
     portal_type = 'Topic'
     cmf_portal_type = 'CMF Topic'
     cmf_klass = Topic
-    title = 'Topic'
+    title = 'Smart Folder'
     meta_type = 'ATTopic'
     icon = 'topic_icon.gif'
 
@@ -166,12 +171,23 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         iface = IATTopic
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
+        
+    def test_isNotOrdered(self):
+        iface = IZopeOrderedContainer
+        self.failIf(iface.isImplementedBy(self._ATCT))
+        self.failIf(iface.isImplementedByInstancesOf(self.klass))
 
     def test_Empty( self ):
         topic = self._ATCT
 
         query = topic.buildQuery()
         self.assertEquals( query, None )
+
+    def test_canContainSubtopics(self):
+        ttool = self.portal.portal_types
+        fti = ttool.getTypeInfo(self.portal_type)
+        self.failUnless(self.portal_type in fti.allowed_content_types,
+                        'Topics should be allowed to contain topics')
 
     def test_Simple( self ):
         topic = self._ATCT
@@ -191,7 +207,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         query = topic.buildQuery()
         self.assertEquals( len( query ), 2 )
         self.assertEquals( query[ 'foo' ], 'bar' )
-        self.assertEquals( query[ 'baz' ], 43 )
+        self.assertEquals( query[ 'baz' ], {'query': 43} )
 
     def test_Nested( self ):
         topic = self._ATCT
@@ -269,7 +285,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         old_query = convert_old_catalog_query(old.buildQuery())
 
         # migrated (needs subtransaction to work)
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = TopicMigrator(old)
         m(unittest=1)
         
@@ -295,7 +311,22 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.failUnlessEqual(old_query, migrated.buildQuery(),
                             'Build Query mismatch: %s / %s' % \
                                 (old_query, migrated.buildQuery()))
-        
+
+    def test_hasSubTopics(self):
+        """ Ensure that has subtopics returns True if there are subtopics,
+            false otherwise
+        """
+        topic = self._ATCT
+        self.failUnlessEqual(topic.hasSubtopics(), False)
+        topic.invokeFactory('Topic', 'subtopic')
+        self.failUnlessEqual(topic.hasSubtopics(), True)
+
+    def test_get_size(self):
+        atct = self._ATCT
+        self.failUnlessEqual(atct.get_size(), 1)
+
+    def test_schema_marshall(self):
+        pass
 
 tests.append(TestSiteATTopic)
 
@@ -324,7 +355,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setAcquireCriteria',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission == ChangeTopics,
                         'Value is %s' % field.write_permission)
@@ -364,7 +395,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setLimitNumber',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission == ChangeTopics,
                         'Value is %s' % field.write_permission)
@@ -404,7 +435,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setItemCount',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission == ChangeTopics,
                         'Value is %s' % field.write_permission)
@@ -446,7 +477,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setCustomView',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission == ChangeTopics,
                         'Value is %s' % field.write_permission)
@@ -488,7 +519,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setCustomViewFields',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission == ChangeTopics,
                         'Value is %s' % field.write_permission)

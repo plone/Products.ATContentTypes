@@ -43,6 +43,7 @@ from Products.Archetypes.tests.atsitetestcase import portal_owner
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
+from Products.CMFPlone import transaction
 
 class IntegrationTestCase(ATFunctionalSiteTestCase):
 
@@ -69,6 +70,9 @@ class IntegrationTestCase(ATFunctionalSiteTestCase):
         temp_logs = {} # clean up log
         self.error_log = self.getPortal().error_log
         self.error_log._ignored_exceptions = ()
+
+        # disable portal_factory as it's a nuisance here
+        self.portal.portal_factory.manage_setPortalFactoryTypes(listOfTypeIds=[])
         
         # object
         self.setupTestObject()
@@ -102,7 +106,6 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
     def setupTestObject(self):
         # create test object
         self.obj_id = 'test_object'
-        self.folder.setLocallyAllowedTypes([self.portal_type])
         self.folder.invokeFactory(self.portal_type, self.obj_id, title=self.obj_id)
         self.obj = getattr(self.folder.aq_explicit, self.obj_id)
         self.obj_url = self.obj.absolute_url()
@@ -127,7 +130,8 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         response = self.publish(edit_form_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
         temp_id = body.split('/')[-2]
-        new_obj = getattr(self.folder.aq_explicit, temp_id)
+
+        new_obj = getattr(self.folder.portal_factory, temp_id)
         self.failUnlessEqual(self.obj.checkCreationFlag(), True) # object is not yet edited
         
 
@@ -150,8 +154,8 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         response = self.publish('%s/base_view' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
 
-    def test_templatemixin_view(self):
-        # template mixin magic should work
+    def test_dynamic_view(self):
+        # dynamic view magic should work
         response = self.publish('%s/view' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
 
@@ -230,17 +234,20 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         
         self.failUnless(hasattr(self.obj.aq_explicit, 'talkback'))
 
-    def test_templateMixinContext(self):
+    def test_dynamicViewContext(self):
         # register and add a testing template (it's a script)
         self.setRoles(['Manager', 'Member'])
-        at = getToolByName(self.portal, 'archetype_tool')
-        at.registerTemplate('unittestGetTitleOf')
-        at._templates[self.portal_type] += ['unittestGetTitleOf']
-        self.obj.setLayout('unittestGetTitleOf')
-        self.setRoles(['Member'])
         
+        ttool = self.portal.portal_types
+        fti = getattr(ttool, self.portal_type)
+        view_methods = fti.getAvailableViewMethods(self.obj) + ('unittestGetTitleOf',)
+        fti.manage_changeProperties(view_methods=view_methods)
+        
+        self.obj.setLayout('unittestGetTitleOf')
         self.folder.setTitle('the folder')
         self.obj.setTitle('the obj')
+
+        self.setRoles(['Member'])
         
         response = self.publish('%s/view' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
@@ -250,7 +257,6 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         
         self.failUnlessEqual(output, ['the obj', 'the folder', 'the obj', 'the folder'])
 
-
 from Products.CMFCore.utils import getToolByName
 from Products.CMFQuickInstallerTool.QuickInstallerTool import AlreadyInstalled
 from Products.Archetypes.tests.atsitetestcase import portal_name
@@ -258,7 +264,7 @@ from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 
 def setupEditors(app, id=portal_name, quiet=False):
-    get_transaction().begin()
+    transaction.begin()
     _start = time.time()
     portal = app[id]
 
@@ -285,7 +291,7 @@ def setupEditors(app, id=portal_name, quiet=False):
             if not quiet: ZopeTestCase._print('Epoz already installed ... \n')
 
     noSecurityManager()
-    get_transaction().commit()
+    transaction.commit()
     if not quiet: ZopeTestCase._print('done (%.3fs)\n' % (time.time()-_start,))
 
 app = ZopeTestCase.app()

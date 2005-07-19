@@ -32,26 +32,26 @@ Quick switching instructions for the impatient
 Requirements
 ============
 
-Zope 2.7.4+
------------------------
+Zope 2.8
+--------
 
-AT Content Types requires Zope 2.7.4.
+AT Content Types requires either Zope 2.8.0 + BTreeFolder 1.0.2 or Zope 2.8.1.
 
-Python 2.3.4+
-----------------------
+Python 2.3.5+
+-------------
 
-AT Content Types requires some new features of Python 2.3.4+.
+AT Content Types requires some new features of Python 2.3.5+. Python 2.4+ is
+not recommended at the moment.
 
-
-Archetypes 1.3.3
+Archetypes 1.3.4+
 ----------------
 
 AT Content Types is tested with the following AT versions
 
- * AT 1.3.3 (not yet released) or newer releases of AT 1.3
+ * AT 1.3.4-beta3 (not yet released) or newer releases of AT 1.3
 
- * AT SVN anon bundle after 2005-03-20
-   http://svn.plone.org/archetypes/bundles/anon-archetypes-1.3/
+ * AT SVN bundle after 2005-07-08
+   https://svn.plone.org/svn/archetypes/bundles/archetypes-1.3/
 
 AT Content Types doesn't work with other versions of Archetypes because some
 fixes are missing. Right now it's tested only with the newest cvs version of
@@ -62,29 +62,32 @@ AT Content Types doesn't work with AT 1.2.x or older!
 CMFQuickinstaller
 -----------------
 
-You have to install CMFQuickinstaller 1.5.2+ of the quickinstaller tool.
+You have to install CMFQuickinstaller 1.5.4+ of the quickinstaller tool.
 
-Plone
------
+Plone 2.1
+---------
 
 AT Content Types requires the templates and icon of CMFPlone for viewing the
 types and AT Folder requires some code from PloneFolder, too. It should be easy
 to seperate the dependecies if needed.
 
-ATContentTypes 1.0 is designed for the upcoming version 2.1 of Plone. Most parts
-of ATContentTypes will work with Plone 2.0.5 but there are at least 4 known bugs
-or missing features in Plone 2.0.5. Read ERRATA.txt for more informations. Maybe
-the plone community will release Plone 2.0.6 which will contain some bug fixes
-and backports from 2.1.
+ATContentTypes 1.0 is designed for the upcoming Plone 2.1.0. It doesn't run
+under Plone 2.0. Please stick to ATContentTypes 0.2.
 
-ATReferenceBrowserWidget
-------------------------
+ATReferenceBrowserWidget 1.0
+-----------------------------
 
-ATReferenceWidget from http://svn.plone.org/archetypes/MoreFieldsAndWidgets/
-is required for the related items field. There is no official release yet. You
-to get it from svn:
+ATReferenceWidget 1.0.1 or higher is required for the related items field. 
 
-  svn co http://svn.plone.org/archetypes/MoreFieldsAndWidgets/ATReferenceBrowserWidget/trunk/ ATReferenceBrowserWidget
+CMF 1.5
+-------
+
+Plone 2.1 and ATContentTypes 1.0 are requiring CMF 1.5
+
+CMFDynamicViewFTI
+-----------------
+
+A special new FTI for dynamic views. It is the successor of TemplateMixin. 
 
 =====================
 Optional Requirements
@@ -114,17 +117,13 @@ For debian users:
 apt-get install lynx pdftohtml wv xsltproc tidy \
                 unrtf ppthtml xlhtml gs-common xpdf-utils catdoc
 
-Python Imaging Library (PIL)
-----------------------------
+Python Imaging Library (PIL) 1.1.5+
+-----------------------------------
 
 In order to enable the auto resizing feature of ATImage (Archetypes ImageField)
 you have to install PIL also known as python-imaging or Python Imaging Library.
 It's available under http://www.pythonware.com/products/pil/
 
-ExternalStorage
----------------
-
-For the moment ExternalStorage is not supported offically!
 
 ============
 Installation
@@ -141,19 +140,12 @@ Reconfiguration of Zope
 You need to reconfigure Zope to make it play nice with Plone and AT Content
 Types.
 
-At first you need to set reST header level to 2. For Zope 2.7 change the 
+At first you need to set reST header level to 2. For Zope 2.8 change the 
 etc/zope.conf and adjust the environment section in the config file:
 
 <environment>
     STX_DEFAULT_LEVEL 2
 </environment>
-
-For Zope 2.6 define a environment var. For a un*x bash script:
-
-export STX_DEFAULT_LEVEL=2
-
-For Windows:
-@set STXT_DEFAULT_LEVEL=2
 
 For Zope 2.7 you also must set the rest-input-encoding and rest-out-encoding
 to the same encoding you are using as site-encoding for Plone. I suggest using
@@ -186,13 +178,7 @@ Migration from CMF types
 Migration may fail and it could destroy your data. So please backup your ZODB
 before migrating to AT Content Types.
 
-Go to the external method 'migrateFromCMFtoATCT' in the ZMI of your portal root.
-Run it using the 'test' tab.
+ * Install ATContentTypes as usually using the quickinstaller
+ 
+ * browse to the portal_atct tool and run the type migration
 
-
-==============================
-Migration from CMF Plone Types
-==============================
-
-Migration from CMF Plone Types is no longer supported. There are some outdated
-migration scripts available in CVS.

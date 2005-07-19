@@ -54,7 +54,7 @@ for x in inputfile.readlines():
         x = "-".join(splitted[2:])
     current[2].append(x)
 
-outputfile.write("""<html><head><title>XXX/TODO/BBB-Comment report for Archetypes</title>
+outputfile.write("""<html><head><title>XXX/TODO/BBB-Comment report for ATContentTypes</title>
 </head>
 
 <body>
@@ -74,7 +74,7 @@ outputfile.write("""<html><head><title>XXX/TODO/BBB-Comment report for Archetype
 # Write the comments down
 
 for x in comments:
-    outputfile.write("""<li><b>File: %(filename)s:%(line)s</b><br/><pre>%(text)s</pre></li>""" % {'filename':'Archetypes'+x[0][4:], 'line':x[1], 'text':"".join(x[2])})
+    outputfile.write("""<li><b>File: %(filename)s:%(line)s</b><br/><pre>%(text)s</pre></li>""" % {'filename':'ATContentTypes'+x[0][5:], 'line':x[1], 'text':"".join(x[2])})
 
 outputfile.write("<ol></body></html>")
 outputfile.flush()

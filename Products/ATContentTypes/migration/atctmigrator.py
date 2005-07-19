@@ -21,16 +21,23 @@ are permitted provided that the following conditions are met:
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
+import logging
+from cStringIO import StringIO
+
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.migration.common import registerATCTMigrator
-from Products.ATContentTypes.migration.common import LOG
+from Products.ATContentTypes.migration.common import getMigrator
 from Products.ATContentTypes.migration.walker import CatalogWalker
 from Products.ATContentTypes.migration.walker import CatalogWalkerWithLevel
-from Products.ATContentTypes.migration.walker import useLevelWalker
 from Products.ATContentTypes.migration.migrator import CMFItemMigrator
 from Products.ATContentTypes.migration.migrator import CMFFolderMigrator
+from Products.ATContentTypes.migration.catalogpatch import applyCatalogPatch
+from Products.ATContentTypes.migration.catalogpatch import removeCatalogPatch
+
 from Products.CMFCore.utils import getToolByName
 from Acquisition import aq_parent
+from Acquisition import aq_base
+from Products.CMFPlone import transaction
 
 from Products.ATContentTypes.content import document
 from Products.ATContentTypes.content import event
@@ -43,6 +50,8 @@ from Products.ATContentTypes.content import newsitem
 from Products.ATContentTypes.content import topic
 from Products.ATContentTypes.content.base import translateMimetypeAlias
 
+LOG = logging.getLogger('ATCT.migration')
+
 CRIT_MAP = {'Integer Criterion': 'ATSimpleIntCriterion',
                 'String Criterion': 'ATSimpleStringCriterion',
                 'Friendly Date Criterion': 'ATFriendlyDateCriteria',
@@ -52,7 +61,7 @@ CRIT_MAP = {'Integer Criterion': 'ATSimpleIntCriterion',
 REV_CRIT_MAP = dict([[v,k] for k,v in CRIT_MAP.items()])
 
 class DocumentMigrator(CMFItemMigrator):
-    walker = CatalogWalker
+    walkerClass = CatalogWalker
     map = {'text' : 'setText'}
 
     def custom(self):
@@ -63,7 +72,7 @@ class DocumentMigrator(CMFItemMigrator):
 registerATCTMigrator(DocumentMigrator, document.ATDocument)
 
 class EventMigrator(CMFItemMigrator):
-    walker = CatalogWalker
+    walkerClass = CatalogWalker
     map = {
             'location'      : 'setLocation',
             'Subject'       : 'setEventType',
@@ -89,12 +98,14 @@ class EventMigrator(CMFItemMigrator):
 
 registerATCTMigrator(EventMigrator, event.ATEvent)
 
-class TopicMigrator(CMFItemMigrator):
-    walker = CatalogWalker
+class TopicMigrator(CMFFolderMigrator):
+    walkerClass = CatalogWalker
     map = {'acquireCriteria' : 'setAcquireCriteria'}
 
     def custom(self):
-        for old_crit in self.old.listCriteria():
+        for old_crit in self.new.objectValues(CRIT_MAP.keys()):
+            self.new._delObject(old_crit.getId())
+            old_crit = aq_base(old_crit)
             old_meta = old_crit.meta_type
             new_meta = CRIT_MAP[old_meta]
             self.new.addCriterion(old_crit.field or old_crit.index, new_meta)
@@ -104,8 +115,15 @@ class TopicMigrator(CMFItemMigrator):
             elif new_meta == 'ATSortCriterion':
                 new_crit.setReversed(old_crit.reversed)
             if new_meta == 'ATFriendlyDateCriteria':
-                new_crit.setOperation(old_crit.operation)
+                old_op = old_crit.operation
                 DATE_RANGE = ( old_crit.daterange == 'old' and '-') or '+'
+                if old_op == 'max':
+                    new_op = (DATE_RANGE == '-' and 'more') or 'less'
+                elif old_op == 'min':
+                    new_op = (DATE_RANGE == '-' and 'less') or 'more'
+                else:
+                    new_op = old_op
+                new_crit.setOperation(new_op)
                 new_crit.setDateRange(DATE_RANGE)
             if new_meta == 'ATListCriterion':
                 new_crit.setOperator(old_crit.operator)
@@ -123,7 +141,7 @@ class TopicMigrator(CMFItemMigrator):
 registerATCTMigrator(TopicMigrator, topic.ATTopic)
 
 class FileMigrator(CMFItemMigrator):
-    walker = CatalogWalker
+    walkerClass = CatalogWalker
     # mapped in custom()
     # map = { 'file' : 'setFile' }
 
@@ -135,7 +153,7 @@ class FileMigrator(CMFItemMigrator):
 registerATCTMigrator(FileMigrator, file.ATFile)
 
 class ImageMigrator(CMFItemMigrator):
-    walker = CatalogWalker
+    walkerClass = CatalogWalker
     # mapped in custom()
     # map = {'image':'setImage'}
 
@@ -149,13 +167,13 @@ class ImageMigrator(CMFItemMigrator):
 registerATCTMigrator(ImageMigrator, image.ATImage)
 
 class LinkMigrator(CMFItemMigrator):
-    walker = CatalogWalker
+    walkerClass = CatalogWalker
     map = {'remote_url' : 'setRemoteUrl'}
 
 registerATCTMigrator(LinkMigrator, link.ATLink)
 
 class FavoriteMigrator(LinkMigrator):
-    walker = CatalogWalker
+    walkerClass = CatalogWalker
     # see LinkMigrator
     # map = {'remote_url' : 'setRemoteUrl'}
     pass
@@ -163,20 +181,20 @@ class FavoriteMigrator(LinkMigrator):
 registerATCTMigrator(FavoriteMigrator, favorite.ATFavorite)
 
 class NewsItemMigrator(DocumentMigrator):
-    walker = CatalogWalker
+    walkerClass = CatalogWalker
     # see DocumentMigrator
     map = {'text' : 'setText'}
 
 registerATCTMigrator(NewsItemMigrator, newsitem.ATNewsItem)
 
 class FolderMigrator(CMFFolderMigrator):
-    walker = CatalogWalkerWithLevel
+    walkerClass = CatalogWalkerWithLevel
     map = {}
 
 registerATCTMigrator(FolderMigrator, folder.ATFolder)
 
 class LargeFolderMigrator(CMFFolderMigrator):
-    walker = CatalogWalkerWithLevel
+    walkerClass = CatalogWalkerWithLevel
     # no other attributes to migrate
     map = {}
 
@@ -188,45 +206,94 @@ migrators = (DocumentMigrator, EventMigrator, FavoriteMigrator, FileMigrator,
 
 folderMigrators = ( FolderMigrator, LargeFolderMigrator, TopicMigrator,)
 
-def migrateAll(portal):
-    # first fix Members folder
-    kwargs = {}
-    catalog = getToolByName(portal, 'portal_catalog')
-    pprop = getToolByName(portal, 'portal_properties')
-    atct = getToolByName(portal, TOOLNAME)
-    try:
-        kwargs['default_language'] = pprop.aq_explicit.site_properties.default_language
-    except (AttributeError, KeyError):
-        kwargs['default_language'] = 'en'
+def migrateAll(portal, **kwargs):
+    LOG.debug('Starting ATContentTypes type migration')
+    #kwargs['use_catalog_patch'] = True
+    #kwargs['use_savepoint'] = True
+    #kwargs['transaction_size'] = 20
+    
+    kwargs = kwargs.copy()
+    for remove in ('src_portal_type', 'dst_portal_type'):
+        if remove in kwargs:
+            del kwarg[remove]
         
-    out = []
-    for migrator in migrators:
-        #out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.src_portal_type, migrator.dst_portal_type))
-        out.append('*** Migrating %s to %s ***' % (migrator.src_portal_type, migrator.dst_portal_type))
-        w = CatalogWalker(migrator, catalog)
-        out.append(w.go(**kwargs))
-    for migrator in folderMigrators:
-        #out.append('\n\n*** Migrating %s to %s ***\n' % (migrator.src_portal_type, migrator.dst_portal_type))
-        out.append('*** Migrating %s to %s ***' % (migrator.src_portal_type, migrator.dst_portal_type))
-        useLevelWalker(portal, migrator, out=out, **kwargs)
-                
-    #out.append('\nCommitting full transaction')
-    #get_transaction().commit()
-    #get_transaction().begin()
-
-    wf = getToolByName(catalog, 'portal_workflow')
-    LOG('starting wf migration')
-    count = wf.updateRoleMappings()
-    #out.append('\n\n*** Workflow: %d object(s) updated. ***\n' % count)
-    out.append('Workflow: %d object(s) updated.' % count)
+    out = StringIO()
+    for migrator in migrators+folderMigrators:
+        src_portal_type = migrator.src_portal_type
+        dst_portal_type = migrator.dst_portal_type
+        ttool = getToolByName(portal, 'portal_types')
+        if (ttool.getTypeInfo(src_portal_type) is None or
+           ttool.getTypeInfo(dst_portal_type) is None):
+            
+            LOG.debug('Missing FTI for %s or %s'%(src_portal_type, dst_portal_type))
+            print >>out, ("Couldn't migrate src_portal_type due to missing FTI")
+            continue
+        migratePortalType(portal, src_portal_type, dst_portal_type, out=out,
+                      migrator=migrator, **kwargs)
+                    
+    #transaction.commit()
     
-    #out.append('\nCommitting full transaction')
-    #get_transaction().commit()
-    #get_transaction().begin()
+    LOG.debug('Finished ATContentTypes type migration')
     
-    LOG('starting catalog update')
-    ct = getToolByName(catalog, 'portal_catalog')
-    ct.refreshCatalog(clear=1)
-    out.append('Portal catalog updated.')
+    return out.getvalue()
 
-    return '\n'.join(out)
+def migratePortalType(portal, src_portal_type, dst_portal_type, out=None,
+                      migrator=None, use_catalog_patch=False, **kwargs):
+    """Migrate from src portal type to dst portal type
+    
+    Additional **kwargs are applied to the walker
+    """
+    if not out:
+        out = StringIO()
+        
+    # migrators are also registered by (src meta type, dst meta type)
+    # let's find the right migrator for us
+    ttool = getToolByName(portal, 'portal_types')
+    src = ttool.getTypeInfo(src_portal_type)
+    dst = ttool.getTypeInfo(dst_portal_type)
+    if src is None or dst is None:
+        raise ValueError, "Unknown src or dst portal type: %s -> %s" % (
+                           src_portal_type, dst_portal_type,)
+    
+    key = (src.Metatype(), dst.Metatype())
+    migratorFromRegistry = getMigrator(key)
+    if migratorFromRegistry is None:
+        raise ValueError, "No registered migrator for '%s' found" % key
+    
+    if migrator is not None:
+        # got a migrator, make sure it is the right one
+        if migrator is not migratorFromRegistry:
+            raise ValueError, "ups"
+    else:
+        migrator = migratorFromRegistry 
+
+    Walker = migrator.walkerClass
+    
+    msg = '--> Migrating %s to %s with %s' % (src_portal_type,
+           dst_portal_type, Walker.__name__)
+    if use_catalog_patch:
+        msg+=', using catalog patch'
+    if kwargs.get('use_savepoint', False):
+        msg+=', using savepoints'
+    if kwargs.get('full_transaction', False):
+        msg+=', using full transactions'
+    
+    print >> out, msg
+    LOG.debug(msg)
+    
+    walk = Walker(portal, migrator, src_portal_type=src_portal_type,
+                  dst_portal_type=dst_portal_type, **kwargs)
+    # wrap catalog patch inside a try/finally clause to make sure that the catalog
+    # is unpatched under *any* circumstances (hopely)
+    try:
+        if use_catalog_patch:
+            catalog_class = applyCatalogPatch(portal)
+        walk.go()
+    finally:
+        if use_catalog_patch:
+            removeCatalogPatch(catalog_class)
+    
+    print >>out, walk.getOutput()       
+    LOG.debug('<-- Migrating %s to %s done' % (src_portal_type, dst_portal_type))
+    
+    return out

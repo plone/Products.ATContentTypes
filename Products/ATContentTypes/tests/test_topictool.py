@@ -20,18 +20,24 @@ from Products.CMFPlone.CatalogTool import CatalogTool
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.interfaces import IATCTTopicsTool
 from Interface.Verify import verifyObject
+from Products.ATContentTypes.configuration import zconf
+
+tool_config = zconf.atct_tool.topic_tool
 
 
 tests = []
 index_def = {'index'        : 'end',
-             'friendlyName' : 'End Date',
+             'friendlyName' : 'End Date For Test',
              'description'  : 'This is an end Date',
              'criteria'     : ['ATDateCriteria','ATDateRangeCriteria']
             }
 meta_def =  {'metadata'        : 'ModificationDate',
-             'friendlyName' : 'Modification Date',
+             'friendlyName' : 'Modification Date For Test',
              'description'  : ''
             }
+
+conf_index_def = [i for i in tool_config.indexes if i.name == index_def['index']][0]
+conf_meta_def = [m for m in tool_config.metadata if m.name == meta_def['metadata']][0]
 
 class TestTool(atcttestcase.ATCTSiteTestCase):
 
@@ -51,7 +57,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(index.friendlyName, index_def['friendlyName'])
         self.failUnlessEqual(index.description, index_def['description'])
         #Only need to test truth not actual value
-        self.failUnlessEqual(not index.enabled, not True)
+        self.failUnless(index.enabled)
         self.failUnlessEqual(index.criteria, tuple(index_def['criteria']))
 
         self.failUnless(index in t.getEnabledIndexes())
@@ -68,13 +74,13 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(index.friendlyName, index_def['friendlyName'])
         self.failUnlessEqual(index.description, index_def['description'])
         #Only need to test truth not actual value
-        self.failUnlessEqual(not index.enabled, not False)
+        self.failIf(index.enabled)
         self.failUnlessEqual(index.criteria, tuple(index_def['criteria']))
 
-        self.failUnless(index not in t.getEnabledIndexes())
-        self.failUnless(index_def['index'] not in [a[0] for a in t.getEnabledFields()])
-        self.failUnless(index_def['index'] not in t.getIndexes(1))
-        self.failUnless(index_def['index'] not in t.getIndexDisplay(True).keys())
+        self.failIf(index in t.getEnabledIndexes())
+        self.failIf(index_def['index'] in [a[0] for a in t.getEnabledFields()])
+        self.failIf(index_def['index'] in t.getIndexes(1))
+        self.failIf(index_def['index'] in t.getIndexDisplay(True).keys())
         self.failUnless(index_def['friendlyName'] not in t.getIndexDisplay(True).values())
         #Make sure it's still in the un-limited list
         self.failUnless(index_def['index'] in t.getIndexDisplay(False).keys())
@@ -99,16 +105,16 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         
         #Add
         t.addIndex('bogosity', enabled = True)
-        self.failUnless('bogosity' not in [a[0] for a in t.getEnabledFields()])
+        self.failIf('bogosity' in [a[0] for a in t.getEnabledFields()])
         #Add
         t.addIndex('bogosity', enabled = True)
-        self.failUnless('bogosity' not in t.getIndexDisplay(True).keys())
+        self.failIf('bogosity' in t.getIndexDisplay(True).keys())
         #Add
         t.addIndex('bogosity', enabled = True)
-        self.failUnless('bogosity' not in t.getIndexes(1))
+        self.failIf('bogosity' in t.getIndexes(1))
         #Add
         t.addIndex('bogosity', enabled = True)
-        self.failUnless('bogosity' not in [i.index for i in t.getEnabledIndexes()])
+        self.failIf('bogosity' in [i.index for i in t.getEnabledIndexes()])
         
     def test_remove_index(self):
         t = self.tool
@@ -126,9 +132,9 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
             index = t.getIndex(index_def['index'])
         except AttributeError:
             error = True
-        self.failUnless(not error)
+        self.failIf(error)
         #Make sure the FriendlyName is reset to default
-        self.failUnless(index.friendlyName != index_def['friendlyName'])
+        self.failUnlessEqual(index.friendlyName, getattr(conf_index_def,'friendlyName'))
         
     def test_update_index(self):
         """An index with no criteria set should set all available criteria,
@@ -136,14 +142,14 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
            values"""
         t = self.tool
         t.addIndex(enabled = True, **index_def)
-        t.updateIndex(index_def['index'], criteria = (),
+        t.updateIndex(index_def['index'], criteria = None,
                       description = 'New Description')
         index = t.getIndex(index_def['index'])
         self.failUnless(index.criteria)
         self.failUnless(index.criteria != index_def['criteria'])
         self.failUnless(index.description == 'New Description')
         self.failUnless(index.friendlyName == index_def['friendlyName'])
-        self.failUnlessEqual(not index.enabled, not True)
+        self.failUnless(index.enabled)
 
     def test_all_indexes(self):
         """Ensure that the tool includes all indexes in the catalog"""
@@ -153,7 +159,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         init_indexes = list(t.getIndexes())
         unique_indexes = [i for i in indexes if i not in init_indexes]
         unique_indexes = unique_indexes + [i for i in init_indexes if i not in indexes]
-        self.failUnless(not unique_indexes)
+        self.failIf(unique_indexes)
 
     def test_change_catalog_index(self):
         """Make sure tool updates when indexes are added to or deleted from
@@ -167,7 +173,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
             t.getIndex('nonsense')
         except AttributeError:
             error = True
-        self.failUnless(not error)
+        self.failIf(error)
         #remove
         error = False
         cat.delIndex('nonsense')
@@ -187,7 +193,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(meta.friendlyName, meta_def['friendlyName'])
         self.failUnlessEqual(meta.description, meta_def['description'])
         #Only need to test truth not actual value
-        self.failUnlessEqual(not meta.enabled, not True)
+        self.failUnless(meta.enabled)
 
         self.failUnless(meta in t.getEnabledMetadata())
         self.failUnless(meta_def['metadata'] in t.getMetadataDisplay(True).keys())
@@ -202,12 +208,12 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(meta.friendlyName, meta_def['friendlyName'])
         self.failUnlessEqual(meta.description, meta_def['description'])
         #Only need to test truth not actual value
-        self.failUnlessEqual(not meta.enabled, not False)
+        self.failIf(meta.enabled)
 
         self.failUnless(meta not in t.getEnabledMetadata())
-        self.failUnless(meta_def['metadata'] not in t.getAllMetadata(1))
-        self.failUnless(meta_def['metadata'] not in t.getMetadataDisplay(True).keys())
-        self.failUnless(meta_def['friendlyName'] not in t.getMetadataDisplay(True).values())
+        self.failIf(meta_def['metadata'] in t.getAllMetadata(1))
+        self.failIf(meta_def['metadata'] in t.getMetadataDisplay(True).keys())
+        self.failIf(meta_def['friendlyName'] in t.getMetadataDisplay(True).values())
         #Make sure it's still in the un-limited list
         self.failUnless(meta_def['metadata'] in t.getMetadataDisplay(False).keys())
         self.failUnless(meta_def['friendlyName'] in t.getMetadataDisplay(False).values())
@@ -230,13 +236,13 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
 
         #Add
         t.addMetadata('bogosity', enabled = True)
-        self.failUnless('bogosity' not in t.getMetadataDisplay(True).keys())
+        self.failIf('bogosity' in t.getMetadataDisplay(True).keys())
         #Add
         t.addMetadata('bogosity', enabled = True)
-        self.failUnless('bogosity' not in t.getAllMetadata(1))
+        self.failIf('bogosity' in t.getAllMetadata(1))
         #Add
         t.addMetadata('bogosity', enabled = True)
-        self.failUnless('bogosity' not in [i.index for i in t.getEnabledMetadata()])
+        self.failIf('bogosity' in [i.index for i in t.getEnabledMetadata()])
 
     def test_remove_metadata(self):
         t = self.tool
@@ -254,9 +260,9 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
             meta = t.getMetadata(meta_def['metadata'])
         except AttributeError:
             error = True
-        self.failUnless(not error)
+        self.failIf(error)
         #Make sure the FriendlyName is reset to default
-        self.failUnless(meta.friendlyName != meta_def['friendlyName'])
+        self.failUnlessEqual(meta.friendlyName, getattr(conf_meta_def,'friendlyName'))
         
     def test_update_metadata(self):
         """Changes made using updateMetadata should not reset already set
@@ -266,7 +272,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         t.updateMetadata(meta_def['metadata'], friendlyName = 'New Name')
         meta = t.getMetadata(meta_def['metadata'])
         self.failUnless(meta.friendlyName == 'New Name')
-        self.failUnlessEqual(not meta.enabled, not True)
+        self.failUnless(meta.enabled)
 
     def test_all_metadata(self):
         """Ensure that the tool includes all metadata in the catalog"""
@@ -276,7 +282,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         init_metadata = list(t.getAllMetadata())
         unique_metadata = [i for i in metadata if i not in init_metadata]
         unique_metadata = unique_metadata + [i for i in init_metadata if i not in metadata]
-        self.failUnless(not unique_metadata)
+        self.failIf(unique_metadata)
 
     def test_change_catalog_schema(self):
         """Make sure tool updates when columns are added to or deleted from
@@ -290,7 +296,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
             t.getMetadata('nonsense')
         except AttributeError:
             error = True
-        self.failUnless(not error)
+        self.failIf(error)
         #remove
         error = False
         cat.delColumn('nonsense')

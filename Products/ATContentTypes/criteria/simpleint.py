@@ -22,7 +22,8 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATSimpleIntCriterion'
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.public import Schema
@@ -59,7 +60,7 @@ ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
                     label_msgid="label_int_criteria_value",
                     description="An integer number.",
                     description_msgid="help_int_criteria_value",
-                    i18n_domain="plone"),
+                    i18n_domain="atcontenttypes"),
                 ),
     IntegerField('value2',
                 required=0,
@@ -73,7 +74,7 @@ ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
                     label_msgid="label_int_criteria_value2",
                     description="An integer number used as the maximum value if the between direction is selected.",
                     description_msgid="help_int_criteria_value2",
-                    i18n_domain="plone"),
+                    i18n_domain="atcontenttypes"),
                 ),
     StringField('direction',
                 required=0,
@@ -87,7 +88,7 @@ ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
                     label_msgid="label_int_criteria_direction",
                     description="Specify whether you want to find values lesser than, greater than, equal to, or between the chosen value(s).",
                     description_msgid="help_int_criteria_direction",
-                    i18n_domain="plone"),
+                    i18n_domain="atcontenttypes"),
                 ),
     ))
 
@@ -102,9 +103,9 @@ class ATSimpleIntCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'exact integer value'
+    shortDesc      = 'Integer value or range'
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
         val = self.Value()
@@ -117,11 +118,11 @@ class ATSimpleIntCriterion(ATBaseCriterion):
             if direction:
                 result.append((self.Field(), {'query': val,  'range': direction}))
             else:
-                result.append((self.Field(), val))
+                result.append((self.Field(), {'query': val}))
 
         return tuple(result)
 
-    security.declareProtected(CMFCorePermissions.View, 'post_validate')
+    security.declareProtected(View, 'post_validate')
     def post_validate(self, REQUEST, errors):
         """Check that Value2 is set if range is set to min:max"""
         direction = REQUEST.get('direction', self.getDirection())

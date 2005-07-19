@@ -23,8 +23,10 @@
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-DEPTH=5
-OBJ_PER_FOLDER=20
+from Products.CMFPlone import transaction
+
+DEPTH=10
+OBJ_PER_FOLDER=5
 id = 'batch_%(type)s_%(no)d'
 description = 'batch test'
 text = """Lorem ipsum dolor sit amet
@@ -46,6 +48,7 @@ eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim.
 """
 content_type = 'text/x-rst'
 
+
 def batchCreate(self):
     """Creates a bunch of objects for testing purpose
     """
@@ -54,17 +57,19 @@ def batchCreate(self):
         fid = id % { 'type' : 'Folder', 'no' : fno }
         base.invokeFactory('Folder', fid)
         folder = getattr(base, fid)
-        folder.edit(description=description, title=fid)
-        #folder.edit(title=fid)
+        #folder.edit(description=description, title=fid)
+        folder.setDescription(description)
+        folder.setTitle(fid)
         for dno in range(OBJ_PER_FOLDER):
             did = id % { 'type' : 'Document', 'no' : dno }
             folder.invokeFactory('Document', did)
             document = getattr(folder, did)
-            document.edit(description=description, title=did, text=text)
-            document.setContentType(content_type)
-            #document.setTitle(did)
-            #document.edit(text, content_type)
+            #document.edit(description=description, title=did, text=text)
+            #document.setContentType(content_type)
+            document.setTitle(did)
+            document.setDescription(description)
+            document.edit(text, content_type)
             print fno, dno
-        get_transaction().commit(1)
+        transaction.commit(1)
         print fno
         base = folder

@@ -70,7 +70,7 @@ class ATSelectionCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'select list'
+    shortDesc      = 'Select values from list'
 
 
     def getCurrentValues(self):
@@ -80,8 +80,9 @@ class ATSelectionCriterion(ATBaseCriterion):
         # DisplayList keys though it is supposed to (it should
         # probably accept Booleans as well) so we only accept strings
         # for now
-        options = [o for o in options if type(o) is StringType]
-        return options
+        options = [(o.lower(),o) for o in options if type(o) is StringType]
+        options.sort()
+        return [o[1] for o in options]
 
     security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
     def getCriteriaItems(self):

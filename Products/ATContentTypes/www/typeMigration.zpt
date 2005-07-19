@@ -18,7 +18,13 @@
  <tal:migrate tal:condition="submitted">
    <h3>Migrating types from CMF to ATContentTypes</h3>
 
-   <pre tal:content="here/migrateToATCT"/>
+   <pre tal:define="result here/migrateContentTypesToATCT;
+                    elapse python:result[0];
+                    c_elapse python:result[1];
+                    out python:result[2];
+                   "
+        tal:content="out" 
+        />
  </tal:migrate>
 
 </tal:body>

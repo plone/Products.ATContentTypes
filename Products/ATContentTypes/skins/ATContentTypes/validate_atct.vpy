@@ -34,7 +34,7 @@ errors  = context.validate(REQUEST=request, errors=errors, data=1, metadata=0)
 if errors:
     return state.set(status='failure', errors=errors, portal_status_message='Please correct the indicated errors.')
 
-message = 'Your changes have been saved.'
+message = context.translate('Changes saved.')
 tidiedFields = request.get('tidiedFields', None)
 if tidiedFields:
     message = '%s mxTidy has fixed the HTML code of the following field(s): %s' % \

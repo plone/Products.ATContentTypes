@@ -32,7 +32,7 @@ from Acquisition import aq_parent
 from Globals import InitializeClass
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.public import log_exc
@@ -60,7 +60,8 @@ class HistoryAwareMixin:
         'id'          : 'history',
         'name'        : 'History',
         'action'      : 'string:${object_url}/atct_history',
-        'permissions' : (ATCTPermissions.ViewHistory, )
+        'permissions' : (ATCTPermissions.ViewHistory, ),
+        'visible' : False,
          },
     )
 
@@ -108,7 +109,7 @@ class HistoryAwareMixin:
 
         return lst
 
-    security.declareProtected(CMFCorePermissions.View, 'getLastEditor')
+    security.declareProtected(View, 'getLastEditor')
     def getLastEditor(self):
         """Returns the user name of the last editor.
 

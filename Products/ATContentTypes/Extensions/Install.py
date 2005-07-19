@@ -43,12 +43,13 @@ from Products.ATContentTypes.config import WORKFLOW_FOLDER
 from Products.ATContentTypes.config import WORKFLOW_TOPIC
 from Products.ATContentTypes.config import WORKFLOW_CRITERIA
 from Products.ATContentTypes.config import WORKFLOW_DEFAULT
-from Products.ATContentTypes.config import INSTALL_LINGUA_PLONE
 from Products.ATContentTypes.config import GLOBALS
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.Extensions.utils import setupMimeTypes
 from Products.ATContentTypes.Extensions.utils import registerTemplates
 from Products.ATContentTypes.Extensions.utils import registerActionIcons
+
+from Products.CMFDynamicViewFTI.migrate import migrateFTIs
 
 def install(self, reinstall):
     out = StringIO()
@@ -96,12 +97,8 @@ def install(self, reinstall):
         qi.installProduct('ATReferenceBrowserWidget')
         print >>out, 'Install ATReferenceBrowserWidget'
     
-    if INSTALL_LINGUA_PLONE:
-        if 'LinguaPlone' in installable:
-            print >>out, 'Installing LinguaPlone as reqested'
-            qi.installProduct('LinguaPlone')
 
-    # step 5: install skins before install types to make TemplateMixin happy
+    # step 5: install skins
     install_subskin(self, out, GLOBALS)
 
     # step 6: install types
@@ -115,21 +112,9 @@ def install(self, reinstall):
         print >>out, 'Copying FTI flags like allow_discussion'
         tool.copyFTIFlags()
     
-    # step 8: register switch methods to toggle old plonetypes on/off
-    # BBB remove these two dummy methods
-    #manage_addExternalMethod(self,'switchATCT2CMF',
-    #    'DUMMY: Set reenable CMF type',
-    #    PROJECTNAME+'.Install',
-    #    'dummyExternalMethod')
-    #manage_addExternalMethod(self,'switchCMF2ATCT',
-    #    'DUMMY: Set ATCT as default content types ',
-    #    PROJECTNAME+'.Install',
-    #    'dummyExternalMethod')
-    #
-    #manage_addExternalMethod(self,'migrateFromCMFtoATCT',
-    #    'Migrate from CMFDefault types to ATContentTypes',
-    #    PROJECTNAME+'.migrateFromCMF',
-    #    'migrate')
+    # step 8: migrate FTIs  to DynamicViewFTIs
+    migrated = migrateFTIs(self, product=PROJECTNAME)
+    print >>out, "Switch to DynamicViewFTI: %s" % ', '.join(migrated)
 
     # step 9: changing workflow
     if not reinstall:
@@ -146,10 +131,16 @@ def install(self, reinstall):
     print >>out, 'Adding additional action icons'
     registerActionIcons(self, out)
     
-    # step 12: update / create internal version info
+    # step 12: set initial version at 0.2 to ensure full migration
     nv, v = tool.getVersion()
     if not nv and not v:
-        tool.setVersionFromFS()
+        tool.setInstanceVersion('0.2.0-final ')
+
+    # step 13: run any migrations
+    if reinstall:
+        print >>out, 'Migrating existing content to latest version'
+        migration_result = tool.upgrade()
+        print >>out, migration_result
     
     print >> out, 'Successfully installed %s' % PROJECTNAME
     return out.getvalue()
@@ -198,7 +189,13 @@ def installTool(self, out):
     # register tool as action provider, multiple installs are harmeless
     #actions_tool = getToolByName(self, 'portal_actions')
     #actions_tool.addActionProvider(TOOLNAME)
-    
+    group = 'atct|ATContentTypes|ATCT Setup'
+    cp = getToolByName(self, 'portal_controlpanel')
+    if 'atct' not in cp.getGroupIds():
+        cp._updateProperty('groups', tuple(cp.groups)+(group,))
+    for configlet in tool.getConfiglets():
+        cp.unregisterConfiglet(configlet['id'])
+    cp.registerConfiglets(tool.getConfiglets())
     print >>out, "Installing %s and registering it as action provider" % TOOLNAME
     return tool
 

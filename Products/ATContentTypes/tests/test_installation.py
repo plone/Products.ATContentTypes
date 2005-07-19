@@ -29,11 +29,10 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
-from Products.ATContentTypes.config import _ATCT_UNIT_TEST_MODE
-from Products.ATContentTypes.config import _ATCT_OLD_VALUES
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.tool.atct import ATCTTool
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone import transaction
 
 tests = []
 
@@ -110,7 +109,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         cmf_prods = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFCalendar')
 
         qi.uninstallProducts(('ATContentTypes',))
-        get_transaction().commit(1)
+        transaction.commit(1)
 
         tids = ttool.objectIds()
         for id in cmf_ids:
@@ -121,13 +120,8 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
     def test_installsetsCMFcataloged(self):
         t = self.tool
         self.failUnless(t.getCMFTypesAreRecataloged())
-        
-    def test_unit_test_mode(self):
-        self.failUnlessEqual(_ATCT_UNIT_TEST_MODE, True)
 
     def test_release_settings_SAVE_TO_FAIL_FOR_DEVELOPMENT(self):
-        old = _ATCT_OLD_VALUES
-        self.failUnlessEqual(old['INSTALL_LINGUA_PLONE'], False)
         self.failUnlessEqual(SWALLOW_IMAGE_RESIZE_EXCEPTIONS, True)
  
     def test_reindex_doesnt_add_tools(self):
@@ -140,6 +134,14 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
                 result = cat(id=id)
                 l = len(result)
                 self.failUnlessEqual(l, 0, (id, l, result))
+ 
+    def test_adds_related_items_catalog_index(self):
+        self.assertEqual(self.cat.Indexes['getRawRelatedItems'].__class__.__name__,
+                         'KeywordIndex')
+
+    def test_api_import(self):
+        import Products.ATContentTypes.atct
+        
     
 tests.append(TestInstallation)
 

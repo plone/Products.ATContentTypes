@@ -23,23 +23,27 @@
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
+from Products.ATContentTypes.config import HAS_PLONE2
+
 from Interface import Interface
 from Interface import Attribute
-# BBB remove after we depend on AT 1.3.3
-try:
-    from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
-except ImportError:
-    from Products.Archetypes.interfaces.ITemplateMixin import ITemplateMixin
 
 from Products.Archetypes.interfaces.base import IBaseContent
 from Products.Archetypes.interfaces.base import IBaseFolder
+from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
 
-class IATContentType(ITemplateMixin, IBaseContent):
+try:
+    from Products.CMFPlone.interfaces.ConstrainTypes import \
+        ISelectableConstrainTypes as IPloneSelectableConstrainTypes
+except ImportError:
+    IPloneSelectableConstrainTypes = Interface
+
+class IATContentType(ISelectableBrowserDefault, IBaseContent):
     """Marker interface for AT Content Types
     """
 
-    default_view = Attribute('''Default view template - used for TemplateMixin''')
-    suppl_views = Attribute('''Supplementary views - used for TemplateMixin''')
+    default_view = Attribute('''Default view template - used for dynamic view''')
+    suppl_views = Attribute('''Supplementary views - used for dynamic view''')
 
     _atct_newTypeFor = Attribute('''XXX''')
 
@@ -59,14 +63,6 @@ class IATContentType(ITemplateMixin, IBaseContent):
     If one of this kw names is used with edit() then the cmf_edit method is
     called.
     ''')
-
-    def getLayout(**kw):
-        """Get the current layout or the default layout if the current one is None
-        """
-
-    def getDefaultLayout():
-        """Get the default layout used for TemplateMixin
-        """
 
 class IHistoryAware(Interface):
     """History awareness marker interface
@@ -324,4 +320,8 @@ class IATCTTool(Interface):
     
 class IATCTTopicsTool(Interface):
     """Mixin class for providing features to customize the display of topics
+    """
+
+class ISelectableConstrainTypes(IPloneSelectableConstrainTypes):
+    """Marker interface based on IPloneSelectableConstrainTypes or Interface
     """

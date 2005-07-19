@@ -43,90 +43,23 @@ from Products.Archetypes.public import MultiSelectionWidget
 from Products.Archetypes.public import RichWidget
 from Products.Archetypes.public import StringWidget
 from Products.Archetypes.public import RFC822Marshaller
+from Products.Archetypes.public import AnnotationStorage
 
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import updateActions
 from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.calendarsupport import CalendarSupportMixin
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.permission import ChangeEvents
 from Products.ATContentTypes.utils import DT2dt
 
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
-    StringField('location',
-                searchable=True,
-                write_permission = ChangeEvents,
-                widget = StringWidget(
-                    description = "Enter the location where the event will take place.",
-                    description_msgid = "help_event_location",
-                    label = "Event Location",
-                    label_msgid = "label_event_location",
-                    i18n_domain = "plone")),
-
-    TextField('text',
-              required=False,
-              searchable=True,
-              primary=True,
-              validators = ('isTidyHtmlWithCleanup',),
-              #validators = ('isTidyHtml',),
-              default_content_type = zconf.ATEvent.default_content_type,
-              default_output_type = 'text/x-html-safe',
-              allowable_content_types = zconf.ATEvent.allowed_content_types,
-              widget = RichWidget(
-                        description = "The full text of the event announcement.",
-                        description_msgid = "help_body_text",
-                        label = "Body text",
-                        label_msgid = "label_body_text",
-                        rows = 25,
-                        i18n_domain = "plone",
-                        allow_file_upload = zconf.ATDocument.allow_document_upload)),
-
-    LinesField('attendees',
-               languageIndependent=True,
-               searchable=True,
-               write_permission=ChangeEvents,
-               widget=LinesWidget(label="Attendees",
-                                  label_msgid="label_event_attendees",
-                                  description=("People who are attending "
-                                               "the event."),
-                                  description_msgid="help_event_attendees",
-                                  i18n_domain="plone")),
-
-    LinesField('eventType',
-               required=True,
-               searchable=True,
-               write_permission = ChangeEvents,
-               vocabulary = 'getEventTypes',
-               languageIndependent=True,
-               widget = MultiSelectionWidget(
-                        size = 6,
-                        description=("Select the type of event. "
-                                     "Multiple event types possible."),
-                        description_msgid = "help_event_type",
-                        label = "Event Type",
-                        label_msgid = "label_event_type",
-                        i18n_domain = "plone")),
-
-    StringField('eventUrl',
-                required=False,
-                searchable=True,
-                accessor='event_url',
-                write_permission = ChangeEvents,
-                validators = ('isURL',),
-                widget = StringWidget(
-                        description = ("Enter an optional web address of a page "
-                                       "containing more info about the event, if"
-                                       " required."),
-                        description_msgid = "help_url",
-                        label = "Event URL",
-                        label_msgid = "label_url",
-                        i18n_domain = "plone")),
-
     DateTimeField('startDate',
                   required=True,
                   searchable=False,
@@ -135,8 +68,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   default_method=DateTime,
                   languageIndependent=True,
                   widget = CalendarWidget(
-                        description=("Enter the starting date and time, or click "
-                                     "the calendar icon and select it. "),
+                        description= "",
                         description_msgid = "help_event_start",
                         label="Event Starts",
                         label_msgid = "label_event_start",
@@ -150,12 +82,78 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   default_method=DateTime,
                   languageIndependent=True,
                   widget = CalendarWidget(
-                        description=("Enter the ending date and time, or click "
-                                     "the calendar icon and select it. "),
+                        description = "",
                         description_msgid = "help_event_end",
                         label = "Event Ends",
                         label_msgid = "label_event_end",
                         i18n_domain = "plone")),
+    StringField('location',
+                searchable=True,
+                write_permission = ChangeEvents,
+                widget = StringWidget(
+                    description = "",
+                    description_msgid = "help_event_location",
+                    label = "Event Location",
+                    label_msgid = "label_event_location",
+                    i18n_domain = "plone")),
+
+    TextField('text',
+              required=False,
+              searchable=True,
+              primary=True,
+              storage = AnnotationStorage(migrate=True),
+              validators = ('isTidyHtmlWithCleanup',),
+              #validators = ('isTidyHtml',),
+              default_content_type = zconf.ATEvent.default_content_type,
+              default_output_type = 'text/x-html-safe',
+              allowable_content_types = zconf.ATEvent.allowed_content_types,
+              widget = RichWidget(
+                        description = "",
+                        description_msgid = "help_event_announcement",
+                        label = "Event Announcement",
+                        label_msgid = "label_event_announcement",
+                        rows = 25,
+                        i18n_domain = "plone",
+                        allow_file_upload = zconf.ATDocument.allow_document_upload)),
+
+    LinesField('attendees',
+               languageIndependent=True,
+               searchable=True,
+               write_permission=ChangeEvents,
+               widget=LinesWidget(label="Attendees",
+                                  label_msgid="label_event_attendees",
+                                  description=(" "),
+                                  description_msgid="help_event_attendees",
+                                  i18n_domain="plone")),
+
+    LinesField('eventType',
+               required=True,
+               searchable=True,
+               write_permission = ChangeEvents,
+               vocabulary = 'getEventTypes',
+               languageIndependent=True,
+               widget = MultiSelectionWidget(
+                        size = 6,
+                        description="",
+                        description_msgid = "help_event_type",
+                        label = "Event Type(s)",
+                        label_msgid = "label_event_type",
+                        i18n_domain = "plone")),
+
+    StringField('eventUrl',
+                required=False,
+                searchable=True,
+                accessor='event_url',
+                write_permission = ChangeEvents,
+                validators = ('isURL',),
+                widget = StringWidget(
+                        description = ("Web address with more info about the event. " 
+                                       "Add http:// for external links."),
+                        description_msgid = "help_url",
+                        label = "Event URL",
+                        label_msgid = "label_url",
+                        i18n_domain = "plone")),
+
 
     StringField('contactName',
                 required=False,
@@ -163,8 +161,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 accessor='contact_name',
                 write_permission = ChangeEvents,
                 widget = StringWidget(
-                        description=("Enter a contact person or "
-                                     "organization for the event."),
+                        description = "",
                         description_msgid = "help_contact_name",
                         label = "Contact Name",
                         label_msgid = "label_contact_name",
@@ -177,8 +174,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 write_permission = ChangeEvents,
                 validators = ('isEmail',),
                 widget = StringWidget(
-                        description = ("Enter an e-mail address to use for "
-                                       "information regarding the event."),
+                        description = "",
                         description_msgid = "help_contact_email",
                         label = "Contact E-mail",
                         label_msgid = "label_contact_email",
@@ -193,19 +189,17 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 #validators = ('isInternationalPhoneNumber',),
                 validators= (),
                 widget = StringWidget(
-                        description = ("Enter the phone number to call for "
-                                       "information and/or booking."),
+                        description = "",
                         description_msgid = "help_contact_phone",
                         label = "Contact Phone",
                         label_msgid = "label_contact_phone",
                         i18n_domain = "plone")),
     ), marshall = RFC822Marshaller()
     )
-ATEventSchema.addField(relatedItemsField)
-
+finalizeATCTSchema(ATEventSchema)
 
 class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
-    """An Archetype derived version of CMFCalendar's Event"""
+    """Information about an upcoming event, which can be displayed in the calendar."""
 
     schema         =  ATEventSchema
 
@@ -217,7 +211,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
     immediate_view = 'event_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Event', 'meta_type' : 'CMF Event'}
-    typeDescription= 'Fill in the details of the event you want to add.'
+    typeDescription= 'Information about an upcoming event, which can be displayed in the calendar.'
     typeDescMsgId  = 'description_edit_event'
     assocMimetypes = ()
     assocFileExt   = ('event', )
@@ -399,10 +393,5 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
         elif kwargs:
             info = kwargs
         ATCTContent.update(self, **info)
-
-    security.declareProtected(View, 'get_size')
-    def get_size(self):
-        """Returns the size of the event description field."""
-        return len(self.getText()) or 1
 
 registerATCT(ATEvent, PROJECTNAME)

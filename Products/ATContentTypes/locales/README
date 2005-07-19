@@ -1,0 +1,8 @@
+All files regarding i18n are now part of the PloneTranslations product, which
+can be found in Plone Collective:
+
+https://svn.plone.org/collective/PloneTranslations/trunk/
+
+Additions to manual.pot now have to go in:
+
+https://svn.plone.org/collective/PloneTranslations/trunk/i18n/atcontenttypes-manual.pot

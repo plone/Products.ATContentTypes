@@ -95,15 +95,71 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
 
         brains = cat(meta_type=mt)
         #self.failUnless(len(brains) > 0)
-        
+
         brains = cat(portal_type=pt)
         #self.failUnless(len(brains) > 0)
-        
+
     def test_recatalogCMFTypes(self):
         # just to make sure it is callable
         t = self.tool
         t.recatalogCMFTypes()
-        
+
+    def test__catalogTypesByMetatypeDoesNotGiveResultsForEmptyInput(self):
+        # just to make sure it returns an empty list and
+        # doesn't catalog all objects on the site
+        t = self.tool
+        self.assertEqual(t._catalogTypesByMetatype([])[0], [])
+
+    def test_enableCMFTypes(self):
+        t = self.tool
+        # login as manager
+        self.setRoles(['Manager', 'Member'])
+        t.enableCMFTypes()
+        self.failUnlessEqual(t.isCMFdisabled(), False)
+
+    def XXX_test_disableCMFTypes(self):
+        # Currently fails inexplicably
+        t = self.tool
+        # login as manager
+        self.setRoles(['Manager', 'Member'])
+        t.enableCMFTypes()
+        t.disableCMFTypes()
+        self.failUnlessEqual(t.isCMFdisabled(), True)
+
+    def test_disableCMFTypes_with_non_contentish_cataloged_object(self):
+        t = self.tool
+        # login as manager
+        self.setRoles(['Manager', 'Member'])
+
+        # Add non-contentish subobject to inherit portal_type from parent
+        factory = self.folder.manage_addProduct['PythonScripts']
+        factory.manage_addPythonScript('index_html')
+        index = self.folder.index_html
+
+        # Catalog it so that migration thinks it's a folder.
+        self.portal.portal_catalog.indexObject(index)
+
+        t.enableCMFTypes()
+        # This shouldn't fail with AttributeError: _setPortalTypeName
+        t.disableCMFTypes()
+
+    def test_disableCMFTypes_with_missing_FTIs(self):
+        # Don't crash when expected types are not installed
+        t = self.tool
+        # login as manager
+        self.setRoles(['Manager', 'Member'])
+
+        t.enableCMFTypes()
+        # Remove Large Plone Folder
+        self.portal.portal_types.manage_delObjects(['Large Plone Folder'])
+
+        # This shouldn't fail with AttributeError: _setPortalTypeName
+        try:
+            t.disableCMFTypes()
+        except Exception, e:
+            import sys, traceback
+            self.fail('Failed to disable CMF types when an expected type is missing: %s \n %s'%(e,''.join(traceback.format_tb(sys.exc_traceback))))
+
     def test_interface(self):
         t = self.tool
         self.failUnless(IATCTTool.isImplementedBy(t))
@@ -125,10 +181,23 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         cmfdoc.manage_changeProperties(allow_discussion=True)
         t.copyFTIFlags()
         self.failUnlessEqual(atctdoc.allow_discussion, True)
-        
+
         cmfdoc.manage_changeProperties(allow_discussion=False)
         t.copyFTIFlags()
         self.failUnlessEqual(atctdoc.allow_discussion, False)
+        
+    def test_copyftiflags_with_missing_FTIs(self):
+        t = self.tool
+        ttool = getToolByName(self.portal, 'portal_types')
+        # Remove Large Plone Folder
+        ttool.manage_delObjects(['Large Plone Folder'])
+
+        try:
+            t.copyFTIFlags()
+        except Exception, e:
+            import sys, traceback
+            self.fail('Failed to copy FTI properties when an expected type is missing: %s \n %s'%(e,''.join(traceback.format_tb(sys.exc_traceback))))
+        
         
     def test_copyactions(self):
         t = self.tool
@@ -145,6 +214,21 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         t.copyFTIFlags()
         atct_actions_ids = [action.getId() for action in atctdoc.listActions()]
         self.failUnless(id in atct_actions_ids, atct_actions_ids)
+
+    def testMigrationFinished(self):
+        t = self.tool
+        self.assertEqual(t.getVersion(),
+                         t.getVersionFromFS())
+
+    def testNeedsVersionMigration(self):
+        t = self.tool
+        self.failIf(t.needsVersionMigration(),
+                    'Migration needs upgrading, currently: %s'%str(t.getVersion()))
+
+    def testMigrationNeedsRecatalog(self):
+        t = self.tool
+        self.failIf(t.needRecatalog(),
+                    'Migration needs recataloging')
 
 tests.append(TestTool)
 

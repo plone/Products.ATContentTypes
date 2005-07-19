@@ -24,7 +24,8 @@ __author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATReferenceCriterion'
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
@@ -32,6 +33,7 @@ from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import LIST_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
+from Products.Archetypes.public import DisplayList
 
 ATReferenceCriterionSchema = ATSelectionCriterion.schema
 
@@ -45,16 +47,19 @@ class ATReferenceCriterion(ATSelectionCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'reference field select list'
+    shortDesc      = 'Select referenced content'
 
 
     def getCurrentValues(self):
         catalog = getToolByName(self, 'portal_catalog')
         uid_cat = getToolByName(self, 'uid_catalog')
+        putils = getToolByName(self, 'plone_utils')
         options = catalog.uniqueValuesFor(self.Field())
 
         brains = uid_cat(UID=options, sort_on='Title')
-        display_list = DisplayList([(b.UID, b.Title or b.id) for b in brains])
+        display = [((putils.pretty_title_or_id(b)).lower(), b.UID, b.Title or b.id) for b in brains]
+        display.sort()
+        display_list = DisplayList([(d[1], d[2]) for d in display])
 
         return display_list
 

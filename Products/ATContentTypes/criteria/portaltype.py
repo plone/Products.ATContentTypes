@@ -23,7 +23,8 @@ __author__  = 'Godefroid Chapelle'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATPortalTypeCriterion'
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
@@ -61,17 +62,27 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'portal types values'
+    shortDesc      = 'Select content types'
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCurrentValues(self):
          """Return enabled portal types"""
-         topic_tool = getToolByName(self, TOOLNAME)
-         portal_types = topic_tool.getAllowedPortalTypes()
-         portal_types = [t[1] or t[0] for t in portal_types]
+         plone_tool = getToolByName(self, 'plone_utils')
+         portal_types = plone_tool.getUserFriendlyTypes()
+         getSortTuple = lambda x: (x.lower(),x)
+
+         if self.Field() == 'Type':
+            types_tool = getToolByName(self, 'portal_types')
+            get_type = types_tool.getTypeInfo
+            portal_types = [getSortTuple(get_type(t).Title() or t) for t in portal_types]
+         else:
+            portal_types = [(t.lower(),t) for t in portal_types]
+
+         portal_types.sort()
+         portal_types = [p[1] for p in portal_types]
          return DisplayList(zip(portal_types,portal_types))
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
 

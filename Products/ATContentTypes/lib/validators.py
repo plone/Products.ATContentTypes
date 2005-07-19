@@ -23,6 +23,9 @@
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
+from types import FileType
+from Acquisition import aq_base
+
 from Products.ATContentTypes.config import HAS_MX_TIDY
 from Products.ATContentTypes.config import MX_TIDY_ENABLED
 from Products.ATContentTypes.config import MX_TIDY_MIMETYPES
@@ -167,6 +170,40 @@ class TidyHtmlWithCleanupValidator:
 
 validatorList.append(TidyHtmlWithCleanupValidator('isTidyHtmlWithCleanup', title='', description=''))
 
+class NonEmptyFileValidator:
+    """Fails on empty non-existant files
+    """
+
+    __implements__ = IValidator
+
+    def __init__(self, name, title='', description=''):
+        self.name = name
+        self.title = title or name
+        self.description = description
+
+    def __call__(self, value, *args, **kwargs):
+        instance = kwargs.get('instance', None)
+        field    = kwargs.get('field', None)
+
+        # calculate size
+        if isinstance(value, FileUpload) or type(value) is FileType \
+          or hasattr(aq_base(value), 'tell'):
+            value.seek(0, 2) # eof
+            size = value.tell()
+            value.seek(0)
+        else:
+            try:
+                size = len(value)
+            except TypeError:
+                size = 1
+
+        if size == 0:
+            return ("Validation failed: Uploaded file is empty")
+        else:
+            return True
+
+
+validatorList.append(NonEmptyFileValidator('isNonEmptyFile', title='', description=''))
 
 for validator in validatorList:
     # register the validators

@@ -39,8 +39,8 @@ class TestATTopicFunctional(atctftestcase.ATCTIntegrationTestCase):
         self.setRoles(['Manager', 'Member',])
         atctftestcase.ATCTIntegrationTestCase.afterSetUp(self)
         
-    def test_templatemixin_view_without_view(self):
-        # template mixin magic should work
+    def test_dynamic_view_without_view(self):
+        # dynamic view magic should work
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) #
     

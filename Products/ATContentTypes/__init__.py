@@ -38,7 +38,6 @@ else:
 
 from Products.CMFCore.utils import ContentInit
 from Products.CMFCore.utils import ToolInit
-from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.DirectoryView import registerDirectory
 
 # import all content types, migration and validators
@@ -49,6 +48,7 @@ import Products.ATContentTypes.content
 import Products.ATContentTypes.criteria
 import Products.ATContentTypes.migration
 from Products.ATContentTypes.tool.atct import ATCTTool
+from Products.ATContentTypes import migration
 
 # BBB aliases
 import Products.ATContentTypes.modulealiases
@@ -60,12 +60,16 @@ wireAddPermissions()
 registerDirectory(SKINS_DIR,GLOBALS)
 
 def initialize(context):
+    # Setup migrations
+    migration.executeMigrations()
+    migration.registerMigrations()
+    
     # process our custom types
     
     ToolInit(
         'ATContentTypes tools', 
-        tools=(ATCTTool,),  
-        product_name='ATContentTypes', 
+        tools=(ATCTTool,),
+        product_name='ATContentTypes',
         icon='tool.gif', ).initialize(context) 
 
     listOfTypes = listTypes(PROJECTNAME)

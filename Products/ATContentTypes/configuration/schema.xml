@@ -13,6 +13,12 @@
     </description>
   </section>
 
+  <section type="feature" name="swallowImageResizeExceptions"
+   attribute="swallowImageResizeExceptions" required="yes" />
+
+  <section type="pil_config" name="*"
+   attribute="pil_config" required="yes" />
+
   <section type="archetype" name="ATDocument"
    attribute="ATDocument" required="yes" />
 
@@ -26,6 +32,9 @@
    attribute="ATFile" required="yes" />
 
   <section type="archetype" name="ATImage"
-   attribute="ATImage" required="yes" />
+  attribute="ATImage" required="yes" />
+
+  <section type="atct_tool" name="*"
+           attribute="atct_tool" required="no" />
 
 </schema>

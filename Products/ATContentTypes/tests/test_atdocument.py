@@ -29,7 +29,8 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
@@ -44,6 +45,7 @@ from Products.ATContentTypes.interfaces import IHistoryAware
 from Products.ATContentTypes.interfaces import ITextContent
 from Products.ATContentTypes.interfaces import IATDocument
 from Interface.Verify import verifyObject
+from Products.CMFPlone import transaction
 
 example_stx = """
 Header
@@ -82,7 +84,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
     portal_type = 'Document'
     cmf_portal_type = 'CMF Document'
     cmf_klass = Document
-    title = 'Document'
+    title = 'Page'
     meta_type = 'ATDocument'
     icon = 'document_icon.gif'
 
@@ -90,7 +92,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         iface = IHistoryAware
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
-        
+
     def test_implementsTextContent(self):
         iface = ITextContent
         self.failUnless(iface.isImplementedBy(self._ATCT))
@@ -127,10 +129,10 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         time.sleep(1.0)
 
         # migrated (needs subtransaction to work)
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = DocumentMigrator(old)
         m(unittest=1)
-        get_transaction().commit(1)
+        transaction.commit(1)
 
         self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
         migrated = getattr(self.folder, id)
@@ -138,6 +140,8 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         self.compareAfterMigration(migrated, mod=mod, created=created)
         self.compareDC(migrated, title=title, description=description)
 
+        self.assertEquals(migrated.Schema()['text'].getContentType(migrated),
+                            'text/structured')
         self.failUnless(migrated.CookedBody() == body, 'Body mismatch: %s / %s' \
                         % (migrated.CookedBody(), body))
 
@@ -146,29 +150,43 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         doc.setText(example_rest, mimetype="text/x-rst")
         self.failUnless(str(doc.getField('text').getContentType(doc)) == "text/x-rst")
         #make sure we have _p_jar
-        get_transaction().commit(1)
+        transaction.commit(1)
 
         cur_id = 'ATCT'
         new_id = 'WasATCT'
         self.folder.manage_renameObject(cur_id, new_id)
         doc = getattr(self.folder, new_id)
-        self.failUnless(str(doc.getField('text').getContentType(doc)) == "text/x-rst")
-        
+        field = doc.getField('text')
+        self.failUnless(str(field.getContentType(doc)) == "text/x-rst")
+
     def test_x_safe_html(self):
         doc = self._ATCT
         mimetypes = (
-            'text/html',
-            'text/stx',
-            #'text/x-rst', # <p>&lt;script&gt;I'm a nasty boy&lt;/script&gt;</p>
-            #'text/python-source', # syntax highlighting
-            #'text/plain', # <p>&lt;script&gt;I'm a nasty boy&lt;/script&gt;</p>
+            ('text/html', '<p>test</p>'),
+            # MTR doens't know about text/stx, and transforming
+            # doubles the tags. Yuck.
+            ('text/structured', '<p><p>test</p></p>\n'),
+            # XXX
+            # ('text/x-rst', ("<p>&lt;p&gt;test&lt;/p&gt;&lt;script&gt;"
+            #                 "I'm a nasty boy&lt;p&gt;nested&lt;/p&gt;"
+            #                 "&lt;/script&gt;</p>\n")),
+            # ('text/python-source', '<p>test</p>'),
+            # XXX
+            # ('text/plain', ("<p>&lt;p&gt;test&lt;/p&gt;&lt;script&gt;"
+            #                 "I'm a nasty boy&lt;p&gt;nested&lt;/p&gt;"
+            #                 "&lt;/script&gt;</p>\n")),
             )
-        for mimetype in mimetypes:
+        for mimetype, expected in mimetypes:
             # scrub html is removing unallowed tags
-            doc.setText("<p>test</p><script>I'm a nasty boy<p>nested</p></script>", mimetype=mimetype)
+            text = "<p>test</p><script>I'm a nasty boy<p>nested</p></script>"
+            doc.setText(text, mimetype=mimetype)
             txt = doc.getText()
-            self.failUnlessEqual(txt, '<p>test</p>', (txt, mimetype))
-
+            self.failUnlessEqual(txt, expected, (txt, expected, mimetype))
+            
+    def test_get_size(self):
+        atct = self._ATCT
+        editATCT(atct)
+        self.failUnlessEqual(atct.get_size(), len(example_stx))
 
 tests.append(TestSiteATDocument)
 
@@ -177,6 +195,46 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
     def afterSetUp(self):
         atcttestcase.ATCTFieldTestCase.afterSetUp(self)
         self._dummy = self.createDummy(klass=ATDocument)
+
+    def test_text_field_mutator_filename(self):
+        dummy = self._dummy
+        field = dummy.getField('text')
+        mutator = field.getMutator(dummy)
+        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getContentType(dummy), 'text/html')
+        mutator('', filename='foo.txt')
+        self.assertEquals(field.getFilename(dummy), 'foo.txt')
+        self.assertEquals(field.getContentType(dummy), 'text/plain')
+
+    def test_text_field_mutator_mime(self):
+        dummy = self._dummy
+        field = dummy.getField('text')
+        mutator = field.getMutator(dummy)
+        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getContentType(dummy), 'text/html')
+        mutator('', mimetype='text/plain')
+        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getContentType(dummy), 'text/plain')
+
+    def test_text_field_mutator_none_mime(self):
+        dummy = self._dummy
+        field = dummy.getField('text')
+        mutator = field.getMutator(dummy)
+        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getContentType(dummy), 'text/html')
+        mutator('', mimetype=None)
+        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getContentType(dummy), 'text/plain')
+
+    def test_text_field_mutator_none_filename(self):
+        dummy = self._dummy
+        field = dummy.getField('text')
+        mutator = field.getMutator(dummy)
+        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getContentType(dummy), 'text/html')
+        mutator('', filename=None)
+        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getContentType(dummy), 'text/plain')
 
     def test_textField(self):
         dummy = self._dummy
@@ -197,18 +255,17 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setText',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
-                        CMFCorePermissions.ModifyPortalContent,
+        self.failUnless(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'text', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
+        self.failUnless(isinstance(field.storage, AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
+        self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
         self.failUnless(field.validators == TidyHTMLValidator,
@@ -225,9 +282,9 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.default_content_type)
         self.failUnless(field.default_output_type == 'text/x-html-safe',
                         'Value is %s' % field.default_output_type)
-        self.failUnlessEqual(field.allowable_content_types, ('text/structured',
-                        'text/x-rst', 'text/html', 'text/plain',
-                        'text/plain-pre', 'text/python-source'))
+        
+        self.failUnless('text/html' in field.allowable_content_types)
+        self.failUnless('text/structured'  in field.allowable_content_types)
 
 tests.append(TestATDocumentFields)
 

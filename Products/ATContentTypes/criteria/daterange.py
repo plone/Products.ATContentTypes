@@ -24,7 +24,8 @@ __author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATDateRangeCriterion'
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
@@ -64,7 +65,7 @@ ATDateRangeCriterionSchema = ATBaseCriterionSchema + Schema((
                 widget=CalendarWidget(
                     label="End Date",
                     label_msgid="label_date_range_criteria_end",
-                    description="The beginning of the date range to search",
+                    description="The ending of the date range to search.",
                     description_msgid="help_date_range_criteria_end",
                     i18n_domain="plone"),
                 ),
@@ -81,13 +82,13 @@ class ATDateRangeCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'date range value'
+    shortDesc      = 'Date range'
 
-    security.declareProtected(CMFCorePermissions.View, 'getValue')
+    security.declareProtected(View, 'getValue')
     def Value(self):
         return (self.getStart(), self.getEnd())
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
 

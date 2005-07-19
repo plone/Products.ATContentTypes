@@ -7,6 +7,9 @@ Team members (in alphabetic order)
 Leonardo Rochael Almeida:
  * constrain types support
 
+Vidar Anderson:
+ * export, rotation and flip icons
+
 Dominik Bartenstein:
 
 

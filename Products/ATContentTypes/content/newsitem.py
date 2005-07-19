@@ -26,8 +26,6 @@ __old_name__ = 'Products.ATContentTypes.types.ATNewsItem'
 
 from AccessControl import ClassSecurityInfo
 
-from Products.CMFCore import CMFCorePermissions
-
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import ImageField
 from Products.Archetypes.public import StringField
@@ -36,8 +34,10 @@ from Products.Archetypes.public import ImageWidget
 from Products.Archetypes.public import RichWidget
 from Products.Archetypes.public import StringWidget
 from Products.Archetypes.public import RFC822Marshaller
+from Products.Archetypes.public import AnnotationStorage
 
 from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import translateMimetypeAlias
@@ -46,7 +46,18 @@ from Products.ATContentTypes.content.document import ATDocument
 from Products.ATContentTypes.content.image import ATCTImageTransform
 from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
+
+from Products.validation.config import validation
+from Products.validation.validators.SupplValidators import MaxSizeValidator
+from Products.validation import V_REQUIRED
+
+validation.register(MaxSizeValidator('checkNewsImageMaxSize',
+                                     maxsize=zconf.ATNewsItem.max_file_size))
+
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 
 ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
@@ -54,15 +65,16 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
         required = True,
         searchable = True,
         primary = True,
+        storage = AnnotationStorage(migrate=True),
         validators = ('isTidyHtmlWithCleanup',),
         #validators = ('isTidyHtml',),
         default_content_type = zconf.ATNewsItem.default_content_type,
         default_output_type = 'text/x-html-safe',
         allowable_content_types = zconf.ATNewsItem.allowed_content_types,
         widget = RichWidget(
-            description = "The body text of the document.",
+            description = "",
             description_msgid = "help_body_text",
-            label = "Body text",
+            label = "Body Text",
             label_msgid = "label_body_text",
             rows = 25,
             i18n_domain = "plone",
@@ -70,7 +82,9 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
         ),
     ImageField('image',
         required = False,
+        storage = AnnotationStorage(migrate=True),
         languageIndependent = True,
+        max_size = zconf.ATNewsItem.max_image_dimension,
         sizes= {'large'   : (768, 768),
                 'preview' : (400, 400),
                 'mini'    : (200, 200),
@@ -79,13 +93,13 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
                 'icon'    :  (32, 32),
                 'listing' :  (16, 16),
                },
-        validators = MaxSizeValidator('checkFileMaxSize',
-                                       maxsize=zconf.ATNewsItem.max_size),
+        validators = (('isNonEmptyFile', V_REQUIRED),
+                             ('checkNewsImageMaxSize', V_REQUIRED)),
         widget = ImageWidget(
-            description = "Add an optional image by clicking the 'Browse' button. This will be shown in the news listing, and in the news item itself. It will automatically scale the picture you upload to a sensible size.",
-            description_msgid = "help_image",
+            description = "Will be shown in the news listing, and in the news item itself. Image will be scaled to a sensible size.",
+            description_msgid = "help_news_image",
             label= "Image",
-            label_msgid = "label_image",
+            label_msgid = "label_news_image",
             i18n_domain = "plone",
             show_content_type = False)
         ),
@@ -93,20 +107,19 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
         required = False,
         searchable = True,
         widget = StringWidget(
-            description = "A caption text for the image.",
+            description = "",
             description_msgid = "help_image_caption",
-            label = "Image caption",
+            label = "Image Caption",
             label_msgid = "label_image_caption",
             size = 40,
             i18n_domain = "plone")
         ),
     ), marshall=RFC822Marshaller()
     )
-ATNewsItemSchema.addField(relatedItemsField)
+finalizeATCTSchema(ATNewsItemSchema)
 
 class ATNewsItem(ATDocument, ATCTImageTransform):
-    """A AT news item based on AT Document
-    """
+    """An announcement that will show up on the news portlet and in the news listing."""
 
     schema         =  ATNewsItemSchema
 
@@ -118,9 +131,7 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
     default_view   = 'newsitem_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF News Item', 'meta_type' : 'News Item'}
-    typeDescription = ("A news item is a small piece of news that "
-                       "is published on the front page. "
-                       "Add the relevant details below, and press 'Save'.")
+    typeDescription = 'An announcement that will show up on the news portlet and in the news listing.'
     typeDescMsgId  = 'description_edit_news_item'
     assocMimetypes = ()
     assocFileExt   = ('news', )
@@ -128,11 +139,9 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
 
     __implements__ = ATDocument.__implements__, IATNewsItem
     
-    actions = updateActions(ATDocument, ATCTImageTransform.actions)
-
     security = ClassSecurityInfo()
 
-    security.declareProtected(CMFCorePermissions.View, 'tag')
+    security.declareProtected(View, 'tag')
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
         """
@@ -146,5 +155,25 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
             self.setDescription(description)
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
+    
+    def __bobo_traverse__(self, REQUEST, name, RESPONSE=None):
+        """Transparent access to image scales
+        """
+        if name.startswith('image'):
+            field = self.getField('image')
+            image = None
+            if name == 'image':
+                image = field.getScale(self)
+            else:
+                scalename = name[len('image_'):]
+                if scalename in field.getAvailableSizes(self):
+                    image = field.getScale(self, scale=scalename)
+            if image is not None and not isinstance(image, basestring):
+                # image might be None or '' for empty images
+                if not field.checkPermission('view', self):
+                    raise Unauthorized, name
+                return image
+        
+        return ATDocument.__bobo_traverse__(self, REQUEST, name, RESPONSE=None)
 
 registerATCT(ATNewsItem, PROJECTNAME)

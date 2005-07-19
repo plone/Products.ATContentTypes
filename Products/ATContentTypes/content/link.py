@@ -26,7 +26,8 @@ __old_name__ = 'Products.ATContentTypes.types.ATLink'
 
 import urlparse
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.public import Schema
@@ -37,32 +38,32 @@ from Products.validation import V_SUFFICIENT
 from Products.validation import V_REQUIRED
 
 from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.interfaces import IATLink
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
 ATLinkSchema = ATContentTypeSchema.copy() + Schema((
     StringField('remoteUrl',
         required=True,
         searchable=True,
         primary=True,
-        # either mailto or an absolute url
-        validators = (('isMailto', V_SUFFICIENT), ('isURL', V_REQUIRED),),
+        default = "http://",
+        # either mailto, absolute url or relative url
+        validators = (),
         widget = StringWidget(
-            # XXX description is wrong!
-            description=("The address of the location. Prefix is "
-                          "optional; if not provided, the link will be relative."),
+            description = "",
             description_msgid = "help_url",
             label = "URL",
             label_msgid = "label_url",
             i18n_domain = "plone")),
     ))
-ATLinkSchema.addField(relatedItemsField)
+finalizeATCTSchema(ATLinkSchema)
 
 class ATLink(ATCTContent):
-    """An Archetypes derived version of CMFDefault's Link"""
+    """A link to an internal or external resource."""
 
     schema         =  ATLinkSchema
 
@@ -74,9 +75,7 @@ class ATLink(ATCTContent):
     default_view   = 'link_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Link', 'meta_type' : 'Link'}
-    typeDescription= ("A link is a pointer to a location on "
-                      "the internet or intranet.\n"
-                      "Enter the relevant details below, and press 'Save'.")
+    typeDescription= 'A link to an internal or external resource.'
     typeDescMsgId  = 'description_edit_link_item'
     assocMimetypes = ()
     assocFileExt   = ('link', 'url', )
@@ -86,7 +85,7 @@ class ATLink(ATCTContent):
 
     security       = ClassSecurityInfo()
     
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setRemoteUrl')
+    security.declareProtected(ModifyPortalContent, 'setRemoteUrl')
     def setRemoteUrl(self, value, **kwargs):
         """remute url mutator
         
@@ -97,7 +96,7 @@ class ATLink(ATCTContent):
             value = urlparse.urlunparse(urlparse.urlparse(value))
         self.getField('remoteUrl').set(self, value, **kwargs)
 
-    security.declareProtected(CMFCorePermissions.View, 'remote_url')
+    security.declareProtected(View, 'remote_url')
     def remote_url(self):
         """CMF compatibility method
         """
@@ -108,10 +107,5 @@ class ATLink(ATCTContent):
         if not remote_url:
             remote_url = kwargs.get('remote_url', None)
         self.update(remoteUrl = remote_url, **kwargs)
-
-    security.declareProtected(CMFCorePermissions.View, 'get_size')
-    def get_size(self):
-        """Return the size of the remote url."""
-        return len(self.getRemoteUrl()) or 1
 
 registerATCT(ATLink, PROJECTNAME)

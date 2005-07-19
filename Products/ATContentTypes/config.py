@@ -46,11 +46,8 @@ WWW_DIR = os.path.join(ATCT_DIR, 'www')
 
 GLOBALS = globals()
 
-INSTALL_LINGUA_PLONE = True
-
 ## swallow PIL exceptions when resizing the image?
-#SWALLOW_IMAGE_RESIZE_EXCEPTIONS = True
-SWALLOW_IMAGE_RESIZE_EXCEPTIONS = False
+SWALLOW_IMAGE_RESIZE_EXCEPTIONS = zconf.swallowImageResizeExceptions.enable
 
 ## using special plone 2 stuff?
 try:
@@ -95,6 +92,14 @@ except ImportError:
 else:
     HAS_LINGUA_PLONE = True
     del registerType
+
+try:
+    from PIL import Image
+except ImportError:
+    HAS_PIL = False
+else:
+    HAS_PIL = True
+    
 
 ## workflow mapping for the installer
 WORKFLOW_DEFAULT  = '(Default)'
@@ -240,19 +245,9 @@ MIME_ALIAS = {
     'stx'   : 'text/structured',
     'html'  : 'text/html',
     'rest'  : 'text/x-rst',
+    'text/stx' : 'text/structured',
     'structured-text' : 'text/structured',
     'restructuredtext' : 'text/x-rst',
     'text/restructured' : 'text/x-rst',
     }
 
-## force enable some features for ATCT unit testing
-if os.environ.get('ZOPETESTCASE', False):
-    _ATCT_OLD_VALUES = {
-        'INSTALL_LINGUA_PLONE' : INSTALL_LINGUA_PLONE,
-        }
-    INSTALL_LINGUA_PLONE = True
-    _ATCT_UNIT_TEST_MODE = True
-    
-else:
-    _ATCT_UNIT_TEST_MODE = False
-    _ATCT_OLD_VALUES = {}

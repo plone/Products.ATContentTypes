@@ -1,3 +1,4 @@
+# -*- coding: latin1 -*- 
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
 #  Copyright (c) 2003-2005 AT Content Types development team
@@ -34,23 +35,24 @@ __docformat__ = 'restructuredtext'
 from Testing import ZopeTestCase
 ZopeTestCase.installProduct('ATContentTypes')
 ZopeTestCase.installProduct('ATReferenceBrowserWidget')
-from Products.ATContentTypes.config import INSTALL_LINGUA_PLONE
-if INSTALL_LINGUA_PLONE and ZopeTestCase.hasProduct('LinguaPlone'):
-    ZopeTestCase.installProduct('PloneLanguageTool')
-    ZopeTestCase.installProduct('LinguaPlone')
 
+import os
 from Products.Archetypes.tests.attestcase import ATTestCase
 from Products.Archetypes.tests.atsitetestcase import ATSiteTestCase
 
 from Interface.Verify import verifyObject
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.interfaces.DublinCore import DublinCore as IDublinCore
 from Products.CMFCore.interfaces.DublinCore import MutableDublinCore as IMutableDublinCore
 from Products.Archetypes.interfaces.base import IBaseContent
 from Products.Archetypes.public import *
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.interfaces.referenceable import IReferenceable
+from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
+from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
 from Products.Archetypes.tests.test_baseschema import BaseSchemaTest
+from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.interfaces import IATContentType
@@ -61,6 +63,8 @@ from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 from Products.CMFCore.utils import getToolByName
+from Testing.ZopeTestCase.functional import Functional
+from Products.CMFPlone import transaction
 
 # BBB remove import from PloneLanguageTool later
 try:
@@ -68,9 +72,13 @@ try:
 except ImportError:
     from Products.PloneLanguageTool.interfaces import ITranslatable
 
+test_home = os.path.dirname(__file__) 
 
 class ATCTSiteTestCase(ATSiteTestCase):
     pass
+
+class ATCTFunctionalSiteTestCase(Functional, ATCTSiteTestCase):
+    __implements__ = Functional.__implements__ + ATCTSiteTestCase.__implements__    
 
 class ATCTTypeTestCase(ATSiteTestCase):
     """AT Content Types test
@@ -157,7 +165,15 @@ class ATCTTypeTestCase(ATSiteTestCase):
         if not HAS_LINGUA_PLONE:
             return
         self.failUnless(ITranslatable.isImplementedBy(self._ATCT))
-        self.failUnless(verifyObject(ITranslatable, self._ATCT))       
+        self.failUnless(verifyObject(ITranslatable, self._ATCT)) 
+        
+    def test_not_implements_ITemplateMixin(self):
+        self.failIf(ITemplateMixin.isImplementedBy(self._ATCT))
+    
+    def test_implements_ISelectableBrowserDefault(self):
+        iface = ISelectableBrowserDefault
+        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
 
     def compareDC(self, first, second=None, **kwargs):
         """
@@ -207,6 +223,12 @@ class ATCTTypeTestCase(ATSiteTestCase):
         # TODO: not a real test
         self._ATCT.getObjPositionInParent()
 
+    def test_schema_marshall(self):
+        atct = self._ATCT
+        schema = atct.Schema()
+        marshall = schema.getLayerImpl('marshall')
+        self.failUnless(isinstance(marshall, RFC822Marshaller), marshall)
+
     def beforeTearDown(self):
         self.logout()
 
@@ -245,9 +267,8 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnlessEqual(field.accessor, 'Description')
         self.failUnlessEqual(field.mutator, 'setDescription')
         self.failUnlessEqual(field.edit_accessor, 'getRawDescription')
-        self.failUnlessEqual(field.read_permission, CMFCorePermissions.View)
-        self.failUnlessEqual(field.write_permission,
-                             CMFCorePermissions.ModifyPortalContent)
+        self.failUnlessEqual(field.read_permission, View)
+        self.failUnlessEqual(field.write_permission, ModifyPortalContent)
         self.failUnlessEqual(field.generateMode, 'mVc')
         #self.failUnless(field.generateMode == 'veVc', field.generateMode)
         self.failUnlessEqual(field.force, '')
@@ -277,9 +298,8 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnlessEqual(field.accessor, 'getId')
         self.failUnlessEqual(field.mutator, 'setId')
         self.failUnlessEqual(field.edit_accessor, 'getRawId')
-        self.failUnlessEqual(field.read_permission, CMFCorePermissions.View)
-        self.failUnlessEqual(field.write_permission,
-                             CMFCorePermissions.ModifyPortalContent)
+        self.failUnlessEqual(field.read_permission, View)
+        self.failUnlessEqual(field.write_permission, ModifyPortalContent)
         self.failUnlessEqual(field.generateMode, 'veVc')
         self.failUnlessEqual(field.force, '')
         self.failUnlessEqual(field.type, 'string')
@@ -308,9 +328,8 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnlessEqual(field.accessor, 'getRelatedItems')
         self.failUnlessEqual(field.mutator, 'setRelatedItems')
         self.failUnlessEqual(field.edit_accessor, 'getRawRelatedItems')
-        self.failUnlessEqual(field.read_permission, CMFCorePermissions.View)
-        self.failUnlessEqual(field.write_permission,
-                             CMFCorePermissions.ModifyPortalContent)
+        self.failUnlessEqual(field.read_permission, View)
+        self.failUnlessEqual(field.write_permission, ModifyPortalContent)
         self.failUnlessEqual(field.generateMode, 'veVc')
         self.failUnlessEqual(field.force, '')
         self.failUnlessEqual(field.type, 'reference')
@@ -321,7 +340,8 @@ class ATCTFieldTestCase(BaseSchemaTest):
         vocab = field.Vocabulary(dummy)
         self.failUnless(isinstance(vocab, DisplayList))
 
-    def test_layout(self):
+    def DISABLED_test_layout(self):
+        # layout field was removed in the favor of a property
         dummy = self._dummy
         field = dummy.getField('layout')
 
@@ -339,7 +359,7 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnlessEqual(field.mutator, 'setLayout')
         self.failUnlessEqual(field.edit_accessor, 'getRawLayout')
         self.failUnlessEqual(field.default_method, "getDefaultLayout")
-        self.failUnlessEqual(field.read_permission, CMFCorePermissions.View)
+        self.failUnlessEqual(field.read_permission, View)
         self.failUnlessEqual(field.write_permission,
                              ATCTPermissions.ModifyViewTemplate)
         self.failUnlessEqual(field.generateMode, 'veVc')
@@ -361,7 +381,7 @@ from AccessControl.SecurityManagement import noSecurityManager
 import time
 
 def setupATCT(app, id=portal_name, quiet=False):
-    get_transaction().begin()
+    transaction.begin()
     _start = time.time()
     portal = app[id]
     if not quiet: ZopeTestCase._print('Adding ATContentTypes \n')
@@ -383,9 +403,10 @@ def setupATCT(app, id=portal_name, quiet=False):
 
     # Log out
     noSecurityManager()
-    get_transaction().commit()
+    transaction.commit()
     if not quiet: ZopeTestCase._print('done (%.3fs)\n' % (time.time()-_start,))
 
 app = ZopeTestCase.app()
 setupATCT(app)
 ZopeTestCase.close(app)
+

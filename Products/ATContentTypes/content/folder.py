@@ -27,13 +27,14 @@ __old_name__ = 'Products.ATContentTypes.types.ATFolder'
 from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTOrderedFolder
 from Products.ATContentTypes.content.base import ATCTBTreeFolder
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
 from Products.ATContentTypes.lib.autosort import AutoSortSupport
 from Products.ATContentTypes.lib.autosort import AutoOrderSupport
@@ -41,11 +42,12 @@ from Products.ATContentTypes.lib.autosort import AutoOrderSupport
 ATFolderSchema      = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 
-ATFolderSchema.addField(relatedItemsField)
-ATBTreeFolderSchema.addField(relatedItemsField)
+finalizeATCTSchema(ATFolderSchema, folderish=True, moveDiscussion=False)
+finalizeATCTSchema(ATBTreeFolderSchema, folderish=True, moveDiscussion=False)
+
 
 class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
-    """A simple folderish archetype"""
+    """A folder which can contain other items."""
 
     schema         =  ATFolderSchema
 
@@ -57,8 +59,8 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
     default_view   = 'folder_listing'
     suppl_views    = ('atct_album_view', )
     _atct_newTypeFor = {'portal_type' : 'CMF Folder', 'meta_type' : 'Plone Folder'}
-    typeDescription= ''
-    typeDescMsgId  = ''
+    typeDescription= 'A folder which can contain other items.'
+    typeDescMsgId  = 'description_edit_folder'
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()
@@ -87,7 +89,7 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
 registerATCT(ATFolder, PROJECTNAME)
 
 class ATBTreeFolder(AutoSortSupport, ATCTBTreeFolder):
-    """A simple btree folderish archetype"""
+    """A folder suitable for holding a very large number of items"""
     schema         =  ATBTreeFolderSchema
 
     content_icon   = 'folder_icon.gif'
@@ -100,7 +102,8 @@ class ATBTreeFolder(AutoSortSupport, ATCTBTreeFolder):
     global_allow   = False
     _atct_newTypeFor = {'portal_type' : 'CMF Large Plone Folder',
                         'meta_type' : 'Large Plone Folder'}
-    TypeDescription= ''
+    typeDescription= 'A folder suitable for holding a very large number of items'
+    typeDescMsgId  = 'description_edit_large_folder'
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()

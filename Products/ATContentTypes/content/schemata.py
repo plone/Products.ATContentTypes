@@ -25,68 +25,88 @@ __docformat__ = 'restructuredtext'
 
 from DateTime import DateTime
 
+from Products.ATContentTypes.config import HAS_PLONE2
+
 from Products.Archetypes.public import BaseSchema
 from Products.Archetypes.public import Schema
+from Products.Archetypes.public import MetadataSchema
 from Products.Archetypes.public import ReferenceField
 from Products.Archetypes.public import StringField
 from Products.Archetypes.public import StringWidget
 from Products.Archetypes.public import SelectionWidget
+from Products.Archetypes.public import BooleanField
+from Products.Archetypes.public import BooleanWidget
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 
 from Products.ATContentTypes import permission as ATCTPermissions
-from Products.ATContentTypes.lib.browserdefault import BrowserDefaultSchema
 
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 
 # for ATContentTypes we want to have the description in the edit view
 # just like CMF
-ATContentTypeBaseSchema = BaseSchema.copy()
-ATContentTypeBaseSchema['id'].validators = ('isValidId',)
-ATContentTypeBaseSchema['id'].searchable = True
-ATContentTypeBaseSchema['id'].widget.macro = 'zid'
-ATContentTypeBaseSchema['description'].schemata = 'default'
+ATContentTypeSchema = BaseSchema.copy() + MetadataSchema((
+    BooleanField('excludeFromNav',
+        required = False,
+        languageIndependent = True,
+        schemata = 'metadata', # moved to 'default' for folders
+        widget = BooleanWidget(
+            description="If selected, this item will not appear in the navigation tree",
+            description_msgid = "help_exclude_from_nav",
+            label = "Exclude from navigation",
+            label_msgid = "label_exclude_from_nav",
+            i18n_domain = "plone",
+            visible={'view' : 'hidden',
+                     'edit' : 'visible'},
+            ),
+        ),
+    ),)
+
+ATContentTypeSchema['id'].validators = ('isValidId',)
+ATContentTypeSchema['id'].searchable = True
+ATContentTypeSchema['description'].schemata = 'default'
+
+# BBB
+ATContentTypeBaseSchema = ATContentTypeSchema
 
 relatedItemsField = ReferenceField('relatedItems',
         relationship = 'relatesTo', 
         multiValued = True,
         isMetadata = True,
         languageIndependent = False,
-        write_permission = CMFCorePermissions.ModifyPortalContent,
+        index = 'KeywordIndex',
+        write_permission = ModifyPortalContent,
         widget = ReferenceBrowserWidget(
             allow_search = True,
             allow_browse = True,
             show_indexes = False,
             force_close_on_insert = True,
 
-            label = "Related items",
+            label = "Related Item(s)",
             label_msgid = "label_related_items",
-            description = "Select one or more related items",
+            description = "",
             description_msgid = "help_related_items",
             i18n_domain = "plone",
-            visible={'view' : 'hidden',
-                     #'edit' : ENABLE_RELATED_ITEMS and 'visible' or 'hidden'
-                    },
+            visible = {'edit' : 'visible', 'view' : 'invisible' }
             )
         )
+ATContentTypeSchema.addField(relatedItemsField.copy())
 
-urlUploadField = StringField('urlUpload',
-        required = False,
-        mode = 'w', # write only field
-        languageIndependent = True,
-        validators = ('isURL',),
-        write_permission = ATCTPermissions.UploadViaURL,
-        widget = StringWidget(
-            description="Upload a file from another server by url.",
-            description_msgid = "help_upload_url",
-            label = "Upload from server",
-            label_msgid = "label_upload_url",
-            i18n_domain = "plone",
-            visible={'view' : 'hidden',
-                     'edit' : 'hidden'},
-            ),
-        )
+def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
+    """Finalizes an ATCT type schema to alter some fields
+    """
+    schema.moveField('relatedItems', pos='bottom')
+    if folderish:
+        schema['excludeFromNav'].schemata = 'default'
+        schema.moveField('excludeFromNav', after='relatedItems')
+        schema['relatedItems'].widget.visible['edit'] = 'invisible'
+    else:
+        schema.moveField('excludeFromNav', after='allowDiscussion')
+    if moveDiscussion:
+        schema['allowDiscussion'].schemata = 'default'
+        schema.moveField('allowDiscussion', after='relatedItems')
+    return schema
 
-ATContentTypeSchema = ATContentTypeBaseSchema + BrowserDefaultSchema
 
 __all__ = ('ATContentTypeSchema', 'relatedItemsField',)

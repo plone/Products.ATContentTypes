@@ -29,7 +29,8 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
@@ -50,6 +51,7 @@ from DateTime import DateTime
 from Products.ATContentTypes.interfaces import ICalendarSupport
 from Products.ATContentTypes.interfaces import IATEvent
 from Interface.Verify import verifyObject
+from Products.CMFPlone import transaction
 
 LOCATION = 'my location'
 EV_TYPE  = 'Meeting'
@@ -62,6 +64,7 @@ C_EMAIL  = 'john@example.org'
 EV_ATTENDEES = ('john@doe.com',
                 'john@doe.org',
                 'john@example.org')
+TEXT = "lorem ipsum"
 
 def editCMF(obj):
     dcEdit(obj)
@@ -85,6 +88,7 @@ def editATCT(obj):
     obj.setContactPhone(C_PHONE)
     obj.setContactEmail(C_EMAIL)
     obj.setAttendees(EV_ATTENDEES)
+    obj.setText(TEXT)
 
 
 tests = []
@@ -161,7 +165,7 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         ev_type = old.Subject()
 
         # migrated (needs subtransaction to work)
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = EventMigrator(old)
         m(unittest=1)
         
@@ -224,6 +228,11 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         e2.edit(startDate = day29, endDate=day30, title='evenz')
         self.failUnlessEqual(cmp(e1, e2), -1)  # e1 < e2
 
+    def test_get_size(self):
+        atct = self._ATCT
+        editATCT(atct)
+        self.failUnlessEqual(atct.get_size(), len(TEXT))
+
 tests.append(TestSiteATEvent)
 
 class TestATEventFields(atcttestcase.ATCTFieldTestCase):
@@ -251,10 +260,9 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setLocation',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
-                        ChangeEvents,
+        self.failUnless(field.write_permission == ChangeEvents,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
@@ -292,7 +300,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setEventType',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
                         ChangeEvents,
@@ -331,7 +339,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setEventUrl',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
                         ChangeEvents,
@@ -373,7 +381,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setStartDate',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
                         ChangeEvents,
@@ -417,7 +425,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setEndDate',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
                         ChangeEvents,
@@ -459,7 +467,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setContactName',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
                         ChangeEvents,
@@ -501,7 +509,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setContactEmail',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
                         ChangeEvents,
@@ -543,7 +551,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setContactPhone',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
                         ChangeEvents,
@@ -587,7 +595,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setAttendees',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
                         ChangeEvents,
@@ -627,18 +635,18 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setText',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
-                        CMFCorePermissions.ModifyPortalContent,
+                        ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'text', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
+        self.failUnless(isinstance(field.storage, AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
+        self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
         self.failUnless(field.validators == NotRequiredTidyHTMLValidator,
@@ -655,9 +663,8 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.default_content_type)
         self.failUnless(field.default_output_type == 'text/x-html-safe',
                         'Value is %s' % field.default_output_type)
-        self.failUnlessEqual(field.allowable_content_types, ('text/structured',
-                        'text/x-rst', 'text/html', 'text/plain',
-                        'text/plain-pre'))
+        self.failUnless('text/html' in field.allowable_content_types)
+        self.failUnless('text/structured'  in field.allowable_content_types)
 
     def beforeTearDown(self):
         # more

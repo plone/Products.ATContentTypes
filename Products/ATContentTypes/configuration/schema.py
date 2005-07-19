@@ -41,6 +41,9 @@ atctRegistry = Registry()
 atctRegistry.register('permission', datatype.permission_handler)
 atctRegistry.register('identifer_none', datatype.identifier_none)
 atctRegistry.register('byte-size-in-mb', datatype.byte_size_in_mb)
+atctRegistry.register('image-dimension', datatype.image_dimension)
+atctRegistry.register('image-dimension-or-no', datatype.image_dimension_or_no)
+atctRegistry.register('pil-algo', datatype.pil_algo)
 
 # schema
 atctSchema = None

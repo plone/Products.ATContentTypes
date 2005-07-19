@@ -24,7 +24,8 @@ __docformat__ = 'restructuredtext'
 
 from Products.Archetypes.public import BaseContentMixin
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 
@@ -43,12 +44,12 @@ from Products.Archetypes.interfaces.base import IBaseContent
 class NonRefCatalogContent(BaseContentMixin):
     """Base class for content that is neither referenceable nor in the catalog
     """
-   
+
     isReferenceable = None
 
     __implements__ = (PortalContent.__implements__, IATTopicCriterion,
                       IBaseContent)
-    
+
     # reference register / unregister methods
     def _register(self, *args, **kwargs): pass
     def _unregister(self, *args, **kwargs): pass
@@ -56,7 +57,7 @@ class NonRefCatalogContent(BaseContentMixin):
     def _referenceApply(self, *args, **kwargs): pass
     def _uncatalogUID(self, *args, **kwargs): pass
     def _uncatalogRefs(self, *args, **kwargs): pass
-    
+
     # catalog methods
     def indexObject(self, *args, **kwargs): pass
     def unindexObject(self, *args, **kwargs): pass
@@ -64,9 +65,9 @@ class NonRefCatalogContent(BaseContentMixin):
 
 class ATBaseCriterion(NonRefCatalogContent):
     """A basic criterion"""
-    
+
     security = ClassSecurityInfo()
-    
+
     __implements__ = (IATTopicCriterion, NonRefCatalogContent.__implements__)
 
     schema = ATBaseCriterionSchema
@@ -75,19 +76,18 @@ class ATBaseCriterion(NonRefCatalogContent):
     typeDescription= ''
     typeDescMsgId  = ''
     global_allow = 0
-    
+
     def __init__(self, id=None, field=None, oid=None):
         if oid is not None:
             if field is None:
                 field = id
             id = oid
         assert id
-        assert field
         NonRefCatalogContent.__init__(self, id)
         self.getField('id').set(self, id)
         self.getField('field').set(self, field)
 
-    security.declareProtected(CMFCorePermissions.View, 'getId')
+    security.declareProtected(View, 'getId')
     def getId(self):
         """Get the object id"""
         return str(self.id)
@@ -97,16 +97,16 @@ class ATBaseCriterion(NonRefCatalogContent):
         """
         assert value == self.getId(), 'You are not allowed to change the id'
 
-    security.declareProtected(CMFCorePermissions.View, 'Type')
+    security.declareProtected(View, 'Type')
     def Type(self):
         return self.archetype_name
 
-    security.declareProtected(CMFCorePermissions.View, 'Description')
+    security.declareProtected(View, 'Description')
     def Description(self):
         lines = [ line.strip() for line in self.__doc__.splitlines() ]
         return ' '.join( [ line for line in lines if line ] )
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         """Return a sequence of items to be used to build the catalog query.
         """

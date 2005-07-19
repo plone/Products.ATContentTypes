@@ -26,16 +26,11 @@ import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
-def editCMF(obj):
-    dcEdit(obj)
-
-def editATCT(obj):
-    dcEdit(obj)
-
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
@@ -50,8 +45,18 @@ from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.CMFDefault.NewsItem import NewsItem
 from Interface.Verify import verifyObject
+from Products.CMFPlone import transaction
 
 tests = []
+
+TEXT = "lorum ipsum"
+
+def editCMF(obj):
+    dcEdit(obj)
+
+def editATCT(obj):
+    dcEdit(obj)
+    obj.setText(TEXT)
 
 class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
 
@@ -102,7 +107,7 @@ class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
         time.sleep(1.5)
 
         # migrated (needs subtransaction to work)
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = NewsItemMigrator(old)
         m(unittest=1)
 
@@ -114,6 +119,10 @@ class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
 
         # XXX more
 
+    def test_get_size(self):
+        atct = self._ATCT
+        editATCT(atct)
+        self.failUnlessEqual(atct.get_size(), len(TEXT))
 
 tests.append(TestSiteATNewsItem)
 
@@ -142,18 +151,17 @@ class TestATNewsItemFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setText',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
-                        CMFCorePermissions.ModifyPortalContent,
+        self.failUnless(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'text', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
+        self.failUnless(isinstance(field.storage, AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
+        self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
         self.failUnless(field.validators == TidyHTMLValidator,
@@ -170,9 +178,8 @@ class TestATNewsItemFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.default_content_type)
         self.failUnless(field.default_output_type == 'text/x-html-safe',
                         'Value is %s' % field.default_output_type)
-        self.failUnlessEqual(field.allowable_content_types, ('text/structured',
-                        'text/x-rst', 'text/html', 'text/plain',
-                        'text/plain-pre'))
+        self.failUnless('text/html' in field.allowable_content_types)
+        self.failUnless('text/structured'  in field.allowable_content_types)
 
 
 tests.append(TestATNewsItemFields)

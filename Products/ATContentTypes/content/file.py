@@ -25,7 +25,8 @@ __old_name__ = 'Products.ATContentTypes.types.ATFile'
 
 from urllib import quote
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_parent
@@ -35,10 +36,12 @@ from Products.Archetypes.public import Schema
 from Products.Archetypes.public import FileField
 from Products.Archetypes.public import FileWidget
 from Products.Archetypes.public import PrimaryFieldMarshaller
+from Products.Archetypes.public import AnnotationStorage
 from Products.Archetypes.BaseContent import BaseContent
 from Products.PortalTransforms.utils import TransformException
 
 from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import ICONMAP
 from Products.ATContentTypes import permission as ATCTPermissions
@@ -46,17 +49,23 @@ from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import relatedItemsField
-from Products.ATContentTypes.content.schemata import urlUploadField
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.validation.validators.SupplValidators import MaxSizeValidator
+
+from Products.validation.config import validation
+from Products.validation import V_REQUIRED
+
+validation.register(MaxSizeValidator('checkFileMaxSize',
+                                     maxsize=zconf.ATFile.max_file_size))
 
 ATFileSchema = ATContentTypeSchema.copy() + Schema((
     FileField('file',
               required=True,
               primary=True,
               languageIndependent=True,
-              validators = MaxSizeValidator('checkFileMaxSize',
-                                            maxsize=zconf.ATFile.max_size),
+              storage = AnnotationStorage(migrate=True),
+              validators = (('isNonEmptyFile', V_REQUIRED),
+                             ('checkFileMaxSize', V_REQUIRED)),
               widget = FileWidget(
                         #description = "Select the file to be added by clicking the 'Browse' button.",
                         #description_msgid = "help_file",
@@ -67,12 +76,10 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
                         show_content_type = False,)),
     ), marshall=PrimaryFieldMarshaller()
     )
-ATFileSchema.addField(urlUploadField)
-ATFileSchema.addField(relatedItemsField)
-
+finalizeATCTSchema(ATFileSchema)
 
 class ATFile(ATCTFileContent):
-    """A Archetype derived version of CMFDefault's File"""
+    """An external file uploaded to the portal."""
 
     schema         =  ATFileSchema
 
@@ -84,8 +91,7 @@ class ATFile(ATCTFileContent):
     default_view   = 'file_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF File', 'meta_type' : 'Portal File'}
-    typeDescription= "Add the relevant details of the file to be added in the form below,\n" \
-                     "select the file with the 'Browse' button, and press 'Save'."
+    typeDescription= "An external file uploaded to the portal."
     typeDescMsgId  = 'description_edit_file'
     assocMimetypes = ('application/*', 'audio/*', 'video/*', )
     assocFileExt   = ()
@@ -95,14 +101,14 @@ class ATFile(ATCTFileContent):
 
     security       = ClassSecurityInfo()
 
-    security.declareProtected(CMFCorePermissions.View, 'index_html')
-    def index_html(self, REQUEST, RESPONSE):
+    security.declareProtected(View, 'index_html')
+    def index_html(self, REQUEST=None, RESPONSE=None):
         """Download the file
         """
         field = self.getPrimaryField()
         return field.download(self)
 
-    security.declareProtected(CMFCorePermissions.ModifyPortalContent, 'setFile')
+    security.declareProtected(ModifyPortalContent, 'setFile')
     def setFile(self, value, **kwargs):
         """Set id to uploaded id
         """
@@ -147,7 +153,7 @@ class ATFile(ATCTFileContent):
                 res = res[1:]
             return res
 
-    security.declareProtected(CMFCorePermissions.View, 'icon')
+    security.declareProtected(View, 'icon')
     def icon(self):
         """for ZMI
         """

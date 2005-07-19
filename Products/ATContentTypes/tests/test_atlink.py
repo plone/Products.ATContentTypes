@@ -26,16 +26,11 @@ import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
-def editCMF(obj):
-    dcEdit(obj)
-
-def editATCT(obj):
-    dcEdit(obj)
-
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
@@ -44,10 +39,11 @@ import time
 from Products.ATContentTypes.content.link import ATLink
 from Products.ATContentTypes.content.link import ATLinkSchema
 from Products.ATContentTypes.migration.atctmigrator import LinkMigrator
-from Products.ATContentTypes.tests.utils import RequiredURLValidator
 from Products.ATContentTypes.interfaces import IATLink
 from Products.CMFDefault.Link import Link
 from Interface.Verify import verifyObject
+from Products.CMFPlone import transaction
+
 
 URL='http://www.example.org/'
 
@@ -113,7 +109,7 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
 
 
         # migrated (needs subtransaction to work)
-        get_transaction().commit(1)
+        transaction.commit(1)
         m = LinkMigrator(old)
         m()
 
@@ -127,6 +123,11 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
 
         self.failUnless(migrated.getRemoteUrl() == url, 'URL mismatch: %s / %s' \
                         % (migrated.getRemoteUrl(), url))
+
+    def test_get_size(self):
+        atct = self._ATCT
+        editATCT(atct)
+        self.failUnlessEqual(atct.get_size(), len(URL))
 
 tests.append(TestSiteATLink)
 
@@ -142,7 +143,7 @@ class TestATLinkFields(atcttestcase.ATCTFieldTestCase):
 
         self.failUnless(ILayerContainer.isImplementedBy(field))
         self.failUnless(field.required == 1, 'Value is %s' % field.required)
-        self.failUnless(field.default == '', 'Value is %s' % str(field.default))
+        self.failUnless(field.default == 'http://', 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
         self.failUnless(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
@@ -155,10 +156,9 @@ class TestATLinkFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.accessor)
         self.failUnless(field.mutator == 'setRemoteUrl',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == CMFCorePermissions.View,
+        self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission ==
-                        CMFCorePermissions.ModifyPortalContent,
+        self.failUnless(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
@@ -169,7 +169,7 @@ class TestATLinkFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
-        self.failUnless(field.validators == RequiredURLValidator,
+        self.failUnless(field.validators == (),
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, StringWidget),
                         'Value is %s' % id(field.widget))

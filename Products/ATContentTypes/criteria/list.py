@@ -23,7 +23,8 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATListCriterion'
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.public import Schema
@@ -58,7 +59,7 @@ ATListCriterionSchema = ATBaseCriterionSchema + Schema((
                     label_msgid="label_list_criteria_value",
                     description="Values, each on its own line.",
                     description_msgid="help_list_criteria_value",
-                    i18n_domain="plone"),
+                    i18n_domain="atcontenttypes"),
                 ),
     StringField('operator',
                 required=1,
@@ -72,7 +73,7 @@ ATListCriterionSchema = ATBaseCriterionSchema + Schema((
                     description="Operator used to join the tests "
                     "on each value.",
                     description_msgid="help_list_criteria_operator",
-                    i18n_domain="plone"),
+                    i18n_domain="atcontenttypes"),
                 ),
     ))
 
@@ -88,9 +89,9 @@ class ATListCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'logical AND or OR of list values'
+    shortDesc      = 'List of values'
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         # filter out empty strings
         result = []
