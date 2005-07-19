@@ -42,6 +42,8 @@ if same_type(value,[]) or same_type(value,()):
     # Return list as comma separated values
     value = ', '.join(value)
 
+value = str(value)
+
 pt = context.portal_properties
 site_props = getattr(pt, 'site_properties', None)
 if site_props is not None:
