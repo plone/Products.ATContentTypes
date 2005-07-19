@@ -1,6 +1,9 @@
 1.0-devel
 =====================
 
+ * Fixed permission issue in formatCatalogMetadata.py.
+   [alecm]
+
  * ConstrainTypes should default to disabled unless the parent object is of
    the same portal type.
    [alecm]

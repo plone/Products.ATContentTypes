@@ -8,7 +8,7 @@
 ##title=Determine whether the input is a DateTime or ISO date and localize it if so, also convert lists and dicts into reasonable strings.
 from DateTime import DateTime
 from ZODB.POSException import ConflictError
-from Products.CMFPlone.utils import base_hasattr
+from Products.CMFPlone.utils import base_hasattr, safe_callable
 
 if same_type(value, DateTime()):
     return context.toLocalizedTime(value.ISO(), long_format = long_format)
@@ -27,9 +27,16 @@ if same_type(value, '') and value[4:-1:3] == '-- ::':
         return value
     return context.toLocalizedTime(value, long_format = long_format)
 
-if base_hasattr(value, 'items'):
+try:
+    # Missing.Value and others have items() but don't have security assertions
+    # to support accessing it.
+    items = getattr(value, 'items', None)
+except Unauthorized:
+    items = None
+
+if items is not None and safe_callable(items):
     # For dictionaries return a string of the form 'key1: value1, key2: value2' 
-    value = ', '.join(['%s: %s'%(a,b) for a,b in value.items()])
+    value = ', '.join(['%s: %s'%(a,b) for a,b in items()])
 if same_type(value,[]) or same_type(value,()):
     # Return list as comma separated values
     value = ', '.join(value)
