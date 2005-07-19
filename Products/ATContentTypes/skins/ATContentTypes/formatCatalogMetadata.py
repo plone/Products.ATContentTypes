@@ -9,6 +9,7 @@
 from DateTime import DateTime
 from ZODB.POSException import ConflictError
 from Products.CMFPlone.utils import base_hasattr, safe_callable
+from AccessControl import Unauthorized
 
 if same_type(value, DateTime()):
     return context.toLocalizedTime(value.ISO(), long_format = long_format)
