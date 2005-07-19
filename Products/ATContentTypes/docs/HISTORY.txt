@@ -1,6 +1,11 @@
 1.0-devel
 =====================
 
+ * Fixed
+   http://sf.net/tracker/?func=detail&atid=645337&aid=1215755&group_id=55262
+   by making the template sane.
+   [alecm]
+
  * Fixed get_size for ATImage. It should return only the file size of the
    original image.
    [tiran]
