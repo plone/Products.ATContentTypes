@@ -34,6 +34,32 @@ Sidneys tests for Archetypes.
   
   Plone's default error message template is too verbose and far too long
   >>> portal.default_error_message = None
+  
+  Dates use for If-* requests
+  
+  >>> from App.Common import rfc1123_date
+  >>> import time
+  >>> future = time.time()+3600
+  >>> past = time.time()-3600
+
+  For some tests an image is needed. 
+
+  >>> input = open(os.path.join(test_home, 'test.gif'), 'rb')
+  >>> input.seek(0)
+  
+  >>> print http(r"""
+  ... PUT /%s/test-image HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ... Content-Type: image/gif
+  ... Depth: 0
+  ...
+  ... %s""" % (fpath, user_name, user_password, input.read()))
+  HTTP/1.1 201 Created
+  ...
+  
+  >>> input.close()
+  >>> image = folder['test-image']
+  >>> imgpath = '/'.join(image.getPhysicalPath())
 
 HTTP HEAD
 =========
@@ -219,3 +245,125 @@ Test HEAD for the portal root object
   ... """ % (ppath, user_name, user_password))
   HTTP/1.1 200 OK
   ...
+
+ATImage
+-------
+
+  >>> print http(r"""
+  ... HEAD /%s HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ... """ % (imgpath, user_name, user_password))
+  HTTP/1.1 200 OK
+  Accept-Ranges: none
+  Connection: close
+  Content-Length: 905
+  Content-Type: image/gif
+  Date: ...
+  Etag: ts...
+  Last-Modified: ...
+  <BLANKLINE>  
+
+HTTP Range request
+==================
+
+  ATImage is using OFS.Image which support HTTP Range requests. A range 
+  request can be used to get a specific range. A common use case is 
+  the resuming of a download.
+  
+  A range of bytes=0-4 returns the first 5 bytes of the image. The 
+  Content-Lenghth header contains the length of the requested range while
+  the Content-Range headers contains informations about the range and the
+  full size of the image. You can read the information as "You got the bytes
+  0 up to 4 of 905 bytes". Also note that the code is 206 and not 200.
+  
+  >>> print http(r"""
+  ... GET /%s HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ... Range: bytes=0-4
+  ... """ % (imgpath, user_name, user_password))
+  HTTP/1.1 206 Partial Content
+  Accept-Ranges: bytes
+  Content-Length: 5
+  Content-Range: bytes 0-4/905
+  Content-Type: image/gif
+  Last-Modified: ...
+  <BLANKLINE>
+  GIF89
+  
+  If-Range is used to check if the object was changed. You really don't want
+  to resume a download when the file was changed. If-Range can contain a
+  RFC 1123 style date.
+
+  >>> print http(r"""
+  ... GET /%s HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ... If-Range: %s
+  ... Range: bytes=0-4
+  ... """ % (imgpath, user_name, user_password, rfc1123_date(past))) 
+  HTTP/1.1 200 OK
+  Accept-Ranges: bytes
+  Content-Length: 905
+  Content-Type: image/gif
+  ...
+  <BLANKLINE>
+  GIF89...
+  
+  It can also contain an etag. Etags are starting with ts. In order to change
+  the etag I'm altering the title. update() calls reindexObject() which calls
+  notifyModified() which calls http__refreshEtag() ... nice chain, isn't it? :)
+  
+  >>> etag = image.http__etag()
+  >>> image.update(title="new title")
+  >>> image.http__etag() != etag
+  True
+
+  >>> print http(r"""
+  ... GET /%s HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ... If-Range: %s
+  ... Range: bytes=0-4
+  ... """ % (imgpath, user_name, user_password, etag)) 
+  HTTP/1.1 200 OK
+  Accept-Ranges: bytes
+  Content-Length: 905
+  Content-Type: image/gif
+  ...
+  <BLANKLINE>
+  GIF89...
+
+  
+HTTP If modified since
+======================
+
+  The If-Modified-Since header can be used to query if a content object has
+  been modified since a date.
+
+  The image was created seconds ago. I'm using a point in time 1h in the
+  future to be sure. The response code is 304.
+
+  >>> print http(r"""
+  ... GET /%s HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ... If-Modified-Since: %s
+  ... """ % (imgpath, user_name, user_password, rfc1123_date(future)))
+  HTTP/1.1 304 Not Modified
+  Accept-Ranges: bytes
+  Content-Length: 0
+  Content-Type: image/gif
+  ...
+  
+  The image wasn't there in the past. If modified since returns the
+  image with a response code of 200.
+
+  >>> print http(r"""
+  ... GET /%s HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ... If-Modified-Since: %s
+  ... """ % (imgpath, user_name, user_password, rfc1123_date(past))) 
+  HTTP/1.1 200 OK
+  Accept-Ranges: bytes
+  Content-Length: 905
+  Content-Type: image/gif
+  ...
+  <BLANKLINE>
+  GIF89...
