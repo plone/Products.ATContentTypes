@@ -1,5 +1,7 @@
 1.0-devel
 =====================
+ * Fixed http://plone.org/collector/4083 for atct_album_view.pt
+   [ender]
 
  * Fixed
    http://sf.net/tracker/?func=detail&atid=645337&aid=1215755&group_id=55262

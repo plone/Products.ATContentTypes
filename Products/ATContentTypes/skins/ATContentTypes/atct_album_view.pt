@@ -80,7 +80,7 @@
             </div>
         </tal:albums>
 
-        <div class="visualClear"></div>
+        <div class="visualClear"><!-- --></div>
 
     </tal:albumsimages>
 
