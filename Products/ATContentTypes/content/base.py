@@ -202,7 +202,7 @@ class ATCTMixin(BrowserDefaultMixin):
 
     aliases = {
         '(Default)'  : '(dynamic view)',
-        'view'       : '(dynamic view)',
+        'view'       : '(selected layout)',
         'index.html' : '(dynamic view)',
         'edit'       : 'atct_edit',
         'properties' : 'base_metadata',
