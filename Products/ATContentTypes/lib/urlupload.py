@@ -28,15 +28,12 @@ import urlparse
 
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
-from ZODB.POSException import ConflictError
-from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ExtensionClass import Base
 
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.utils import getToolByName
 
 from Products.Archetypes.public import StringField
 from Products.Archetypes.public import StringWidget
@@ -67,6 +64,8 @@ urlUploadField = StringField('urlUpload',
 
 
 class URLUpload(Base):
+    
+    security = ClassSecurityInfo()
     
     security.declarePrivate('loadFileFromURL')
     def loadFileFromURL(self, url, contenttypes=()):

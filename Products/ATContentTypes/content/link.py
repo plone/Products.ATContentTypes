@@ -34,7 +34,6 @@ from Products.Archetypes.public import Schema
 from Products.Archetypes.public import StringField
 from Products.Archetypes.public import StringWidget
 
-from Products.validation import V_SUFFICIENT
 from Products.validation import V_REQUIRED
 
 from Products.ATContentTypes.config import PROJECTNAME

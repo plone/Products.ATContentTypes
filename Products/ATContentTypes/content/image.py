@@ -29,11 +29,8 @@ from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
-from Acquisition import aq_parent
 from Acquisition import aq_base
 from ComputedAttribute import ComputedAttribute
-from Globals import InitializeClass
-from OFS.Image import Image as OFSImage
 
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import ImageField

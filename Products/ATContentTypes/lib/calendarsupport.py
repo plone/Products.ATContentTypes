@@ -23,7 +23,6 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 from cStringIO import StringIO
-import quopri # quoted printable
 
 from DateTime import DateTime
 from Globals import InitializeClass

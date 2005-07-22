@@ -1,5 +1,21 @@
 1.0-devel
 =====================
+
+ * Added migration/othermigrator.py for other migrators like CMFPhoto and
+   CMFPhotoAlbum. These migrators are written but not yet available to end
+   users. Some glue code needs to be written.
+   [tiran]
+
+ * Moved exif library to a new directory thirdparty/. This directory should
+   contain all third party extensions that are required to run ATCT. Well
+   lib/ was added for this purpose the first time. thirdparty/ is added to
+   sys.path at position three which is right after Zope's instance home
+   and zope home in most cases.
+   [tiran]
+
+ * Removed lot's of unused imports.
+   [tiran]
+
  * Fixed http://plone.org/collector/4083 for atct_album_view.pt
    [ender]
 

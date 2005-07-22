@@ -24,7 +24,6 @@ import os, sys, traceback
 from cStringIO import StringIO
 import logging
 import time
-import urllib
 import zLOG
 
 from OFS.SimpleItem import SimpleItem
@@ -32,7 +31,6 @@ from OFS.PropertyManager import PropertyManager
 from Globals import InitializeClass
 from ZODB.POSException import ConflictError
 from AccessControl import ClassSecurityInfo
-import Persistence
 from Acquisition import aq_base
 import AccessControl.Owned
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile

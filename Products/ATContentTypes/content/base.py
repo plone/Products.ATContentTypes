@@ -24,6 +24,7 @@ __docformat__ = 'restructuredtext'
 
 
 from copy import copy
+import logging
 
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 if HAS_LINGUA_PLONE:
@@ -44,13 +45,10 @@ from Products.ATContentTypes.config import HAS_PLONE2
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
 from Globals import InitializeClass
-from ZODB.POSException import ConflictError
 from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from ExtensionClass import Base
 from Globals import REPLACEABLE
-from zExceptions import BadRequest
 from webdav.Lockable import ResourceLockedError
 from webdav.NullResource import NullResource
 from zExceptions import MethodNotAllowed
@@ -64,12 +62,6 @@ from Products.CMFCore.utils import getToolByName
 
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.ATContentTypes import permission as ATCTPermissions
-from Products.Archetypes.debug import _default_logger
-from Products.Archetypes.debug import _zlogger
-from Products.Archetypes.utils import shasattr
-from Products.Archetypes.public import log_exc
-
-from Products.CMFPlone.interfaces.Translatable import ITranslatable
 
 from Products.ATContentTypes.config import CHAR_MAPPING
 from Products.ATContentTypes.config import GOOD_CHARS
@@ -79,6 +71,7 @@ from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
 DEBUG = True
+LOG = logging.getLogger('ATCT')
 
 if HAS_PLONE2:
     # the browser default checks for isinstance()
@@ -234,7 +227,7 @@ class ATCTMixin(BrowserDefaultMixin):
                 self.edit(**kwargs)
             self._signature = self.Schema().signature()
         except Exception, msg:
-            _zlogger.log_exc()
+            LOG.warn('Exception in initializeArchetype', exc_info=True)
             if DEBUG and str(msg) not in ('SESSION',):
                 # debug code
                 raise

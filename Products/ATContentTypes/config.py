@@ -41,7 +41,7 @@ PROJECTNAME = "ATContentTypes"
 TOOLNAME = "portal_atct"
 SKINS_DIR = 'skins'
 
-ATCT_DIR = os.path.dirname(__file__)
+ATCT_DIR = os.path.abspath(os.path.dirname(__file__))
 WWW_DIR = os.path.join(ATCT_DIR, 'www')
 
 GLOBALS = globals()

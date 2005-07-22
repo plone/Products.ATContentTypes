@@ -37,12 +37,11 @@ __docformat__ = 'restructuredtext'
 # uncatalog_object(). There is no need to patch these methods.
 
 import logging
-from types import MethodType as instancemethod
 # instancemethod(function, instance, class)
 # Create an instance method object.
+from types import MethodType as instancemethod
 
 from Products.CMFCore.utils import getToolByName
-from Acquisition import aq_base
 
 LOG = logging.getLogger('ATCT.migration')
 UPDATE_METADATA = False

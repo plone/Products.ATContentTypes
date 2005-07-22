@@ -1,5 +1,4 @@
 from Products.CMFCore.utils import getToolByName
-from Products.ATContentTypes.migration.atctmigrator import migrateAll
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.migration.atctmigrator import TopicMigrator
 from Products.ATContentTypes.migration.walker import useLevelWalker

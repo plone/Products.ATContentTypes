@@ -24,7 +24,6 @@ __docformat__ = 'restructuredtext'
 from copy import copy
 import logging
 
-from Products.CMFCore.utils import getToolByName
 from Acquisition import aq_base
 from Acquisition import aq_parent
 from Acquisition import aq_inner
@@ -36,10 +35,6 @@ from ZODB.POSException import ConflictError
 
 from Products.ATContentTypes.migration.common import *
 from Products.ATContentTypes.migration.common import _createObjectByType
-
-import sys, traceback
-from StringIO import StringIO
-from warnings import warn
 
 LOG = logging.getLogger('ATCT.migration')
 

@@ -21,7 +21,6 @@ are permitted provided that the following conditions are met:
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-import sys
 import logging
 import traceback
 from cStringIO import StringIO
@@ -31,7 +30,6 @@ from Products.ATContentTypes.migration.common import HAS_LINGUA_PLONE
 from Products.ATContentTypes.migration.common import registerWalker
 from ZODB.POSException import ConflictError
 from Products.CMFCore.utils import getToolByName
-from Acquisition import aq_parent
 from Products.CMFPlone import transaction
 
 LOG = logging.getLogger('ATCT.migration')
@@ -324,25 +322,3 @@ registerWalker(CatalogWalkerWithLevel)
 def useLevelWalker(portal, migrator, **kwargs):
     w = CatalogWalkerWithLevel(portal, migrator)
     return w.go(**kwargs)
-
-##class RecursiveWalker(Walker):
-##    """Walk recursivly through a directory stucture
-##    """
-##
-##    def __init__(self, migrator, portal, checkMethod):
-##        Walker.__init__(self, migrator, portal=portal)
-##        self.base=portal
-##        self.checkMethod = checkMethod
-##        #self.list = []
-##
-##    def walk(self, **kwargs):
-##        """
-##        """
-##        return self.recurse(self.base)
-##
-##    def recurse(self, folder):
-##        for obj in folder.objectValues():
-##            if self.checkMethod(obj):
-##                yield obj
-##            if obj.isPrincipiaFolderish:
-##                self.recurse(obj)

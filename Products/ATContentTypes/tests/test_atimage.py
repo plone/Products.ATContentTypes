@@ -45,10 +45,12 @@ from Products.ATContentTypes.content.image import ATImageSchema
 from Products.ATContentTypes.migration.atctmigrator import ImageMigrator
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage
-from Products.ATContentTypes.lib import exif
 from Products.CMFDefault.Image import Image
 from Interface.Verify import verifyObject
 from Products.CMFPlone import transaction
+
+# third party extension
+import exif
 
 TEST_CANONEYE_JPG = open(os.path.join(PACKAGE_HOME, 'CanonEye.jpg'), 'rb').read()
 TEST_GIF = open(os.path.join(PACKAGE_HOME, 'test.gif'), 'rb').read()

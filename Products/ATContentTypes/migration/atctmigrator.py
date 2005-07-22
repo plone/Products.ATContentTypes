@@ -24,20 +24,16 @@ __docformat__ = 'restructuredtext'
 import logging
 from cStringIO import StringIO
 
-from Products.ATContentTypes.config import TOOLNAME
+from Acquisition import aq_base
+from Products.CMFCore.utils import getToolByName
+
 from Products.ATContentTypes.migration.common import registerATCTMigrator
 from Products.ATContentTypes.migration.common import getMigrator
+from Products.ATContentTypes.migration.common import migratePortalType
 from Products.ATContentTypes.migration.walker import CatalogWalker
 from Products.ATContentTypes.migration.walker import CatalogWalkerWithLevel
 from Products.ATContentTypes.migration.migrator import CMFItemMigrator
 from Products.ATContentTypes.migration.migrator import CMFFolderMigrator
-from Products.ATContentTypes.migration.catalogpatch import applyCatalogPatch
-from Products.ATContentTypes.migration.catalogpatch import removeCatalogPatch
-
-from Products.CMFCore.utils import getToolByName
-from Acquisition import aq_parent
-from Acquisition import aq_base
-from Products.CMFPlone import transaction
 
 from Products.ATContentTypes.content import document
 from Products.ATContentTypes.content import event
@@ -236,64 +232,3 @@ def migrateAll(portal, **kwargs):
     LOG.debug('Finished ATContentTypes type migration')
     
     return out.getvalue()
-
-def migratePortalType(portal, src_portal_type, dst_portal_type, out=None,
-                      migrator=None, use_catalog_patch=False, **kwargs):
-    """Migrate from src portal type to dst portal type
-    
-    Additional **kwargs are applied to the walker
-    """
-    if not out:
-        out = StringIO()
-        
-    # migrators are also registered by (src meta type, dst meta type)
-    # let's find the right migrator for us
-    ttool = getToolByName(portal, 'portal_types')
-    src = ttool.getTypeInfo(src_portal_type)
-    dst = ttool.getTypeInfo(dst_portal_type)
-    if src is None or dst is None:
-        raise ValueError, "Unknown src or dst portal type: %s -> %s" % (
-                           src_portal_type, dst_portal_type,)
-    
-    key = (src.Metatype(), dst.Metatype())
-    migratorFromRegistry = getMigrator(key)
-    if migratorFromRegistry is None:
-        raise ValueError, "No registered migrator for '%s' found" % key
-    
-    if migrator is not None:
-        # got a migrator, make sure it is the right one
-        if migrator is not migratorFromRegistry:
-            raise ValueError, "ups"
-    else:
-        migrator = migratorFromRegistry 
-
-    Walker = migrator.walkerClass
-    
-    msg = '--> Migrating %s to %s with %s' % (src_portal_type,
-           dst_portal_type, Walker.__name__)
-    if use_catalog_patch:
-        msg+=', using catalog patch'
-    if kwargs.get('use_savepoint', False):
-        msg+=', using savepoints'
-    if kwargs.get('full_transaction', False):
-        msg+=', using full transactions'
-    
-    print >> out, msg
-    LOG.debug(msg)
-    
-    walk = Walker(portal, migrator, src_portal_type=src_portal_type,
-                  dst_portal_type=dst_portal_type, **kwargs)
-    # wrap catalog patch inside a try/finally clause to make sure that the catalog
-    # is unpatched under *any* circumstances (hopely)
-    try:
-        if use_catalog_patch:
-            catalog_class = applyCatalogPatch(portal)
-        walk.go()
-    finally:
-        if use_catalog_patch:
-            removeCatalogPatch(catalog_class)
-    
-    print >>out, walk.getOutput()       
-    LOG.debug('<-- Migrating %s to %s done' % (src_portal_type, dst_portal_type))
-    
-    return out

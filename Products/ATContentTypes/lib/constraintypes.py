@@ -49,9 +49,7 @@ from Products.Archetypes.public import SelectionWidget
 from Products.Archetypes.public import IntDisplayList
 from Products.Archetypes.public import DisplayList
 
-from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes import permission as ATCTPermissions
-from Products.ATContentTypes.criteria import _criterionRegistry
 from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
 
 # constants for enableConstrainMixin
