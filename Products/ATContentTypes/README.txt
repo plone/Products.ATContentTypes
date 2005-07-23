@@ -102,6 +102,6 @@ What is new in ATContentTypes 1.0
  
   * For developers: Interfaces were moved to a single module interfaces.py and
     schemata were moved to the module of their type classes. E.g. instead of
-    importing ATDocumentSchema from types.schemata you have to import it from
-    types.ATDocument.
+    importing ATDocumentSchema from content.schemata you have to import it from
+    content.ATDocument.
 
