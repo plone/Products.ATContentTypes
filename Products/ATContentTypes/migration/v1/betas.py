@@ -5,18 +5,21 @@ from Products.CMFCore.Expression import Expression
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.Archetypes.ArchetypeTool import fixActionsForType
+from Products.CMFDynamicViewFTI.migrate import migrateFTIs
+from Products.CMFDynamicViewFTI.fti import fti_meta_type
 
 def alpha2_beta1(portal):
     """1.0-alpha2 -> 1.0-beta1
     """
     out = []
-    reindex = 0
 
     # Fix folderlisting action for folderish types
     fixFolderlistingAction(portal, out)
 
     # Fix folderlisting action for folderish types
-    reindex += addRelatedItemsIndex(portal, out)
+    reindex = addRelatedItemsIndex(portal, out)
+    if reindex:
+        reindexIndex(portal, 'getRawRelatedItems', out)
 
     # Rename the topics configlet
     renameTopicsConfiglet(portal, out)
@@ -38,6 +41,14 @@ def alpha2_beta1(portal):
 
     return out
 
+def beta1_rc1(portal):
+    """1.0-beta1 -> 1.0.0-rc1
+    """
+    out = []
+    migrateFTIs2DynamicView(portal, out)
+    changeDynView2SelectedLayout(portal, out)
+    return out
+    
 
 def fixFolderlistingAction(portal, out):
     """Fixes the folder listing action for folderish ATCT types to make it
@@ -112,14 +123,14 @@ def addRelatedItemsIndex(portal, out):
         else:
             indextype = index.__class__.__name__
             if indextype == 'KeywordIndex':
-                return 0
+                return False
             catalog.delIndex('getRawRelatedItems')
             out.append("Deleted %s 'getRawRelatedItems' from portal_catalog." % indextype)
 
         catalog.addIndex('getRawRelatedItems', 'KeywordIndex')
         out.append("Added KeywordIndex 'getRawRelatedItems' to portal_catalog.")
-        return 1 # Ask for reindexing
-    return 0
+        return True # Ask for reindexing
+    return False
 
 
 def reindexCatalog(portal, out):
@@ -133,6 +144,16 @@ def reindexCatalog(portal, out):
         catalog.threshold = old_threshold
         out.append("Reindexed portal_catalog.")
 
+def reindexIndex(portal, name, out):
+    """Reindex a single index of the portal_catalog."""
+    catalog = getToolByName(portal, 'portal_catalog', None)
+    if catalog is not None:
+        # Reduce threshold for the reindex run
+        old_threshold = catalog.threshold
+        catalog.threshold = 2000
+        catalog.reindexIndex(name, REQUEST=portal.REQUEST)
+        catalog.threshold = old_threshold
+        out.append("Reindexed index %s of portal_catalog." % name)
 
 def renameTopicsConfiglet(portal, out):
     """Update the name of the Topics configlet"""
@@ -191,3 +212,29 @@ def removeTopicFolderContentsAction(portal, out):
                 idx += 1
             fti.deleteActions(idxs)
 
+def migrateFTIs2DynamicView(portal, out):
+    """Migrate FTIs to dynamic view FTI
+    """
+    result = migrateFTIs(portal, product=PROJECTNAME)
+    if result:
+        out.append("Migrated FTIs to DynamicView FTI: %s" ', '.join(result))
+    else:
+        out.append("FTIs are already migrated")
+
+def changeDynView2SelectedLayout(portal, out):
+    """Changes the view alias from dyn view to selected layout
+    """
+    atct = getToolByName(portal, 'portal_atct')
+    migrated = []
+    for fti in atct._getATCTFtis():
+        if getattr(fti, 'meta_type', None) == fti_meta_type:
+            aliases = fti.getMethodAliases()
+            if aliases.get('view') == '(dynamic view)':
+                aliases['view'] = '(selected layout)'
+                fti.setMethodAliases(aliases)
+                migrated.append(fti.getId())
+    if migrated:
+        out.append('Migrated view alias to (select layou) for %s' % 
+                   ', '.join(migrated))
+
+        

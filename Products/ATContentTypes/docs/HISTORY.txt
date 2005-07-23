@@ -1,5 +1,17 @@
-1.0-devel
-=====================
+1.0.0-rc1 2005-07-23
+====================
+
+ * Fixed 4330 Inter-version ATCT migration fails to migrate types
+   to CMFDynamicViewFTI. Migration to the new FTI is part of the version
+   migration again.
+   [tiran]
+   
+ * Added migration step + unit test for '(selected layout)' change.
+   [tiran]
+   
+ * Optimized getRawRelatedItems index addition. There is no need to reindex
+   the *whole* catalog when adding a *single* index.
+   [tiran]
 
  * Made the 'view' method aliases point to '(selected layout)' instead of
    '(default view)'. This assures consistency with previous behaviour,
@@ -195,6 +207,9 @@
 
  * Added some additional i18n markup.
    [hannosch]
+
+Snapshot 2005 07 05
+===================
 
  * Don't run version migration when installing the first time. People should run it
    after type migration.

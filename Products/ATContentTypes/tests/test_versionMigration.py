@@ -31,6 +31,7 @@ from Products.ATContentTypes.migration.v1.betas import renameTopicsConfiglet
 from Products.ATContentTypes.migration.v1.betas import addTopicSyndicationAction
 from Products.ATContentTypes.migration.v1.betas import fixViewActions
 from Products.ATContentTypes.migration.v1.betas import removeTopicFolderContentsAction
+from Products.ATContentTypes.migration.v1.betas import changeDynView2SelectedLayout
 
 from Products.CMFDynamicViewFTI.migrate import migrateFTIs
 
@@ -375,6 +376,20 @@ class TestMigrations_v1(MigrationTest):
         typesTool = getToolByName(self.portal, 'portal_types', None)
         self.portal.portal_types._delObject('Topic')
         removeTopicFolderContentsAction(self.portal, [])
+        
+    def test_changeDynView2SelectedLayout(self):
+        typesTool = getToolByName(self.portal, 'portal_types', None)
+        fti = typesTool['Document']
+        # set view aliases to old value
+        aliases = fti.getMethodAliases()
+        aliases['view'] = '(dynamic view)'
+        fti.setMethodAliases(aliases)
+        # migrate
+        changeDynView2SelectedLayout(self.portal, [])
+        # test new value
+        aliases = fti.getMethodAliases()
+        self.failUnlessEqual(aliases['view'], '(selected layout)')
+
 
 def test_suite():
     from unittest import TestSuite, makeSuite

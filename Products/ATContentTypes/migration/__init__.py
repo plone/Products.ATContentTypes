@@ -11,7 +11,7 @@ import Products.ATContentTypes.migration.storage
 from Products.ATContentTypes.tool import atct
 
 def executeMigrations():
-    import v1
+    from Products.ATContentTypes.migration import v1
 
 def null(portal):
     """ This is a null migration, use it when nothing happens """
@@ -30,5 +30,5 @@ def registerMigrations():
                              '1.0.0-devel (snapshot-2005-07-05)',
                              v1.betas.alpha2_beta1)
     atct.registerUpgradePath('1.0.0-devel (snapshot-2005-07-05)',
-                             '1.0.0-devel (svn/unreleased)',
-                             null)
+                             '1.0.0-rc1 (svn/unreleased)',
+                             v1.betas.beta1_rc1)

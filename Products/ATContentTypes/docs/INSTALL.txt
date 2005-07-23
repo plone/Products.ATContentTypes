@@ -32,10 +32,11 @@ Quick switching instructions for the impatient
 Requirements
 ============
 
-Zope 2.8
---------
+Zope 2.8.1 or 2.7.7
+-------------------
 
-AT Content Types requires either Zope 2.8.0 + BTreeFolder 1.0.2 or Zope 2.8.1.
+AT Content Types requires, Zope 2.7.7, Zope 2.8.0 + BTreeFolder 1.0.2
+or Zope 2.8.1.
 
 Python 2.3.5+
 -------------
@@ -44,20 +45,18 @@ AT Content Types requires some new features of Python 2.3.5+. Python 2.4+ is
 not recommended at the moment.
 
 Archetypes 1.3.4+
-----------------
+-----------------
 
 AT Content Types is tested with the following AT versions
 
- * AT 1.3.4-beta3 (not yet released) or newer releases of AT 1.3
+ * AT 1.3.4-rc2 (not yet released) or newer releases of AT 1.3
 
- * AT SVN bundle after 2005-07-08
+ * AT SVN bundle after 2005-07-23
    https://svn.plone.org/svn/archetypes/bundles/archetypes-1.3/
 
 AT Content Types doesn't work with other versions of Archetypes because some
 fixes are missing. Right now it's tested only with the newest cvs version of
 Archetypes.
-
-AT Content Types doesn't work with AT 1.2.x or older!
 
 CMFQuickinstaller
 -----------------
@@ -79,10 +78,10 @@ ATReferenceBrowserWidget 1.0
 
 ATReferenceWidget 1.0.1 or higher is required for the related items field. 
 
-CMF 1.5
--------
+CMF 1.5.2+
+----------
 
-Plone 2.1 and ATContentTypes 1.0 are requiring CMF 1.5
+Plone 2.1 and ATContentTypes 1.0 are requiring CMF 1.5.2 or newer.
 
 CMFDynamicViewFTI
 -----------------
