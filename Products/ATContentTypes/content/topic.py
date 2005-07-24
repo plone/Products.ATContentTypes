@@ -354,7 +354,7 @@ class ATTopic(ATCTFolder):
         val.sort()
         return val
 
-    security.declareProtected(View, 'listSubtopics')
+    security.declareProtected(View, 'hasSubtopics')
     def hasSubtopics(self):
         """Returns true if subtopics have been created on this topic.
         """
@@ -445,9 +445,6 @@ class ATTopic(ATCTFolder):
         if limit:
             return results[:max_items]
         return results
-
-    security.declareProtected(View, 'queryCatalog')
-    synContentValues = queryCatalog
 
     security.declareProtected(ChangeTopics, 'addCriterion')
     def addCriterion(self, field, criterion_type):
