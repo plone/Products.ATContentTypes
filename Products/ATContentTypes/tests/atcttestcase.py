@@ -277,6 +277,33 @@ class ATCTTypeTestCase(ATSiteTestCase):
         
         old_fti.global_allow = 0
 
+    def test_tool_auto_migration(self):
+        # test if the atct tool migrates all types
+        atct = self.portal.portal_atct
+        ttool = self.portal.portal_types
+        old_fti = ttool[self.cmf_portal_type]
+        
+        # create old object
+        self.setRoles(['Manager',])
+        old_fti.global_allow = 1
+        self.folder.invokeFactory(self.cmf_portal_type, 'migrationtest')
+        obj = self.folder.migrationtest
+        self.failUnless(isinstance(obj, self.cmf_klass), obj.__class__)
+        self.failUnlessEqual(obj.portal_type, self.cmf_portal_type)
+        del obj # keep no references when migrating
+
+        # migrate types
+        transaction.savepoint() # subtransaction
+        atct.migrateContentTypesToATCT()
+        # check the new
+        obj = self.folder.migrationtest
+        self.failUnless(isinstance(obj, self.klass), obj.__class__)
+        self.failUnlessEqual(obj.portal_type, self.portal_type)
+        self.failUnlessEqual(obj.meta_type, self.meta_type)
+        
+        old_fti.global_allow = 0        
+        self.setRoles(['Member',])
+
     def beforeTearDown(self):
         self.logout()
 

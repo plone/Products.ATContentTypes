@@ -1,6 +1,10 @@
 1.0.0-rc1 2005-07-23
 ====================
 
+ * Enabled swallowResizeExceptions by default and added warning that original
+   image resizing destroies the exif information before the data is saved.
+   [tiran]
+ 
  * Fixed spelling error in a security declaration of ATTopic.
    [tiran]
 

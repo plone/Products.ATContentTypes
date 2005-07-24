@@ -14,7 +14,7 @@
 </mxtidy>
 
 <feature swallowImageResizeExceptions>
-  enable no 
+  enable yes
 </feature>
 
 <pil_config>
@@ -59,6 +59,8 @@
   
   # maximum image dimension (w, h)
   # 0,0 means no rescaling of the original image
+  # WARNING: This feature is incompatible with the EXIF code. Resizing the
+  #          original image destroies its exif information before it is saved.
   max_image_dimension 0,0
   
   # enable upload of documents
@@ -85,6 +87,8 @@
   max_file_size no
   # maximum image dimension (w, h)
   # 0,0 means no rescaling of the original image
+  # WARNING: This feature is incompatible with the EXIF code. Resizing the
+  #          original image destroies its exif information before it is saved.
   max_image_dimension 0,0
 </archetype>
 
