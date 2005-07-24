@@ -4,6 +4,9 @@
 1.0.0-rc1 2005-07-23
 ====================
 
+ * Fixed error in version parsing which somehow made portal_types disappear.
+   [alecm]
+
  * Enabled swallowResizeExceptions by default and added warning that original
    image resizing destroies the exif information before the data is saved.
    [tiran]
