@@ -29,8 +29,6 @@ from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
-from Acquisition import aq_parent
-from OFS.Image import File
 
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import FileField
@@ -44,7 +42,6 @@ from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import ICONMAP
-from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
 from Products.ATContentTypes.interfaces import IATFile

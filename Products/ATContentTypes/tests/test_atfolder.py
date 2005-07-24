@@ -78,6 +78,34 @@ class FolderTestMixin:
         self.failUnless(IAutoSortSupport.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(IAutoSortSupport, self._ATCT)) 
         
+    def test_migrationKeepsLocallyAddedRoles(self):
+        atct = self.portal.portal_atct
+        ttool = self.portal.portal_types
+        old_fti = ttool[self.cmf_portal_type]
+        role = 'testrole'
+        
+        # create old object
+        self.setRoles(['Manager',])
+        old_fti.global_allow = 1
+        self.folder.invokeFactory(self.cmf_portal_type, 'rolecheck')
+        obj = self.folder.rolecheck
+        self.failUnlessEqual(obj.portal_type, self.cmf_portal_type)
+        
+        # add a role
+        self.failIf(role in obj.valid_roles())
+        obj._addRole(role)
+        self.failUnless(role in obj.userdefined_roles(), obj.userdefined_roles())
+
+        del obj # keep no references when migrating
+        # migrate types
+        transaction.savepoint() # subtransaction
+        atct.migrateContentTypesToATCT()
+
+        # check the new
+        obj = self.folder.rolecheck
+        self.failUnlessEqual(obj.portal_type, self.portal_type)
+        self.failUnless(role in obj.userdefined_roles(), obj.userdefined_roles())
+        
 class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     klass = ATFolder

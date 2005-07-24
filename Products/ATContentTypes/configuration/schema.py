@@ -23,7 +23,6 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 import os
-import sys
 
 from ZConfig.datatypes import Registry
 from ZConfig.loader import SchemaLoader

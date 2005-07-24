@@ -24,7 +24,6 @@ import os, sys, traceback
 from cStringIO import StringIO
 import logging
 import time
-import urllib
 import zLOG
 
 from OFS.SimpleItem import SimpleItem
@@ -32,7 +31,6 @@ from OFS.PropertyManager import PropertyManager
 from Globals import InitializeClass
 from ZODB.POSException import ConflictError
 from AccessControl import ClassSecurityInfo
-import Persistence
 from Acquisition import aq_base
 import AccessControl.Owned
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
@@ -747,7 +745,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
         * Changes the id of the portal type inside portal types
         * Updates the catalog indexes and metadata
         """
-        LOG_MIGRATION.log("TRACE", "Changing portal type name from %s to %s" % 
+        LOG_MIGRATION.debug("Changing portal type name from %s to %s" % 
                             (old_name, new_name))
 
         cat = getToolByName(self, 'portal_catalog')

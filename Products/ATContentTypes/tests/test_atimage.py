@@ -29,8 +29,10 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from Acquisition import aq_base
+import time
+from cStringIO import StringIO
 
+from Acquisition import aq_base
 from OFS.Image import Image as OFSImage
 
 from Products.CMFCore.permissions import View
@@ -38,33 +40,41 @@ from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
-import time
 
 from Products.ATContentTypes.content.image import ATImage
 from Products.ATContentTypes.content.image import ATImageSchema
 from Products.ATContentTypes.migration.atctmigrator import ImageMigrator
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage
-from Products.ATContentTypes.lib import exif
 from Products.CMFDefault.Image import Image
 from Interface.Verify import verifyObject
 from Products.CMFPlone import transaction
 
-TEST_CANONEYE_JPG = open(os.path.join(PACKAGE_HOME, 'CanonEye.jpg'), 'rb').read()
-TEST_GIF = open(os.path.join(PACKAGE_HOME, 'test.gif'), 'rb').read()
-TEST2_GIF = open(os.path.join(PACKAGE_HOME, 'test_DivisionError.jpg'), 'rb').read()
-TEST_JPEG_FILE = open(os.path.join(PACKAGE_HOME, 'CanonEye.jpg'), 'rb')
-TEST_JPEG_FILE.seek(0, 2)
-TEST_JPEG_LEN = TEST_JPEG_FILE.tell()
-TEST_JPEG_FILE.seek(0)
-TEST_JPEG = TEST_JPEG_FILE.read()
+# third party extension
+import exif
+
+def loadImage(name, size=0):
+    """Load image from testing directory
+    """
+    path = os.path.join(PACKAGE_HOME, 'input', name)
+    fd = open(path, 'rb')
+    data = fd.read()
+    fd.close()
+    return data
+
+TEST_EXIF_ERROR = loadImage('canoneye.jpg')
+TEST_GIF = loadImage('test.gif')
+TEST_GIF_LEN = len(TEST_GIF)
+TEST_DIV_ERROR = loadImage('divisionerror.jpg')
+TEST_JPEG = loadImage('canoneye.jpg')
+TEST_JPEG_LEN = len(TEST_JPEG)
 
 def editCMF(obj):
-    obj.update_data(TEST_JPEG, content_type="image/jpeg")
+    obj.update_data(TEST_GIF, content_type="image/gif")
     dcEdit(obj)
 
 def editATCT(obj):
-    obj.setImage(TEST_JPEG, content_type="image/jpeg")
+    obj.setImage(TEST_GIF, content_type="image/gif")
     dcEdit(obj)
 
 tests = []
@@ -88,16 +98,6 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         iface = IATImage
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
-
-    def test_dcEdit(self):
-        #if not hasattr(self, '_cmf') or not hasattr(self, '_ATCT'):
-        #    return
-        old = self._cmf
-        new = self._ATCT
-        new.setImage(TEST_JPEG, content_type="image/jpeg")
-        dcEdit(old)
-        dcEdit(new)
-        self.compareDC(old, new)
 
     def test_edit(self):
         old = self._cmf
@@ -180,15 +180,16 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         atct = self._ATCT
         
         # test upload
-        atct.setImage(TEST2_GIF, mimetype='image/gif', filename='test_DivisionError.jpg')
-        self.failUnlessEqual(atct.getImage().data, TEST2_GIF)
+        atct.setImage(TEST_DIV_ERROR, mimetype='image/jpeg',
+                      filename='divisionerror.jpg')
+        self.failUnlessEqual(atct.getImage().data, TEST_DIV_ERROR)
 
 
     def test_get_size(self):
         atct = self._ATCT
         editATCT(atct)
-        self.failUnlessEqual(len(TEST_JPEG), TEST_JPEG_LEN)
-        self.failUnlessEqual(atct.get_size(), TEST_JPEG_LEN)
+        self.failUnlessEqual(len(TEST_GIF), TEST_GIF_LEN)
+        self.failUnlessEqual(atct.get_size(), TEST_GIF_LEN)
         
     def test_schema_marshall(self):
         atct = self._ATCT
@@ -201,16 +202,15 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         #    return
         old = self._cmf
         new = self._ATCT
-        new.setImage(TEST_JPEG, content_type="image/jpeg")
+        new.setImage(TEST_GIF, content_type="image/gif")
         dcEdit(old)
         dcEdit(new)
         self.compareDC(old, new)
 
     def test_broken_exif(self):
-
         #EXIF data in images from Canon digicams breaks EXIF of 2005.05.12 with following exception
         # 
-          #2005-05-01T19:21:16 ERROR(200) Archetypes None
+        #2005-05-01T19:21:16 ERROR(200) Archetypes None
         #Traceback (most recent call last):
         #  File "/home/russ/cb/var/zope/Products/ATContentTypes/content/image.py", line 207, in getEXIF
         #    exif_data = exif.process_file(img, debug=False, noclose=True)
@@ -225,11 +225,8 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
 
         # This test fails even with the 2005.05.12 exif version from 
         #    http://home.cfl.rr.com/genecash/
-
-        atct = self._ATCT
-        atct.setImage(TEST_CANONEYE_JPG, mimetype='image/jpeg', filename='CanonImage.jpg')
-        canonImage = atct.getImageAsFile(scale=None)
-        exif_data = exif.process_file(canonImage, debug=False)        
+        f = StringIO(TEST_EXIF_ERROR)
+        exif_data = exif.process_file(f, debug=False)        
         # probably want to add some tests on returned data. Currently gives 
         #  ValueError in process_file 
 

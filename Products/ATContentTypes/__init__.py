@@ -22,12 +22,16 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
 import os.path
+import sys
 __version__ = open(os.path.join(__path__[0], 'version.txt')).read().strip()
 
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.config import SKINS_DIR
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import GLOBALS
+from Products.ATContentTypes.config import ATCT_DIR
+
+sys.path.insert(3, os.path.join(ATCT_DIR, 'thirdparty'))
 
 if HAS_LINGUA_PLONE:
     from Products.LinguaPlone.public import process_types
@@ -92,7 +96,4 @@ def initialize(context):
             extra_constructors = (constructor,),
             fti                = ftis,
             ).initialize(context)
-       
-    from Products.ATContentTypes.customizationpolicy import registerPolicy
-    registerPolicy(context)
- 
+

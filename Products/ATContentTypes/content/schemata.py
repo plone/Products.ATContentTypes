@@ -25,10 +25,7 @@ __docformat__ = 'restructuredtext'
 
 from DateTime import DateTime
 
-from Products.ATContentTypes.config import HAS_PLONE2
-
 from Products.Archetypes.public import BaseSchema
-from Products.Archetypes.public import Schema
 from Products.Archetypes.public import MetadataSchema
 from Products.Archetypes.public import ReferenceField
 from Products.Archetypes.public import StringField
@@ -37,10 +34,7 @@ from Products.Archetypes.public import SelectionWidget
 from Products.Archetypes.public import BooleanField
 from Products.Archetypes.public import BooleanWidget
 
-from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
-
-from Products.ATContentTypes import permission as ATCTPermissions
 
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 

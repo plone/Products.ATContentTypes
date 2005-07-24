@@ -1,5 +1,75 @@
-1.0-devel
-=====================
+1.0.0-rc2
+====================
+
+1.0.0-rc1 2005-07-23
+====================
+
+ * Enabled swallowResizeExceptions by default and added warning that original
+   image resizing destroies the exif information before the data is saved.
+   [tiran]
+ 
+ * Fixed spelling error in a security declaration of ATTopic.
+   [tiran]
+
+ * Fixed critical migration issue. Locally added roles and locally changed
+   permissions are now migrated. Also added unit tests to verify the 
+   migration.
+   [tiran]
+
+ * Cleanup up unit tests and logging to reduce the noise
+   [tiran]
+
+ * Removed 'MakerNote JPEGThumbnail' from the exif tags. Some cameras might
+   store the thumbnail in this tag.
+   [tiran]
+
+ * Removed unused customization policy including unit test. Plone 2.1 always
+   installing ATCT.
+   [tiran]
+
+ * Fixed 4330 Inter-version ATCT migration fails to migrate types
+   to CMFDynamicViewFTI. Migration to the new FTI is part of the version
+   migration again.
+   [tiran]
+   
+ * Added migration step + unit test for '(selected layout)' change.
+   [tiran]
+   
+ * Optimized getRawRelatedItems index addition. There is no need to reindex
+   the *whole* catalog when adding a *single* index.
+   [tiran]
+
+ * Made the 'view' method aliases point to '(selected layout)' instead of
+   '(default view)'. This assures consistency with previous behaviour,
+   so that /view at the end of a URL always gets the item itself, ignoring
+   any default-page that may be set. Note that the 'view' *action* still
+   points to 'string:${object_url}', so that the 'view' tab, as well as
+   the '(Default)' target, still get '(dynamic view)' (and thus default
+   pages) for types other than File and Image.
+   [optilude]
+
+ * Added migration/othermigrator.py for other migrators like CMFPhoto and
+   CMFPhotoAlbum. These migrators are written but not yet available to end
+   users. Some glue code needs to be written.
+   [tiran]
+
+ * Moved exif library to a new directory thirdparty/. This directory should
+   contain all third party extensions that are required to run ATCT. Well
+   lib/ was added for this purpose the first time. thirdparty/ is added to
+   sys.path at position three which is right after Zope's instance home
+   and zope home in most cases.
+   [tiran]
+
+ * Removed lot's of unused imports.
+   [tiran]
+
+ * Fixed http://plone.org/collector/4083 for atct_album_view.pt
+   [ender]
+
+ * Fixed
+   http://sf.net/tracker/?func=detail&atid=645337&aid=1215755&group_id=55262
+   by making the template sane.
+   [alecm]
 
  * Fixed get_size for ATImage. It should return only the file size of the
    original image.
@@ -163,6 +233,9 @@
 
  * Added some additional i18n markup.
    [hannosch]
+
+Snapshot 2005 07 05
+===================
 
  * Don't run version migration when installing the first time. People should run it
    after type migration.

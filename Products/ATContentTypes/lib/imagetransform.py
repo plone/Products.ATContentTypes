@@ -33,12 +33,13 @@ from AccessControl import ClassSecurityInfo
 from ExtensionClass import Base
 from DateTime import DateTime
 from Globals import InitializeClass
+from OFS.Image import Image as OFSImage
 
-from Products.ATContentTypes.lib import exif
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import HAS_PIL
 
-from OFS.Image import Image as OFSImage
+# third party extension
+import exif
 
 # the following code is based on the rotation code of Photo
 if HAS_PIL:
@@ -135,7 +136,8 @@ class ATCTImageTransform(Base):
                     LOG.error('Failed to process EXIF information', exc_info=True)
                     exif_data = {}
                 # remove some unwanted elements lik thumb nails
-                for key in ('JPEGThumbnail', 'TIFFThumbnail'):
+                for key in ('JPEGThumbnail', 'TIFFThumbnail', 
+                            'MakerNote JPEGThumbnail'):
                     if key in exif_data:
                         del exif_data[key]
 

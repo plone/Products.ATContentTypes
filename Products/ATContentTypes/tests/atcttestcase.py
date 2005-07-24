@@ -228,6 +228,85 @@ class ATCTTypeTestCase(ATSiteTestCase):
         schema = atct.Schema()
         marshall = schema.getLayerImpl('marshall')
         self.failUnless(isinstance(marshall, RFC822Marshaller), marshall)
+        
+    def test_migrationKeepsPermissions(self):
+        atct = self.portal.portal_atct
+        ttool = self.portal.portal_types
+        cat = self.portal.portal_catalog
+        old_fti = ttool[self.cmf_portal_type]
+        
+        # create old object
+        self.setRoles(['Manager',])
+        old_fti.global_allow = 1
+        self.folder.invokeFactory(self.cmf_portal_type, 'permcheck')
+        obj = self.folder.permcheck
+        cat.indexObject(obj) # index object explictly because Topics aren't indexed
+        self.failUnlessEqual(obj.portal_type, self.cmf_portal_type)
+        # modify permissions
+        roles = obj.valid_roles() # we rely on the following order of roles
+        self.failUnlessEqual(roles, ('Anonymous', 'Authenticated', 'Manager',
+                                     'Member', 'Owner', 'Reviewer'))
+        obj.manage_permission('View', roles=['Manager', 'Reviewer'],
+                              acquire=0)
+        permsettings = obj.permission_settings('View')[0]
+        self.failUnlessEqual(permsettings['acquire'], '')
+        self.failUnlessEqual(permsettings['name'], 'View')
+        self.failUnlessEqual(permsettings['roles'][0]['checked'], '')
+        self.failUnlessEqual(permsettings['roles'][1]['checked'], '')
+        self.failUnlessEqual(permsettings['roles'][2]['checked'], 'CHECKED')
+        self.failUnlessEqual(permsettings['roles'][3]['checked'], '')
+        self.failUnlessEqual(permsettings['roles'][4]['checked'], '')
+        self.failUnlessEqual(permsettings['roles'][5]['checked'], 'CHECKED')
+        del obj # keep no references when migrating
+        # migrate types
+        transaction.savepoint() # subtransaction
+        atct.migrateContentTypesToATCT()
+        # check the new
+        obj = self.folder.permcheck
+        self.failUnlessEqual(obj.portal_type, self.portal_type)
+        roles = obj.valid_roles() # we rely on the following order of roles
+        self.failUnlessEqual(roles, ('Anonymous', 'Authenticated', 'Manager',
+                                     'Member', 'Owner', 'Reviewer'))
+        permsettings = obj.permission_settings('View')[0]
+        self.failUnlessEqual(permsettings['acquire'], '')
+        self.failUnlessEqual(permsettings['name'], 'View')
+        self.failUnlessEqual(permsettings['roles'][0]['checked'], '')
+        self.failUnlessEqual(permsettings['roles'][1]['checked'], '')
+        self.failUnlessEqual(permsettings['roles'][2]['checked'], 'CHECKED')
+        self.failUnlessEqual(permsettings['roles'][3]['checked'], '')
+        self.failUnlessEqual(permsettings['roles'][4]['checked'], '')
+        self.failUnlessEqual(permsettings['roles'][5]['checked'], 'CHECKED')
+        
+        old_fti.global_allow = 0
+
+    def test_tool_auto_migration(self):
+        # test if the atct tool migrates all types
+        atct = self.portal.portal_atct
+        ttool = self.portal.portal_types
+        cat = self.portal.portal_catalog
+        old_fti = ttool[self.cmf_portal_type]
+        
+        # create old object
+        self.setRoles(['Manager',])
+        old_fti.global_allow = 1
+        self.folder.invokeFactory(self.cmf_portal_type, 'migrationtest')
+        obj = self.folder.migrationtest
+        cat.indexObject(obj) # index object explictly because Topics aren't indexed
+        self.failUnless(isinstance(obj, self.cmf_klass), obj.__class__)
+        self.failUnlessEqual(obj.portal_type, self.cmf_portal_type)
+        del obj # keep no references when migrating
+
+        # migrate types
+        transaction.savepoint() # subtransaction
+        atct.migrateContentTypesToATCT()
+        # check the new
+        obj = self.folder.migrationtest
+        self.failUnless(isinstance(obj, self.klass), obj.__class__)
+        self.failUnlessEqual(obj.portal_type, self.portal_type)
+        self.failUnlessEqual(obj.meta_type, self.meta_type)
+        
+        old_fti.global_allow = 0        
+        self.setRoles(['Member',])
 
     def beforeTearDown(self):
         self.logout()

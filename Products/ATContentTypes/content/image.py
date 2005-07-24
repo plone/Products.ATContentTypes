@@ -29,11 +29,8 @@ from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
-from Acquisition import aq_parent
 from Acquisition import aq_base
 from ComputedAttribute import ComputedAttribute
-from Globals import InitializeClass
-from OFS.Image import Image as OFSImage
 
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import ImageField
@@ -129,6 +126,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         """
         self._setATCTFileContent(value, **kwargs)
         # set exif because rotation might screw up the exif data
+        # XXX: EXIF data will be lost if original image resizing is enabled!
         self.getEXIF(refresh=kwargs.get('refresh_exif', True))
 
     security.declareProtected(View, 'tag')

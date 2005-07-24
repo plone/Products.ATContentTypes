@@ -3,13 +3,10 @@ from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.criteria import _criterionRegistry
 from AccessControl import ClassSecurityInfo
 import Persistence
-from ZODB.PersistentMapping import PersistentMapping
 from OFS.SimpleItem import SimpleItem
 from ExtensionClass import Base
 from Acquisition import aq_base
 
-from Products.ATContentTypes.permission import ChangeTopics, AddTopics
-from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ManagePortal
 from Products.ATContentTypes.interfaces import IATCTTopicsTool
 

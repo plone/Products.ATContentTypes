@@ -27,7 +27,6 @@ __old_name__ = 'Products.ATContentTypes.types.ATTopic'
 from types import ListType
 from types import TupleType
 from types import StringType
-from locale import strcoll
 
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
@@ -38,7 +37,6 @@ from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from Acquisition import aq_parent
 from Acquisition import aq_inner
-from zExceptions import MethodNotAllowed
 from zExceptions import NotFound
 from webdav.Resource import Resource as WebdavResoure
 
@@ -285,7 +283,7 @@ class ATTopic(ATCTFolder):
         return [val for val in self.listCriteria() if
              IATTopicSearchCriterion.isImplementedBy(val)]
 
-    security.declareProtected(ChangeTopics, 'hasSortCriteria')
+    security.declareProtected(ChangeTopics, 'hasSortCriterion')
     def hasSortCriterion(self):
         """Tells if a sort criterai is already setup.
         """
