@@ -283,7 +283,7 @@ class ATTopic(ATCTFolder):
         return [val for val in self.listCriteria() if
              IATTopicSearchCriterion.isImplementedBy(val)]
 
-    security.declareProtected(ChangeTopics, 'hasSortCriteria')
+    security.declareProtected(ChangeTopics, 'hasSortCriterion')
     def hasSortCriterion(self):
         """Tells if a sort criterai is already setup.
         """

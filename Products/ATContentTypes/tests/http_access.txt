@@ -44,7 +44,7 @@ Sidneys tests for Archetypes.
 
   For some tests an image is needed. 
 
-  >>> input = open(os.path.join(test_home, 'test.gif'), 'rb')
+  >>> input = open(os.path.join(input_dir, 'test.gif'), 'rb')
   >>> input.seek(0)
   
   >>> print http(r"""

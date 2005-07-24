@@ -222,7 +222,7 @@ File
 Image
 -----
 
-  >>> input = open(os.path.join(test_home, 'test.gif'), 'rb')
+  >>> input = open(os.path.join(input_dir, 'test.gif'), 'rb')
   
   Create an object by content type
   

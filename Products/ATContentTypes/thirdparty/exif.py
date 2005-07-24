@@ -1152,6 +1152,8 @@ def process_file(file, debug=0):
         try:
             hdr.decode_maker_note()
         except:
+            # an error occured. Log it and remove the broken note
+            del hdr.tags['EXIF MakerNote']
             LOG.error('Failed to parse EXIF MakerNote', exc_info=True)
 
     # Sometimes in a TIFF file, a JPEG thumbnail is hidden in the MakerNote

@@ -745,7 +745,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
         * Changes the id of the portal type inside portal types
         * Updates the catalog indexes and metadata
         """
-        LOG_MIGRATION.log("TRACE", "Changing portal type name from %s to %s" % 
+        LOG_MIGRATION.debug("Changing portal type name from %s to %s" % 
                             (old_name, new_name))
 
         cat = getToolByName(self, 'portal_catalog')

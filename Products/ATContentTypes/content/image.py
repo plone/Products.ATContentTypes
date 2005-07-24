@@ -126,6 +126,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         """
         self._setATCTFileContent(value, **kwargs)
         # set exif because rotation might screw up the exif data
+        # XXX: EXIF data will be lost if original image resizing is enabled!
         self.getEXIF(refresh=kwargs.get('refresh_exif', True))
 
     security.declareProtected(View, 'tag')

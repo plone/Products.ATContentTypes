@@ -136,7 +136,8 @@ class ATCTImageTransform(Base):
                     LOG.error('Failed to process EXIF information', exc_info=True)
                     exif_data = {}
                 # remove some unwanted elements lik thumb nails
-                for key in ('JPEGThumbnail', 'TIFFThumbnail'):
+                for key in ('JPEGThumbnail', 'TIFFThumbnail', 
+                            'MakerNote JPEGThumbnail'):
                     if key in exif_data:
                         del exif_data[key]
 

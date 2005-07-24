@@ -32,6 +32,7 @@ from Persistence import PersistentMapping
 from OFS.Uninstalled import BrokenClass
 from OFS.IOrderSupport import IOrderedContainer
 from ZODB.POSException import ConflictError
+from AccessControl.Permission import Permission
 
 from Products.ATContentTypes.migration.common import *
 from Products.ATContentTypes.migration.common import _createObjectByType
@@ -79,6 +80,14 @@ def copyPermMap(old):
         nv = copy(v)
         new[k] = v
     return new
+
+def getPermissionMapping(acperm):
+    """Converts the list from ac_inherited_permissions into a dict
+    """
+    result = {}
+    for entry in acperm:
+        result[entry[0]] = entry[1]
+    return result
 
 class BaseMigrator:
     """Migrates an object to the new type
@@ -262,7 +271,33 @@ class BaseMigrator:
             self.new.manage_setLocalRoles(owner.getId(), ['Owner'])
         else:
             self.new.__ac_local_roles__ = copy(local_roles)
+            
+    def migrate_user_roles(self):
+        """Migrate roles added by users
+        """
+        if getattr(aq_base(self.old), 'userdefined_roles', False):
+            ac_roles = self.old.userdefined_roles()
+            new_ac_roles = tuple(getattr(self.new, '__ac_roles__', ()))
+            if ac_roles:
+                for role in ac_roles:
+                    if role not in new_ac_roles:
+                        self.new._addRole(role)
 
+    def migrate_permission_settings(self):
+        """Migrate permission settings (permission <-> role)
+        
+        The acquire flag is coded into the type of the sequence. If roles is a list
+        than the roles are also acquire. If roles is a tuple the roles aren't 
+        acquired.
+        """
+        oldmap = getPermissionMapping(self.old.ac_inherited_permissions(1))
+        newmap = getPermissionMapping(self.new.ac_inherited_permissions(1))
+        for key, values in oldmap.items():
+            old_p = Permission(key, values, self.old)
+            old_roles = old_p.getRoles()
+            new_values = newmap.get(key, ())
+            new_p = Permission(key, new_values, self.new)
+            new_p.setRoles(old_roles)
 
     def migrate_withmap(self):
         """Migrates other attributes from obj.__dict__ using a map

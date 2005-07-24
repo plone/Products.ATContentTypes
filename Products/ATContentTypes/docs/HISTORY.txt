@@ -1,6 +1,25 @@
 1.0.0-rc1 2005-07-23
 ====================
 
+ * Fixed spelling error in a security declaration of ATTopic.
+   [tiran]
+
+ * Fixed critical migration issue. Locally added roles and locally changed
+   permissions are now migrated. Also added unit tests to verify the 
+   migration.
+   [tiran]
+
+ * Cleanup up unit tests and logging to reduce the noise
+   [tiran]
+
+ * Removed 'MakerNote JPEGThumbnail' from the exif tags. Some cameras might
+   store the thumbnail in this tag.
+   [tiran]
+
+ * Removed unused customization policy including unit test. Plone 2.1 always
+   installing ATCT.
+   [tiran]
+
  * Fixed 4330 Inter-version ATCT migration fails to migrate types
    to CMFDynamicViewFTI. Migration to the new FTI is part of the version
    migration again.
