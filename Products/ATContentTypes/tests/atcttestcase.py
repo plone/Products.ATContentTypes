@@ -232,6 +232,7 @@ class ATCTTypeTestCase(ATSiteTestCase):
     def test_migrationKeepsPermissions(self):
         atct = self.portal.portal_atct
         ttool = self.portal.portal_types
+        cat = self.portal.portal_catalog
         old_fti = ttool[self.cmf_portal_type]
         
         # create old object
@@ -239,6 +240,7 @@ class ATCTTypeTestCase(ATSiteTestCase):
         old_fti.global_allow = 1
         self.folder.invokeFactory(self.cmf_portal_type, 'permcheck')
         obj = self.folder.permcheck
+        cat.indexObject(obj) # index object explictly because Topics aren't indexed
         self.failUnlessEqual(obj.portal_type, self.cmf_portal_type)
         # modify permissions
         roles = obj.valid_roles() # we rely on the following order of roles
@@ -281,6 +283,7 @@ class ATCTTypeTestCase(ATSiteTestCase):
         # test if the atct tool migrates all types
         atct = self.portal.portal_atct
         ttool = self.portal.portal_types
+        cat = self.portal.portal_catalog
         old_fti = ttool[self.cmf_portal_type]
         
         # create old object
@@ -288,6 +291,7 @@ class ATCTTypeTestCase(ATSiteTestCase):
         old_fti.global_allow = 1
         self.folder.invokeFactory(self.cmf_portal_type, 'migrationtest')
         obj = self.folder.migrationtest
+        cat.indexObject(obj) # index object explictly because Topics aren't indexed
         self.failUnless(isinstance(obj, self.cmf_klass), obj.__class__)
         self.failUnlessEqual(obj.portal_type, self.cmf_portal_type)
         del obj # keep no references when migrating
