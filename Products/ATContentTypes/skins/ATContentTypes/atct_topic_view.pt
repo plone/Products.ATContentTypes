@@ -1,0 +1,143 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+
+<body>
+
+<div metal:fill-slot="main">
+    <metal:body define-macro="body_macro">
+
+        <div metal:use-macro="here/document_actions/macros/document_actions">
+             Document actions (print, sendto etc)
+        </div>
+
+        <h1 tal:content="here/title_or_id" class="documentFirstHeading">
+            Title or id
+        </h1>
+
+        <a href=""
+           class="link-parent"
+           tal:define="parent_url python:here.navigationParent(here, template.getId())"
+           tal:condition="parent_url"
+           tal:attributes="href parent_url"
+           i18n:translate="go_to_parent_url">
+            Up one level
+        </a>
+
+        <div class="documentDescription" tal:content="structure here/Description">
+            description
+        </div>
+
+        <metal:listingmacro define-macro="listing">
+        <tal:topiccontents define="topicContents here/queryCatalog">
+
+            <tal:listing condition="topicContents">
+            <a style='text-align: right' href="#"
+               tal:condition="nocall: here/asPDF|nothing"
+               tal:attributes="href string:${here_url}/asPDF/atct_topic_pdf_template/atct_topic_pdf"
+               i18n:translate="label_download_as_pdf"
+               i18n:domain="atcontenttypes">
+                Download PDF
+            </a>
+
+            <tal:default condition="not:here/getCustomView|nothing"
+                         define="folderContents topicContents">
+                <metal:listing metal:use-macro="here/folder_listing/macros/listing">
+                    <metal:empty metal:fill-slot="no_items_in_listing"></metal:empty>
+                </metal:listing>
+
+            </tal:default>
+
+            <tal:custom condition="here/getCustomView|nothing"
+                        define="vocab python:here.listMetaDataFields(False)">
+
+                <table class="listing"
+                       summary="Content listing"
+                       cellpadding="0" cellspacing="0" width="100%"
+                       i18n:attributes="summary summary_content_listing;">
+                     <thead>
+                        <tr>
+                            <th tal:repeat="field here/getCustomViewFields"
+                                tal:content="python:vocab.getValue(field, field)"
+                                i18n:translate=""/>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tal:brain tal:repeat="obj topicContents">
+                        <tr tal:define="oddrow repeat/obj/odd;"
+                            tal:attributes="class python:test(oddrow, 'even', 'odd')">
+                            <tal:fields repeat="field here/getCustomViewFields"
+                                        define="url obj/getURL;
+                                                obj_type obj/portal_type;
+                                                obj_typeinfo python: here.portal_types.getTypeInfo(obj_type);
+                                                icon python:portal_url+'/'+ obj_typeinfo.getIcon();
+                                                title_or_id obj/pretty_title_or_id">
+                            <tal:block define="value python: getattr(obj, field, None)">
+                                <td tal:condition="python: field != 'Title'"
+                                    tal:content="python:here.formatCatalogMetadata(value)"/>
+                                <td tal:condition="python: field == 'Title'">
+                                    <a href="#" tal:attributes="href url">
+                                        <img src="#"
+                                             height="16"
+                                             width="16"
+                                             tal:attributes="src icon"/>
+                                    </a>
+
+                                    <a href="#" tal:condition="python: obj.portal_type not in ['Link', 'Image']"
+                                                tal:attributes="href url"
+                                                tal:content="title_or_id" />
+
+                                    <a href="#" tal:condition="python: obj.portal_type == 'Image'"
+                                                tal:attributes="href string:${url}/view"
+                                                tal:content="title_or_id" />
+
+                                    <a href="#"
+                                       tal:condition="python: obj.portal_type == 'Link'"
+                                       tal:attributes="href obj/getRemoteUrl;"
+                                       class="link-plain"
+                                       tal:content="title_or_id" />
+                                </td>
+                            </tal:block>
+                            </tal:fields>
+                        </tr>
+                        </tal:brain>
+                     </tbody>
+                </table>
+            </tal:custom>
+
+            </tal:listing>
+
+            <p class="discreet"
+               tal:condition="python: not topicContents and here.listCriteria()"
+               i18n:domain="atcontenttypes"
+               i18n:translate="description_no_items_in_topic">
+                There are currently no results for this search.
+            </p>
+
+            <p class="discreet"
+               tal:condition="not: here/listCriteria"
+               i18n:domain="atcontenttypes"
+               i18n:translate="description_no_criteria_in_topic">
+                There are currently no criteria on which to search.
+                Please add them using the 'criteria' tab.
+            </p>
+
+        </tal:topiccontents>
+        </metal:listingmacro>
+    </metal:body>
+
+    <metal:body define-macro="folderlisting_macro">
+        <tal:subtopics condition="here/hasSubtopics">
+            <h2 i18n:domain="atcontenttypes"
+                i18n:translate="sub_topics_heading">
+                Sub-topics:
+            </h2>
+            <metal:list metal:use-macro="here/base/macros/folderlisting"/>
+        </tal:subtopics>
+    </metal:body>
+
+</div>
+
+</body>
+</html>
