@@ -32,3 +32,6 @@ def registerMigrations():
     atct.registerUpgradePath('1.0.0-devel (snapshot-2005-07-05)',
                              '1.0.0-rc1',
                              v1.betas.beta1_rc1)
+    atct.registerUpgradePath('1.0.0-rc1',
+                             '1.0.0-rc2 (SVN/UNRELEASED)',
+                             null)
