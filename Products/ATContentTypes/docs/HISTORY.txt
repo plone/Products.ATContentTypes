@@ -1,6 +1,18 @@
 1.0.0-rc2
 ====================
 
+ * Fixed http://members.plone.org/collector/4321 which was caused by three
+   distinct bugs. 1) The initial rename of the CMF object didn't preserve
+   order, but rather moved the object to the end of the list.  2) When
+   migrating folders the check for orderability on self.new always failed
+   because self.new is None at this point, so ordering wasn't attempted.
+   3) When going through the subobjects of a folder the position was noted,
+   and then the object deleted, the next object was now in the same position
+   as the prior one and the order was lost.  Now there is a seperate loop to
+   delete the objects after the loop which marks the order and preserves the
+   object.
+   [alecm]
+
  * Fixed some minor issues with the relative url and CMF uid handling in
    ATFavorite.
    [tiran]

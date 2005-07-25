@@ -190,6 +190,27 @@ class TestTypeMigrations(atcttestcase.ATCTTypeTestCase):
             import sys, traceback
             self.fail('Failed to migrate types when an expected FTI is missing: %s \n %s'%(e,''.join(traceback.format_tb(sys.exc_traceback))))
 
+    def test_folder_migration_preserves_order(self):
+        fold = self._createType(self.folder, 'CMF Folder', 'test_folder')
+        doc1 = self._createType(fold, 'CMF Document', 'doc1')
+        doc2 = self._createType(fold, 'CMF Document', 'doc2')
+        doc3 = self._createType(fold, 'CMF Document', 'doc3')
+        doc4 = self._createType(fold, 'CMF Document', 'doc4')
+        doc5 = self._createType(fold, 'CMF Document', 'doc5')
+        fold.moveObjectToPosition('doc5', 3)
+        transaction.commit(1)
+        self.assertEqual(fold.portal_type, 'CMF Folder')
+        self.assertEqual(doc1.portal_type, 'CMF Document')
+        self.assertEqual(fold.objectIds(),
+                                        ['doc1','doc2','doc3','doc5','doc4'])
+        self.portal.portal_atct.migrateToATCT(self.portal)
+        fold = self.folder.test_folder
+        doc1 = fold.doc1
+        self.assertEqual(fold.portal_type, 'Folder')
+        self.assertEqual(doc1.portal_type, 'Document')
+        self.assertEqual(fold.objectIds(),
+                                        ['doc1','doc2','doc3','doc5','doc4'])
+
 
 tests.append(TestTypeMigrations)
 
