@@ -95,16 +95,16 @@ class ATCTTypeTestCase(ATSiteTestCase):
     icon = ''
 
     def afterSetUp(self):
-        self.setRoles(['Manager', 'Member'])
+        #self.setRoles(['Manager', 'Member'])
         self._ATCT = self._createType(self.folder, self.portal_type, 'ATCT')
         self._cmf = self._createType(self.folder, self.cmf_portal_type, 'cmf')
 
-    def _createType(self, context, portal_type, id):
+    def _createType(self, context, portal_type, id, **kwargs):
         """Helper method to create a new type 
         """
         ttool = getToolByName(context, 'portal_types')
         fti = ttool.getTypeInfo(portal_type)
-        fti.constructInstance(context, id)
+        fti.constructInstance(context, id, **kwargs)
         return getattr(context.aq_inner.aq_explicit, id)
     
     def test_000testsetup(self):
@@ -198,11 +198,10 @@ class ATCTTypeTestCase(ATSiteTestCase):
 
 
     def test_idValidation(self):
-        ttool = getToolByName(self.portal, 'portal_types')
-        atctFTI = ttool.getTypeInfo(self.portal_type)
-        atctFTI.constructInstance(self.folder, 'asdf')
-        atctFTI.constructInstance(self.folder, 'asdf2')
-        asdf = self.folder.asdf
+        self.setRoles(['Manager', 'Member']) # for ATTopic
+        asdf = self._createType(self.folder, self.portal_type, 'asdf')
+        asdf2 = self._createType(self.folder, self.portal_type, 'asdf2')
+        self.setRoles(['Member'])
         
         request = FakeRequestSession()
         

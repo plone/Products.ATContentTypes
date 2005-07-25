@@ -36,6 +36,7 @@ from AccessControl.Permission import Permission
 
 from Products.ATContentTypes.migration.common import *
 from Products.ATContentTypes.migration.common import _createObjectByType
+from Products.Archetypes.interfaces.referenceable import IReferenceable
 
 LOG = logging.getLogger('ATCT.migration')
 
@@ -516,10 +517,33 @@ class FolderMigrationMixin(ItemMigrationMixin):
             for id, pos in orderMap.items():
                 self.new.moveObjectToPosition(id, pos)
 
-class CMFItemMigrator(ItemMigrationMixin, BaseCMFMigrator):
+class UIDMigrator:
+    """Migrator class for migration CMF and AT uids
+    """
+    
+    def migrate_cmf_uid(self):
+        """Migrate CMF uids
+        """
+        uidhandler = getToolByName(self.parent, 'portal_uidhandler', None)
+        if uidhandler is None:
+            return # no uid handler available
+        uid = uidhandler.queryUid(self.old, default=None)
+        if uid is not None:
+            uidhandler._setUid(self.new, uid)
+            
+    def migrate_at_uuid(self):
+        """Migrate AT universal uid
+        """
+        if not IReferenceable.isImplementedBy(self.old):
+            return # old object doesn't support AT uuids
+        uid = self.old.UID()
+        self.old._uncatalogUID(self.parent)
+        self.new._setUID(uid)
+
+class CMFItemMigrator(ItemMigrationMixin, UIDMigrator, BaseCMFMigrator):
     """Migrator for items implementing the CMF API
     """
 
-class CMFFolderMigrator(FolderMigrationMixin, BaseCMFMigrator):
+class CMFFolderMigrator(FolderMigrationMixin, UIDMigrator, BaseCMFMigrator):
     """Migrator from folderish items implementing the CMF API
     """

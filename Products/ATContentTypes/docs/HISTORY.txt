@@ -1,6 +1,17 @@
 1.0.0-rc2
 ====================
 
+ * Fixed some minor issues with the relative url and CMF uid handling in
+   ATFavorite.
+   [tiran]
+
+ * Added AT and CMF uid migration to the migration system.
+   [tiran]
+
+ * Fixed the unit test fixture and ATFavorite unit tests. Now tests aren't
+   running as Manager only when really needed.
+   [tiran]
+
 1.0.0-rc1 2005-07-23
 ====================
 

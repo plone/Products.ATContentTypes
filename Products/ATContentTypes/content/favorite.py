@@ -24,13 +24,18 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.ATFavorite'
 
-from Products.CMFCore.utils import getToolByName
+import urlparse
+import logging
+
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from ComputedAttribute import ComputedAttribute
 from ZODB.POSException import ConflictError
 
-from Products.Archetypes.debug import _zlogger
+from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
+
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import StringField
 from Products.Archetypes.public import StringWidget
@@ -42,8 +47,7 @@ from Products.ATContentTypes.interfaces import IATFavorite
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
+LOG = logging.getLogger('ATCT')
 
 ATFavoriteSchema = ATContentTypeSchema.copy() + Schema((
     StringField('remoteUrl',
@@ -95,15 +99,43 @@ class ATFavorite(ATCTContent):
         """
         # need to check why this is different than PortalLink
         utool  = getToolByName(self, 'portal_url')
+        portal_url = utool()
         remote = self._getRemoteUrl()
         if remote:
             if remote.startswith('/'):
                 remote = remote[1:]
-            return '%s/%s' % (utool(), remote)
+            return '%s/%s' % (portal_url, remote)
         else:
-            return utool()
+            return portal_url
+            
+    def _getRemoteUrl(self):
+        """Accessor 
+        """
+        return self.getField('remoteUrl').get(self)
+            
+    remote_url = ComputedAttribute(_getRemoteUrl, 1)
 
-    remote_url = ComputedAttribute(getRemoteUrl, 1)
+    security.declareProtected(ModifyPortalContent, 'setRemoteUrl')
+    def setRemoteUrl(self, remote_url):
+        """Set url relative to portal root
+        """
+        utool  = getToolByName(self, 'portal_url')
+        # strip off scheme and machine from URL if present
+        tokens = urlparse.urlparse(remote_url, 'http')
+        if tokens[1]:
+            # There is a nethost, remove it
+            t=('', '') + tokens[2:]
+            remote_url = urlparse.urlunparse(t)
+        # if URL begins with site URL, remove site URL
+        portal_url = utool.getPortalPath()
+        i = remote_url.find(portal_url)
+        if i==0:
+            remote_url=remote_url[len(portal_url):]
+        # if site is still absolute, make it relative
+        if remote_url[:1]=='/':
+            remote_url=remote_url[1:]
+        
+        self.getField('remoteUrl').set(self, remote_url)
 
     security.declareProtected(View, 'getIcon')
     def getIcon(self, relative_to_portal=0):
@@ -111,7 +143,7 @@ class ATFavorite(ATCTContent):
         to display an icon based on what the Favorite links to.
         """
         obj =  self.getObject()
-        if obj:
+        if obj is not None:
             return obj.getIcon(relative_to_portal)
         else:
             return 'favorite_broken_icon.gif'
@@ -123,20 +155,19 @@ class ATFavorite(ATCTContent):
         """
         utool  = getToolByName(self, 'portal_url')
         portal = utool.getPortalObject()
-        remote = self._getRemoteUrl()
+        relative_url = self._getRemoteUrl()
         try:
-            obj = portal.restrictedTraverse(remote)
+            obj = portal.restrictedTraverse(relative_url)
         except ConflictError:
             raise
         except (KeyError, AttributeError, Unauthorized, 'Unauthorized', ):
-            _zlogger.log_exc()
+            LOG.error('Failed to get object for %s with url of %s' % (repr(self),
+                      relative_url), exc_info=True)
             obj = None
         return obj
 
     security.declarePrivate('cmf_edit')
     def cmf_edit(self, remote_url=None, **kwargs):
-        if not remote_url:
-            remote_url = kwargs.get('remote_url', None)
         self.update(remoteUrl = remote_url, **kwargs)
 
 registerATCT(ATFavorite, PROJECTNAME)
