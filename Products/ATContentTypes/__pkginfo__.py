@@ -7,7 +7,9 @@ modname=PRODUCT.__name__
 # (major, minor, patchlevel, release info) where release info is:
 # -99 for alpha, -49 for beta, -19 for rc and 0 for final
 # increment the release info number by one e.g. -98 for alpha2
-vers, rest = version.split(' ')
+ver_tup = version.split(' ')
+vers = ver_tup[0]
+rest = len(ver_tup) == 2 and ver_tup[1] or ''
 major, minor, bugfix =  vers.split('.')
 bugfix, release = bugfix.split('-')
 

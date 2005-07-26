@@ -31,9 +31,11 @@ from Products.ATContentTypes.tests import atcttestcase
 
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
+from Products.Archetypes.tests.atsitetestcase import portal_name
 import time
 
 from Products.ATContentTypes.content.favorite import ATFavorite
@@ -45,17 +47,20 @@ from Products.CMFDefault.Favorite import Favorite
 from Interface.Verify import verifyObject
 from Products.CMFPlone import transaction
 
-URL='/test/url'
+URL='/%s/Members' % portal_name
 
 def editCMF(obj):
     obj.setTitle('Test Title')
     obj.setDescription('Test description')
     obj.edit(remote_url=URL)
+    assert obj.remote_url == 'Members'
+    return obj
 
 def editATCT(obj):
     obj.setTitle('Test Title')
     obj.setDescription('Test description')
     obj.setRemoteUrl(URL)
+    return obj
 
 tests = []
 
@@ -75,16 +80,28 @@ class TestSiteATFavorite(atcttestcase.ATCTTypeTestCase):
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_edit(self):
-        old = self._cmf
-        new = self._ATCT
-        editCMF(old)
-        editATCT(new)
-        self.failUnless(old.Title() == new.Title(), 'Title mismatch: %s / %s' \
-                        % (old.Title(), new.Title()))
-        self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
-                        % (old.Description(), new.Description()))
-        self.failUnless(old.getRemoteUrl() == new.getRemoteUrl(), 'URL mismatch: %s / %s' \
-                        % (old.getRemoteUrl(), new.getRemoteUrl()))
+        old = editCMF(self._cmf)
+        new = editATCT(self._ATCT)
+        transaction.savepoint()
+        
+        # CMF uid handling test ... had some issues with it
+        obj = self.portal.unrestrictedTraverse(URL)
+        handler = getToolByName(self.portal, 'portal_uidhandler')
+        uid = old.remote_uid
+        self.failUnlessEqual(handler.queryObject(uid).getPhysicalPath(), 
+                             obj.getPhysicalPath())
+        
+        self.failUnlessEqual(old.Title(), new.Title())
+        self.failUnlessEqual(old.Description(), new.Description())
+        
+        url = 'http://nohost%s' % URL
+        self.failUnlessEqual(url, obj.absolute_url())
+        
+        self.failUnlessEqual(old.remote_url, URL[len(portal_name)+2:])
+        self.failUnlessEqual(old.remote_url, new.remote_url)
+        self.failUnlessEqual(old.getRemoteUrl(), url)
+        self.failUnlessEqual(new.getRemoteUrl(), url)
+        self.failUnlessEqual(old.getRemoteUrl(), new.getRemoteUrl())
 
     def testLink(self):
         obj = self._ATCT
@@ -129,7 +146,10 @@ class TestSiteATFavorite(atcttestcase.ATCTTypeTestCase):
     def test_get_size(self):
         atct = self._ATCT
         editATCT(atct)
-        self.failUnlessEqual(atct.get_size(), len(URL))
+        # url is /plone/Members but the favorite stores the url relative to
+        # the portal so substract length of the portal + 2 for the two slashes
+        url_len = len(URL) - len(portal_name) - 2
+        self.failUnlessEqual(atct.get_size(), url_len)
 
 tests.append(TestSiteATFavorite)
 

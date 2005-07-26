@@ -88,6 +88,13 @@ CMFDynamicViewFTI
 
 A special new FTI for dynamic views. It is the successor of TemplateMixin. 
 
+Marshall
+--------
+
+All content type are using the controlled marshaller from Sid's Marshall
+product. A current version of the marshall product is required to run
+ATContentTypes.
+
 =====================
 Optional Requirements
 =====================

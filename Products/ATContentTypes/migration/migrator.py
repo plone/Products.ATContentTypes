@@ -36,6 +36,7 @@ from AccessControl.Permission import Permission
 
 from Products.ATContentTypes.migration.common import *
 from Products.ATContentTypes.migration.common import _createObjectByType
+from Products.Archetypes.interfaces.referenceable import IReferenceable
 
 LOG = logging.getLogger('ATCT.migration')
 
@@ -181,7 +182,10 @@ class BaseMigrator:
             __traceback_info__ = (self, method, self.old, self.orig_id)
             # may raise an exception, catch it later
             method()
-
+        # preserve position on rename
+        self.need_order = IOrderedContainer.isImplementedBy(self.parent)
+        if self.need_order:
+            self._position = self.parent.getObjectPosition(self.orig_id)
         self.renameOld()
         self.createNew()
 
@@ -438,9 +442,8 @@ class ItemMigrationMixin:
     def reorder(self):
         """Reorder the new object in its parent
         """
-        if IOrderedContainer.isImplementedBy(self.parent):
+        if self.need_order:
             try:
-                self._position = self.parent.getObjectPosition(self.old_id)
                 self.parent.moveObject(self.new_id, self._position)
             except ConflictError:
                 raise
@@ -462,10 +465,8 @@ class FolderMigrationMixin(ItemMigrationMixin):
         For performance reasons the objects are removed from the old folder before it
         is renamed. Elsewise the objects would be reindex more often.
         """
-        # in CMF 1.5 Topic is orderable while ATCT's Topic is not orderable
-        # order objects only when old *and* are orderable 
-        orderAble = IOrderedContainer.isImplementedBy(self.old) and \
-                    IOrderedContainer.isImplementedBy(self.new)
+
+        orderAble = IOrderedContainer.isImplementedBy(self.old)
         orderMap = {}
         subobjs = {}
 
@@ -488,6 +489,9 @@ class FolderMigrationMixin(ItemMigrationMixin):
             # doesn't unindex an object. The migrate children method uses
             # _setObject later. This methods indexes the object again and
             # so updates all catalogs.
+        for id in self.old.objectIds():
+            # Loop again to remove objects, order is not preserved when
+            # deleting objects
             self.old._delOb(id)
             # We need to take care to remove the relevant ids from _objects
             # otherwise objectValues breaks.
@@ -511,15 +515,41 @@ class FolderMigrationMixin(ItemMigrationMixin):
             self.new._setObject(id, obj, set_owner=0)
 
         # reorder items
-        if self.orderAble:
+        # in CMF 1.5 Topic is orderable while ATCT's Topic is not orderable
+        # order objects only when old *and* new are orderable we can't check
+        # when creating the map because self.new == None.
+        if self.orderAble and IOrderedContainer.isImplementedBy(self.new):
             orderMap = self.orderMap
             for id, pos in orderMap.items():
                 self.new.moveObjectToPosition(id, pos)
 
-class CMFItemMigrator(ItemMigrationMixin, BaseCMFMigrator):
+class UIDMigrator:
+    """Migrator class for migration CMF and AT uids
+    """
+    
+    def migrate_cmf_uid(self):
+        """Migrate CMF uids
+        """
+        uidhandler = getToolByName(self.parent, 'portal_uidhandler', None)
+        if uidhandler is None:
+            return # no uid handler available
+        uid = uidhandler.queryUid(self.old, default=None)
+        if uid is not None:
+            uidhandler._setUid(self.new, uid)
+            
+    def migrate_at_uuid(self):
+        """Migrate AT universal uid
+        """
+        if not IReferenceable.isImplementedBy(self.old):
+            return # old object doesn't support AT uuids
+        uid = self.old.UID()
+        self.old._uncatalogUID(self.parent)
+        self.new._setUID(uid)
+
+class CMFItemMigrator(ItemMigrationMixin, UIDMigrator, BaseCMFMigrator):
     """Migrator for items implementing the CMF API
     """
 
-class CMFFolderMigrator(FolderMigrationMixin, BaseCMFMigrator):
+class CMFFolderMigrator(FolderMigrationMixin, UIDMigrator, BaseCMFMigrator):
     """Migrator from folderish items implementing the CMF API
     """

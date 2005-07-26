@@ -151,8 +151,10 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
     def setInstanceVersion(self, version):
         """ The version this instance of atct is on """
         self._version = version
+        ver_tup = version.split(' ')
+        vers = ver_tup[0]
+        rest = len(ver_tup) == 2 and ver_tup[1] or ''
 
-        vers, rest = version.split(' ')
         major, minor, bugfix =  vers.split('.')
         bugfix, release = bugfix.split('-')
 

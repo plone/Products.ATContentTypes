@@ -275,6 +275,18 @@ class ATCTMixin(BrowserDefaultMixin):
             return "n/a"
         return f.get_size(self) or 0
 
+    def _PUT_ignorematch(self, id_or_obj):
+        """Helper for workaround for broken FTP/WebDAV clients
+        """
+        if isinstance(id_or_obj, basestring):
+            id = id_or_obj
+        else:
+            id = id_or_obj.getId()
+        # broken Mac OS X Finder
+        if id == '.DS_Store' or id.startswith('._'):
+            return True
+        return False 
+
 InitializeClass(ATCTMixin)
 
 class ATCTContent(ATCTMixin, BaseContent):
@@ -312,6 +324,18 @@ class ATCTContent(ATCTMixin, BaseContent):
         title = self.Title()
         if not title:
             self.setTitle(self.getId())
+            
+    #def PUT(self, *args, **kwargs):
+    #    """Overwrite PUT to delete ignored content after it is created
+    #    """
+    #    created = getattr(self, ' __null_resource__', False)
+    #    result = BaseContent.PUT(self, *args, **kwargs)
+    #    if created and self._PUT_ignorematch(self):
+    #        parent = getattr(self, '__parent__', None)
+    #        name = getattr(self, '__name__', None)
+    #        if parent is not None or name is not None:
+    #            parent.manage_delObjects([name])
+    #    return result
 
 InitializeClass(ATCTContent)
 
@@ -498,67 +522,6 @@ class ATCTFileContent(ATCTContent):
         elif check_id:
             errors[f_name] = check_id
 
-    security.declarePrivate('loadFileFromURL')
-    def loadFileFromURL(self, url, contenttypes=()):
-        """Loads a file from an url using urllib2
-
-        You can use contenttypes to restrict uploaded content types like:
-            ('image',) for all image content types
-            ('image/jpeg', 'image/png') only jpeg and png
-
-        May raise an urllib2.URLError based exception or InvalidContentType
-
-        returns file_handler, mimetype, filename, size_in_bytes
-        """
-        fh = urllib2.urlopen(url)
-
-        info = fh.info()
-        mimetype = info.get('content-type', 'application/octetstream')
-        size = info.get('content-length', None)
-
-        # scheme, netloc, path, parameters, query, fragment
-        path = urlparse.urlparse(fh.geturl())[2]
-        if path.endswith('/'):
-            pos = -2
-        else:
-            pos = -1
-        filename = path.split('/')[pos]
-
-        success = False
-        for ct in contenttypes:
-            if ct.find('/') == -1:
-                if mimetype[:mimetype.find('/')] == ct:
-                    success = True
-                    break
-            else:
-                if mimetype == ct:
-                    success = True
-                    break
-        if not contenttypes:
-            success = True
-        if not success:
-            raise InvalidContentType, mimetype
-
-        return fh, mimetype, filename, size
-
-    security.declareProtected(ATCTPermissions.UploadViaURL, 'setUploadURL')
-    def setUrlUpload(self, value, **kwargs):
-        """Upload a file from URL
-        """
-        if not value:
-            return
-        # XXX no error catching
-        fh, mimetype, filename, size = self.loadFileFromURL(value,
-                                           contenttypes=('image',))
-        mutator = self.getPrimaryField().getMutator(self)
-        mutator(fh.read(), mimetype=mimetype, filename=filename)
-
-    security.declareProtected(View, 'getUploadURL')
-    def getUrlUpload(self, **kwargs):
-        """Always return the default value since we don't store the url
-        """
-        return self.getField('urlUpload').default
-
     security.declarePrivate('manage_afterPUT')
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
                         filename, REQUEST, RESPONSE):
@@ -665,6 +628,15 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
             return view_method.__of__(self).HEAD(REQUEST, RESPONSE)
         else:
             raise MethodNotAllowed, 'Method not supported for this resource.' 
+
+    def PUT_factory(self, name, typ, body):
+        """Overwrite PUT factory to ignore certain names
+        """
+        if self._PUT_ignorematch(name):
+            LOG.debug("Ignoring upload of %s to %s" % 
+                      (name, self.absolute_url(1)))
+            return None
+        return BaseFolder.PUT_factory(self, name, typ, body)
 
 InitializeClass(ATCTFolderMixin)
 

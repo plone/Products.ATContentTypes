@@ -166,6 +166,12 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
     title = 'Smart Folder'
     meta_type = 'ATTopic'
     icon = 'topic_icon.gif'
+    
+    def afterSetUp(self):
+        self.setRoles(['Manager', 'Member'])
+        self._ATCT = self._createType(self.folder, self.portal_type, 'ATCT')
+        self._cmf = self._createType(self.folder, self.cmf_portal_type, 'cmf')
+        self.setRoles(['Member'])
 
     def test_implementsATTopic(self):
         iface = IATTopic
@@ -209,7 +215,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.assertEquals( query[ 'foo' ], 'bar' )
         self.assertEquals( query[ 'baz' ], {'query': 43} )
 
-    def test_Nested( self ):
+    def test_nested( self ):
         topic = self._ATCT
 
         topic.addCriterion( 'foo', 'ATSimpleStringCriterion' )
@@ -217,7 +223,9 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
             topic.objectIds(), topic.objectIds())
         topic.getCriterion( 'foo_ATSimpleStringCriterion' ).setValue( 'bar' )
 
+        self.setRoles(['Manager', 'Member'])
         topic.addSubtopic( 'qux' )
+        self.setRoles(['Member'])
         subtopic = topic.qux
 
         subtopic.setAcquireCriteria(True)
@@ -313,12 +321,13 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
                                 (old_query, migrated.buildQuery()))
 
     def test_hasSubTopics(self):
-        """ Ensure that has subtopics returns True if there are subtopics,
-            false otherwise
-        """
+        #Ensure that has subtopics returns True if there are subtopics,
+        #    false otherwise
         topic = self._ATCT
         self.failUnlessEqual(topic.hasSubtopics(), False)
+        self.setRoles(['Manager', 'Member'])
         topic.invokeFactory('Topic', 'subtopic')
+        self.setRoles(['Member'])
         self.failUnlessEqual(topic.hasSubtopics(), True)
 
     def test_get_size(self):

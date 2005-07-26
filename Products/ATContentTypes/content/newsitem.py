@@ -55,6 +55,8 @@ from Products.validation.config import validation
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 from Products.validation import V_REQUIRED
 
+from Products.Marshall import ControlledMarshaller
+
 validation.register(MaxSizeValidator('checkNewsImageMaxSize',
                                      maxsize=zconf.ATNewsItem.max_file_size))
 
@@ -114,7 +116,7 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
             size = 40,
             i18n_domain = "plone")
         ),
-    ), marshall=RFC822Marshaller()
+    ), marshall=ControlledMarshaller()
     )
 finalizeATCTSchema(ATNewsItemSchema)
 

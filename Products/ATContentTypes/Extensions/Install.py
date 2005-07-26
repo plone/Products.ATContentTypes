@@ -91,11 +91,12 @@ def install(self, reinstall):
     installable = [ prod['id'] for prod in qi.listInstallableProducts() ]
     installed = [ prod['id'] for prod in qi.listInstalledProducts() ]
     
-    if 'ATReferenceBrowserWidget' not in installable + installed:
-        raise RuntimeError('ATReferenceBrowserWidget not available')
-    if 'ATReferenceBrowserWidget' in installable:
-        qi.installProduct('ATReferenceBrowserWidget')
-        print >>out, 'Install ATReferenceBrowserWidget'
+    for product in ('ATReferenceBrowserWidget', 'Marshall'):
+        if product not in installable + installed:
+            raise RuntimeError('%s not available' % product)
+        if product in installable:
+            qi.installProduct(product)
+            print >>out, 'Install %s' % product
     
 
     # step 5: install skins
@@ -141,6 +142,11 @@ def install(self, reinstall):
         print >>out, 'Migrating existing content to latest version'
         migration_result = tool.upgrade()
         print >>out, migration_result
+    
+    # step 14: add marshallers
+    mr = getToolByName(self, 'marshaller_registry')
+    if not reinstall or not mr.objectIds():
+        setupMarshallPredicates(mr, out)
     
     print >> out, 'Successfully installed %s' % PROJECTNAME
     return out.getvalue()
@@ -238,7 +244,41 @@ def setChainFor(portal_type, chain, wftool, out):
         # default is default :)
         wftool.setChainForPortalTypes((portal_type,), chain)
 
+def setupMarshallPredicates(mr, out):
+    """setup marshaller
+    """
+    from Products.Marshall.predicates import add_predicate
+    installed = mr.objectIds()
+    predicates = [
+        { 'id' : 'image_primary', 
+          'title' : 'Primary field for images' , 
+          'predicate' : 'default', 
+          'expression' : "python: object.portal_type == 'Image'",
+          'component_name' : 'primary_field'
+        },
+        { 'id' : 'file_primary', 
+          'title' : 'Primary field for files' , 
+          'predicate' : 'default', 
+          'expression' : "python: object.portal_type == 'File'",
+          'component_name' : 'primary_field'
+        },
+        { 'id' : 'xml_primary', 
+          'title' : 'Marshall XML w/ primary field', 
+          'predicate' : 'default', 
+          'expression' : "python: mode == 'marshall' and object.getContentType().find('xml') != -1",
+          'component_name' : 'primary_field'
+        },
+        { 'id' : 'default_atct', 
+          'title' : 'Default marshaller for ATCT', 
+          'predicate' : 'default', 
+          'expression' : "python: object.meta_type in ('ATDocument', 'ATEvent', 'ATFavorite', 'ATImage', 'ATLink', 'ATNewsItem')",
+          'component_name' : 'rfc822'
+        },
 
+        ]
+    for predicate in predicates:
+        if predicate['id'] not in installed:
+            add_predicate(mr, **predicate)
 def dummyExternalMethod(self, *args, **kwargs):
     """Dummy external method for backward compatibility
     """

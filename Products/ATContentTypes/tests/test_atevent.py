@@ -204,7 +204,7 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
 
     def test_cmp(self):
         e1 = self._ATCT
-        e2 = self._createType(self.portal, self.portal_type, 'e2')
+        e2 = self._createType(self.folder, self.portal_type, 'e2')
         day29 = DateTime('2004-12-29 0:00:00')
         day30 = DateTime('2004-12-30 0:00:00')
         day31 = DateTime('2004-12-31 0:00:00')

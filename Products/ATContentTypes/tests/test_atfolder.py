@@ -167,7 +167,7 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         # TODO: more tests
 
     def test_migrator_doesnt_migrate_non_contentish_sub_objects(self):
-        # Test that we don't try to migrate conteaind non-content objects
+        # Test that we don't try to migrate contained non-content objects
         old = self._cmf
         id  = old.getId()
 

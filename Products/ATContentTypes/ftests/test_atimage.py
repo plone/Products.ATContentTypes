@@ -34,7 +34,7 @@ from AccessControl import Unauthorized
 
 tests = []
 
-TEST_JPEG = open(os.path.join(PACKAGE_HOME, 'CanonEye.jpg'), 'rb').read()
+TEST_GIF = open(os.path.join(PACKAGE_HOME, 'input', 'test.gif'), 'rb').read()
 
 class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
     
@@ -43,7 +43,7 @@ class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
 
     def afterSetUp(self):
         atctftestcase.ATCTIntegrationTestCase.afterSetUp(self)
-        self.obj.setImage(TEST_JPEG, content_type="image/jpeg")
+        self.obj.setImage(TEST_GIF, content_type="image/gif")
         dcEdit(self.obj)
 
     def test_url_returns_image(self):

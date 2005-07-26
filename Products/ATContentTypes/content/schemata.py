@@ -38,6 +38,7 @@ from Products.CMFCore.permissions import ModifyPortalContent
 
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 
+
 # for ATContentTypes we want to have the description in the edit view
 # just like CMF
 ATContentTypeSchema = BaseSchema.copy() + MetadataSchema((

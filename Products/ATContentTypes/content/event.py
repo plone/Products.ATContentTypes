@@ -59,6 +59,8 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.permission import ChangeEvents
 from Products.ATContentTypes.utils import DT2dt
 
+from Products.Marshall import ControlledMarshaller
+
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
     DateTimeField('startDate',
                   required=True,
@@ -194,7 +196,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                         label = "Contact Phone",
                         label_msgid = "label_contact_phone",
                         i18n_domain = "plone")),
-    ), marshall = RFC822Marshaller()
+    ), marshall = ControlledMarshaller()
     )
 finalizeATCTSchema(ATEventSchema)
 

@@ -44,6 +44,9 @@ from Products.ATContentTypes.interfaces import IATLink
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
+from Products.Marshall import ControlledMarshaller
+
+
 ATLinkSchema = ATContentTypeSchema.copy() + Schema((
     StringField('remoteUrl',
         required=True,
@@ -58,7 +61,7 @@ ATLinkSchema = ATContentTypeSchema.copy() + Schema((
             label = "URL",
             label_msgid = "label_url",
             i18n_domain = "plone")),
-    ))
+    ), marshall=ControlledMarshaller())
 finalizeATCTSchema(ATLinkSchema)
 
 class ATLink(ATCTContent):

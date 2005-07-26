@@ -52,6 +52,8 @@ from Products.validation.validators.SupplValidators import MaxSizeValidator
 from Products.validation.config import validation
 from Products.validation import V_REQUIRED
 
+from Products.Marshall import ControlledMarshaller
+
 validation.register(MaxSizeValidator('checkFileMaxSize',
                                      maxsize=zconf.ATFile.max_file_size))
 
@@ -71,7 +73,7 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
                         label_msgid = "label_file",
                         i18n_domain = "plone",
                         show_content_type = False,)),
-    ), marshall=PrimaryFieldMarshaller()
+    ), marshall=ControlledMarshaller()
     )
 finalizeATCTSchema(ATFileSchema)
 
