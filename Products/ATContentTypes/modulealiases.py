@@ -75,4 +75,8 @@ def createModuleAliases():
         old_name = module.__old_name__
         sys.modules[old_name] = module
 
+# Aliase for EXIF classes
+import exif
+sys.modules['Products.ATContentTypes.lib.exif] = exif
+
 createModuleAliases()
