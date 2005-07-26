@@ -48,6 +48,7 @@ class TestModuleAliases(atcttestcase.ATCTSiteTestCase):
         from Products.ATContentTypes.types.ATLink import ATLink
         from Products.ATContentTypes.types.ATNewsItem import ATNewsItem
         from Products.ATContentTypes.types.ATTopic import ATTopic
+        from Products.ATContentTypes.lib import exif
         
         self.failUnlessEqual(ATDocument.__module__, 
             'Products.ATContentTypes.content.document')
@@ -69,6 +70,7 @@ class TestModuleAliases(atcttestcase.ATCTSiteTestCase):
             'Products.ATContentTypes.content.newsitem')
         self.failUnlessEqual(ATTopic.__module__,
             'Products.ATContentTypes.content.topic')
+        self.failUnlessEqual(exif.__name__, 'exif')
         
     def test_import_criteria(self):
         from Products.ATContentTypes.criteria.boolean import \

@@ -72,11 +72,13 @@ def createModuleAliases():
         if not name.startswith('Products.ATContentTypes'):
             # not a module inside ATCT
             continue
-        old_name = module.__old_name__
+        old_name = getattr(module, '__old_name__', None)
+        if old_name is None:
+            continue
         sys.modules[old_name] = module
 
 # Aliase for EXIF classes
 import exif
-sys.modules['Products.ATContentTypes.lib.exif] = exif
+sys.modules['Products.ATContentTypes.lib.exif'] = exif
 
 createModuleAliases()
