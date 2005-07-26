@@ -68,7 +68,7 @@ class IntegrationTestCase(ATFunctionalSiteTestCase):
         # error log
         from Products.SiteErrorLog.SiteErrorLog import temp_logs
         temp_logs = {} # clean up log
-        self.error_log = self.getPortal().error_log
+        self.error_log = self.portal.error_log
         self.error_log._ignored_exceptions = ()
 
         # disable portal_factory as it's a nuisance here
