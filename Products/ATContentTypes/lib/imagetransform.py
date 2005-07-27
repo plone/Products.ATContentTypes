@@ -34,6 +34,8 @@ from ExtensionClass import Base
 from DateTime import DateTime
 from Globals import InitializeClass
 from OFS.Image import Image as OFSImage
+from OFS.Image import Pdata
+from Acquisition import aq_base
 
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import HAS_PIL
@@ -92,17 +94,26 @@ class ATCTImageTransform(Base):
     security = ClassSecurityInfo()
 
     security.declarePrivate('getImageAsFile')
-    def getImageAsFile(self, scale=None):
+    def getImageAsFile(self, img=None, scale=None):
         """Get the img as file like object
         """
-        f = self.getField('image')
-        img = f.getScale(self, scale)
+        img = aq_base(img)
+        if img is None:
+            f = self.getField('image')
+            img = f.getScale(self, scale)
         # img.data contains the image as string or Pdata chain
         # TODO: explicit check for Pdata or file handler
+        data = None
         if isinstance(img, OFSImage):
             data = str(img.data)
-        else:
+        elif isinstance(img, Pdata):
             data = str(img)
+        elif isinstance(img, str):
+            data = img
+        elif isinstance(img, file) or (hasattr(img, 'read') and
+          hasattr(img, 'seek')):
+            img.seek(0)
+            return img
         if data:
             return StringIO(data)
         else:
@@ -112,7 +123,7 @@ class ATCTImageTransform(Base):
     # partly based on CMFPhoto
     
     security.declareProtected(View, 'getEXIF')
-    def getEXIF(self, refresh=False):
+    def getEXIF(self, img=None, refresh=False):
         """Get the exif informations of the file
         
         The information is cached in _v_image_exif
@@ -125,13 +136,15 @@ class ATCTImageTransform(Base):
         exif_data = getattr(self, cache, None)
         
         if exif_data is None or not isinstance(exif_data, dict):
-            img = self.getImageAsFile(scale=None)
+            img = self.getImageAsFile(img=img, scale=None)
             if img is not None:
                 # some cameras are naughty :(
                 try:
                     img.seek(0)
                     exif_data = exif.process_file(img, debug=False)
-                    img.close()
+                    # seek to 0 and do NOT close because we might work
+                    # on a file upload which is required later
+                    img.seek(0)
                 except:
                     LOG.error('Failed to process EXIF information', exc_info=True)
                     exif_data = {}
@@ -144,8 +157,10 @@ class ATCTImageTransform(Base):
         if not exif_data:
             # alawys return a dict
             exif_data = {}
-        else:
-            setattr(self, cache, exif_data)
+        # set the EXIF cache even if the image has returned an empty
+        # dict. This prevents regenerating the exif every time if an
+        # image doesn't have exif information.
+        setattr(self, cache, exif_data)
         return exif_data
 
     security.declareProtected(View, 'getEXIFOrientation')

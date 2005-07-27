@@ -66,6 +66,9 @@ TEST_EXIF_ERROR = loadImage('canoneye.jpg')
 TEST_GIF = loadImage('test.gif')
 TEST_GIF_LEN = len(TEST_GIF)
 TEST_DIV_ERROR = loadImage('divisionerror.jpg')
+TEST_JPEG_FILE = open(os.path.join(PACKAGE_HOME, 'input', 'canoneye.jpg'), 'rb')
+# XXX replace it by an image with exif informations but w/o
+# the nasty error ...
 TEST_JPEG = loadImage('canoneye.jpg')
 TEST_JPEG_LEN = len(TEST_JPEG)
 
@@ -229,7 +232,34 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         exif_data = exif.process_file(f, debug=False)        
         # probably want to add some tests on returned data. Currently gives 
         #  ValueError in process_file 
-
+    
+    def test_exif_upload(self):
+        atct = self._ATCT
+        atct._image_exif = None
+        
+        # string upload
+        atct.setImage(TEST_JPEG)
+        self.failUnless(len(atct.getEXIF()), atct.getEXIF())
+        atct._image_exif = None
+        
+        # file upload
+        atct.setImage(TEST_JPEG_FILE)
+        self.failUnless(len(atct.getEXIF()), atct.getEXIF())
+        atct._image_exif = None
+        
+        # Pdata upload
+        from OFS.Image import Pdata
+        pd = Pdata(TEST_JPEG)
+        atct.setImage(pd)
+        self.failUnless(len(atct.getEXIF()), atct.getEXIF())
+        atct._image_exif = None
+        
+        # ofs image upload
+        ofs = atct.getImage()
+        atct.setImage(ofs)
+        self.failUnless(len(atct.getEXIF()), atct.getEXIF())
+        atct._image_exif = None
+        
 tests.append(TestSiteATImage)
 
 class TestATImageFields(atcttestcase.ATCTFieldTestCase):

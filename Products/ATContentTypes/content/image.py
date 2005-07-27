@@ -121,13 +121,15 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     security       = ClassSecurityInfo()
 
     security.declareProtected(ModifyPortalContent, 'setImage')
-    def setImage(self, value, **kwargs):
+    def setImage(self, value, refresh_exif=True, **kwargs):
         """Set id to uploaded id
         """
+        # set exif first because rotation might screw up the exif data
+        # the exif methods can handle str, Pdata, OFSImage and file
+        # like objects
+        self.getEXIF(img=value, refresh=refresh_exif)
+        
         self._setATCTFileContent(value, **kwargs)
-        # set exif because rotation might screw up the exif data
-        # XXX: EXIF data will be lost if original image resizing is enabled!
-        self.getEXIF(refresh=kwargs.get('refresh_exif', True))
 
     security.declareProtected(View, 'tag')
     def tag(self, **kwargs):

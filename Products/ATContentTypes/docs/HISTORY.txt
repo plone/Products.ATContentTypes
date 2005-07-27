@@ -1,6 +1,10 @@
 1.0.0-rc2
 ====================
 
+ * Added fix for exif issue when rescaling the original image.  The exif
+   information is now stored before the image is set.
+   [tiran]
+
  * Added a main macro to a few templates so they display nicely when used in
    discussion_reply_form.
    [alecm]
