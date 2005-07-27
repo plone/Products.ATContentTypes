@@ -14,7 +14,8 @@
 
 <body>
 
-<div metal:fill-slot="main"
+<div metal:fill-slot="main">
+<metal:main_macro define-macro="main"
      tal:define="result python:here.atctListAlbum(images=1, folders=1, subimages=0, others=1);
                  images result/images;
                  albums result/folders;
@@ -101,6 +102,7 @@
 
     </tal:listing>
 
+</metal:main_macro>
 </div>
 
 </body>

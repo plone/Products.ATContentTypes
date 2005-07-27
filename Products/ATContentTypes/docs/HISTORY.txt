@@ -1,6 +1,10 @@
 1.0.0-rc2
 ====================
 
+ * Added a main macro to a few templates so they display nicely when used in
+   discussion_reply_form.
+   [alecm]
+
  * Added workaround for broken WebDAV/FTP clients like Mac OS X Finder.
    PUT_factory is patched to use the default_PUT_factory which creates
    standard Zope objects instead of CMF/AT content objects.
