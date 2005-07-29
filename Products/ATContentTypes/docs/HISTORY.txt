@@ -1,5 +1,9 @@
-1.0.0-rc2
+1.0.0-rc2 2005-07-28
 ====================
+
+ * Updated requirements to CMFDynamicViewFTI 1.0.0 and ATRefBrowserWidget
+   1.1.
+   [tiran]
 
  * Fixed error in config loader code. The loader must stop after the first
    conf file is loaded or the conf file is overwritten by the default file.
