@@ -128,7 +128,6 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         # the exif methods can handle str, Pdata, OFSImage and file
         # like objects
         self.getEXIF(img=value, refresh=refresh_exif)
-        
         self._setATCTFileContent(value, **kwargs)
 
     security.declareProtected(View, 'tag')
