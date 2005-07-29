@@ -1,6 +1,11 @@
 1.0.0-rc2
 ====================
 
+ * Add optional arguments to ATTopic.queryCatalog to make it compatible with
+   getFolderContents (optional batching, return full objects instead of
+   brains).  Make the album_view compatible with Smart Folders.
+   [alecm]
+
  * Added fix for exif issue when rescaling the original image.  The exif
    information is now stored before the image is set.
    [tiran]

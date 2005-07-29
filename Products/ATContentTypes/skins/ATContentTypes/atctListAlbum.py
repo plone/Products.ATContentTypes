@@ -12,11 +12,16 @@ from Products.CMFPlone.utils import base_hasattr
 
 result = {}
 
+if context.portal_type == 'Topic':
+    queryMethod = context.queryCatalog
+else:
+    queryMethod = context.getFolderContents
+
 if images:
-    result['images'] = context.getFolderContents(contentFilter={'Type':('Image',)},full_objects=True)
+        result['images'] = queryMethod({'Type':('Image',)},full_objects=True)
 if folders:
     # We don't need the full objects for the folders
-    result['folders'] = context.getFolderContents(contentFilter={'Type':('Folder',)})
+    result['folders'] = queryMethod({'Type':('Folder',)})
 if subimages:
     #Handle brains or objects
     if base_hasattr(context, 'getPath'):
@@ -24,14 +29,14 @@ if subimages:
     else:
         path = '/'.join(context.getPhysicalPath())
     # Explicitly set path to remove default depth
-    result['subimages'] = context.getFolderContents(contentFilter={'Type':('Image',), 'path':path})
+    result['subimages'] = queryMethod({'Type':('Image',), 'path':path})
 if others:
-    allowedContentTypes = context.allowedContentTypes()
-    filtered = [type.title_or_id() for type in allowedContentTypes
-                if type.title_or_id() not in ('Image', 'Folder',) ]
+    searchContentTypes = context.plone_utils.getUserFriendlyTypes()
+    filtered = [p_type for p_type in searchContentTypes
+                if p_type not in ('Image', 'Folder',) ]
     if filtered:
         # We don't need the full objects for the folder_listing
-        result['others'] = context.getFolderContents(contentFilter={'Type':filtered})
+        result['others'] = queryMethod({'portal_type':filtered})
     else:
         result['others'] = ()
 
