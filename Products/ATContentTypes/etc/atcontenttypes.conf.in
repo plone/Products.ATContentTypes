@@ -234,7 +234,7 @@
     <index>
       name effectiveRange
       friendlyName Effective Range
-      description All items pubilcly available on a certain date
+      description All items publicly available on a certain date
       criterion ATFriendlyDateCriteria
       enabled off
     </index>
