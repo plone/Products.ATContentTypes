@@ -117,14 +117,6 @@ def getFileExtOf(klass):
     name = '%s_ext' % klass.meta_type
     return (name, klass.assocFileExt)
 
-def registerTemplates(self, typeInfo, out):
-    """Registers templates in the archetypes tool
-    """
-    for t in typeInfo:
-        klass          = t['klass']
-        portal_type    = klass.portal_type
-        registerTemplatesForClass(self, klass, portal_type)
-
 def registerActionIcons(self, out):
     """Register action icons for Calendar
     """

@@ -36,10 +36,10 @@ Comparing CMF types with ATContentTypes
   
   * Translateable using LinguaPlone.
     
-  * TemplateMixin: All types are using the template feature of Archetypes
-    that allows you to choose the view template per instance. Simply register
-    your template, assign it to a type and choose it in the edit form of
-    your object. This features is used to turn an ordinary folder into a
+  * Dynamic Views: All types are using the new dynamic view FTI
+    that allows you to choose the view template per instance. You can
+    configure the templates in the portal_types tool. This features 
+    is used to turn an ordinary folder into a
     photo ablum by simple switching to a different view.
     
   * Permissions per type and feature: Every type has its own add permission
@@ -104,4 +104,9 @@ What is new in ATContentTypes 1.0
     schemata were moved to the module of their type classes. E.g. instead of
     importing ATDocumentSchema from content.schemata you have to import it from
     content.ATDocument.
+    
+  * ZopeX3/Five briged interfaces
+  
+  * New migration features like savepoints and a catalog patch.
+
 

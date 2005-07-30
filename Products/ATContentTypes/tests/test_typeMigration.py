@@ -203,13 +203,33 @@ class TestTypeMigrations(atcttestcase.ATCTTypeTestCase):
         self.assertEqual(doc1.portal_type, 'CMF Document')
         self.assertEqual(fold.objectIds(),
                                         ['doc1','doc2','doc3','doc5','doc4'])
-        self.portal.portal_atct.migrateToATCT(self.portal)
+        self.portal.portal_atct.migrateToATCT()
         fold = self.folder.test_folder
         doc1 = fold.doc1
         self.assertEqual(fold.portal_type, 'Folder')
         self.assertEqual(doc1.portal_type, 'Document')
         self.assertEqual(fold.objectIds(),
                                         ['doc1','doc2','doc3','doc5','doc4'])
+    
+    def test_migrationFixCMFPortalTypes(self):
+        cat = self.portal.portal_catalog
+        cmfdoc = self._createType(self.folder, 'CMF Document', 'cmfdoc')
+        self.failUnlessEqual(cmfdoc.portal_type, 'CMF Document')
+        # fake the name of an important/copied object
+        # it would have the old name
+        cmfdoc._setPortalTypeName('Document')
+        # recatalog so the catalog knows about the new name
+        cat.reindexObject(cmfdoc)
+        self.failUnlessEqual(cmfdoc.portal_type, 'Document')
+        
+        transaction.savepoint() # subtransaction
+        
+        atct = self.portal.portal_atct
+        
+        changed, elapse, c_elapse = atct.migrationFixCMFPortalTypes()
+        self.failUnless(changed, changed)
+        self.failUnlessEqual(changed[0], '/'.join(cmfdoc.getPhysicalPath()))
+        self.failUnlessEqual(cmfdoc.portal_type, 'CMF Document')
 
 
 tests.append(TestTypeMigrations)

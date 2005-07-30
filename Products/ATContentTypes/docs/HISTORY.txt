@@ -1,6 +1,23 @@
 1.0.0-rc3
 ====================
 
+ * Fixed an error in the module alias code for the exif library. Fixes
+   http://plone.org/collector/4352 - Uploading certain images causes ATCT
+   pickling errors
+   [tiran]
+
+ * Expose some advanced migration options to the user by using new propertites
+   in the portal_atct tool.
+   [tiran]
+
+ * Enhanced and updated documentation, mostly the feature documentations in
+   the portal_atct tool.
+   [tiran]
+
+ * Moved migration related code from tool/atct.py to tool/migration.py. The
+   tool class was getting too long.
+   [tiran]
+
 1.0.0-rc2 2005-07-28
 ====================
 

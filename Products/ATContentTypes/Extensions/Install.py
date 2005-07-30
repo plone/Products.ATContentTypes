@@ -46,7 +46,6 @@ from Products.ATContentTypes.config import WORKFLOW_DEFAULT
 from Products.ATContentTypes.config import GLOBALS
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.Extensions.utils import setupMimeTypes
-from Products.ATContentTypes.Extensions.utils import registerTemplates
 from Products.ATContentTypes.Extensions.utils import registerActionIcons
 
 from Products.CMFDynamicViewFTI.migrate import migrateFTIs
@@ -187,6 +186,7 @@ def installTool(self, out):
         tool = getToolByName(self, TOOLNAME)
     
     # register tool as action provider, multiple installs are harmeless
+    # currently NOT used
     #actions_tool = getToolByName(self, 'portal_actions')
     #actions_tool.addActionProvider(TOOLNAME)
     group = 'atct|ATContentTypes|ATCT Setup'

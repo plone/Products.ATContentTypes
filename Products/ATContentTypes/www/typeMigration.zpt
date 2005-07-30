@@ -7,7 +7,35 @@
 
   <h3>Type Migration</h3>
 
-  <p>TODO explain me</p>
+  <p>Invoke the migration system to migrate CMF content types to ATCT
+     content types.
+  </p>
+  
+  <p><strong>BACKUP your ZODB before running the migration system!</strong>
+     Type migration is a very complex and delicate process that may destroy
+     your data.
+  </p>
+  
+  <p>Before you are invoking the migration system you have to recatalog all 
+     CMF content objects to make sure that your <code>portal_catalog</code>
+     is up to date and contains all CMF content objects. For more informations
+     please refer to the recatalog tab.
+  </p>
+  
+  <p><em>Migration may take a very long time!</em>. You should follow the
+     Zope event log to follow the migration and see errors immediately.
+     On unix systems like Linux, Mac OS X or BSD either start Zope
+     with <code>bin/zopectl fg</code> or attach to the event log of a running
+     Zope server with <code>bin/zopectl logtail</code> from within your
+     instance home.
+  </p>
+  
+  <p>After you have migrated all content objects successfully you should
+     update your portal catalog. Go to the advanced tab of the 
+     <code>portal_catalog</code> tool and press update.
+  </p>
+  
+  <p>TODO: <code>migrationFixCMFPortalTypes</code></p>
  
   <form method="put" action="" tal:attributes="action template/getId">
     <input type="hidden" name="submitted" value="1" />

@@ -66,7 +66,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         expected.sort()
         self.failUnlessEqual(pt, expected)
         
-        pt = t._getCMFPortalTypes(metatype="Portal Topic")
+        pt = t._getCMFPortalTypes(meta_type="Portal Topic")
         self.failUnlessEqual(pt, ['CMF Topic'])
         
     def test_uncatalogcmf(self):

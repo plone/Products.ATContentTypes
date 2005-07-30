@@ -204,11 +204,22 @@ folderMigrators = ( FolderMigrator, LargeFolderMigrator, TopicMigrator,)
 
 def migrateAll(portal, **kwargs):
     LOG.debug('Starting ATContentTypes type migration')
-    #kwargs['use_catalog_patch'] = True
-    #kwargs['use_savepoint'] = True
-    #kwargs['transaction_size'] = 20
-    
     kwargs = kwargs.copy()
+    
+    atct = getToolByName(portal, 'portal_atct')
+    kwargs['use_catalog_patch'] = bool(atct.migration_catalog_patch)
+    kwargs['transaction_size'] = int(atct.migration_transaction_size)
+    transaction = atct.migration_transaction_style
+    if transaction == "full transaction":
+        kwargs['full_transaction'] = True
+        kwargs['use_savepoint'] = False
+    elif transaction == "savepoint":
+        kwargs['full_transaction'] = False
+        kwargs['use_savepoint'] = True
+    else:
+        kwargs['full_transaction'] = False
+        kwargs['use_savepoint'] = False
+    
     for remove in ('src_portal_type', 'dst_portal_type'):
         if remove in kwargs:
             del kwarg[remove]

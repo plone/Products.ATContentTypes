@@ -97,12 +97,10 @@ class ATCTImageTransform(Base):
     def getImageAsFile(self, img=None, scale=None):
         """Get the img as file like object
         """
-        img = aq_base(img)
         if img is None:
             f = self.getField('image')
             img = f.getScale(self, scale)
         # img.data contains the image as string or Pdata chain
-        # TODO: explicit check for Pdata or file handler
         data = None
         if isinstance(img, OFSImage):
             data = str(img.data)
@@ -136,18 +134,18 @@ class ATCTImageTransform(Base):
         exif_data = getattr(self, cache, None)
         
         if exif_data is None or not isinstance(exif_data, dict):
-            img = self.getImageAsFile(img=img, scale=None)
-            if img is not None:
+            io = self.getImageAsFile(img, scale=None)
+            if io is not None:
                 # some cameras are naughty :(
                 try:
-                    img.seek(0)
-                    exif_data = exif.process_file(img, debug=False)
-                    # seek to 0 and do NOT close because we might work
-                    # on a file upload which is required later
-                    img.seek(0)
+                    io.seek(0)
+                    exif_data = exif.process_file(io, debug=False)
                 except:
                     LOG.error('Failed to process EXIF information', exc_info=True)
                     exif_data = {}
+                # seek to 0 and do NOT close because we might work
+                # on a file upload which is required later
+                io.seek(0)
                 # remove some unwanted elements lik thumb nails
                 for key in ('JPEGThumbnail', 'TIFFThumbnail', 
                             'MakerNote JPEGThumbnail'):

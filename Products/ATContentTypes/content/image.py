@@ -127,7 +127,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         # set exif first because rotation might screw up the exif data
         # the exif methods can handle str, Pdata, OFSImage and file
         # like objects
-        self.getEXIF(img=value, refresh=refresh_exif)
+        self.getEXIF(value, refresh=refresh_exif)
         self._setATCTFileContent(value, **kwargs)
 
     security.declareProtected(View, 'tag')
