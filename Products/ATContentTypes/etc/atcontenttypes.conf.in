@@ -269,7 +269,7 @@
     <index>
       name is_default_page
       friendlyName Default Page
-      description Find that are the default view for their containing folder.
+      description Find items that are the default view for their containing folder.
       criterion ATBooleanCriterion
       enabled off
     </index>
