@@ -33,9 +33,6 @@ def alpha2_beta1(portal):
     # Remove folderContents action from Topics
     removeTopicFolderContentsAction(portal, out)
 
-    # Make sure Topic uses /edit method alias for edit action
-    fixTopicEditAction(portal, out)
-
     # ADD NEW STUFF BEFORE THIS LINE!
 
     # Rebuild catalog
@@ -50,6 +47,14 @@ def beta1_rc1(portal):
     out = []
     migrateFTIs2DynamicView(portal, out)
     changeDynView2SelectedLayout(portal, out)
+    return out
+
+def rc2_rc3(portal):
+    """1.0-beta1 -> 1.0.0-rc1
+    """
+    out = []
+    # Make sure Topic uses /edit method alias for edit action
+    fixTopicEditAction(portal, out)
     return out
     
 
