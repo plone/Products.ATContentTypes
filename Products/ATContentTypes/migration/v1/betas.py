@@ -33,6 +33,9 @@ def alpha2_beta1(portal):
     # Remove folderContents action from Topics
     removeTopicFolderContentsAction(portal, out)
 
+    # Make sure Topic uses /edit method alias for edit action
+    fixTopicEditAction(portal, out)
+
     # ADD NEW STUFF BEFORE THIS LINE!
 
     # Rebuild catalog
@@ -234,7 +237,17 @@ def changeDynView2SelectedLayout(portal, out):
                 fti.setMethodAliases(aliases)
                 migrated.append(fti.getId())
     if migrated:
-        out.append('Migrated view alias to (select layou) for %s' % 
+        out.append('Migrated view alias to (select layou) for %s' %
                    ', '.join(migrated))
 
-        
+def fixTopicEditAction(portal, out):
+    """The topic edit action should be /edit"""
+    portal_types = getToolByName(portal, 'portal_types', None)
+    if portal_types is not None:
+        fti = portal_types.getTypeInfo('Topic')
+        if fti is not None:
+            for action in fti.listActions():
+                if action.getId() == 'edit':
+                    if action.getActionExpression().endswith('/atct_edit'):
+                        action.setActionExpression(Expression('string:${object_url}/edit'))
+                        out.append("Made Topic not use /edit for edit action")
