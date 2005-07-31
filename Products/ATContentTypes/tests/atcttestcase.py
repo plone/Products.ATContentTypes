@@ -103,9 +103,13 @@ class ATCTTypeTestCase(ATSiteTestCase):
         """Helper method to create a new type 
         """
         ttool = getToolByName(context, 'portal_types')
+        cat = self.portal.portal_catalog
+        
         fti = ttool.getTypeInfo(portal_type)
         fti.constructInstance(context, id, **kwargs)
-        return getattr(context.aq_inner.aq_explicit, id)
+        obj = getattr(context.aq_inner.aq_explicit, id)
+        cat.indexObject(obj)
+        return obj
     
     def test_000testsetup(self):
         # test if we really have the right test setup
@@ -206,7 +210,7 @@ class ATCTTypeTestCase(ATSiteTestCase):
         request = FakeRequestSession()
         
         # invalid ids
-        ids = ['asdf2', 'ההה', '/asdf2', ' asdf2', 'portal_workflow',
+        ids = ['asdf2', '???', '/asdf2', ' asdf2', 'portal_workflow',
             'portal_url']
         for id in ids:
             request.form = {'id':id, 'fieldset':'default'}
@@ -229,17 +233,10 @@ class ATCTTypeTestCase(ATSiteTestCase):
         self.failUnless(isinstance(marshall, RFC822Marshaller), marshall)
         
     def test_migrationKeepsPermissions(self):
+        self.setRoles(['Manager'])
         atct = self.portal.portal_atct
-        ttool = self.portal.portal_types
-        cat = self.portal.portal_catalog
-        old_fti = ttool[self.cmf_portal_type]
-        
-        # create old object
-        self.setRoles(['Manager',])
-        old_fti.global_allow = 1
-        self.folder.invokeFactory(self.cmf_portal_type, 'permcheck')
-        obj = self.folder.permcheck
-        cat.indexObject(obj) # index object explictly because Topics aren't indexed
+
+        obj = self._createType(self.folder, self.cmf_portal_type, 'permcheck')
         self.failUnlessEqual(obj.portal_type, self.cmf_portal_type)
         # modify permissions
         roles = obj.valid_roles() # we rely on the following order of roles
@@ -275,22 +272,12 @@ class ATCTTypeTestCase(ATSiteTestCase):
         self.failUnlessEqual(permsettings['roles'][3]['checked'], '')
         self.failUnlessEqual(permsettings['roles'][4]['checked'], '')
         self.failUnlessEqual(permsettings['roles'][5]['checked'], 'CHECKED')
-        
-        old_fti.global_allow = 0
 
     def test_tool_auto_migration(self):
+        self.setRoles(['Manager'])
         # test if the atct tool migrates all types
         atct = self.portal.portal_atct
-        ttool = self.portal.portal_types
-        cat = self.portal.portal_catalog
-        old_fti = ttool[self.cmf_portal_type]
-        
-        # create old object
-        self.setRoles(['Manager',])
-        old_fti.global_allow = 1
-        self.folder.invokeFactory(self.cmf_portal_type, 'migrationtest')
-        obj = self.folder.migrationtest
-        cat.indexObject(obj) # index object explictly because Topics aren't indexed
+        obj = self._createType(self.folder, self.cmf_portal_type, 'migrationtest')
         self.failUnless(isinstance(obj, self.cmf_klass), obj.__class__)
         self.failUnlessEqual(obj.portal_type, self.cmf_portal_type)
         del obj # keep no references when migrating
@@ -303,9 +290,6 @@ class ATCTTypeTestCase(ATSiteTestCase):
         self.failUnless(isinstance(obj, self.klass), obj.__class__)
         self.failUnlessEqual(obj.portal_type, self.portal_type)
         self.failUnlessEqual(obj.meta_type, self.meta_type)
-        
-        old_fti.global_allow = 0        
-        self.setRoles(['Member',])
 
     def beforeTearDown(self):
         self.logout()

@@ -59,8 +59,6 @@
   
   # maximum image dimension (w, h)
   # 0,0 means no rescaling of the original image
-  # WARNING: This feature is incompatible with the EXIF code. Resizing the
-  #          original image destroies its exif information before it is saved.
   max_image_dimension 0,0
   
   # enable upload of documents
@@ -87,8 +85,6 @@
   max_file_size no
   # maximum image dimension (w, h)
   # 0,0 means no rescaling of the original image
-  # WARNING: This feature is incompatible with the EXIF code. Resizing the
-  #          original image destroies its exif information before it is saved.
   max_image_dimension 0,0
 </archetype>
 
@@ -238,7 +234,7 @@
     <index>
       name effectiveRange
       friendlyName Effective Range
-      description All items pubilcly available on a certain date
+      description All items publicly available on a certain date
       criterion ATFriendlyDateCriteria
       enabled off
     </index>
@@ -273,7 +269,7 @@
     <index>
       name is_default_page
       friendlyName Default Page
-      description Find that are the default view for their containing folder.
+      description Find items that are the default view for their containing folder.
       criterion ATBooleanCriterion
       enabled off
     </index>

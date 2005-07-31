@@ -23,7 +23,6 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 import os, sys, traceback
 from cStringIO import StringIO
 import logging
-import time
 import zLOG
 
 from OFS.SimpleItem import SimpleItem
@@ -53,6 +52,7 @@ from Products.ATContentTypes.config import ATCT_DIR
 from Products.ATContentTypes.config import WWW_DIR
 from Products.ATContentTypes.migration.atctmigrator import migrateAll
 from Products.ATContentTypes.tool.topic import ATTopicsTool
+from Products.ATContentTypes.tool.migration import ATCTMigrationTool
 
 try:
     from ProgressHandler import ZLogHandler
@@ -89,8 +89,8 @@ def log(message,summary='',severity=0):
 
 class AlreadySwitched(RuntimeError): pass
 
-class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
-    ATTopicsTool):
+class ATCTTool(UniqueObject, SimpleItem, PropertyManager,
+    ActionProviderBase, ATCTMigrationTool, ATTopicsTool):
     """ATContentTypes tool
     
     Used for migration, maintenace ...
@@ -102,47 +102,70 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
     meta_type= 'ATCT Tool'
     title = 'ATContentTypes Tool'
     plone_tool = True
-    
-    _cmfTypesAreRecataloged = False
+    # migration
     _numversion = ()
     _version = ''
-
-    _needRecatalog = 0
+    _needRecatalog = False
     
     __implements__ = (SimpleItem.__implements__, IATCTTool,
                       ActionProviderBase.__implements__,
+                      ATCTMigrationTool.__implements__,
                       ATTopicsTool.__implements__)
         
     manage_options =  (
             {'label' : 'Overview', 'action' : 'manage_overview'},
-            {'label' : 'Type Migration', 'action' : 'manage_typeMigration'},
             {'label' : 'Version Migration', 'action' : 'manage_versionMigration'},
-            {'label' : 'Recatalog', 'action' : 'manage_recatalog'},
             {'label' : 'Image scales', 'action' : 'manage_imageScales'}
-        ) + PropertyManager.manage_options + \
+        ) + ATCTMigrationTool.manage_options + \
+            PropertyManager.manage_options + \
             AccessControl.Owned.Owned.manage_options
             #ActionProviderBase.manage_options + \
             #SimpleItem.manage_options
+    
+    # properties and their default values
+    
+    _properties = PropertyManager._properties + (
+        {'id' : 'image_types', 'type' : 'multiple selection',
+         'mode' : 'w', 'select_variable' : 'listContentTypes'},
+        {'id' : 'folder_types', 'type' : 'multiple selection',
+         'mode' : 'w', 'select_variable' : 'listContentTypes'},
+        {'id' : 'album_batch_size', 'type' : 'int', 'mode' : 'w'},
+        {'id' : 'album_image_scale', 'type' : 'string', 'mode' : 'w'},
+        {'id' : 'single_image_scale', 'type' : 'string', 'mode' : 'w'},
+        {'id' : 'migration_catalog_patch', 'type' : 'boolean',
+         'mode' : 'w'},
+        {'id' : 'migration_transaction_size', 'type' : 'int',
+         'mode' : 'w'},
+        {'id' : 'migration_transaction_style', 'type' : 'selection',
+         'mode' : 'w', 'select_variable' : 'transactionStyles'},
+        )
+    # list of portal types with an Image field used for rescale
+    # and album listing
+    image_types = ('Image', 'News Item',)
+    # list of portal types to display as album folder
+    folder_types = ('Folder', 'Large Plone Folder')
+    # album batch size
+    album_batch_size = 30
+    # scale name for image in batch view
+    album_image_scale = 'thumb'
+    # scale name for image in single view
+    single_image_scale = 'preview'
+    
+    migration_catalog_patch = False
+    migration_transaction_size = 20
+    migration_transaction_style = None
+    transactionStyles = (None, 'full transaction', 'savepoint')
+    
+    # templates
 
-    security.declareProtected(ManagePortal,
-                              'manage_imageScales')
+    security.declareProtected(ManagePortal, 'manage_imageScales')
     manage_imageScales = PageTemplateFile('imageScales', WWW_DIR)
     
-    security.declareProtected(ManagePortal,
-                              'manage_recatalog')
-    manage_recatalog = PageTemplateFile('recatalog', WWW_DIR)
-
-    security.declareProtected(ManagePortal,
-                              'manage_typemigration')
-    manage_typeMigration = PageTemplateFile('typeMigration', WWW_DIR)
-
-    security.declareProtected(ManagePortal,
-                              'manage_versionMigration')
+    security.declareProtected(ManagePortal, 'manage_versionMigration')
     manage_versionMigration = PageTemplateFile('versionMigration', WWW_DIR)
 
 
-    security.declareProtected(ManagePortal,
-                              'manage_overview')
+    security.declareProtected(ManagePortal, 'manage_overview')
     manage_overview = PageTemplateFile('overview', WWW_DIR)
     
     ## version code
@@ -203,11 +226,6 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
                   },)
 
         return icons
-
-    security.declareProtected(ManagePortal, 'needRecatalog')
-    def needRecatalog(self):
-        """ Does this thing now need recataloging? """
-        return self._needRecatalog
 
     security.declareProtected(ManagePortal, 'knownVersions')
     def knownVersions(self):
@@ -307,12 +325,17 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
 
         return out
 
+    security.declareProtected(ManagePortal, 'needRecatalog')
+    def needRecatalog(self):
+        """ Does this thing now need recataloging? """
+        return self._needRecatalog
+
     ##############################################################
     # Private methods
 
     def _check(self):
         """ Are we inside an ATCT site?  This is probably silly and redundant."""
-        if getattr(self, TOOLNAME, []) == []:
+        if getattr(self, TOOLNAME, None) is None:
             raise AttributeError, 'You must be in an ATCT site to migrate.'
 
     def _upgrade(self, version):
@@ -327,57 +350,19 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
         res = function(self.aq_parent)
         return newversion, res
 
-
-    ## recataloging code
-
-    security.declareProtected(ManagePortal, 'getCMFTypesAreRecataloged')
-    def getCMFTypesAreRecataloged(self):
-        """Get the is recatalog flag
-        """
-        return bool(self._cmfTypesAreRecataloged)
-    
-    security.declareProtected(ManagePortal, 'setCMFTypesAreRecataloged')
-    def setCMFTypesAreRecataloged(self, value=True):
-        """set the is recatalog flag
-        """
-        self._cmfTypesAreRecataloged = value
-
-    security.declareProtected(ManagePortal, 'recatalogCMFTypes')
-    def recatalogCMFTypes(self, remove=True):
-        """Remove and recatalog all CMF core products + CMFPlone types
-        """
-        if remove:
-            rres, relapse, rc_elapse = self._removeCMFtypesFromCatalog()
-        else:
-            rres, relapse, rc_elapse = None, 0, 0
-        cres, celapse, cc_elapse = self._catalogCMFtypes()
-        elapse = relapse + celapse
-        c_elapse = rc_elapse + cc_elapse
-        return elapse, c_elapse
- 
-    security.declareProtected(ManagePortal, 'recatalogATCTTypes')
-    def recatalogATCTTypes(self, remove=False):
-        """Remove and recatalog all ATCT types
-        """
-        if remove:
-            rres, relapse, rc_elapse = self._removeATCTtypesFromCatalog()
-        else:
-            rres, relapse, rc_elapse = None, 0, 0
-        cres, celapse, cc_elapse = self._catalogATCTtypes()
-        elapse = relapse + celapse
-        c_elapse = rc_elapse + cc_elapse
-        return elapse, c_elapse
-
     # image scales
 
     security.declareProtected(ManagePortal, 'recreateImageScales')
-    def recreateImageScales(self, portal_type=('Image', 'News Item', )):
+    def recreateImageScales(self, portal_type=None):
         """Recreates AT Image scales (doesn't remove unused!)
         """
+        if portal_type is None:
+            portal_type = tuple(self.image_types)
         out = StringIO()
         print >>out, "Updating AT Image scales"
         catalog = getToolByName(self, 'portal_catalog')
-        brains = catalog(portal_type = portal_type)
+        brains = catalog(portal_type = portal_type,
+                         portal_type_operator = 'or')
         for brain in brains:
             obj = brain.getObject()
             if obj is None:
@@ -390,201 +375,14 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
             except: state = 0
     
             field = obj.getField('image')
-            if field:
+            if field is not None:
                 print >>out, 'Updating %s' % obj.absolute_url(1)
+                field.removeScales(obj)
                 field.createScales(obj)
 
             if state is None: obj._p_deactivate()
     
         return out.getvalue()
-
-    # type switching and migration
-
-    security.declareProtected(ManagePortal, 'disableCMFTypes')
-    def disableCMFTypes(self):
-        """Disable and rename CMF types
-        
-        You *should* run recatalogCMFTypes() before running this method to make
-        sure all types are found!
-        
-        * Backups the old FTIs as "CMF Name"
-        * Changes the portal_type of all existing objects
-        """
-        if self.isCMFdisabled():
-            raise AlreadySwitched
-        result = []
-        for atct in self._listATCTTypes():
-            klass = atct['klass']
-            if not IATContentType.isImplementedByInstancesOf(klass):
-                # skip criteria
-                continue
-            ntf = klass._atct_newTypeFor
-            if not ntf or not ntf.get('portal_type'):
-                # no old portal type given
-                continue
-            cmf_orig_pt = klass.portal_type
-            cmf_bak_pt = ntf.get('portal_type')
-            cmf_mt = ntf.get('meta_type')
-            __traceback_info__ = 'Error converting %s to %s in disableCMFTypes'%(
-                                            str(cmf_orig_pt), str(cmf_bak_pt))
-            error = self._changePortalTypeName(cmf_orig_pt, cmf_bak_pt, global_allow=False,
-                                       metatype=cmf_mt)
-            if not error:
-                result.append('Renamed %s to %s' % (cmf_orig_pt, cmf_bak_pt))
-        return ''.join(result)
-    
-    security.declareProtected(ManagePortal, 'enableCMFTypes')
-    def enableCMFTypes(self):
-        """Enable CMF types
-        
-        NOTE: Enabling CMF types leaves all ATCT based types in an insane state!
-        
-        Maybe we should rename the types:
-        
-            atct_bak_pt = 'AT %s' % cmf_pt
-            self._changePortalTypeName(cmf_pt, atct_bak_pt, global_allow=False)
-        
-        The feature isn't in the code because we don't support uninstall.
-        """
-        assert self.isCMFdisabled()
-        result = []
-        ttool = getToolByName(self, 'portal_types')
-        for atct in self._listATCTTypes():
-            klass = atct['klass']
-            if not IATContentType.isImplementedByInstancesOf(klass):
-                # skip criteria
-                continue
-            ntf = klass._atct_newTypeFor
-            if not ntf or not ntf.get('portal_type'):
-                # no old portal type given
-                continue
-            cmf_orig_pt = klass.portal_type
-            cmf_bak_pt = ntf.get('portal_type')
-            cmf_mt = ntf.get('meta_type')
-            ttool.manage_delObjects(cmf_orig_pt)
-            result.append('Removing ATCT: %s' % cmf_orig_pt)
-            __traceback_info__ = 'Error converting %s to %s in enableCMFTypes'%(
-                                            str(cmf_bak_pt), str(cmf_orig_pt))
-            self._changePortalTypeName(cmf_bak_pt, cmf_orig_pt, global_allow=False, metatype=cmf_mt)
-            result.append('Renamed %s to %s' % (cmf_bak_pt, cmf_orig_pt))
-        return ''.join(result)
-    
-    security.declareProtected(ManagePortal, 'copyFTIFlags')
-    def copyFTIFlags(self):
-        """Copies some flags like allow discussion from the old types to new
-        """
-        assert self.isCMFdisabled()
-        ttool = getToolByName(self, 'portal_types')
-        for atct in self._listATCTTypes():
-            klass = atct['klass']
-            if not IATContentType.isImplementedByInstancesOf(klass):
-                # skip criteria
-                continue
-            ntf = klass._atct_newTypeFor
-            if not ntf or not ntf.get('portal_type'):
-                # no old portal type given
-                continue
-            atct_pt = klass.portal_type
-            cmf_bak_pt = ntf.get('portal_type')
-            __traceback_info__ = 'Error converting %s to %s in copyCMFTypes'%(
-                                            str(cmf_bak_pt), str(atct_pt))
-            self._copyFTIFlags(ptfrom=cmf_bak_pt, ptto=atct_pt)
-    
-    security.declareProtected(ManagePortal, 'isCMFdisabled')
-    def isCMFdisabled(self):
-        """Query if CMF types are disabled
-        """
-        ttool = getToolByName(self, 'portal_types')
-        if 'Document' in ttool.objectIds():
-            docp = getattr(ttool, 'Document').product
-            if docp == 'ATContentTypes':
-                return True
-        return False
-
-    security.declareProtected(ManagePortal, 'migrateToATCT')
-    def migrateToATCT(self, portal_types=None):
-        """Migrate to ATCT (all in one)
-        
-        This method is called from the CMFPlone migration system in order to migrate
-        all content types to ATCT based types. For large sites you might want to run
-        migration, update workflow and update catalog in three transactions.
-        """
-        elapse, c_elapse, out = self.migrateContentTypesToATCT(portal_types=None)
-        elapse, c_elapse, count = self.migrationUpdateWorkflowRoleMapping()
-        out += '\n\nWorkflow: %d object(s) updated.\n' % count
-        elapse, c_elapse = self.migrationRefreshPortalCatalog()
-        self.upgrade()
-        return out
-    
-    security.declareProtected(ManagePortal, 'migrateContentTypesToATCT')
-    def migrateContentTypesToATCT(self, portal_types=None):
-        """Content type migration from CMF types to ATCT  types
-        """
-        if portal_types is not None:
-            # TODO: not impelemented
-            raise NotImplementedError, "Migrating a subset of types is not implemented"
-        if isinstance(portal_types, basestring):
-            portal_types = (portal_types,)
-        portal = getToolByName(self, 'portal_url').getPortalObject()
-        
-        elapse = time.time()
-        c_elapse = time.clock()
-        
-        out = migrateAll(portal)
-        
-        elapse = time.time() - elapse
-        c_elapse = time.clock() - c_elapse
-    
-        LOG_MIGRATION.debug('Migrated content types to ATContentType based types '
-            'in %s seconds (cpu %s seconds)' % (elapse, c_elapse))
-        
-        return elapse, c_elapse, out
-
-    security.declareProtected(ManagePortal, 'migrationRefreshPortalCatalog')
-    def migrationRefreshPortalCatalog(self):
-        """Migration helper - refresh catalog w/ pghandler
-        """
-        LOG_MIGRATION.debug('Updating portal_catalog')
-        
-        catalog = getToolByName(self, 'portal_catalog')
-        elapse = time.time()
-        c_elapse = time.clock()
-
-        try:
-            pgthreshold = catalog._getProgressThreshold()
-        except AttributeError:
-            catalog.refreshCatalog(clear=1)
-        else:
-            handler = (pgthreshold > 0) and ZLogHandler(pgthreshold) or None
-            catalog.refreshCatalog(clear=1, pghandler=handler)
-
-        elapse = time.time() - elapse
-        c_elapse = time.clock() - c_elapse
-        
-        LOG_MIGRATION.debug('Updated and recataloged portal_catalog '
-            'in %s seconds (cpu %s seconds)' % (elapse, c_elapse))
-            
-        return elapse, c_elapse
-    
-    security.declareProtected(ManagePortal, 'migrationUpdateWorkflowRoleMapping')
-    def migrationUpdateWorkflowRoleMapping(self):
-        """Migration helper - update workflow role mappings
-        """
-        LOG_MIGRATION.debug('Updating workflow role mapping')
-        
-        wf = getToolByName(self, 'portal_workflow')
-        elapse = time.time()
-        c_elapse = time.clock()
-        
-        count = wf.updateRoleMappings()
-        
-        elapse = time.time() - elapse
-        c_elapse = time.clock() - c_elapse
-        
-        LOG_MIGRATION.debug('Updated workflow role mappings for %s objects '
-            'in %s seconds (cpu %s seconds)' % (count, elapse, c_elapse))
-        
-        return elapse, c_elapse, count
 
     # utilities
 
@@ -593,242 +391,18 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ActionProviderBase,
         f = open(os.path.join(ATCT_DIR, 'README.txt'))
         return format_stx(f.read(), stx_level)
 
-    # ************************************************************************
-    # private methods
-
-    def _getFtis(self, products = None):
-        """Get FTIs by product
-        """
-        ttool = getToolByName(self, 'portal_types')
-        if products is None:
-            return ttool.objectValues()
-        ftis = []
-        for fti in ttool.objectValues():
-            product = getattr(aq_base(fti), 'product', None)
-            if product in products:
-                if fti.getId() not in SITE_TYPES:
-                    ftis.append(fti)
-        return ftis
-    
-    def _getCMFFtis(self):
-        """Get all FTIs register by CMF core products + CMFPlone
-        
-        It includes CMFPlone, CMFDefault, CMFTopic and CMFCalendar
-        """
-        return self._getFtis(products = CMF_PRODUCTS)
-
-    def _getATCTFtis(self):
-        """Get all FTIs register by ATCT
-        """
-        return self._getFtis(products = ATCT_PRODUCTS)
-
-    def _listATCTTypes(self):
-        """Get all atct types
-        
-        The returned list of dicts contains klass, name, identifer, meta_type,
-        portal_type, package, module, schema and signature
-        """
-        return listTypes('ATContentTypes')
-        
-    def _getCMFMetaTypes(self):
-        """Get all meta_types registered by CMF core products + CMFPlone for types
-        """
-        meta_types = {}
-        for fti in self._getCMFFtis():
-            mt = getattr(aq_base(fti), 'content_meta_type')
-            meta_types[mt] = 1
-        return meta_types.keys()
-
-    def _getATCTMetaTypes(self):
-        """Get all meta_types registered by ATCT
-        """
-        meta_types = {}
-        for fti in self._getATCTFtis():
-            mt = getattr(aq_base(fti), 'content_meta_type')
-            meta_types[mt] = 1
-        return meta_types.keys()
-
-    def _getCMFPortalTypes(self, metatype=None):
-        """Get all portal types registered by CMF core products + CMFPlone for types
-        """
-        if metatype is None:
-            return [fti.getId() for fti in self._getCMFFtis()]
-        else:
-            return [fti.getId() for fti in self._getCMFFtis()
-                    if aq_base(fti).content_meta_type == metatype
-                   ]
-
-    def _removeTypesFromCatalogByMetatype(self, mt, count=True):
-        """Removes all types from the catalog
-        
-        It's using the meta_type to find all objects.
-        """
-        LOG_MIGRATION.debug('Remove object by metatypes %s from portal_catalog' %
-                            ', '.join(mt))
-        
-        cat = getToolByName(self, 'portal_catalog')
-        counter = 0
-        
-        elapse = time.time()
-        c_elapse = time.clock()
-        
-        for brain in cat(meta_type=mt):
-            cat.uncatalog_object(brain.getPath())
-            counter+=1
-            
-        elapse = time.time() - elapse
-        c_elapse = time.clock() - c_elapse
-        
-        LOG_MIGRATION.debug('Removed %s objects from portal_catalog '
-            'in %s seconds (cpu %s seconds)' % (count, elapse, c_elapse))
-        
-        return counter, elapse, c_elapse
-    
-    def _catalogTypesByMetatype(self, mt):
-        """Catalogs objects by meta type
-        
-        It's using the meta_type to find all objects. The objects are found
-        by zcatalog's ZopeFindAndApply method. It may take a very (!) long
-        time to find all objects.
-        """
-        if not mt:
-            # XXX: I consider passing an empty mt argument as bug
-            return [], 0, 0
-        
-        if not isinstance(mt, (list, tuple)):
-            mt = (mt, )
-        
-        LOG_MIGRATION.debug('Catalog object by metatypes %s using '
-                            'ZopeFindAndApply' %  ', '.join(mt))
-        
-        cat = getToolByName(self, 'portal_catalog')
-        portal = getToolByName(self, 'portal_url').getPortalObject()
-        basepath = '/'.join(portal.getPhysicalPath())
-        
-        elapse = time.time()
-        c_elapse = time.clock()
-
-        results = self.ZopeFindAndApply(portal,
-                                        obj_metatypes=mt,
-                                        search_sub=1,
-                                        REQUEST=self.REQUEST,
-                                        apply_func=cat.catalog_object,
-                                        apply_path=basepath)
-
-        elapse = time.time() - elapse
-        c_elapse = time.clock() - c_elapse
-        
-        LOG_MIGRATION.debug('Catalog objects by metatype '
-            'in %s seconds (cpu %s seconds)' % (elapse, c_elapse))
-        
-        return results, elapse, c_elapse
- 
-    def _removeCMFtypesFromCatalog(self, count=False):
-        mt = self._getCMFMetaTypes()
-        return self._removeTypesFromCatalogByMetatype(mt, count)
-    
-    def _catalogCMFtypes(self):
-        mt = self._getCMFMetaTypes()
-        return self._catalogTypesByMetatype(mt)
- 
-    def _removeATCTtypesFromCatalog(self, count=False):
-        mt = self._getATCTMetaTypes()
-        return self._removeTypesFromCatalogByMetatype(mt, count)
-    
-    def _catalogATCTtypes(self):
-        mt = self._getATCTMetaTypes()
-        return self._catalogTypesByMetatype(mt)
- 
-    
-    def _changePortalTypeName(self, old_name, new_name, global_allow=None,
-        title=None, metatype=None):
-        """Changes the portal type name of an object
-
-        * Changes the id of the portal type inside portal types
-        * Updates the catalog indexes and metadata
-        """
-        LOG_MIGRATION.debug("Changing portal type name from %s to %s" % 
-                            (old_name, new_name))
-
-        cat = getToolByName(self, 'portal_catalog')
-        ttool = getToolByName(self, 'portal_types')
-
-        # Make sure the type we wish to rename exists
-        orig_type = getattr(ttool.aq_explicit, old_name, None)
-        if orig_type is None:
-            return 1
-
-        ttool.manage_renameObject(old_name, new_name)
-        new_type = getattr(ttool.aq_explicit, new_name)
-        if global_allow is not None:
-            new_type.manage_changeProperties(global_allow=global_allow)
-        if title is not None:
-            new_type.manage_changeProperties(title=title)
-
-        if metatype is not None:
-            brains = cat(portal_type = old_name, meta_type = metatype)
-        else:
-            brains = cat(portal_type = old_name)
-        for brain in brains:
-            obj = brain.getObject()
-            if not obj:
-                continue
-            try: state = obj._p_changed
-            except: state = 0
-            __traceback_info__ = (obj, getattr(obj, '__class__', 'no class'),
-                                  getattr(obj, 'meta_type', 'no metatype'),
-                                  (getattr(obj, 'getPhysicalPath', None) is not None and
-                                  obj.getPhysicalPath()) or 'no context')
-            obj._setPortalTypeName(new_name)
-            obj.reindexObject(idxs=['portal_type', 'Type', 'meta_type', ])
-            if state is None: obj._p_deativate()
-        return 0
-            
-    def _copyFTIFlags(self, ptfrom, ptto, flags = ('filter_content_types',
-                      'allowed_content_types', 'allow_discussion')):
-        """Copies different flags from one fti to another
-        
-        * allow discussion
-        * allowed content types
-        * filter content types
-        * actions
-        """
-        ttool = getToolByName(self, 'portal_types')
-        if isinstance(ptfrom, str):
-            ptfrom = getattr(ttool.aq_explicit, ptfrom, None)
-        if isinstance(ptto, str):
-            ptto = getattr(ttool.aq_explicit, ptto, None)
-        # Don't error if we are missing an FTI
-        if ptfrom is None or ptto is None:
-            return 1
-        kw = {}
-        for flag in flags:
-            kw[flag] = getattr(ptfrom.aq_explicit, flag)
-        ptto.manage_changeProperties(**kw)
-        
-        # create clones
-        actions_from = tuple(ptfrom._cloneActions())
-        actions_to = list(ptto._cloneActions())
-        action_to_ids = [action.getId() for action in actions_to]
-        # append unlisted actions to actions_to
-        for action in actions_from:
-            if action.getId() not in action_to_ids:
-                actions_to.append(action)
-        ptto._actions = tuple(actions_to)
-
-    def _fixPortalTypeOfMembersFolder(self):
-        # Why do I need this hack?
-        # probably because of the hard coded and false portal type in Plone :|
-        # Members._getPortalTypeName() returns ATBTreeFolder instead of
-        # Large Plone Folder
-        mt = getToolByName(self, 'portal_membership')
-        members = mt.getMembersFolder()
-        if members is not None:
-            members._setPortalTypeName('Large Plone Folder')
-
     security.declarePrivate('getConfiglets')
     def getConfiglets(self):
         """ Returns the list of configlets for this tool """
         return tuple(configlets)
+        
+    security.declareProtected(ManagePortal, 'listContentTypes')
+    def listContentTypes(self):
+        """List all available content types
+        
+        Used for properties
+        """
+        ttool = getToolByName(self, 'portal_types')
+        return ttool.listContentTypes()
             
 InitializeClass(ATCTTool)

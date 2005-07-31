@@ -68,6 +68,7 @@ def loadConfig(files, schema=atctSchema, overwrite=False):
                 raise RuntimeError, '%s does not exist' % file
             conf_file = file
             zconf, handler = ConfigLoader(schema).loadURL(conf_file)
+            break
 
 
 loadConfig(FILES)

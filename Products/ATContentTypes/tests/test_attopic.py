@@ -37,6 +37,7 @@ from Products.Archetypes.public import *
 from Products.ATContentTypes.content.topic import ATTopic
 from Products.ATContentTypes.content.topic import ATTopicSchema
 from Products.ATContentTypes.content.topic import ChangeTopics
+from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.migration.atctmigrator import TopicMigrator
 from Products.CMFTopic.Topic import Topic
 from Products.ATContentTypes.tests.utils import EmptyValidator
@@ -45,6 +46,8 @@ from Products.ATContentTypes.interfaces import IATTopic
 from Interface.Verify import verifyObject
 from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
 from Products.CMFPlone import transaction
+
+from Products.CMFPlone.PloneBatch import Batch
 
 
 ACQUIRE  = True
@@ -329,6 +332,25 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         topic.invokeFactory('Topic', 'subtopic')
         self.setRoles(['Member'])
         self.failUnlessEqual(topic.hasSubtopics(), True)
+
+    def test_queryCatalogBatching(self):
+        #Ensure that has we return a proper batch if requested
+        topic = self._ATCT
+        self.failUnless(isinstance(topic.queryCatalog(batch=True),Batch))
+        self.failIf(isinstance(topic.queryCatalog(),Batch))
+        # try it with some content now
+        crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
+        crit.setValue('Folder')
+        self.failUnless(isinstance(topic.queryCatalog(batch=True),Batch))
+        self.failIf(isinstance(topic.queryCatalog(),Batch))
+
+    def test_queryCatalogBrains(self):
+        #Ensure that we feturn full objects when requested
+        topic = self._ATCT
+        crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
+        crit.setValue('Folder')
+        self.failUnless(isinstance(topic.queryCatalog(full_objects=True)[0], ATFolder))
+        self.failIf(isinstance(topic.queryCatalog()[0], ATFolder))
 
     def test_get_size(self):
         atct = self._ATCT

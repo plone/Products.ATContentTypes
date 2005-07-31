@@ -5,7 +5,8 @@
 
   <body>
 
-    <div metal:fill-slot="main"
+    <div metal:fill-slot="main">
+    <metal:main_macro define-macro="main"
          tal:define="DateTime python:modules['DateTime'].DateTime;
                      images python:here.atctListAlbum(images=1)['images'];
                      Batch python:modules['Products.CMFPlone'].Batch;
@@ -38,6 +39,7 @@
           Description
       </p>
 
+    </metal:main_macro>
     </div>
 
     <metal:block fill-slot="documentActions" tal:define="b_start python:request.get('b_start', 0)">

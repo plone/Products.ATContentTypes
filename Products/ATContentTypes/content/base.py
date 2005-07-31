@@ -277,12 +277,16 @@ class ATCTMixin(BrowserDefaultMixin):
 
     def _PUT_ignorematch(self, id_or_obj):
         """Helper for workaround for broken FTP/WebDAV clients
+        
+        If this method returns True the PUT_factory is returning None
+        to the NullResource and a plain Zope object is created.
         """
         if isinstance(id_or_obj, basestring):
             id = id_or_obj
         else:
             id = id_or_obj.getId()
         # broken Mac OS X Finder
+        # The Finder tries to upload resource forks
         if id == '.DS_Store' or id.startswith('._'):
             return True
         return False 
@@ -631,6 +635,9 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
 
     def PUT_factory(self, name, typ, body):
         """Overwrite PUT factory to ignore certain names
+        
+        If None is returned the default PUT factory is used an plain
+        Zope objects like DTML method, File or Image are created.
         """
         if self._PUT_ignorematch(name):
             LOG.debug("Ignoring upload of %s to %s" % 

@@ -12,8 +12,57 @@
    adapater using this parser.
    [tiran]
 
-1.0.0-rc2
+1.0.0-rc3
 ====================
+
+ * Added method to fix the portal type name of CMF based objects
+   that were imported or copied from an unmigrated site to a migrated
+   site. The fix method is available in the type migration tab.
+   [tiran]
+
+ * Added code to remove deprecated external methods.
+   [tiran]
+
+ * Fixed an error in the module alias code for the exif library. Fixes
+   http://plone.org/collector/4352 - Uploading certain images causes ATCT
+   pickling errors
+   [tiran]
+
+ * Expose some advanced migration options to the user by using new propertites
+   in the portal_atct tool.
+   [tiran]
+
+ * Enhanced and updated documentation, mostly the feature documentations in
+   the portal_atct tool.
+   [tiran]
+
+ * Moved migration related code from tool/atct.py to tool/migration.py. The
+   tool class was getting too long.
+   [tiran]
+
+1.0.0-rc2 2005-07-28
+====================
+
+ * Updated requirements to CMFDynamicViewFTI 1.0.0 and ATRefBrowserWidget
+   1.1.
+   [tiran]
+
+ * Fixed error in config loader code. The loader must stop after the first
+   conf file is loaded or the conf file is overwritten by the default file.
+   [panjunyong]
+
+ * Add optional arguments to ATTopic.queryCatalog to make it compatible with
+   getFolderContents (optional batching, return full objects instead of
+   brains).  Make the album_view compatible with Smart Folders.
+   [alecm]
+
+ * Added fix for exif issue when rescaling the original image.  The exif
+   information is now stored before the image is set.
+   [tiran]
+
+ * Added a main macro to a few templates so they display nicely when used in
+   discussion_reply_form.
+   [alecm]
 
  * Added workaround for broken WebDAV/FTP clients like Mac OS X Finder.
    PUT_factory is patched to use the default_PUT_factory which creates

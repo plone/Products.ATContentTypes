@@ -6,6 +6,7 @@
 <body>
 
 <div metal:fill-slot="main">
+<metal:main_macro define-macro="main">
     <metal:body define-macro="body_macro">
 
         <div metal:use-macro="here/document_actions/macros/document_actions">
@@ -18,7 +19,7 @@
 
         <a href=""
            class="link-parent"
-           tal:define="parent_url python:here.navigationParent(here, template.getId())"
+           tal:define="parent_url python:here.navigationParent(here, template_id)"
            tal:condition="parent_url"
            tal:attributes="href parent_url"
            i18n:translate="go_to_parent_url">
@@ -136,6 +137,7 @@
             <metal:list metal:use-macro="here/base/macros/folderlisting"/>
         </tal:subtopics>
     </metal:body>
+</metal:main_macro>
 
 </div>
 

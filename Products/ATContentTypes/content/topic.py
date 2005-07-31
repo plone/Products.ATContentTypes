@@ -64,6 +64,8 @@ from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 from Products.ATContentTypes.config import TOOLNAME
 
+from Products.CMFPlone.PloneBatch import Batch
+
 # A couple of fields just don't make sense to sort (for a user),
 # some are just doubles.
 IGNORED_FIELDS = ['Date', 'allowedRolesAndUsers', 'getId', 'in_reply_to', 
@@ -180,7 +182,7 @@ class ATTopic(ATCTFolder):
         {
         'id'          : 'edit',
         'name'        : 'Edit',
-        'action'      : 'string:${object_url}/atct_edit',
+        'action'      : 'string:${object_url}/edit',
         'permissions' : (ChangeTopics,)
         },
         {
@@ -411,13 +413,20 @@ class ATTopic(ATCTFolder):
         return result
 
     security.declareProtected(View, 'queryCatalog')
-    def queryCatalog(self, REQUEST=None, **kw):
+    def queryCatalog(self, REQUEST=None, batch=False, b_size=100,
+                                                    full_objects=False, **kw):
         """Invoke the catalog using our criteria to augment any passed
             in query before calling the catalog.
         """
+        if REQUEST is None:
+            REQUEST = getattr(self, 'REQUEST', {})
+        b_start = REQUEST.get('b_start', 0)
+
         q = self.buildQuery()
         if q is None:
             # empty query - do not show anything
+            if batch:
+                return Batch([], b_size, int(b_start), orphan=0)
             return []
         # Allow parameters to further limit existing criterias
         for k,v in q.items():
@@ -442,7 +451,14 @@ class ATTopic(ATCTFolder):
             kw.setdefault('sort_limit', max_items)
         __traceback_info__ = (self, kw,)
         results = pcatalog.searchResults(REQUEST, **kw)
+        if full_objects and not limit:
+            results = [b.getObject() for b in results]
+        if batch:
+            batch = Batch(results, b_size, int(b_start), orphan=0)
+            return batch
         if limit:
+            if full_objects:
+                return [b.getObject() for b in results[:max_items]]
             return results[:max_items]
         return results
 

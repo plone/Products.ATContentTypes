@@ -30,6 +30,7 @@ from Products.ATContentTypes.migration.v1.betas import addRelatedItemsIndex
 from Products.ATContentTypes.migration.v1.betas import renameTopicsConfiglet
 from Products.ATContentTypes.migration.v1.betas import addTopicSyndicationAction
 from Products.ATContentTypes.migration.v1.betas import fixViewActions
+from Products.ATContentTypes.migration.v1.betas import fixTopicEditAction
 from Products.ATContentTypes.migration.v1.betas import removeTopicFolderContentsAction
 from Products.ATContentTypes.migration.v1.betas import changeDynView2SelectedLayout
 
@@ -389,6 +390,36 @@ class TestMigrations_v1(MigrationTest):
         # test new value
         aliases = fti.getMethodAliases()
         self.failUnlessEqual(aliases['view'], '(selected layout)')
+
+    def testFixTopicEditAction(self):
+        fti = getattr(self.portal.portal_types, 'Topic')
+        for a in fti.listActions():
+            if a.getId() == 'edit':
+                a.setActionExpression('string:${object_url}/atct_edit')
+        fixTopicEditAction(self.portal, [])
+        for a in fti.listActions():
+            if a.getId() == 'edit':
+                self.assertEqual(a.getActionExpression(), 'string:${object_url}/edit')
+
+    def testFixTopicEditActionNoTool(self):
+        self.portal._delObject('portal_types')
+        fixTopicEditAction(self.portal, [])
+
+    def testFixTopicEditActionNoType(self):
+        self.portal.portal_types._delObject('Topic')
+        fixTopicEditAction(self.portal, [])
+
+    def testFixTopicEditActionTwice(self):
+        fti = getattr(self.portal.portal_types, 'Topic')
+        for a in fti.listActions():
+            if a.getId() == 'edit':
+                a.setActionExpression('string:${object_url}/atct_edit')
+        fixTopicEditAction(self.portal, [])
+        fixTopicEditAction(self.portal, [])
+        for a in fti.listActions():
+            if a.getId() == 'edit':
+                self.assertEqual(a.getActionExpression(), 'string:${object_url}/edit')
+
 
 
 def test_suite():
