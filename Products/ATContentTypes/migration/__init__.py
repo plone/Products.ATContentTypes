@@ -7,7 +7,7 @@ import Products.ATContentTypes.migration.atctmigrator
 import Products.ATContentTypes.migration.othermigrator
 import Products.ATContentTypes.migration.storage
 
-#Vesrion migration
+# Version migration
 from Products.ATContentTypes.tool import atct
 
 def executeMigrations():

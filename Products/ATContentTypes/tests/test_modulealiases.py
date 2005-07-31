@@ -120,6 +120,17 @@ class TestModuleAliases(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(IFD_Tag.__module__, 'exif')
         self.failUnlessEqual(IFD_Tag, libIFD_Tag)
         
+    def test_libexif_classimport(self):
+        from Products.ATContentTypes.lib.exif import IFD_Tag
+        name = IFD_Tag.__name__
+        module = IFD_Tag.__module__
+        __import__(module)
+        mod = sys.modules[module]
+        klass = getattr(mod, name)
+        self.failUnless(klass is IFD_Tag)
+        
+        
+        
 tests.append(TestModuleAliases)
 
 if __name__ == '__main__':

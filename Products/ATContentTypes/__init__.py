@@ -23,15 +23,16 @@ __docformat__ = 'restructuredtext'
 
 import os.path
 import sys
+
+ATCT_DIR = os.path.abspath(os.path.dirname(__file__))
+sys.path.insert(3, os.path.join(ATCT_DIR, 'thirdparty'))
+
 __version__ = open(os.path.join(__path__[0], 'version.txt')).read().strip()
 
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.config import SKINS_DIR
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import GLOBALS
-from Products.ATContentTypes.config import ATCT_DIR
-
-sys.path.insert(3, os.path.join(ATCT_DIR, 'thirdparty'))
 
 if HAS_LINGUA_PLONE:
     from Products.LinguaPlone.public import process_types
@@ -44,22 +45,26 @@ from Products.CMFCore.utils import ContentInit
 from Products.CMFCore.utils import ToolInit
 from Products.CMFCore.DirectoryView import registerDirectory
 
-# import all content types, migration and validators
+# first level imports: configuration and validation
 import Products.ATContentTypes.configuration
-import Products.ATContentTypes.Extensions.Install
 import Products.ATContentTypes.lib.validators
+
+# second leven imports: content types, criteria
+# the content types are depending on the validators and configuration
 import Products.ATContentTypes.content
 import Products.ATContentTypes.criteria
-import Products.ATContentTypes.migration
-from Products.ATContentTypes.tool.atct import ATCTTool
-from Products.ATContentTypes import migration
 
-# BBB aliases
-import Products.ATContentTypes.modulealiases
+# misc imports 
+import Products.ATContentTypes.Extensions.Install
+from Products.ATContentTypes import migration
+from Products.ATContentTypes.tool.atct import ATCTTool
 
 # wire the add permission after all types are registered
 from Products.ATContentTypes.permission import wireAddPermissions
 wireAddPermissions()
+
+# setup module aliases for old dotted pathes
+import Products.ATContentTypes.modulealiases
 
 registerDirectory(SKINS_DIR,GLOBALS)
 
