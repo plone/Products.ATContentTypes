@@ -28,7 +28,6 @@ from Products.Archetypes.Extensions.utils import install_subskin
 from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.Catalog import CatalogError
 from StringIO import StringIO
-from Products.ExternalMethod.ExternalMethod import manage_addExternalMethod
 from Acquisition import aq_base
 
 from Products.Archetypes.interfaces.base import IBaseFolder
@@ -58,12 +57,6 @@ def install(self, reinstall):
     # step 1: install tool
     # It's required for migration
     tool = installTool(self, out)
-    if not IATCTTool.isImplementedBy(tool):
-        self.manage_delObjects([TOOLNAME])
-        tool = installTool(self, out)
-    result = tool._initializeTopicTool()
-    if result:
-        print >>out, 'Initialized Topic Tool'
         
     # step 2: recatalog CMF items if installing
     # I've to make sure all CMF types are in the catalog
@@ -141,6 +134,9 @@ def install(self, reinstall):
         migration_result = tool.upgrade()
         print >>out, migration_result
     
+    # step 14: cleanup depr. external methods
+    removeExteneralMethods(self, out)
+    
     print >> out, 'Successfully installed %s' % PROJECTNAME
     return out.getvalue()
 
@@ -153,15 +149,6 @@ def uninstall(self, reinstall):
     if not reinstall:
         assert tool.isCMFdisabled()
         tool.enableCMFTypes()
-
-    # remove external methods for toggling between old and new types
-    # leave it for clean up
-    for script in ('switch_old_plone_types_on', 'switch_old_plone_types_off',
-     'migrateFromCMFtoATCT', 'migrateFromCPTtoATCT', 'recreateATImageScales',
-     'switchATCT2CMF', 'switchCMF2ATCT', ):
-        if hasattr(aq_base(self), script):
-            print >>out, 'Removing script %s from portal root' % script
-            self.manage_delObjects(ids=[script,])
     
     return out.getvalue()
 
@@ -179,16 +166,30 @@ def beforeUninstall(self, cascade, product, reinstall):
     return out.getvalue(), cascade
 
 def installTool(self, out):
+    """Install the portal_atct tool
+    """
     tool = getToolByName(self, TOOLNAME, None)
+    if tool is not None and not IATCTTool.isImplementedBy(tool):
+        # tool exists but it invalid - remove it
+        self.manage_delObjects([TOOLNAME])
+        tool = None
     if tool is None:
+        print >>out, "Installing %s" % TOOLNAME
         addTool = self.manage_addProduct['ATContentTypes'].manage_addTool
         addTool('ATCT Tool')
         tool = getToolByName(self, TOOLNAME)
+    
+    # init tool
+    result = tool._initializeTopicTool()
+    if result:
+        print >>out, 'Initialized Topic Tool'
     
     # register tool as action provider, multiple installs are harmeless
     # currently NOT used
     #actions_tool = getToolByName(self, 'portal_actions')
     #actions_tool.addActionProvider(TOOLNAME)
+    
+    # register ATCT tool as configlet 
     group = 'atct|ATContentTypes|ATCT Setup'
     cp = getToolByName(self, 'portal_controlpanel')
     if 'atct' not in cp.getGroupIds():
@@ -196,21 +197,32 @@ def installTool(self, out):
     for configlet in tool.getConfiglets():
         cp.unregisterConfiglet(configlet['id'])
     cp.registerConfiglets(tool.getConfiglets())
-    print >>out, "Installing %s and registering it as action provider" % TOOLNAME
+    
     return tool
 
-def removeCMFTypesFromRegisteredTypes(self, product, out):
-    qi_types = product.types
-    tool = getToolByName(self, TOOLNAME)
-    cmf_types = tool._getCMFPortalTypes()
+def removeCMFTypesFromRegisteredTypes(self, qi_product, out):
+    """Alters the Quickinstaller product information
+    
+    The backups of the CMF types are removed from the list of registered
+    type informations. QI won't remove them on uninstall. 
+    """
+    qi_types = qi_product.types
+    atct = getToolByName(self, TOOLNAME)
+    cmf_types = atct._getCMFPortalTypes()
     new_types = [ t for t in qi_types if t not in cmf_types]
-    product.types = new_types
-    print >>out, 'Changing registered type list from %s to %s in order to' \
-                 'save backed up cmf types' % (qi_types, new_types)
+    qi_product.types = new_types
+    print >>out, ('Changing registered type list from %s to %s in '
+                  'order to save backed up cmf types' % 
+                  (qi_types, new_types))
 
     return out
 
 def setupWorkflows(self, typeInfo, out):
+    """Setup workflow magic
+    
+    TODO: should be replaced by a proper class attribute and moved to
+          Archetypes
+    """
     wftool = getToolByName(self, 'portal_workflow')
     for t in typeInfo:
         klass       = t['klass']
@@ -238,8 +250,18 @@ def setChainFor(portal_type, chain, wftool, out):
         # default is default :)
         wftool.setChainForPortalTypes((portal_type,), chain)
 
-
-def dummyExternalMethod(self, *args, **kwargs):
-    """Dummy external method for backward compatibility
+def removeExteneralMethods(self, out):
+    """Remove deprecated external methods from the portal root
     """
-    return 
+    portal_ids = self.objectIds()
+    scripts = (
+        'switch_old_plone_types_on', 'switch_old_plone_types_off',
+        'migrateFromCMFtoATCT', 'migrateFromCPTtoATCT', 
+        'recreateATImageScales', 'switchATCT2CMF', 'switchCMF2ATCT', 
+        )
+    remove = [script_id for script_id in scripts
+              if script_id in portal_ids]
+    if remove:
+        print  >>out, ("Removing scripts %s from portal root" %
+                       ', '.join(remove))
+        self.manage_delObjects(remove)

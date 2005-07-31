@@ -277,7 +277,7 @@ class ATCTMigrationTool(Base):
         LOG.debug('Migrated content types to ATContentType based types '
             'in %s seconds (cpu %s seconds)' % (elapse, c_elapse))
         
-        return elapse, c_elapse, out
+        return out, elapse, c_elapse
 
     security.declareProtected(ManagePortal, 'migrationRefreshPortalCatalog')
     def migrationRefreshPortalCatalog(self):
@@ -301,7 +301,7 @@ class ATCTMigrationTool(Base):
         LOG.debug('Updated and recataloged portal_catalog '
             'in %s seconds (cpu %s seconds)' % (elapse, c_elapse))
             
-        return elapse, c_elapse
+        return '', elapse, c_elapse
     
     security.declareProtected(ManagePortal, 'migrationUpdateWorkflowRoleMapping')
     def migrationUpdateWorkflowRoleMapping(self):
@@ -319,7 +319,7 @@ class ATCTMigrationTool(Base):
         LOG.debug('Updated workflow role mappings for %s objects '
             'in %s seconds (cpu %s seconds)' % (count, elapse, c_elapse))
         
-        return elapse, c_elapse, count
+        return count, elapse, c_elapse
         
     security.declareProtected(ManagePortal, 'migrationFixCMFPortalTypes')
     def migrationFixCMFPortalTypes(self):
@@ -349,7 +349,7 @@ class ATCTMigrationTool(Base):
             result.extend(changed)
         
         elapse, c_elapse = timeit(timeinfo)
-        return result, elapse, c_elapse
+        return '\n'.join(result), elapse, c_elapse
 
     # ************************************************************************
     # private methods

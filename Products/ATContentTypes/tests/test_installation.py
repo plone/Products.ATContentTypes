@@ -31,8 +31,10 @@ from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.tool.atct import ATCTTool
+from Products.ATContentTypes.Extensions.Install import removeExteneralMethods
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import transaction
+from StringIO import StringIO
 
 tests = []
 
@@ -141,6 +143,15 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
     def test_api_import(self):
         import Products.ATContentTypes.atct
+        
+    def test_cleanup_external_methods(self):
+        id = 'migrateFromCMFtoATCT'
+        em = self.portal.manage_addProduct['ExternalMethod']
+        em.manage_addExternalMethod(id, 'title'
+                                    'ATContentTypes.Install', 'install')
+        self.failUnless(id in self.portal.objectIds())
+        removeExteneralMethods(self.portal, StringIO())
+        self.failIf(id in self.portal.objectIds())
         
     
 tests.append(TestInstallation)

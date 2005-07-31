@@ -356,12 +356,13 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager,
     def recreateImageScales(self, portal_type=None):
         """Recreates AT Image scales (doesn't remove unused!)
         """
-        if portal_types is None:
-            portal_types = tuple(self.image_types)
+        if portal_type is None:
+            portal_type = tuple(self.image_types)
         out = StringIO()
         print >>out, "Updating AT Image scales"
         catalog = getToolByName(self, 'portal_catalog')
-        brains = catalog(portal_type = portal_type)
+        brains = catalog(portal_type = portal_type,
+                         portal_type_operator = 'or')
         for brain in brains:
             obj = brain.getObject()
             if obj is None:

@@ -1,6 +1,14 @@
 1.0.0-rc3
 ====================
 
+ * Added method to fix the portal type name of CMF based objects
+   that were imported or copied from an unmigrated site to a migrated
+   site. The fix method is available in the type migration tab.
+   [tiran]
+
+ * Added code to remove deprecated external methods.
+   [tiran]
+
  * Fixed an error in the module alias code for the exif library. Fixes
    http://plone.org/collector/4352 - Uploading certain images causes ATCT
    pickling errors
