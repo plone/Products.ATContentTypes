@@ -1,4 +1,4 @@
-1.0.0-rc3
+1.0.0-rc3 2005-08-01
 ====================
 
  * Added method to fix the portal type name of CMF based objects
