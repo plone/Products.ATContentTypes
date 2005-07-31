@@ -227,8 +227,7 @@ class TestTypeMigrations(atcttestcase.ATCTTypeTestCase):
         atct = self.portal.portal_atct
         
         changed, elapse, c_elapse = atct.migrationFixCMFPortalTypes()
-        self.failUnless(changed, changed)
-        self.failUnlessEqual(changed[0], '/'.join(cmfdoc.getPhysicalPath()))
+        self.failUnlessEqual(changed, '/'.join(cmfdoc.getPhysicalPath()))
         self.failUnlessEqual(cmfdoc.portal_type, 'CMF Document')
 
 
