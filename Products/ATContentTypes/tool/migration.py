@@ -254,7 +254,6 @@ class ATCTMigrationTool(Base):
         count, elapse, c_elapse = self.migrationUpdateWorkflowRoleMapping()
         out += '\n\nWorkflow: %d object(s) updated.\n' % count
         ignored, elapse, c_elapse = self.migrationRefreshPortalCatalog()
-        dummy, elapse, c_elapse = self.migrationRefreshPortalCatalog()
         self.upgrade()
         return out
     
