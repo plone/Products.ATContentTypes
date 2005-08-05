@@ -42,7 +42,7 @@ else:
 
 from Products.ATContentTypes.config import HAS_PLONE2
 
-from AccessControl import ClassSecurityInfo
+from AccessControl import ClassSecurityInfo, Permissions
 from ComputedAttribute import ComputedAttribute
 from Globals import InitializeClass
 from Acquisition import aq_base
@@ -575,6 +575,9 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
                       ConstrainTypesMixin.__implements__,)
 
     security       = ClassSecurityInfo()
+
+    # copy from PloneFolder's
+    security.declareProtected(Permissions.copy_or_move, 'manage_copyObjects')
 
     def __browser_default__(self, request):
         """ Set default so we can return whatever we want instead

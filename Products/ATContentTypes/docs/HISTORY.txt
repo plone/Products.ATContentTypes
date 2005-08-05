@@ -4,6 +4,10 @@
 1.0.0-rc3 2005-08-01
 ====================
 
+ * Change manage_copyObjects' permission to Copy or move, just copy from
+   Plone's PortalFolder.
+   [panjunyong]
+
  * Added method to fix the portal type name of CMF based objects
    that were imported or copied from an unmigrated site to a migrated
    site. The fix method is available in the type migration tab.
