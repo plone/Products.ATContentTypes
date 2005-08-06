@@ -1,6 +1,20 @@
 1.0.0-rc4
 ====================
 
+ * Made inherit criteria field only appear when the parent of a Smart Folder
+   is also a Smart folder.
+   [alecm]
+
+ * Added permissions checks to listSubTopics.
+   [alecm]
+
+ * Remove Smart Folder syndication action as the action category has changed
+   in CMF.
+   [alecm]
+
+ * Fixed bug in subtopic listing.
+   [alecm]
+
 1.0.0-rc3 2005-08-01
 ====================
 

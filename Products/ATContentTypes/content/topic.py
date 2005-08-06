@@ -85,7 +85,11 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                         description=("Narrow down the search results from the parent Smart Folder(s) "
                                      "by using the criteria from this Smart Folder."),
                         description_msgid="help_inherit_criteria",
-                        i18n_domain = "plone"),
+                        i18n_domain = "plone",
+                        # Only show when the parent object is a Topic also,
+                        # for some reason the checkcondition passes the
+                        #template as 'object', and the object as 'folder'.
+                        condition = "python:folder.getParentNode().portal_type == 'Topic'"),
                 ),
     BooleanField('limitNumber',
                 required=False,
@@ -196,13 +200,6 @@ class ATTopic(ATCTFolder):
         'name'        : 'Subfolders',
         'action'      : 'string:${folder_url}/atct_topic_subtopics',
         'permissions' : (ChangeTopics,)
-        },
-        {
-        'id'          : 'syndication',
-        'name'        : 'Syndication',
-        'action'      : 'string:${folder_url}/synPropertiesForm',
-        'condition'   : 'python: portal.portal_syndication.isSiteSyndicationAllowed()',
-        'permissions' : (ManageProperties,)
         },
        )
     )
@@ -353,7 +350,13 @@ class ATTopic(ATCTFolder):
         """Return a list of our subtopics.
         """
         val = self.objectValues(self.meta_type)
-        val.sort()
+        check_p = getToolByName(self.portal_membership).checkPermission
+        tops = []
+        for top in val:
+            if check_p('View', top):
+                tops.append((top.getTitle().lower(),top))
+        tops.sort()
+        tops = [t[1] for t in tops]
         return val
 
     security.declareProtected(View, 'hasSubtopics')

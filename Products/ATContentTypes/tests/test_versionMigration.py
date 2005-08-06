@@ -28,7 +28,7 @@ from Products.ATContentTypes.migration.v1.betas import fixFolderlistingAction
 from Products.ATContentTypes.migration.v1.betas import reindexCatalog
 from Products.ATContentTypes.migration.v1.betas import addRelatedItemsIndex
 from Products.ATContentTypes.migration.v1.betas import renameTopicsConfiglet
-from Products.ATContentTypes.migration.v1.betas import addTopicSyndicationAction
+from Products.ATContentTypes.migration.v1.betas import removeTopicSyndicationAction
 from Products.ATContentTypes.migration.v1.betas import fixViewActions
 from Products.ATContentTypes.migration.v1.betas import fixTopicEditAction
 from Products.ATContentTypes.migration.v1.betas import removeTopicFolderContentsAction
@@ -267,40 +267,37 @@ class TestMigrations_v1(MigrationTest):
         self.assertEqual(len(self.catalog(Title='Foo')), 0)
         self.assertEqual(len(self.catalog(Title='Bar')), 1)
 
-    def testAddTopicsSyndicationAction(self):
-        # Should add the syndication action to Topics
+    def testRemoveTopicsSyndicationAction(self):
+        # Should remove the syndication action to Topics
         typesTool = getToolByName(self.portal, 'portal_types', None)
-        self.removeActionFromType('Topic', 'syndication')
-        self.failIf('syndication' in [x.id for x in
-                                        typesTool.Topic.listActions()])
-        addTopicSyndicationAction(self.portal, [])
+        self.addActionToType('Topic', 'syndication', 'object')
         self.failUnless('syndication' in [x.id for x in
                                         typesTool.Topic.listActions()])
-
-    def testAddTopicSyndicationActionTwice(self):
-        # Should not fail if migrated again
-        typesTool = getToolByName(self.portal, 'portal_types', None)
-        self.removeActionFromType('Topic', 'syndication')
+        removeTopicSyndicationAction(self.portal, [])
         self.failIf('syndication' in [x.id for x in
                                         typesTool.Topic.listActions()])
-        ret1 = addTopicSyndicationAction(self.portal, [])
-        ret2 = addTopicSyndicationAction(self.portal, [])
-        self.assertEqual(ret1, 1)
-        self.assertEqual(ret2, 0)
-        self.assertEqual(len([x.id for x in
-                                        typesTool.Topic.listActions()
-                                        if x.id == 'syndication']), 1)
+
+    def testRemoveTopicSyndicationActionTwice(self):
+        # Should not fail if migrated again
+        typesTool = getToolByName(self.portal, 'portal_types', None)
+        self.addActionToType('Topic', 'syndication', 'object')
+        self.failUnless('syndication' in [x.id for x in
+                                        typesTool.Topic.listActions()])
+        ret1 = removeTopicSyndicationAction(self.portal, [])
+        ret2 = removeTopicSyndicationAction(self.portal, [])
+        self.failIf('syndication' in [x.id for x in
+                                        typesTool.Topic.listActions()])
 
     def testAddTopicSyndicationActionNoTool(self):
         # Should not fail if portal_types is missing
         self.portal._delObject('portal_types')
-        addTopicSyndicationAction(self.portal, [])
+        removeTopicSyndicationAction(self.portal, [])
 
     def testAddTopicSyndicationActionTypeMissing(self):
         # Should not fail if Topic type is missing
         typesTool = getToolByName(self.portal, 'portal_types', None)
         self.portal.portal_types._delObject('Topic')
-        addTopicSyndicationAction(self.portal, [])
+        removeTopicSyndicationAction(self.portal, [])
 
     def testFixViewActions(self):
         fixViewActions(self.portal, [])
