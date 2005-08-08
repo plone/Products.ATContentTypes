@@ -1,6 +1,11 @@
 1.0.0-rc4
 ====================
 
+ * Implemented the custom PUT_factory in both ATCTOrderedFolder and
+   ATCTBTreeFolder, as inheriting it from ATCTFolderMixin breaks when
+   LinguaPlone comes into play.
+   [stefan]
+
  * Enable syndication on topics by default.
    [alecm]
 

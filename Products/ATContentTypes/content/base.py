@@ -686,6 +686,18 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
 
     index_html = ComputedAttribute(index_html, 1)
 
+    def PUT_factory(self, name, typ, body):
+        """Overwrite PUT factory to ignore certain names
+        
+        If None is returned the default PUT factory is used an plain
+        Zope objects like DTML method, File or Image are created.
+        """
+        if self._PUT_ignorematch(name):
+            LOG.debug("Ignoring upload of %s to %s" % 
+                      (name, self.absolute_url(1)))
+            return None
+        return OrderedBaseFolder.PUT_factory(self, name, typ, body)
+
 InitializeClass(ATCTOrderedFolder)
 
 
@@ -730,6 +742,18 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
         return ReplaceableWrapper(aq_base(_target).__of__(self))
 
     index_html = ComputedAttribute(index_html, 1)
+
+    def PUT_factory(self, name, typ, body):
+        """Overwrite PUT factory to ignore certain names
+        
+        If None is returned the default PUT factory is used an plain
+        Zope objects like DTML method, File or Image are created.
+        """
+        if self._PUT_ignorematch(name):
+            LOG.debug("Ignoring upload of %s to %s" % 
+                      (name, self.absolute_url(1)))
+            return None
+        return BaseBTreeFolder.PUT_factory(self, name, typ, body)
 
 InitializeClass(ATCTBTreeFolder)
 
