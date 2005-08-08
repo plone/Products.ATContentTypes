@@ -1,6 +1,9 @@
 1.0.0-rc4
 ====================
 
+ * Enable syndication on topics by default.
+   [alecm]
+
  * Made inherit criteria field only appear when the parent of a Smart Folder
    is also a Smart folder.
    [alecm]

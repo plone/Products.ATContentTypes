@@ -356,6 +356,10 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         atct = self._ATCT
         self.failUnlessEqual(atct.get_size(), 1)
 
+    def test_syndication_enabled_by_default(self):
+        syn = self.portal.portal_syndication
+        self.failUnless(syn.isSyndicationAllowed(self._ATCT))
+
     def test_schema_marshall(self):
         pass
 
