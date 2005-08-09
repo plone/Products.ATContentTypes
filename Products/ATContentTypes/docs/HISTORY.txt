@@ -1,4 +1,4 @@
-1.0.0-rc4
+1.0.0-rc4 2005-08-09
 ====================
 
  * Implemented the custom PUT_factory in both ATCTOrderedFolder and
