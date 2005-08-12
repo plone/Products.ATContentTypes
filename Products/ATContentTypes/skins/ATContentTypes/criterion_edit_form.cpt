@@ -163,6 +163,7 @@
                                             title python:explanation"
                             tal:content="python:field[1]"
                             tal:condition="python:here.allowedCriteriaForField(field[0])"
+                            i18n:attributes="title"
                             i18n:translate="">
                             Field
                     </option>
@@ -252,6 +253,7 @@
                                                  selected python:here.hasSortCriterion() and here.getSortCriterion().field==field[0];
                                                  title explanation"
                                  tal:content="python:field[1]"
+                                 i18n:attributes="title"
                                  i18n:translate="">Field</option>
                      </tal:block>
                 </select>

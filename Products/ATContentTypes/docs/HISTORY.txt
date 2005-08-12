@@ -1,3 +1,8 @@
+
+ * Fixed http://plone.org/collector/4448 index titles in smart folder's
+   criteria edit form were not translated
+   [hannosch]
+
 1.0.0-rc4 2005-08-09
 ====================
 
