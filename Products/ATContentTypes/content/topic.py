@@ -426,7 +426,7 @@ class ATTopic(ATCTFolder):
         return result
 
     security.declareProtected(View, 'queryCatalog')
-    def queryCatalog(self, REQUEST=None, batch=False, b_size=100,
+    def queryCatalog(self, REQUEST=None, batch=False, b_size=None,
                                                     full_objects=False, **kw):
         """Invoke the catalog using our criteria to augment any passed
             in query before calling the catalog.
@@ -457,6 +457,11 @@ class ATTopic(ATCTFolder):
         pcatalog = getToolByName(self, 'portal_catalog')
         limit = self.getLimitNumber()
         max_items = self.getItemCount()
+        # Batch based on limit size if b_szie is unspecified
+        if max_items and b_size is None:
+            b_size = max_items
+        else:
+            b_size = 20
         if limit and self.hasSortCriterion():
             # Sort limit helps Zope 2.6.1+ to do a faster query
             # sorting when sort is involved

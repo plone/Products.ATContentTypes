@@ -400,5 +400,11 @@
       name location
       friendlyName Location
     </metadata>
+    <metadata>
+      name is_folderish
+      friendlyName Folder-like
+      description Find items that can contain other objects
+      enabled off
+    </metadata>
   </topic_tool>
 </atct_tool>

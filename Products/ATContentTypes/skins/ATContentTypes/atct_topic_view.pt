@@ -31,7 +31,8 @@
         </div>
 
         <metal:listingmacro define-macro="listing">
-        <tal:topiccontents define="topicContents here/queryCatalog">
+        <tal:topiccontents define="topicContents python:here.queryCatalog(batch=True);
+                                   batch topicContents;">
 
             <tal:listing condition="topicContents">
             <a style='text-align: right' href="#"
@@ -41,6 +42,10 @@
                i18n:domain="atcontenttypes">
                 Download PDF
             </a>
+
+
+            <!-- Navigation -->
+            <div metal:use-macro="here/batch_macros/macros/navigation" />
 
             <tal:default condition="not:here/getCustomView|nothing"
                          define="folderContents topicContents">
@@ -123,6 +128,9 @@
                 There are currently no criteria on which to search.
                 Please add them using the 'criteria' tab.
             </p>
+
+            <!-- Navigation -->
+            <div metal:use-macro="here/batch_macros/macros/navigation" />
 
         </tal:topiccontents>
         </metal:listingmacro>
