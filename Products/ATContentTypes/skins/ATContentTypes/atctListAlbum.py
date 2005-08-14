@@ -18,10 +18,10 @@ else:
     queryMethod = context.getFolderContents
 
 if images:
-        result['images'] = queryMethod({'Type':('Image',)},full_objects=True)
+    result['images'] = queryMethod({'portal_type':('Image',)},full_objects=True)
 if folders:
     # We don't need the full objects for the folders
-    result['folders'] = queryMethod({'Type':('Folder',)})
+    result['folders'] = queryMethod({'portal_type':('Folder',)})
 if subimages:
     #Handle brains or objects
     if base_hasattr(context, 'getPath'):
