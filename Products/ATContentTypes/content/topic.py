@@ -439,7 +439,7 @@ class ATTopic(ATCTFolder):
         if q is None:
             # empty query - do not show anything
             if batch:
-                return Batch([], b_size, int(b_start), orphan=0)
+                return Batch([], 20, int(b_start), orphan=0)
             return []
         # Allow parameters to further limit existing criterias
         for k,v in q.items():
@@ -459,7 +459,7 @@ class ATTopic(ATCTFolder):
         max_items = self.getItemCount()
         # Batch based on limit size if b_szie is unspecified
         if max_items and b_size is None:
-            b_size = max_items
+            b_size = int(max_items)
         else:
             b_size = 20
         if limit and self.hasSortCriterion():
