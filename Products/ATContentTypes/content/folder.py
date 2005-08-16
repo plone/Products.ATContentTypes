@@ -64,16 +64,16 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()
-    
+
     __implements__ = (ATCTOrderedFolder.__implements__, IATFolder,
                      AutoOrderSupport.__implements__)
 
     security       = ClassSecurityInfo()
-    
+
     def manage_afterAdd(self, item, container):
         ATCTOrderedFolder.manage_afterAdd(self, item, container)
         AutoOrderSupport.manage_afterAdd(self, item, container)
-    
+
 
 ##    actions = updateActions(ATCTOrderedFolder,
 ##        ({

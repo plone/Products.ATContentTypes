@@ -83,11 +83,11 @@ class ATLink(ATCTContent):
     __implements__ = ATCTContent.__implements__, IATLink
 
     security       = ClassSecurityInfo()
-    
+
     security.declareProtected(ModifyPortalContent, 'setRemoteUrl')
     def setRemoteUrl(self, value, **kwargs):
         """remute url mutator
-        
+
         Use urlparse to sanify the url
         Also see http://plone.org/collector/3296
         """

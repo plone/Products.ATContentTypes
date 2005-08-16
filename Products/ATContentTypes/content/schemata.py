@@ -65,7 +65,7 @@ ATContentTypeSchema['description'].schemata = 'default'
 ATContentTypeBaseSchema = ATContentTypeSchema
 
 relatedItemsField = ReferenceField('relatedItems',
-        relationship = 'relatesTo', 
+        relationship = 'relatesTo',
         multiValued = True,
         isMetadata = True,
         languageIndependent = False,

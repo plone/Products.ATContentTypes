@@ -138,7 +138,7 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
     cmf_edit_kws   = ATDocument.cmf_edit_kws
 
     __implements__ = ATDocument.__implements__, IATNewsItem
-    
+
     security = ClassSecurityInfo()
 
     security.declareProtected(View, 'tag')
@@ -155,7 +155,7 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
             self.setDescription(description)
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
-    
+
     def __bobo_traverse__(self, REQUEST, name, RESPONSE=None):
         """Transparent access to image scales
         """
@@ -173,7 +173,7 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
                 if not field.checkPermission('view', self):
                     raise Unauthorized, name
                 return image
-        
+
         return ATDocument.__bobo_traverse__(self, REQUEST, name, RESPONSE=None)
 
 registerATCT(ATNewsItem, PROJECTNAME)
