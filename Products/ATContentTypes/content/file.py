@@ -98,6 +98,13 @@ class ATFile(ATCTFileContent):
 
     security       = ClassSecurityInfo()
 
+    security.declareProtected(View, 'index_html')
+    def index_html(self, REQUEST=None, RESPONSE=None):
+        """Download the file
+        """
+        field = self.getPrimaryField()
+        return field.download(self)
+
     security.declareProtected(ModifyPortalContent, 'setFile')
     def setFile(self, value, **kwargs):
         """Set id to uploaded id
