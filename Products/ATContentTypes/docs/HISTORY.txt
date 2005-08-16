@@ -1,4 +1,8 @@
 
+ * Display files inline if they are of mimetype text/* thanks to LaurenceRowe
+   for the patch.
+   [alecm]
+
  * Fixed http://plone.org/collector/4448 index titles in smart folder's
    criteria edit form were not translated
    [hannosch]
