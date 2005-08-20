@@ -161,8 +161,8 @@ class ATFavorite(ATCTContent):
         except ConflictError:
             raise
         except (KeyError, AttributeError, Unauthorized, 'Unauthorized', ):
-            LOG.error('Failed to get object for %s with url of %s' % (repr(self),
-                      relative_url), exc_info=True)
+            ##LOG.error('Failed to get object for %s with url of %s' % (repr(self),
+            ##          relative_url), exc_info=True)
             obj = None
         return obj
 
