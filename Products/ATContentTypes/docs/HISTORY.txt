@@ -1,3 +1,10 @@
+ * Changed Subject index/metadata title to Keywords, and added appropriate
+   description.
+   [alecm]
+
+1.0.0-rc5 2005-08-18
+====================
+
  * Fixed http://plone.org/collector/4429 by updating the modifySelectList.js
    to deal with IE deficiencies.
    [alecm]

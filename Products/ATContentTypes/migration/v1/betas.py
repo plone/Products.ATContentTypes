@@ -62,6 +62,14 @@ def rc3_rc4(portal):
     removeTopicSyndicationAction(portal, out)
     return out
 
+def rc5_final(portal):
+    """1.0-rc5 -> 1.0.0-final
+    """
+    out = []
+    # Update topic Subjact friendlyname
+    changeSubjectToKeywords(portal, out)
+    return out
+
 def fixFolderlistingAction(portal, out):
     """Fixes the folder listing action for folderish ATCT types to make it
        work properly with the new browser default magic
@@ -245,7 +253,7 @@ def changeDynView2SelectedLayout(portal, out):
                 fti.setMethodAliases(aliases)
                 migrated.append(fti.getId())
     if migrated:
-        out.append('Migrated view alias to (select layou) for %s' %
+        out.append('Migrated view alias to (select layout) for %s' %
                    ', '.join(migrated))
 
 def fixTopicEditAction(portal, out):
@@ -259,3 +267,14 @@ def fixTopicEditAction(portal, out):
                     if action.getActionExpression().endswith('/atct_edit'):
                         action.setActionExpression(Expression('string:${object_url}/edit'))
                         out.append("Made Topic not use /edit for edit action")
+
+def changeSubjectToKeywords(portal, out):
+    """The DC field Subject is called Keywords in Plone"""
+    tool = getToolByName(portal, 'portal_atct', None)
+    if tool is not None:
+        if not tool.getIndex('Subject').friendlyName:
+            tool.updateIndex('Subject', friendlyName='Keywords',
+            enabled=True, description='The keywords used to describe an item')
+            tool.updateMetadata('Subject', friendlyName='Keywords',
+            enabled=True, description='The keywords used to describe an item')
+            out.append('Updated Smart Folder friendlyName for Subject')

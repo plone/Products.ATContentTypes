@@ -170,6 +170,9 @@
     </index>
     <index>
       name Subject
+      friendlyName Keywords
+      description The keywords used to describe an item
+      enabled on
       criterion ATSelectionCriterion
       criterion ATSimpleStringCriterion
       criterion ATListCriterion
@@ -308,6 +311,9 @@
     </metadata>
     <metadata>
       name Subject
+      friendlyName Keywords
+      description The keywords used to describe an item
+      enabled on
     </metadata>
     <metadata>
       name Title

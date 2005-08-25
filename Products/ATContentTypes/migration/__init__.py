@@ -46,4 +46,4 @@ def registerMigrations():
                              null)
     atct.registerUpgradePath('1.0.0-rc5',
                              '1.0.0-final (SVN/UNRELEASED)',
-                             null)
+                             v1.betas.rc5_final)

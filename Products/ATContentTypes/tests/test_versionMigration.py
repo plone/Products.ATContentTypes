@@ -33,6 +33,7 @@ from Products.ATContentTypes.migration.v1.betas import fixViewActions
 from Products.ATContentTypes.migration.v1.betas import fixTopicEditAction
 from Products.ATContentTypes.migration.v1.betas import removeTopicFolderContentsAction
 from Products.ATContentTypes.migration.v1.betas import changeDynView2SelectedLayout
+from Products.ATContentTypes.migration.v1.betas import changeSubjectToKeywords
 
 from Products.CMFDynamicViewFTI.migrate import migrateFTIs
 
@@ -415,7 +416,30 @@ class TestMigrations_v1(MigrationTest):
         fixTopicEditAction(self.portal, [])
         for a in fti.listActions():
             if a.getId() == 'edit':
-                self.assertEqual(a.getActionExpression(), 'string:${object_url}/edit')
+                self.assertEqual(a.getActionExpression(), 'string:${object_url}/edit')\
+
+    def testChangeSubjectToKeywords(self):
+        tool = self.portal.portal_atct
+        tool.updateIndex('Subject','')
+        tool.updateMetadata('Subject','')
+        self.assertEqual(tool.getIndex('Subject').friendlyName,'')
+        self.assertEqual(tool.getMetadata('Subject').friendlyName,'')
+        changeSubjectToKeywords(self.portal, [])
+        self.assertEqual(tool.getIndex('Subject').friendlyName,'Keywords')
+        self.assertEqual(tool.getMetadata('Subject').friendlyName,'Keywords')
+
+    def testChangeSubjectToKeywordsTwice(self):
+        tool = self.portal.portal_atct
+        tool.updateIndex('Subject','')
+        tool.updateMetadata('Subject','')
+        changeSubjectToKeywords(self.portal, [])
+        changeSubjectToKeywords(self.portal, [])
+        self.assertEqual(tool.getIndex('Subject').friendlyName,'Keywords')
+        self.assertEqual(tool.getMetadata('Subject').friendlyName,'Keywords')
+
+    def testChangeSubjectToKeywordsNoTool(self):
+        self.portal._delOb('portal_atct')
+        changeSubjectToKeywords(self.portal, [])
 
 
 
