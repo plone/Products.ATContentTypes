@@ -62,8 +62,7 @@ from Products.validation.validators.SupplValidators import MaxSizeValidator
 
 ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
     TextField('text',
-        required = True,
-        searchable = True,
+         searchable = True,
         primary = True,
         storage = AnnotationStorage(migrate=True),
         validators = ('isTidyHtmlWithCleanup',),

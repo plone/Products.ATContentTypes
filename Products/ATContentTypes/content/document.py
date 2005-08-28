@@ -54,7 +54,6 @@ from Products.ATContentTypes.interfaces import IATDocument
 
 ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
     TextField('text',
-              required=True,
               searchable=True,
               primary=True,
               storage = AnnotationStorage(migrate=True),
