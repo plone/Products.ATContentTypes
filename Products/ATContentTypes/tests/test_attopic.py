@@ -352,6 +352,20 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.failUnless(isinstance(topic.queryCatalog(full_objects=True)[0], ATFolder))
         self.failIf(isinstance(topic.queryCatalog()[0], ATFolder))
 
+    def test_queryCatalogLimitChangesBatchSize(self):
+        #Ensure that a set limit overrides batch size
+        topic = self._ATCT
+        topic.setLimitNumber(True)
+        topic.setItemCount(10)
+        crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
+        crit.setValue('Folder')
+        # Add a bunch of folders.
+        for i in range(1, 20):
+            self.folder.invokeFactory('Folder', str(i))
+        self.failUnless(isinstance(topic.queryCatalog(batch=True),Batch))
+        # Check the batch length
+        self.assertEqual(len(topic.queryCatalog(batch=True)), 10)
+
     def test_get_size(self):
         atct = self._ATCT
         self.failUnlessEqual(atct.get_size(), 1)

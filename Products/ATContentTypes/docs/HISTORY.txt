@@ -1,3 +1,9 @@
+ * Fixed two Smart folder issues: http://members.plone.org/collector/4594
+   we now fail gracefully on bad limit settings, and
+   http://members.plone.org/collector/4601 added show/hide all link to the
+   medatata control panel.
+   [alecm]
+
  * Changed Subject index/metadata title to Keywords, and added appropriate
    description.
    [alecm]

@@ -70,7 +70,7 @@
           <input type="hidden" name="form.submitted" value="1" />
           <input type="hidden" name="sub" value="1" />
 
-          <tal:indices tal:define="enabledOnly python:request.get('showEnabledOnly',False);
+          <tal:indices tal:define="enabledOnly python:request.get('showEnabledOnly',True);
                               indexes python:atct_tool.getIndexes(enabledOnly=enabledOnly);
                               metadata python:atct_tool.getAllMetadata(enabledOnly=enabledOnly)">
 
