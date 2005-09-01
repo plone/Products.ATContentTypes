@@ -1,3 +1,7 @@
+ * Made migration more tolerant of conflicting ids due to auto-created content
+   from manage_afterAdd or similar.  Fixes http://plone.org/collector/4468
+   [alecm]
+
  * Moved the exclude from navigation checkbox back to the properties tab, on
    folderish objects, per request from limi.
    [alecm]
