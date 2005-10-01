@@ -85,7 +85,11 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                         description=("Narrow down the search results from the parent Smart Folder(s) "
                                      "by using the criteria from this Smart Folder."),
                         description_msgid="help_inherit_criteria",
-                        i18n_domain = "plone"),
+                        i18n_domain = "plone",
+                        # Only show when the parent object is a Topic also,
+                        # for some reason the checkcondition passes the
+                        #template as 'object', and the object as 'folder'.
+                        condition = "python:folder.getParentNode().portal_type == 'Topic'"),
                 ),
     BooleanField('limitNumber',
                 required=False,
@@ -197,15 +201,18 @@ class ATTopic(ATCTFolder):
         'action'      : 'string:${folder_url}/atct_topic_subtopics',
         'permissions' : (ChangeTopics,)
         },
-        {
-        'id'          : 'syndication',
-        'name'        : 'Syndication',
-        'action'      : 'string:${folder_url}/synPropertiesForm',
-        'condition'   : 'python: portal.portal_syndication.isSiteSyndicationAllowed()',
-        'permissions' : (ManageProperties,)
-        },
        )
     )
+
+    # Override initializeArchetype to turn on syndication by default
+    def initializeArchetype(self, **kwargs):
+        ret_val = ATCTFolder.initializeArchetype(self, **kwargs)
+        # Enable topic syndication by default
+        syn_tool = getToolByName(self, 'portal_syndication', None)
+        if syn_tool is not None:
+            if syn_tool.isSiteSyndicationAllowed():
+                syn_tool.enableSyndication(self)
+        return ret_val
 
     security.declareProtected(ChangeTopics, 'validateAddCriterion')
     def validateAddCriterion(self, indexId, criteriaType):
@@ -353,7 +360,13 @@ class ATTopic(ATCTFolder):
         """Return a list of our subtopics.
         """
         val = self.objectValues(self.meta_type)
-        val.sort()
+        check_p = getToolByName(self.portal_membership).checkPermission
+        tops = []
+        for top in val:
+            if check_p('View', top):
+                tops.append((top.getTitle().lower(),top))
+        tops.sort()
+        tops = [t[1] for t in tops]
         return val
 
     security.declareProtected(View, 'hasSubtopics')
@@ -413,7 +426,7 @@ class ATTopic(ATCTFolder):
         return result
 
     security.declareProtected(View, 'queryCatalog')
-    def queryCatalog(self, REQUEST=None, batch=False, b_size=100,
+    def queryCatalog(self, REQUEST=None, batch=False, b_size=None,
                                                     full_objects=False, **kw):
         """Invoke the catalog using our criteria to augment any passed
             in query before calling the catalog.
@@ -426,7 +439,7 @@ class ATTopic(ATCTFolder):
         if q is None:
             # empty query - do not show anything
             if batch:
-                return Batch([], b_size, int(b_start), orphan=0)
+                return Batch([], 20, int(b_start), orphan=0)
             return []
         # Allow parameters to further limit existing criterias
         for k,v in q.items():
@@ -444,7 +457,12 @@ class ATTopic(ATCTFolder):
         pcatalog = getToolByName(self, 'portal_catalog')
         limit = self.getLimitNumber()
         max_items = self.getItemCount()
-        if limit and self.hasSortCriterion():
+        # Batch based on limit size if b_szie is unspecified
+        if max_items and b_size is None:
+            b_size = int(max_items)
+        else:
+            b_size = 20
+        if limit and max_items and self.hasSortCriterion():
             # Sort limit helps Zope 2.6.1+ to do a faster query
             # sorting when sort is involved
             # See: http://zope.org/Members/Caseman/ZCatalog_for_2.6.1

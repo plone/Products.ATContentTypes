@@ -24,9 +24,6 @@ def alpha2_beta1(portal):
     # Rename the topics configlet
     renameTopicsConfiglet(portal, out)
 
-    # Update topic actions
-    addTopicSyndicationAction(portal, out)
-
     # Fix up view actions - with CMFDynamicViewFTI, we don't need /view anymore
     fixViewActions(portal, out)
 
@@ -56,7 +53,22 @@ def rc2_rc3(portal):
     # Make sure Topic uses /edit method alias for edit action
     fixTopicEditAction(portal, out)
     return out
-    
+
+def rc3_rc4(portal):
+    """1.0-rc3 -> 1.0.0-rc4
+    """
+    out = []
+    # Update topic actions
+    removeTopicSyndicationAction(portal, out)
+    return out
+
+def rc5_final(portal):
+    """1.0-rc5 -> 1.0.0-final
+    """
+    out = []
+    # Update topic Subjact friendlyname
+    changeSubjectToKeywords(portal, out)
+    return out
 
 def fixFolderlistingAction(portal, out):
     """Fixes the folder listing action for folderish ATCT types to make it
@@ -178,17 +190,16 @@ def renameTopicsConfiglet(portal, out):
     out.append("Renamed Smart Folder configlet")
 
 
-def addTopicSyndicationAction(portal, out):
+def removeTopicSyndicationAction(portal, out):
     """Update the Topic actions"""
     #Do this the lazy way by using fix_actions
     typesTool = getToolByName(portal, 'portal_types', None)
     topicFTI = getattr(typesTool, 'Topic', None)
     if typesTool is not None and topicFTI is not None:
-        if 'syndication' not in [x.id for x in topicFTI.listActions()]:
-            fixActionsForType(ATTopic, typesTool)
-            out.append("Updated Topic actions")
-            return 1
-    return 0
+        actions = topicFTI.listActions()
+        actions = [x for x in actions if x.id != 'syndication']
+        topicFTI._actions = tuple(actions)
+        out.append("Updated Topic actions")
 
 def fixViewActions(portal, out):
     """Make view actions for types except File and Image not use /view"""
@@ -242,7 +253,7 @@ def changeDynView2SelectedLayout(portal, out):
                 fti.setMethodAliases(aliases)
                 migrated.append(fti.getId())
     if migrated:
-        out.append('Migrated view alias to (select layou) for %s' %
+        out.append('Migrated view alias to (select layout) for %s' %
                    ', '.join(migrated))
 
 def fixTopicEditAction(portal, out):
@@ -256,3 +267,14 @@ def fixTopicEditAction(portal, out):
                     if action.getActionExpression().endswith('/atct_edit'):
                         action.setActionExpression(Expression('string:${object_url}/edit'))
                         out.append("Made Topic not use /edit for edit action")
+
+def changeSubjectToKeywords(portal, out):
+    """The DC field Subject is called Keywords in Plone"""
+    tool = getToolByName(portal, 'portal_atct', None)
+    if tool is not None:
+        if not tool.getIndex('Subject').friendlyName:
+            tool.updateIndex('Subject', friendlyName='Keywords',
+            enabled=True, description='The keywords used to describe an item')
+            tool.updateMetadata('Subject', friendlyName='Keywords',
+            enabled=True, description='The keywords used to describe an item')
+            out.append('Updated Smart Folder friendlyName for Subject')

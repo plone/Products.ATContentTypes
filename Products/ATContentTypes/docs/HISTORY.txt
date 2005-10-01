@@ -1,19 +1,74 @@
-1.0.0 trunk
+1.0.0-final 2005-09-05
+======================
+
+ * Packaged 1.0.0 final with a tip of the hat to Christian Heimes who has
+   disappeared from our radar. We miss you, dude.
+   [stefan]
+ 
+ * Made migration more tolerant of conflicting ids due to auto-created content
+   from manage_afterAdd or similar.  Fixes http://plone.org/collector/4468
+   [alecm]
+
+ * Moved the exclude from navigation checkbox back to the properties tab, on
+   folderish objects, per request from limi.
+   [alecm]
+
+ * Fixed two Smart folder issues: http://members.plone.org/collector/4594
+   we now fail gracefully on bad limit settings, and
+   http://members.plone.org/collector/4601 added show/hide all link to the
+   medatata control panel.
+   [alecm]
+
+ * Changed Subject index/metadata title to Keywords, and added appropriate
+   description.
+   [alecm]
+
+1.0.0-rc5 2005-08-18
 ====================
 
- * Replaced marshaller for all content types with the ControlledMarshaller
-   from Sid's Marshall product. Also added some code to set up some 
-   marshall predicates for Image, File, XML content and all other content
-   types based on ATCT.
-   [tiran]
+ * Fixed http://plone.org/collector/4429 by updating the modifySelectList.js
+   to deal with IE deficiencies.
+   [alecm]
 
- * Added icalendar product from svn codespeak.net to thirdparty/. In the
-   future the dumb ical parser for ATEvent is going to be replaced by an
-   adapater using this parser.
-   [tiran]
+ * Display files inline if they are of mimetype text/* thanks to LaurenceRowe
+   for the patch.
+   [alecm]
 
-1.0.0-rc3
+ * Fixed http://plone.org/collector/4448 index titles in smart folder's
+   criteria edit form were not translated
+   [hannosch]
+
+1.0.0-rc4 2005-08-09
 ====================
+
+ * Implemented the custom PUT_factory in both ATCTOrderedFolder and
+   ATCTBTreeFolder, as inheriting it from ATCTFolderMixin breaks when
+   LinguaPlone comes into play.
+   [stefan]
+
+ * Enable syndication on topics by default.
+   [alecm]
+
+ * Made inherit criteria field only appear when the parent of a Smart Folder
+   is also a Smart folder.
+   [alecm]
+
+ * Added permissions checks to listSubTopics.
+   [alecm]
+
+ * Remove Smart Folder syndication action as the action category has changed
+   in CMF.
+   [alecm]
+
+ * Fixed bug in subtopic listing.
+   [alecm]
+
+1.0.0-rc3 2005-08-01
+====================
+
+ * Change manage_copyObjects' permission to Copy or move, just copy from
+   Plone's PortalFolder.
+   [panjunyong]
 
  * Added method to fix the portal type name of CMF based objects
    that were imported or copied from an unmigrated site to a migrated

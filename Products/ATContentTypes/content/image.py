@@ -117,7 +117,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     cmf_edit_kws   = ('file', )
 
     __implements__ = ATCTFileContent.__implements__, IATImage
-    
+
     actions = updateActions(ATCTFileContent, ATCTImageTransform.actions)
 
     security       = ClassSecurityInfo()
@@ -137,29 +137,29 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         """Generate image tag using the api of the ImageField
         """
         return self.getField('image').tag(self, **kwargs)
-    
+
     def __str__(self):
         """cmf compatibility
         """
         return self.tag()
-    
+
     security.declareProtected(View, 'get_size')
     def get_size(self):
         """ZMI / Plone get size method
-        
-        BBB: ImageField.get_size() returns the size of the original image + all 
+
+        BBB: ImageField.get_size() returns the size of the original image + all
         scales but we want only the size of the original image.
         """
         img = self.getImage()
         if not getattr(aq_base(img), 'get_size', False):
             return "n/a"
         return img.get_size()
-        
+
     security.declareProtected(View, 'getSize')
     def getSize(self, scale=None):
         field = self.getField('image')
         return field.getSize(self, scale=scale)
-    
+
     security.declareProtected(View, 'getWidth')
     def getWidth(self, scale=None):
         return self.getSize(scale)[0]
@@ -167,7 +167,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     security.declareProtected(View, 'getHeight')
     def getHeight(self, scale=None):
         return self.getSize(scale)[1]
-    
+
     width = ComputedAttribute(getWidth, 1)
     height = ComputedAttribute(getHeight, 1)
 
@@ -194,7 +194,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
             if image is not None and not isinstance(image, basestring):
                 # image might be None or '' for empty images
                 return image
-        
+
         return ATCTFileContent.__bobo_traverse__(self, REQUEST, name, RESPONSE=None)
 
 registerATCT(ATImage, PROJECTNAME)

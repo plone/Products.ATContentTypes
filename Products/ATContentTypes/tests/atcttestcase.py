@@ -446,7 +446,7 @@ def setupATCT(app, id=portal_name, quiet=False):
     transaction.begin()
     _start = time.time()
     portal = app[id]
-    if not quiet: ZopeTestCase._print('Adding ATContentTypes \n')
+    if not quiet: ZopeTestCase._print('Adding ATContentTypes ... ')
 
     # login as manager
     user = app.acl_users.getUserById(portal_owner).__of__(app.acl_users)

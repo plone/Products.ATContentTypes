@@ -105,6 +105,10 @@ class ATFile(ATCTFileContent):
         """Download the file
         """
         field = self.getPrimaryField()
+        if field.getContentType(self).startswith('text/'): 
+            # return the content in line.
+            return ATCTFileContent.index_html(self, REQUEST, RESPONSE)
+        # otherwise return the content as an attachment
         return field.download(self)
 
     security.declareProtected(ModifyPortalContent, 'setFile')

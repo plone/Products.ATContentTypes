@@ -200,7 +200,7 @@ class Walker:
                             "was committed. Unable to roll back!")
                 #  stop migration process after an error
                 # aborting transaction
-                LOG.error("FATAL: Migration has failied, aborting transaction!")
+                LOG.error("FATAL: Migration has failed, aborting transaction!")
                 transaction.abort()
                 raise MigrationError(objpath, migrator, tb)
                 

@@ -71,8 +71,10 @@ function getNewOptions(selectInput, cur_key) {
         }
         var change_func = new Function("selectProcessRequestChange('"+cur_key+"','"+selectInput.value+"');")
         var selectRequest = cur_sel["_request"]
+        // abort any earlier requests on this same key
+        if (selectRequest.readyState != 0) selectRequest.abort();
         selectRequest.onreadystatechange = change_func;
-        selectRequest.open("GET", url + selectInput.value );
+        selectRequest.open("GET", url + selectInput.value, true );
         selectRequest.send(null);
     }
 }
@@ -93,7 +95,11 @@ function selectProcessRequestChange(cur_key, selectValue) {
 }
 
 function changeOnSelect(ev, master_element) {
-    if (! master_element) var master_element = this;
+    if (! master_element) {
+        if (ev.target) var master_element = ev.target;
+        else if (ev.srcElement) var master_element = ev.srcElement;
+        else var master_element = this;
+    }
     var selectInput = master_element;
     var form_name = master_element.form.name;
     var master_key = form_name+'|'+selectInput.id;
@@ -141,11 +147,19 @@ function disableField(field_elem, should_hide) {
 
 function hideField(field_elem, should_hide) {
     // Special handling for complex widgets
-    if (should_hide) var vis = "hidden";
-    else var vis = "visible";
+    if (should_hide) {
+        var vis = "hidden";
+        var disp = "none";
+    }
+    else {
+        var vis = "visible";
+        // This may mess with existing css
+        var disp = "";
+    }
 
     if (field_elem.style) {
         field_elem.style.visibility=vis;
+        field_elem.style.display=disp;
         //walk the tree to get INPUT element which are explicitly visible
         if (field_elem.childNodes) {
             for (var i=0;i < field_elem.childNodes.length;i++) {

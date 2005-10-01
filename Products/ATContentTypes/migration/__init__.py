@@ -1,4 +1,4 @@
-"""AT Content Types migration suite
+"""at Content Types migration suite
 """
 #Types migration
 import Products.ATContentTypes.migration.walker
@@ -7,7 +7,7 @@ import Products.ATContentTypes.migration.atctmigrator
 import Products.ATContentTypes.migration.othermigrator
 import Products.ATContentTypes.migration.storage
 
-#Vesrion migration
+# Version migration
 from Products.ATContentTypes.tool import atct
 
 def executeMigrations():
@@ -36,5 +36,17 @@ def registerMigrations():
                              '1.0.0-rc2',
                              null)
     atct.registerUpgradePath('1.0.0-rc2',
-                             '1.0.0-rc3 (SVN/UNRELEASED)',
+                             '1.0.0-rc3',
                              v1.betas.rc2_rc3)
+    atct.registerUpgradePath('1.0.0-rc3',
+                             '1.0.0-rc4',
+                              v1.betas.rc3_rc4)
+    atct.registerUpgradePath('1.0.0-rc4',
+                             '1.0.0-rc5',
+                             null)
+    atct.registerUpgradePath('1.0.0-rc5',
+                             '1.0.0-final',
+                             v1.betas.rc5_final)
+    atct.registerUpgradePath('1.0.0-final',
+                             '1.0.1-devel (SVN/UNRELEASED)',
+                             null)

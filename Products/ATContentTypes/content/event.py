@@ -149,7 +149,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 write_permission = ChangeEvents,
                 validators = ('isURL',),
                 widget = StringWidget(
-                        description = ("Web address with more info about the event. " 
+                        description = ("Web address with more info about the event. "
                                        "Add http:// for external links."),
                         description_msgid = "help_url",
                         label = "Event URL",
@@ -223,13 +223,13 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
                       'start_date', 'end_date', 'contact_name', 'contact_email',
                       'contact_phone', 'event_url')
 
-    __implements__ = (ATCTContent.__implements__, IATEvent, 
+    __implements__ = (ATCTContent.__implements__, IATEvent,
                       CalendarSupportMixin.__implements__,
                       HistoryAwareMixin.__implements__)
 
     security       = ClassSecurityInfo()
 
-    actions = updateActions(ATCTContent, CalendarSupportMixin.actions + 
+    actions = updateActions(ATCTContent, CalendarSupportMixin.actions +
                             HistoryAwareMixin.actions)
 
     security.declareProtected(ChangeEvents, 'setEventType')
@@ -364,7 +364,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
 
     def __cmp__(self, other):
         """Compare method
-        
+
         If other is based on ATEvent, compare start, duration and title.
         #If other is a number, compare duration and number
         If other is a DateTime instance, compare start date with date

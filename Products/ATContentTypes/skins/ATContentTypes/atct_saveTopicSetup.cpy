@@ -17,6 +17,6 @@ result = context.portal_atct.manage_saveTopicSetup(context.REQUEST)
 
 state.setNextAction('redirect_to:string:%s'%next_page)
 
-state.setKwargs({'portal_status_message':'Topic setup saved'})
+state.setKwargs({'portal_status_message':'Smart Folder setup saved'})
 
 return state

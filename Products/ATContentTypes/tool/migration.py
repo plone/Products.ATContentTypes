@@ -250,10 +250,10 @@ class ATCTMigrationTool(Base):
         all content types to ATCT based types. For large sites you might want to run
         migration, update workflow and update catalog in three transactions.
         """
-        elapse, c_elapse, out = self.migrateContentTypesToATCT(portal_types=None)
-        elapse, c_elapse, count = self.migrationUpdateWorkflowRoleMapping()
+        out, elapse, c_elapse = self.migrateContentTypesToATCT(portal_types=None)
+        count, elapse, c_elapse = self.migrationUpdateWorkflowRoleMapping()
         out += '\n\nWorkflow: %d object(s) updated.\n' % count
-        elapse, c_elapse = self.migrationRefreshPortalCatalog()
+        ignored, elapse, c_elapse = self.migrationRefreshPortalCatalog()
         self.upgrade()
         return out
     

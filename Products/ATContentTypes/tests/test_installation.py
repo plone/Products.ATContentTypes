@@ -147,7 +147,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
     def test_cleanup_external_methods(self):
         id = 'migrateFromCMFtoATCT'
         em = self.portal.manage_addProduct['ExternalMethod']
-        em.manage_addExternalMethod(id, 'title'
+        em.manage_addExternalMethod(id, 'title',
                                     'ATContentTypes.Install', 'install')
         self.failUnless(id in self.portal.objectIds())
         removeExteneralMethods(self.portal, StringIO())

@@ -191,7 +191,7 @@ def migratePortalType(portal, src_portal_type, dst_portal_type, out=None,
     key = (src.Metatype(), dst.Metatype())
     migratorFromRegistry = getMigrator(key)
     if migratorFromRegistry is None:
-        raise ValueError, "No registered migrator for '%s' found" % key
+        raise ValueError, "No registered migrator for '%s' found" % str(key)
     
     if migrator is not None:
         # got a migrator, make sure it is the right one

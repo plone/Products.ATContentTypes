@@ -66,7 +66,7 @@ ATContentTypeSchema['description'].schemata = 'default'
 ATContentTypeBaseSchema = ATContentTypeSchema
 
 relatedItemsField = ReferenceField('relatedItems',
-        relationship = 'relatesTo', 
+        relationship = 'relatesTo',
         multiValued = True,
         isMetadata = True,
         languageIndependent = False,
@@ -93,11 +93,8 @@ def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
     """
     schema.moveField('relatedItems', pos='bottom')
     if folderish:
-        schema['excludeFromNav'].schemata = 'default'
-        schema.moveField('excludeFromNav', after='relatedItems')
         schema['relatedItems'].widget.visible['edit'] = 'invisible'
-    else:
-        schema.moveField('excludeFromNav', after='allowDiscussion')
+    schema.moveField('excludeFromNav', after='allowDiscussion')
     if moveDiscussion:
         schema['allowDiscussion'].schemata = 'default'
         schema.moveField('allowDiscussion', after='relatedItems')

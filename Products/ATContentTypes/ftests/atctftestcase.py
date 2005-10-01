@@ -274,7 +274,7 @@ def setupEditors(app, id=portal_name, quiet=False):
     qi = getToolByName(portal, 'portal_quickinstaller') 
     # add kupu
     if HAS_KUPU:
-        if not quiet: ZopeTestCase._print('Adding kupu\n')
+        if not quiet: ZopeTestCase._print('Adding kupu ... ')
         try:
             qi.installProduct('kupu')
         except AlreadyInstalled:
@@ -283,7 +283,7 @@ def setupEditors(app, id=portal_name, quiet=False):
 
     # add Epoz
     if HAS_EPOZ:
-        if not quiet: ZopeTestCase._print('Adding Epoz\n')
+        if not quiet: ZopeTestCase._print('Adding Epoz ...')
         try:
             qi.installProduct('Epoz')
         except AlreadyInstalled:

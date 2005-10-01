@@ -31,7 +31,8 @@
         </div>
 
         <metal:listingmacro define-macro="listing">
-        <tal:topiccontents define="topicContents here/queryCatalog">
+        <tal:topiccontents define="topicContents python:here.queryCatalog(batch=True);
+                                   batch topicContents;">
 
             <tal:listing condition="topicContents">
             <a style='text-align: right' href="#"
@@ -41,6 +42,10 @@
                i18n:domain="atcontenttypes">
                 Download PDF
             </a>
+
+
+            <!-- Navigation -->
+            <div metal:use-macro="here/batch_macros/macros/navigation" />
 
             <tal:default condition="not:here/getCustomView|nothing"
                          define="folderContents topicContents">
@@ -124,15 +129,19 @@
                 Please add them using the 'criteria' tab.
             </p>
 
+            <!-- Navigation -->
+            <div metal:use-macro="here/batch_macros/macros/navigation" />
+
         </tal:topiccontents>
         </metal:listingmacro>
     </metal:body>
 
     <metal:body define-macro="folderlisting_macro">
-        <tal:subtopics condition="here/hasSubtopics">
+        <tal:subtopics condition="here/hasSubtopics"
+                       define="folderContents here/getFolderContents">
             <h2 i18n:domain="atcontenttypes"
                 i18n:translate="sub_topics_heading">
-                Sub-topics:
+                Contained Smart Folders:
             </h2>
             <metal:list metal:use-macro="here/base/macros/folderlisting"/>
         </tal:subtopics>

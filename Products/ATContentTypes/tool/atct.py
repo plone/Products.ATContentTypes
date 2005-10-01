@@ -65,7 +65,7 @@ ATCT_PRODUCTS = ('ATContentTypes', )
 SITE_TYPES = ('Portal Site', 'Plone Site',)
 
 LOG_MIGRATION = logging.getLogger('ATCT.migration')
-LOG = logging.getLogger('ATContentTypes')
+LOG = logging.getLogger('ATCT')
 
 configlets = ({
     'id' : TOOLNAME,

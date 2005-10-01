@@ -1,5 +1,5 @@
 [default]
-title = Edit Topic
+title = Edit Smart Folder Criteria
 
 [validators]
 validators..AddCriterion = validate_add_criterion

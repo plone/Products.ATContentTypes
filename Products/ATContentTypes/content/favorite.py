@@ -109,12 +109,12 @@ class ATFavorite(ATCTContent):
             return '%s/%s' % (portal_url, remote)
         else:
             return portal_url
-            
+
     def _getRemoteUrl(self):
-        """Accessor 
+        """Accessor
         """
         return self.getField('remoteUrl').get(self)
-            
+
     remote_url = ComputedAttribute(_getRemoteUrl, 1)
 
     security.declareProtected(ModifyPortalContent, 'setRemoteUrl')
@@ -136,7 +136,7 @@ class ATFavorite(ATCTContent):
         # if site is still absolute, make it relative
         if remote_url[:1]=='/':
             remote_url=remote_url[1:]
-        
+
         self.getField('remoteUrl').set(self, remote_url)
 
     security.declareProtected(View, 'getIcon')
@@ -163,8 +163,8 @@ class ATFavorite(ATCTContent):
         except ConflictError:
             raise
         except (KeyError, AttributeError, Unauthorized, 'Unauthorized', ):
-            LOG.error('Failed to get object for %s with url of %s' % (repr(self),
-                      relative_url), exc_info=True)
+            ##LOG.error('Failed to get object for %s with url of %s' % (repr(self),
+            ##          relative_url), exc_info=True)
             obj = None
         return obj
 
