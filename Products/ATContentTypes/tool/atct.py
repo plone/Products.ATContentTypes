@@ -28,6 +28,7 @@ import zLOG
 from OFS.SimpleItem import SimpleItem
 from OFS.PropertyManager import PropertyManager
 from Globals import InitializeClass
+from StructuredText.StructuredText import HTML
 from ZODB.POSException import ConflictError
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_base
@@ -37,7 +38,6 @@ from Products.CMFPlone import transaction
 
 from Products.CMFCore.utils import UniqueObject 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.utils import format_stx
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.permissions import View
 from Products.CMFCore.ActionProviderBase import ActionProviderBase
@@ -389,7 +389,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager,
     security.declareProtected(ManagePortal, 'getReadme')
     def getReadme(self, stx_level=4):
         f = open(os.path.join(ATCT_DIR, 'README.txt'))
-        return format_stx(f.read(), stx_level)
+        return HTML(f.read(), level=stx_level)
 
     security.declarePrivate('getConfiglets')
     def getConfiglets(self):

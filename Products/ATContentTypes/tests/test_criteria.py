@@ -31,7 +31,6 @@ from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 from Missing import MV
 
-from Products.CMFCore import CMFCorePermissions
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 import time

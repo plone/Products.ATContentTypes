@@ -80,6 +80,7 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
 ##         'id'          : 'folderContents',
 ##         'name'        : 'Contents',
 ##         'action'      : 'string:${folder_url}/folder_contents',
+
 ##         'permissions' : (CMFCorePermissions.ListFolderContents,),
 ##         'condition'   : 'python:object.displayContentsTab()'
 ##          },
