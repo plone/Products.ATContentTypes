@@ -28,7 +28,7 @@
         <li class="selected">
           <a href=""
              tal:attributes="href string:${here/absolute_url}/${template/id}"
-             i18n:translate="label_topic_metadata">Smart Folder MetaData</a>
+             i18n:translate="label_topic_metadata">Smart Folder Metadata</a>
         </li>
     </ul>
 

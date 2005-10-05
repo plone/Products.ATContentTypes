@@ -226,7 +226,7 @@
 
             <div class="field" style="float:left">
 
-                <label for="field" i18n:translate="label_criteria_field_name">Field Name</label>
+                <label for="field" i18n:translate="label_criteria_field_name">Field name</label>
 
                 <div class="formHelp"
                      id="fieldHelpSort"
