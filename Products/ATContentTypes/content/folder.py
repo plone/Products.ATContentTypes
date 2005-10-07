@@ -74,19 +74,6 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
         ATCTOrderedFolder.manage_afterAdd(self, item, container)
         AutoOrderSupport.manage_afterAdd(self, item, container)
 
-
-##    actions = updateActions(ATCTOrderedFolder,
-##        ({
-##         'id'          : 'folderContents',
-##         'name'        : 'Contents',
-##         'action'      : 'string:${folder_url}/folder_contents',
-
-##         'permissions' : (CMFCorePermissions.ListFolderContents,),
-##         'condition'   : 'python:object.displayContentsTab()'
-##          },
-##        )
-##    )
-
 registerATCT(ATFolder, PROJECTNAME)
 
 class ATBTreeFolder(AutoSortSupport, ATCTBTreeFolder):
