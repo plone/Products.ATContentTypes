@@ -37,7 +37,6 @@ from Products.CMFPlone import transaction
 
 from Products.CMFCore.utils import UniqueObject 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.utils import format_stx
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.permissions import View
 from Products.CMFCore.ActionProviderBase import ActionProviderBase

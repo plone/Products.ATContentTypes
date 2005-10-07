@@ -49,7 +49,7 @@ def permission_handler(value):
     """Parse a permission
     
     Valid value are:
-        cmf.NAME - Products.CMFCore.CMFCorePermissions
+        cmf.NAME - Products.CMFCore.permissions
         zope.NAME - AccessControl.Permissions
         aDottedName
     """
