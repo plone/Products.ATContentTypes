@@ -177,7 +177,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
             self.setTitle(title)
         self.reindexObject()
 
-    def __bobo_traverse__(self, REQUEST, name, RESPONSE=None):
+    def __bobo_traverse__(self, REQUEST, name):
         """Transparent access to image scales
         """
         if name.startswith('image'):
@@ -193,6 +193,6 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
                 # image might be None or '' for empty images
                 return image
 
-        return ATCTFileContent.__bobo_traverse__(self, REQUEST, name, RESPONSE=None)
+        return ATCTFileContent.__bobo_traverse__(self, REQUEST, name)
 
 registerATCT(ATImage, PROJECTNAME)

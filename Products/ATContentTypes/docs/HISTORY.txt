@@ -1,6 +1,10 @@
 Changes after 1.0.0
 ======================
 
+ * Fixes for http://members.plone.org/collector/4709 __bobo_traverse__ doesn't
+   need or want a RESPONSE argument.
+   [alecm]
+
  * Fixed http://members.plone.org/collector/4734 It is generally a bad idea
    to check permissions in bobo_traverse methods, especially permissions
    that don't exist, especially if you then try to raise an exception that
