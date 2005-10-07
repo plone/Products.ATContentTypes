@@ -1,5 +1,9 @@
-Changes after 1.0.0
+1.1.0-devel unreleased
 ======================
+
+ * make trunk compatible with cmf > 1.5, by changing references to
+   cmfcore.permissions and removing use of format_stx
+   [k_vertigo, hannosch]
 
  * Fix two small i18n default text inconsistencies
    [hannosch]
