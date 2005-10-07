@@ -24,7 +24,7 @@ __author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATSelectionCriterion'
 
-from Products.CMFCore import permissions as CMFCorePermissions
+from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
@@ -84,7 +84,7 @@ class ATSelectionCriterion(ATBaseCriterion):
         options.sort()
         return [o[1] for o in options]
 
-    security.declareProtected(CMFCorePermissions.View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
 
