@@ -1,6 +1,12 @@
 Changes after 1.0.0
 ======================
 
+ * Fixed http://members.plone.org/collector/4734 It is generally a bad idea
+   to check permissions in bobo_traverse methods, especially permissions
+   that don't exist, especially if you then try to raise an exception that
+   you haven't actually imported.
+   [alecm]
+
  * Fix two small i18n default text inconsistencies
    [hannosch]
 
