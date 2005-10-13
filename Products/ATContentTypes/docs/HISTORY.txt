@@ -1,4 +1,4 @@
-Changes after 1.0.0
+1.0.1-final 2005-10-13
 ======================
 
  * Fixes for http://members.plone.org/collector/4709 __bobo_traverse__ doesn't
