@@ -1,8 +1,14 @@
- * Fix issue causing archetypes schema update to fail due to topic not
+ * Fixed two issues with PathCriterion.  It was using depth 0 to get subfolders,
+   the proper parameter is depth -1.  Also, in order to properly handle the
+   references it holds, it must itself be cataloged in the UID catalog, and
+   have its references cataloged.
+   [alecm]
+
+ * Fixed issue causing archetypes schema update to fail due to topic not
    checking syndication state in initializeArchetype.
    [alecm]
 
- * Add missing alternate views for folderish types.
+ * Added missing alternate views for folderish types.
    [alecm]
 
 1.0.1-final 2005-10-13

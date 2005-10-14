@@ -32,6 +32,7 @@ from AccessControl import ClassSecurityInfo
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import BooleanField, ReferenceField
 from Products.Archetypes.public import BooleanWidget
+from Products.Archetypes.Referenceable import Referenceable
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import PATH_INDICES
@@ -99,12 +100,28 @@ class ATPathCriterion(ATBaseCriterion):
     security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
-        depth = (not self.Recurse() and 1) or 0
+        depth = (not self.Recurse() and 1) or -1
         paths = ['/'.join(o.getPhysicalPath()) for o in self.Value()]
 
         if paths is not '':
             result.append((self.Field(), {'query': paths, 'depth': depth}))
 
         return tuple( result )
+
+    # We need references, so we need to be partly cataloged
+    _catalogUID = Referenceable._catalogUID
+    _catalogRefs = Referenceable._catalogRefs
+
+    def reindexObject(self, *args, **kwargs):
+        self._catalogUID(self)
+        self._catalogRefs(self)
+
+    def unindexObject(self, *args, **kwargs):
+        self._catalogUID(self)
+        self._catalogRefs(self)
+
+    def indexObject(self, *args, **kwargs):
+        self._catalogUID(self)
+        self._catalogRefs(self)
 
 registerCriterion(ATPathCriterion, PATH_INDICES)
