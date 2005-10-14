@@ -159,7 +159,7 @@ class ATTopic(ATCTFolder):
     archetype_name = 'Smart Folder'
     immediate_view = 'atct_topic_view'
     default_view   = 'atct_topic_view'
-    suppl_views    = ()
+    suppl_views    = ('folder_listing', 'folder_summary_view', 'folder_tabular_view', 'atct_album_view')
     _atct_newTypeFor = {'portal_type' : 'CMF Topic', 'meta_type' : 'Portal Topic'}
     typeDescription= 'An automatically updated stored search that can be used to display items matching criteria you specify.'
     typeDescMsgId  = 'description_edit_topic'
@@ -210,7 +210,8 @@ class ATTopic(ATCTFolder):
         # Enable topic syndication by default
         syn_tool = getToolByName(self, 'portal_syndication', None)
         if syn_tool is not None:
-            if syn_tool.isSiteSyndicationAllowed():
+            if (syn_tool.isSiteSyndicationAllowed() and
+                                    not syn_tool.isSyndicationAllowed(self)):
                 syn_tool.enableSyndication(self)
         return ret_val
 
