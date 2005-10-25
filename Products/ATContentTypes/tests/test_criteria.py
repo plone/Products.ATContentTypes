@@ -608,7 +608,7 @@ class TestATPathCriterion(CriteriaTest):
         field = items[0][0]
         self.assertEquals(field, 'path')
         self.assertEquals(tuple(query['query']), ('/plone/Members/test_user_1_/doc1',))
-        self.assertEquals(query['depth'], 0)
+        self.assertEquals(query['depth'], -1)
         self.dummy.setRecurse(False)
         items = self.dummy.getCriteriaItems()
         query = items[0][1]

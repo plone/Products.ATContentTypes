@@ -158,7 +158,7 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
 
-    def __bobo_traverse__(self, REQUEST, name, RESPONSE=None):
+    def __bobo_traverse__(self, REQUEST, name):
         """Transparent access to image scales
         """
         if name.startswith('image'):
@@ -172,10 +172,8 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
                     image = field.getScale(self, scale=scalename)
             if image is not None and not isinstance(image, basestring):
                 # image might be None or '' for empty images
-                if not field.checkPermission('view', self):
-                    raise Unauthorized, name
                 return image
 
-        return ATDocument.__bobo_traverse__(self, REQUEST, name, RESPONSE=None)
+        return ATDocument.__bobo_traverse__(self, REQUEST, name)
 
 registerATCT(ATNewsItem, PROJECTNAME)

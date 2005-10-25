@@ -5,6 +5,35 @@
    cmfcore.permissions and removing use of format_stx
    [k_vertigo, hannosch]
 
+1.0.2-devel
+======================
+
+ * Fixed two issues with PathCriterion.  It was using depth 0 to get subfolders,
+   the proper parameter is depth -1.  Also, in order to properly handle the
+   references it holds, it must itself be cataloged in the UID catalog, and
+   have its references cataloged.
+   [alecm]
+
+ * Fixed issue causing archetypes schema update to fail due to topic not
+   checking syndication state in initializeArchetype.
+   [alecm]
+
+ * Added missing alternate views for folderish types.
+   [alecm]
+
+1.0.1-final 2005-10-13
+======================
+
+ * Fixes for http://members.plone.org/collector/4709 __bobo_traverse__ doesn't
+   need or want a RESPONSE argument.
+   [alecm]
+
+ * Fixed http://members.plone.org/collector/4734 It is generally a bad idea
+   to check permissions in bobo_traverse methods, especially permissions
+   that don't exist, especially if you then try to raise an exception that
+   you haven't actually imported.
+   [alecm]
+
  * Fix two small i18n default text inconsistencies
    [hannosch]
 
