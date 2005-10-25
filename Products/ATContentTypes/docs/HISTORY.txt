@@ -1,3 +1,6 @@
+1.0.2-devel
+======================
+
  * Fixed two issues with PathCriterion.  It was using depth 0 to get subfolders,
    the proper parameter is depth -1.  Also, in order to properly handle the
    references it holds, it must itself be cataloged in the UID catalog, and
