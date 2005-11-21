@@ -39,7 +39,6 @@ from Products.ATContentTypes.tests.utils import dcEdit
 import time
 
 from Products.ATContentTypes.content.file import ATFile
-from Products.ATContentTypes.content.file import ATFileSchema
 from Products.ATContentTypes.migration.atctmigrator import FileMigrator
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.interfaces import IFileContent

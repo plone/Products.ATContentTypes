@@ -29,10 +29,7 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-import time
 from cStringIO import StringIO
-
-from Acquisition import aq_base
 from OFS.Image import Image as OFSImage
 
 from Products.CMFCore.permissions import View
@@ -42,7 +39,6 @@ from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
 
 from Products.ATContentTypes.content.image import ATImage
-from Products.ATContentTypes.content.image import ATImageSchema
 from Products.ATContentTypes.migration.atctmigrator import ImageMigrator
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage

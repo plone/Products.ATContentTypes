@@ -35,7 +35,6 @@ from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 
 from Products.ATContentTypes.content.topic import ATTopic
-from Products.ATContentTypes.content.topic import ATTopicSchema
 from Products.ATContentTypes.content.topic import ChangeTopics
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.migration.atctmigrator import TopicMigrator

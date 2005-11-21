@@ -35,7 +35,6 @@ from DateTime import DateTime
 from Globals import InitializeClass
 from OFS.Image import Image as OFSImage
 from OFS.Image import Pdata
-from Acquisition import aq_base
 
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import HAS_PIL

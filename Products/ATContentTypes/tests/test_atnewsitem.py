@@ -37,7 +37,6 @@ from Products.ATContentTypes.tests.utils import dcEdit
 import time
 
 from Products.ATContentTypes.content.newsitem import ATNewsItem
-from Products.ATContentTypes.content.newsitem import ATNewsItemSchema
 from Products.ATContentTypes.tests.utils import TidyHTMLValidator
 from Products.ATContentTypes.migration.atctmigrator import NewsItemMigrator
 from Products.ATContentTypes.interfaces import ITextContent

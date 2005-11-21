@@ -37,7 +37,6 @@ from Products.ATContentTypes.tests.utils import dcEdit
 import time
 
 from Products.ATContentTypes.content.document import ATDocument
-from Products.ATContentTypes.content.document import ATDocumentSchema
 from Products.ATContentTypes.tests.utils import TidyHTMLValidator
 from Products.ATContentTypes.migration.atctmigrator import DocumentMigrator
 from Products.CMFDefault.Document import Document

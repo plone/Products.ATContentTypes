@@ -33,12 +33,6 @@ from AccessControl import Unauthorized
 
 from Products.ATContentTypes.lib import constraintypes
 from Products.CMFPlone.interfaces.ConstrainTypes import ISelectableConstrainTypes
-from Products.Archetypes.public import registerType, process_types, listTypes
-from Products.Archetypes.Extensions.utils import installTypes
-from AccessControl.SecurityManagement import newSecurityManager
-from Testing.ZopeTestCase import user_name as default_user
-
-from Products.CMFCore.utils import getToolByName
 
 tests = []
 

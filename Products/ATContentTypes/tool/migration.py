@@ -20,37 +20,25 @@
 """
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 
-import os, sys, traceback
-from cStringIO import StringIO
 import logging
 import time
 
 from ExtensionClass import Base
 from Globals import InitializeClass
-from ZODB.POSException import ConflictError
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_base
 from Acquisition import aq_inner
 import AccessControl.Owned
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.CMFPlone import transaction
 
-from Products.CMFCore.utils import UniqueObject 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import ManagePortal
-from Products.CMFCore.permissions import View
-from Products.CMFCore.ActionProviderBase import ActionProviderBase
 
 from Products.Archetypes import listTypes
 
 from Products.ATContentTypes.interfaces import IATContentType
-from Products.ATContentTypes.interfaces import IImageContent
-from Products.ATContentTypes.interfaces import IATCTTool
-from Products.ATContentTypes.config import TOOLNAME
-from Products.ATContentTypes.config import ATCT_DIR
 from Products.ATContentTypes.config import WWW_DIR
 from Products.ATContentTypes.migration.atctmigrator import migrateAll
-from Products.ATContentTypes.tool.topic import ATTopicsTool
 
 try:
     from ProgressHandler import ZLogHandler

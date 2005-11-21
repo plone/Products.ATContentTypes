@@ -23,14 +23,9 @@
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-from DateTime import DateTime
-
 from Products.Archetypes.public import BaseSchema
 from Products.Archetypes.public import MetadataSchema
 from Products.Archetypes.public import ReferenceField
-from Products.Archetypes.public import StringField
-from Products.Archetypes.public import StringWidget
-from Products.Archetypes.public import SelectionWidget
 from Products.Archetypes.public import BooleanField
 from Products.Archetypes.public import BooleanWidget
 

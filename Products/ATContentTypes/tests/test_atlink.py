@@ -33,11 +33,8 @@ from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
-from Products.ATContentTypes.tests.utils import dcEdit
-import time
 
 from Products.ATContentTypes.content.link import ATLink
-from Products.ATContentTypes.content.link import ATLinkSchema
 from Products.ATContentTypes.migration.atctmigrator import LinkMigrator
 from Products.ATContentTypes.interfaces import IATLink
 from Products.CMFDefault.Link import Link

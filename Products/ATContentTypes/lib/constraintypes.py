@@ -42,9 +42,7 @@ except:
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import LinesField
 from Products.Archetypes.public import IntegerField
-from Products.Archetypes.public import BooleanField
 from Products.Archetypes.public import MultiSelectionWidget
-from Products.Archetypes.public import BooleanWidget
 from Products.Archetypes.public import SelectionWidget
 from Products.Archetypes.public import IntDisplayList
 from Products.Archetypes.public import DisplayList

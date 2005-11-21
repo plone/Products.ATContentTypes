@@ -2,7 +2,6 @@
 # Tests for migration components
 #
 
-
 __author__ = 'Alec Mitchell <apm13@columbia.edu>'
 __docformat__ = 'restructuredtext'
 
@@ -14,10 +13,7 @@ from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.CMFDynamicViewFTI import DynamicViewTypeInformation
 from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
-from Products.ATContentTypes.interfaces import IATCTTool
-from Interface.Verify import verifyObject
 from Products.CMFCore.utils import getToolByName
-import os, sys
 
 from Products.ATContentTypes.migration.v1.alphas import updateDateCriteria
 from Products.ATContentTypes.migration.v1.alphas import updateIntegerCriteria

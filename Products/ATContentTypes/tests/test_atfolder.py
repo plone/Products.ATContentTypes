@@ -27,19 +27,14 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests import atcttestcase
 from Acquisition import aq_base
 
-from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
-import time
 
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATBTreeFolder
-from Products.ATContentTypes.content.folder import ATFolderSchema
-from Products.ATContentTypes.tests.utils import TidyHTMLValidator
 from Products.ATContentTypes.migration.atctmigrator import FolderMigrator, \
                                                         LargeFolderMigrator, \
                                                         DocumentMigrator

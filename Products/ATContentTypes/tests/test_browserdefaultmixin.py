@@ -29,20 +29,9 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from AccessControl import Unauthorized
-
-#from Products.ATContentTypes.lib import browserdefault
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.ATContentTypes import permission
-#from Products.CMFPlone.interfaces.BrowserDefault import ISelectableBrowserDefault
 from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
-from Products.CMFDynamicViewFTI.interfaces import IBrowserDefault
-from Products.Archetypes.public import registerType, process_types, listTypes
-from Products.Archetypes.Extensions.utils import installTypes
-from AccessControl.SecurityManagement import newSecurityManager
-from Testing.ZopeTestCase import user_name as default_user
-
-from Products.CMFCore.utils import getToolByName
 
 tests = []
 
