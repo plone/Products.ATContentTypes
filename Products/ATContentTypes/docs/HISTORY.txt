@@ -1,6 +1,9 @@
 1.0.2-devel
 ======================
 
+ * Correct some wrong security settings.
+   [hannosch]
+
  * Code cleanup removing lots of unused import statements.
    [hannosch]
 

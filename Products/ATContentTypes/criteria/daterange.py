@@ -82,7 +82,7 @@ class ATDateRangeCriterion(ATBaseCriterion):
 
     shortDesc      = 'Date range'
 
-    security.declareProtected(View, 'getValue')
+    security.declareProtected(View, 'Value')
     def Value(self):
         return (self.getStart(), self.getEnd())
 

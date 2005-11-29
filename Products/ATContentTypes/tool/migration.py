@@ -84,7 +84,7 @@ class ATCTMigrationTool(Base):
     manage_recatalog = PageTemplateFile('recatalog', WWW_DIR)
 
     security.declareProtected(ManagePortal,
-                              'manage_typemigration')
+                              'manage_typeMigration')
     manage_typeMigration = PageTemplateFile('typeMigration', WWW_DIR)
 
 
