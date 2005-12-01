@@ -23,6 +23,7 @@ __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.ATFile'
 
+import logging
 from urllib import quote
 
 from Products.CMFCore.permissions import View
@@ -37,6 +38,7 @@ from Products.Archetypes.public import PrimaryFieldMarshaller
 from Products.Archetypes.public import AnnotationStorage
 from Products.Archetypes.BaseContent import BaseContent
 from Products.PortalTransforms.utils import TransformException
+from Products.MimetypesRegistry.common import MimeTypeException
 
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import HAS_PLONE2
@@ -51,6 +53,8 @@ from Products.validation.validators.SupplValidators import MaxSizeValidator
 
 from Products.validation.config import validation
 from Products.validation import V_REQUIRED
+
+LOG = logging.getLogger('ATCT')
 
 validation.register(MaxSizeValidator('checkFileMaxSize',
                                      maxsize=zconf.ATFile.max_file_size))
@@ -140,7 +144,11 @@ class ATFile(ATCTFileContent):
         elif ICONMAP.has_key(contenttype_major):
             icon = quote(ICONMAP[contenttype_major])
         else:
-            mimetypeitem = mtr.lookup(contenttype)
+            mimetypeitem = None
+            try:
+                mimetypeitem = mtr.lookup(contenttype)
+            except MimeTypeException, msg:
+                LOG.error('MimeTypeException for %s. Error is: %s' % (self.absolute_url(), str(msg)))
             if not mimetypeitem:
                 return BaseContent.getIcon(self, relative_to_portal)
             icon = mimetypeitem[0].icon_path
