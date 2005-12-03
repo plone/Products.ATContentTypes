@@ -141,7 +141,7 @@
     <index>
       name path
       friendlyName Location
-      description The location an item in the portal (path)
+      description The location of an item in the portal (path)
       enabled on
       criterion ATPathCriterion
     </index>

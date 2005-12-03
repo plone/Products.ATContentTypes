@@ -1,6 +1,9 @@
 1.0.2-devel
 ======================
 
+ * Fixes #4865 - Spelling error on location criteria.
+   [hannosch]
+
  * On invalid mimetypes the getIcon method of ATFile doesn't throw an exception
    anymore but generates a log entry. This should minimize some migration
    problems or at least tell the exact object with an invalid mimetype.
