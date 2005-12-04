@@ -795,9 +795,6 @@ class EXIF_header:
                 # unknown field type
                 raise ValueError, \
                       'unknown type %d in tag 0x%04X' % (field_type, tag)
-                #import pdb
-                #pdb.set_trace()
-                #break
 
             typelen=FIELD_TYPES[field_type][0]
             count=self.s2n(entry+4, 4)
@@ -1082,7 +1079,6 @@ if __name__ == '__main__':
         print filename+':'
         # data=process_file(file, 1) # with debug info
         data=process_file(file)
-        #print data
         if not data:
             print 'No EXIF information found'
             continue
