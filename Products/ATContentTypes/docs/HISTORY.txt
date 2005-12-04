@@ -1,7 +1,10 @@
 1.0.2-devel
 ======================
 
- * Fixes #4865 - Spelling error on location criteria.
+ * Fixed #4572 and #4909 - Unicode problems with using kupu together with mxTidy
+   [hannosch]
+
+ * Fixed #4865 - Spelling error on location criteria.
    [hannosch]
 
  * On invalid mimetypes the getIcon method of ATFile doesn't throw an exception

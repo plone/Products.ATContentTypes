@@ -10,7 +10,7 @@
     word_2000        yes
     wrap             72
     tab_size         4
-    char_encoding    raw
+    char_encoding    utf8
 </mxtidy>
 
 <feature swallowImageResizeExceptions>
