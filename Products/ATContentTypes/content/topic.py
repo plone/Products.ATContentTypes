@@ -66,7 +66,7 @@ from Products.CMFPlone.PloneBatch import Batch
 
 # A couple of fields just don't make sense to sort (for a user),
 # some are just doubles.
-IGNORED_FIELDS = ['Date', 'allowedRolesAndUsers', 'getId', 'in_reply_to', 
+IGNORED_FIELDS = ['Date', 'allowedRolesAndUsers', 'getId', 'in_reply_to',
     'meta_type',
     # 'portal_type' # portal type and Type might differ!
     ]
@@ -171,6 +171,9 @@ class ATTopic(ATCTFolder):
     use_folder_tabs = 0
 
     __implements__ = ATCTFolder.__implements__, IATTopic
+
+    # Enable marshalling via WebDAV/FTP/ExternalEditor.
+    __dav_marshall__ = True
 
     security       = ClassSecurityInfo()
     actions = updateActions(ATCTFolder,
@@ -338,7 +341,7 @@ class ATTopic(ATCTFolder):
     def listSortFields(self):
         """Return a list of available fields for sorting."""
         fields = [ field
-                    for field in self.listFields() 
+                    for field in self.listFields()
                     if self.validateAddCriterion(field[0], 'ATSortCriterion') ]
         return fields
 
@@ -566,9 +569,9 @@ class ATTopic(ATCTFolder):
 
     def HEAD(self, REQUEST, RESPONSE):
         """Retrieve resource information without a response body.
-        
-        An empty Topic returns 404 NotFound while a topic w/ a criterion returns
-        200 OK.
+
+        An empty Topic returns 404 NotFound while a topic w/ a
+        criterion returns 200 OK.
         """
         self.dav__init(REQUEST, RESPONSE)
         criteria = self.listCriteria()

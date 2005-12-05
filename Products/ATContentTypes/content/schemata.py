@@ -82,6 +82,28 @@ relatedItemsField = ReferenceField('relatedItems',
         )
 ATContentTypeSchema.addField(relatedItemsField.copy())
 
+def marshall_register(schema):
+    try:
+        # It's a soft dependency, if not available ignore it.
+        from Products.Marshall import ControlledMarshaller
+    except ImportError:
+        return
+    # If it's available, then wrap the existing marshaller with a
+    # ControlledMarshaller.
+    if not schema.hasLayer('marshall'):
+        # We are not interested in schemas that don't have a marshaller.
+        return
+
+    # Get existing marshaller.
+    marshaller = schema.getLayerImpl('marshall')
+    # Check if not already wrapped.
+    if isinstance(marshaller, ControlledMarshaller):
+        return
+
+    # Wrap into a ControlledMarshaller
+    marshaller = ControlledMarshaller(marshaller)
+    schema.registerLayer('marshall', marshaller)
+
 def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
     """Finalizes an ATCT type schema to alter some fields
     """
@@ -92,6 +114,7 @@ def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
     if moveDiscussion:
         schema['allowDiscussion'].schemata = 'default'
         schema.moveField('allowDiscussion', after='relatedItems')
+    marshall_register(schema)
     return schema
 
 

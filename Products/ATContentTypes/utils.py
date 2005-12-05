@@ -17,8 +17,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-
-
+Some utilities.
 """
 
 import datetime
@@ -44,6 +43,6 @@ def toTime(date):
     return date.Time()
 
 def toSeconds(td):
-    """Converts a timedelta to an integer representing the number of seconds 
+    """Converts a timedelta to an integer representing the number of seconds
     """
     return td.seconds + td.days * 86400
