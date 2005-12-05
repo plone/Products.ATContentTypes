@@ -137,7 +137,13 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         atct = self._ATCT
         schema = atct.Schema()
         marshall = schema.getLayerImpl('marshall')
-        self.failUnless(isinstance(marshall, PrimaryFieldMarshaller), marshall)
+        marshallers = [PrimaryFieldMarshaller]
+        try:
+            from Products.Marshall import ControlledMarshaller
+            marshallers.append(ControlledMarshaller)
+        except ImportError:
+            pass
+        self.failUnless(isinstance(marshall, tuple(marshallers)), marshall)
 
 
 tests.append(TestSiteATFile)
