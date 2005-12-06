@@ -156,7 +156,7 @@ class ATCTMixin(BrowserDefaultMixin):
     """Mixin class for AT Content Types"""
     schema         =  ATContentTypeSchema
 
-    #content_icon   = 'document_icon.gif'
+    # content_icon   = 'document_icon.gif'
     meta_type      = 'ATContentType'
     archetype_name = 'AT Content Type'
     immediate_view = 'base_view'
@@ -168,13 +168,9 @@ class ATCTMixin(BrowserDefaultMixin):
     assocFileExt   = ()
     cmf_edit_kws   = ()
 
-    # aliases for CMF method aliases is defined in browser default
-
     # flag to show that the object is a temporary object
     isDocTemp = False
     _at_rename_after_creation = True # rename object according to the title?
-
-    # aliases for CMF method aliases is defined in browser default
 
     __implements__ = (IATContentType, BrowserDefaultMixin.__implements__)
 
@@ -253,7 +249,8 @@ class ATCTMixin(BrowserDefaultMixin):
 
     security.declarePrivate('cmf_edit')
     def cmf_edit(self, *args, **kwargs):
-        """Overwrite this method to make AT compatible with the crappy CMF edit()
+        """Overwrite this method to make AT compatible with the crappy
+        CMF edit()
         """
         raise NotImplementedError("cmf_edit method isn't implemented")
 
@@ -274,25 +271,6 @@ class ATCTMixin(BrowserDefaultMixin):
         if f is None:
             return "n/a"
         return f.get_size(self) or 0
-
-    # XXX: The problem with this approach is that Members typically do not
-    #      have the "Add Documents, Images, and Files" permission.
-    #
-    #def _PUT_ignorematch(self, id_or_obj):
-    #    """Helper for workaround for broken FTP/WebDAV clients
-    #
-    #    If this method returns True the PUT_factory is returning None
-    #    to the NullResource and a plain Zope object is created.
-    #    """
-    #    if isinstance(id_or_obj, basestring):
-    #        id = id_or_obj
-    #    else:
-    #        id = id_or_obj.getId()
-    #    # broken Mac OS X Finder
-    #    # The Finder tries to upload resource forks
-    #    if id == '.DS_Store' or id.startswith('._'):
-    #        return True
-    #    return False
 
 InitializeClass(ATCTMixin)
 
@@ -340,8 +318,9 @@ class ATCTFileContent(ATCTContent):
     The file field *must* be the exclusive primary field
     """
 
-    # the precondition attribute is required to make ATFile and ATImage compatible
-    # with OFS.Image.*. The precondition feature is (not yet) supported.
+    # the precondition attribute is required to make ATFile and
+    # ATImage compatible with OFS.Image.*. The precondition feature is
+    # (not yet) supported.
     precondition = ''
 
     security = ClassSecurityInfo()
@@ -479,8 +458,8 @@ class ATCTFileContent(ATCTContent):
                 return
             elif clean_filename:
                 # got a clean file name - rename it
-                # apply subtransaction. w/o a subtransaction renaming fails when
-                # the type is created using portal_factory
+                # apply subtransaction. w/o a subtransaction renaming
+                # fails when the type is created using portal_factory
                 transaction.commit(1)
                 self.setId(clean_filename)
 
@@ -522,8 +501,8 @@ class ATCTFileContent(ATCTContent):
                         filename, REQUEST, RESPONSE):
         """After webdav/ftp PUT method
 
-        Set the title according to the uploaded filename if the title is empty or
-        set it to the id if no filename is given.
+        Set the title according to the uploaded filename if the title
+        is empty or set it to the id if no filename is given.
         """
         title = self.Title()
         if not title:
@@ -601,8 +580,8 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
 
         Set title according to the id
         """
-        # manage_afterMKCOL is called in the context of the parent folder, *not* in
-        # the context of the new folder!
+        # manage_afterMKCOL is called in the context of the parent
+        # folder, *not* in the context of the new folder!
         new = getattr(self, id)
         title = new.Title()
         if not title.strip():
@@ -626,20 +605,6 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
             return view_method.__of__(self).HEAD(REQUEST, RESPONSE)
         else:
             raise MethodNotAllowed, 'Method not supported for this resource.'
-
-    # XXX: See _PUT_ignorematch above
-    # 
-    #def PUT_factory(self, name, typ, body):
-    #    """Overwrite PUT factory to ignore certain names
-    #
-    #    If None is returned the default PUT factory is used an plain
-    #    Zope objects like DTML method, File or Image are created.
-    #    """
-    #    if self._PUT_ignorematch(name):
-    #        LOG.debug("Ignoring upload of %s to %s" %
-    #                  (name, self.absolute_url(1)))
-    #        return None
-    #    return BaseFolder.PUT_factory(self, name, typ, body)
 
 InitializeClass(ATCTFolderMixin)
 
@@ -691,20 +656,6 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
 
     index_html = ComputedAttribute(index_html, 1)
 
-    # XXX: See _PUT_ignorematch above
-    # 
-    #def PUT_factory(self, name, typ, body):
-    #    """Overwrite PUT factory to ignore certain names
-    #
-    #    If None is returned the default PUT factory is used an plain
-    #    Zope objects like DTML method, File or Image are created.
-    #    """
-    #    if self._PUT_ignorematch(name):
-    #        LOG.debug("Ignoring upload of %s to %s" %
-    #                  (name, self.absolute_url(1)))
-    #        return None
-    #    return OrderedBaseFolder.PUT_factory(self, name, typ, body)
-
 InitializeClass(ATCTOrderedFolder)
 
 
@@ -749,20 +700,6 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
         return ReplaceableWrapper(aq_base(_target).__of__(self))
 
     index_html = ComputedAttribute(index_html, 1)
-
-    # XXX: See _PUT_ignorematch above
-    # 
-    #def PUT_factory(self, name, typ, body):
-    #    """Overwrite PUT factory to ignore certain names
-    #
-    #    If None is returned the default PUT factory is used an plain
-    #    Zope objects like DTML method, File or Image are created.
-    #    """
-    #    if self._PUT_ignorematch(name):
-    #        LOG.debug("Ignoring upload of %s to %s" %
-    #                  (name, self.absolute_url(1)))
-    #        return None
-    #    return BaseBTreeFolder.PUT_factory(self, name, typ, body)
 
 InitializeClass(ATCTBTreeFolder)
 
