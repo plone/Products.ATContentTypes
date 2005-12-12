@@ -1,6 +1,10 @@
 1.0.2-devel
 ======================
 
+ * Fixed #4512 - vCal export was not working with outlook.
+   https://trac.plone.org/plone/ticket/4512.
+   [hannosch]
+
  * Use the ControlledMarshaller from the Marshall product if
    available. Fallbacks to existing marshaller.
    [sidnei]
