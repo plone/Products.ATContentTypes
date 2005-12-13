@@ -31,6 +31,9 @@ from AccessControl import ClassSecurityInfo
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import LinesField
 from Products.Archetypes.public import MultiSelectionWidget
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import SelectionWidget
+from Products.Archetypes.public import DisplayList
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import LIST_INDICES
@@ -40,6 +43,11 @@ from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 
 from types import StringType
+
+CompareOperators = DisplayList((
+                    ('and', 'and')
+                  , ('or', 'or')
+    ))
 
 ATSelectionCriterionSchema = ATBaseCriterionSchema + Schema((
     LinesField('value',
@@ -56,6 +64,20 @@ ATSelectionCriterionSchema = ATBaseCriterionSchema + Schema((
                     description="Existing values.",
                     description_msgid="help_selection_criteria_value",
                     i18n_domain="plone"),
+                ),
+    StringField('operator',
+                required=1,
+                mode="rw",
+                write_permission=ChangeTopics,
+                default='or',
+                vocabulary=CompareOperators,
+                widget=SelectionWidget(
+                    label="operator name",
+                    label_msgid="label_list_criteria_operator",
+                    description="Operator used to join the tests "
+                    "on each value.",
+                    description_msgid="help_list_criteria_operator",
+                    i18n_domain="atcontenttypes"),
                 ),
     ))
 
@@ -86,11 +108,14 @@ class ATSelectionCriterion(ATBaseCriterion):
 
     security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
+        # filter out empty strings
         result = []
 
-        if self.Value() is not '':
-            result.append((self.Field(), self.Value()))
+        value = tuple([ value for value in self.Value() if value ])
+        if not value:
+            return ()
+        result.append((self.Field(), { 'query': value, 'operator': self.getOperator()}),)
 
-        return tuple( result )
+        return tuple(result)
 
 registerCriterion(ATSelectionCriterion, LIST_INDICES)

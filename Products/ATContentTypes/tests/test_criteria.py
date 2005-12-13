@@ -152,7 +152,7 @@ class TestATDateCriteria(CriteriaTest):
         self.dummy.setOperation('less')
         self.dummy.setDateRange('-')
         self.dummy.setValue('14')
-        expected_begin = DateTime().earliestTime() - 14
+        expected_begin = (DateTime() - 14).earliestTime()
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
         query = items[0][1]
@@ -173,7 +173,7 @@ class TestATDateCriteria(CriteriaTest):
         self.dummy.setOperation('less')
         self.dummy.setDateRange('+')
         self.dummy.setValue('14')
-        expected_end = DateTime().latestTime() + 14
+        expected_end = (DateTime() + 14).latestTime()
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
         query = items[0][1]
@@ -191,7 +191,7 @@ class TestATDateCriteria(CriteriaTest):
         self.dummy.setOperation('more')
         self.dummy.setDateRange('-')
         self.dummy.setValue('14')
-        expected_begin = DateTime().earliestTime() - 14
+        expected_begin = (DateTime() - 14).earliestTime()
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
         query = items[0][1]
@@ -205,7 +205,7 @@ class TestATDateCriteria(CriteriaTest):
         self.dummy.setOperation('more')
         self.dummy.setDateRange('+')
         self.dummy.setValue('14')
-        expected_begin = DateTime().earliestTime() + 14
+        expected_begin = (DateTime() + 14).earliestTime()
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
         query = items[0][1]
@@ -381,12 +381,14 @@ class TestATSelectionCriterion(CriteriaTest):
     def test_selection_query(self):
         self.dummy.Schema()['field'].set(self.dummy,'Subject')
         self.dummy.setValue(('1','2','3'))
+        self.dummy.setOperator('and')
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
         query = items[0][1]
         field = items[0][0]
         self.assertEquals(field, 'Subject')
-        self.assertEquals(query, ('1','2','3'))
+        self.assertEquals(query['query'], ('1','2','3'))
+        self.assertEquals(query['operator'], 'and')
 
     def test_vocabulary(self):
         #Should return some ids
@@ -439,12 +441,14 @@ class TestATReferenceCriterion(CriteriaTest):
         self.folder.invokeFactory('Document', 'doc1')
         uid = self.folder.doc1.UID()
         self.dummy.setValue((uid,))
+        self.dummy.setOperator('and')
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
         query = items[0][1]
         field = items[0][0]
         self.assertEquals(field, 'getRawRelatedItems')
-        self.assertEquals(query, (uid,))
+        self.assertEquals(query['query'], (uid,))
+        self.assertEquals(query['operator'], 'and')
 
     def test_reference_vocab(self):
         self.dummy.Schema()['field'].set(self.dummy,'getRawRelatedItems')
