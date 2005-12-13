@@ -602,6 +602,30 @@ class TestATPathCriterion(CriteriaTest):
         query = items[0][1]
         self.assertEquals(query['depth'], 1)
 
+    # Some reference errors were making this impossible
+    def test_path_criteria_can_be_removed(self):
+        self.setRoles(['Manager', 'Member'])
+        self.folder.invokeFactory('Topic', 'new_topic', title='New Topic')
+        topic  = self.folder.new_topic
+        # Add a path criterion
+        path_crit = topic.addCriterion('path', 'ATPathCriterion')
+        # Give it a reference
+        path_crit.setValue([topic.UID()])
+        # The error is masked when not in debug mode or as manager, though it
+        # still has consequences
+        from App.config import getConfiguration
+        config = getConfiguration()
+        orig_debug = config.debug_mode
+        config.debug_mode = True
+        self.setRoles(['Member'])
+        # Delete the topic
+        try:
+            self.folder.manage_delObjects(['new_topic'])
+        except AttributeError:
+            config.debug_mode = orig_debug
+            self.fail("Deleting a topic with path criteria raises an error!")
+        config.debug_mode = orig_debug
+
 tests.append(TestATPathCriterion)
 
 class TestCriterionRegistry(atcttestcase.ATCTSiteTestCase):

@@ -1,6 +1,11 @@
 1.0.2-devel
 ======================
 
+ * Fixed #4915: Smart Folders with path criteria where throwing errors on
+   unindex due to partial reference support.
+   http://trac.plone.org/plone/ticket/4915
+   [alecm]
+
  * Added And/Or operator to selection criterion.
    [alecm]
 

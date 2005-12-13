@@ -93,6 +93,11 @@ class ATPathCriterion(ATBaseCriterion):
         nav_types = ptool.typesToList()
         return nav_types
 
+    # Override reference mutator, so that it always reindexes
+    def setValue(self, value):
+        self.getField('value').set(self, value)
+        self.reindexObject()
+
     security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
@@ -107,14 +112,19 @@ class ATPathCriterion(ATBaseCriterion):
     # We need references, so we need to be partly cataloged
     _catalogUID = Referenceable._catalogUID
     _catalogRefs = Referenceable._catalogRefs
+    _unregister = Referenceable._unregister
+    _updateCatalog = Referenceable._updateCatalog
+    _referenceApply = Referenceable._referenceApply
+    _uncatalogUID = Referenceable._uncatalogUID
+    _uncatalogRefs = Referenceable._uncatalogRefs
 
     def reindexObject(self, *args, **kwargs):
         self._catalogUID(self)
         self._catalogRefs(self)
 
     def unindexObject(self, *args, **kwargs):
-        self._catalogUID(self)
-        self._catalogRefs(self)
+        self._uncatalogUID(self)
+        self._uncatalogRefs(self)
 
     def indexObject(self, *args, **kwargs):
         self._catalogUID(self)
