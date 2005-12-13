@@ -1,6 +1,11 @@
 1.0.2-devel
 ======================
 
+ * Fixed #4590: Subfolders inherit the selected layout of their parent folders
+   if they are of the same type.
+   https://trac.plone.org/plone/ticket/4590
+   [alecm]
+
  * Fixed #4512 - vCal export was not working with outlook.
    https://trac.plone.org/plone/ticket/4512.
    [hannosch]

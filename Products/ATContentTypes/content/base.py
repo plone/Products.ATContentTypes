@@ -53,6 +53,7 @@ from webdav.Lockable import ResourceLockedError
 from webdav.NullResource import NullResource
 from zExceptions import MethodNotAllowed
 from zExceptions import NotFound
+from ZODB.POSException import ConflictError
 from Products.CMFPlone import transaction
 
 from Products.CMFCore.permissions import View
@@ -222,12 +223,32 @@ class ATCTMixin(BrowserDefaultMixin):
             if kwargs:
                 self.edit(**kwargs)
             self._signature = self.Schema().signature()
+            if self.isPrincipiaFolderish:
+                self.copyLayoutFromParent()
+        except ConflictError:
+            raise
         except Exception, msg:
             LOG.warn('Exception in initializeArchetype', exc_info=True)
             if DEBUG and str(msg) not in ('SESSION',):
                 # debug code
                 raise
                 #_default_logger.log_exc()
+
+    security.declarePrivate('copyDefaultViewFromParent')
+    def copyLayoutFromParent(self):
+        """ A method to copy the layout from the parent object if it is of the
+            same type. """
+        parent = aq_parent(aq_inner(self))
+        if parent is not None:
+            # Only set the layout if we are the same type as out parent object
+            if parent.meta_type == self.meta_type:
+                # If the parent is the same type as us it should implement
+                # BrowserDefaultMixin
+                parent_layout = parent.getLayout()
+                # Just in case we should make sure that the layout is
+                # available to the new object
+                if parent_layout in [l[0] for l in self.getAvailableLayouts()]:
+                    self.setLayout(parent_layout)
 
     security.declareProtected(ModifyPortalContent, 'edit')
     def edit(self, *args, **kwargs):
