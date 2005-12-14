@@ -28,7 +28,7 @@ from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.criteria import registerCriterion, \
-    STRING_INDICES
+                                             LIST_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
@@ -61,4 +61,4 @@ class ATCurrentAuthorCriterion(ATBaseCriterion):
 
         return tuple( result )
 
-registerCriterion(ATCurrentAuthorCriterion, STRING_INDICES)
+registerCriterion(ATCurrentAuthorCriterion, LIST_INDICES)

@@ -1,6 +1,17 @@
 1.0.2-devel
 ======================
 
+ * Fixed #4937: Removed list criteria from text indices, because it makes no
+   sense, AND and OR must be used explicitly.
+   http://trac.plone.org/plone/ticket/4937
+   [alecm]
+
+ * Added migration for #4865 to fix the grammar on existing instances.
+   [alecm]
+
+ * Made the criteria to index type mapping a little more sane.
+   [alecm]
+
  * Fixed #4915: Smart Folders with path criteria where throwing errors on
    unindex due to partial reference support.
    http://trac.plone.org/plone/ticket/4915

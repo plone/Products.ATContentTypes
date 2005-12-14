@@ -29,10 +29,6 @@ from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 
 from Products.Archetypes.ClassGen import generateClass
-from Products.ATContentTypes.criteria import ALL_INDICES
-from Products.ATContentTypes.criteria import DATE_INDICES
-from Products.ATContentTypes.criteria import STRING_INDICES
-from Products.ATContentTypes.criteria import LIST_INDICES
 from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 

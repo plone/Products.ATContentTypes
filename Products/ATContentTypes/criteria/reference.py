@@ -28,7 +28,7 @@ from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.criteria import registerCriterion
-from Products.ATContentTypes.criteria import LIST_INDICES
+from Products.ATContentTypes.criteria import REFERENCE_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
 from Products.Archetypes.public import DisplayList
@@ -61,4 +61,4 @@ class ATReferenceCriterion(ATSelectionCriterion):
 
         return display_list
 
-registerCriterion(ATReferenceCriterion, LIST_INDICES)
+registerCriterion(ATReferenceCriterion, REFERENCE_INDICES)

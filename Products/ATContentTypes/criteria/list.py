@@ -34,7 +34,7 @@ from Products.Archetypes.public import LinesWidget
 from Products.Archetypes.public import DisplayList
 
 from Products.ATContentTypes.criteria import registerCriterion
-from Products.ATContentTypes.criteria import STRING_INDICES
+from Products.ATContentTypes.criteria import LIST_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
@@ -102,4 +102,4 @@ class ATListCriterion(ATBaseCriterion):
 
         return tuple(result)
 
-registerCriterion(ATListCriterion, STRING_INDICES)
+registerCriterion(ATListCriterion, LIST_INDICES)
