@@ -70,6 +70,8 @@ def install(self, reinstall):
             tool.recatalogCMFTypes()
             #print 'Done'
             tool.setCMFTypesAreRecataloged(True)
+            # Fix objects with missing portal_type
+            tool.fixObjectsWithMissingPortalType()
     
     # step 3: Rename and move away to old CMF types on install
     if not reinstall:

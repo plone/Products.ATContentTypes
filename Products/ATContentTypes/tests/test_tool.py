@@ -117,6 +117,18 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         t.enableCMFTypes()
         self.failUnlessEqual(t.isCMFdisabled(), False)
 
+    def test_fixObjectsWithMissingPortalType(self):
+        t = self.tool
+        from Products.CMFPlone.PloneFolder import PloneFolder
+        new_folder = PloneFolder('new_folder', 'A New folder')
+        self.portal._setObject('new_folder', new_folder)
+        new_folder = self.portal.new_folder
+        self.assertEqual(new_folder.portal_type, None)
+        # It must be in the catalog
+        new_folder.reindexObject()
+        t.fixObjectsWithMissingPortalType()
+        self.assertEqual(new_folder.portal_type, 'CMF Folder')
+
     def XXX_test_disableCMFTypes(self):
         # Currently fails inexplicably
         t = self.tool

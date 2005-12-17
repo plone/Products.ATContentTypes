@@ -338,6 +338,31 @@ class ATCTMigrationTool(Base):
         elapse, c_elapse = timeit(timeinfo)
         return '\n'.join(result), elapse, c_elapse
 
+    security.declareProtected(ManagePortal, 'fixObjectsWithMissingPortalType')
+    def fixObjectsWithMissingPortalType(self):
+        """Some portals have objects which were created improperly and have
+           no portal_type set, these need to be repaired before a successful
+           migration is possible."""
+        meta_type_map = {}
+        timeinfo = timeit()
+        catalog = getToolByName(self, 'portal_catalog')
+        for fti in self._getCMFFtis():
+            meta_type_map[fti.content_meta_type] = fti.getId()
+        blank_type_objs = catalog(meta_type=meta_type_map.keys(),
+                                  portal_type=[None,''])
+
+        fixed = []
+        for brain in blank_type_objs:
+            # Only alter objects with a CMF content meta_type
+            obj_pt = meta_type_map.get(brain.meta_type, None)
+            if obj_pt:
+                obj = brain.getObject()
+                obj._setPortalTypeName(obj_pt)
+                catalog.reindexObject(obj)
+                fixed.append(brain.getPath())
+        elapse, c_elapse = timeit(timeinfo)
+        return '\n'.join(fixed), elapse, c_elapse
+
     # ************************************************************************
     # private methods
 

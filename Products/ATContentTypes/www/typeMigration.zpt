@@ -3,7 +3,8 @@
     tal:replace="structure here/manage_tabs">Tabs</tal:message>
 <tal:body tal:define="submitted request/submitted | nothing;
                       domigrate request/domigrate | nothing;
-                      fixportaltypes request/fixPortalTypes | nothing;">
+                      fixportaltypes request/fixPortalTypes | nothing;
+                      addportaltypes request/fixMissingPortalTypes | nothing;">
 
  <tal:form tal:condition="not: submitted">
 
@@ -66,6 +67,26 @@
     <input type="submit" name="fixPortalTypes" value="Fix" />
   </form>
 
+
+  <h3>Fix missing portal type</h3>
+  
+  <p>If you have created CMF based content objects using the ZMI or through
+     badly designed python code, there will be objects without portal_type set
+     in your portal.  If these objects are folders they will cause migration
+     to fail.  To find and fix all CMF objects with missing portal_type use
+     the button below.
+  </p>
+  
+  <p>The code is using the portal catalog to find objects which have to
+     be fixed. Please make sure your catalog is up to date or some
+     objects might be missed.
+  </p>
+  
+  <form method="put" action="" tal:attributes="action template/getId">
+    <input type="hidden" name="submitted" value="1" />
+    <input type="submit" name="fixMissingPortalTypes" value="Fix" />
+  </form>
+
  </tal:form>
  <tal:submitted tal:condition="submitted">
   <tal:migrate tal:condition="domigrate">
@@ -90,6 +111,17 @@
      <pre tal:content="python: result[0]" />
     </span>
   </tal:fixportaltypes>
+
+  <tal:addportaltypes tal:condition="addportaltypes">
+   <h3>Fixing missing portal types</h3>
+
+    <span tal:define="result here/fixObjectsWithMissingPortalType">
+      Time: <tal:time tal:content="python: '%0.3f' % result[1]" /> seconds, 
+      CPU time: <tal:time tal:content="python: '%0.3f' % result[2]" /> seconds
+     <br />
+     <pre tal:content="python: result[0]" />
+    </span>
+  </tal:addportaltypes>
  </tal:submitted>
 
 </tal:body>
