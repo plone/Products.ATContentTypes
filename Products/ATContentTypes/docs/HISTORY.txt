@@ -1,9 +1,10 @@
 1.0.2-devel
 ======================
- * Added portal_atct method to fix portal_type on CMF objects that have empty
+ * Fixed #4567: Added portal_atct method to fix portal_type on CMF objects that have empty
    portal_type because they were incorrectly instantiated.  Such situations
    caused migration to fail. This method is available in the type migration
    form, and also runs automatically on install.
+   https://trac.plone.org/plone/ticket/4567
    [alecm]
 
  * Fixed #4937: Removed list criteria from text indices, because it makes no
