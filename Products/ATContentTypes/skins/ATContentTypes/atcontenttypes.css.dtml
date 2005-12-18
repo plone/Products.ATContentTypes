@@ -3,38 +3,42 @@
 
 .photoAlbumEntry {
     float: left;
-    height: 150px;
-    padding: 0.5em;
-    margin: 0.5em;
+    height: 185px;
+    width: 145px;
+    margin: 0em;
+    padding: 16px 0px 7px 16px;
     text-align: center;
-    border: &dtml-borderWidth; &dtml-borderStyleAnnotations; &dtml-globalBorderColor;;
+    background-image: url(polaroid-single.png);
+    background-repeat: no-repeat;
+}
+
+.photoAlbumEntry img {
+    border: 1px solid #ccc;
+    display: block;
+    margin: auto;
+}
+
+.photoAlbumEntryWrapper {
+  display: block;
+  height: 130px;
+  width: 128px;
+}
+
+.photoAlbumEntry a {
+    display: block;
+    text-decoration: none;
+    font-size: &dtml-fontSmallSize;;
+    height: 168px;
+    width: 130px;
 }
 
 .photoAlbumFolder {
-    border: &dtml-borderWidth; &dtml-borderStyle; &dtml-globalBorderColor;;
-    background: &dtml-globalBackgroundColor;;
+    background-image: url(polaroid-multi.png);
+    background-repeat: no-repeat;
 }
 
-.photoAlbumEntry dl,
-.photoAlbumEntry dt,
-.photoAlbumEntry dd {
-    padding: 0;
-    margin: 0;
-}
-
-.photoAlbumFolder dd span {
-    display: block;
-    line-height: 1em;
-}
-
-.photoAlbumEntry dd {
-    font-size: &dtml-fontSmallSize;;
-    font-weight: bold;
-}
-
-.photoAlbumEmpty {
-    display: block;
-    margin: 4em 0 4em 0;
+.photoAlbumEntryTitle {
+    color: &dtml-discreetColor;;
 }
 
 /* </dtml-with> */
