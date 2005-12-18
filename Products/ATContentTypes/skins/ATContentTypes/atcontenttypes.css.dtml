@@ -42,6 +42,7 @@
     display: block;
     overflow: hidden;
     width: 128px;
+    height: 3.6em;
 }
 
 /* </dtml-with> */
