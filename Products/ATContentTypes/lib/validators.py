@@ -235,9 +235,14 @@ def doTidy(value, field, request, cleanup=0):
     if isinstance(value, FileUpload):
         # *mmh* ok it's a file upload but a file upload could destroy
         # the layout, too.
-        value = FileUpload.read()
+        # the validator can be called many times, we have to rewind
+        # the FileUpload.
+        value.seek(0)
+        value = value.read()
+    else:
+        value = wrapValueInHTML(value)
 
-    result = mx_tidy(wrapValueInHTML(value), **MX_TIDY_OPTIONS)
+    result = mx_tidy(value, **MX_TIDY_OPTIONS)
     nerrors, nwarnings, outputdata, errordata = result
 
     # parse and change the error data
