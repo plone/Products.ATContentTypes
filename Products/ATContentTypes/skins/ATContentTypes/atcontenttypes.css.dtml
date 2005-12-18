@@ -39,6 +39,9 @@
 
 .photoAlbumEntryTitle {
     color: &dtml-discreetColor;;
+    display: block;
+    overflow: hidden;
+    width: 128px;
 }
 
 /* </dtml-with> */
