@@ -464,7 +464,7 @@ class ATTopic(ATCTFolder):
             b_size = int(max_items)
         else:
             b_size = 20
-        if limit and max_items and self.hasSortCriterion():
+        if not batch and limit and max_items and self.hasSortCriterion():
             # Sort limit helps Zope 2.6.1+ to do a faster query
             # sorting when sort is involved
             # See: http://zope.org/Members/Caseman/ZCatalog_for_2.6.1

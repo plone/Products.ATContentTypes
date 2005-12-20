@@ -333,7 +333,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.failUnlessEqual(topic.hasSubtopics(), True)
 
     def test_queryCatalogBatching(self):
-        #Ensure that has we return a proper batch if requested
+        # Ensure that has we return a proper batch if requested
         topic = self._ATCT
         self.failUnless(isinstance(topic.queryCatalog(batch=True),Batch))
         self.failIf(isinstance(topic.queryCatalog(),Batch))
@@ -342,6 +342,27 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         crit.setValue('Folder')
         self.failUnless(isinstance(topic.queryCatalog(batch=True),Batch))
         self.failIf(isinstance(topic.queryCatalog(),Batch))
+
+    def test_queryCatalogBatchingWithLimit(self):
+        # Ensure that the number of results is the same with or without a
+        # limit
+        topic = self._ATCT
+        crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
+        crit.setValue('Folder')
+        # set a sort criterion because sort_limit affects result batching.
+        topic.setSortCriterion('created', False)
+        # add a few folders
+        for i in range(6):
+            self.folder.invokeFactory('Folder', 'folder_%s'%i)
+            getattr(self.folder, 'folder_%s'%i).reindexObject()
+        num_items = len(topic.queryCatalog())
+        # We better have some folders
+        self.failUnless(num_items >= 6)
+        self.assertEqual(topic.queryCatalog(batch=True).sequence_length, num_items)
+        # Set some limits
+        topic.setLimitNumber(True)
+        topic.setItemCount(2)
+        self.assertEqual(topic.queryCatalog(batch=True).sequence_length, num_items)
 
     def test_queryCatalogBrains(self):
         #Ensure that we feturn full objects when requested

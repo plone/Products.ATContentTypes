@@ -1,5 +1,10 @@
 1.0.2-devel
 ======================
+ * Fixed #5026: Setting a ZCatalog sort limit was interfering with result
+   batching.  Only use the sort_limit optimization when batching is disabled.
+   https://trac.plone.org/plone/ticket/5026
+   [alecm]
+
  * Fixed #4567: Added portal_atct method to fix portal_type on CMF objects that have empty
    portal_type because they were incorrectly instantiated.  Such situations
    caused migration to fail. This method is available in the type migration
