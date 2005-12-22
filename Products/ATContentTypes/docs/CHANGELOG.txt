@@ -1,3 +1,7 @@
+2005-12-22 12:00  raphael
+
+        * content/event.py: made event type look-up respect dynamic types.
+
 2005-03-07 21:07  tiran
 
 	* tests/test_installation.py: upps ... forgot to add self
