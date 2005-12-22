@@ -1,5 +1,8 @@
 1.0.2-devel
 ======================
+ * Don't return "n/a" in get_size(). This fixes Plone's #5030.
+   [nouri]
+
  * Fixed #5026: Setting a ZCatalog sort limit was interfering with result
    batching.  Only use the sort_limit optimization when batching is disabled.
    https://trac.plone.org/plone/ticket/5026
