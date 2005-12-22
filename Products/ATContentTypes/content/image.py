@@ -147,7 +147,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         """
         img = self.getImage()
         if not getattr(aq_base(img), 'get_size', False):
-            return "n/a"
+            return 0
         return img.get_size()
 
     security.declareProtected(View, 'getSize')

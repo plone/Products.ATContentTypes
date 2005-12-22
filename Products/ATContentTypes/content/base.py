@@ -290,7 +290,7 @@ class ATCTMixin(BrowserDefaultMixin):
         """
         f = self.getPrimaryField()
         if f is None:
-            return "n/a"
+            return 0
         return f.get_size(self) or 0
 
 InitializeClass(ATCTMixin)
