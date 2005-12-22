@@ -271,7 +271,8 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
         """fetch a list of the available event types from the vocabulary
         """
         metatool = getToolByName(self, "portal_metadata")
-        events = metatool.listAllowedSubjects(content_type = "Event")
+        my_type = self.getPortalTypeName()
+        events = metatool.listAllowedSubjects(content_type = my_type)
         return events
 
     security.declarePrivate('cmf_edit')
