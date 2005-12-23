@@ -90,6 +90,13 @@
 # 04-DEC-05 JFROCHE Reduce number of objects created.
 #
 
+# XXX: These are here because removing them broke existing ZODB instances.
+# we should remove them completely and have migrations to fix them up instead.
+class Ratio: 
+    pass
+class IFD_Tag: 
+    pass
+
 import logging
 LOG = logging.getLogger('exif')
 
