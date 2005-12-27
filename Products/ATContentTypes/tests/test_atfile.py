@@ -37,6 +37,7 @@ from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
 import time
+import StringIO
 
 from Products.ATContentTypes.content.file import ATFile
 from Products.ATContentTypes.migration.atctmigrator import FileMigrator
@@ -144,6 +145,17 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         except ImportError:
             pass
         self.failUnless(isinstance(marshall, tuple(marshallers)), marshall)
+
+    def testInvokeFactoryWithFileContents(self):
+        # test for Plone tracker #4939
+        class fakefile(StringIO.StringIO):
+            pass
+        fakefile = fakefile()
+        fakefile.filename = 'some_filename'
+        id = self.folder.invokeFactory(self.portal_type,
+                                       'image.2005-11-18.4066860572',
+                                       file=fakefile)
+        self.assertEquals(id, fakefile.filename)
 
 
 tests.append(TestSiteATFile)
