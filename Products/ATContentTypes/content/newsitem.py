@@ -41,7 +41,6 @@ from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import translateMimetypeAlias
-from Products.ATContentTypes.content.base import updateActions
 from Products.ATContentTypes.content.document import ATDocument
 from Products.ATContentTypes.content.image import ATCTImageTransform
 from Products.ATContentTypes.interfaces import IATNewsItem
@@ -49,7 +48,6 @@ from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
 from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
 
 from Products.validation.config import validation
 from Products.validation.validators.SupplValidators import MaxSizeValidator

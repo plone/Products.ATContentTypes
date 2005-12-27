@@ -429,7 +429,7 @@ class ATTopicsTool(Base):
             raise AttributeError('Metadata ' + str(metadata) + ' not found')
 
 
-    security.declareProtected(ManagePortal,'manage_SavePortalTopics')
+    security.declareProtected(ManagePortal,'manage_saveTopicSetup')
     def manage_saveTopicSetup(self, REQUEST=None):
         """ Set indexes and metadata from form """
         if REQUEST==None:
@@ -448,7 +448,7 @@ class ATTopicsTool(Base):
 
         return 1
 
-    security.declareProtected(ManagePortal,'manage_SavePortalTopicsTypes')
+    security.declareProtected(ManagePortal,'manage_saveTopicSetupTypes')
     def manage_saveTopicSetupTypes(self, REQUEST=None):
         """ Set portal types from form """
         if REQUEST==None:

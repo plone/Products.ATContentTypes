@@ -29,8 +29,6 @@ from types import TupleType
 from types import StringType
 
 from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.permissions import ManageProperties
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.CatalogTool import CatalogTool
 from AccessControl import ClassSecurityInfo
@@ -68,7 +66,7 @@ from Products.CMFPlone.PloneBatch import Batch
 
 # A couple of fields just don't make sense to sort (for a user),
 # some are just doubles.
-IGNORED_FIELDS = ['Date', 'allowedRolesAndUsers', 'getId', 'in_reply_to', 
+IGNORED_FIELDS = ['Date', 'allowedRolesAndUsers', 'getId', 'in_reply_to',
     'meta_type',
     # 'portal_type' # portal type and Type might differ!
     ]
@@ -173,6 +171,9 @@ class ATTopic(ATCTFolder):
     use_folder_tabs = 0
 
     __implements__ = ATCTFolder.__implements__, IATTopic
+
+    # Enable marshalling via WebDAV/FTP/ExternalEditor.
+    __dav_marshall__ = True
 
     security       = ClassSecurityInfo()
     actions = updateActions(ATCTFolder,
@@ -340,7 +341,7 @@ class ATTopic(ATCTFolder):
     def listSortFields(self):
         """Return a list of available fields for sorting."""
         fields = [ field
-                    for field in self.listFields() 
+                    for field in self.listFields()
                     if self.validateAddCriterion(field[0], 'ATSortCriterion') ]
         return fields
 
@@ -463,7 +464,7 @@ class ATTopic(ATCTFolder):
             b_size = int(max_items)
         else:
             b_size = 20
-        if limit and max_items and self.hasSortCriterion():
+        if not batch and limit and max_items and self.hasSortCriterion():
             # Sort limit helps Zope 2.6.1+ to do a faster query
             # sorting when sort is involved
             # See: http://zope.org/Members/Caseman/ZCatalog_for_2.6.1
@@ -568,9 +569,9 @@ class ATTopic(ATCTFolder):
 
     def HEAD(self, REQUEST, RESPONSE):
         """Retrieve resource information without a response body.
-        
-        An empty Topic returns 404 NotFound while a topic w/ a criterion returns
-        200 OK.
+
+        An empty Topic returns 404 NotFound while a topic w/ a
+        criterion returns 200 OK.
         """
         self.dav__init(REQUEST, RESPONSE)
         criteria = self.listCriteria()

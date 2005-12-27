@@ -10,7 +10,7 @@
     word_2000        yes
     wrap             72
     tab_size         4
-    char_encoding    raw
+    char_encoding    utf8
 </mxtidy>
 
 <feature swallowImageResizeExceptions>
@@ -100,7 +100,6 @@
     <index>
       name Description
       criterion ATSimpleStringCriterion
-      criterion ATListCriterion
     </index>
     <index>
       name allowedRolesAndUsers
@@ -141,7 +140,7 @@
     <index>
       name path
       friendlyName Location
-      description The location an item in the portal (path)
+      description The location of an item in the portal (path)
       enabled on
       criterion ATPathCriterion
     </index>
@@ -166,7 +165,6 @@
       description Text search of an item's contents
       enabled on
       criterion ATSimpleStringCriterion
-      criterion ATListCriterion
     </index>
     <index>
       name Subject
@@ -183,7 +181,6 @@
       description Text search of an item's title
       enabled on
       criterion ATSimpleStringCriterion
-      criterion ATListCriterion
     </index>
     <index>
       name Type

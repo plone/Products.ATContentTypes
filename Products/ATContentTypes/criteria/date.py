@@ -25,7 +25,6 @@ __old_name__ = 'Products.ATContentTypes.types.criteria.ATDateCriteria'
 
 from DateTime import DateTime
 from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.public import Schema

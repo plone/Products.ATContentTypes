@@ -87,7 +87,15 @@
 # 30-NOV-03 CEC Fixed problem with canon_decode_tag() not creating an
 #               IFD_Tag() object.
 # 15-FEB-04 CEC Finally fixed bit shift warning by converting Y to 0L.
+# 04-DEC-05 JFROCHE Reduce number of objects created.
 #
+
+# XXX: These are here because removing them broke existing ZODB instances.
+# we should remove them completely and have migrations to fix them up instead.
+class Ratio: 
+    pass
+class IFD_Tag: 
+    pass
 
 import logging
 LOG = logging.getLogger('exif')
@@ -719,49 +727,6 @@ def gcd(a, b):
    else:
       return gcd(b, a % b)
 
-class Ratio:
-    def __init__(self, num, den):
-        self.num=num
-        self.den=den
-
-    def __repr__(self):
-        self.reduce()
-        if self.den == 1:
-            return str(self.num)
-        return '%d/%d' % (self.num, self.den)
-
-    def reduce(self):
-        div=gcd(self.num, self.den)
-        if div > 1:
-            self.num=self.num/div
-            self.den=self.den/div
-
-# for ease of dealing with tags
-class IFD_Tag:
-    def __init__(self, printable, tag, field_type, values, field_offset,
-                 field_length):
-        # printable version of data
-        self.printable=printable
-        # tag ID number
-        self.tag=tag
-        # field type as index into FIELD_TYPES
-        self.field_type=field_type
-        # offset of start of field in bytes from beginning of IFD
-        self.field_offset=field_offset
-        # length of data field in bytes
-        self.field_length=field_length
-        # either a string or array of data items
-        self.values=values
-
-    def __str__(self):
-        return self.printable
-
-    def __repr__(self):
-        return '(0x%04X) %s=%s @ %d' % (self.tag,
-                                        FIELD_TYPES[self.field_type][2],
-                                        self.printable,
-                                        self.field_offset)
-
 # class that handles an EXIF header
 class EXIF_header:
     def __init__(self, file, endian, offset, fake_exif, debug=0):
@@ -837,6 +802,7 @@ class EXIF_header:
                 # unknown field type
                 raise ValueError, \
                       'unknown type %d in tag 0x%04X' % (field_type, tag)
+
             typelen=FIELD_TYPES[field_type][0]
             count=self.s2n(entry+4, 4)
             offset=entry+8
@@ -868,9 +834,17 @@ class EXIF_header:
                 signed=(field_type in [6, 8, 9, 10])
                 for j in range(count):
                     if field_type in (5, 10):
-                        # a ratio
-                        value_j=Ratio(self.s2n(offset,   4, signed),
-                                      self.s2n(offset+4, 4, signed))
+                        # a ratio => reduce it if possible
+                        num = self.s2n(offset,   4, signed)
+                        den = self.s2n(offset+4, 4, signed)
+                        div=gcd(num, den)
+                        if div > 1:
+                          num=num/div
+                          den=den/div
+                        if(den==1):
+                          value_j = str(num)
+                        else:
+                          value_j = "%d/%d" % (num, den)
                     else:
                         value_j=self.s2n(offset, typelen, signed)
                     values.append(value_j)
@@ -892,69 +866,12 @@ class EXIF_header:
                         for i in values:
                             # use lookup table for this tag
                             printable+=tag_entry[1].get(i, repr(i))
-            self.tags[ifd_name+' '+tag_name]=IFD_Tag(printable, tag,
-                                                     field_type,
-                                                     values, field_offset,
-                                                     count*typelen)
+            printable=printable.strip().replace('\x00','')
+            if(values):
+                self.tags[ifd_name+' '+tag_name] = (values[0],printable,field_offset)
             if self.debug:
                 print ' debug:   %s: %s' % (tag_name,
                                             repr(self.tags[ifd_name+' '+tag_name]))
-
-    # extract uncompressed TIFF thumbnail (like pulling teeth)
-    # we take advantage of the pre-existing layout in the thumbnail IFD as
-    # much as possible
-    def extract_TIFF_thumbnail(self, thumb_ifd):
-        entries=self.s2n(thumb_ifd, 2)
-        # this is header plus offset to IFD ...
-        if self.endian == 'M':
-            tiff='MM\x00*\x00\x00\x00\x08'
-        else:
-            tiff='II*\x00\x08\x00\x00\x00'
-        # ... plus thumbnail IFD data plus a null "next IFD" pointer
-        self.file.seek(self.offset+thumb_ifd)
-        tiff+=self.file.read(entries*12+2)+'\x00\x00\x00\x00'
-
-        # fix up large value offset pointers into data area
-        for i in range(entries):
-            entry=thumb_ifd+2+12*i
-            tag=self.s2n(entry, 2)
-            field_type=self.s2n(entry+2, 2)
-            typelen=FIELD_TYPES[field_type][0]
-            count=self.s2n(entry+4, 4)
-            oldoff=self.s2n(entry+8, 4)
-            # start of the 4-byte pointer area in entry
-            ptr=i*12+18
-            # remember strip offsets location
-            if tag == 0x0111:
-                strip_off=ptr
-                strip_len=count*typelen
-            # is it in the data area?
-            if count*typelen > 4:
-                # update offset pointer (nasty "strings are immutable" crap)
-                # should be able to say "tiff[ptr:ptr+4]=newoff"
-                newoff=len(tiff)
-                tiff=tiff[:ptr]+self.n2s(newoff, 4)+tiff[ptr+4:]
-                # remember strip offsets location
-                if tag == 0x0111:
-                    strip_off=newoff
-                    strip_len=4
-                # get original data and store it
-                self.file.seek(self.offset+oldoff)
-                tiff+=self.file.read(count*typelen)
-
-        # add pixel strips and update strip offset info
-        old_offsets=self.tags['Thumbnail StripOffsets'].values
-        old_counts=self.tags['Thumbnail StripByteCounts'].values
-        for i in range(len(old_offsets)):
-            # update offset pointer (more nasty "strings are immutable" crap)
-            offset=self.n2s(len(tiff), strip_len)
-            tiff=tiff[:strip_off]+offset+tiff[strip_off+strip_len:]
-            strip_off+=strip_len
-            # add pixel strip to end
-            self.file.seek(self.offset+old_offsets[i])
-            tiff+=self.file.read(old_counts[i])
-
-        self.tags['TIFFThumbnail']=tiff
 
     # decode all the camera-specific MakerNote formats
 
@@ -977,8 +894,8 @@ class EXIF_header:
     # or from the header at the start of the makernote.)
     def decode_maker_note(self):
         note=self.tags['EXIF MakerNote']
-        make=self.tags['Image Make'].printable
-        model=self.tags['Image Model'].printable
+        make=self.tags['Image Make'][1]
+        model=self.tags['Image Model'][1]
 
         # Nikon
         # The maker note usually starts with the word Nikon, followed by the
@@ -989,33 +906,33 @@ class EXIF_header:
             if note.values[0:7] == [78, 105, 107, 111, 110, 00, 01]:
                 if self.debug:
                     print "Looks like a type 1 Nikon MakerNote."
-                self.dump_IFD(note.field_offset+8, 'MakerNote',
+                self.dump_IFD(note[2]+8, 'MakerNote',
                               dict=MAKERNOTE_NIKON_OLDER_TAGS)
             elif note.values[0:7] == [78, 105, 107, 111, 110, 00, 02]:
                 if self.debug:
                     print "Looks like a labeled type 2 Nikon MakerNote"
-                if note.values[12:14] != [0, 42] and note.values[12:14] != [42L, 0L]:
+                if note[0][12:14] != [0, 42] and note[0][12:14] != [42L, 0L]:
                     raise ValueError, "Missing marker tag '42' in MakerNote."
                 # skip the Makernote label and the TIFF header
-                self.dump_IFD(note.field_offset+10+8, 'MakerNote',
+                self.dump_IFD(note[2]+10+8, 'MakerNote',
                               dict=MAKERNOTE_NIKON_NEWER_TAGS, relative=1)
             else:
                 # E99x or D1
                 if self.debug:
                     print "Looks like an unlabeled type 2 Nikon MakerNote"
-                self.dump_IFD(note.field_offset, 'MakerNote',
+                self.dump_IFD(note[2], 'MakerNote',
                               dict=MAKERNOTE_NIKON_NEWER_TAGS)
             return
 
         # Olympus
         if make[:7] == 'OLYMPUS':
-            self.dump_IFD(note.field_offset+8, 'MakerNote',
+            self.dump_IFD(note[2]+8, 'MakerNote',
                           dict=MAKERNOTE_OLYMPUS_TAGS)
             return
 
         # Casio
         if make == 'Casio':
-            self.dump_IFD(note.field_offset, 'MakerNote',
+            self.dump_IFD(note[2], 'MakerNote',
                           dict=MAKERNOTE_CASIO_TAGS)
             return
 
@@ -1028,7 +945,7 @@ class EXIF_header:
             # bug: IFD offsets are from beginning of MakerNote, not
             # beginning of file header
             offset=self.offset
-            self.offset+=note.field_offset
+            self.offset+=note[2]
             # process note with bogus values (note is actually at offset 12)
             self.dump_IFD(12, 'MakerNote', dict=MAKERNOTE_FUJIFILM_TAGS)
             # reset to correct values
@@ -1038,11 +955,10 @@ class EXIF_header:
 
         # Canon
         if make == 'Canon':
-            self.dump_IFD(note.field_offset, 'MakerNote',
-                          dict=MAKERNOTE_CANON_TAGS)
+            self.dump_IFD(note[2], 'MakerNote',dict=MAKERNOTE_CANON_TAGS)
             for i in (('MakerNote Tag 0x0001', MAKERNOTE_CANON_TAG_0x001),
                       ('MakerNote Tag 0x0004', MAKERNOTE_CANON_TAG_0x004)):
-                self.canon_decode_tag(self.tags[i[0]].values, i[1])
+                self.canon_decode_tag(self.tags[i[0]][0], i[1])
             return
 
     # decode Canon MakerNote tag based on offset within tag
@@ -1059,14 +975,12 @@ class EXIF_header:
                 val=value[i]
             # it's not a real IFD Tag but we fake one to make everybody
             # happy. this will have a "proprietary" type
-            self.tags['MakerNote '+name]=IFD_Tag(str(val), None, 0, None,
-                                                 None, None)
+            self.tags['MakerNote '+name]=str(val)
 
 # process an image file (expects an open file object)
 # this is the function that has to deal with all the arbitrary nasty bits
 # of the EXIF standard
 def process_file(file, debug=0):
-    # determine whether it's a JPEG or TIFF
     data=file.read(12)
     if data[0:4] in ['II*\x00', 'MM\x00*']:
         # it's a TIFF file
@@ -1118,7 +1032,7 @@ def process_file(file, debug=0):
         if exif_off:
             if debug:
                 print ' EXIF SubIFD at offset %d:' % exif_off.values[0]
-            hdr.dump_IFD(exif_off.values[0], 'EXIF')
+            hdr.dump_IFD(exif_off[0], 'EXIF')
             # Interoperability IFD contained in EXIF IFD
             intr_off=hdr.tags.get('EXIF SubIFD InteroperabilityOffset')
             if intr_off:
@@ -1135,40 +1049,28 @@ def process_file(file, debug=0):
             hdr.dump_IFD(gps_off.values[0], 'GPS', dict=GPS_TAGS)
         ctr+=1
 
-    # extract uncompressed TIFF thumbnail
-    thumb=hdr.tags.get('Thumbnail Compression')
-    if thumb and thumb.printable == 'Uncompressed TIFF':
-        hdr.extract_TIFF_thumbnail(thumb_ifd)
-
-    # JPEG thumbnail (thankfully the JPEG data is stored as a unit)
-    thumb_off=hdr.tags.get('Thumbnail JPEGInterchangeFormat')
-    if thumb_off:
-        file.seek(offset+thumb_off.values[0])
-        size=hdr.tags['Thumbnail JPEGInterchangeFormatLength'].values[0]
-        hdr.tags['JPEGThumbnail']=file.read(size)
-
-    # deal with MakerNote contained in EXIF IFD
     if hdr.tags.has_key('EXIF MakerNote'):
         try:
             hdr.decode_maker_note()
         except:
-            # an error occured. Log it and remove the broken note
-            del hdr.tags['EXIF MakerNote']
-            LOG.error('Failed to parse EXIF MakerNote', exc_info=True)
-
-    # Sometimes in a TIFF file, a JPEG thumbnail is hidden in the MakerNote
-    # since it's not allowed in a uncompressed TIFF IFD
-    if not hdr.tags.has_key('JPEGThumbnail'):
-        thumb_off=hdr.tags.get('MakerNote JPEGThumbnail')
-        if thumb_off:
-            file.seek(offset+thumb_off.values[0])
-            hdr.tags['JPEGThumbnail']=file.read(thumb_off.field_length)
-
+            pass
+        del hdr.tags['EXIF MakerNote']
+    dict = {}
+    tags = hdr.tags.keys()
+    tags.sort()
+    for tag in tags:
+        hdr.tags[tag] = hdr.tags[tag][1]
     return hdr.tags
 
 # library test/debug function (dump given files)
 if __name__ == '__main__':
     import sys
+    import gc
+    import time
+    gc.enable()
+    start_time = time.clock()
+    start = len(gc.get_objects())
+    print "%s object at the beginning" % start
 
     if len(sys.argv) < 2:
         print 'Usage: %s files...\n' % sys.argv[0]
@@ -1191,13 +1093,14 @@ if __name__ == '__main__':
         x=data.keys()
         x.sort()
         for i in x:
-            if i in ('JPEGThumbnail', 'TIFFThumbnail'):
-                continue
-            try:
-                print '   %s (%s): %s' % \
-                      (i, FIELD_TYPES[data[i].field_type][2], data[i].printable)
-            except:
-                print 'error', i, '"', data[i], '"'
-        if data.has_key('JPEGThumbnail'):
-            print 'File has JPEG thumbnail'
-        print
+           print "   %s: %s" % (i, data[i])
+    end_time = time.clock()
+    duration = end_time - start_time
+    end = len(gc.get_objects())
+    print ""
+    print "---------------------------------------------"
+    print "%s object at the end" % end
+    print "so %s object have been created for one photo" % (end-start)
+    print "---------------------------------------------"
+    print "Time needed : %s" % duration
+

@@ -26,9 +26,7 @@ from Products.Archetypes import listTypes
 from Products.Archetypes.Extensions.utils import installTypes
 from Products.Archetypes.Extensions.utils import install_subskin
 from Products.CMFCore.utils import getToolByName
-from Products.ZCatalog.Catalog import CatalogError
 from StringIO import StringIO
-from Acquisition import aq_base
 
 from Products.Archetypes.interfaces.base import IBaseFolder
 from Products.ATContentTypes.interfaces import IATTopic
@@ -72,6 +70,8 @@ def install(self, reinstall):
             tool.recatalogCMFTypes()
             #print 'Done'
             tool.setCMFTypesAreRecataloged(True)
+            # Fix objects with missing portal_type
+            tool.fixObjectsWithMissingPortalType()
     
     # step 3: Rename and move away to old CMF types on install
     if not reinstall:

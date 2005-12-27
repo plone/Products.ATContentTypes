@@ -29,10 +29,7 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-import time
 from cStringIO import StringIO
-
-from Acquisition import aq_base
 from OFS.Image import Image as OFSImage
 
 from Products.CMFCore.permissions import View
@@ -42,7 +39,6 @@ from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
 
 from Products.ATContentTypes.content.image import ATImage
-from Products.ATContentTypes.content.image import ATImageSchema
 from Products.ATContentTypes.migration.atctmigrator import ImageMigrator
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage
@@ -138,11 +134,11 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         # NOTE: not a real test
         exif_data = self._ATCT.getEXIF()
         self.failUnless(isinstance(exif_data, dict), type(exif_data))
-        
+
     def test_exifOrientation(self):
         # NOTE: not a real test
         r, m = self._ATCT.getEXIFOrientation()
-        
+
     def test_transform(self):
         # NOTE: not a real test
         self._ATCT.transformImage(2)
@@ -150,7 +146,7 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
     def test_autotransform(self):
         # NOTE: not a real test
         self._ATCT.autoTransformImage()
-        
+
     def test_broken_pil(self):
         # PIL has a nasty bug when the image ratio is too extrem like 300x15:
         # Module PIL.Image, line 1136, in save
@@ -158,20 +154,20 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         # Module PIL.ImageFile, line 474, in _save
         # SystemError: tile cannot extend outside image
         atct = self._ATCT
-        
+
         # test upload
         atct.setImage(TEST_GIF, mimetype='image/gif', filename='test.gif')
         self.failUnlessEqual(atct.getImage().data, TEST_GIF)
-        
+
     def test_bobo_hook(self):
         atct = self._ATCT
         REQUEST = {'method' : 'GET'}
         scales = atct.getField('image').getAvailableSizes(atct)
         atct.setImage(TEST_GIF, mimetype='image/gif', filename='test.gif')
-        
+
         img = atct.__bobo_traverse__(REQUEST, 'image')
         self.failUnless(isinstance(img, OFSImage), img)
-        
+
         # test if all scales exist
         for scale in scales.keys():
             name = 'image_' + scale
@@ -181,7 +177,7 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
     def test_division_by_0_pil(self):
         # pil generates a division by zero error on some images
         atct = self._ATCT
-        
+
         # test upload
         atct.setImage(TEST_DIV_ERROR, mimetype='image/jpeg',
                       filename='divisionerror.jpg')
@@ -193,12 +189,18 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         editATCT(atct)
         self.failUnlessEqual(len(TEST_GIF), TEST_GIF_LEN)
         self.failUnlessEqual(atct.get_size(), TEST_GIF_LEN)
-        
+
     def test_schema_marshall(self):
         atct = self._ATCT
         schema = atct.Schema()
         marshall = schema.getLayerImpl('marshall')
-        self.failUnless(isinstance(marshall, PrimaryFieldMarshaller), marshall)
+        marshallers = [PrimaryFieldMarshaller]
+        try:
+            from Products.Marshall import ControlledMarshaller
+            marshallers.append(ControlledMarshaller)
+        except ImportError:
+            pass
+        self.failUnless(isinstance(marshall, tuple(marshallers)), marshall)
 
     def test_dcEdit(self):
         #if not hasattr(self, '_cmf') or not hasattr(self, '_ATCT'):
@@ -212,7 +214,7 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
 
     def test_broken_exif(self):
         #EXIF data in images from Canon digicams breaks EXIF of 2005.05.12 with following exception
-        # 
+        #
         #2005-05-01T19:21:16 ERROR(200) Archetypes None
         #Traceback (most recent call last):
         #  File "/home/russ/cb/var/zope/Products/ATContentTypes/content/image.py", line 207, in getEXIF
@@ -226,40 +228,40 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         #ValueError: unknown type 768 in tag 0x0100
         #
 
-        # This test fails even with the 2005.05.12 exif version from 
+        # This test fails even with the 2005.05.12 exif version from
         #    http://home.cfl.rr.com/genecash/
         f = StringIO(TEST_EXIF_ERROR)
-        exif_data = exif.process_file(f, debug=False)        
-        # probably want to add some tests on returned data. Currently gives 
-        #  ValueError in process_file 
-    
+        exif_data = exif.process_file(f, debug=False)
+        # probably want to add some tests on returned data. Currently gives
+        #  ValueError in process_file
+
     def test_exif_upload(self):
         atct = self._ATCT
         atct._image_exif = None
-        
+
         # string upload
         atct.setImage(TEST_JPEG)
         self.failUnless(len(atct.getEXIF()), atct.getEXIF())
         atct._image_exif = None
-        
+
         # file upload
         atct.setImage(TEST_JPEG_FILE)
         self.failUnless(len(atct.getEXIF()), atct.getEXIF())
         atct._image_exif = None
-        
+
         # Pdata upload
         from OFS.Image import Pdata
         pd = Pdata(TEST_JPEG)
         atct.setImage(pd)
         self.failUnless(len(atct.getEXIF()), atct.getEXIF())
         atct._image_exif = None
-        
+
         # ofs image upload
         ofs = atct.getImage()
         atct.setImage(ofs)
         self.failUnless(len(atct.getEXIF()), atct.getEXIF())
         atct._image_exif = None
-        
+
 tests.append(TestSiteATImage)
 
 class TestATImageFields(atcttestcase.ATCTFieldTestCase):

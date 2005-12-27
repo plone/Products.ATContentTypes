@@ -24,13 +24,11 @@ __author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATReferenceCriterion'
 
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.criteria import registerCriterion
-from Products.ATContentTypes.criteria import LIST_INDICES
+from Products.ATContentTypes.criteria import REFERENCE_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
 from Products.Archetypes.public import DisplayList
@@ -63,4 +61,4 @@ class ATReferenceCriterion(ATSelectionCriterion):
 
         return display_list
 
-registerCriterion(ATReferenceCriterion, LIST_INDICES)
+registerCriterion(ATReferenceCriterion, REFERENCE_INDICES)

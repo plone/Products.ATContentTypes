@@ -30,26 +30,13 @@ from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
 from Products.CMFCore.utils import getToolByName
-from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
-import time
 
 from Products.ATContentTypes.content.document import ATDocument
-from Products.ATContentTypes.content.document import ATDocumentSchema
-from Products.ATContentTypes.tests.utils import TidyHTMLValidator
-from Products.ATContentTypes.migration.atctmigrator import DocumentMigrator, \
-                                                           FolderMigrator
+from Products.ATContentTypes.migration.atctmigrator import DocumentMigrator
 from Products.CMFDefault.Document import Document
-from Products.ATContentTypes.interfaces import IHistoryAware
-from Products.ATContentTypes.interfaces import ITextContent
-from Products.ATContentTypes.interfaces import IATDocument
-from Interface.Verify import verifyObject
-from Products.Archetypes.public import Schema, BaseSchema, BaseContent, \
-                                       TextField, RichWidget
-from Products.ATContentTypes.config import PROJECTNAME
 from Products.CMFPlone import transaction
-
 
 example_stx = """
 Header

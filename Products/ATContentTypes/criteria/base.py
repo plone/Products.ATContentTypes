@@ -25,16 +25,10 @@ __docformat__ = 'restructuredtext'
 from Products.Archetypes.public import BaseContentMixin
 
 from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 
 from Products.Archetypes.ClassGen import generateClass
-from Products.ATContentTypes.criteria import registerCriterion
-from Products.ATContentTypes.criteria import ALL_INDICES
-from Products.ATContentTypes.criteria import DATE_INDICES
-from Products.ATContentTypes.criteria import STRING_INDICES
-from Products.ATContentTypes.criteria import LIST_INDICES
 from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 
@@ -116,4 +110,3 @@ class ATBaseCriterion(NonRefCatalogContent):
 # I'm not able to unit test it in the right way.
 generateClass(ATBaseCriterion)
 InitializeClass(ATBaseCriterion)
-# registerCriterion(ATBaseCriterion, ())

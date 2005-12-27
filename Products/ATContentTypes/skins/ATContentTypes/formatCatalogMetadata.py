@@ -8,7 +8,7 @@
 ##title=Determine whether the input is a DateTime or ISO date and localize it if so, also convert lists and dicts into reasonable strings.
 from DateTime import DateTime
 from ZODB.POSException import ConflictError
-from Products.CMFPlone.utils import base_hasattr, safe_callable
+from Products.CMFPlone.utils import safe_callable
 from AccessControl import Unauthorized
 
 if value is None:

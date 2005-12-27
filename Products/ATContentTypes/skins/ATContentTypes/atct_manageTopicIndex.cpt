@@ -166,7 +166,7 @@
                                     i18n:translate=""
                                     i18n:domain="plone"/>
                         </select>
-                        <br/>
+                        <br />
                         <span i18n:translate="label_help_text">
                             Help Text:
                         </span>

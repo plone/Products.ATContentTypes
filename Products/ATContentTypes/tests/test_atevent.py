@@ -34,15 +34,12 @@ from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
-import time
 
 from Products.ATContentTypes.content.event import ATEvent
-from Products.ATContentTypes.content.event import ATEventSchema
 from Products.ATContentTypes.migration.atctmigrator import EventMigrator
 from Products.CMFCalendar.Event import Event
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.tests.utils import EmailValidator
-from Products.ATContentTypes.tests.utils import PhoneValidator
 from Products.ATContentTypes.tests.utils import URLValidator
 from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
 from Products.ATContentTypes.permission import ChangeEvents
@@ -565,9 +562,6 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
-        # disabled
-        #self.failUnless(field.validators == PhoneValidator,
-        #                'Value is %s' % str(field.validators))
         self.failUnlessEqual(field.validators, EmptyValidator)
         self.failUnless(isinstance(field.widget, StringWidget),
                         'Value is %s' % id(field.widget))

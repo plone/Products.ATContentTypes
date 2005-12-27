@@ -31,7 +31,6 @@ from Globals import InitializeClass
 from StructuredText.StructuredText import HTML
 from ZODB.POSException import ConflictError
 from AccessControl import ClassSecurityInfo
-from Acquisition import aq_base
 import AccessControl.Owned
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.CMFPlone import transaction
@@ -42,15 +41,11 @@ from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.permissions import View
 from Products.CMFCore.ActionProviderBase import ActionProviderBase
 
-from Products.Archetypes import listTypes
-
-from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATCTTool
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import ATCT_DIR
 from Products.ATContentTypes.config import WWW_DIR
-from Products.ATContentTypes.migration.atctmigrator import migrateAll
 from Products.ATContentTypes.tool.topic import ATTopicsTool
 from Products.ATContentTypes.tool.migration import ATCTMigrationTool
 

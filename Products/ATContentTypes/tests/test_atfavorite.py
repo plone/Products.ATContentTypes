@@ -34,13 +34,9 @@ from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
-from Products.ATContentTypes.tests.utils import dcEdit
 from Products.Archetypes.tests.atsitetestcase import portal_name
-import time
 
 from Products.ATContentTypes.content.favorite import ATFavorite
-from Products.ATContentTypes.content.favorite import ATFavoriteSchema
-from Products.ATContentTypes.tests.utils import TidyHTMLValidator
 from Products.ATContentTypes.migration.atctmigrator import FavoriteMigrator
 from Products.ATContentTypes.interfaces import IATFavorite
 from Products.CMFDefault.Favorite import Favorite

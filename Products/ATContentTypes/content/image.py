@@ -28,7 +28,6 @@ __old_name__ = 'Products.ATContentTypes.types.ATImage'
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
-from AccessControl import Unauthorized
 from Acquisition import aq_base
 from ComputedAttribute import ComputedAttribute
 
@@ -37,14 +36,12 @@ from Products.Archetypes.public import ImageField
 from Products.Archetypes.public import ImageWidget
 from Products.Archetypes.public import PrimaryFieldMarshaller
 from Products.Archetypes.public import AnnotationStorage
-from Products.Archetypes.public import log_exc
 
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
-from Products.ATContentTypes.content.base import cleanupFilename
 from Products.ATContentTypes.content.base import updateActions
 from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
@@ -152,7 +149,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         """
         img = self.getImage()
         if not getattr(aq_base(img), 'get_size', False):
-            return "n/a"
+            return 0
         return img.get_size()
 
     security.declareProtected(View, 'getSize')

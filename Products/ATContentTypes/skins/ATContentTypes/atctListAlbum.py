@@ -7,7 +7,6 @@
 ##bind subpath=traverse_subpath
 ##parameters=images=0, folders=0, subimages=0, others=0
 
-from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import base_hasattr
 
 result = {}

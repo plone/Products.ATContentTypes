@@ -31,9 +31,7 @@ from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 from Missing import MV
 
-from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
-import time
 
 from Interface.Verify import verifyObject
 from Products.Archetypes.interfaces.base import IBaseContent
@@ -41,36 +39,22 @@ from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.Archetypes.interfaces.metadata import IExtensibleMetadata
 
 from Products.ATContentTypes.interfaces import IATTopicCriterion
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
-from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
-from Products.ATContentTypes.criteria.date import \
-    ATDateCriteria 
-from Products.ATContentTypes.criteria.list import \
-    ATListCriterion
-from Products.ATContentTypes.criteria.simpleint import \
-    ATSimpleIntCriterion
+from Products.ATContentTypes.criteria.date import ATDateCriteria 
+from Products.ATContentTypes.criteria.list import ATListCriterion
+from Products.ATContentTypes.criteria.simpleint import ATSimpleIntCriterion
 from Products.ATContentTypes.criteria.simplestring import \
     ATSimpleStringCriterion
-from Products.ATContentTypes.criteria.portaltype import \
-    ATPortalTypeCriterion
-from Products.ATContentTypes.criteria.sort import \
-    ATSortCriterion
-from Products.ATContentTypes.criteria.selection import \
-    ATSelectionCriterion
-from Products.ATContentTypes.criteria.daterange import \
-    ATDateRangeCriterion
-from Products.ATContentTypes.criteria.reference import \
-    ATReferenceCriterion
-from Products.ATContentTypes.criteria.boolean import \
-    ATBooleanCriterion
-from Products.ATContentTypes.criteria.portaltype import \
-    ATPortalTypeCriterion
+from Products.ATContentTypes.criteria.sort import ATSortCriterion
+from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
+from Products.ATContentTypes.criteria.daterange import ATDateRangeCriterion
+from Products.ATContentTypes.criteria.reference import ATReferenceCriterion
+from Products.ATContentTypes.criteria.boolean import ATBooleanCriterion
+from Products.ATContentTypes.criteria.portaltype import ATPortalTypeCriterion
 from Products.ATContentTypes.criteria.currentauthor import \
     ATCurrentAuthorCriterion
-from Products.ATContentTypes.criteria.path import \
-    ATPathCriterion
+from Products.ATContentTypes.criteria.path import ATPathCriterion
 tests = []
 
 class CriteriaTest(atcttestcase.ATCTSiteTestCase):
@@ -168,7 +152,7 @@ class TestATDateCriteria(CriteriaTest):
         self.dummy.setOperation('less')
         self.dummy.setDateRange('-')
         self.dummy.setValue('14')
-        expected_begin = DateTime().earliestTime() - 14
+        expected_begin = (DateTime() - 14).earliestTime()
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
         query = items[0][1]
@@ -189,7 +173,7 @@ class TestATDateCriteria(CriteriaTest):
         self.dummy.setOperation('less')
         self.dummy.setDateRange('+')
         self.dummy.setValue('14')
-        expected_end = DateTime().latestTime() + 14
+        expected_end = (DateTime() + 14).latestTime()
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
         query = items[0][1]
@@ -207,7 +191,7 @@ class TestATDateCriteria(CriteriaTest):
         self.dummy.setOperation('more')
         self.dummy.setDateRange('-')
         self.dummy.setValue('14')
-        expected_begin = DateTime().earliestTime() - 14
+        expected_begin = (DateTime() - 14).earliestTime()
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
         query = items[0][1]
@@ -221,7 +205,7 @@ class TestATDateCriteria(CriteriaTest):
         self.dummy.setOperation('more')
         self.dummy.setDateRange('+')
         self.dummy.setValue('14')
-        expected_begin = DateTime().earliestTime() + 14
+        expected_begin = (DateTime() + 14).earliestTime()
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
         query = items[0][1]
@@ -397,12 +381,14 @@ class TestATSelectionCriterion(CriteriaTest):
     def test_selection_query(self):
         self.dummy.Schema()['field'].set(self.dummy,'Subject')
         self.dummy.setValue(('1','2','3'))
+        self.dummy.setOperator('and')
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
         query = items[0][1]
         field = items[0][0]
         self.assertEquals(field, 'Subject')
-        self.assertEquals(query, ('1','2','3'))
+        self.assertEquals(query['query'], ('1','2','3'))
+        self.assertEquals(query['operator'], 'and')
 
     def test_vocabulary(self):
         #Should return some ids
@@ -455,12 +441,14 @@ class TestATReferenceCriterion(CriteriaTest):
         self.folder.invokeFactory('Document', 'doc1')
         uid = self.folder.doc1.UID()
         self.dummy.setValue((uid,))
+        self.dummy.setOperator('and')
         items = self.dummy.getCriteriaItems()
         self.assertEquals(len(items),1)
         query = items[0][1]
         field = items[0][0]
         self.assertEquals(field, 'getRawRelatedItems')
-        self.assertEquals(query, (uid,))
+        self.assertEquals(query['query'], (uid,))
+        self.assertEquals(query['operator'], 'and')
 
     def test_reference_vocab(self):
         self.dummy.Schema()['field'].set(self.dummy,'getRawRelatedItems')
@@ -613,6 +601,30 @@ class TestATPathCriterion(CriteriaTest):
         items = self.dummy.getCriteriaItems()
         query = items[0][1]
         self.assertEquals(query['depth'], 1)
+
+    # Some reference errors were making this impossible
+    def test_path_criteria_can_be_removed(self):
+        self.setRoles(['Manager', 'Member'])
+        self.folder.invokeFactory('Topic', 'new_topic', title='New Topic')
+        topic  = self.folder.new_topic
+        # Add a path criterion
+        path_crit = topic.addCriterion('path', 'ATPathCriterion')
+        # Give it a reference
+        path_crit.setValue([topic.UID()])
+        # The error is masked when not in debug mode or as manager, though it
+        # still has consequences
+        from App.config import getConfiguration
+        config = getConfiguration()
+        orig_debug = config.debug_mode
+        config.debug_mode = True
+        self.setRoles(['Member'])
+        # Delete the topic
+        try:
+            self.folder.manage_delObjects(['new_topic'])
+        except AttributeError:
+            config.debug_mode = orig_debug
+            self.fail("Deleting a topic with path criteria raises an error!")
+        config.debug_mode = orig_debug
 
 tests.append(TestATPathCriterion)
 

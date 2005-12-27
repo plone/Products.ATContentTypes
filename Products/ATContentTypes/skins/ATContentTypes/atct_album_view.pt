@@ -34,22 +34,19 @@
         Description
     </div>
 
-    <div metal:use-macro="here/batch_macros/macros/navigation"></div>
-
     <tal:albumsimages tal:condition="python:albums or images">
         <tal:images tal:condition="batch" tal:repeat="image batch">
             <div class="photoAlbumEntry">
-                <dl>
-                    <dt>
                         <a tal:define="id python:int(b_start)+int(repeat['image'].number()-1)"
-                           tal:attributes="href string:${here/absolute_url}/atct_album_image?b_start=$id">
+                           tal:attributes="href string:${image/absolute_url}/view;
+                                           title image/Description">
+                            <span class="photoAlbumEntryWrapper">
                             <img src="" alt="" tal:replace="structure python:image.tag(scale='thumb', title=image.Description())" />
-                        </a>
-                    </dt>
-                    <dd tal:content="image/pretty_title_or_id">
+                            </span>
+                    <span class="photoAlbumEntryTitle" tal:content="image/pretty_title_or_id">
                        Title
-                    </dd>
-                </dl>
+                    </span>
+                        </a>
             </div>
         </tal:images>
 
@@ -59,25 +56,18 @@
                              number_of_images python:len(image_brains_in_album);
                              random python:modules['whrandom'];
                              random_image python:number_of_images and random.choice(image_brains_in_album).getObject() or None">
-                <dl i18n:domain="atcontenttypes">
-                    <dt>
-                        <a tal:condition="number_of_images"
-                           tal:attributes="href album/getURL">
-                            <img src="" alt="" tal:replace="structure python:random_image.tag(scale='thumb', title=album.Description)" />
+                        <a tal:attributes="href album/getURL;
+                                           title album/Description">
+                            <span class="photoAlbumEntryWrapper">
+                                <img src="" alt="" 
+                                     tal:condition="number_of_images"
+                                     tal:replace="structure python:random_image.tag(scale='thumb', title=album.Description)" />
+                            </span>
+                            <span class="photoAlbumEntryTitle">
+                               <tal:title content="album/pretty_title_or_id">Title</tal:title>
+                            (<tal:number content="number_of_images" />)                        
+                            </span>
                         </a>
-                        <a tal:condition="not:number_of_images"
-                           tal:attributes="href album/getURL" class="photoAlbumEmpty">
-                          <span i18n:translate="text_empty_album"
-                                tal:omit-tag="">Empty album</span>
-                        </a>
-                    </dt>
-                    <dd>
-                        <span tal:content="album/pretty_title_or_id">Title</span>
-                        <span>(<span i18n:translate="photos_in_album" tal:omit-tag=""><tal:number
-                                     i18n:name="num_photos" content="number_of_images" />
-                                     photos in album</span>)</span>
-                    </dd>
-                </dl>
             </div>
         </tal:albums>
 
@@ -85,7 +75,8 @@
 
     </tal:albumsimages>
 
-    <p i18n:domain="atcontenttypes"
+    <p class="discreet"
+       i18n:domain="atcontenttypes"
        i18n:translate="text_no_albums_uploaded"
        tal:condition="python:not (albums or images)">
         No albums or photos uploaded yet.

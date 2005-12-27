@@ -25,8 +25,6 @@ __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATDateRangeCriterion'
 
 from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.public import Schema
@@ -84,7 +82,7 @@ class ATDateRangeCriterion(ATBaseCriterion):
 
     shortDesc      = 'Date range'
 
-    security.declareProtected(View, 'getValue')
+    security.declareProtected(View, 'Value')
     def Value(self):
         return (self.getStart(), self.getEnd())
 

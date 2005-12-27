@@ -28,17 +28,12 @@ import urlparse
 
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from ExtensionClass import Base
 
 from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
 
 from Products.Archetypes.public import StringField
 from Products.Archetypes.public import StringWidget
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
 from Products.ATContentTypes import permission as ATCTPermissions
 
 class InvalidContentType(Exception):

@@ -41,11 +41,10 @@ ICS_HEADER = """\
 BEGIN:VCALENDAR
 PRODID:%(prodid)s
 VERSION:2.0
-
+METHOD:PUBLISH
 """
 
 ICS_FOOTER = """\
-
 END:VCALENDAR
 """
 
@@ -67,7 +66,6 @@ CLASS:PUBLIC
 PRIORITY:3
 TRANSP:OPAQUE
 END:VEVENT
-
 """
 
 # vCal header and footer
@@ -78,7 +76,6 @@ VERSION:1.0
 """
 
 VCS_FOOTER = """\
-
 END:VCALENDAR
 """
 
@@ -98,7 +95,6 @@ VCS_EVENT_END = """\
 PRIORITY:3
 TRANSP:0
 END:VEVENT
-
 """
 
 class CalendarSupportMixin:
@@ -147,21 +143,21 @@ class CalendarSupportMixin:
         """
         out = StringIO()
         map = {
-            'dtstamp'   : DateTime().strftime(DATE),
-            'created'   : DateTime(self.CreationDate()).strftime(DATE),
+            'dtstamp'   : DateTime().toZone('UTC').strftime(DATE),
+            'created'   : DateTime(self.CreationDate()).toZone('UTC').strftime(DATE),
             'uid'       : self.UID(),
-            'modified'  : DateTime(self.ModificationDate()).strftime(DATE),
+            'modified'  : DateTime(self.ModificationDate()).toZone('UTC').strftime(DATE),
             'summary'   : self.Title(),
-            'startdate' : self.start().strftime(DATE),
-            'enddate'   : self.end().strftime(DATE),
+            'startdate' : self.start().toZone('UTC').strftime(DATE),
+            'enddate'   : self.end().toZone('UTC').strftime(DATE),
             }
         out.write(ICS_EVENT_START % map)
         description = self.Description()
         if description:
-            out.write('DESCRIPTION:%s\n' % description)
+            out.write('DESCRIPTION:%s\n' % vformat(description))
         location = self.getLocation()
         if location:
-            out.write('LOCATION:%s\n' % location)
+            out.write('LOCATION:%s\n' % vformat(location))
         eventType = self.getEventType()
         if eventType:
             out.write('CATEGORIES:%s\n' % eventType)
@@ -190,25 +186,25 @@ class CalendarSupportMixin:
         """
         out = StringIO()
         map = {
-            'dtstamp'   : DateTime().strftime(DATE),
-            'created'   : DateTime(self.CreationDate()).strftime(DATE),
+            'dtstamp'   : DateTime().toZone('UTC').strftime(DATE),
+            'created'   : DateTime(self.CreationDate()).toZone('UTC').strftime(DATE),
             'uid'       : self.UID(),
-            'modified'  : DateTime(self.ModificationDate()).strftime(DATE),
+            'modified'  : DateTime(self.ModificationDate()).toZone('UTC').strftime(DATE),
             'summary'   : self.Title(),
-            'startdate' : self.start().strftime(DATE),
-            'enddate'   : self.end().strftime(DATE),
+            'startdate' : self.start().toZone('UTC').strftime(DATE),
+            'enddate'   : self.end().toZone('UTC').strftime(DATE),
             }
         out.write(VCS_EVENT_START % map)
         description = self.Description()
         if description:
-            out.write('DESCRIPTION:%s\n' % description)
+            out.write('DESCRIPTION:%s\n' % vformat(description))
         location = self.getLocation()
         if location:
-            out.write('LOCATION:%s\n' % location)
+            out.write('LOCATION:%s\n' % vformat(location))
         out.write(VCS_EVENT_END)
         # TODO
         # Insert missing code here :]
-        return n2rn(out.getvalue())
+        return out.getvalue()
 
     security.declareProtected(View, 'vcs_view')
     def vcs_view(self, REQUEST, RESPONSE):
@@ -224,6 +220,8 @@ class CalendarSupportMixin:
 
 InitializeClass(CalendarSupportMixin)
 
+def vformat(s):
+    return s.replace('\r', '\\n').replace('\n', '\\n')
 
 def n2rn(s):
     return s.replace('\n', '\r\n')

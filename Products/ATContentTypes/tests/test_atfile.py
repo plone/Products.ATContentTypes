@@ -39,7 +39,6 @@ from Products.ATContentTypes.tests.utils import dcEdit
 import time
 
 from Products.ATContentTypes.content.file import ATFile
-from Products.ATContentTypes.content.file import ATFileSchema
 from Products.ATContentTypes.migration.atctmigrator import FileMigrator
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.interfaces import IFileContent
@@ -138,7 +137,13 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         atct = self._ATCT
         schema = atct.Schema()
         marshall = schema.getLayerImpl('marshall')
-        self.failUnless(isinstance(marshall, PrimaryFieldMarshaller), marshall)
+        marshallers = [PrimaryFieldMarshaller]
+        try:
+            from Products.Marshall import ControlledMarshaller
+            marshallers.append(ControlledMarshaller)
+        except ImportError:
+            pass
+        self.failUnless(isinstance(marshall, tuple(marshallers)), marshall)
 
 
 tests.append(TestSiteATFile)

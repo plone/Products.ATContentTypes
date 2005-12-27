@@ -68,6 +68,9 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
     __implements__ = (ATCTOrderedFolder.__implements__, IATFolder,
                      AutoOrderSupport.__implements__)
 
+    # Enable marshalling via WebDAV/FTP/ExternalEditor.
+    __dav_marshall__ = True
+
     security       = ClassSecurityInfo()
 
     def manage_afterAdd(self, item, container):
@@ -98,6 +101,9 @@ class ATBTreeFolder(AutoSortSupport, ATCTBTreeFolder):
 
     __implements__ = (ATCTBTreeFolder.__implements__, IATBTreeFolder,
                       AutoSortSupport.__implements__)
+
+    # Enable marshalling via WebDAV/FTP/ExternalEditor.
+    __dav_marshall__ = True
 
     security       = ClassSecurityInfo()
 

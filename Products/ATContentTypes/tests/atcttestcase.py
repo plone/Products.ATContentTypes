@@ -1,4 +1,4 @@
-# -*- coding: latin1 -*- 
+# -*- coding: latin1 -*-
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
 #  Copyright (c) 2003-2005 AT Content Types development team
@@ -72,17 +72,17 @@ try:
 except ImportError:
     from Products.PloneLanguageTool.interfaces import ITranslatable
 
-test_home = os.path.dirname(__file__) 
+test_home = os.path.dirname(__file__)
 
 class ATCTSiteTestCase(ATSiteTestCase):
     pass
 
 class ATCTFunctionalSiteTestCase(Functional, ATCTSiteTestCase):
-    __implements__ = Functional.__implements__ + ATCTSiteTestCase.__implements__    
+    __implements__ = Functional.__implements__ + ATCTSiteTestCase.__implements__
 
 class ATCTTypeTestCase(ATSiteTestCase):
     """AT Content Types test
-    
+
     Tests some basics of a type
     """
 
@@ -100,17 +100,17 @@ class ATCTTypeTestCase(ATSiteTestCase):
         self._cmf = self._createType(self.folder, self.cmf_portal_type, 'cmf')
 
     def _createType(self, context, portal_type, id, **kwargs):
-        """Helper method to create a new type 
+        """Helper method to create a new type
         """
         ttool = getToolByName(context, 'portal_types')
         cat = self.portal.portal_catalog
-        
+
         fti = ttool.getTypeInfo(portal_type)
         fti.constructInstance(context, id, **kwargs)
         obj = getattr(context.aq_inner.aq_explicit, id)
         cat.indexObject(obj)
         return obj
-    
+
     def test_000testsetup(self):
         # test if we really have the right test setup
         # vars
@@ -121,11 +121,11 @@ class ATCTTypeTestCase(ATSiteTestCase):
         self.failUnless(self.title)
         self.failUnless(self.meta_type)
         self.failUnless(self.icon)
-        
+
         # portal types
         self.failUnlessEqual(self._ATCT.portal_type, self.portal_type)
         self.failUnlessEqual(self._cmf.portal_type, self.cmf_portal_type)
-        
+
         # classes
         atct_class = self._ATCT.__class__
         cmf_class = self._cmf.__class__
@@ -157,23 +157,23 @@ class ATCTTypeTestCase(ATSiteTestCase):
     def test_doesImplementATCT(self):
         self.failUnless(IATContentType.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(IATContentType, self._ATCT))
-        
+
     def test_doesImplementAT(self):
         self.failUnless(IBaseContent.isImplementedBy(self._ATCT))
         self.failUnless(IReferenceable.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(IBaseContent, self._ATCT))
         self.failUnless(verifyObject(IReferenceable, self._ATCT))
-        
+
     def test_implementsTranslateable(self):
         # lingua plone is adding the ITranslatable interface to all types
         if not HAS_LINGUA_PLONE:
             return
         self.failUnless(ITranslatable.isImplementedBy(self._ATCT))
-        self.failUnless(verifyObject(ITranslatable, self._ATCT)) 
-        
+        self.failUnless(verifyObject(ITranslatable, self._ATCT))
+
     def test_not_implements_ITemplateMixin(self):
         self.failIf(ITemplateMixin.isImplementedBy(self._ATCT))
-    
+
     def test_implements_ISelectableBrowserDefault(self):
         iface = ISelectableBrowserDefault
         self.failUnless(iface.isImplementedBy(self._ATCT))
@@ -206,9 +206,9 @@ class ATCTTypeTestCase(ATSiteTestCase):
         asdf = self._createType(self.folder, self.portal_type, 'asdf')
         asdf2 = self._createType(self.folder, self.portal_type, 'asdf2')
         self.setRoles(['Member'])
-        
+
         request = FakeRequestSession()
-        
+
         # invalid ids
         ids = ['asdf2', '???', '/asdf2', ' asdf2', 'portal_workflow',
             'portal_url']
@@ -230,8 +230,14 @@ class ATCTTypeTestCase(ATSiteTestCase):
         atct = self._ATCT
         schema = atct.Schema()
         marshall = schema.getLayerImpl('marshall')
-        self.failUnless(isinstance(marshall, RFC822Marshaller), marshall)
-        
+        marshallers = [RFC822Marshaller]
+        try:
+            from Products.Marshall import ControlledMarshaller
+            marshallers.append(ControlledMarshaller)
+        except ImportError:
+            pass
+        self.failUnless(isinstance(marshall, tuple(marshallers)), marshall)
+
     def test_migrationKeepsPermissions(self):
         self.setRoles(['Manager'])
         atct = self.portal.portal_atct
@@ -296,7 +302,7 @@ class ATCTTypeTestCase(ATSiteTestCase):
 
 class ATCTFieldTestCase(BaseSchemaTest):
     """ ATContentTypes test including AT schema tests """
-    
+
     def afterSetUp(self):
         # initalize the portal but not the base schema test
         # because we want to overwrite the dummy and don't need it
@@ -452,7 +458,7 @@ def setupATCT(app, id=portal_name, quiet=False):
     user = app.acl_users.getUserById(portal_owner).__of__(app.acl_users)
     newSecurityManager(None, user)
     # add ATCT
-    qi = getToolByName(portal, 'portal_quickinstaller') 
+    qi = getToolByName(portal, 'portal_quickinstaller')
     try:
         qi.installProduct('ATReferenceBrowserWidget')
     except AlreadyInstalled:

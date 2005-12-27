@@ -29,20 +29,9 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from AccessControl import Unauthorized
-
-#from Products.ATContentTypes.lib import browserdefault
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.ATContentTypes import permission
-#from Products.CMFPlone.interfaces.BrowserDefault import ISelectableBrowserDefault
 from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
-from Products.CMFDynamicViewFTI.interfaces import IBrowserDefault
-from Products.Archetypes.public import registerType, process_types, listTypes
-from Products.Archetypes.Extensions.utils import installTypes
-from AccessControl.SecurityManagement import newSecurityManager
-from Testing.ZopeTestCase import user_name as default_user
-
-from Products.CMFCore.utils import getToolByName
 
 tests = []
 
@@ -152,6 +141,27 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         browserDefault = self.af.__browser_default__(None)[1][0]
         browserDefaultResolved = self.af.unrestrictedTraverse(browserDefault)()
         self.assertEqual(resolved, browserDefaultResolved)
+
+    def test_inherit_parent_layout(self):
+        # Check to see if subobjects of the same type inherit the layout set
+        # on the parent object
+        af = self.af
+        af.setLayout('folder_tabular_view')
+        af.invokeFactory('Folder', 'subfolder', title='folder 2')
+        subfolder = af.subfolder
+        self.assertEqual(subfolder.getLayout(), 'folder_tabular_view')
+
+    def test_inherit_parent_layout_if_different_type(self):
+        # Objects will not inherit the layout if parent object is a different
+        # type
+        af = self.af
+        af.setLayout('folder_tabular_view')
+        # Create a subobject of a different type (need to enable LPF globally)
+        lpf_fti = self.portal.portal_types['Large Plone Folder']
+        lpf_fti.global_allow = 1
+        af.invokeFactory('Large Plone Folder', 'subfolder', title='folder 2')
+        subfolder = af.subfolder
+        self.failIf(subfolder.getLayout() == 'folder_tabular_view')
 
 tests.append(TestBrowserDefaultMixin)
 

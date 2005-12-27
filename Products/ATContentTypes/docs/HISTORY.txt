@@ -8,6 +8,79 @@
 1.0.2-devel
 ======================
 
+ * content/events.py: made event type look-up respect dynamic types.
+   [raphael]
+
+ * Don't return "n/a" in get_size(). This fixes Plone's #5030.
+   [nouri]
+
+ * Fixed #5026: Setting a ZCatalog sort limit was interfering with result
+   batching.  Only use the sort_limit optimization when batching is disabled.
+   https://trac.plone.org/plone/ticket/5026
+   [alecm]
+
+ * Fixed #4567: Added portal_atct method to fix portal_type on CMF objects that have empty
+   portal_type because they were incorrectly instantiated.  Such situations
+   caused migration to fail. This method is available in the type migration
+   form, and also runs automatically on install.
+   https://trac.plone.org/plone/ticket/4567
+   [alecm]
+
+ * Fixed #4937: Removed list criteria from text indices, because it makes no
+   sense, AND and OR must be used explicitly.
+   http://trac.plone.org/plone/ticket/4937
+   [alecm]
+
+ * Added migration for #4865 to fix the grammar on existing instances.
+   [alecm]
+
+ * Made the criteria to index type mapping a little more sane.
+   [alecm]
+
+ * Fixed #4915: Smart Folders with path criteria where throwing errors on
+   unindex due to partial reference support.
+   http://trac.plone.org/plone/ticket/4915
+   [alecm]
+
+ * Added And/Or operator to selection criterion.
+   [alecm]
+
+ * Fixed #4590: Subfolders inherit the selected layout of their parent folders
+   if they are of the same type.
+   https://trac.plone.org/plone/ticket/4590
+   [alecm]
+
+ * Fixed #4512 - vCal export was not working with outlook.
+   https://trac.plone.org/plone/ticket/4512.
+   [hannosch]
+
+ * Use the ControlledMarshaller from the Marshall product if
+   available. Fallbacks to existing marshaller.
+   [sidnei]
+
+ * Enable __dav_marshall__ by default on ATTopic, ATFolder and
+   ATBTreeFolder.
+   [sidnei]
+
+ * Fixed #4572 and #4909 - Unicode problems with using kupu together
+   with mxTidy
+   [hannosch]
+
+ * Fixed #4865 - Spelling error on location criteria.
+   [hannosch]
+
+ * On invalid mimetypes the getIcon method of ATFile doesn't throw an exception
+   anymore but generates a log entry. This should minimize some migration
+   problems or at least tell the exact object with an invalid mimetype.
+   This should fix http://plone.org/collector/4979.
+   [hannosch]
+
+ * Correct some wrong security settings.
+   [hannosch]
+
+ * Code cleanup removing lots of unused import statements.
+   [hannosch]
+
  * Fixed two issues with PathCriterion.  It was using depth 0 to get subfolders,
    the proper parameter is depth -1.  Also, in order to properly handle the
    references it holds, it must itself be cataloged in the UID catalog, and
@@ -24,11 +97,11 @@
 1.0.1-final 2005-10-13
 ======================
 
- * Fixes for http://members.plone.org/collector/4709 __bobo_traverse__ doesn't
+ * Fixes for http://plone.org/collector/4709 __bobo_traverse__ doesn't
    need or want a RESPONSE argument.
    [alecm]
 
- * Fixed http://members.plone.org/collector/4734 It is generally a bad idea
+ * Fixed http://plone.org/collector/4734 It is generally a bad idea
    to check permissions in bobo_traverse methods, especially permissions
    that don't exist, especially if you then try to raise an exception that
    you haven't actually imported.
@@ -52,10 +125,9 @@
    folderish objects, per request from limi.
    [alecm]
 
- * Fixed two Smart folder issues: http://members.plone.org/collector/4594
-   we now fail gracefully on bad limit settings, and
-   http://members.plone.org/collector/4601 added show/hide all link to the
-   medatata control panel.
+ * Fixed two Smart folder issues: http://plone.org/collector/4594 we now fail
+   gracefully on bad limit settings, and http://plone.org/collector/4601 added
+   show/hide all link to the medatata control panel.
    [alecm]
 
  * Changed Subject index/metadata title to Keywords, and added appropriate

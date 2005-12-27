@@ -20,37 +20,25 @@
 """
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 
-import os, sys, traceback
-from cStringIO import StringIO
 import logging
 import time
 
 from ExtensionClass import Base
 from Globals import InitializeClass
-from ZODB.POSException import ConflictError
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_base
 from Acquisition import aq_inner
 import AccessControl.Owned
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.CMFPlone import transaction
 
-from Products.CMFCore.utils import UniqueObject 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import ManagePortal
-from Products.CMFCore.permissions import View
-from Products.CMFCore.ActionProviderBase import ActionProviderBase
 
 from Products.Archetypes import listTypes
 
 from Products.ATContentTypes.interfaces import IATContentType
-from Products.ATContentTypes.interfaces import IImageContent
-from Products.ATContentTypes.interfaces import IATCTTool
-from Products.ATContentTypes.config import TOOLNAME
-from Products.ATContentTypes.config import ATCT_DIR
 from Products.ATContentTypes.config import WWW_DIR
 from Products.ATContentTypes.migration.atctmigrator import migrateAll
-from Products.ATContentTypes.tool.topic import ATTopicsTool
 
 try:
     from ProgressHandler import ZLogHandler
@@ -96,7 +84,7 @@ class ATCTMigrationTool(Base):
     manage_recatalog = PageTemplateFile('recatalog', WWW_DIR)
 
     security.declareProtected(ManagePortal,
-                              'manage_typemigration')
+                              'manage_typeMigration')
     manage_typeMigration = PageTemplateFile('typeMigration', WWW_DIR)
 
 
@@ -349,6 +337,31 @@ class ATCTMigrationTool(Base):
         
         elapse, c_elapse = timeit(timeinfo)
         return '\n'.join(result), elapse, c_elapse
+
+    security.declareProtected(ManagePortal, 'fixObjectsWithMissingPortalType')
+    def fixObjectsWithMissingPortalType(self):
+        """Some portals have objects which were created improperly and have
+           no portal_type set, these need to be repaired before a successful
+           migration is possible."""
+        meta_type_map = {}
+        timeinfo = timeit()
+        catalog = getToolByName(self, 'portal_catalog')
+        for fti in self._getCMFFtis():
+            meta_type_map[fti.content_meta_type] = fti.getId()
+        blank_type_objs = catalog(meta_type=meta_type_map.keys(),
+                                  portal_type=[None,''])
+
+        fixed = []
+        for brain in blank_type_objs:
+            # Only alter objects with a CMF content meta_type
+            obj_pt = meta_type_map.get(brain.meta_type, None)
+            if obj_pt:
+                obj = brain.getObject()
+                obj._setPortalTypeName(obj_pt)
+                catalog.reindexObject(obj)
+                fixed.append(brain.getPath())
+        elapse, c_elapse = timeit(timeinfo)
+        return '\n'.join(fixed), elapse, c_elapse
 
     # ************************************************************************
     # private methods

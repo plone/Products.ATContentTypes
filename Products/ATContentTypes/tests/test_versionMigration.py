@@ -2,7 +2,6 @@
 # Tests for migration components
 #
 
-
 __author__ = 'Alec Mitchell <apm13@columbia.edu>'
 __docformat__ = 'restructuredtext'
 
@@ -14,10 +13,7 @@ from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.CMFDynamicViewFTI import DynamicViewTypeInformation
 from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
-from Products.ATContentTypes.interfaces import IATCTTool
-from Interface.Verify import verifyObject
 from Products.CMFCore.utils import getToolByName
-import os, sys
 
 from Products.ATContentTypes.migration.v1.alphas import updateDateCriteria
 from Products.ATContentTypes.migration.v1.alphas import updateIntegerCriteria
@@ -34,6 +30,8 @@ from Products.ATContentTypes.migration.v1.betas import fixTopicEditAction
 from Products.ATContentTypes.migration.v1.betas import removeTopicFolderContentsAction
 from Products.ATContentTypes.migration.v1.betas import changeDynView2SelectedLayout
 from Products.ATContentTypes.migration.v1.betas import changeSubjectToKeywords
+from Products.ATContentTypes.migration.v1.final import removeListCriteriaFromTextIndices
+from Products.ATContentTypes.migration.v1.final import fixLocationCriteriaGrammar
 
 from Products.CMFDynamicViewFTI.migrate import migrateFTIs
 
@@ -440,6 +438,48 @@ class TestMigrations_v1(MigrationTest):
     def testChangeSubjectToKeywordsNoTool(self):
         self.portal._delOb('portal_atct')
         changeSubjectToKeywords(self.portal, [])
+
+    def testRemoveListCriteriaFromTextIndices(self):
+        tool = self.portal.portal_atct
+        tool.updateIndex('Subject',
+                      criteria=('ATListCriterion', 'ATSimpleStringCriterion'))
+        self.failUnless('ATListCriterion' in tool.getIndex('Subject').criteria)
+        removeListCriteriaFromTextIndices(self.portal, [])
+        self.assertEqual(len(tool.getIndex('Subject').criteria), 1)
+        self.failIf('ATListCriterion' in tool.getIndex('Subject').criteria)
+
+    def testRemoveListCriteriaFromTextIndicesTwice(self):
+        tool = self.portal.portal_atct
+        tool.updateIndex('Subject',
+                      criteria=('ATListCriterion', 'ATSimpleStringCriterion'))
+        self.failUnless('ATListCriterion' in tool.getIndex('Subject').criteria)
+        removeListCriteriaFromTextIndices(self.portal, [])
+        removeListCriteriaFromTextIndices(self.portal, [])
+        self.assertEqual(len(tool.getIndex('Subject').criteria), 1)
+        self.failIf('ATListCriterion' in tool.getIndex('Subject').criteria)
+
+    def testRemoveListCriteriaFromTextIndicesNoTool(self):
+        self.portal._delOb('portal_atct')
+        removeListCriteriaFromTextIndices(self.portal, [])
+
+    def testFixLocationCriteriaGrammar(self):
+        tool = self.portal.portal_atct
+        # Break grammar
+        tool.updateIndex('path','The location an item in the portal (path)')
+        fixLocationCriteriaGrammar(self.portal, [])
+        self.assertEqual(tool.getIndex('path').friendlyName, 'The location of an item in the portal (path)')
+
+    def testFixLocationCriteriaGrammarTwice(self):
+        tool = self.portal.portal_atct
+        # Break grammar
+        tool.updateIndex('path','The location an item in the portal (path)')
+        fixLocationCriteriaGrammar(self.portal, [])
+        fixLocationCriteriaGrammar(self.portal, [])
+        self.assertEqual(tool.getIndex('path').friendlyName, 'The location of an item in the portal (path)')
+
+    def testFixLocationCriteriaGrammarNoTool(self):
+        self.portal._delOb('portal_atct')
+        fixLocationCriteriaGrammar(self.portal, [])
 
 
 

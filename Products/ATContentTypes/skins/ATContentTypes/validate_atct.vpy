@@ -35,9 +35,10 @@ if errors:
     return state.set(status='failure', errors=errors, portal_status_message='Please correct the indicated errors.')
 
 message = context.translate('Changes saved.')
-tidiedFields = request.get('tidiedFields', None)
-if tidiedFields:
-    message = '%s mxTidy has fixed the HTML code of the following field(s): %s' % \
-              (message, ', '.join([field.widget.Label(context) for field in tidiedFields]))
+#TODO: This should be an additional status message, which should be possible
+#in Plone 2.5. Reactivate then but right now it's not possible to i18n-ize this.
+#tidiedFields = request.get('tidiedFields', None)
+#if tidiedFields:
+#    message = '%s mxTidy has fixed the HTML code.' % message
 
 return state.set(portal_status_message=message)

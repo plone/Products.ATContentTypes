@@ -65,7 +65,7 @@ outputfile.write("""<html><head><title>XXX/TODO/BBB-Comment report for ATContent
 <p>
  There are currently %(commentcount)s XXX/TODO/BBB comments.
 </p>
-<hr/>
+<hr />
 <h3>Listing</h3>
 <ol>""" % {"commentcount" : len(comments),
            "reporttime" : time.strftime("%a, %d %b %Y %H:%M:%S %Z", time.localtime())
@@ -74,7 +74,7 @@ outputfile.write("""<html><head><title>XXX/TODO/BBB-Comment report for ATContent
 # Write the comments down
 
 for x in comments:
-    outputfile.write("""<li><b>File: %(filename)s:%(line)s</b><br/><pre>%(text)s</pre></li>""" % {'filename':'ATContentTypes'+x[0][5:], 'line':x[1], 'text':"".join(x[2])})
+    outputfile.write("""<li><b>File: %(filename)s:%(line)s</b><br /><pre>%(text)s</pre></li>""" % {'filename':'ATContentTypes'+x[0][5:], 'line':x[1], 'text':"".join(x[2])})
 
 outputfile.write("<ol></body></html>")
 outputfile.flush()

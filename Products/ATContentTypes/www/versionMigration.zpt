@@ -33,7 +33,7 @@
     <div tal:condition="not: here/needsVersionMigration">
         Your Plone instance is up to date. 
     </div>
-    <hr/>
+    <hr />
 
     <form action="" tal:attributes="action template/getId">
         <input type="hidden" name="submitted" value="1" />

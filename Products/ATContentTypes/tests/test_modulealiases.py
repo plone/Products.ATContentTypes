@@ -31,7 +31,6 @@ if __name__ == '__main__':
 
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
-from Products.CMFCore.utils import getToolByName
 
 tests = []
 
@@ -113,22 +112,6 @@ class TestModuleAliases(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(ATSortCriterion.__module__,
             'Products.ATContentTypes.criteria.sort')
             
-    def test_exif(self):
-        from Products.ATContentTypes.lib.exif import IFD_Tag as libIFD_Tag
-        from exif import IFD_Tag
-        self.failUnlessEqual(libIFD_Tag.__module__, 'exif')
-        self.failUnlessEqual(IFD_Tag.__module__, 'exif')
-        self.failUnlessEqual(IFD_Tag, libIFD_Tag)
-        
-    def test_libexif_classimport(self):
-        from Products.ATContentTypes.lib.exif import IFD_Tag
-        name = IFD_Tag.__name__
-        module = IFD_Tag.__module__
-        __import__(module)
-        mod = sys.modules[module]
-        klass = getattr(mod, name)
-        self.failUnless(klass is IFD_Tag)
-        
         
         
 tests.append(TestModuleAliases)

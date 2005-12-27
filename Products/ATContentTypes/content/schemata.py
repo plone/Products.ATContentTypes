@@ -23,14 +23,9 @@
 __author__  = 'Christian Heimes <ch@comlounge.net>'
 __docformat__ = 'restructuredtext'
 
-from DateTime import DateTime
-
 from Products.Archetypes.public import BaseSchema
 from Products.Archetypes.public import MetadataSchema
 from Products.Archetypes.public import ReferenceField
-from Products.Archetypes.public import StringField
-from Products.Archetypes.public import StringWidget
-from Products.Archetypes.public import SelectionWidget
 from Products.Archetypes.public import BooleanField
 from Products.Archetypes.public import BooleanWidget
 
@@ -88,6 +83,28 @@ relatedItemsField = ReferenceField('relatedItems',
         )
 ATContentTypeSchema.addField(relatedItemsField.copy())
 
+def marshall_register(schema):
+    try:
+        # It's a soft dependency, if not available ignore it.
+        from Products.Marshall import ControlledMarshaller
+    except ImportError:
+        return
+    # If it's available, then wrap the existing marshaller with a
+    # ControlledMarshaller.
+    if not schema.hasLayer('marshall'):
+        # We are not interested in schemas that don't have a marshaller.
+        return
+
+    # Get existing marshaller.
+    marshaller = schema.getLayerImpl('marshall')
+    # Check if not already wrapped.
+    if isinstance(marshaller, ControlledMarshaller):
+        return
+
+    # Wrap into a ControlledMarshaller
+    marshaller = ControlledMarshaller(marshaller)
+    schema.registerLayer('marshall', marshaller)
+
 def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
     """Finalizes an ATCT type schema to alter some fields
     """
@@ -98,6 +115,7 @@ def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
     if moveDiscussion:
         schema['allowDiscussion'].schemata = 'default'
         schema.moveField('allowDiscussion', after='relatedItems')
+    marshall_register(schema)
     return schema
 
 

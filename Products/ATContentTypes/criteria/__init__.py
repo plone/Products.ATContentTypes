@@ -44,11 +44,17 @@ SORT_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex', 'KeywordIndex')
 
 DATE_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex')
 
-STRING_INDICES = ('FieldIndex', 'KeywordIndex', 'PathIndex', 'TextIndex',
-                  'TextIndexNG2', 'ZCTextIndex', 'NavtreeIndexNG',
+# Indices that can take a list of values
+LIST_INDICES = ('FieldIndex', 'KeywordIndex', 'PathIndex', 'NavtreeIndexNG',
                   'ExtendedPathIndex', 'TopicIndex')
 
-LIST_INDICES = ('FieldIndex', 'KeywordIndex', 'TopicIndex')
+TEXT_INDICES = ('TextIndex', 'TextIndexNG2', 'ZCTextIndex')
+
+# Indices that can take a simple string
+STRING_INDICES = LIST_INDICES + TEXT_INDICES
+
+# Indices that may hold AT reference data
+REFERENCE_INDICES = ('FieldIndex', 'KeywordIndex')
 FIELD_INDICES = ('FieldIndex',)
 PATH_INDICES = ('PathIndex','ExtendedPathIndex')
 

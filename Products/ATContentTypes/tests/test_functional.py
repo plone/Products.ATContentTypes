@@ -10,7 +10,6 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase
 
 from Products.ATContentTypes.tests.atcttestcase import ATCTFunctionalSiteTestCase 
-from Products.CMFCore.utils import getToolByName
 
 FILES = ['webdav.txt', 'http_access.txt']
 

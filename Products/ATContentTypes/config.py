@@ -99,7 +99,7 @@ except ImportError:
     HAS_PIL = False
 else:
     HAS_PIL = True
-    
+
 
 ## workflow mapping for the installer
 WORKFLOW_DEFAULT  = '(Default)'
