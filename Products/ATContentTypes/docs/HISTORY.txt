@@ -1,6 +1,9 @@
 1.0.2-devel
 ======================
 
+ * fixed styles for thumbnailview.
+   [spliter]
+
  * content/events.py: made event type look-up respect dynamic types.
    [raphael]
 
@@ -1535,4 +1538,3 @@ Snapshot 2005 07 05
 
  * First official beta release for testing.
    [tiran]
-
