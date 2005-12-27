@@ -1,6 +1,4 @@
-2005-12-22 12:00  raphael
-
-        * content/event.py: made event type look-up respect dynamic types.
+This file is closed! Please use HISTORY.txt
 
 2005-03-07 21:07  tiran
 
