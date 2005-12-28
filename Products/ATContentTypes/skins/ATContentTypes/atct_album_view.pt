@@ -22,7 +22,7 @@
                  otherContents result/others;
                  Batch python:modules['Products.CMFPlone'].Batch;
                  b_start python:request.get('b_start', 0);
-                 batch python:Batch(images, 20, int(b_start), orphan=1)">
+                 batch python:Batch(images, 12, int(b_start), orphan=1)">
 
     <div metal:use-macro="here/document_actions/macros/document_actions">
         Document actions (print, sendto etc)
