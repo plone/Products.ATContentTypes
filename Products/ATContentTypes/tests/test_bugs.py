@@ -105,6 +105,7 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
         self.folder.invokeFactory('Document', 'document')
         d = getattr(self.folder, 'document')
         d.setTitle("HTML end tags start with </ and end with >")
+        self.assertEqual(d.Title(), "HTML end tags start with </ and end with >")
         
 
 tests.append(TestBugs)
