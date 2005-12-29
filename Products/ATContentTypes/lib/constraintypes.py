@@ -142,7 +142,13 @@ def parentPortalTypeEqual(obj):
         False - unequal
         True - equal
     """
-    parent = aq_parent(aq_inner(obj))
+    portal_factory = getToolByName(obj, 'portal_factory', None)
+    if portal_factory is not None and portal_factory.isTemporary(obj):
+        # created by portal_factory
+        parent = aq_parent(aq_parent(aq_parent(aq_inner(obj))))
+    else:
+        parent = aq_parent(aq_inner(obj))
+
     if parent is None:
         return None # no context
     parent_type = getattr(parent.aq_explicit, 'portal_type', None)
