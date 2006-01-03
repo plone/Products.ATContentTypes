@@ -1,4 +1,4 @@
-1.0.2-devel
+1.0.2-final 2006-01-03
 ======================
 
  * Fixed #5028: constraintypes.py doesn't work properly with PortalFactory when 
