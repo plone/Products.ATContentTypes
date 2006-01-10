@@ -75,9 +75,9 @@ def install(self, reinstall):
     
     # step 3: Rename and move away to old CMF types on install
     if not reinstall:
-        assert not tool.isCMFdisabled()
-        print >>out, 'Disable CMF types. They are backuped as "CMF Document" ...'
-        tool.disableCMFTypes()
+        if not tool.isCMFdisabled():
+            print >>out, 'Disable CMF types. They are backuped as "CMF Document" ...'
+            tool.disableCMFTypes()
     
     # step 4: Install dependency products 
     installable = [ prod['id'] for prod in qi.listInstallableProducts() ]

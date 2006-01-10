@@ -33,8 +33,18 @@ __docformat__ = 'restructuredtext'
 ###
 
 from Testing import ZopeTestCase
+# XXX need to install all these products until we have a stripped down
+#     GenericSetup-based install for unit tests
+ZopeTestCase.installProduct('CMFPlone')
+ZopeTestCase.installProduct('ExternalEditor')
+ZopeTestCase.installProduct('kupu')
+if ZopeTestCase.hasProduct('Marshall'):
+    ZopeTestCase.installProduct('Marshall')
 ZopeTestCase.installProduct('ATContentTypes')
 ZopeTestCase.installProduct('ATReferenceBrowserWidget')
+# XXX This is bad. Should be removed as soon as we have a proper solution in ZopeTestCase
+if ZopeTestCase.hasProduct('Five'):
+    ZopeTestCase.installProduct('Five')
 
 import os
 from Products.Archetypes.tests.attestcase import ATTestCase
