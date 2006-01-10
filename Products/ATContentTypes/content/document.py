@@ -52,9 +52,6 @@ from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument
 
-from Products.Marshall import ControlledMarshaller
-
-
 ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
     TextField('text',
               required=True,
@@ -74,7 +71,7 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
                         rows = 25,
                         i18n_domain = "plone",
                         allow_file_upload = zconf.ATDocument.allow_document_upload)),
-    ), marshall=ControlledMarshaller(RFC822Marshaller())
+    ), marshall=RFC822Marshaller()
     )
 finalizeATCTSchema(ATDocumentSchema)
 

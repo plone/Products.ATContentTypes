@@ -83,7 +83,7 @@ def install(self, reinstall):
     installable = [ prod['id'] for prod in qi.listInstallableProducts() ]
     installed = [ prod['id'] for prod in qi.listInstalledProducts() ]
     
-    for product in ('ATReferenceBrowserWidget', 'Marshall'):
+    for product in ('ATReferenceBrowserWidget',):
         if product not in installable + installed:
             raise RuntimeError('%s not available' % product)
         if product in installable:
@@ -135,10 +135,10 @@ def install(self, reinstall):
         migration_result = tool.upgrade()
         print >>out, migration_result
     
-    # step 14: add marshallers
-    mr = getToolByName(self, 'marshaller_registry')
-    if not reinstall or not mr.objectIds():
-        setupMarshallPredicates(mr, out)
+    # XXX: We do not require Marshall right now (add marshallers)
+    # mr = getToolByName(self, 'marshaller_registry')
+    # if not reinstall or not mr.objectIds():
+    #    setupMarshallPredicates(mr, out)
     
     # step 14: cleanup depr. external methods
     removeExteneralMethods(self, out)

@@ -47,8 +47,6 @@ from Products.ATContentTypes.interfaces import IATFavorite
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
-from Products.Marshall import ControlledMarshaller
-
 LOG = logging.getLogger('ATCT')
 
 ATFavoriteSchema = ATContentTypeSchema.copy() + Schema((
@@ -64,7 +62,7 @@ ATFavoriteSchema = ATContentTypeSchema.copy() + Schema((
                         label = "URL",
                         label_msgid = "label_url",
                         i18n_domain = "plone")),
-    ), marshaller=ControlledMarshaller)
+    ))
 finalizeATCTSchema(ATFavoriteSchema, moveDiscussion=False)
 
 class ATFavorite(ATCTContent):
