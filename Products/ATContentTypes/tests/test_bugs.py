@@ -90,11 +90,11 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
     def test_reinstall_keeps_wfmapping(self):
         pt = 'Document'
         wf = ('folder_workflow',)
-        
-        self.wf.setChainForPortalTypes(pt, wf)
+
+        self.wf.setChainForPortalTypes((pt,), wf)
         pwf = self.wf.getChainFor(pt)
         self.failUnlessEqual(pwf, wf, (pt, pwf, wf))
-        
+
         self.qi.reinstallProducts(('ATContentTypes',))
         
         pwf = self.wf.getChainFor(pt)
