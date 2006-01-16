@@ -22,7 +22,7 @@
                  otherContents result/others;
                  Batch python:modules['Products.CMFPlone'].Batch;
                  b_start python:request.get('b_start', 0);
-                 batch python:Batch(images, 20, int(b_start), orphan=1)">
+                 batch python:Batch(images, 12, int(b_start), orphan=1)">
 
     <div metal:use-macro="here/document_actions/macros/document_actions">
         Document actions (print, sendto etc)
@@ -54,7 +54,7 @@
             <div class="photoAlbumEntry photoAlbumFolder"
                  tal:define="image_brains_in_album python:album.atctListAlbum(subimages=1)['subimages'];
                              number_of_images python:len(image_brains_in_album);
-                             random python:modules['whrandom'];
+                             random python:modules['random'];
                              random_image python:number_of_images and random.choice(image_brains_in_album).getObject() or None">
                         <a tal:attributes="href album/getURL;
                                            title album/Description">

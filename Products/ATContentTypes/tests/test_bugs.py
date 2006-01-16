@@ -100,6 +100,14 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
         pwf = self.wf.getChainFor(pt)
         self.failUnlessEqual(pwf, wf, (pt, pwf, wf))
 
+    def test_striphtmlbug(self):
+        # Test for Plone tracker #4944
+        self.folder.invokeFactory('Document', 'document')
+        d = getattr(self.folder, 'document')
+        d.setTitle("HTML end tags start with </ and end with >")
+        self.assertEqual(d.Title(), "HTML end tags start with </ and end with >")
+        
+
 tests.append(TestBugs)
 
 

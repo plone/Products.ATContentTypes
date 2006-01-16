@@ -5,8 +5,16 @@
    cmfcore.permissions and removing use of format_stx
    [k_vertigo, hannosch]
 
-1.0.2-devel
+1.0.2-final 2006-01-03
 ======================
+
+ * Fixed #5028: constraintypes.py doesn't work properly with PortalFactory when 
+   acquiring types.
+   http://trac.plone.org/plone/ticket/5028
+   [panjunyong]
+
+ * fixed styles for thumbnailview.
+   [spliter]
 
  * content/events.py: made event type look-up respect dynamic types.
    [raphael]
@@ -1542,4 +1550,3 @@ Snapshot 2005 07 05
 
  * First official beta release for testing.
    [tiran]
-
