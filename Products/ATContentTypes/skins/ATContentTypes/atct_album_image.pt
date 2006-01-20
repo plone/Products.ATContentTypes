@@ -25,6 +25,7 @@
       <div metal:use-macro="here/batch_macros/macros/navigation"></div>
 
       <div style="position: relative; top: 1.6em; left: 0.3em;"
+           class="exifImageDate"
            tal:define="orig_date image/getEXIFOrigDate"
            tal:condition="orig_date">
           <span style="color: white; background: black; white-space: nowrap; padding: 1px;"
