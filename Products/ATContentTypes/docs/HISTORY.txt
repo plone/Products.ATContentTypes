@@ -1,5 +1,5 @@
-1.0.3 unreleased
-================
+1.0.3-final 2006-01-20
+======================
 
  * Fixed non-clickable thumbnails in thumbnail view for IE.
    https://trac.plone.org/plone/ticket/5119
