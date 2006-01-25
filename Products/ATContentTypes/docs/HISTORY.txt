@@ -5,12 +5,19 @@
    cmfcore.permissions and removing use of format_stx
    [k_vertigo, hannosch]
 
+1.0.3-final 2006-01-20
+======================
+
+ * Fixed non-clickable thumbnails in thumbnail view for IE.
+   https://trac.plone.org/plone/ticket/5119
+   [hannosch]
+
 1.0.2-final 2006-01-03
 ======================
 
  * Fixed #5028: constraintypes.py doesn't work properly with PortalFactory when 
    acquiring types.
-   http://trac.plone.org/plone/ticket/5028
+   https://trac.plone.org/plone/ticket/5028
    [panjunyong]
 
  * fixed styles for thumbnailview.
@@ -23,14 +30,14 @@
    [nouri]
 
  * Fixed #5026: Setting a ZCatalog sort limit was interfering with result
-   batching.  Only use the sort_limit optimization when batching is disabled.
+   batching. Only use the sort_limit optimization when batching is disabled.
    https://trac.plone.org/plone/ticket/5026
    [alecm]
 
- * Fixed #4567: Added portal_atct method to fix portal_type on CMF objects that have empty
-   portal_type because they were incorrectly instantiated.  Such situations
-   caused migration to fail. This method is available in the type migration
-   form, and also runs automatically on install.
+ * Fixed #4567: Added portal_atct method to fix portal_type on CMF objects that
+   have empty portal_type because they were incorrectly instantiated. Such
+   situations caused migration to fail. This method is available in the type
+   migration form, and also runs automatically on install.
    https://trac.plone.org/plone/ticket/4567
    [alecm]
 
