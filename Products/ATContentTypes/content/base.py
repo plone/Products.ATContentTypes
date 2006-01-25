@@ -234,10 +234,9 @@ class ATCTMixin(BrowserDefaultMixin):
                 raise
                 #_default_logger.log_exc()
 
-    security.declarePrivate('copyDefaultViewFromParent')
+    security.declarePrivate('copyLayoutFromParent')
     def copyLayoutFromParent(self):
-        """ A method to copy the layout from the parent object if it is of the
-            same type. """
+        """Copies the layout from the parent object if it's of the same type."""
         parent = aq_parent(aq_inner(self))
         if parent is not None:
             # Only set the layout if we are the same type as out parent object
