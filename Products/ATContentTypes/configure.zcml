@@ -1,10 +1,30 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
     >
 
   <include file="bridge.zcml"/>
 
   <include file="implements.zcml"/>
+
+  <five:implements
+      class="Products.ATContentTypes.content.folder.ATFolder"
+      interface=".z3.interfaces.IPhotoAlbumAble"
+      />
+
+  <!-- five:implements
+      class="Products.ATContentTypes.content.folder.ATFolder"
+      interface=".z3.interfaces.IPhotoAlbum"
+      / -->
+
+
+  <adapter
+      for=".z3.interfaces.IATFolder"
+      factory=".z3.adapters.PhotoAlbum"
+      provides=".z3.interfaces.IPhotoAlbum"
+      />
+
+
 
 </configure>
 

@@ -44,6 +44,9 @@ from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
 from Products.CMFPlone.interfaces.OrderedContainer import IOrderedContainer
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
+from Products.ATContentTypes.z3.interfaces import IPhotoAlbum
+from Products.ATContentTypes.z3.interfaces import IPhotoAlbumAble
+
 from Products.ATContentTypes.lib.autosort import IAutoSortSupport
 from Products.ATContentTypes.lib.autosort import IAutoOrderSupport
 from Interface.Verify import verifyObject
@@ -99,7 +102,20 @@ class FolderTestMixin:
         obj = self.folder.rolecheck
         self.failUnlessEqual(obj.portal_type, self.portal_type)
         self.failUnless(role in obj.userdefined_roles(), obj.userdefined_roles())
-        
+
+class TestSitePhotoAlbumSupport(atcttestcase.ATCTSiteTestCase):
+    def afterSetUp(self):
+        atcttestcase.ATCTSiteTestCase.afterSetUp(self)
+        self.folder.invokeFactory('Folder', 'fobj', title='folder 1')
+        self.fobj = self.folder.fobj
+
+    def test_implements(self):
+        self.failUnless(IPhotoAlbumAble.providedBy(self.fobj))
+
+    def test_SymbolicPhoto(self):
+        adapted = IPhotoAlbum(self.fobj)
+
+
 class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     klass = ATFolder
