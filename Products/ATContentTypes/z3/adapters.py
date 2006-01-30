@@ -7,6 +7,7 @@ from interfaces import IDataExtractor
 from interfaces import IArchivable
 from cStringIO import StringIO
 from zipfile import ZipFile
+from Acquisition import aq_parent
 
 class PhotoDataExtractor(object):
     """
@@ -40,10 +41,10 @@ class FolderishArchiver(object):
         """
         if(not accumulator):
             accumulator = ZipAccumulator(self.context)
-        self.getArchive(None,accumulator, **kwargs)
+        self.createArchive(None,accumulator, **kwargs)
         return accumulator.getRaw()
 
-    def getArchive(self, path, accumulator, **kwargs):
+    def createArchive(self, path, accumulator, **kwargs):
         """
         get the archive file object
         """
@@ -57,10 +58,10 @@ class FolderishArchiver(object):
                 folderish = isinstance(archiver,FolderishArchiver)
                 if (recursive and folderish and path):
                     path = '%s/%s' % (path, self.context.getId())
-                    archiver.getArchive(path, accumulator, **kwargs)
+                    archiver.createArchive(path, accumulator, **kwargs)
                 if not folderish:
                     path = self.context.getId()
-                    archiver.getArchive(path, accumulator, **kwargs)
+                    archiver.createArchive(path, accumulator, **kwargs)
 
 class DocumentDataExtractor(object):
     """
@@ -83,11 +84,12 @@ class NonFolderishArchiver(object):
 
     def getRawArchive(self, accumulator=None, **kwargs):
         if(not accumulator):
-            accumulator = IZipAccumulator(self.context)
-        self.getArchive(accumulator, **kwargs)
-        return self.accumulator.getRawZip()
+            accumulator = ZipAccumulator(self.context)
+        container = aq_parent(self.context)
+        self.createArchive(container.getId(),accumulator, **kwargs)
+        return accumulator.getRaw()
 
-    def getArchive(self, path, accumulator, **kwargs):
+    def createArchive(self, path, accumulator, **kwargs):
         """
         get the zip file object
         """

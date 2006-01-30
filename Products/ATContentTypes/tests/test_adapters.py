@@ -85,11 +85,16 @@ class TestFolderishArchiver(atcttestcase.ATCTSiteTestCase):
         verifyClass(IArchiver,FolderishArchiver)
 
     def test_getArchive(self):
+### FOLDERISH
         archiver = IArchiver(self.fobj)
         zipFile = archiver.getRawArchive()
-        print zipFile
         zip = ZipFile(StringIO(zipFile),"r",8)
-        print zip.namelist()
+        self.assertEqual(zip.namelist(),['fobj/doc1'])
+### NON Folderish
+        archiver = IArchiver(self.fobj.doc1)
+        zipFile = archiver.getRawArchive()
+        zip = ZipFile(StringIO(zipFile),"r",8)
+        self.assertEqual(zip.namelist(),['fobj/doc1'])
 
 
 #tests.append(TestAutoSortSupport)

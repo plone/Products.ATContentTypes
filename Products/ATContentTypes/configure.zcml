@@ -4,6 +4,10 @@
     xmlns:five="http://namespaces.zope.org/five"
     >
 
+  <five:traversable class="Products.ATContentTypes.content.folder.ATFolder"/>
+  <five:traversable class="Products.ATContentTypes.content.document.ATDocument"/>
+
+
   <include file="bridge.zcml"/>
 
   <include file="implements.zcml"/>
@@ -60,14 +64,12 @@
       provides=".z3.interfaces.IFilterFolder"
       />
 
-
   <browser:page
-    for=".z3.interfaces.IPhotoAlbum"
-    name="getZipFile"
+    for=".z3.interfaces.IArchivable"
+    name="zip"
     class=".z3.browser.ArchiveView"
     attribute="getZipFile"
     permission="zope2.View"
     />
-
 
 </configure>

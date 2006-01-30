@@ -50,7 +50,7 @@ class IArchiver(Interface):
         """
         """
 
-    def getArchive(path, accumulator, **kwargs):
+    def createArchive(path, accumulator, **kwargs):
         """
         """
 
