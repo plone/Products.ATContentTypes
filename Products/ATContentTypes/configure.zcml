@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:five="http://namespaces.zope.org/five"
     >
 
@@ -12,10 +13,21 @@
       interface=".z3.interfaces.IPhotoAlbumAble"
       />
 
+  <five:implements
+     class="Products.ATContentTypes.content.folder.ATFolder"
+     interface=".z3.interfaces.IArchivable"
+     />
+
+  <five:implements
+     class="Products.ATContentTypes.content.document.ATDocument"
+     interface=".z3.interfaces.IArchivable"
+     />
+
+
   <!-- five:implements
-      class="Products.ATContentTypes.content.folder.ATFolder"
-      interface=".z3.interfaces.IPhotoAlbum"
-      / -->
+     class="Products.ATContentTypes.content.folder.ATFolder"
+     interface=".z3.interfaces.IArchiver"
+     / -->
 
 
   <adapter
@@ -24,7 +36,38 @@
       provides=".z3.interfaces.IPhotoAlbum"
       />
 
+  <adapter
+      for=".z3.interfaces.IATFolder"
+      factory=".z3.adapters.FolderishArchiver"
+      provides=".z3.interfaces.IArchiver"
+      />
+
+  <adapter
+      for=".z3.interfaces.IATDocument"
+      factory=".z3.adapters.NonFolderishArchiver"
+      provides=".z3.interfaces.IArchiver"
+      />
+
+  <adapter
+      for=".z3.interfaces.IATDocument"
+      factory=".z3.adapters.DocumentDataExtractor"
+      provides=".z3.interfaces.IDataExtractor"
+      />
+
+  <adapter
+      for=".z3.interfaces.IATFolder"
+      factory=".z3.adapters.FolderFilter"
+      provides=".z3.interfaces.IFilterFolder"
+      />
+
+
+  <browser:page
+    for=".z3.interfaces.IPhotoAlbum"
+    name="getZipFile"
+    class=".z3.browser.ArchiveView"
+    attribute="getZipFile"
+    permission="zope2.View"
+    />
 
 
 </configure>
-

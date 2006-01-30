@@ -18,6 +18,47 @@
 #
 from zope.interface import Interface
 
+class IArchiveAccumulator(Interface):
+    def initIO():
+        """
+        reinit the Zip IO
+        """
+
+    def setFile(filename,data):
+        """
+        store the file inside the zip file
+        """
+
+    def close():
+        """
+        close the zip file
+        """
+
+    def getRaw():
+        """
+        return the raw archive
+        """
+
+class IFilterFolder(Interface):
+    def listObjects():
+        """
+        """
+
+
+class IArchiver(Interface):
+    def getRawArchive(accumulator=None, **kwargs):
+        """
+        """
+
+    def getArchive(path, accumulator, **kwargs):
+        """
+        """
+
+class IDataExtractor(Interface):
+    def getData(**kwargs):
+        """
+        """
+
 class IPhotoAlbum(Interface):
     """
     interface that adapts a folder into a photo album
@@ -36,4 +77,9 @@ class IPhotoAlbum(Interface):
 class IPhotoAlbumAble(Interface):
     """
     marker interface for possible photoalbum object
+    """
+
+class IArchivable(Interface):
+    """
+    marker interface for possible zippable object
     """
