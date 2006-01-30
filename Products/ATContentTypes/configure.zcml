@@ -43,12 +43,12 @@
   <adapter
       for=".interfaces.IATDocument"
       factory=".adapters.archive.NonFolderishArchiver"
-      provides=".interface.archive.IArchiver"
+      provides=".interfaces.archive.IArchiver"
       />
 
   <adapter
       for=".interfaces.IATDocument"
-      factory=".adapters.docuemnt.DocumentRawDataExtractor"
+      factory=".adapters.document.DocumentRawDataExtractor"
       provides=".interfaces.dataExtractor.IDataExtractor"
       />
 
@@ -58,6 +58,12 @@
       provides=".interface.folder.IFilterFolder"
       />
 
+   <adapter
+	  for=".interfaces.IATFolder"
+	  factory=".adapters.syndication.FolderFeedSource"
+	  provides="Products.basesyndication.interfaces.IFeedSource"
+	  />
+	
   <browser:page
     for=".interfaces.archive.IArchivable"
     name="zip"
