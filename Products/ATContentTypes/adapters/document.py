@@ -1,4 +1,3 @@
-from Products.ATContentTypes.z3.interfaces import IPhotoAlbum
 from zope.interface import implements
 from Products.ATContentTypes.interface.dataExtractor import IDataExtractor
 
