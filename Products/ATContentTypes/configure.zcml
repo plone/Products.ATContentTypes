@@ -43,13 +43,13 @@
   <adapter
       for=".interfaces.IATDocument"
       factory=".adapters.archive.NonFolderishArchiver"
-      provides=".interfaces.archive.IArchiver"
+      provides=".interface.archive.IArchiver"
       />
 
   <adapter
       for=".interfaces.IATDocument"
       factory=".adapters.document.DocumentRawDataExtractor"
-      provides=".interfaces.dataExtractor.IDataExtractor"
+      provides=".interface.dataExtractor.IDataExtractor"
       />
 
   <adapter
