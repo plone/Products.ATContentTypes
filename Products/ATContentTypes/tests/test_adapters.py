@@ -37,15 +37,15 @@ from Products.ATContentTypes.interfaces import IATFolder
 from Products.Five.traversable import FakeRequest
 from Products.ATContentTypes.tests.utils import FakeRequestSession
 
-from Products.ATContentTypes.z3.interfaces import IPhotoAlbum
-from Products.ATContentTypes.z3.interfaces import IArchiver
-from Products.ATContentTypes.z3.interfaces import IArchivable
-from Products.ATContentTypes.z3.interfaces import IPhotoAlbumAble
+from Products.ATContentTypes.interface.image import IPhotoAlbum
+from Products.ATContentTypes.interface.image import IPhotoAlbumAble
+from Products.ATContentTypes.interface.archive import IArchiver
+from Products.ATContentTypes.interface.archive import IArchivable
 
-from Products.ATContentTypes.z3.adapters import PhotoAlbum
-from Products.ATContentTypes.z3.adapters import FolderishArchiver
+from Products.ATContentTypes.adapters.image import PhotoAlbum
+from Products.ATContentTypes.adapters.archive import FolderishArchiver
 
-from Products.ATContentTypes.z3.browser import ArchiveView
+from Products.ATContentTypes.browser.archive import ArchiveView
 
 from zope.interface.verify import verifyClass
 from zipfile import ZipFile

@@ -4,8 +4,8 @@
     xmlns:five="http://namespaces.zope.org/five"
     >
 
-  <five:traversable class="Products.ATContentTypes.content.folder.ATFolder"/>
-  <five:traversable class="Products.ATContentTypes.content.document.ATDocument"/>
+  <five:traversable class=".content.folder.ATFolder"/>
+  <five:traversable class=".content.document.ATDocument"/>
 
 
   <include file="bridge.zcml"/>
@@ -13,61 +13,55 @@
   <include file="implements.zcml"/>
 
   <five:implements
-      class="Products.ATContentTypes.content.folder.ATFolder"
-      interface=".z3.interfaces.IPhotoAlbumAble"
+      class=".content.folder.ATFolder"
+      interface=".interface.image.IPhotoAlbumAble"
       />
 
   <five:implements
-     class="Products.ATContentTypes.content.folder.ATFolder"
-     interface=".z3.interfaces.IArchivable"
+     class=".content.folder.ATFolder"
+     interface=".interface.archive.IArchivable"
      />
 
   <five:implements
-     class="Products.ATContentTypes.content.document.ATDocument"
-     interface=".z3.interfaces.IArchivable"
+     class=".content.document.ATDocument"
+     interface=".interface.archive.IArchivable"
      />
 
 
-  <!-- five:implements
-     class="Products.ATContentTypes.content.folder.ATFolder"
-     interface=".z3.interfaces.IArchiver"
-     / -->
-
-
   <adapter
-      for=".z3.interfaces.IATFolder"
-      factory=".z3.adapters.PhotoAlbum"
-      provides=".z3.interfaces.IPhotoAlbum"
+      for=".interfaces.IATFolder"
+      factory=".adapters.image.PhotoAlbum"
+      provides=".interface.image.IPhotoAlbum"
       />
 
   <adapter
-      for=".z3.interfaces.IATFolder"
-      factory=".z3.adapters.FolderishArchiver"
-      provides=".z3.interfaces.IArchiver"
+      for=".interfaces.IATFolder"
+      factory=".adapters.archive.FolderishArchiver"
+      provides=".interface.archive.IArchiver"
       />
 
   <adapter
-      for=".z3.interfaces.IATDocument"
-      factory=".z3.adapters.NonFolderishArchiver"
-      provides=".z3.interfaces.IArchiver"
+      for=".interfaces.IATDocument"
+      factory=".adapters.archive.NonFolderishArchiver"
+      provides=".interface.archive.IArchiver"
       />
 
   <adapter
-      for=".z3.interfaces.IATDocument"
-      factory=".z3.adapters.DocumentRawDataExtractor"
-      provides=".z3.interfaces.IDataExtractor"
+      for=".interfaces.IATDocument"
+      factory=".adapters.docuemnt.DocumentRawDataExtractor"
+      provides=".interfaces.dataExtractor.IDataExtractor"
       />
 
   <adapter
-      for=".z3.interfaces.IATFolder"
-      factory=".z3.adapters.FolderFilter"
-      provides=".z3.interfaces.IFilterFolder"
+      for=".interfaces.IATFolder"
+      factory=".adapters.folder.FolderFilter"
+      provides=".interface.folder.IFilterFolder"
       />
 
   <browser:page
-    for=".z3.interfaces.IArchivable"
+    for=".interfaces.archive.IArchivable"
     name="zip"
-    class=".z3.browser.ArchiveView"
+    class=".browser.archive.ArchiveView"
     attribute="getZipFile"
     permission="zope2.View"
     />
