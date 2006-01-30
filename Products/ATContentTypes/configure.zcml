@@ -54,7 +54,7 @@
 
   <adapter
       for=".z3.interfaces.IATDocument"
-      factory=".z3.adapters.DocumentDataExtractor"
+      factory=".z3.adapters.DocumentRawDataExtractor"
       provides=".z3.interfaces.IDataExtractor"
       />
 

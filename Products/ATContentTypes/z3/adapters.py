@@ -74,6 +74,18 @@ class DocumentDataExtractor(object):
         """
         return self.context.CookedBody()
 
+class DocumentRawDataExtractor(object):
+    """
+    """
+    def __init__(self, context):
+        self.context = context
+
+    def getData(self,**kwargs):
+        """
+        """
+        return self.context.getRawText()
+
+
 class NonFolderishArchiver(object):
     """
     store your files in a zip file

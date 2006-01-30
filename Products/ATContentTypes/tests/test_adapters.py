@@ -90,6 +90,7 @@ class TestFolderishArchiver(atcttestcase.ATCTSiteTestCase):
         zipFile = archiver.getRawArchive()
         zip = ZipFile(StringIO(zipFile),"r",8)
         self.assertEqual(zip.namelist(),['fobj/doc1'])
+        self.assertEqual(zip.read('fobj/doc1'),"A nice text")
 ### NON Folderish
         archiver = IArchiver(self.fobj.doc1)
         zipFile = archiver.getRawArchive()
