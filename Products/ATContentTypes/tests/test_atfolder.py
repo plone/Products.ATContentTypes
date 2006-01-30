@@ -46,16 +46,6 @@ from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.Five.traversable import FakeRequest
 from Products.ATContentTypes.tests.utils import FakeRequestSession
-from Products.ATContentTypes.z3.interfaces import IPhotoAlbum
-from Products.ATContentTypes.z3.interfaces import IZipFile
-from Products.ATContentTypes.z3.interfaces import IZippable
-
-from Products.ATContentTypes.z3.interfaces import IPhotoAlbumAble
-from Products.ATContentTypes.z3.adapters import PhotoAlbum
-from Products.ATContentTypes.z3.adapters import ZipFile
-
-from Products.ATContentTypes.z3.browser import ZipView
-
 
 from zope.interface.verify import verifyClass
 
@@ -114,49 +104,6 @@ class FolderTestMixin:
         obj = self.folder.rolecheck
         self.failUnlessEqual(obj.portal_type, self.portal_type)
         self.failUnless(role in obj.userdefined_roles(), obj.userdefined_roles())
-
-class TestSitePhotoAlbumSupport(atcttestcase.ATCTSiteTestCase):
-    def afterSetUp(self):
-        atcttestcase.ATCTSiteTestCase.afterSetUp(self)
-        self.folder.invokeFactory('Folder', 'fobj', title='folder 1')
-        self.fobj = self.folder.fobj
-
-    def test_implements(self):
-        self.failUnless(IPhotoAlbumAble.providedBy(self.fobj))
-
-    def test_adapter(self):
-        verifyClass(IPhotoAlbum,PhotoAlbum)
-
-    def test_SymbolicPhoto(self):
-        adapted = IPhotoAlbum(self.fobj)
-
-class TestZipFile(atcttestcase.ATCTSiteTestCase):
-    def afterSetUp(self):
-        atcttestcase.ATCTSiteTestCase.afterSetUp(self)
-        self.folder.invokeFactory('Folder', 'fobj', title='folder 1')
-        self.fobj = self.folder.fobj
-
-    def test_implements(self):
-        self.failUnless(IZipFile.providedBy(self.fobj))
-
-    def test_adapter(self):
-        verifyClass(IZipFile,ZipFile)
-
-
-
-class TestZipView(atcttestcase.ATCTSiteTestCase):
-    def afterSetUp(self):
-        atcttestcase.ATCTSiteTestCase.afterSetUp(self)
-        self.folder.invokeFactory('Folder', 'fobj', title='folder 1')
-        self.fobj = self.folder.fobj
-
-    def test_getZipFile(self):
-        request = FakeRequestSession()
-        #request.set('RESPONSE',{})
-        adapted = ZipView(self.fobj, request)
-        rawZipFile = adapted.getZipFile('PNG',200,200)
-
-
 
 class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
