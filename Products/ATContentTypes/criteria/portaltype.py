@@ -37,7 +37,7 @@ from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
 ATPortalTypeCriterionSchema = ATSelectionCriterion.schema.copy()
 
 val_widget = ATPortalTypeCriterionSchema['value'].widget
-val_widget.description="One of the registered portal types."
+val_widget.description="One of the available content types."
 val_widget.description_msgid="help_portal_type_criteria_value"
 val_widget.label_msgid="label_portal_type_criteria_value"
 ATPortalTypeCriterionSchema['value'].widget = val_widget
