@@ -29,43 +29,43 @@
 
 
   <adapter
-      for=".interfaces.IATFolder"
+      for=".interface.interfaces.IATFolder"
       factory=".adapters.image.PhotoAlbum"
       provides=".interface.image.IPhotoAlbum"
       />
 
   <adapter
-      for=".interfaces.IATFolder"
+      for=".interface.interfaces.IATFolder"
       factory=".adapters.archive.FolderishArchiver"
       provides=".interface.archive.IArchiver"
       />
 
   <adapter
-      for=".interfaces.IATDocument"
+      for=".interface.interfaces.IATDocument"
       factory=".adapters.archive.NonFolderishArchiver"
       provides=".interface.archive.IArchiver"
       />
 
   <adapter
-      for=".interfaces.IATDocument"
+      for=".interface.interfaces.IATDocument"
       factory=".adapters.document.DocumentRawDataExtractor"
       provides=".interface.dataExtractor.IDataExtractor"
       />
 
   <adapter
-      for=".interfaces.IATFolder"
+      for=".interface.interfaces.IATFolder"
       factory=".adapters.folder.FolderFilter"
       provides=".interface.folder.IFilterFolder"
       />
 
-   <adapter
-	  for=".interfaces.IATFolder"
-	  factory=".adapters.syndication.FolderFeedSource"
-	  provides="Products.basesyndication.interfaces.IFeedSource"
-	  />
-	
+   <!--adapter
+      for=".interfaces.IATFolder"
+      factory=".adapters.syndication.FolderFeedSource"
+      provides="Products.basesyndication.interfaces.IFeedSource"
+      / -->
+
   <browser:page
-    for=".interfaces.archive.IArchivable"
+    for=".interface.archive.IArchivable"
     name="zip"
     class=".browser.archive.ArchiveView"
     attribute="getZipFile"

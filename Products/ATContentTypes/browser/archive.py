@@ -1,5 +1,5 @@
 from Products.Five import BrowserView
-from Products.ATContentTypes.z3.interfaces import IArchiver
+from Products.ATContentTypes.interface.archive import IArchiver
 
 class ArchiveView(BrowserView):
     """
