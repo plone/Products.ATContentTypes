@@ -21,4 +21,5 @@ from zope.interface import Interface
 class IDataExtractor(Interface):
     def getData(**kwargs):
         """
+        getting the data to extract from the object
         """

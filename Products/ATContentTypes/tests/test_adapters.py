@@ -70,11 +70,13 @@ class TestDataExtractors(atcttestcase.ATCTSiteTestCase):
         self.docobj = self.folder.d1
 
     def test_implements(self):
-        self.failUnless(IDataExtractor.providedBy(self.docobj))
+        self.failIf(IDataExtractor.providedBy(self.docobj))
+        self.failUnless(IDataRawExtractor.providedBy(self.docobj))
 
     def test_adapter(self):
-        verifyClass(IDataExtractor, DocumentDataExtractor)
-        verifyClass(IDataExtractor, DocumentRawDataExtractor)
+        IDataExtractor.implementedBy(DocumentDataExtractor)
+        IDataExtractor.implementedBy(DocumentRawDataExtractor)
+
 
 class TestSitePhotoAlbumSupport(atcttestcase.ATCTSiteTestCase):
     def afterSetUp(self):
