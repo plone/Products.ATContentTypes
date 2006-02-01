@@ -209,6 +209,11 @@ class ConstrainTypesMixin:
                 return [fti.getId() for fti in self.getDefaultAddableTypes()]
             else:
                 parent = aq_parent(aq_inner(self))
+                
+                # bypass for portal_factory
+                if self.portal_factory.isTemporary(self):
+                    return parent.getLocallyAllowedTypes()
+
                 # check for permission in parent
                 if self.portal_membership.checkPermission(parent(),'Add portal content'):
                     return parent.getLocallyAllowedTypes()
@@ -239,6 +244,11 @@ class ConstrainTypesMixin:
                         PortalFolder.allowedContentTypes(self)]
             else:
                 parent = aq_parent(aq_inner(self))
+
+                # bypass for portal_factory
+                if self.portal_factory.isTemporary(self):
+                   return parent.getImmediatelyAddableTypes()
+
                 # check for permission in parent
                 if self.portal_membership.checkPermission(parent(),'Add portal content'):
                     return parent.getImmediatelyAddableTypes()
