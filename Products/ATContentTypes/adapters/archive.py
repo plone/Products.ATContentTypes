@@ -31,7 +31,7 @@ class FolderishArchiver(object):
         """
         get the archive file object
         """
-        recursive = kwargs.get('recursive',0)
+        recursive = kwargs.get('recursive',1)
 #        if(IArchiveAccumulator.providedBy(accumulator)):
 #            raise ValueError, "accumulator must implement IArchiveAccumulaotor"
         adapter = IFilterFolder(self.context)
@@ -39,12 +39,12 @@ class FolderishArchiver(object):
             if IArchivable.providedBy(item):
                 archiver = IArchiver(item)
                 folderish = isinstance(archiver,FolderishArchiver)
-                if (recursive and folderish and path):
-                    path = '%s/%s' % (path, self.context.getId())
-                    archiver.createArchive(path, accumulator, **kwargs)
-                if not folderish:
-                    path = self.context.getId()
-                    archiver.createArchive(path, accumulator, **kwargs)
+                if path:
+                    cpath = '%s/%s' % (path, self.context.getId())
+                else:
+                    cpath = self.context.getId()
+                if (recursive and folderish) or not folderish:
+                    archiver.createArchive(cpath, accumulator, **kwargs)
 
 
 class NonFolderishArchiver(object):
@@ -58,8 +58,8 @@ class NonFolderishArchiver(object):
     def getRawArchive(self, accumulator=None, **kwargs):
         if(not accumulator):
             accumulator = ZipAccumulator(self.context)
-        container = aq_parent(self.context)
-        self.createArchive(container.getId(),accumulator, **kwargs)
+        #container = aq_parent(self.context)
+        self.createArchive(None, accumulator, **kwargs)
         return accumulator.getRaw()
 
     def createArchive(self, path, accumulator, **kwargs):
@@ -71,7 +71,10 @@ class NonFolderishArchiver(object):
         dataExtractor = IDataExtractor(self.context)
         if dataExtractor and IArchivable.providedBy(self.context):
             data = dataExtractor.getData(**kwargs)
-            filepath = '%s/%s' % (path, self.context.getId())
+            if path:
+              filepath = '%s/%s' % (path, self.context.getId())
+            else:
+              filepath = self.context.getId()
             accumulator.setFile(filepath,data)
 
 

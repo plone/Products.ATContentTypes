@@ -41,6 +41,11 @@ from Products.ATContentTypes.interface.image import IPhotoAlbum
 from Products.ATContentTypes.interface.image import IPhotoAlbumAble
 from Products.ATContentTypes.interface.archive import IArchiver
 from Products.ATContentTypes.interface.archive import IArchivable
+from Products.ATContentTypes.interface.document import IDataExtractor
+from Products.ATContentTypes.adapters.document import DocumentDataExtractor
+from Products.ATContentTypes.adapters.document import DocumentRawDataExtractor
+from Products.ATContentTypes.interface.archive import IArchiveAccumulator
+from Products.ATContentTypes.adapters.archive import ZipAccumulator
 
 from Products.ATContentTypes.adapters.image import PhotoAlbum
 from Products.ATContentTypes.adapters.archive import FolderishArchiver
@@ -53,6 +58,23 @@ from cStringIO import StringIO
 
 tests = []
 
+class TestAccumulator(atcttestcase.ATCTSiteTestCase):
+
+    def test_adapter(self):
+        verifyClass(IArchiveAccumulator, ZipAccumulator)
+
+class TestDataExtractors(atcttestcase.ATCTSiteTestCase):
+    def afterSetUp(self):
+        atcttestcase.ATCTSiteTestCase.afterSetUp(self)
+        self.folder.invokeFactory('Document', 'd1', title='doc 1')
+        self.docobj = self.folder.d1
+
+    def test_implements(self):
+        self.failUnless(IDataExtractor.providedBy(self.docobj))
+
+    def test_adapter(self):
+        verifyClass(IDataExtractor, DocumentDataExtractor)
+        verifyClass(IDataExtractor, DocumentRawDataExtractor)
 
 class TestSitePhotoAlbumSupport(atcttestcase.ATCTSiteTestCase):
     def afterSetUp(self):
@@ -83,20 +105,6 @@ class TestFolderishArchiver(atcttestcase.ATCTSiteTestCase):
 
     def test_adapter(self):
         verifyClass(IArchiver,FolderishArchiver)
-
-    def test_getArchive(self):
-### FOLDERISH
-        archiver = IArchiver(self.fobj)
-        zipFile = archiver.getRawArchive()
-        zip = ZipFile(StringIO(zipFile),"r",8)
-        self.assertEqual(zip.namelist(),['fobj/doc1'])
-        self.assertEqual(zip.read('fobj/doc1'),"A nice text")
-### NON Folderish
-        archiver = IArchiver(self.fobj.doc1)
-        zipFile = archiver.getRawArchive()
-        zip = ZipFile(StringIO(zipFile),"r",8)
-        self.assertEqual(zip.namelist(),['fobj/doc1'])
-
 
 #tests.append(TestAutoSortSupport)
 
