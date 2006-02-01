@@ -13,7 +13,7 @@ class FolderishArchiver(object):
     store your files in a zip file
     """
     implements(IArchiver)
-#XXXX Refactor so that init and getRawZip methods inside Folderish and non Folderish object
+#XXXX Refactor common methods inside Folderish and non Folderish object
     def __init__(self, context):
         """
         """
@@ -79,7 +79,10 @@ class NonFolderishArchiver(object):
 
 
 class ZipAccumulator(object):
-    """
+    """ Implements an accumulator for zip files.
+    Note: This should be derived from a superclass allowing for other
+    compression types, and also for specific handling of object 
+    specific content - hence the object parameter.
     """
     implements(IArchiveAccumulator)
 
@@ -88,12 +91,6 @@ class ZipAccumulator(object):
 
     def __init__(self, context):
         self.context = context
-        self.initIO()
-
-    def initIO(self):
-        """
-        reinit the Zip IO
-        """
         self.sIO = StringIO()
         self._zip = ZipFile(self.sIO,"w",8)
 

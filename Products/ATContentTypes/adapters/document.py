@@ -11,7 +11,7 @@ class DocumentDataExtractor(object):
         self.context = context
 
     def getData(self,**kwargs):
-        """
+        """ get the CookedBody of the Document
         """
         return self.context.CookedBody()
 
@@ -24,6 +24,6 @@ class DocumentRawDataExtractor(object):
         self.context = context
 
     def getData(self,**kwargs):
-        """
+        """ get the raw text of the Document
         """
         return self.context.getRawText()

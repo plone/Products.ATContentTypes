@@ -19,19 +19,14 @@
 from zope.interface import Interface
 
 class IArchiveAccumulator(Interface):
-    def initIO():
-        """
-        reinit the Zip IO
-        """
-
     def setFile(filename,data):
         """
-        store the file inside the zip file
+        store the file inside the archive file
         """
 
     def close():
         """
-        close the zip file
+        close the archive file
         """
 
     def getRaw():
@@ -61,5 +56,5 @@ class IDataExtractor(Interface):
 
 class IArchivable(Interface):
     """
-    marker interface for possible zippable object
+    marker interface for possible archivable object
     """

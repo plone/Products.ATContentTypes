@@ -137,5 +137,41 @@ And that its content is as we expect
   >>> zip.read('d5')
   'A nice text'
  
+============================
+4. Test the Zip accumulator
+============================
 
+Create an accumulator
 
+  >>> from Products.ATContentTypes.adapters.archive import ZipAccumulator
+  >>> accu = ZipAccumulator(folder.d5)
+
+Test that it starts off empty
+
+  >>> rawArchive = accu.getRaw()
+  >>> zip = ZipFile(StringIO(rawArchive),"r",8)
+  >>> zip.namelist()
+  []
+
+Add some very simple fils
+
+  >>> accu.setFile('folder1/file1', 'abc')
+  >>> accu.setFile('folder1/file2', 'xyz')
+  >>> accu.setFile('folder2/file1', '123')
+  >>> accu.setFile('folder2/folder3/file1', 'ABC')
+  >>> accu.setFile('folder2/folder3/file2', 'XYZ')
+
+Test that the hierarchy is in the archive
+  >>> rawArchive = accu.getRaw()
+  >>> zip = ZipFile(StringIO(rawArchive),"r",8)
+  >>> zip.namelist()
+  ['folder1/file1', 'folder1/file2', 'folder2/file1', 'folder2/folder3/file1', 'folder2/folder3/file2']
+
+Spot check the file contents
+
+  >>> zip.read('folder1/file1')
+  'abc'
+
+  >>> zip.read('folder2/folder3/file2')
+  'XYZ'
+  
