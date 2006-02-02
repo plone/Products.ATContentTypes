@@ -44,6 +44,11 @@ from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
 from Products.CMFPlone.interfaces.OrderedContainer import IOrderedContainer
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
+from Products.Five.traversable import FakeRequest
+from Products.ATContentTypes.tests.utils import FakeRequestSession
+
+from zope.interface.verify import verifyClass
+
 from Products.ATContentTypes.lib.autosort import IAutoSortSupport
 from Products.ATContentTypes.lib.autosort import IAutoOrderSupport
 from Interface.Verify import verifyObject
@@ -99,7 +104,7 @@ class FolderTestMixin:
         obj = self.folder.rolecheck
         self.failUnlessEqual(obj.portal_type, self.portal_type)
         self.failUnless(role in obj.userdefined_roles(), obj.userdefined_roles())
-        
+
 class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     klass = ATFolder

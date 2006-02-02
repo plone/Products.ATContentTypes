@@ -26,6 +26,8 @@ __docformat__ = 'restructuredtext'
 from Products.ATContentTypes.config import HAS_PLONE2
 
 from Interface import Interface
+
+
 from Interface import Attribute
 
 from Products.Archetypes.interfaces.base import IBaseContent
@@ -37,6 +39,7 @@ try:
         ISelectableConstrainTypes as IPloneSelectableConstrainTypes
 except ImportError:
     IPloneSelectableConstrainTypes = Interface
+
 
 class IATContentType(ISelectableBrowserDefault, IBaseContent):
     """Marker interface for AT Content Types

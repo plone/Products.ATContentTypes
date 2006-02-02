@@ -6,166 +6,166 @@
 
   <implements
       class=".content.base.ATCTMixin"
-      interface=".z3.interfaces.IATContentType"
+      interface=".interface.interfaces.IATContentType"
       /> 
 
   <implements
       class=".content.base.ATCTFolderMixin"
-      interface=".z3.interfaces.ISelectableConstrainTypes"
+      interface=".interface.interfaces.ISelectableConstrainTypes"
       />      
   
   <implements
       class=".content.document.ATDocument"
-      interface=".z3.interfaces.IATDocument"
+      interface=".interface.interfaces.IATDocument"
       />   
 
   <implements
       class=".content.event.ATEvent"
-      interface=".z3.interfaces.IATEvent"
+      interface=".interface.interfaces.IATEvent"
       /> 
 
   <implements
       class=".content.favorite.ATFavorite"
-      interface=".z3.interfaces.IATFavorite"
+      interface=".interface.interfaces.IATFavorite"
       /> 
 
   <implements
       class=".content.file.ATFile"
-      interface=".z3.interfaces.IATFile"
+      interface=".interface.interfaces.IATFile"
       /> 
 
   <implements
       class=".content.folder.ATFolder"
-      interface=".z3.interfaces.IATFolder"
+      interface=".interface.interfaces.IATFolder"
       /> 
 
   <implements
       class=".content.folder.ATBTreeFolder"
-      interface=".z3.interfaces.IATBTreeFolder"
+      interface=".interface.interfaces.IATBTreeFolder"
       /> 
  
   <implements
       class=".content.image.ATImage"
-      interface=".z3.interfaces.IATImage"
+      interface=".interface.interfaces.IATImage"
       /> 
 
   <implements
       class=".content.link.ATLink"
-      interface=".z3.interfaces.IATLink"
+      interface=".interface.interfaces.IATLink"
       /> 
 
   <implements
       class=".content.newsitem.ATNewsItem"
-      interface=".z3.interfaces.IATNewsItem"
+      interface=".interface.interfaces.IATNewsItem"
       /> 
 
   <implements
       class=".content.topic.ATTopic"
-      interface=".z3.interfaces.IATTopic"
+      interface=".interface.interfaces.IATTopic"
       /> 
 
   <!-- Criteria -->
 
   <implements
       class=".criteria.base.ATBaseCriterion"
-      interface=".z3.interfaces.IATTopicCriterion"
+      interface=".interface.interfaces.IATTopicCriterion"
       />
 
   <implements
       class=".criteria.boolean.ATBooleanCriterion"
-      interface=".z3.interfaces.IATTopicSearchCriterion"
+      interface=".interface.interfaces.IATTopicSearchCriterion"
       />
 
   <implements
       class=".criteria.currentauthor.ATCurrentAuthorCriterion"
-      interface=".z3.interfaces.IATTopicSearchCriterion"
+      interface=".interface.interfaces.IATTopicSearchCriterion"
       />
  
   <implements
       class=".criteria.date.ATDateCriteria"
-      interface=".z3.interfaces.IATTopicSearchCriterion"
+      interface=".interface.interfaces.IATTopicSearchCriterion"
       />
  
   <implements
       class=".criteria.daterange.ATDateRangeCriterion"
-      interface=".z3.interfaces.IATTopicSearchCriterion"
+      interface=".interface.interfaces.IATTopicSearchCriterion"
       />
  
   <implements
       class=".criteria.list.ATListCriterion"
-      interface=".z3.interfaces.IATTopicSearchCriterion"
+      interface=".interface.interfaces.IATTopicSearchCriterion"
       />
  
   <implements
       class=".criteria.path.ATPathCriterion"
-      interface=".z3.interfaces.IATTopicSearchCriterion"
+      interface=".interface.interfaces.IATTopicSearchCriterion"
       />
  
   <implements
       class=".criteria.portaltype.ATPortalTypeCriterion"
-      interface=".z3.interfaces.IATTopicSearchCriterion"
+      interface=".interface.interfaces.IATTopicSearchCriterion"
       />
  
   <implements
       class=".criteria.reference.ATReferenceCriterion"
-      interface=".z3.interfaces.IATTopicSearchCriterion"
+      interface=".interface.interfaces.IATTopicSearchCriterion"
       />
  
   <implements
       class=".criteria.selection.ATSelectionCriterion"
-      interface=".z3.interfaces.IATTopicSearchCriterion"
+      interface=".interface.interfaces.IATTopicSearchCriterion"
       />
  
   <implements
       class=".criteria.simpleint.ATSimpleIntCriterion"
-      interface=".z3.interfaces.IATTopicSearchCriterion"
+      interface=".interface.interfaces.IATTopicSearchCriterion"
       />
  
   <implements
       class=".criteria.simplestring.ATSimpleStringCriterion"
-      interface=".z3.interfaces.IATTopicSearchCriterion"
+      interface=".interface.interfaces.IATTopicSearchCriterion"
       />
  
   <!-- lib -->
 
   <implements
       class=".lib.autosort.AutoSortSupport"
-      interface=".z3.interfaces.IAutoSortSupport"
+      interface=".interface.interfaces.IAutoSortSupport"
       />
 
   <implements
       class=".lib.autosort.AutoOrderSupport"
-      interface=".z3.interfaces.IAutoOrderSupport"
+      interface=".interface.interfaces.IAutoOrderSupport"
       />
 
   <implements
       class=".lib.calendarsupport.CalendarSupportMixin"
-      interface=".z3.interfaces.ICalendarSupport"
+      interface=".interface.interfaces.ICalendarSupport"
       />  
 
   <implements
       class=".lib.constraintypes.ConstrainTypesMixin"
-      interface=".z3.interfaces.ISelectableConstrainTypes"
+      interface=".interface.interfaces.ISelectableConstrainTypes"
       /> 
 
   <implements
       class=".lib.historyaware.HistoryAwareMixin"
-      interface=".z3.interfaces.IHistoryAware"
+      interface=".interface.interfaces.IHistoryAware"
       />
 
   <!--implements
       class=".lib.imagetransform.ATCTImageTransform"
-      interface=".z3.interfaces."
+      interface=".interface.interfaces."
       /--> 
 
   <implements
       class=".tool.atct.ATCTTool"
-      interface=".z3.interfaces.IATCTTool"
+      interface=".interface.interfaces.IATCTTool"
       />
 
   <implements
       class=".tool.topic.ATTopicsTool"
-      interface=".z3.interfaces.IATCTTopicsTool"
+      interface=".interface.interfaces.IATCTTopicsTool"
       />
 
 </configure>

@@ -16,9 +16,10 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""ATContentTypes bridged interfaces
+from zope.interface import Interface
 
-bridge.zcml is adding bridged Zope3 style interfaces to this module. We are unable
-to add the bridged interfaces to Products.ATContentTypes.interfaces because they
-would overwrite the existing Zope2 interfaces.
-"""
+class IFilterFolder(Interface):
+    def listObjects():
+        """
+        """
+

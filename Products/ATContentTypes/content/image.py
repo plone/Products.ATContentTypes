@@ -117,6 +117,9 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
 
     security       = ClassSecurityInfo()
 
+    def exportImage(self, format, width, height):
+        return '',''
+
     security.declareProtected(ModifyPortalContent, 'setImage')
     def setImage(self, value, refresh_exif=True, **kwargs):
         """Set id to uploaded id
