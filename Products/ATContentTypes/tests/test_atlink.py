@@ -42,6 +42,10 @@ from Interface.Verify import verifyObject
 from Products.CMFPlone import transaction
 
 
+# z3 imports
+from Products.ATContentTypes.interface import IATLink as Z3IATLink
+from zope.interface.verify import verifyObject as Z3verifyObject
+
 URL='http://www.example.org/'
 
 def editCMF(obj):
@@ -70,6 +74,10 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
         iface = IATLink
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
+
+    def test_implementsATLink(self):
+        iface = Z3IATLink
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def testLink(self):
         obj = self._ATCT

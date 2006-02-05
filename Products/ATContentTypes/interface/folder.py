@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2005 AT Content Types development team
+#  Copyright (c) 2003-2006 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -17,9 +17,20 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 from zope.interface import Interface
+from Products.ATContentTypes.interface.interfaces import IATContentType
+
 
 class IFilterFolder(Interface):
     def listObjects():
         """
         """
+
+class IATFolder(IATContentType):
+    """AT Folder marker interface
+    """
+
+class IATBTreeFolder(IATContentType):
+    """AT BTree Folder marker interface
+    """
+
 

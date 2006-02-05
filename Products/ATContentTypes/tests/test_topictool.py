@@ -22,6 +22,10 @@ from Products.ATContentTypes.interfaces import IATCTTopicsTool
 from Interface.Verify import verifyObject
 from Products.ATContentTypes.configuration import zconf
 
+# z3 imports
+from Products.ATContentTypes.interface import IATCTTopicsTool as Z3IATCTTopicsTool
+from zope.interface.verify import verifyObject as Z3verifyObject
+
 tool_config = zconf.atct_tool.topic_tool
 
 
@@ -47,6 +51,10 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
     def test_interface(self):
         self.failUnless(IATCTTopicsTool.isImplementedBy(self.tool))
         self.failUnless(verifyObject(IATCTTopicsTool, self.tool))
+
+    def test_Z3interface(self):
+        iface = Z3IATCTTopicsTool
+        self.failUnless(Z3verifyObject(iface,self.tool))
  
     #Index tests
     def test_add_index(self):

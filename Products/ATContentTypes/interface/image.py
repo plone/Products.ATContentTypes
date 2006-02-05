@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2005 AT Content Types development team
+#  Copyright (c) 2003-2006 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -37,4 +37,25 @@ class IPhotoAlbumAble(Interface):
     """
     marker interface for possible photoalbum object
     """
+
+class IImageContent(Interface):
+    """Interface for types containing an image
+    """
+
+    def getImage(**kwargs):
+        """
+        """
+
+    def setImage(value, **kwargs):
+        """
+        """
+
+    def tag(**kwargs):
+        """
+        """
+
+class IATImage(IImageContent):
+    """AT Image marker Interface
+    """
+
 

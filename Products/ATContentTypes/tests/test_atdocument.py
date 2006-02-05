@@ -46,6 +46,12 @@ from Products.ATContentTypes.interfaces import IATDocument
 from Interface.Verify import verifyObject
 from Products.CMFPlone import transaction
 
+# z3 imports
+from Products.ATContentTypes.interface import IHistoryAware as Z3IHistoryAware
+from Products.ATContentTypes.interface import ITextContent as Z3TextContent
+from Products.ATContentTypes.interface import IATDocument as Z3IATDocument
+from zope.interface.verify import verifyObject as Z3verifyObject
+
 example_stx = """
 Header
 
@@ -92,15 +98,27 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
+    def test_doesImplementZ3HistoryAware(self):
+        iface = Z3IHistoryAware
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
+
     def test_implementsTextContent(self):
         iface = ITextContent
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
+    def test_implementsZ3TextContent(self):
+        iface = Z3TextContent
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
+
     def test_implementsATDocument(self):
         iface = IATDocument
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
+
+    def test_implementsZ3ATDocument(self):
+        iface = Z3IATDocument
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         old = self._cmf

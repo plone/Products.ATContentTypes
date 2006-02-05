@@ -46,6 +46,13 @@ from Products.CMFDefault.NewsItem import NewsItem
 from Interface.Verify import verifyObject
 from Products.CMFPlone import transaction
 
+# z3 imports
+from Products.ATContentTypes.interface import ITextContent as Z3ITextContent
+from Products.ATContentTypes.interface import IImageContent as Z3IImageContent
+from Products.ATContentTypes.interface import IATNewsItem as Z3IATNewsItem
+from zope.interface.verify import verifyObject as Z3verifyObject
+
+
 tests = []
 
 TEXT = "lorum ipsum"
@@ -72,15 +79,27 @@ class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
+    def test_implementsZ3TextContent(self):
+        iface = Z3ITextContent
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
+
     def test_implementsImageContent(self):
         iface = IImageContent
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
+    def test_implementsZ3ImageContent(self):
+        iface = Z3IImageContent
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
+
     def test_implementsATNewsItem(self):
         iface = IATNewsItem
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
+
+    def test_implementsZ3ATNewsItem(self):
+        iface = Z3IATNewsItem
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         old = self._cmf

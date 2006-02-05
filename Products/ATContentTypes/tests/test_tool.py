@@ -33,6 +33,10 @@ from Products.ATContentTypes.interfaces import IATCTTool
 from Interface.Verify import verifyObject
 from Products.CMFCore.utils import getToolByName
 
+# z3 imports
+from Products.ATContentTypes.interface import IATCTTool as Z3IATCTTool
+from zope.interface.verify import verifyObject as Z3verifyObject
+
 tests = []
 
 class TestTool(atcttestcase.ATCTSiteTestCase):
@@ -176,6 +180,11 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         t = self.tool
         self.failUnless(IATCTTool.isImplementedBy(t))
         self.failUnless(verifyObject(IATCTTool, t))
+
+    def test_Z3interface(self):
+        t = self.tool
+        iface = Z3IATCTTool
+        self.failUnless(Z3verifyObject(iface, t))
         
     def test_names(self):
         t = self.tool

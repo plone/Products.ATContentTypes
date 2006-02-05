@@ -42,9 +42,15 @@ from Products.ATContentTypes.content.image import ATImage
 from Products.ATContentTypes.migration.atctmigrator import ImageMigrator
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage
+
 from Products.CMFDefault.Image import Image
 from Interface.Verify import verifyObject
 from Products.CMFPlone import transaction
+
+# z3 imports
+from Products.ATContentTypes.interface import IATImage as Z3IATImage
+from Products.ATContentTypes.interface import IImageContent as Z3IImageContent
+from zope.interface.verify import verifyObject as Z3verifyObject
 
 # third party extension
 import exif
@@ -93,10 +99,18 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
+    def test_z3ImplementsImageContent(self):
+        iface = Z3IImageContent
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
+
     def test_implementsATImage(self):
         iface = IATImage
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
+
+    def test_z3ImplementsImageContent(self):
+        iface = Z3IATImage
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         old = self._cmf

@@ -1,69 +1,14 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:five="http://namespaces.zope.org/five"
     >
 
-  <five:traversable class=".content.folder.ATFolder"/>
-  <five:traversable class=".content.document.ATDocument"/>
-
-
-  <include file="bridge.zcml"/>
+  <include file="traversable.zcml"/>
 
   <include file="implements.zcml"/>
 
-  <five:implements
-      class=".content.folder.ATFolder"
-      interface=".interface.image.IPhotoAlbumAble"
-      />
+  <include file="adapters.zcml"/>
 
-  <five:implements
-     class=".content.folder.ATFolder"
-     interface=".interface.archive.IArchivable"
-     />
-
-  <five:implements
-     class=".content.document.ATDocument"
-     interface=".interface.archive.IArchivable"
-     />
-
-
-  <adapter
-      for=".interface.interfaces.IATFolder"
-      factory=".adapters.image.PhotoAlbum"
-      provides=".interface.image.IPhotoAlbum"
-      />
-
-  <adapter
-      for=".interface.interfaces.IATFolder"
-      factory=".adapters.archive.FolderishArchiver"
-      provides=".interface.archive.IArchiver"
-      />
-
-  <adapter
-      for=".interface.interfaces.IATDocument"
-      factory=".adapters.archive.NonFolderishArchiver"
-      provides=".interface.archive.IArchiver"
-      />
-
-  <adapter
-      for=".interface.interfaces.IATDocument"
-      factory=".adapters.document.DocumentRawDataExtractor"
-      provides=".interface.dataExtractor.IDataExtractor"
-      />
-
-  <adapter
-      for=".interface.interfaces.IATFolder"
-      factory=".adapters.folder.FolderFilter"
-      provides=".interface.folder.IFilterFolder"
-      />
-
-  <browser:page
-    for=".interface.archive.IArchivable"
-    name="zip"
-    class=".browser.archive.ArchiveView"
-    attribute="getZipFile"
-    permission="zope2.View"
-    />
+  <include file="browser.zcml"/>
 
 </configure>

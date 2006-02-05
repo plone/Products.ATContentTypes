@@ -1,0 +1,10 @@
+<configure
+    xmlns="http://namespaces.zope.org/five">
+
+ <!-- Define Z3 traversables -->
+
+  <traversable class=".content.folder.ATFolder"/>
+
+  <traversable class=".content.document.ATDocument"/>
+
+</configure>
