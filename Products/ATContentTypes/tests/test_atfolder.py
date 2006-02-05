@@ -49,8 +49,8 @@ from Products.ATContentTypes.tests.utils import FakeRequestSession
 
 from zope.interface.verify import verifyClass
 
-from Products.ATContentTypes.lib.autosort import IAutoSortSupport
-from Products.ATContentTypes.lib.autosort import IAutoOrderSupport
+from Products.ATContentTypes.interfaces import IAutoSortSupport
+from Products.ATContentTypes.interfaces import IAutoOrderSupport
 from Interface.Verify import verifyObject
 from Products.CMFPlone import transaction
 
