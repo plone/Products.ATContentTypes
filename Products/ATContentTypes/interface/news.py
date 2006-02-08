@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2005 AT Content Types development team
+#  Copyright (c) 2003-2006 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -16,5 +16,13 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""ATContentTypes Zope3 / Five Adapters
-"""
+
+
+from Products.ATContentTypes.interface.document import IATDocument
+from Products.ATContentTypes.interface.image import IImageContent
+
+class IATNewsItem(IATDocument, IImageContent):
+    """AT News Item marker interface
+    """
+
+

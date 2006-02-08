@@ -1,6 +1,6 @@
 #  ATContentTypes http://sf.net/projects/collective/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2005 AT Content Types development team
+#  Copyright (c) 2003-2006 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -17,69 +17,10 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 from zope.interface import Interface
+from Products.ATContentTypes.interface.interfaces import ITextContent
 
-class IArchiveAccumulator(Interface):
-    def initIO():
-        """
-        reinit the Zip IO
-        """
-
-    def setFile(filename,data):
-        """
-        store the file inside the zip file
-        """
-
-    def close():
-        """
-        close the zip file
-        """
-
-    def getRaw():
-        """
-        return the raw archive
-        """
-
-class IFilterFolder(Interface):
-    def listObjects():
-        """
-        """
-
-
-class IArchiver(Interface):
-    def getRawArchive(accumulator=None, **kwargs):
-        """
-        """
-
-    def createArchive(path, accumulator, **kwargs):
-        """
-        """
-
-class IDataExtractor(Interface):
-    def getData(**kwargs):
-        """
-        """
-
-class IPhotoAlbum(Interface):
-    """
-    interface that adapts a folder into a photo album
-    """
-    def setSymbolicPhoto(photo=None):
-        """
-        set the photo which represents the album
-        """
-
-    def getSymbolicPhoto():
-        """
-        get the photo which represents the album
-        """
-
-
-class IPhotoAlbumAble(Interface):
-    """
-    marker interface for possible photoalbum object
+class IATDocument(ITextContent):
+    """AT Document marker interface
     """
 
-class IArchivable(Interface):
-    """
-    marker interface for possible zippable object
-    """
+

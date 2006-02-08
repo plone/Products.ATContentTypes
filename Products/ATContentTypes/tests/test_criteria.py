@@ -57,6 +57,10 @@ from Products.ATContentTypes.criteria.currentauthor import \
 from Products.ATContentTypes.criteria.path import ATPathCriterion
 tests = []
 
+# z3 imports
+from Products.ATContentTypes.interface import IATTopicCriterion as Z3IATTopicCriterion
+from zope.interface.verify import verifyObject as Z3verifyObject
+
 class CriteriaTest(atcttestcase.ATCTSiteTestCase):
 
     klass = None
@@ -124,7 +128,11 @@ class CriteriaTest(atcttestcase.ATCTSiteTestCase):
             self.failUnless(IATTopicCriterion.isImplementedBy(self.dummy))
             self.failUnless(verifyObject(IBaseContent, self.dummy))
             self.failUnless(verifyObject(IATTopicCriterion, self.dummy))
-        
+
+    def test_Z3implements(self):
+        if self.dummy is not None:
+            iface = Z3IATTopicCriterion
+            self.failUnless(Z3verifyObject(iface, self.dummy))
 
 class TestATBaseCriterion(CriteriaTest):
     klass = ATBaseCriterion

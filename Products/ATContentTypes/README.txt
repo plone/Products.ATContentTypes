@@ -105,7 +105,7 @@ What is new in ATContentTypes 1.0
     importing ATDocumentSchema from content.schemata you have to import it from
     content.ATDocument.
     
-  * ZopeX3/Five briged interfaces
+  * Zope 3/Five adapter - interfaces - browser view
   
   * New migration features like savepoints and a catalog patch.
 

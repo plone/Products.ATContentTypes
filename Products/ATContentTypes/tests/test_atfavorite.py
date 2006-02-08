@@ -43,6 +43,10 @@ from Products.CMFDefault.Favorite import Favorite
 from Interface.Verify import verifyObject
 from Products.CMFPlone import transaction
 
+# z3 imports
+from Products.ATContentTypes.interface import IATFavorite as Z3IATFavorite
+from zope.interface.verify import verifyObject as Z3verifyObject
+
 URL='/%s/Members' % portal_name
 
 def editCMF(obj):
@@ -69,6 +73,9 @@ class TestSiteATFavorite(atcttestcase.ATCTTypeTestCase):
     title = 'Favorite'
     meta_type = 'ATFavorite'
     icon = 'favorite_icon.gif'
+    def test_implementsZ3ATFavorite(self):
+        iface = Z3IATFavorite
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_implementsATFavorite(self):
         iface = IATFavorite

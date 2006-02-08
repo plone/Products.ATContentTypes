@@ -82,6 +82,10 @@ try:
 except ImportError:
     from Products.PloneLanguageTool.interfaces import ITranslatable
 
+# Z3 imports
+from Products.ATContentTypes.interface import IATContentType as Z3IATContentType
+from zope.interface.verify import verifyObject as Z3verifyObject
+
 test_home = os.path.dirname(__file__)
 
 class ATCTSiteTestCase(ATSiteTestCase):
@@ -167,6 +171,10 @@ class ATCTTypeTestCase(ATSiteTestCase):
     def test_doesImplementATCT(self):
         self.failUnless(IATContentType.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(IATContentType, self._ATCT))
+
+    def test_doesImplementZ3ATCT(self):
+        iface = Z3IATContentType
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_doesImplementAT(self):
         self.failUnless(IBaseContent.isImplementedBy(self._ATCT))

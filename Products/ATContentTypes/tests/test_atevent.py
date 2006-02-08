@@ -50,6 +50,12 @@ from Products.ATContentTypes.interfaces import IATEvent
 from Interface.Verify import verifyObject
 from Products.CMFPlone import transaction
 
+# z3 imports
+from Products.ATContentTypes.interface import ICalendarSupport as Z3ICalendarSupport
+from Products.ATContentTypes.interface import IATEvent as Z3IATEvent
+from zope.interface.verify import verifyObject as Z3verifyObject
+
+
 LOCATION = 'my location'
 EV_TYPE  = 'Meeting'
 EV_URL   = 'http://example.org/'
@@ -104,10 +110,18 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         self.failUnless(ICalendarSupport.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(ICalendarSupport, self._ATCT))
 
+    def test_doesImplementZ3CalendarSupport(self):
+        iface = Z3ICalendarSupport
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
+
     def test_implementsATEvent(self):
         iface = IATEvent
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
+
+    def test_implementsZ3ATEvent(self):
+        iface = Z3IATEvent
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         old = self._cmf

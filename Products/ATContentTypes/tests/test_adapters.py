@@ -41,7 +41,7 @@ from Products.ATContentTypes.interface.image import IPhotoAlbum
 from Products.ATContentTypes.interface.image import IPhotoAlbumAble
 from Products.ATContentTypes.interface.archive import IArchiver
 from Products.ATContentTypes.interface.archive import IArchivable
-from Products.ATContentTypes.interface.document import IDataExtractor
+from Products.ATContentTypes.interface.archive import IDataExtractor
 from Products.ATContentTypes.adapters.document import DocumentDataExtractor
 from Products.ATContentTypes.adapters.document import DocumentRawDataExtractor
 from Products.ATContentTypes.interface.archive import IArchiveAccumulator
@@ -63,19 +63,19 @@ class TestAccumulator(atcttestcase.ATCTSiteTestCase):
     def test_adapter(self):
         verifyClass(IArchiveAccumulator, ZipAccumulator)
 
+tests.append(TestAccumulator)
+
 class TestDataExtractors(atcttestcase.ATCTSiteTestCase):
     def afterSetUp(self):
         atcttestcase.ATCTSiteTestCase.afterSetUp(self)
         self.folder.invokeFactory('Document', 'd1', title='doc 1')
         self.docobj = self.folder.d1
 
-    def test_implements(self):
-        self.failIf(IDataExtractor.providedBy(self.docobj))
-        self.failUnless(IDataRawExtractor.providedBy(self.docobj))
-
     def test_adapter(self):
         IDataExtractor.implementedBy(DocumentDataExtractor)
         IDataExtractor.implementedBy(DocumentRawDataExtractor)
+
+tests.append(TestDataExtractors)
 
 
 class TestSitePhotoAlbumSupport(atcttestcase.ATCTSiteTestCase):
@@ -93,6 +93,8 @@ class TestSitePhotoAlbumSupport(atcttestcase.ATCTSiteTestCase):
     def test_SymbolicPhoto(self):
         adapted = IPhotoAlbum(self.fobj)
 
+tests.append(TestSitePhotoAlbumSupport)
+
 class TestFolderishArchiver(atcttestcase.ATCTSiteTestCase):
     def afterSetUp(self):
         atcttestcase.ATCTSiteTestCase.afterSetUp(self)
@@ -108,7 +110,7 @@ class TestFolderishArchiver(atcttestcase.ATCTSiteTestCase):
     def test_adapter(self):
         verifyClass(IArchiver,FolderishArchiver)
 
-#tests.append(TestAutoSortSupport)
+tests.append(TestFolderishArchiver)
 
 
 if __name__ == '__main__':

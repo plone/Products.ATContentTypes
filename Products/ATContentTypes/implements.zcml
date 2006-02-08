@@ -1,171 +1,182 @@
 <configure
     xmlns="http://namespaces.zope.org/five"
     >
-    
+  <!-- Using Zope3 interfaces  -->
+
   <!-- Content Types -->
 
-  <implements
-      class=".content.base.ATCTMixin"
-      interface=".interface.interfaces.IATContentType"
-      /> 
+    <implements
+        class=".content.folder.ATFolder"
+        interface=".interface.image.IPhotoAlbumAble"
+        />
 
-  <implements
-      class=".content.base.ATCTFolderMixin"
-      interface=".interface.interfaces.ISelectableConstrainTypes"
-      />      
-  
-  <implements
-      class=".content.document.ATDocument"
-      interface=".interface.interfaces.IATDocument"
-      />   
+    <implements
+        class=".content.folder.ATFolder"
+        interface=".interface.archive.IArchivable"
+        />
 
-  <implements
-      class=".content.event.ATEvent"
-      interface=".interface.interfaces.IATEvent"
-      /> 
+    <implements
+        class=".content.document.ATDocument"
+        interface=".interface.archive.IArchivable"
+        />
 
-  <implements
-      class=".content.favorite.ATFavorite"
-      interface=".interface.interfaces.IATFavorite"
-      /> 
+    <implements
+        class=".content.base.ATCTMixin"
+        interface=".interface.IATContentType"
+        />
 
-  <implements
-      class=".content.file.ATFile"
-      interface=".interface.interfaces.IATFile"
-      /> 
+    <implements
+        class=".content.base.ATCTFolderMixin"
+        interface=".interface.ISelectableConstrainTypes"
+        />
 
-  <implements
-      class=".content.folder.ATFolder"
-      interface=".interface.interfaces.IATFolder"
-      /> 
+    <implements
+        class=".content.document.ATDocument"
+        interface=".interface.IATDocument"
+        />
 
-  <implements
-      class=".content.folder.ATBTreeFolder"
-      interface=".interface.interfaces.IATBTreeFolder"
-      /> 
- 
-  <implements
-      class=".content.image.ATImage"
-      interface=".interface.interfaces.IATImage"
-      /> 
+    <implements
+        class=".content.event.ATEvent"
+        interface=".interface.IATEvent"
+        />
 
-  <implements
-      class=".content.link.ATLink"
-      interface=".interface.interfaces.IATLink"
-      /> 
+    <implements
+        class=".content.favorite.ATFavorite"
+        interface=".interface.IATFavorite"
+        />
 
-  <implements
-      class=".content.newsitem.ATNewsItem"
-      interface=".interface.interfaces.IATNewsItem"
-      /> 
+    <implements
+        class=".content.file.ATFile"
+        interface=".interface.IATFile"
+        />
 
-  <implements
-      class=".content.topic.ATTopic"
-      interface=".interface.interfaces.IATTopic"
-      /> 
+    <implements
+        class=".content.folder.ATFolder"
+        interface=".interface.IATFolder"
+        />
+
+    <implements
+        class=".content.folder.ATBTreeFolder"
+        interface=".interface.IATBTreeFolder"
+        />
+
+    <implements
+        class=".content.image.ATImage"
+        interface=".interface.IATImage"
+        />
+
+    <implements
+        class=".content.link.ATLink"
+        interface=".interface.IATLink"
+        />
+
+    <implements
+        class=".content.newsitem.ATNewsItem"
+        interface=".interface.IATNewsItem"
+        />
+
+    <implements
+        class=".content.topic.ATTopic"
+        interface=".interface.IATTopic"
+        />
 
   <!-- Criteria -->
 
-  <implements
-      class=".criteria.base.ATBaseCriterion"
-      interface=".interface.interfaces.IATTopicCriterion"
-      />
+    <implements
+        class=".criteria.base.ATBaseCriterion"
+        interface=".interface.IATTopicCriterion"
+        />
 
-  <implements
-      class=".criteria.boolean.ATBooleanCriterion"
-      interface=".interface.interfaces.IATTopicSearchCriterion"
-      />
+    <implements
+        class=".criteria.boolean.ATBooleanCriterion"
+        interface=".interface.IATTopicCriterion"
+        />
 
-  <implements
-      class=".criteria.currentauthor.ATCurrentAuthorCriterion"
-      interface=".interface.interfaces.IATTopicSearchCriterion"
-      />
- 
-  <implements
-      class=".criteria.date.ATDateCriteria"
-      interface=".interface.interfaces.IATTopicSearchCriterion"
-      />
- 
-  <implements
-      class=".criteria.daterange.ATDateRangeCriterion"
-      interface=".interface.interfaces.IATTopicSearchCriterion"
-      />
- 
-  <implements
-      class=".criteria.list.ATListCriterion"
-      interface=".interface.interfaces.IATTopicSearchCriterion"
-      />
- 
-  <implements
-      class=".criteria.path.ATPathCriterion"
-      interface=".interface.interfaces.IATTopicSearchCriterion"
-      />
- 
-  <implements
-      class=".criteria.portaltype.ATPortalTypeCriterion"
-      interface=".interface.interfaces.IATTopicSearchCriterion"
-      />
- 
-  <implements
-      class=".criteria.reference.ATReferenceCriterion"
-      interface=".interface.interfaces.IATTopicSearchCriterion"
-      />
- 
-  <implements
-      class=".criteria.selection.ATSelectionCriterion"
-      interface=".interface.interfaces.IATTopicSearchCriterion"
-      />
- 
-  <implements
-      class=".criteria.simpleint.ATSimpleIntCriterion"
-      interface=".interface.interfaces.IATTopicSearchCriterion"
-      />
- 
-  <implements
-      class=".criteria.simplestring.ATSimpleStringCriterion"
-      interface=".interface.interfaces.IATTopicSearchCriterion"
-      />
- 
+    <implements
+        class=".criteria.currentauthor.ATCurrentAuthorCriterion"
+        interface=".interface.IATTopicSearchCriterion"
+        />
+
+    <implements
+        class=".criteria.date.ATDateCriteria"
+        interface=".interface.IATTopicSearchCriterion"
+        />
+
+    <implements
+        class=".criteria.daterange.ATDateRangeCriterion"
+        interface=".interface.IATTopicSearchCriterion"
+        />
+
+    <implements
+        class=".criteria.list.ATListCriterion"
+        interface=".interface.IATTopicSearchCriterion"
+        />
+
+    <implements
+        class=".criteria.path.ATPathCriterion"
+        interface=".interface.IATTopicSearchCriterion"
+        />
+
+    <implements
+        class=".criteria.portaltype.ATPortalTypeCriterion"
+        interface=".interface.IATTopicSearchCriterion"
+        />
+
+    <implements
+        class=".criteria.reference.ATReferenceCriterion"
+        interface=".interface.IATTopicSearchCriterion"
+        />
+
+    <implements
+        class=".criteria.selection.ATSelectionCriterion"
+        interface=".interface.IATTopicSearchCriterion"
+        />
+
+    <implements
+        class=".criteria.simpleint.ATSimpleIntCriterion"
+        interface=".interface.IATTopicSearchCriterion"
+        />
+
+    <implements
+        class=".criteria.simplestring.ATSimpleStringCriterion"
+        interface=".interface.IATTopicSearchCriterion"
+        />
+
   <!-- lib -->
 
-  <implements
-      class=".lib.autosort.AutoSortSupport"
-      interface=".interface.interfaces.IAutoSortSupport"
-      />
+    <implements
+        class=".lib.autosort.AutoSortSupport"
+        interface=".interface.IAutoSortSupport"
+        />
 
-  <implements
-      class=".lib.autosort.AutoOrderSupport"
-      interface=".interface.interfaces.IAutoOrderSupport"
-      />
+    <implements
+        class=".lib.autosort.AutoOrderSupport"
+        interface=".interface.IAutoOrderSupport"
+        />
 
-  <implements
-      class=".lib.calendarsupport.CalendarSupportMixin"
-      interface=".interface.interfaces.ICalendarSupport"
-      />  
+    <implements
+        class=".lib.calendarsupport.CalendarSupportMixin"
+        interface=".interface.ICalendarSupport"
+        />
 
-  <implements
-      class=".lib.constraintypes.ConstrainTypesMixin"
-      interface=".interface.interfaces.ISelectableConstrainTypes"
-      /> 
+    <implements
+        class=".lib.constraintypes.ConstrainTypesMixin"
+        interface=".interface.ISelectableConstrainTypes"
+        />
 
-  <implements
+    <implements
       class=".lib.historyaware.HistoryAwareMixin"
-      interface=".interface.interfaces.IHistoryAware"
+      interface=".interface.IHistoryAware"
       />
 
-  <!--implements
-      class=".lib.imagetransform.ATCTImageTransform"
-      interface=".interface.interfaces."
-      /--> 
+    <implements
+        class=".tool.atct.ATCTTool"
+        interface=".interface.IATCTTool"
+        />
 
-  <implements
-      class=".tool.atct.ATCTTool"
-      interface=".interface.interfaces.IATCTTool"
-      />
-
-  <implements
-      class=".tool.topic.ATTopicsTool"
-      interface=".interface.interfaces.IATCTTopicsTool"
-      />
+    <implements
+        class=".tool.topic.ATTopicsTool"
+        interface=".interface.IATCTTopicsTool"
+        />
 
 </configure>

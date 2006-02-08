@@ -47,6 +47,12 @@ from Products.CMFDefault.File import File
 from Interface.Verify import verifyObject
 from Products.CMFPlone import transaction
 
+# z3 imports
+from Products.ATContentTypes.interface import IATFile as Z3IATFile
+from Products.ATContentTypes.interface import IFileContent as Z3IFileContent
+from zope.interface.verify import verifyObject as Z3verifyObject
+
+
 file_text = """
 foooooo
 """
@@ -76,10 +82,18 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
+    def test_implementsZ3FileContent(self):
+        iface = Z3IFileContent
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
+
     def test_implementsATFile(self):
         iface = IATFile
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
+
+    def test_implementsZ3ATFile(self):
+        iface = Z3IATFile
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         old = self._cmf
