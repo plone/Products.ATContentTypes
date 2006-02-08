@@ -1,6 +1,17 @@
 1.1.0-devel unreleased
 ======================
 
+ * Reorganized z3 interfaces into the interface package, created a complete
+   set of z3 interfaces, as well as tests for those interfaces.
+   [jfroche, russf]
+
+ * Added some adapters and views for exporting Folders and Documents (and
+   other types, given additional configuration) as zip files.
+   [jfroche, russf]
+
+1.1.0-alpha1 2006-01-26
+=======================
+
  * make trunk compatible with cmf > 1.5, by changing references to
    cmfcore.permissions and removing use of format_stx
    [k_vertigo, hannosch]
