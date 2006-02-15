@@ -136,8 +136,6 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         # Login the new user
         user = self.portal.acl_users.getUserById('restricted')
         newSecurityManager(None, user)
-        import pdb
-        pdb.set_trace()
         self.failUnlessEqual(inner.getLocallyAllowedTypes(), ('Document', 'Event'))
 
 
