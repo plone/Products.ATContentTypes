@@ -284,7 +284,7 @@ class ConstrainTypesMixin:
         args = (type_name, self, id, RESPONSE) + args
         return pt.constructContent(*args, **kw)
 
-    security.declarePrivate('getDefaultAllowTypes')
+    security.declarePrivate('getDefaultAddableTypes')
     def getDefaultAddableTypes(self):
         """returns a list of normally allowed objects as ftis
         """
