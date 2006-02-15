@@ -1,3 +1,13 @@
+1.0.?
+=====
+
+ * Modify getLocallyAllowedTypes and getImmediatelyAddableTypes to take
+   a context in which type creation is to be tested. This is used to determine
+   if a user can create a type in the current context instead of in a parent
+   folder.
+   http://dev.plone.org/plone/ticket/5255
+   [wichert]
+
 1.0.3-final 2006-01-20
 ======================
 
