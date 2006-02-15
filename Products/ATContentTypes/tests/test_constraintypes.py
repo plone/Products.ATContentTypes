@@ -132,12 +132,11 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         # Create a new unprivileged user who can only access the inner folder
         self.portal.acl_users._doAddUser('restricted', 'secret', ['Member'], [])
         inner.manage_addLocalRoles('restricted', ('Manager',))
-        self.af.setConstrainTypesMode(constraintypes.DISABLED)
         # Login the new user
         user = self.portal.acl_users.getUserById('restricted')
         newSecurityManager(None, user)
-        self.failUnlessEqual(inner.getLocallyAllowedTypes(), ('Document', 'Event'))
-
+        self.failUnlessEqual(inner.getLocallyAllowedTypes(),
+                        ('Folder', 'Image'))
 
         
     def test_acquireFromHetereogenousParent(self):
