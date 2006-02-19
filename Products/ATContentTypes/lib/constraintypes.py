@@ -232,7 +232,7 @@ class ConstrainTypesMixin:
 
         if mode == DISABLED:
             return [fti.getId() for fti in \
-                        PortalFolder.allowedContentTypes(self)]
+                        self.getDefaultAddableTypes(context)]
         elif mode == ENABLED:
             return self.getField('immediatelyAddableTypes').get(self)
         elif mode == ACQUIRE:
