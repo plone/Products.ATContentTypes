@@ -157,6 +157,15 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
                                        file=fakefile)
         self.assertEquals(id, fakefile.filename)
 
+    def testUpperCaseFilename(self):
+        class fakefile(StringIO.StringIO):
+            pass
+        fakefile = fakefile()
+        fakefile.filename = 'Some_filename_With_Uppercase.txt'
+        id = self.folder.invokeFactory(self.portal_type,
+                                       'image.2005-11-18.4066860572',
+                                       file=fakefile)
+        self.assertEquals(id, fakefile.filename)
 
 tests.append(TestSiteATFile)
 
