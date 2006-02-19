@@ -267,7 +267,8 @@ class ConstrainTypesMixin:
         allowed = list(self.getLocallyAllowedTypes())
         ftis = [ fti for fti in globalTypes if fti.getId() in allowed ]
 
-        return [ fti for fti in ftis if fti.isConstructionAllowed(self) ]
+        return ftis
+
 
     # overrides CMFCore's PortalFolder invokeFactory
     security.declareProtected(AddPortalContent, 'invokeFactory')
@@ -296,7 +297,9 @@ class ConstrainTypesMixin:
 
     security.declareProtected(View, 'getDefaultAddableTypes')
     def getDefaultAddableTypes(self, context=None):
-        """returns a list of normally allowed objects as ftis
+        """returns a list of normally allowed objects as ftis.
+        Exactly like PortalFolder.allowedContentTypes except this
+        will check in a specific context.
         """
         if context is None:
             context = self
