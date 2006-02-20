@@ -162,10 +162,22 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
             pass
         fakefile = fakefile()
         fakefile.filename = 'Some_filename_With_Uppercase.txt'
-        id = self.folder.invokeFactory(self.portal_type,
-                                       'image.2005-11-18.4066860572',
-                                       file=fakefile)
-        self.assertEquals(id, fakefile.filename)
+        id = 'file.2005-11-18.4066860573'
+        self.folder.invokeFactory(self.portal_type, id)
+        self.folder[id].setFile(fakefile)
+        self.failIf(id in self.folder.objectIds())
+        self.failUnless(fakefile.filename in self.folder.objectIds())
+        
+    def testUpperCaseFilenameWithFunnyCharacters(self):
+        class fakefile(StringIO.StringIO):
+            pass
+        fakefile = fakefile()
+        fakefile.filename = 'Zope&Plo?ne .txt'
+        id = 'file.2005-11-18.4066860574'
+        self.folder.invokeFactory(self.portal_type, id)
+        self.folder[id].setFile(fakefile)
+        self.failIf(id in self.folder.objectIds())
+        self.failUnless('Zope-Plo-ne .txt' in self.folder.objectIds())
 
 tests.append(TestSiteATFile)
 
