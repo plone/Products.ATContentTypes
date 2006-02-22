@@ -56,7 +56,7 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
         location = response.getHeader('Location').split('?')[0]
 
         self.failUnless(location.startswith(self.folder_url), location)
-        self.failUnless(location.endswith('/atct_edit'), location)
+        self.failUnless(location.endswith('edit'), location)
 
         # Perform the redirect
         edit_form_path = location[len(self.app.REQUEST.SERVER_URL):]
