@@ -30,6 +30,7 @@ from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
 from AccessControl import Unauthorized
+from AccessControl.SecurityManagement import newSecurityManager
 
 from Products.ATContentTypes.lib import constraintypes
 from Products.CMFPlone.interfaces.ConstrainTypes import ISelectableConstrainTypes
@@ -126,7 +127,17 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         # Make sure immediately-addable are inherited
         self.failUnlessEqual(inner.getImmediatelyAddableTypes(), 
                                 self.af.getImmediatelyAddableTypes())
+
         
+        # Create a new unprivileged user who can only access the inner folder
+        self.portal.acl_users._doAddUser('restricted', 'secret', ['Member'], [])
+        inner.manage_addLocalRoles('restricted', ('Manager',))
+        # Login the new user
+        user = self.portal.acl_users.getUserById('restricted')
+        newSecurityManager(None, user)
+        self.failUnlessEqual(inner.getLocallyAllowedTypes(),
+                        ('Folder', 'Image'))
+
         
     def test_acquireFromHetereogenousParent(self):
     
@@ -174,6 +185,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
                                 inner.getLocallyAllowedTypes())
         
         
+
 
 tests.append(TestConstrainTypes)
 

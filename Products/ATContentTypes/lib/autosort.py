@@ -107,7 +107,7 @@ class AutoOrderSupport(AutoSortSupport, OrderedContainer):
     security = ClassSecurityInfo()
 
     security.declarePrivate('autoOrderItems')
-    def autoOrderItems():
+    def autoOrderItems(self):
         """Auto order all containing items according to the settings
         """
         if not self.getSortAuto():

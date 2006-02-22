@@ -1,6 +1,5 @@
-1.1.0-devel unreleased
-======================
-
+1.1.0-alpha2 2006-02-22
+=======================
  * Reorganized z3 interfaces into the interface package, created a complete
    set of z3 interfaces, as well as tests for those interfaces.
    [jfroche, russf]
@@ -15,6 +14,16 @@
  * make trunk compatible with cmf > 1.5, by changing references to
    cmfcore.permissions and removing use of format_stx
    [k_vertigo, hannosch]
+
+1.0.4-devel unreleased
+======================
+
+ * Modify getLocallyAllowedTypes and getImmediatelyAddableTypes to take
+   a context in which type creation is to be tested. This is used to determine
+   if a user can create a type in the current context instead of in a parent
+   folder.
+   http://dev.plone.org/plone/ticket/5255
+   [wichert]
 
 1.0.3-final 2006-01-20
 ======================

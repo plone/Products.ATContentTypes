@@ -86,7 +86,7 @@ class ATPathCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'Location in portal'
+    shortDesc      = 'Location in site'
 
     def getNavTypes(self):
         ptool = self.plone_utils

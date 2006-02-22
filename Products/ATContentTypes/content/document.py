@@ -76,7 +76,7 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
 finalizeATCTSchema(ATDocumentSchema)
 
 class ATDocument(ATCTContent, HistoryAwareMixin):
-    """A page in the portal, which can contain rich text."""
+    """A page in the site. Can contain rich text."""
 
     schema         =  ATDocumentSchema
 
@@ -88,7 +88,7 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
     immediate_view = 'document_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Document', 'meta_type' : 'Document'}
-    typeDescription= 'A page in the portal, which can contain rich text.'
+    typeDescription= 'A page in the site. Can contain rich text.'
     typeDescMsgId  = 'description_edit_document'
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
     assocFileExt   = ('txt', 'stx', 'rst', 'rest', 'py',)

@@ -57,7 +57,7 @@ ATFavoriteSchema = ATContentTypeSchema.copy() + Schema((
                 primary=True,
                 validators = (),
                 widget = StringWidget(
-                        description=("Add http:// to link outside the portal."),
+                        description=("Add http:// to link outside the site."),
                         description_msgid = "help_url",
                         label = "URL",
                         label_msgid = "label_url",
@@ -66,7 +66,7 @@ ATFavoriteSchema = ATContentTypeSchema.copy() + Schema((
 finalizeATCTSchema(ATFavoriteSchema, moveDiscussion=False)
 
 class ATFavorite(ATCTContent):
-    """A placeholder item linking to a favorite object in the portal."""
+    """A placeholder item linking to a favorite object in the site."""
 
     schema         =  ATFavoriteSchema
 

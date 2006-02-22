@@ -80,7 +80,7 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
 finalizeATCTSchema(ATFileSchema)
 
 class ATFile(ATCTFileContent):
-    """An external file uploaded to the portal."""
+    """An external file uploaded to the site."""
 
     schema         =  ATFileSchema
 
@@ -92,7 +92,7 @@ class ATFile(ATCTFileContent):
     default_view   = 'file_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF File', 'meta_type' : 'Portal File'}
-    typeDescription= "An external file uploaded to the portal."
+    typeDescription= "An external file uploaded to the site."
     typeDescMsgId  = 'description_edit_file'
     assocMimetypes = ('application/*', 'audio/*', 'video/*', )
     assocFileExt   = ()

@@ -131,7 +131,7 @@ def cleanupFilename(filename, context=None, encoding='utf-8'):
     if context is not None:
         plone_utils = getToolByName(context, 'plone_utils', None)
         if plone_utils is not None:
-            return plone_utils.normalizeString(filename)
+            return plone_utils.normalizeString(filename, relaxed=True)
 
     # no context or plone_utils
     result = u''

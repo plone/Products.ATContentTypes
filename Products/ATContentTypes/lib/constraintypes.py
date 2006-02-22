@@ -191,41 +191,48 @@ class ConstrainTypesMixin:
     #
 
     security.declareProtected(View, 'getLocallyAllowedTypes')
-    def getLocallyAllowedTypes(self):
+    def getLocallyAllowedTypes(self, context=None):
         """If enableTypeRestrictions is ENABLE, return the list of types
         set. If it is ACQUIRE, get the types set on the parent so long
         as the parent is of the same type - if not, use the same behaviuor as
         DISABLE: return the types allowable in the item.
         """
+        if context is None:
+            context=self
         mode = self.getConstrainTypesMode()
 
         if mode == DISABLED:
-            return [fti.getId() for fti in self.getDefaultAddableTypes()]
+            return [fti.getId() for fti in self.getDefaultAddableTypes(context)]
         elif mode == ENABLED:
             return self.getField('locallyAllowedTypes').get(self)
         elif mode == ACQUIRE:
             #if not parent or parent.portal_type != self.portal_type:
             if not parentPortalTypeEqual(self):
-                return [fti.getId() for fti in self.getDefaultAddableTypes()]
+                return [fti.getId() for fti in self.getDefaultAddableTypes(context)]
             else:
                 parent = aq_parent(aq_inner(self))
-                return parent.getLocallyAllowedTypes()
+                if ISelectableConstrainTypes.isImplementedBy(parent):
+                    return parent.getLocallyAllowedTypes(context)
+                else:
+                    return parent.getLocallyAllowedTypes()
         else:
             raise ValueError, "Invalid value for enableAddRestriction"
 
 
     security.declareProtected(View, 'getImmediatelyAddableTypes')
-    def getImmediatelyAddableTypes(self):
+    def getImmediatelyAddableTypes(self, context=None):
         """Get the list of type ids which should be immediately addable.
         If enableTypeRestrictions is ENABLE, return the list set; if it is
         ACQUIRE, use the value from the parent; if it is DISABLE, return
         all type ids allowable on the item.
         """
+        if context is None:
+            context=self
         mode = self.getConstrainTypesMode()
 
         if mode == DISABLED:
             return [fti.getId() for fti in \
-                        PortalFolder.allowedContentTypes(self)]
+                        self.getDefaultAddableTypes(context)]
         elif mode == ENABLED:
             return self.getField('immediatelyAddableTypes').get(self)
         elif mode == ACQUIRE:
@@ -235,14 +242,16 @@ class ConstrainTypesMixin:
                         PortalFolder.allowedContentTypes(self)]
             else:
                 parent = aq_parent(aq_inner(self))
-                return parent.getImmediatelyAddableTypes()
+                return parent.getImmediatelyAddableTypes(context)
         else:
             raise ValueError, "Invalid value for enableAddRestriction"
 
     # overrides CMFCore's PortalFolder allowedTypes
-    def allowedContentTypes(self):
+    def allowedContentTypes(self, context=None):
         """returns constrained allowed types as list of fti's
         """
+        if context is None:
+            context=self
         mode = self.getConstrainTypesMode()
 
         # Short circuit if we are disabled or acquiring from non-compatible
@@ -254,11 +263,12 @@ class ConstrainTypesMixin:
 	         (mode == ACQUIRE and not parentPortalTypeEqual(self) ):
             return PortalFolder.allowedContentTypes(self)
 
-        globalTypes = self.getDefaultAddableTypes()
+        globalTypes = self.getDefaultAddableTypes(context)
         allowed = list(self.getLocallyAllowedTypes())
         ftis = [ fti for fti in globalTypes if fti.getId() in allowed ]
 
-        return [ fti for fti in ftis if fti.isConstructionAllowed(self) ]
+        return ftis
+
 
     # overrides CMFCore's PortalFolder invokeFactory
     security.declareProtected(AddPortalContent, 'invokeFactory')
@@ -284,13 +294,28 @@ class ConstrainTypesMixin:
         args = (type_name, self, id, RESPONSE) + args
         return pt.constructContent(*args, **kw)
 
-    security.declarePrivate('getDefaultAllowTypes')
-    def getDefaultAddableTypes(self):
-        """returns a list of normally allowed objects as ftis
+
+    security.declareProtected(View, 'getDefaultAddableTypes')
+    def getDefaultAddableTypes(self, context=None):
+        """returns a list of normally allowed objects as ftis.
+        Exactly like PortalFolder.allowedContentTypes except this
+        will check in a specific context.
         """
-        # Use the parent allowedContentTypes(), which respects global_allow
-        # and filter_content_types
-        return PortalFolder.allowedContentTypes(self)
+        if context is None:
+            context = self
+
+        result = []
+        portal_types = getToolByName(self, 'portal_types')
+        myType = portal_types.getTypeInfo(self)
+        if myType is not None:
+            for contentType in portal_types.listTypeInfo(context):
+                if myType.allowType( contentType.getId() ):
+                    result.append( contentType )
+        else:
+            result = portal_types.listTypeInfo()
+
+        return [ t for t in result if t.isConstructionAllowed(context) ]
+
 
     security.declarePublic('canSetConstrainTypes')
     def canSetConstrainTypes(self):
