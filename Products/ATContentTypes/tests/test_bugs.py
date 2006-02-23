@@ -19,7 +19,7 @@
 """Test module for bug reports
 """
 
-__author__ = 'Christian Heimes <ch@comlounge.net>'
+__author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 import os, sys

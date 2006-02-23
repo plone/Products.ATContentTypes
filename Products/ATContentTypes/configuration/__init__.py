@@ -19,7 +19,7 @@
 """ATCT ZConfig loader
 
 """
-__author__  = 'Christian Heimes <ch@comlounge.net>'
+__author__  = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 from Products.ATContentTypes.configuration.config import zconf

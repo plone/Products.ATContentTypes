@@ -22,7 +22,7 @@ Tests if the classes can be imported from the old path but the new path is the r
 path for pickling.
 """
 
-__author__ = 'Christian Heimes <ch@comlounge.net>'
+__author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 import os, sys

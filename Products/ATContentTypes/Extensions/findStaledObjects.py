@@ -28,7 +28,7 @@ find all objects which are:
 
 """ 
 
-__author__  = 'Christian Heimes <ch@comlounge.net>'
+__author__  = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 from DateTime import DateTime

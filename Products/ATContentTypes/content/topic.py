@@ -20,7 +20,7 @@
 
 
 """
-__author__  = 'Christian Heimes <ch@comlounge.net>, Alec Mitchell'
+__author__  = 'Christian Heimes <tiran@cheimes.de>, Alec Mitchell'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.ATTopic'
 
