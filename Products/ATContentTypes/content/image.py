@@ -21,7 +21,7 @@
 The basics for the EXIF information, orientation code and the rotation code
 were taken from CMFPhoto.
 """
-__author__  = 'Christian Heimes <ch@comlounge.net>'
+__author__  = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.ATImage'
 

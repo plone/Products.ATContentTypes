@@ -18,7 +18,7 @@
 #
 """
 """
-__author__  = 'Christian Heimes <ch@comlounge.net>'
+__author__  = 'Christian Heimes <tiran@cheimes.de>'
 
 import os, sys, traceback
 from cStringIO import StringIO

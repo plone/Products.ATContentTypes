@@ -18,7 +18,7 @@ numversion = (int(major), int(minor), int(bugfix), -199)
 license     = 'GPL, ZPL'
 copyright   = '''(c) 2003-2005 AT Content Types development team'''
 
-author      = 'AT Content Type development team, Christian Heimes <ch@comlounge.net>'
+author      = 'AT Content Type development team, Christian Heimes <tiran@cheimes.de>'
 author_email= 'heimes@faho.rwth-aachen.de'
 
 short_desc  = 'Archetypes reimplementation of the CMF core types'

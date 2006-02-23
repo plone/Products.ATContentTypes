@@ -18,7 +18,7 @@
 #
 """Auto sorting / auto ordering support
 """
-__author__  = 'Christian Heimes <ch@comlounge.net>'
+__author__  = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 from ExtensionClass import Base
