@@ -1,3 +1,5 @@
+-*- coding: utf-8 -*-
+
 ============
 WebDAV tests
 ============
@@ -6,8 +8,7 @@ ATContentTypes supports WebDAV and FTP uploads with small differences
 from ordinary AT based content types.
 
 First, we are going to setup an environment so we can test that stuff
-is acquired or not acquired at the right times. The code is based on
-Sidneys tests for Archetypes.
+is acquired or not acquired at the right times.
 
   >>> import os
   >>> from Products.Archetypes.tests.attestcase import user_name
@@ -48,7 +49,6 @@ Document
   ... PUT /%s/test-document HTTP/1.1
   ... Authorization: Basic %s:%s
   ... Content-Type: text/html; charset="utf-8"
-  ... Depth: 0
   ...
   ... %s""" % (fpath, user_name, user_password, input.read()))
   HTTP/1.1 201 Created
@@ -104,7 +104,6 @@ Document
   >>> print http(r"""
   ... PUT /%s/test-document2.txt HTTP/1.1
   ... Authorization: Basic %s:%s
-  ... Depth: 0
   ...
   ... %s""" % (fpath, user_name, user_password, "a test"))
   HTTP/1.1 201 Created
@@ -136,7 +135,6 @@ Event
   >>> print http(r"""
   ... PUT /%s/test-event.event HTTP/1.1
   ... Authorization: Basic %s:%s
-  ... Depth: 0
   ...
   ... %s""" % (fpath, user_name, user_password, input.read()))
   HTTP/1.1 201 Created
@@ -165,7 +163,6 @@ File
   ... PUT /%s/test-file HTTP/1.1
   ... Authorization: Basic %s:%s
   ... Content-Type: application/zip
-  ... Depth: 0
   ...
   ... %s""" % (fpath, user_name, user_password, input.read()))
   HTTP/1.1 201 Created
@@ -200,7 +197,6 @@ File, by Extension
   >>> print http(r"""
   ... PUT /%s/test-file.zip HTTP/1.1
   ... Authorization: Basic %s:%s
-  ... Depth: 0
   ...
   ... %s""" % (fpath, user_name, user_password, input.read()))
   HTTP/1.1 201 Created
@@ -349,7 +345,6 @@ Image
   ... PUT /%s/test-image HTTP/1.1
   ... Authorization: Basic %s:%s
   ... Content-Type: image/gif
-  ... Depth: 0
   ...
   ... %s""" % (fpath, user_name, user_password, input.read()))
   HTTP/1.1 201 Created
@@ -384,7 +379,6 @@ Image, by Extension
   >>> print http(r"""
   ... PUT /%s/test-image.gif HTTP/1.1
   ... Authorization: Basic %s:%s
-  ... Depth: 0
   ...
   ... %s""" % (fpath, user_name, user_password, input.read()))
   HTTP/1.1 201 Created
@@ -409,7 +403,6 @@ Image, by Extension
   >>> print http(r"""
   ... PUT /%s/test%%20my%%20image.gif HTTP/1.1
   ... Authorization: Basic %s:%s
-  ... Depth: 0
   ...
   ... %s""" % (fpath, user_name, user_password, input.read()))
   HTTP/1.1 201 Created
@@ -441,7 +434,6 @@ Link
   >>> print http(r"""
   ... PUT /%s/test-link.link HTTP/1.1
   ... Authorization: Basic %s:%s
-  ... Depth: 0
   ...
   ... %s""" % (fpath, user_name, user_password, input.read()))
   HTTP/1.1 201 Created
@@ -469,7 +461,6 @@ News Item
   >>> print http(r"""
   ... PUT /%s/test-newsitem.news HTTP/1.1
   ... Authorization: Basic %s:%s
-  ... Depth: 0
   ...
   ... %s""" % (fpath, user_name, user_password, input.read()))
   HTTP/1.1 201 Created
@@ -491,9 +482,144 @@ News Item
 WebDAV MKCOL
 ============
 
+Need manager roles here:
+
+  >>> self.setRoles(['Manager'])
+
 Folder
 ------
+
+  >>> print http(r"""
+  ... MKCOL /%s/test-folder-name HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ...
+  ... """ % (fpath, user_name, user_password))
+  HTTP/1.1 201 Created
+  ...
+
+  >>> self.folder['test-folder-name'].Title()
+  'test-folder-name'
 
 BTreeFolder
 -----------
 
+Need to make a BTreeFolder manually, and then do a MKCOL inside it:
+
+  >>> lpf = self.portal.portal_types['Large Plone Folder']
+  >>> lpf_allow = lpf.global_allow
+  >>> lpf.global_allow = True
+
+  >>> _ = self.folder.invokeFactory('Large Plone Folder', 'test-btree')
+
+  >>> print http(r"""
+  ... MKCOL /%s/test-btree/test-btreefolder-name HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ...
+  ... """ % (fpath, user_name, user_password))
+  HTTP/1.1 201 Created
+  ...
+
+  >>> self.folder['test-btree']['test-btreefolder-name'].Title()
+  'test-btreefolder-name'
+
+  >>> lpf.global_allow = lpf_allow
+
+
+WebDAV Name Mangling
+====================
+
+A experiment with WebDAV Name Mangling, by tweaking
+TraversalRequestNameStack with a before traverse hook. We want the
+title to end up with the original file/folder name even if the
+destination filename ends up mangled.
+
+  >>> body = """
+  ... from Products.CMFCore.utils import getToolByName
+  ...
+  ... # Only act on PUT, MKCOL
+  ... method = request.get('REQUEST_METHOD', 'GET').upper()
+  ... if method not in ('PUT', 'MKCOL'):
+  ...    return
+  ...
+  ... # See if we can find the plone tool and the method that is
+  ... # supposed to normalize strings.
+  ... pt = getToolByName(parent, 'plone_utils', None)
+  ... if pt is None:
+  ...     return
+  ... normalize = getattr(pt, 'normalizeString', None)
+  ... if normalize is None:
+  ...     return
+  ... # Alright, it's a method we want to handle.
+  ... if method in ('PUT', 'MKCOL'):
+  ...     # If it's a PUT or MKCOL we want to normalize the URL, so
+  ...     # tweak TraversalRequestNameStack.
+  ...     stack = request['TraversalRequestNameStack']
+  ...     if not stack:
+  ...         # Should this ever happen?
+  ...         return
+  ...     name = stack[0]
+  ...     stack[0] = name = normalize(name)
+  ... """
+
+  >>> factory = self.portal.manage_addProduct['PythonScripts']
+  >>> _ = factory.manage_addPythonScript('webdav_mangle')
+  >>> ps = self.portal['webdav_mangle']
+  >>> ps.ZPythonScript_edit('parent, request', body)
+
+  >>> factory = self.portal.manage_addProduct['SiteAccess']
+  >>> factory.manage_addAccessRule('webdav_mangle')
+
+
+PUT Mangling
+------------
+
+Now for the real thing, doing a PUT request, back to Member role:
+
+  >>> self.setRoles(['Member'])
+
+  >>> print http(r"""
+  ... PUT /%s/Foto%%20do%%20Paraná.jpg HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ...
+  ... """ % (fpath, user_name, user_password))
+  HTTP/1.1 201 Created
+  ...
+
+  >>> 'foto-do-parana.jpg' in self.folder.objectIds()
+  True
+
+  >>> image = self.folder['foto-do-parana.jpg']
+
+  >>> print image.getPortalTypeName()
+  Image
+
+  >>> print image.Title()
+  Foto do Paraná.jpg
+
+  >>> self.setRoles(['Manager'])
+
+MKCOL Mangling
+--------------
+
+Need manager roles here:
+
+  >>> self.setRoles(['Manager'])
+
+  >>> print http(r"""
+  ... MKCOL /%s/Fotos%%20de%%20Jurerê HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ...
+  ... """ % (fpath, user_name, user_password))
+  HTTP/1.1 201 Created
+  ...
+
+  >>> 'fotos-de-jurere' in self.folder.objectIds()
+  True
+
+  >>> print self.folder['fotos-de-jurere'].Title()
+  Fotos de Jurerê
+
+Then disable again the Access Rule:
+
+  >>> factory = self.portal.manage_addProduct['SiteAccess']
+  >>> factory.manage_addAccessRule(None)

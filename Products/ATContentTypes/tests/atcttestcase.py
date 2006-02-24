@@ -45,6 +45,7 @@ ZopeTestCase.installProduct('ATReferenceBrowserWidget')
 # XXX This is bad. Should be removed as soon as we have a proper solution in ZopeTestCase
 if ZopeTestCase.hasProduct('Five'):
     ZopeTestCase.installProduct('Five')
+ZopeTestCase.installProduct('SiteAccess')
 
 import os
 from Products.Archetypes.tests.attestcase import ATTestCase

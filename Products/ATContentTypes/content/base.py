@@ -23,6 +23,7 @@ __author__  = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 
+import posixpath
 from copy import copy
 import logging
 
@@ -326,10 +327,19 @@ class ATCTContent(ATCTMixin, BaseContent):
 
         Set title according to the id on webdav/ftp PUTs.
         """
+        id = self.getId()
         title = self.Title()
         if not title:
-            self.setTitle(self.getId())
-            
+            # Use the last-segment from the url as the id, as the
+            # object might have been renamed somehow (eg: by id
+            # mangling).
+            request = REQUEST or getattr(self, 'REQUEST', None)
+            if request is not None:
+                path_info = request.get('PATH_INFO')
+                if path_info:
+                    id = posixpath.basename(path_info)
+            self.setTitle(id)
+
     #def PUT(self, *args, **kwargs):
     #    """Overwrite PUT to delete ignored content after it is created
     #    """
@@ -536,12 +546,21 @@ class ATCTFileContent(ATCTContent):
         Set the title according to the uploaded filename if the title
         is empty or set it to the id if no filename is given.
         """
+        id = self.getId()
         title = self.Title()
         if not title:
             if filename:
                 self.setTitle(filename)
             else:
-                self.setTitle(self.getId())
+                # Use the last-segment from the url as the id, as the
+                # object might have been renamed somehow (eg: by id
+                # mangling).
+                request = REQUEST or getattr(self, 'REQUEST', None)
+                if request is not None:
+                    path_info = request.get('PATH_INFO')
+                    if path_info:
+                        id = posixpath.basename(path_info)
+                self.setTitle(id)
 
 InitializeClass(ATCTFileContent)
 
@@ -617,6 +636,14 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
         new = getattr(self, id)
         title = new.Title()
         if not title.strip():
+            # Use the last-segment from the url as the id, as the
+            # object might have been renamed somehow (eg: by id
+            # mangling).
+            request = REQUEST or getattr(self, 'REQUEST', None)
+            if request is not None:
+                path_info = request.get('PATH_INFO')
+                if path_info:
+                    id = posixpath.basename(path_info)
             new.update(title=id)
 
     security.declareProtected(View, 'HEAD')

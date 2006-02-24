@@ -8,7 +8,6 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase
-
 from Products.ATContentTypes.tests.atcttestcase import ATCTFunctionalSiteTestCase 
 
 FILES = ['webdav.txt', 'http_access.txt']
