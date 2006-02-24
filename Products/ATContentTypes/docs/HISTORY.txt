@@ -1,6 +1,15 @@
 1.0.?
 =====
 
+ * Made manage_afterPUT and manage_afterMKCOL use PATH_INFO to get at
+   the original id for usage in the Title, so that in a WebDAV
+   name-mangling environment the Title gets set to the original
+   filename.
+   [sidnei]
+
+ * Added test for ATFolder and ATBTreeFolder MKCOL.
+   [sidnei]
+
  * Modify getLocallyAllowedTypes and getImmediatelyAddableTypes to take
    a context in which type creation is to be tested. This is used to determine
    if a user can create a type in the current context instead of in a parent
@@ -18,7 +27,7 @@
 1.0.2-final 2006-01-03
 ======================
 
- * Fixed #5028: constraintypes.py doesn't work properly with PortalFactory when 
+ * Fixed #5028: constraintypes.py doesn't work properly with PortalFactory when
    acquiring types.
    https://trac.plone.org/plone/ticket/5028
    [panjunyong]
@@ -134,7 +143,7 @@
  * Packaged 1.0.0 final with a tip of the hat to Christian Heimes who has
    disappeared from our radar. We miss you, dude.
    [stefan]
- 
+
  * Made migration more tolerant of conflicting ids due to auto-created content
    from manage_afterAdd or similar.  Fixes http://plone.org/collector/4468
    [alecm]
@@ -286,12 +295,12 @@
  * Enabled swallowResizeExceptions by default and added warning that original
    image resizing destroies the exif information before the data is saved.
    [tiran]
- 
+
  * Fixed spelling error in a security declaration of ATTopic.
    [tiran]
 
  * Fixed critical migration issue. Locally added roles and locally changed
-   permissions are now migrated. Also added unit tests to verify the 
+   permissions are now migrated. Also added unit tests to verify the
    migration.
    [tiran]
 
@@ -310,10 +319,10 @@
    to CMFDynamicViewFTI. Migration to the new FTI is part of the version
    migration again.
    [tiran]
-   
+
  * Added migration step + unit test for '(selected layout)' change.
    [tiran]
-   
+
  * Optimized getRawRelatedItems index addition. There is no need to reindex
    the *whole* catalog when adding a *single* index.
    [tiran]
@@ -389,7 +398,7 @@
    reorder is mostly harmless.
    [tiran]
 
- * Added workarounds for EXIF MakerNote errors. Some cameras are *really* 
+ * Added workarounds for EXIF MakerNote errors. Some cameras are *really*
    broken. Better no make notes than no exif infos at all.
    [tiran]
 
@@ -401,12 +410,12 @@
  * Clean up multiple Topic folder_contents tabs.
    [alecm]
 
- * Readded a seperate _cleanupFilename method for ATCTFileContent to make it 
+ * Readded a seperate _cleanupFilename method for ATCTFileContent to make it
    better for patch.
    [panjunyong]
 
  * Fixed http://plone.org/collector/4218 ATCT now uses normalizeString from
-   PloneTool. 
+   PloneTool.
    [hannosch]
 
  * Fixed http://plone.org/collector/4170 Link checking is crazy and [ 1197068 ]
@@ -421,10 +430,10 @@
  * Disabled text/x-python and text/plain-pre by default. Customize the
    atcontenttypes.conf if you need them.
    [tiran]
-   
+
  * Removed relatedItems field from folderish objects.
    [tiran]
-   
+
  * Made download tab for File and Image invisible.
    [tiran]
 

@@ -35,6 +35,7 @@ __docformat__ = 'restructuredtext'
 from Testing import ZopeTestCase
 ZopeTestCase.installProduct('ATContentTypes')
 ZopeTestCase.installProduct('ATReferenceBrowserWidget')
+ZopeTestCase.installProduct('SiteAccess')
 
 import os
 from Products.Archetypes.tests.attestcase import ATTestCase
