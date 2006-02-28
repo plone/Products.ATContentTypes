@@ -90,7 +90,7 @@ What is new in ATContentTypes 1.0
   * The migration from CMF types to ATContentTypes types has some new helpers
     to recatalog CMF or ATContentTypes based types to make sure neither an
     object is missing nor that staled objects are in the catalog. The recatalog
-    features are exposed through the tool. In order to sucessfully migrate a
+    features are exposed through the tool. In order to successfully migrate a
     site you **must** recatalog it using the api or some objects like the
     members folder or topic aren't migrated.
  
