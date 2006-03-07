@@ -58,7 +58,7 @@ import Products.ATContentTypes.lib.validators
 import Products.ATContentTypes.content
 import Products.ATContentTypes.criteria
 
-# misc imports 
+# misc imports
 import Products.ATContentTypes.Extensions.Install
 from Products.ATContentTypes import migration
 from Products.ATContentTypes.tool.atct import ATCTTool
@@ -76,13 +76,13 @@ def initialize(context):
     # Setup migrations
     migration.executeMigrations()
     migration.registerMigrations()
-    
+
     # process our custom types
-    
+
     ToolInit(
-        'ATContentTypes tools', 
+        'ATContentTypes tool',
         tools=(ATCTTool,),
-        icon='tool.gif', ).initialize(context) 
+        icon='tool.gif', ).initialize(context)
 
     listOfTypes = listTypes(PROJECTNAME)
 
@@ -93,7 +93,7 @@ def initialize(context):
     # Assign an own permission to all content types
     # Heavily based on Bricolite's code from Ben Saller
     from Products.ATContentTypes.permission import permissions
-    
+
     allTypes = zip(content_types, constructors)
     for atype, constructor in allTypes:
         kind = "%s: %s" % (PROJECTNAME, atype.archetype_name)
