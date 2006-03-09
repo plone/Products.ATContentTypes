@@ -297,7 +297,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('eventType')
         self.failUnless(ILayerContainer.isImplementedBy(field))
-        self.failUnless(field.required == 1, 'Value is %s' % field.required)
+        self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == (), 'Value is %s' % str(str(field.default)))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
         self.failUnless(field.vocabulary == 'getEventTypes',
@@ -325,8 +325,8 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
-        self.failUnless(field.validators == (),
-                        'Value is %s' % str(field.validators))
+        self.failUnless(field.validators == EmptyValidator,
+                        'Value is %s' % repr(field.validators))
         self.failUnless(isinstance(field.widget, MultiSelectionWidget),
                         'Value is %s' % id(field.widget))
 

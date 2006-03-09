@@ -127,7 +127,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                                   i18n_domain="plone")),
 
     LinesField('eventType',
-               required=True,
+               required=False,
                searchable=True,
                write_permission = ChangeEvents,
                vocabulary = 'getEventTypes',
