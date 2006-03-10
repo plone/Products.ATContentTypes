@@ -39,7 +39,7 @@ from Products.Archetypes.public import StringField
 from Products.Archetypes.public import TextField
 from Products.Archetypes.public import CalendarWidget
 from Products.Archetypes.public import LinesWidget
-from Products.Archetypes.public import MultiSelectionWidget
+from Products.Archetypes.public import KeywordWidget
 from Products.Archetypes.public import RichWidget
 from Products.Archetypes.public import StringWidget
 from Products.Archetypes.public import RFC822Marshaller
@@ -130,9 +130,8 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                required=False,
                searchable=True,
                write_permission = ChangeEvents,
-               vocabulary = 'getEventTypes',
                languageIndependent=True,
-               widget = MultiSelectionWidget(
+               widget = KeywordWidget(
                         size = 6,
                         description="",
                         description_msgid = "help_event_type",
@@ -270,10 +269,9 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
     def getEventTypes(self):
         """fetch a list of the available event types from the vocabulary
         """
-        metatool = getToolByName(self, "portal_metadata")
-        my_type = self.getPortalTypeName()
-        events = metatool.listAllowedSubjects(content_type = my_type)
-        return events
+        f = self.getField('eventType')
+        result = self.collectKeywords('eventType', f.accessor)
+        return tuple(result)
 
     security.declarePrivate('cmf_edit')
     def cmf_edit(self, title=None, description=None, eventType=None,

@@ -300,8 +300,6 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == (), 'Value is %s' % str(str(field.default)))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == 'getEventTypes',
-                        'Value is %s' % str(field.vocabulary))
         self.failUnless(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.failUnless(field.multiValued == 0,
@@ -327,7 +325,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(ILayerContainer.isImplementedBy(field))
         self.failUnless(field.validators == EmptyValidator,
                         'Value is %s' % repr(field.validators))
-        self.failUnless(isinstance(field.widget, MultiSelectionWidget),
+        self.failUnless(isinstance(field.widget, KeywordWidget),
                         'Value is %s' % id(field.widget))
 
 

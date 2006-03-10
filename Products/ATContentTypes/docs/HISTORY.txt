@@ -1,5 +1,15 @@
+1.1.0-beta1
+===========
+
+ * Use KeywordWidget for eventType.
+   [fschulze]
+
+ * Body of news items and event types can be empty now.
+   [fschulze]
+
 1.1.0-alpha2 2006-02-22
 =======================
+
  * Reorganized z3 interfaces into the interface package, created a complete
    set of z3 interfaces, as well as tests for those interfaces.
    [jfroche, russf]
