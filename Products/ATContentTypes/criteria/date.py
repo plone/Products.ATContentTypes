@@ -62,7 +62,7 @@ CompareOperations = DisplayList((
     ))
 
 RangeOperations = DisplayList((
-                    ('-', 'ago')
+                    ('-', 'in the past')
                   , ('+', 'in the future')
     ))
 
