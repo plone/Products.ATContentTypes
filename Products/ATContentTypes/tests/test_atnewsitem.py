@@ -23,6 +23,7 @@ __author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 import os, sys
+import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
@@ -44,7 +45,6 @@ from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.CMFDefault.NewsItem import NewsItem
 from Interface.Verify import verifyObject
-from Products.CMFPlone import transaction
 
 # z3 imports
 from Products.ATContentTypes.interface import ITextContent as Z3ITextContent
@@ -125,7 +125,7 @@ class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
         time.sleep(1.5)
 
         # migrated (needs subtransaction to work)
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
         m = NewsItemMigrator(old)
         m(unittest=1)
 

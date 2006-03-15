@@ -23,6 +23,7 @@ __author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 import os, sys
+import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
@@ -33,7 +34,6 @@ from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.tool.atct import ATCTTool
 from Products.ATContentTypes.Extensions.Install import removeExteneralMethods
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone import transaction
 from StringIO import StringIO
 
 tests = []
@@ -45,7 +45,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         self.ttool = getattr(self.portal.aq_explicit, 'portal_types')
         self.qi = getattr(self.portal.aq_explicit, 'portal_quickinstaller')
         self.cat = getattr(self.portal.aq_explicit, 'portal_catalog')
-        
+
     def test_installed_products(self):
         qi = self.qi
         installed = [ prod['id'] for prod in qi.listInstalledProducts() ]
@@ -54,7 +54,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         self.failUnless('Archetypes' in installed, installed)
         self.failUnless('ATContentTypes' in installed, installed)
         self.failUnless('ATReferenceBrowserWidget' in installed, installed)
-        
+
     def test_tool_installed(self):
         t = getToolByName(self.portal, TOOLNAME, None)
         self.failUnless(t, t)
@@ -83,7 +83,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
     def test_reinstallKeepsCMFTypes(self):
         # test if CMF types are not removed and are still CMF types
         # reinstall requires manager roles
-        self.setRoles(['Manager', 'Member']) 
+        self.setRoles(['Manager', 'Member'])
         qi = self.qi
         ttool = self.ttool
         cmf_ids = ('CMF Document', 'CMF Favorite', 'CMF File',
@@ -98,11 +98,11 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
             self.failUnless(id in tids, (id, tids))
             tinfo = ttool[id]
             self.failUnless(tinfo.product in cmf_prods, tinfo.product)
-            
+
     def test_uninstallMakesCMFTypes(self):
         # tests if uninstall resets cmf types
         # reinstall requires manager roles
-        self.setRoles(['Manager', 'Member']) 
+        self.setRoles(['Manager', 'Member'])
         qi = self.qi
         ttool = self.ttool
         cmf_ids = ('Document', 'Favorite', 'File',
@@ -111,21 +111,21 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         cmf_prods = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFCalendar')
 
         qi.uninstallProducts(('ATContentTypes',))
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
 
         tids = ttool.objectIds()
         for id in cmf_ids:
             self.failUnless(id in tids, (id, tids))
             tinfo = ttool[id]
             self.failUnless(tinfo.product in cmf_prods, tinfo.product)
-            
+
     def test_installsetsCMFcataloged(self):
         t = self.tool
         self.failUnless(t.getCMFTypesAreRecataloged())
 
     def test_release_settings_SAVE_TO_FAIL_FOR_DEVELOPMENT(self):
         self.failUnlessEqual(SWALLOW_IMAGE_RESIZE_EXCEPTIONS, True)
- 
+
     def test_reindex_doesnt_add_tools(self):
         cat = self.cat
         ids = [id for id in self.portal.objectIds()
@@ -136,14 +136,14 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
                 result = cat(id=id)
                 l = len(result)
                 self.failUnlessEqual(l, 0, (id, l, result))
- 
+
     def test_adds_related_items_catalog_index(self):
         self.assertEqual(self.cat.Indexes['getRawRelatedItems'].__class__.__name__,
                          'KeywordIndex')
 
     def test_api_import(self):
         import Products.ATContentTypes.atct
-        
+
     def test_cleanup_external_methods(self):
         id = 'migrateFromCMFtoATCT'
         em = self.portal.manage_addProduct['ExternalMethod']
@@ -152,8 +152,8 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         self.failUnless(id in self.portal.objectIds())
         removeExteneralMethods(self.portal, StringIO())
         self.failIf(id in self.portal.objectIds())
-        
-    
+
+
 tests.append(TestInstallation)
 
 if __name__ == '__main__':

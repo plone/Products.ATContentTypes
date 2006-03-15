@@ -1,6 +1,10 @@
 1.1.0-beta1
 ===========
 
+ * Update transaction imports, remove subtransaction usage, use python logger
+   everywhere, other deprecation related cleanup, whitespace cleanup.
+   [alecm]
+
  * Use KeywordWidget for eventType.
    [fschulze]
 

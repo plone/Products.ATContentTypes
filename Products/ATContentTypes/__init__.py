@@ -23,10 +23,11 @@ __docformat__ = 'restructuredtext'
 
 import os.path
 import sys
+import logging
 
-from zLOG import LOG, INFO
+logger = logging.getLogger('ATCT')
 
-LOG('ATContentTypes',INFO, 'Installing Product')
+logger.info('ATCT: Installing Product')
 
 ATCT_DIR = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(3, os.path.join(ATCT_DIR, 'thirdparty'))

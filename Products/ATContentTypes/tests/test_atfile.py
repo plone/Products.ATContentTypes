@@ -28,6 +28,7 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 import unittest
+import transaction
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
@@ -45,7 +46,6 @@ from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.interfaces import IFileContent
 from Products.CMFDefault.File import File
 from Interface.Verify import verifyObject
-from Products.CMFPlone import transaction
 
 # z3 imports
 from Products.ATContentTypes.interface import IATFile as Z3IATFile
@@ -133,7 +133,7 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         time.sleep(1.5)
 
         # migrated (needs subtransaction to work)
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
         m = FileMigrator(old)
         m(unittest=1)
 

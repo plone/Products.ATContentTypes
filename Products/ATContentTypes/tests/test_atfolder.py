@@ -23,6 +23,7 @@ __author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 import os, sys
+import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
@@ -52,7 +53,6 @@ from zope.interface.verify import verifyClass
 from Products.ATContentTypes.interfaces import IAutoSortSupport
 from Products.ATContentTypes.interfaces import IAutoOrderSupport
 from Interface.Verify import verifyObject
-from Products.CMFPlone import transaction
 
 from Products.CMFPlone.interfaces.ConstrainTypes import ISelectableConstrainTypes
 
@@ -92,14 +92,14 @@ class FolderTestMixin:
         ttool = self.portal.portal_types
         old_fti = ttool[self.cmf_portal_type]
         role = 'testrole'
-        
+
         # create old object
         self.setRoles(['Manager',])
         old_fti.global_allow = 1
         self.folder.invokeFactory(self.cmf_portal_type, 'rolecheck')
         obj = self.folder.rolecheck
         self.failUnlessEqual(obj.portal_type, self.cmf_portal_type)
-        
+
         # add a role
         self.failIf(role in obj.valid_roles())
         obj._addRole(role)
@@ -128,8 +128,8 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
     def test_implementsOrderInterface(self):
         self.failUnless(IZopeOrderedContainer.isImplementedBy(self._ATCT))
         self.failUnless(IOrderedContainer.isImplementedBy(self._ATCT))
-        self.failUnless(verifyObject(IZopeOrderedContainer, self._ATCT))  
-        self.failUnless(verifyObject(IOrderedContainer, self._ATCT))  
+        self.failUnless(verifyObject(IZopeOrderedContainer, self._ATCT))
+        self.failUnless(verifyObject(IOrderedContainer, self._ATCT))
 
     def test_implementsATFolder(self):
         iface = IATFolder
@@ -167,7 +167,7 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         created     = old.CreationDate()
 
         # migrated (needs subtransaction to work)
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
         m = FolderMigrator(old)
         m(unittest=1)
 
@@ -201,7 +201,7 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
         # migration will raise an error if it attempts to incorrectly migrate
         # the index_html
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
         m = FolderMigrator(index)
         try:
             m(unittest=1)
@@ -251,7 +251,7 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         iface = ISelectableConstrainTypes
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
-    
+
     def test_isNotOrdered(self):
         iface = IZopeOrderedContainer
         self.failIf(iface.isImplementedBy(self._ATCT))
@@ -282,7 +282,7 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         bogus = old.bogus
 
         # migrated (needs subtransaction to work)
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
         m = LargeFolderMigrator(old)
         m(unittest=1)
 
@@ -305,12 +305,12 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         created     = old.CreationDate()
 
         # Add subobject to test child migration
-        
+
         bogus = self._createType(old, 'CMF Document', 'bogus')
         bogus = old.bogus
 
         # migrated (needs subtransaction to work)
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
         m = DocumentMigrator(bogus)
         try:
             m(unittest=1)
@@ -336,7 +336,7 @@ class TestATFolderFields(atcttestcase.ATCTFieldTestCase):
     def test_field_enableConstrainMixin(self):
         pass
         #self.fail('not implemented')
-        
+
     def test_field_locallyAllowedTypes(self):
         pass
         #self.fail('not implemented')
@@ -352,7 +352,7 @@ class TestATBTreeFolderFields(TestATFolderFields):
 tests.append(TestATBTreeFolderFields)
 
 class TestAutoSortSupport(atcttestcase.ATCTSiteTestCase):
-    
+
     def afterSetUp(self):
         atcttestcase.ATCTSiteTestCase.afterSetUp(self)
         self.folder.invokeFactory('Folder', 'fobj', title='folder 1')
@@ -366,19 +366,19 @@ class TestAutoSortSupport(atcttestcase.ATCTSiteTestCase):
                     )
         for pt, id, title in self.objs:
             self.fobj.invokeFactory(pt, id, title=title)
-        
+
     def test_autoordering(self):
         f = self.fobj
         self.failUnlessEqual(f.getDefaultSorting(), ('Title', False))
         self.failUnlessEqual(f.getSortFolderishFirst(), True)
         self.failUnlessEqual(f.getSortReverse(), False)
         self.failUnlessEqual(f.getSortAuto(), True)
-        
+
         f.setDefaultSorting('getId', reverse=True)
         f.setSortFolderishFirst(False)
         f.setSortReverse(True)
         f.setSortAuto(False)
-        
+
         self.failUnlessEqual(f.getDefaultSorting(), ('getId', True))
         self.failUnlessEqual(f.getSortFolderishFirst(), False)
         self.failUnlessEqual(f.getSortReverse(), True)

@@ -23,6 +23,7 @@ __author__ = 'Alec Mitchell <apm13@columbia.edu>'
 __docformat__ = 'restructuredtext'
 
 import os, sys
+import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
@@ -36,7 +37,6 @@ from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.content.document import ATDocument
 from Products.ATContentTypes.migration.atctmigrator import DocumentMigrator
 from Products.CMFDefault.Document import Document
-from Products.CMFPlone import transaction
 
 example_stx = """
 Header
@@ -105,10 +105,10 @@ class TestTypeMigrations(atcttestcase.ATCTTypeTestCase):
         self.body        = self.old.CookedBody(stx_level=2)
 
         # migrated (needs subtransaction to work)
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
         m = DocumentMigrator(self.old)
         m(unittest=1)
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
 
         self.migrated = getattr(self.folder, self.id)
 
@@ -159,9 +159,9 @@ class TestTypeMigrations(atcttestcase.ATCTTypeTestCase):
         self.login('user1')
         self.failIf(self.pm.checkPermission('View',self.old))
         self.login()
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
         self.portal.portal_atct.migrateToATCT(self.portal)
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
 
         self.migrated = getattr(self.folder, self.id)
 
@@ -175,7 +175,7 @@ class TestTypeMigrations(atcttestcase.ATCTTypeTestCase):
         # Remove Large Plone Folder
         ttool.manage_delObjects(['Large Plone Folder'])
 
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
         try:
             self.portal.portal_atct.migrateToATCT()
         except Exception, e:
@@ -190,7 +190,7 @@ class TestTypeMigrations(atcttestcase.ATCTTypeTestCase):
         doc4 = self._createType(fold, 'CMF Document', 'doc4')
         doc5 = self._createType(fold, 'CMF Document', 'doc5')
         fold.moveObjectToPosition('doc5', 3)
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
         self.assertEqual(fold.portal_type, 'CMF Folder')
         self.assertEqual(doc1.portal_type, 'CMF Document')
         self.assertEqual(fold.objectIds(),
@@ -202,7 +202,7 @@ class TestTypeMigrations(atcttestcase.ATCTTypeTestCase):
         self.assertEqual(doc1.portal_type, 'Document')
         self.assertEqual(fold.objectIds(),
                                         ['doc1','doc2','doc3','doc5','doc4'])
-    
+
     def test_migrationFixCMFPortalTypes(self):
         cat = self.portal.portal_catalog
         cmfdoc = self._createType(self.folder, 'CMF Document', 'cmfdoc')

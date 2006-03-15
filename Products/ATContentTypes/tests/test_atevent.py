@@ -23,6 +23,7 @@ __author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 import os, sys
+import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
@@ -48,7 +49,6 @@ from DateTime import DateTime
 from Products.ATContentTypes.interfaces import ICalendarSupport
 from Products.ATContentTypes.interfaces import IATEvent
 from Interface.Verify import verifyObject
-from Products.CMFPlone import transaction
 
 # z3 imports
 from Products.ATContentTypes.interface import ICalendarSupport as Z3ICalendarSupport
@@ -176,10 +176,10 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         ev_type = old.Subject()
 
         # migrated (needs subtransaction to work)
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
         m = EventMigrator(old)
         m(unittest=1)
-        
+
         self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
         migrated = getattr(self.folder, id)
 
@@ -219,11 +219,11 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         day29 = DateTime('2004-12-29 0:00:00')
         day30 = DateTime('2004-12-30 0:00:00')
         day31 = DateTime('2004-12-31 0:00:00')
-        
+
         e1.edit(startDate = day29, endDate=day30, title='event')
         e2.edit(startDate = day29, endDate=day30, title='event')
         self.failUnlessEqual(cmp(e1, e2), 0)
-    
+
         # start date
         e1.edit(startDate = day29, endDate=day30, title='event')
         e2.edit(startDate = day30, endDate=day31, title='event')
@@ -233,7 +233,7 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         e1.edit(startDate = day29, endDate=day30, title='event')
         e2.edit(startDate = day29, endDate=day31, title='event')
         self.failUnlessEqual(cmp(e1, e2), -1)  # e1 < e2
-    
+
         # title
         e1.edit(startDate = day29, endDate=day30, title='event')
         e2.edit(startDate = day29, endDate=day30, title='evenz')

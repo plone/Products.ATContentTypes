@@ -42,13 +42,13 @@ else:
     HAS_EPOZ = False
 
 import time
+import transaction
 from Products.Archetypes.tests.atsitetestcase import ATFunctionalSiteTestCase
 from Products.Archetypes.tests.attestcase import default_user
 from Products.Archetypes.tests.atsitetestcase import portal_owner
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
-from Products.CMFPlone import transaction
 
 class IntegrationTestCase(ATFunctionalSiteTestCase):
 
@@ -110,9 +110,9 @@ class IntegrationTestCase(ATFunctionalSiteTestCase):
 class ATCTIntegrationTestCase(IntegrationTestCase):
     """Integration tests for view and edit templates
     """
-    
+
     portal_type = None
-        
+
     def setupTestObject(self):
         # create test object
         self.obj_id = 'test_object'
@@ -120,7 +120,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         self.obj = getattr(self.folder.aq_explicit, self.obj_id)
         self.obj_url = self.obj.absolute_url()
         self.obj_path = '/%s' % self.obj.absolute_url(1)
-        
+
     def test_createObject(self):
         # create an object using the createObject script
         response = self.publish(self.folder_path +
@@ -131,7 +131,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
         # omit ?portal_status_message=...
         body = response.getBody().split('?')[0]
-        
+
         self.failUnless(body.startswith(self.folder_url), body)
         # The url may end with /edit or /atct_edit depending on method aliases
         self.failUnless(body.endswith('edit'), body)
@@ -144,14 +144,14 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
         new_obj = getattr(self.folder.portal_factory, temp_id)
         self.failUnlessEqual(self.obj.checkCreationFlag(), True) # object is not yet edited
-        
+
 
     def check_newly_created(self):
         """Objects created programmatically should not have the creation flag set"""
         self.failUnlessEqual(self.obj.checkCreationFlag(), False) # object is fully created
 
     def test_edit_view(self):
-        # edit should work        
+        # edit should work
         response = self.publish('%s/atct_edit' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
 
@@ -173,17 +173,17 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
     def test_local_sharing_view(self):
         # sharing tab should work
         response = self.publish('%s/folder_localrole_form' % self.obj_path, self.basic_auth)
-        self.assertStatusEqual(response.getStatus(), 200) # OK    
+        self.assertStatusEqual(response.getStatus(), 200) # OK
 
     def test_workflow_view(self):
         # workflow tab should work
         response = self.publish('%s/content_status_history' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
-        
+
     def test_linguaplone_views(self):
         if not HAS_LINGUA_PLONE:
             return
-        
+
         response = self.publish('%s/translate_item' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
         response = self.publish('%s/manage_translations_form' % self.obj_path, self.basic_auth)
@@ -192,15 +192,15 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
     def test_linguaplone_create_translation(self):
         if not HAS_LINGUA_PLONE:
             return
-        
+
         # create translation creates a new object
-        response = self.publish('%s/createTranslation?language=de&set_language=de' 
+        response = self.publish('%s/createTranslation?language=de&set_language=de'
                                  % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 302) # Redirect
 
         # omit ?portal_status_message=...
         body = response.getBody().split('?')[0]
-        
+
         self.failUnless(body.startswith(self.folder_url))
         self.failUnless(body.endswith('/translate_item'))
 
@@ -208,64 +208,64 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         form_path = body[len(self.app.REQUEST.SERVER_URL):]
         response = self.publish(form_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
-        
+
         translated_id = "%s-de" % self.obj_id
         self.failUnless(translated_id in self.folder.objectIds(),
                         self.folder.objectIds())
-    
+
     def test_additional_view(self):
         # additional views:
         for view in self.views:
             response = self.publish('%s/%s' % (self.obj_path, view), self.basic_auth)
-            self.assertStatusEqual(response.getStatus(), 200, 
+            self.assertStatusEqual(response.getStatus(), 200,
                 "%s: %s" % (view, response.getStatus())) # OK
-                
+
     def test_discussion(self):
         # enable discussion for  the type
         ttool = getToolByName(self.portal, 'portal_types')
         ttool[self.portal_type].allow_discussion = True
-        
-        response = self.publish('%s/discussion_reply_form' 
+
+        response = self.publish('%s/discussion_reply_form'
                                  % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # ok
-        
-        response = self.publish('%s/discussion_reply?subject=test&body_text=testbody' 
+
+        response = self.publish('%s/discussion_reply?subject=test&body_text=testbody'
                                  % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 302) # Redirect
-        
+
         # omit ?portal_status_message=...
         body = response.getBody().split('?')[0]
-        
+
         self.failUnless(body.startswith(self.folder_url))
-        
+
         # Perform the redirect
         form_path = body[len(self.app.REQUEST.SERVER_URL):]
         response = self.publish(form_path, self.basic_auth)
 #         self.assertStatusEqual(response.getStatus(), 200) # OK
-        
+
         self.failUnless(hasattr(self.obj.aq_explicit, 'talkback'))
 
     def test_dynamicViewContext(self):
         # register and add a testing template (it's a script)
         self.setRoles(['Manager', 'Member'])
-        
+
         ttool = self.portal.portal_types
         fti = getattr(ttool, self.portal_type)
         view_methods = fti.getAvailableViewMethods(self.obj) + ('unittestGetTitleOf',)
         fti.manage_changeProperties(view_methods=view_methods)
-        
+
         self.obj.setLayout('unittestGetTitleOf')
         self.folder.setTitle('the folder')
         self.obj.setTitle('the obj')
 
         self.setRoles(['Member'])
-        
+
         response = self.publish('%s/view' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
-        
+
         output = response.getBody().split(',')
         self.failUnlessEqual(len(output), 4, output)
-        
+
         self.failUnlessEqual(output, ['the obj', 'the folder', 'the obj', 'the folder'])
 
 from Products.CMFCore.utils import getToolByName
@@ -282,7 +282,7 @@ def setupEditors(app, id=portal_name, quiet=False):
     # login as manager
     user = app.acl_users.getUserById(portal_owner).__of__(app.acl_users)
     newSecurityManager(None, user)
-    qi = getToolByName(portal, 'portal_quickinstaller') 
+    qi = getToolByName(portal, 'portal_quickinstaller')
     # add kupu
     if HAS_KUPU:
         if not quiet: ZopeTestCase._print('Adding kupu ... ')

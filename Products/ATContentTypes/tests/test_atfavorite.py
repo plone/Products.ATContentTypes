@@ -23,6 +23,7 @@ __author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 import os, sys
+import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
@@ -41,7 +42,6 @@ from Products.ATContentTypes.migration.atctmigrator import FavoriteMigrator
 from Products.ATContentTypes.interfaces import IATFavorite
 from Products.CMFDefault.Favorite import Favorite
 from Interface.Verify import verifyObject
-from Products.CMFPlone import transaction
 
 # z3 imports
 from Products.ATContentTypes.interface import IATFavorite as Z3IATFavorite
@@ -86,20 +86,20 @@ class TestSiteATFavorite(atcttestcase.ATCTTypeTestCase):
         old = editCMF(self._cmf)
         new = editATCT(self._ATCT)
         transaction.savepoint()
-        
+
         # CMF uid handling test ... had some issues with it
         obj = self.portal.unrestrictedTraverse(URL)
         handler = getToolByName(self.portal, 'portal_uidhandler')
         uid = old.remote_uid
-        self.failUnlessEqual(handler.queryObject(uid).getPhysicalPath(), 
+        self.failUnlessEqual(handler.queryObject(uid).getPhysicalPath(),
                              obj.getPhysicalPath())
-        
+
         self.failUnlessEqual(old.Title(), new.Title())
         self.failUnlessEqual(old.Description(), new.Description())
-        
+
         url = 'http://nohost%s' % URL
         self.failUnlessEqual(url, obj.absolute_url())
-        
+
         self.failUnlessEqual(old.remote_url, URL[len(portal_name)+2:])
         self.failUnlessEqual(old.remote_url, new.remote_url)
         self.failUnlessEqual(old.getRemoteUrl(), url)

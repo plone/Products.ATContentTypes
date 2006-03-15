@@ -48,6 +48,7 @@ if ZopeTestCase.hasProduct('Five'):
 ZopeTestCase.installProduct('SiteAccess')
 
 import os
+import transaction
 from Products.Archetypes.tests.attestcase import ATTestCase
 from Products.Archetypes.tests.atsitetestcase import ATSiteTestCase
 
@@ -75,7 +76,6 @@ from Products.ATContentTypes.tests.utils import DummySessionDataManager
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 from Products.CMFCore.utils import getToolByName
 from Testing.ZopeTestCase.functional import Functional
-from Products.CMFPlone import transaction
 
 # BBB remove import from PloneLanguageTool later
 try:

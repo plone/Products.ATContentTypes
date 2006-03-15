@@ -9,8 +9,6 @@ from Products.Archetypes.public import Schema
 from Products.Archetypes.atapi import ReferenceField
 from Products.Archetypes.atapi import ReferenceWidget
 
-import zLOG
-
 
 class PhotoDataExtractor(object):
     """

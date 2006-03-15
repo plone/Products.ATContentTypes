@@ -23,6 +23,7 @@ __author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 import os, sys
+import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
@@ -45,7 +46,6 @@ from Products.ATContentTypes.interfaces import IATImage
 
 from Products.CMFDefault.Image import Image
 from Interface.Verify import verifyObject
-from Products.CMFPlone import transaction
 
 # z3 imports
 from Products.ATContentTypes.interface import IATImage as Z3IATImage
@@ -134,7 +134,7 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         created     = old.CreationDate()
 
         # migrated (needs subtransaction to work)
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
         m = ImageMigrator(old)
         m(unittest=1)
 

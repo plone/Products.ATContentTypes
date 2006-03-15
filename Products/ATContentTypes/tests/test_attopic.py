@@ -23,6 +23,7 @@ __author__ = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 
 import os, sys
+import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
@@ -44,7 +45,6 @@ from Products.ATContentTypes.migration.atctmigrator import CRIT_MAP, REV_CRIT_MA
 from Products.ATContentTypes.interfaces import IATTopic
 from Interface.Verify import verifyObject
 from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
-from Products.CMFPlone import transaction
 
 from Products.CMFPlone.PloneBatch import Batch
 
@@ -118,7 +118,7 @@ def editATCT(obj):
         if CRIT_TYPE == 'ATSimpleIntCriterion':
             value = params[0].split(' ')
             crit.setValue(value[0])
-            if len(value) > 1: 
+            if len(value) > 1:
                 crit.setValue2(value[1])
             crit.setDirection(params[1])
         if CRIT_TYPE == 'ATSortCriterion':
@@ -172,7 +172,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
     title = 'Smart Folder'
     meta_type = 'ATTopic'
     icon = 'topic_icon.gif'
-    
+
     def afterSetUp(self):
         self.setRoles(['Manager', 'Member'])
         self._ATCT = self._createType(self.folder, self.portal_type, 'ATCT')
@@ -239,7 +239,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         subtopic = topic.qux
 
         subtopic.setAcquireCriteria(True)
-        
+
         #Ensure an empty subtopic uses it's parents' queries
         self.failUnlessEqual(subtopic.buildQuery(), topic.buildQuery())
 
@@ -303,10 +303,10 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         old_query = convert_old_catalog_query(old.buildQuery())
 
         # migrated (needs subtransaction to work)
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
         m = TopicMigrator(old)
         m(unittest=1)
-        
+
         self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
         migrated = getattr(self.folder, id)
 

@@ -23,6 +23,7 @@ __author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 import os, sys
+import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
@@ -44,7 +45,6 @@ from Products.ATContentTypes.interfaces import IHistoryAware
 from Products.ATContentTypes.interfaces import ITextContent
 from Products.ATContentTypes.interfaces import IATDocument
 from Interface.Verify import verifyObject
-from Products.CMFPlone import transaction
 
 # z3 imports
 from Products.ATContentTypes.interface import IHistoryAware as Z3IHistoryAware
@@ -146,10 +146,10 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         time.sleep(1.0)
 
         # migrated (needs subtransaction to work)
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
         m = DocumentMigrator(old)
         m(unittest=1)
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
 
         self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
         migrated = getattr(self.folder, id)
@@ -167,7 +167,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         doc.setText(example_rest, mimetype="text/x-rst")
         self.failUnless(str(doc.getField('text').getContentType(doc)) == "text/x-rst")
         #make sure we have _p_jar
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
 
         cur_id = 'ATCT'
         new_id = 'WasATCT'
@@ -199,7 +199,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
             doc.setText(text, mimetype=mimetype)
             txt = doc.getText()
             self.failUnlessEqual(txt, expected, (txt, expected, mimetype))
-            
+
     def test_get_size(self):
         atct = self._ATCT
         editATCT(atct)
@@ -299,7 +299,7 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.default_content_type)
         self.failUnless(field.default_output_type == 'text/x-html-safe',
                         'Value is %s' % field.default_output_type)
-        
+
         self.failUnless('text/html' in field.allowable_content_types)
         self.failUnless('text/structured'  in field.allowable_content_types)
 

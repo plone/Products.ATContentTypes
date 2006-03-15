@@ -26,6 +26,7 @@ __docformat__ = 'restructuredtext'
 import posixpath
 from copy import copy
 import logging
+import transaction
 
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 if HAS_LINGUA_PLONE:
@@ -55,7 +56,6 @@ from webdav.NullResource import NullResource
 from zExceptions import MethodNotAllowed
 from zExceptions import NotFound
 from ZODB.POSException import ConflictError
-from Products.CMFPlone import transaction
 
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
@@ -502,7 +502,7 @@ class ATCTFileContent(ATCTContent):
                 # got a clean file name - rename it
                 # apply subtransaction. w/o a subtransaction renaming
                 # fails when the type is created using portal_factory
-                transaction.commit(1)
+                transaction.savepoint(optimistic=True)
                 self.setId(clean_filename)
 
     security.declareProtected(View, 'post_validate')

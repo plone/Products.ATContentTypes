@@ -23,6 +23,7 @@ __author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 import os, sys
+import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
@@ -39,7 +40,6 @@ from Products.ATContentTypes.migration.atctmigrator import LinkMigrator
 from Products.ATContentTypes.interfaces import IATLink
 from Products.CMFDefault.Link import Link
 from Interface.Verify import verifyObject
-from Products.CMFPlone import transaction
 
 
 # z3 imports
@@ -114,7 +114,7 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
 
 
         # migrated (needs subtransaction to work)
-        transaction.commit(1)
+        transaction.savepoint(optimistic=True)
         m = LinkMigrator(old)
         m()
 
