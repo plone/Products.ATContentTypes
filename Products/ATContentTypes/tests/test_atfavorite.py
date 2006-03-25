@@ -23,13 +23,13 @@ __author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 import os, sys
-import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
+import transaction
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
@@ -205,6 +205,14 @@ class TestATFavoriteFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
 
 tests.append(TestATFavoriteFields)
+
+class TestATFavoriteFunctional(atctftestcase.ATCTIntegrationTestCase):
+    
+    portal_type = 'Favorite'
+    views = ('favorite_view', )
+
+tests.append(TestATFavoriteFunctional)
+
 
 if __name__ == '__main__':
     framework()

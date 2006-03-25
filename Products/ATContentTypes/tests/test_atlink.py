@@ -23,13 +23,13 @@ __author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 import os, sys
-import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
+import transaction
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
@@ -40,7 +40,6 @@ from Products.ATContentTypes.migration.atctmigrator import LinkMigrator
 from Products.ATContentTypes.interfaces import IATLink
 from Products.CMFDefault.Link import Link
 from Interface.Verify import verifyObject
-
 
 # z3 imports
 from Products.ATContentTypes.interface import IATLink as Z3IATLink
@@ -185,6 +184,14 @@ class TestATLinkFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
 
 tests.append(TestATLinkFields)
+
+class TestATLinkFunctional(atctftestcase.ATCTIntegrationTestCase):
+    
+    portal_type = 'Link'
+    views = ('link_view', )
+
+tests.append(TestATLinkFunctional)
+
 
 if __name__ == '__main__':
     framework()

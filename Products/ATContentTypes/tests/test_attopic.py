@@ -23,14 +23,14 @@ __author__ = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 
 import os, sys
-import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 from Products.ATContentTypes.tests.utils import dcEdit
 
+import transaction
 from Products.CMFCore.permissions import View
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
@@ -618,6 +618,24 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
 #         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
 tests.append(TestATTopicFields)
+
+class TestATTopicFunctional(atctftestcase.ATCTIntegrationTestCase):
+
+    def afterSetUp(self):
+        # adding topics is restricted
+        self.setRoles(['Manager', 'Member',])
+        atctftestcase.ATCTIntegrationTestCase.afterSetUp(self)
+        
+    def test_dynamic_view_without_view(self):
+        # dynamic view magic should work
+        response = self.publish('%s/' % self.obj_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) #
+    
+    portal_type = 'Topic'
+    views = ('atct_topic_view', 'criterion_edit_form', 'atct_topic_subtopics')
+
+tests.append(TestATTopicFunctional)
+
 
 if __name__ == '__main__':
     framework()

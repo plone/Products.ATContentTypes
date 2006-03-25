@@ -1,6 +1,9 @@
 1.1.0-beta1
 ===========
 
+ * Integrated ftests into normal tests. Removed dependency on Archetypes tests.
+   [hannosch]
+
  * Update transaction imports, remove subtransaction usage, use python logger
    everywhere, other deprecation related cleanup, whitespace cleanup.
    [alecm]

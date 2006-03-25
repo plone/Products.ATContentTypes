@@ -28,7 +28,7 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
 from cStringIO import StringIO
 from OFS.Image import Image as OFSImage
@@ -327,8 +327,37 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
         self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
 
-
 tests.append(TestATImageFields)
+
+class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
+    
+    portal_type = 'Image'
+    views = ('image_view', 'download', 'atct_image_transform')
+
+    def afterSetUp(self):
+        atctftestcase.ATCTIntegrationTestCase.afterSetUp(self)
+        self.obj.setImage(TEST_GIF, content_type="image/gif")
+        dcEdit(self.obj)
+
+    def test_url_returns_image(self):
+        response = self.publish(self.obj_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) # OK
+        
+    def test_bobo_hook_security(self):
+        # Make sure that users with 'View' permission can use the
+        # bobo_traversed image scales, even if denied to anonymous
+        response1 = self.publish(self.obj_path+'/image', self.basic_auth)
+        self.assertStatusEqual(response1.getStatus(), 200) # OK
+        # deny access to anonymous
+        self.obj.manage_permission('View', ['Manager','Member'],0)
+        response2 = self.publish(self.obj_path+'/image', self.basic_auth)
+        # Should be allowed for member
+        self.assertStatusEqual(response2.getStatus(), 200) # OK
+        # Should fail for anonymous
+        response3 = self.publish(self.obj_path+'/image')
+        self.assertStatusEqual(response3.getStatus(), 401)
+
+tests.append(TestATImageFunctional)
 
 
 if __name__ == '__main__':

@@ -23,11 +23,12 @@ __author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 import os, sys
-import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
+
+import transaction
 from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS

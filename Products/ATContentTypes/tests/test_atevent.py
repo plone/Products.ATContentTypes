@@ -23,13 +23,13 @@ __author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 import os, sys
-import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
+import transaction
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
@@ -677,6 +677,13 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         atcttestcase.ATCTFieldTestCase.beforeTearDown(self)
 
 tests.append(TestATEventFields)
+
+class TestATEventFunctional(atctftestcase.ATCTIntegrationTestCase):
+    
+    portal_type = 'Event'
+    views = ('event_view', 'vcs_view', 'ics_view', )
+
+tests.append(TestATEventFunctional)
 
 
 if __name__ == '__main__':

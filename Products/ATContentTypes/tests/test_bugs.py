@@ -29,7 +29,7 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from Products.Archetypes.public import *
+from Products.Archetypes.atapi import *
 
 tests = []
 

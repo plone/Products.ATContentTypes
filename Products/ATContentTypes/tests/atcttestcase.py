@@ -19,38 +19,19 @@
 #
 """Common imports and declarations
 
-common includes a set of basic things that every test needs. Ripped of from my
-Archetypes test suit
-
-
+common includes a set of basic things that every test needs.
 """
 
 __author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
-###
-# general test suits including products
-###
-
 from Testing import ZopeTestCase
-# XXX need to install all these products until we have a stripped down
-#     GenericSetup-based install for unit tests
-ZopeTestCase.installProduct('CMFPlone')
-ZopeTestCase.installProduct('ExternalEditor')
-ZopeTestCase.installProduct('kupu')
-if ZopeTestCase.hasProduct('Marshall'):
-    ZopeTestCase.installProduct('Marshall')
-ZopeTestCase.installProduct('ATContentTypes')
-ZopeTestCase.installProduct('ATReferenceBrowserWidget')
-# XXX This is bad. Should be removed as soon as we have a proper solution in ZopeTestCase
-if ZopeTestCase.hasProduct('Five'):
-    ZopeTestCase.installProduct('Five')
+from Products.PloneTestCase import PloneTestCase
 ZopeTestCase.installProduct('SiteAccess')
+PloneTestCase.setupPloneSite()
 
 import os
 import transaction
-from Products.Archetypes.tests.attestcase import ATTestCase
-from Products.Archetypes.tests.atsitetestcase import ATSiteTestCase
 
 from Interface.Verify import verifyObject
 from Products.CMFCore.permissions import View
@@ -58,13 +39,13 @@ from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.interfaces.DublinCore import DublinCore as IDublinCore
 from Products.CMFCore.interfaces.DublinCore import MutableDublinCore as IMutableDublinCore
 from Products.Archetypes.interfaces.base import IBaseContent
-from Products.Archetypes.public import *
+from Products.Archetypes.atapi import *
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
 from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
+from Products.Archetypes.tests.atsitetestcase import ATSiteTestCase
 from Products.Archetypes.tests.test_baseschema import BaseSchemaTest
-from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.interfaces import IATContentType
@@ -75,13 +56,7 @@ from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 from Products.CMFCore.utils import getToolByName
-from Testing.ZopeTestCase.functional import Functional
-
-# BBB remove import from PloneLanguageTool later
-try:
-    from Products.CMFPlone.interfaces.Translatable import ITranslatable
-except ImportError:
-    from Products.PloneLanguageTool.interfaces import ITranslatable
+from Products.CMFPlone.interfaces.Translatable import ITranslatable
 
 # Z3 imports
 from Products.ATContentTypes.interface import IATContentType as Z3IATContentType
@@ -89,13 +64,13 @@ from zope.interface.verify import verifyObject as Z3verifyObject
 
 test_home = os.path.dirname(__file__)
 
-class ATCTSiteTestCase(ATSiteTestCase):
+class ATCTSiteTestCase(PloneTestCase.PloneTestCase):
     pass
 
-class ATCTFunctionalSiteTestCase(Functional, ATCTSiteTestCase):
-    __implements__ = Functional.__implements__ + ATCTSiteTestCase.__implements__
+class ATCTFunctionalSiteTestCase(PloneTestCase.FunctionalTestCase):
+    pass
 
-class ATCTTypeTestCase(ATSiteTestCase):
+class ATCTTypeTestCase(ATCTSiteTestCase):
     """AT Content Types test
 
     Tests some basics of a type
@@ -461,8 +436,8 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnless(len(tuple(vocab)) >= 1, tuple(vocab))
 
 from Products.CMFQuickInstallerTool.QuickInstallerTool import AlreadyInstalled
-from Products.Archetypes.tests.atsitetestcase import portal_name
-from Products.Archetypes.tests.atsitetestcase import portal_owner
+from Products.PloneTestCase.setup import portal_name
+from Products.PloneTestCase.setup import portal_owner
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 import time

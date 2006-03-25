@@ -23,19 +23,18 @@ __author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 import os, sys
-import transaction
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
+import time, transaction
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
-import time
 
 from Products.ATContentTypes.content.document import ATDocument
 from Products.ATContentTypes.tests.utils import TidyHTMLValidator
@@ -304,6 +303,56 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless('text/structured'  in field.allowable_content_types)
 
 tests.append(TestATDocumentFields)
+
+class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
+    
+    portal_type = 'Document'
+    views = ('document_view', )
+
+    def test_atct_history_view(self):
+        # atct history view is restricted, we have to log in as portal ownr
+        response = self.publish('%s/atct_history' % self.obj_path, self.owner_auth)
+        self.assertStatusEqual(response.getStatus(), 200) # OK
+
+    def test_id_change_on_initial_edit(self):
+        """Make sure Id is taken from title on initial edit and not otherwise"""
+        # first create an object using the createObject script
+
+        response = self.publish(self.folder_path +
+                                '/createObject?type_name=%s' % self.portal_type,
+                                self.basic_auth)
+
+        self.assertStatusEqual(response.getStatus(), 302) # Redirect to edit
+
+        # omit ?portal_status_message=...
+        location = response.getHeader('Location').split('?')[0]
+
+        self.failUnless(location.startswith(self.folder_url), location)
+        self.failUnless(location.endswith('edit'), location)
+
+        # Perform the redirect
+        edit_form_path = location[len(self.app.REQUEST.SERVER_URL):]
+        response = self.publish(edit_form_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) # OK
+
+        #Change the title
+        temp_id = location.split('/')[-2]
+        obj_title = "New Title for Object"
+        new_id = "new-title-for-object"
+        new_obj = getattr(self.folder.aq_explicit, temp_id)
+        new_obj_path = '/%s' % new_obj.absolute_url(1)
+        self.failUnlessEqual(new_obj.checkCreationFlag(), True) # object is not yet edited
+
+        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank' % (new_obj_path, obj_title,), self.basic_auth) # Edit object
+        self.assertStatusEqual(response.getStatus(), 302) # OK
+        self.failUnlessEqual(new_obj.getId(), new_id) # does id match
+        self.failUnlessEqual(new_obj.checkCreationFlag(), False) # object is fully created
+        new_title = "Second Title"
+        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank' % ('/%s' % new_obj.absolute_url(1), new_title,), self.basic_auth) # Edit object
+        self.assertStatusEqual(response.getStatus(), 302) # OK
+        self.failUnlessEqual(new_obj.getId(), new_id) # id shouldn't have changed
+
+tests.append(TestATDocumentFunctional)
 
 if __name__ == '__main__':
     framework()
