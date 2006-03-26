@@ -8,10 +8,9 @@ Installation
 
 Reporting bugs / feature requests
 
- Please use the bug tracker in the collective at http://sf.net/projects/collective!
- The url is http://sourceforge.net/tracker/?atid=645337&group_id=55262&func=browse
- Please don't mail bug reports to the mailing lists or to a developer unless
- they are in the bug tracker, too.
+ Please use the Plone issue tracker at http://dev.plone.org/plone and use the
+ Content Types component! Please don't mail bug reports to the mailing lists or
+ to a developer unless they are in the bug tracker, too.
 
 Comparing CMF types with ATContentTypes
 
@@ -36,11 +35,10 @@ Comparing CMF types with ATContentTypes
   
   * Translateable using LinguaPlone.
     
-  * Dynamic Views: All types are using the new dynamic view FTI
-    that allows you to choose the view template per instance. You can
-    configure the templates in the portal_types tool. This features 
-    is used to turn an ordinary folder into a
-    photo ablum by simple switching to a different view.
+  * Dynamic Views: All types are using the new dynamic view FTI that allows you
+    to choose the view template per instance. You can configure the templates in
+    the portal_types tool. This features is used to turn an ordinary folder into
+    a photo ablum by simple switching to a different view.
     
   * Permissions per type and feature: Every type has its own add permission
     and all features like template mixin have their own modify permission, too.
@@ -65,13 +63,6 @@ What is new in ATContentTypes 1.0
     add relations between objects, for example a document is related to an event.
     The relations will be shown in a portlet.
     
-  * The event type has a body text like document.
-  
-  * The new item type has a new image field plus a caption for the image.
-  
-  * Images can be rotated and mirrored through the plone interface. Also there
-    are some new methods to get EXIF informations for images.
-    
   * The folder type has some new views that are showing the containing images
     like a photo album view.
 
@@ -81,8 +72,6 @@ What is new in ATContentTypes 1.0
   * A tool was added to replace the external methods. It contains some
     additional features, too.
     
-  * Each type has its own add permission.
-  
   * The type switching was completly rewritten. It's safer and easier but
     it's not possible to have ATContentTypes as additional types any morer.
     ATContentTypes based types are now always the default types.
@@ -108,5 +97,4 @@ What is new in ATContentTypes 1.0
   * Zope 3/Five adapter - interfaces - browser view
   
   * New migration features like savepoints and a catalog patch.
-
 
