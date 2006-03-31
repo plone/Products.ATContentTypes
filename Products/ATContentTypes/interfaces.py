@@ -140,7 +140,7 @@ class IATContentType(ISelectableBrowserDefault, IBaseContent):
                              ''')
 
     cmf_edit_kws = Attribute('''List of keyword names.
-    
+
     If one of this kw names is used with edit() then the cmf_edit method is
     called.
     ''')
@@ -187,7 +187,7 @@ class IImageContent(Interface):
     def setImage(value, **kwargs):
         """
         """
-        
+
     def tag(**kwargs):
         """
         """
@@ -215,7 +215,7 @@ class ITextContent(Interface):
     def setText(value, **kwargs):
         """
         """
-        
+
     def CookedBody(stx_level='ignored'):
         """
         """
@@ -398,7 +398,7 @@ class IATTopicSortCriterion(IATTopicCriterion):
 class IATCTTool(Interface):
     """
     """
-    
+
 class IATCTTopicsTool(Interface):
     """Mixin class for providing features to customize the display of topics
     """

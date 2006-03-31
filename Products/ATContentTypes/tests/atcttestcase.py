@@ -29,6 +29,7 @@ from Testing import ZopeTestCase
 from Products.PloneTestCase import PloneTestCase
 ZopeTestCase.installProduct('SiteAccess')
 PloneTestCase.setupPloneSite()
+ZopeTestCase.installProduct('SiteAccess')
 
 import os
 import transaction
