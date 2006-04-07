@@ -1,5 +1,12 @@
-1.0.?
-=====
+1.0.4-devel
+===========
+
+ * Updated thirdparty/icalendar to version iCalendar-0.11. Dropped the
+   svn:external to codespeak SVN. This has the side-effect of ridding us
+   of the annoying test failure with the Zope 2.9 testrunner which would
+   pick up the icalendar tests even though they are neither importable nor
+   pass in this setting.
+   [stefan]
 
  * Made manage_afterPUT and manage_afterMKCOL use PATH_INFO to get at
    the original id for usage in the Title, so that in a WebDAV
