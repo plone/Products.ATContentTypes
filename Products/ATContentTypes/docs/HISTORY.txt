@@ -1,6 +1,12 @@
 1.0.4-devel
 ===========
 
+ * the EventType field in an event lists all relevant event types for
+   an event, not just one. Modify the iCal output logic to properly
+   produce comma-seperated event types. Fixes
+   http://dev.plone.org/plone/ticket/4881
+   [wichert]
+
  * Updated thirdparty/icalendar to version iCalendar-0.11. Dropped the
    svn:external to codespeak SVN. This has the side-effect of ridding us
    of the annoying test failure with the Zope 2.9 testrunner which would

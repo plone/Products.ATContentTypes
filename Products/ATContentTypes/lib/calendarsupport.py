@@ -160,7 +160,7 @@ class CalendarSupportMixin:
             out.write('LOCATION:%s\n' % vformat(location))
         eventType = self.getEventType()
         if eventType:
-            out.write('CATEGORIES:%s\n' % eventType)
+            out.write('CATEGORIES:%s\n' % ','.join(eventType))
         # TODO
         #ORGANIZER;CN=%(name):MAILTO=%(email)
         #ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
