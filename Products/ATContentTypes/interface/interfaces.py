@@ -30,11 +30,11 @@ from Products.Archetypes.interfaces import IBaseContent
 from Products.Archetypes.interfaces import IBaseFolder
 from Products.CMFDynamicViewFTI.z3.interfaces import ISelectableBrowserDefault
 
-#try:
-#    from Products.CMFPlone.interfaces.ConstrainTypes import \
-#        ISelectableConstrainTypes as IPloneSelectableConstrainTypes
-#except ImportError:
-IPloneSelectableConstrainTypes = Interface
+try:
+    from Products.CMFPlone.interfaces.constraintypes import \
+        ISelectableConstrainTypes as IPloneSelectableConstrainTypes
+except ImportError:
+    IPloneSelectableConstrainTypes = Interface
 
 
 class IATContentType(ISelectableBrowserDefault, IBaseContent):
