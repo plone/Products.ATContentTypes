@@ -50,14 +50,15 @@ from Products.ATContentTypes.criteria import selection
 from Products.ATContentTypes.criteria import simpleint
 from Products.ATContentTypes.criteria import simplestring
 from Products.ATContentTypes.criteria import sort
+from Products.ATContentTypes import interface
 
 def createModuleAliases():
     """Creates module aliases in sys.modules
-    
+
     Aliases are created for Products.ATContentTypes.types and all modules below
     it which contain classes with persistent objects (content types) but for
     modules with base classes and schemata.
-    
+
     It might look a little bit tricky but it's very easy. The method is
     iterating over all modules in the module name space (globals) and creating
     aliases only forthoses modules which are modules with the module name starting with
@@ -80,5 +81,6 @@ def createModuleAliases():
 # Aliase for EXIF classes
 import exif
 sys.modules['Products.ATContentTypes.lib.exif'] = exif
+sys.modules['Products.ATContentTypes.z3.interfaces'] = interface
 
 createModuleAliases()

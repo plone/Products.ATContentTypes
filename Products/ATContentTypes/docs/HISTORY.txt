@@ -1,3 +1,5 @@
+ * Added a z3 module and an alias for BBB (Ploneboard).
+   [alecm]
 
  * Updated thirdparty/icalendar to version iCalendar-0.11. Dropped the
    svn:external to codespeak SVN. This has the side-effect of ridding us
