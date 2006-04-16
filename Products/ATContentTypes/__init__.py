@@ -27,8 +27,6 @@ import logging
 
 logger = logging.getLogger('ATCT')
 
-logger.info('ATCT: Installing Product')
-
 ATCT_DIR = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(3, os.path.join(ATCT_DIR, 'thirdparty'))
 
