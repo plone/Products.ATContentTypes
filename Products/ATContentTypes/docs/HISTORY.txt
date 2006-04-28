@@ -1,3 +1,7 @@
+ * Made HistoryAwareMixin a subclass of Archetypes ATHistoryAwareMixin, which
+   is a working historyaware implementation for archetypes.
+   [mj]
+
  * Added a z3 module and an alias for BBB (Ploneboard).
    [alecm]
 

@@ -38,6 +38,7 @@ from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
 
 from Products.Archetypes.OrderedBaseFolder import IOrderedContainer
 from Products.Archetypes.OrderedBaseFolder import IZopeOrderedContainer
+from Products.Archetypes.interfaces.athistoryaware import IATHistoryAware
 
 try:
     from Products.CMFPlone.interfaces.ConstrainTypes import \
@@ -145,7 +146,7 @@ class IATContentType(ISelectableBrowserDefault, IBaseContent):
     called.
     ''')
 
-class IHistoryAware(Interface):
+class IHistoryAware(IATHistoryAware):
     """History awareness marker interface
     """
 
@@ -153,13 +154,6 @@ class IHistoryAware(Interface):
         """get source for HistoryAwareMixin
 
         Must return a (raw) string
-        """
-
-    def getHistories(max=10):
-        """Get a list of historic revisions.
-
-        Returns metadata as well
-        (object, time, transaction_note, user)
         """
 
     def getLastEditor():

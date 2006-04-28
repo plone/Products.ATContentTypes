@@ -25,22 +25,18 @@ __docformat__ = 'restructuredtext'
 
 import difflib
 
-from DateTime import DateTime
-from OFS.History import historicalRevision
 from DocumentTemplate.DT_Util import html_quote
-from Acquisition import aq_parent
 from Globals import InitializeClass
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 
-from Products.Archetypes.public import log_exc
-
+from Products.Archetypes.atapi import ATHistoryAwareMixin
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.interfaces import IHistoryAware
 
-class HistoryAwareMixin:
+class HistoryAwareMixin(ATHistoryAwareMixin):
     """History aware mixin class
 
     Shows a unified diff history of the content
@@ -77,45 +73,13 @@ class HistoryAwareMixin:
         else:
             return ''
 
-    security.declarePrivate('getHistories')
-    def getHistories(self, max=10):
-        """Get a list of historic revisions.
-
-        Returns metadata as well
-        (object, time, transaction_note, user)
-        """
-
-        historyList = self._p_jar.db().history(self._p_oid, None, max)
-
-        if not historyList:
-            return ()
-
-        # Build list of objects
-        lst = []
-        parent = aq_parent(self)
-        for revision in historyList:
-            if not revision.has_key('serial'):
-                log_exc()
-                continue
-            serial = revision['serial']
-            # get the revision object and wrap it in a context wrapper
-            obj    = historicalRevision(self, serial)
-            obj    = obj.__of__(parent)
-            lst.append((obj,
-                        DateTime(revision['time']),
-                        revision['description'],
-                        revision['user_name'],
-                      ))
-
-        return lst
-
     security.declareProtected(View, 'getLastEditor')
     def getLastEditor(self):
         """Returns the user name of the last editor.
 
         Returns None if no last editor is known.
         """
-        histories = self.getHistories(1)
+        histories = list(self.getHistories(1))
         if not histories:
             return None
         user = histories[0][3].split(" ")[-1].strip()
@@ -127,7 +91,7 @@ class HistoryAwareMixin:
         """
         mTool = getToolByName(self, 'portal_membership')
 
-        histories = self.getHistories()
+        histories = list(self.getHistories())
         if max > len(histories):
             max = len(histories)
 

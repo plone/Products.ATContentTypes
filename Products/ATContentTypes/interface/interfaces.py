@@ -28,6 +28,7 @@ from zope.interface import Attribute
 
 from Products.Archetypes.interfaces import IBaseContent
 from Products.Archetypes.interfaces import IBaseFolder
+from Products.Archetypes.interfaces import IATHistoryAware
 from Products.CMFDynamicViewFTI.z3.interfaces import ISelectableBrowserDefault
 
 try:
@@ -63,7 +64,7 @@ class IATContentType(ISelectableBrowserDefault, IBaseContent):
     called.
     ''')
 
-class IHistoryAware(Interface):
+class IHistoryAware(IATHistoryAware):
     """History awareness marker interface
     """
 
@@ -71,13 +72,6 @@ class IHistoryAware(Interface):
         """get source for HistoryAwareMixin
 
         Must return a (raw) string
-        """
-
-    def getHistories(max=10):
-        """Get a list of historic revisions.
-
-        Returns metadata as well
-        (object, time, transaction_note, user)
         """
 
     def getLastEditor():
