@@ -28,11 +28,11 @@ from zope.interface import Attribute
 
 from Products.Archetypes.interfaces import IBaseContent
 from Products.Archetypes.interfaces import IBaseFolder
+from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 from Products.Archetypes.interfaces import IATHistoryAware
-from Products.CMFDynamicViewFTI.z3.interfaces import ISelectableBrowserDefault
 
 try:
-    from Products.CMFPlone.interfaces.constraintypes import \
+    from Products.CMFPlone.interfaces.constrains import \
         ISelectableConstrainTypes as IPloneSelectableConstrainTypes
 except ImportError:
     IPloneSelectableConstrainTypes = Interface

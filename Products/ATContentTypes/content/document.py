@@ -140,7 +140,7 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
     security.declareProtected(ModifyPortalContent, 'setText')
     def setText(self, value, **kwargs):
         """Body text mutator
-
+        
         * hook into mxTidy an replace the value with the tidied value
         """
         field = self.getField('text')

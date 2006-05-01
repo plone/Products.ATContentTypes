@@ -23,6 +23,8 @@ which types can be added in a folder-instance
 __author__  = 'Jens Klein <jens.klein@jensquadrat.de>'
 __docformat__ = 'plaintext'
 
+from zope.interface import implements
+
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from Globals import InitializeClass
@@ -48,7 +50,9 @@ from Products.Archetypes.public import IntDisplayList
 from Products.Archetypes.public import DisplayList
 
 from Products.ATContentTypes import permission as ATCTPermissions
-from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
+
+from Products.ATContentTypes.interface import ISelectableConstrainTypes
+from Products.ATContentTypes.interfaces import ISelectableConstrainTypes as ZopeTwoISelectableConstrainTypes
 
 # constants for enableConstrainMixin
 ACQUIRE = -1 # acquire locallyAllowedTypes from parent (default)
@@ -163,7 +167,7 @@ class ConstrainTypesMixin:
         constrain the addable types on a per-folder basis.
     """
 
-    __implements__ = (ISelectableConstrainTypes, )
+    __implements__ = (ZopeTwoISelectableConstrainTypes, )
 
     security = ClassSecurityInfo()
 
@@ -211,7 +215,7 @@ class ConstrainTypesMixin:
                 return [fti.getId() for fti in self.getDefaultAddableTypes(context)]
             else:
                 parent = aq_parent(aq_inner(self))
-                if ISelectableConstrainTypes.isImplementedBy(parent):
+                if ISelectableConstrainTypes.providedBy(parent):
                     return parent.getLocallyAllowedTypes(context)
                 else:
                     return parent.getLocallyAllowedTypes()
@@ -360,8 +364,7 @@ class ConstrainTypesMixin:
        else:
            parent = aq_parent(aq_inner(self))
 
-       if ISelectableConstrainTypes.isImplementedBy(parent) and \
-                                                parentPortalTypeEqual(self):
+       if ISelectableConstrainTypes.providedBy(parent) and parentPortalTypeEqual(self):
            return ACQUIRE
        else:
            return DISABLED

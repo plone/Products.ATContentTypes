@@ -43,7 +43,7 @@ from Products.Archetypes.atapi import *
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
-from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
+from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 from Products.Archetypes.tests.atsitetestcase import ATSiteTestCase
 from Products.Archetypes.tests.test_baseschema import BaseSchemaTest
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
@@ -170,7 +170,7 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
 
     def test_implements_ISelectableBrowserDefault(self):
         iface = ISelectableBrowserDefault
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def compareDC(self, first, second=None, **kwargs):

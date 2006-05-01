@@ -31,7 +31,8 @@ from Products.ATContentTypes.tests import atcttestcase
 
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.ATContentTypes import permission
-from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
+from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault as ZopeTwoISelectableBrowserDefault
+from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 
 tests = []
 
@@ -51,10 +52,11 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.app.REQUEST.set('PARENTS', [self.app])
 
     def test_isMixedIn(self):
-        self.failUnless(isinstance(self.af,
-                                   BrowserDefaultMixin),
+        self.failUnless(isinstance(self.af, BrowserDefaultMixin),
                         "ISelectableBrowserDefault was not mixed in to ATFolder")
-        self.failUnless(ISelectableBrowserDefault.isImplementedBy(self.af),
+        self.failUnless(ZopeTwoISelectableBrowserDefault.isImplementedBy(self.af),
+                        "ISelectableBrowserDefault not implemented by ATFolder instance")
+        self.failUnless(ISelectableBrowserDefault.providedBy(self.af),
                         "ISelectableBrowserDefault not implemented by ATFolder instance")
 
     def test_defaultFolderViews(self):
