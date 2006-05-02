@@ -552,7 +552,7 @@ class UIDMigrator:
             return # no uid handler available
         uid = uidhandler.queryUid(self.old, default=None)
         if uid is not None:
-            uidhandler.setUid(self.new, uid, check_uniqueness=False)
+            uidhandler._setUid(self.new, uid)
             
     def migrate_at_uuid(self):
         """Migrate AT universal uid
