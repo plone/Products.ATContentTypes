@@ -239,6 +239,30 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         e2.edit(startDate = day29, endDate=day30, title='evenz')
         self.failUnlessEqual(cmp(e1, e2), -1)  # e1 < e2
 
+    def test_ical(self):
+        event = self._ATCT
+        event.setStartDate(DateTime('2001/01/01 12:00:00 GMT+1'))
+        event.setEndDate(DateTime('2001/01/01 14:00:00 GMT+1'))
+        ical = event.getICal()
+        lines = ical.split('\n')
+        self.assertEqual(lines[0], "BEGIN:VEVENT")
+        self.assertEqual(lines[6], "SUMMARY:%s"%event.Title())
+        # times should be converted to UTC
+        self.assertEqual(lines[7], "DTSTART:20010101T110000Z")
+        self.assertEqual(lines[8], "DTEND:20010101T130000Z")
+
+    def test_vcal(self):
+        event = self._ATCT
+        event.setStartDate(DateTime('2001/01/01 12:00:00 GMT+1'))
+        event.setEndDate(DateTime('2001/01/01 14:00:00 GMT+1'))
+        vcal = event.getVCal()
+        lines = vcal.split('\n')
+        self.assertEqual(lines[0], "BEGIN:VEVENT")
+        self.assertEqual(lines[7], "SUMMARY:%s"%event.Title())
+        # times should be converted to UTC
+        self.assertEqual(lines[1], "DTSTART:20010101T110000Z")
+        self.assertEqual(lines[2], "DTEND:20010101T130000Z")
+
     def test_get_size(self):
         atct = self._ATCT
         editATCT(atct)
@@ -679,7 +703,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 tests.append(TestATEventFields)
 
 class TestATEventFunctional(atctftestcase.ATCTIntegrationTestCase):
-    
+
     portal_type = 'Event'
     views = ('event_view', 'vcs_view', 'ics_view', )
 

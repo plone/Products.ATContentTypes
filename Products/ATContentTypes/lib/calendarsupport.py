@@ -32,7 +32,7 @@ from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.interfaces import ICalendarSupport
 
-DATE = "%Y%m%dT%H%M%SZ"
+DATE = "%4.4d%2.2d%2.2dT%2.2d%2.2d%2.2dZ"
 
 PRODID = "-//AT Content Types//AT Event//EN"
 
@@ -143,13 +143,13 @@ class CalendarSupportMixin:
         """
         out = StringIO()
         map = {
-            'dtstamp'   : DateTime().toZone('UTC').strftime(DATE),
-            'created'   : DateTime(self.CreationDate()).toZone('UTC').strftime(DATE),
+            'dtstamp'   : vformat_datetime(DateTime()),
+            'created'   : vformat_datetime(DateTime(self.CreationDate())),
             'uid'       : self.UID(),
-            'modified'  : DateTime(self.ModificationDate()).toZone('UTC').strftime(DATE),
+            'modified'  : vformat_datetime(DateTime(self.ModificationDate())),
             'summary'   : self.Title(),
-            'startdate' : self.start().toZone('UTC').strftime(DATE),
-            'enddate'   : self.end().toZone('UTC').strftime(DATE),
+            'startdate' : vformat_datetime(self.start()),
+            'enddate'   : vformat_datetime(self.end()),
             }
         out.write(ICS_EVENT_START % map)
         description = self.Description()
@@ -186,13 +186,13 @@ class CalendarSupportMixin:
         """
         out = StringIO()
         map = {
-            'dtstamp'   : DateTime().toZone('UTC').strftime(DATE),
-            'created'   : DateTime(self.CreationDate()).toZone('UTC').strftime(DATE),
+            'dtstamp'   : vformat_datetime(DateTime()),
+            'created'   : vformat_datetime(DateTime(self.CreationDate())),
             'uid'       : self.UID(),
-            'modified'  : DateTime(self.ModificationDate()).toZone('UTC').strftime(DATE),
+            'modified'  : vformat_datetime(DateTime(self.ModificationDate())),
             'summary'   : self.Title(),
-            'startdate' : self.start().toZone('UTC').strftime(DATE),
-            'enddate'   : self.end().toZone('UTC').strftime(DATE),
+            'startdate' : vformat_datetime(self.start()),
+            'enddate'   : vformat_datetime(self.end()),
             }
         out.write(VCS_EVENT_START % map)
         description = self.Description()
@@ -225,3 +225,6 @@ def vformat(s):
 
 def n2rn(s):
     return s.replace('\n', '\r\n')
+
+def vformat_datetime(dt):
+    return DATE % dt.toZone('UTC').parts()[:6]

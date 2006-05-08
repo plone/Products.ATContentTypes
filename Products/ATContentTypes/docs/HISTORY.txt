@@ -1,4 +1,8 @@
 
+ * Applied patch from Plone issue #5384 to do proper UTC conversion for iCal
+   and vCal output. Added tests. Fixes #5384.
+   [alecm]
+
  * Made use Zope 3 interfaces for constrain types and browser default. Depends
    on changes to CMFDynamicViewFTI trunk and Plone 2.5 branch.
    [optildue]
