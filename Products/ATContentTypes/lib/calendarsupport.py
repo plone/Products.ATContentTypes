@@ -32,8 +32,6 @@ from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.interfaces import ICalendarSupport
 
-DATE = "%Y%m%dT%H%M%SZ"
-
 PRODID = "-//AT Content Types//AT Event//EN"
 
 # iCal header and footer
@@ -48,23 +46,30 @@ ICS_FOOTER = """\
 END:VCALENDAR
 """
 
+# Note: a previous version of event start set "SEQUENCE:0"
+# That's not necessary unless we're supporting recurrence.
+
 # iCal event
 ICS_EVENT_START = """\
 BEGIN:VEVENT
 DTSTAMP:%(dtstamp)s
 CREATED:%(created)s
 UID:ATEvent-%(uid)s
-SEQUENCE:0
 LAST-MODIFIED:%(modified)s
 SUMMARY:%(summary)s
 DTSTART:%(startdate)s
 DTEND:%(enddate)s
 """
 
+# Note: a previous version of event end set "TRANSP:OPAQUE", which would cause
+# blocking of the time slot. That's not appropriate for an event
+# calendar.
+# Also, previous version set "PRIORITY:3", which the RFC interprets as a high
+# priority. In absence of a priority field in the event, there's no justification
+# for that.
+
 ICS_EVENT_END = """\
 CLASS:PUBLIC
-PRIORITY:3
-TRANSP:OPAQUE
 END:VEVENT
 """
 
@@ -143,27 +148,49 @@ class CalendarSupportMixin:
         """
         out = StringIO()
         map = {
-            'dtstamp'   : DateTime().toZone('UTC').strftime(DATE),
-            'created'   : DateTime(self.CreationDate()).toZone('UTC').strftime(DATE),
+            'dtstamp'   : rfc2445dt(DateTime()),
+            'created'   : rfc2445dt(DateTime(self.CreationDate())),
             'uid'       : self.UID(),
-            'modified'  : DateTime(self.ModificationDate()).toZone('UTC').strftime(DATE),
-            'summary'   : self.Title(),
-            'startdate' : self.start().toZone('UTC').strftime(DATE),
-            'enddate'   : self.end().toZone('UTC').strftime(DATE),
+            'modified'  : rfc2445dt(DateTime(self.ModificationDate())),
+            'summary'   : vformat(self.Title()),
+            'startdate' : rfc2445dt(self.start()),
+            'enddate'   : rfc2445dt(self.end()),
             }
         out.write(ICS_EVENT_START % map)
+        
         description = self.Description()
         if description:
-            out.write('DESCRIPTION:%s\n' % vformat(description))
+            out.write(foldLine('DESCRIPTION:%s\n' % vformat(description)))
+
         location = self.getLocation()
         if location:
             out.write('LOCATION:%s\n' % vformat(location))
+
         eventType = self.getEventType()
         if eventType:
             out.write('CATEGORIES:%s\n' % ','.join(eventType))
-        # TODO
+
+        # TODO  -- NO! see the RFC; ORGANIZER field is not to be used for non-group-scheduled entities
         #ORGANIZER;CN=%(name):MAILTO=%(email)
         #ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
+
+        cn = []
+        contact = self.contact_name()
+        if contact:
+            cn.append(contact)
+        phone = self.contact_phone()
+        if phone:
+            cn.append(phone)
+        email = self.contact_email()
+        if email:
+            cn.append(email)
+        if cn:
+            out.write('CONTACT:%s\n' % vformat(', '.join(cn)))
+
+        url = self.event_url()
+        if url:
+            out.write('URL:%s\n' % url)
+
         out.write(ICS_EVENT_END)
         return out.getvalue()
 
@@ -186,18 +213,18 @@ class CalendarSupportMixin:
         """
         out = StringIO()
         map = {
-            'dtstamp'   : DateTime().toZone('UTC').strftime(DATE),
-            'created'   : DateTime(self.CreationDate()).toZone('UTC').strftime(DATE),
+            'dtstamp'   : rfc2445dt(DateTime()),
+            'created'   : rfc2445dt(DateTime(self.CreationDate())),
             'uid'       : self.UID(),
-            'modified'  : DateTime(self.ModificationDate()).toZone('UTC').strftime(DATE),
-            'summary'   : self.Title(),
-            'startdate' : self.start().toZone('UTC').strftime(DATE),
-            'enddate'   : self.end().toZone('UTC').strftime(DATE),
+            'modified'  : rfc2445dt(DateTime(self.ModificationDate())),
+            'summary'   : vformat(self.Title()),
+            'startdate' : rfc2445dt(self.start()),
+            'enddate'   : rfc2445dt(self.end()),
             }
         out.write(VCS_EVENT_START % map)
         description = self.Description()
         if description:
-            out.write('DESCRIPTION:%s\n' % vformat(description))
+            out.write(foldLine('DESCRIPTION:%s\n' % vformat(description)))
         location = self.getLocation()
         if location:
             out.write('LOCATION:%s\n' % vformat(location))
@@ -221,7 +248,30 @@ class CalendarSupportMixin:
 InitializeClass(CalendarSupportMixin)
 
 def vformat(s):
-    return s.replace('\r', '\\n').replace('\n', '\\n')
+    # return string with escaped commas, colons and semicolons
+    return s.strip().replace(',','\,').replace(':','\:').replace(';','\;')
 
 def n2rn(s):
     return s.replace('\n', '\r\n')
+
+def rfc2445dt(dt):
+    # return UTC in RFC2445 format YYYYMMDDTHHMMSSZ
+    return dt.HTML4().replace('-','').replace(':','')
+
+def foldLine(s):
+    # returns string folded per RFC2445 (each line must be less than 75 octets)
+    # This code is a minor modification of MakeICS.py, available at:
+    # http://www.zope.org/Members/Feneric/MakeICS/
+    
+    lineLen = 70
+    
+    workStr = s.strip().replace('\r\n','\n').replace('\r','\n').replace('\n','\\n')
+    numLinesToBeProcessed = len(workStr)/lineLen
+    startingChar = 0
+    res = ''
+    while numLinesToBeProcessed >= 1:
+        res = '%s%s\n '%(res, workStr[startingChar:startingChar+lineLen])
+        startingChar += lineLen
+        numLinesToBeProcessed -= 1
+    return '%s%s\n' % (res, workStr[startingChar:])
+

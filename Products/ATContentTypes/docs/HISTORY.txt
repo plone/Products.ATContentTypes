@@ -1,6 +1,14 @@
 1.0.4-devel
 ===========
 
+ * Various fixes for the iCal/vCal export (thx Steve for the patch):
+    - timezone problems
+    - folding lines longer than 75 octests (per RFC)
+    - escaping commas, colons and semi-colons (per RFC)
+    - adding URL and CONTACT fields
+   This closes http://dev.plone.org/plone/ticket/4512.
+   [hannosch]
+
  * the EventType field in an event lists all relevant event types for
    an event, not just one. Modify the iCal output logic to properly
    produce comma-seperated event types. Fixes
