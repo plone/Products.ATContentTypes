@@ -309,11 +309,6 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
     portal_type = 'Document'
     views = ('document_view', )
 
-    def test_atct_history_view(self):
-        # atct history view is restricted, we have to log in as portal ownr
-        response = self.publish('%s/atct_history' % self.obj_path, self.owner_auth)
-        self.assertStatusEqual(response.getStatus(), 200) # OK
-
     def test_id_change_on_initial_edit(self):
         """Make sure Id is taken from title on initial edit and not otherwise"""
         # first create an object using the createObject script
