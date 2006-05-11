@@ -593,7 +593,7 @@ Now for the real thing, doing a PUT request, back to Member role:
   >>> print image.getPortalTypeName()
   Image
 
-  >>> print image.Title()
+  >>> print image.Title().decode('utf-8')
   Foto do Paraná.jpg
 
   >>> self.setRoles(['Manager'])
@@ -616,7 +616,7 @@ Need manager roles here:
   >>> 'fotos-de-jurere' in self.folder.objectIds()
   True
 
-  >>> print self.folder['fotos-de-jurere'].Title()
+  >>> print self.folder['fotos-de-jurere'].Title().decode('utf-8')
   Fotos de Jurerê
 
 Then disable again the Access Rule:

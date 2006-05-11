@@ -243,18 +243,20 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         event = self._ATCT
         event.setStartDate(DateTime('2001/01/01 12:00:00 GMT+1'))
         event.setEndDate(DateTime('2001/01/01 14:00:00 GMT+1'))
+        event.setTitle('cool event')
         ical = event.getICal()
         lines = ical.split('\n')
         self.assertEqual(lines[0], "BEGIN:VEVENT")
-        self.assertEqual(lines[6], "SUMMARY:%s"%event.Title())
+        self.assertEqual(lines[5], "SUMMARY:%s"%event.Title())
         # times should be converted to UTC
-        self.assertEqual(lines[7], "DTSTART:20010101T110000Z")
-        self.assertEqual(lines[8], "DTEND:20010101T130000Z")
+        self.assertEqual(lines[6], "DTSTART:20010101T110000Z")
+        self.assertEqual(lines[7], "DTEND:20010101T130000Z")
 
     def test_vcal(self):
         event = self._ATCT
         event.setStartDate(DateTime('2001/01/01 12:00:00 GMT+1'))
         event.setEndDate(DateTime('2001/01/01 14:00:00 GMT+1'))
+        event.setTitle('cool event')
         vcal = event.getVCal()
         lines = vcal.split('\n')
         self.assertEqual(lines[0], "BEGIN:VEVENT")
