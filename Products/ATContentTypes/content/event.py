@@ -103,7 +103,6 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
               primary=True,
               storage = AnnotationStorage(migrate=True),
               validators = ('isTidyHtmlWithCleanup',),
-              #validators = ('isTidyHtml',),
               default_content_type = zconf.ATEvent.default_content_type,
               default_output_type = 'text/x-html-safe',
               allowable_content_types = zconf.ATEvent.allowed_content_types,
@@ -145,7 +144,6 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 searchable=True,
                 accessor='event_url',
                 write_permission = ChangeEvents,
-                validators = ('isURL',),
                 widget = StringWidget(
                         description = ("Web address with more info about the event. "
                                        "Add http:// for external links."),
@@ -184,9 +182,6 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 searchable=True,
                 accessor='contact_phone',
                 write_permission = ChangeEvents,
-                # XXX disabled for now, see
-                # https://sourceforge.net/tracker/index.php?func=detail&aid=974102&group_id=55262&atid=645337
-                #validators = ('isInternationalPhoneNumber',),
                 validators= (),
                 widget = StringWidget(
                         description = "",
@@ -377,7 +372,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
         elif isinstance(other, DateTime):
             return cmp(self.start(), other)
         else:
-            # XXX come up with a nice cmp for types
+            # TODO come up with a nice cmp for types
             return cmp(self.Title(), other)
 
     def __hash__(self):

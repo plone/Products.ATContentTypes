@@ -1,6 +1,10 @@
 1.0.4-devel
 ===========
 
+ * Internal links didn't work for event url field. This closes
+   http://dev.plone.org/plone/ticket/5004
+   [hannosch]
+
  * Various fixes for the iCal/vCal export (thx Steve for the patch):
     - timezone problems
     - folding lines longer than 75 octests (per RFC)
