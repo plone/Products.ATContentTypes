@@ -200,6 +200,13 @@ class TestATNewsItemFields(atcttestcase.ATCTFieldTestCase):
 
 tests.append(TestATNewsItemFields)
 
+class TestATNewsItemFunctional(atctftestcase.ATCTIntegrationTestCase):
+    
+    portal_type = 'News Item'
+    views = ('newsitem_view', )
+
+tests.append(TestATNewsItemFunctional)
+
 if __name__ == '__main__':
     framework()
 else:
