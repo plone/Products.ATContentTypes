@@ -1,6 +1,11 @@
 1.0.4-devel
 ===========
 
+ * Semi-intelligent sniffing adding for figuring out the charset
+   when using mx.Tidy.  This closes
+   http://dev.plone.org/plone/ticket/5006
+   [rocky]
+
  * Internal links didn't work for event url field. This closes
    http://dev.plone.org/plone/ticket/5004
    [hannosch]
