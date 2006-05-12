@@ -65,7 +65,7 @@ HTTP HEAD
 =========
 
 Test for bug http://plone.org/collector/4290
-#4290 Ñ HEAD request returns 404 error for Plone folders w/o index_html
+#4290 ï¿½ HEAD request returns 404 error for Plone folders w/o index_html
 
 According to the bug report a plone folder w/o an object named index_html
 return 404. The correct response code for a HEAD request is either 200 for
@@ -303,7 +303,7 @@ HTTP Range request
   HTTP/1.1 200 OK
   Accept-Ranges: bytes
   Content-Length: 905
-  Content-Type: image/gif
+  Content-Type: image/gif...
   ...
   <BLANKLINE>
   GIF89...
@@ -326,7 +326,7 @@ HTTP Range request
   HTTP/1.1 200 OK
   Accept-Ranges: bytes
   Content-Length: 905
-  Content-Type: image/gif
+  Content-Type: image/gif...
   ...
   <BLANKLINE>
   GIF89...
@@ -363,7 +363,7 @@ HTTP If modified since
   HTTP/1.1 200 OK
   Accept-Ranges: bytes
   Content-Length: 905
-  Content-Type: image/gif
+  Content-Type: image/gif...
   ...
   <BLANKLINE>
   GIF89...
