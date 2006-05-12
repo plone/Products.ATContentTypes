@@ -479,6 +479,26 @@ News Item
   >>> del news
   >>> input.close()
 
+HTML Page - verify that title is extracted
+------------------------------------------
+
+  >>> input = open(os.path.join(input_dir, 'test-html-title.html'), 'rb')
+
+  >>> input.seek(0)
+  >>> print http(r"""
+  ... PUT /%s/test-html-title.html HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ... Depth: 0
+  ...
+  ... %s""" % (fpath, user_name, user_password, input.read()))
+  HTTP/1.1 201 Created
+  ...
+
+  >>> htdoc = self.folder['test-html-title.html']
+
+  >>> print htdoc.Title()
+  HTML Title
+
 WebDAV MKCOL
 ============
 
