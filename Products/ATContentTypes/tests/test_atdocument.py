@@ -45,6 +45,13 @@ from Products.ATContentTypes.interfaces import ITextContent
 from Products.ATContentTypes.interfaces import IATDocument
 from Interface.Verify import verifyObject
 from Products.CMFPlone import transaction
+from cgi import FieldStorage
+from Products.ATContentTypes import config as atct_config
+from ZPublisher.HTTPRequest import FileUpload
+
+
+from Products.ATContentTypes.lib.validators import TidyHtmlWithCleanupValidator
+from Products.ATContentTypes.tests.utils import input_file_path
 
 example_stx = """
 Header
@@ -187,6 +194,35 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         editATCT(atct)
         self.failUnlessEqual(atct.get_size(), len(example_stx))
 
+    if atct_config.HAS_MX_TIDY:
+        # this test is null and void if mx.Tidy isn't even installed
+
+        def test_tidy_validator_with_upload_wrong_encoding(self): 
+            doc = self._ATCT
+    
+            field = doc.getField('text')
+            request = self.app.REQUEST
+            setattr(request, 'text_text_format', 'text/html')
+            input_file_name = 'tidy1-in.html'
+            in_file = open(input_file_path(input_file_name))
+            env = {'REQUEST_METHOD':'PUT'}
+            headers = {'content-type':'text/html',
+                       'content-length': len(in_file.read()),
+                       'content-disposition':'attachment; filename=%s' % input_file_name}
+            in_file.seek(0)
+            fs = FieldStorage(fp=in_file, environ=env, headers=headers)
+            f = FileUpload(fs)
+    
+            tcv = TidyHtmlWithCleanupValidator('tidy_validator_with_cleanup')
+            result = tcv.__call__(f, field=field, REQUEST=request)
+    
+            self.assertEquals(result, 1)
+    
+            expected_file = open(input_file_path('tidy1-out.html'))
+            expected = expected_file.read()
+            expected_file.close()
+            self.assertEquals(request['text_tidier_data'], expected)
+        
 tests.append(TestSiteATDocument)
 
 class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
