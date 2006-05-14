@@ -495,7 +495,6 @@ HTML Page - verify that title is extracted
   ...
 
   >>> htdoc = self.folder['test-html-title.html']
-
   >>> print htdoc.Title()
   HTML Title
 
@@ -598,7 +597,7 @@ Now for the real thing, doing a PUT request, back to Member role:
   >>> self.setRoles(['Member'])
 
   >>> print http(r"""
-  ... PUT /%s/Foto%%20do%%20Paraná.jpg HTTP/1.1
+  ... PUT /%s/Foto%%20do%%20Parana.jpg HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
   ... """ % (fpath, user_name, user_password))
@@ -613,8 +612,8 @@ Now for the real thing, doing a PUT request, back to Member role:
   >>> print image.getPortalTypeName()
   Image
 
-  >>> print image.Title().decode('utf-8')
-  Foto do Paraná.jpg
+  >>> print image.Title()
+  Foto do Parana.jpg
 
   >>> self.setRoles(['Manager'])
 
@@ -626,7 +625,7 @@ Need manager roles here:
   >>> self.setRoles(['Manager'])
 
   >>> print http(r"""
-  ... MKCOL /%s/Fotos%%20de%%20Jurerê HTTP/1.1
+  ... MKCOL /%s/Fotos%%20de%%20Jurere HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
   ... """ % (fpath, user_name, user_password))
@@ -636,8 +635,8 @@ Need manager roles here:
   >>> 'fotos-de-jurere' in self.folder.objectIds()
   True
 
-  >>> print self.folder['fotos-de-jurere'].Title().decode('utf-8')
-  Fotos de Jurerê
+  >>> print self.folder['fotos-de-jurere'].Title()
+  Fotos de Jurere
 
 Then disable again the Access Rule:
 
