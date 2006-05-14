@@ -598,7 +598,7 @@ Now for the real thing, doing a PUT request, back to Member role:
   >>> self.setRoles(['Member'])
 
   >>> print http(r"""
-  ... PUT /%s/Foto%%20do%%20Paraná.jpg HTTP/1.1
+  ... PUT /%s/Foto%%20do%%20Parana.jpg HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
   ... """ % (fpath, user_name, user_password))
@@ -614,7 +614,7 @@ Now for the real thing, doing a PUT request, back to Member role:
   Image
 
   >>> print image.Title()
-  Foto do Paraná.jpg
+  Foto do Parana.jpg
 
   >>> self.setRoles(['Manager'])
 
@@ -626,7 +626,7 @@ Need manager roles here:
   >>> self.setRoles(['Manager'])
 
   >>> print http(r"""
-  ... MKCOL /%s/Fotos%%20de%%20Jurerê HTTP/1.1
+  ... MKCOL /%s/Fotos%%20de%%20Jurere HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
   ... """ % (fpath, user_name, user_password))
@@ -637,7 +637,7 @@ Need manager roles here:
   True
 
   >>> print self.folder['fotos-de-jurere'].Title()
-  Fotos de Jurerê
+  Fotos de Jurere
 
 Then disable again the Access Rule:
 
