@@ -35,6 +35,8 @@ from Products.validation.config import validation
 from Products.validation.interfaces.IValidator import IValidator
 
 import re
+import encodings
+import zLOG
 from ZPublisher.HTTPRequest import FileUpload
 
 from TAL.HTMLTALParser import HTMLTALParser
@@ -56,6 +58,11 @@ ERROR_LINE = 'line %d column %d - Error: %s'
 # and .* matches the maximum text between two body tags including other body tags
 # if they exists
 RE_BODY = re.compile('<body[^>]*?>(.*)</body>', re.DOTALL )
+
+# get the encoding from an uploaded html-page 
+# e.g. <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
+# we get ISO-8859-1 into the second match, the rest into the first and third. 
+RE_GET_HTML_ENCODING = re.compile('(<meta.*?content-type.*?charset[\s]*=[\s]*)([^"]*?)("[^>]*?>)', re.S | re.I) 
 
 # subtract 11 line numbers from the warning/error
 SUBTRACT_LINES = 11
@@ -238,7 +245,7 @@ def doTidy(value, field, request, cleanup=0):
         # the validator can be called many times, we have to rewind
         # the FileUpload.
         value.seek(0)
-        value = value.read()
+        value = correctEncoding(value.read())
     else:
         value = wrapValueInHTML(value)
 
@@ -290,6 +297,39 @@ def unwrapValueFromHTML(value):
 ##
 ##    return '\n'.join(nlines)
     return body
+
+def correctEncoding(value):
+    """correct the encoding of a html-page if we know it an mxTidy
+       expects an other encoding 
+    """
+
+    # we have nothing to do if mxTidy has no
+    # fixed char_encoding
+    if not MX_TIDY_OPTIONS.has_key('char_encoding')  \
+           or ( MX_TIDY_OPTIONS['char_encoding'] == 'raw'):
+        return value
+
+    match = RE_GET_HTML_ENCODING.search(value)
+    if match:
+        groups = match.groups()
+
+        # lookup encodings in the pyhon encodings database
+        # returns function-pointers that we can compare
+        # need to normalize encodings a bit before
+        html_encoding = groups[1].strip().lower()
+        char_encoding = MX_TIDY_OPTIONS['char_encoding'].lower().strip()
+        h_enc = encodings.search_function(html_encoding)
+        c_enc = encodings.search_function(char_encoding)
+
+        # one encoding is missing or they are equal
+        if not (h_enc and c_enc) or  h_enc == c_enc:
+            return value
+        else:
+            try:
+                return unicode(value, html_encoding).encode(char_encoding)
+            except:
+                zLOG.LOG('validators', zLOG.INFO, "Error correcting encoding from %s to %s" % (html_encoding, char_encoding))
+    return value
 
 def parseErrorData(data, removeWarnings=0):
     """Parse the error data to change some stuff

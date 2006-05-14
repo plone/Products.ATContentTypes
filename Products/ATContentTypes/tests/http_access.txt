@@ -65,7 +65,7 @@ HTTP HEAD
 =========
 
 Test for bug http://plone.org/collector/4290
-#4290 Ñ HEAD request returns 404 error for Plone folders w/o index_html
+#4290 HEAD request returns 404 error for Plone folders w/o index_html
 
 According to the bug report a plone folder w/o an object named index_html
 return 404. The correct response code for a HEAD request is either 200 for
