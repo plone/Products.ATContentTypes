@@ -34,6 +34,9 @@ from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
 
+from Products.CMFDefault.utils import html_headcheck
+from Products.CMFDefault.utils import SimpleHTMLParser
+
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import TextField
 from Products.Archetypes.public import RichWidget
@@ -242,5 +245,30 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         t = time.time()
         time.sleep(10)
         return str(time.time(), t)
+
+    security.declarePrivate('manage_afterPUT')
+    def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
+                        filename, REQUEST, RESPONSE):
+        """After webdav/ftp PUT method
+
+        Set title according to the id on webdav/ftp PUTs.
+        """
+
+        if '' == data:
+            file.seek(0)
+            content = file.read(65536)
+        else:
+            content = data
+
+        if -1 != content.lower().find("<html>"):
+            parser = SimpleHTMLParser()
+            parser.feed(content)
+            if parser.title:
+                self.setTitle(parser.title)
+            return
+
+        ATCTContent.manage_afterPUT(self, data, marshall_data, file,
+                                    context, mimetype, filename, REQUEST,
+                                    RESPONSE)
 
 registerATCT(ATDocument, PROJECTNAME)

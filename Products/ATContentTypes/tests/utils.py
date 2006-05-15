@@ -23,6 +23,7 @@ import ExtensionClass
 from Acquisition import Implicit
 from ZPublisher.BeforeTraverse import registerBeforeTraverse
 from Persistence import Persistent
+import os
 
 PACKAGE_HOME = package_home(globals())
 
@@ -147,3 +148,8 @@ EmailValidator.appendRequired('isEmail')
 PhoneValidator = ValidationChain('isPhoneChain')
 PhoneValidator.appendSufficient('isEmptyNoError')
 PhoneValidator.appendRequired('isInternationalPhoneNumber')
+
+PREFIX = os.path.abspath(os.path.dirname(__file__)) 
+
+def input_file_path(file): 
+    return os.path.join(PREFIX, 'input', file) 
