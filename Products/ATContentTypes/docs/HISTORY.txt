@@ -3,6 +3,10 @@
    This closes http://dev.plone.org/plone/ticket/4765.
    [hannosch]
 
+ * Removed the unused locales folder. Translation files are part of the
+   PloneTranslation product.
+   [hannosch]
+
  * Uploading HTML via WebDAV now supports reading <title> tag to use 
    as the title of the new content item.
    http://dev.plone.org/plone/ticket/4877
