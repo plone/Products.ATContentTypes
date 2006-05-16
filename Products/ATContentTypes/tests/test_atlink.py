@@ -27,8 +27,9 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
+import transaction
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
@@ -40,7 +41,6 @@ from Products.ATContentTypes.interfaces import IATLink
 from Products.CMFDefault.Link import Link
 from Interface.Verify import verifyObject
 from Products.CMFPlone import transaction
-
 
 URL='http://www.example.org/'
 
@@ -177,6 +177,14 @@ class TestATLinkFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
 
 tests.append(TestATLinkFields)
+
+class TestATLinkFunctional(atctftestcase.ATCTIntegrationTestCase):
+    
+    portal_type = 'Link'
+    views = ('link_view', )
+
+tests.append(TestATLinkFunctional)
+
 
 if __name__ == '__main__':
     framework()

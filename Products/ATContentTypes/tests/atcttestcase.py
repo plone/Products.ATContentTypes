@@ -19,27 +19,18 @@
 #
 """Common imports and declarations
 
-common includes a set of basic things that every test needs. Ripped of from my
-Archetypes test suit
-
-
+common includes a set of basic things that every test needs.
 """
 
 __author__ = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
-###
-# general test suits including products
-###
-
 from Testing import ZopeTestCase
-ZopeTestCase.installProduct('ATContentTypes')
-ZopeTestCase.installProduct('ATReferenceBrowserWidget')
+from Products.PloneTestCase import PloneTestCase
 ZopeTestCase.installProduct('SiteAccess')
+PloneTestCase.setupPloneSite()
 
 import os
-from Products.Archetypes.tests.attestcase import ATTestCase
-from Products.Archetypes.tests.atsitetestcase import ATSiteTestCase
 
 from Interface.Verify import verifyObject
 from Products.CMFCore.permissions import View
@@ -47,13 +38,13 @@ from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.interfaces.DublinCore import DublinCore as IDublinCore
 from Products.CMFCore.interfaces.DublinCore import MutableDublinCore as IMutableDublinCore
 from Products.Archetypes.interfaces.base import IBaseContent
-from Products.Archetypes.public import *
+from Products.Archetypes.atapi import *
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
 from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
+from Products.Archetypes.tests.atsitetestcase import ATSiteTestCase
 from Products.Archetypes.tests.test_baseschema import BaseSchemaTest
-from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.interfaces import IATContentType
@@ -64,24 +55,18 @@ from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 from Products.CMFCore.utils import getToolByName
-from Testing.ZopeTestCase.functional import Functional
+from Products.CMFPlone.interfaces.Translatable import ITranslatable
 from Products.CMFPlone import transaction
-
-# BBB remove import from PloneLanguageTool later
-try:
-    from Products.CMFPlone.interfaces.Translatable import ITranslatable
-except ImportError:
-    from Products.PloneLanguageTool.interfaces import ITranslatable
 
 test_home = os.path.dirname(__file__)
 
-class ATCTSiteTestCase(ATSiteTestCase):
+class ATCTSiteTestCase(PloneTestCase.PloneTestCase):
     pass
 
-class ATCTFunctionalSiteTestCase(Functional, ATCTSiteTestCase):
-    __implements__ = Functional.__implements__ + ATCTSiteTestCase.__implements__
+class ATCTFunctionalSiteTestCase(PloneTestCase.FunctionalTestCase):
+    pass
 
-class ATCTTypeTestCase(ATSiteTestCase):
+class ATCTTypeTestCase(ATCTSiteTestCase):
     """AT Content Types test
 
     Tests some basics of a type
@@ -441,41 +426,4 @@ class ATCTFieldTestCase(BaseSchemaTest):
         vocab = field.Vocabulary(dummy)
         self.failUnless(isinstance(vocab, DisplayList))
         self.failUnless(len(tuple(vocab)) >= 1, tuple(vocab))
-
-from Products.CMFQuickInstallerTool.QuickInstallerTool import AlreadyInstalled
-from Products.Archetypes.tests.atsitetestcase import portal_name
-from Products.Archetypes.tests.atsitetestcase import portal_owner
-from AccessControl.SecurityManagement import newSecurityManager
-from AccessControl.SecurityManagement import noSecurityManager
-import time
-
-def setupATCT(app, id=portal_name, quiet=False):
-    transaction.begin()
-    _start = time.time()
-    portal = app[id]
-    if not quiet: ZopeTestCase._print('Adding ATContentTypes ... ')
-
-    # login as manager
-    user = app.acl_users.getUserById(portal_owner).__of__(app.acl_users)
-    newSecurityManager(None, user)
-    # add ATCT
-    qi = getToolByName(portal, 'portal_quickinstaller')
-    try:
-        qi.installProduct('ATReferenceBrowserWidget')
-    except AlreadyInstalled:
-        # EAFP = easier ask for forgiveness than permission
-        if not quiet: ZopeTestCase._print('ATReferenceBrowserWidget already installed ...\n')
-    try:
-        qi.installProduct('ATContentTypes')
-    except AlreadyInstalled:
-        if not quiet: ZopeTestCase._print('ATContentTypes already installed ...\n')
-
-    # Log out
-    noSecurityManager()
-    transaction.commit()
-    if not quiet: ZopeTestCase._print('done (%.3fs)\n' % (time.time()-_start,))
-
-app = ZopeTestCase.app()
-setupATCT(app)
-ZopeTestCase.close(app)
 

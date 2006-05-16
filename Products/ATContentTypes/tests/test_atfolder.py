@@ -27,7 +27,9 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.tests import atcttestcase, atctftestcase
+
+import transaction
 from Acquisition import aq_base
 
 from Products.Archetypes.public import *
@@ -371,6 +373,43 @@ class TestAutoSortSupport(atcttestcase.ATCTSiteTestCase):
     # TODO: more tests
 
 tests.append(TestAutoSortSupport)
+
+class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
+    
+    portal_type = 'Folder'
+    views = ('folder_listing', 'atct_album_view', )
+
+    def test_dynamic_view_without_view(self):
+        # dynamic view mixin should work
+        response = self.publish('%s/' % self.obj_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) #
+        
+    def test_selectViewTemplate(self):
+        # create an object using the createObject script
+        response = self.publish(self.obj_path +
+                                '/selectViewTemplate?templateId=atct_album_view',
+                                self.owner_auth)
+        self.failUnlessEqual(self.obj.getLayout(), 'atct_album_view')
+
+tests.append(TestATFolderFunctional)
+
+class TestATBTreeFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
+
+    portal_type = 'Large Plone Folder'
+    views = ('folder_listing', 'atct_album_view', )
+
+    def afterSetUp(self):
+        # enable global allow for BTree Folder
+        fti = getattr(self.portal.portal_types, self.portal_type)
+        fti.manage_changeProperties(global_allow=1)
+        atctftestcase.ATCTIntegrationTestCase.afterSetUp(self)
+
+    def test_templatemixin_view_without_view(self):
+        # template mixin magic should work
+        response = self.publish('%s/' % self.obj_path, self.basic_auth)
+        self.assertStatusEqual(response.getStatus(), 200) #
+
+tests.append(TestATBTreeFolderFunctional)
 
 
 if __name__ == '__main__':

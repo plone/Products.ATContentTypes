@@ -29,14 +29,14 @@ if __name__ == '__main__':
 
 import unittest
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
+import time, transaction
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
-import time
 import StringIO
 
 from Products.ATContentTypes.content.file import ATFile
@@ -239,6 +239,13 @@ class TestCleanupFilename(unittest.TestCase):
         self.assertEquals(cleanupFilename(text, 'utf-8'), 'Nikos_Tzanos')
 
 tests.append(TestCleanupFilename)
+
+class TestATFileFunctional(atctftestcase.ATCTIntegrationTestCase):
+    
+    portal_type = 'File'
+    views = ('file_view', 'download', )
+
+tests.append(TestATFileFunctional)
 
 
 if __name__ == '__main__':

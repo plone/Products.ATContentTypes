@@ -1,6 +1,9 @@
 1.0.4-devel
 ===========
 
+ * Folded ftests into unit tests. The distinction was arbitrary anyway.
+   [stefan]
+
  * Removed the unused locales folder. Translation files are part of the
    PloneTranslation product.
    [hannosch]

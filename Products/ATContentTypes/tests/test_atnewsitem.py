@@ -27,14 +27,14 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
+import time, transaction
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.public import *
 from Products.ATContentTypes.tests.utils import dcEdit
-import time
 
 from Products.ATContentTypes.content.newsitem import ATNewsItem
 from Products.ATContentTypes.tests.utils import TidyHTMLValidator
@@ -180,8 +180,20 @@ class TestATNewsItemFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless('text/html' in field.allowable_content_types)
         self.failUnless('text/structured'  in field.allowable_content_types)
 
-
 tests.append(TestATNewsItemFields)
+
+class TestATNewsItemFunctional(atctftestcase.ATCTIntegrationTestCase):
+    
+    portal_type = 'News Item'
+    views = ('newsitem_view', )
+
+    def test_atct_history_view(self):
+        # atct history view is restricted, we have to log in as portal ownr
+        response = self.publish('%s/atct_history' % self.obj_path, self.owner_auth)
+        self.assertStatusEqual(response.getStatus(), 200) # OK
+
+tests.append(TestATNewsItemFunctional)
+
 
 if __name__ == '__main__':
     framework()

@@ -482,7 +482,6 @@ class TestMigrations_v1(MigrationTest):
         fixLocationCriteriaGrammar(self.portal, [])
 
 
-
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
