@@ -1,5 +1,5 @@
-1.0.4-devel
-===========
+1.0.4-final 2006-05-17
+======================
 
  * Folded ftests into unit tests. The distinction was arbitrary anyway.
    [stefan]
