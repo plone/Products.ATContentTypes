@@ -31,7 +31,7 @@ except ImportError:
     NO_PAS = True
 
 
-import transaction
+from Products.CMFPlone import transaction
 from Products.PloneTestCase.setup import default_user
 from Products.PloneTestCase.setup import default_password
 from Products.PloneTestCase.setup import portal_owner
