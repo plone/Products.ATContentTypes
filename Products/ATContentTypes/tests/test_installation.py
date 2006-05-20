@@ -46,6 +46,9 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         self.ttool = getattr(self.portal.aq_explicit, 'portal_types')
         self.qi = getattr(self.portal.aq_explicit, 'portal_quickinstaller')
         self.cat = getattr(self.portal.aq_explicit, 'portal_catalog')
+        qi_atct = [prod for prod in self.qi.listInstalledProducts()
+                        if prod['id'] == 'ATContentTypes']
+        self.qi_atct = qi_atct[0]
 
     def test_installed_products(self):
         qi = self.qi
@@ -81,44 +84,8 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
             tinfo = ttool[id]
             self.failUnless(tinfo.product == 'ATContentTypes', tinfo.product)
 
-    def test_reinstallKeepsCMFTypes(self):
-        # test if CMF types are not removed and are still CMF types
-        # reinstall requires manager roles
-        self.setRoles(['Manager', 'Member'])
-        qi = self.qi
-        ttool = self.ttool
-        cmf_ids = ('CMF Document', 'CMF Favorite', 'CMF File',
-            'CMF Folder', 'CMF Image', 'CMF Large Plone Folder', 'CMF Link',
-            'CMF News Item', 'CMF Topic', 'CMF Event', )
-        cmf_prods = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFCalendar')
-
-        qi.reinstallProducts(('ATContentTypes',))
-
-        tids = ttool.objectIds()
-        for id in cmf_ids:
-            self.failUnless(id in tids, (id, tids))
-            tinfo = ttool[id]
-            self.failUnless(tinfo.product in cmf_prods, tinfo.product)
-
-    def test_uninstallMakesCMFTypes(self):
-        # tests if uninstall resets cmf types
-        # reinstall requires manager roles
-        self.setRoles(['Manager', 'Member'])
-        qi = self.qi
-        ttool = self.ttool
-        cmf_ids = ('Document', 'Favorite', 'File',
-            'Folder', 'Image', 'Large Plone Folder', 'Link',
-            'News Item', 'Topic', 'Event')
-        cmf_prods = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFCalendar')
-
-        qi.uninstallProducts(('ATContentTypes',))
-        transaction.savepoint(optimistic=True)
-
-        tids = ttool.objectIds()
-        for id in cmf_ids:
-            self.failUnless(id in tids, (id, tids))
-            tinfo = ttool[id]
-            self.failUnless(tinfo.product in cmf_prods, tinfo.product)
+    def test_quickinstall_locked(self):
+        self.failUnless(self.qi_atct['isLocked'])
 
     def test_installsetsCMFcataloged(self):
         t = self.tool
@@ -144,15 +111,6 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
     def test_api_import(self):
         import Products.ATContentTypes.atct
-
-    def test_cleanup_external_methods(self):
-        id = 'migrateFromCMFtoATCT'
-        em = self.portal.manage_addProduct['ExternalMethod']
-        em.manage_addExternalMethod(id, 'title',
-                                    'ATContentTypes.Install', 'install')
-        self.failUnless(id in self.portal.objectIds())
-        removeExteneralMethods(self.portal, StringIO())
-        self.failIf(id in self.portal.objectIds())
 
 
 tests.append(TestInstallation)
