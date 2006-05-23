@@ -34,8 +34,9 @@ from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 
 ALL_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex', 'KeywordIndex',
-               'PathIndex', 'TextIndex', 'TextIndexNG2', 'TopicIndex',
-               'ZCTextIndex', 'NavtreeIndexNG', 'ExtendedPathIndex')
+               'PathIndex', 'TextIndex', 'TextIndexNG2', 'TextIndexNG3',
+               'TopicIndex', 'ZCTextIndex', 'NavtreeIndexNG', 
+               'ExtendedPathIndex')
 
 SORT_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex', 'KeywordIndex')
 # TextIndex, PathIndex, TopicIndex, ZCTextIndex, TextIndexNG2, NavtreeIndexNG
@@ -48,7 +49,7 @@ DATE_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex')
 LIST_INDICES = ('FieldIndex', 'KeywordIndex', 'PathIndex', 'NavtreeIndexNG',
                   'ExtendedPathIndex', 'TopicIndex')
 
-TEXT_INDICES = ('TextIndex', 'TextIndexNG2', 'ZCTextIndex')
+TEXT_INDICES = ('TextIndex', 'TextIndexNG2', 'TextIndexNG3', 'ZCTextIndex')
 
 # Indices that can take a simple string
 STRING_INDICES = LIST_INDICES + TEXT_INDICES
