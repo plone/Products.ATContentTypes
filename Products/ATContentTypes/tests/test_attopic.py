@@ -115,7 +115,7 @@ def editATCT(obj):
         if CRIT_TYPE == 'ATSimpleIntCriterion':
             value = params[0].split(' ')
             crit.setValue(value[0])
-            if len(value) > 1: 
+            if len(value) > 1:
                 crit.setValue2(value[1])
             crit.setDirection(params[1])
         if CRIT_TYPE == 'ATSortCriterion':
@@ -169,7 +169,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
     title = 'Smart Folder'
     meta_type = 'ATTopic'
     icon = 'topic_icon.gif'
-    
+
     def afterSetUp(self):
         self.setRoles(['Manager', 'Member'])
         self._ATCT = self._createType(self.folder, self.portal_type, 'ATCT')
@@ -180,7 +180,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         iface = IATTopic
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
-        
+
     def test_isNotOrdered(self):
         iface = IZopeOrderedContainer
         self.failIf(iface.isImplementedBy(self._ATCT))
@@ -232,7 +232,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         subtopic = topic.qux
 
         subtopic.setAcquireCriteria(True)
-        
+
         #Ensure an empty subtopic uses it's parents' queries
         self.failUnlessEqual(subtopic.buildQuery(), topic.buildQuery())
 
@@ -299,7 +299,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         transaction.commit(1)
         m = TopicMigrator(old)
         m(unittest=1)
-        
+
         self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
         migrated = getattr(self.folder, id)
 
@@ -386,6 +386,18 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.failUnless(isinstance(topic.queryCatalog(batch=True),Batch))
         # Check the batch length
         self.assertEqual(len(topic.queryCatalog(batch=True)), 10)
+
+    def test_queryCatalogBSizeChangesBatchSize(self):
+        #Ensure that a set limit overrides batch size
+        topic = self._ATCT
+        crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
+        crit.setValue('Folder')
+        # Add a bunch of folders.
+        for i in range(1, 20):
+            self.folder.invokeFactory('Folder', str(i))
+        self.failUnless(isinstance(topic.queryCatalog(batch=True, b_size=5),Batch))
+        # Check the batch length
+        self.assertEqual(len(topic.queryCatalog(batch=True, b_size=5)), 5)
 
     def test_get_size(self):
         atct = self._ATCT
@@ -618,12 +630,12 @@ class TestATTopicFunctional(atctftestcase.ATCTIntegrationTestCase):
         # adding topics is restricted
         self.setRoles(['Manager', 'Member',])
         atctftestcase.ATCTIntegrationTestCase.afterSetUp(self)
-        
+
     def test_dynamic_view_without_view(self):
         # dynamic view magic should work
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) #
-    
+
     portal_type = 'Topic'
     views = ('atct_topic_view', 'criterion_edit_form', 'atct_topic_subtopics')
 
