@@ -73,10 +73,6 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
 
     security       = ClassSecurityInfo()
 
-    def manage_afterAdd(self, item, container):
-        ATCTOrderedFolder.manage_afterAdd(self, item, container)
-        AutoOrderSupport.manage_afterAdd(self, item, container)
-
 registerATCT(ATFolder, PROJECTNAME)
 
 class ATBTreeFolder(AutoSortSupport, ATCTBTreeFolder):

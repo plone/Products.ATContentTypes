@@ -139,30 +139,19 @@ class AutoOrderSupport(AutoSortSupport, OrderedContainer):
         OrderedContainer.moveObjectsByDelta(self, ids, delta, subset_ids=subset_ids)
         self.setSortAuto(disable_auto_sort)
 
-    def manage_renameObject(self, id, new_id, REQUEST=None):
-        """Rename a particular sub-object without changing its position.
-
-        Overwritten to keep auto sort
-        """
-        old_position = self.getObjectPosition(id)
-        old_sort_auto = self.getSortAuto()
-        result = OrderedBaseFolder.manage_renameObject(self, id, new_id, REQUEST)
-        self.moveObjectToPosition(new_id, old_position)
-        putils = getToolByName(self, 'plone_utils')
-        putils.reindexOnReorder(self)
-        self.setSortAuto(old_sort_auto)
-        return result
-
-    security.declarePrivate('manage_afterAdd')
-    def manage_afterAdd(self, item, container):
-        """after add hook
-
-        Overwritten to auto sort items
-        CAUTION: Make sure that you call this method explictly!
-        """
-        # XXX: disabled
-        # we need a proper event system to make it work
-        #if item.aq_inner.aq_parent == self:
-        #    self.autoOrderItems()
+    # XXX disabled for now, needs to be replaced by an event handler
+    #def manage_renameObject(self, id, new_id, REQUEST=None):
+    #    """Rename a particular sub-object without changing its position.
+    #
+    #    Overwritten to keep auto sort
+    #    """
+    #    old_position = self.getObjectPosition(id)
+    #    old_sort_auto = self.getSortAuto()
+    #    result = OrderedBaseFolder.manage_renameObject(self, id, new_id, REQUEST)
+    #    self.moveObjectToPosition(new_id, old_position)
+    #    putils = getToolByName(self, 'plone_utils')
+    #    putils.reindexOnReorder(self)
+    #    self.setSortAuto(old_sort_auto)
+    #    return result
 
 InitializeClass(AutoOrderSupport)
