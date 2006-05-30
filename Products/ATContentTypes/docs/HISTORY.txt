@@ -1,13 +1,20 @@
+1.1.0-devel unreleased
+======================
+
  * Moved css rules for the photo album view inside Plone's public.css, instead
    of having them inline in the template. This way they can be overridden.
    This closes http://dev.plone.org/plone/ticket/4765.
    [hannosch]
 
+ * Made ATTopic queryCatalog properly support b_size, thanks to patch from
+   Bader.  Fixes http://dev.plone.org/plone/ticket/5526
+   [alecm]
+
  * Removed the unused locales folder. Translation files are part of the
    PloneTranslation product.
    [hannosch]
 
- * Uploading HTML via WebDAV now supports reading <title> tag to use 
+ * Uploading HTML via WebDAV now supports reading <title> tag to use
    as the title of the new content item.
    http://dev.plone.org/plone/ticket/4877
    [rocky]
