@@ -6,7 +6,7 @@ Quick switching instructions for the impatient
    experimental. But we need your feedback to make the migration perfect, so
    please install and convert your site on a backup instance, and report any
    failures/errors to us, so we can fix them.
-   
+
  * Update or install all required software like Archetypes,
    ATReferenceBrowserWidget and ATContentTypes
 
@@ -22,11 +22,11 @@ Quick switching instructions for the impatient
  * Go to the ZMI (Zope management interface) and browse to the portal_atct tool.
    Click on the migration tab and run the migration in order to migrate the old
    CMF types to the new ATContentTypes types.
-     
+
  * Don't forget to report any migration failures in the ATCT bug tracker on SF:
    http://sourceforge.net/tracker/?atid=645337&group_id=55262&func=browse - we
    need your bug report to make migration as smooth as possible!
-       
+
 ============
 Requirements
 ============
@@ -34,7 +34,7 @@ Requirements
 Zope 2.8 or 2.9
 ---------------
 
-AT Content Types requires, Zope 2.8.5 or Zope 2.9.1.
+AT Content Types requires, Zope 2.8.7 or Zope 2.9.3.
 
 Python 2.3.5+
 -------------
@@ -48,7 +48,7 @@ Archetypes 1.3.7+ or 1.4.0+
 AT Content Types is tested with the following AT versions
 
  * AT 1.3.7 or newer releases of AT 1.3
- 
+
  * AT 1.4.0 or newer releases of AT 1.4
 
 CMFQuickinstaller
@@ -66,21 +66,21 @@ to seperate the dependecies if needed.
 ATContentTypes 1.1 is designed for Plone 2.5, whereas 1.0 is designed for
 Plone 2.1.
 
-ATReferenceBrowserWidget 1.2
+ATReferenceBrowserWidget 1.4
 -----------------------------
 
-ATReferenceWidget 1.2 or higher is required for the related items field. 
+ATReferenceWidget 1.4 or higher is required for the related items field.
 
 CMF 1.5.5+
 ----------
 
-Plone 2.1 and ATContentTypes 1.0 are requiring CMF 1.5.5 or newer.
-Plone 2.5 and ATContentTypes 1.1 are requiring CMF 1.6.0 or newer.
+Plone 2.1 and ATContentTypes 1.0 require CMF 1.5.5 or newer.
+Plone 2.5 and ATContentTypes 1.1 require CMF 1.6.0 or newer.
 
 CMFDynamicViewFTI 1.0.2
 -----------------------
 
-A special new FTI for dynamic views. It is the successor of TemplateMixin. 
+A special new FTI for dynamic views. It is the successor of TemplateMixin.
 
 =====================
 Optional Requirements
@@ -91,7 +91,7 @@ mxTidy
 
 Install egenix mxTidy to enable the validation of the body text of ATDocument.
 The text is checked and is rejected if it contains wrong xhtml syntax that may
-break the user interface of plone. 
+break the user interface of plone.
 You can download mxTidy from http://www.egenix.com/files/python/mxTidy.htm
 
 TextIndexNG 2.0.8+
@@ -133,7 +133,7 @@ Reconfiguration of Zope
 You need to reconfigure Zope to make it play nice with Plone and AT Content
 Types.
 
-At first you need to set reST header level to 2. For Zope 2.8 change the 
+At first you need to set reST header level to 2. For Zope 2.8 change the
 etc/zope.conf and adjust the environment section in the config file:
 
 <environment>
@@ -172,6 +172,6 @@ Migration may fail and it could destroy your data. So please backup your ZODB
 before migrating to AT Content Types.
 
  * Install ATContentTypes as usually using the quickinstaller
- 
+
  * browse to the portal_atct tool and run the type migration
 
