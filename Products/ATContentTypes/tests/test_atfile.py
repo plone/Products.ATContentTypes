@@ -248,7 +248,7 @@ class TestCleanupFilename(unittest.TestCase):
 
     def test_cleanup_filename(self):
         from Products.ATContentTypes.content.base import cleanupFilename
-        text = '????? ??????'
+        text = 'Νίκος Τζάνος'
         self.assertEquals(cleanupFilename(text, 'utf-8'), 'Nikos_Tzanos')
 
 tests.append(TestCleanupFilename)
