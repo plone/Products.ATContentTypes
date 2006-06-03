@@ -1,9 +1,12 @@
-1.0.5-devel unreleased
+1.0.5-final 2006-06-03
 ======================
 
  * Made ATTopic queryCatalog properly support b_size, thanks to patch from
    Bader.  Fixes http://dev.plone.org/plone/ticket/5526
    [alecm]
+
+ * Added TextIndexNG3 to list of indexes.
+   [ajung]
 
 1.0.4-final 2006-05-17
 ======================
