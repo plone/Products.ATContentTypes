@@ -28,9 +28,9 @@ __old_name__ = 'Products.ATContentTypes.types.criteria.ATSortCriterion'
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 
-from Products.Archetypes.public import Schema
-from Products.Archetypes.public import BooleanField
-from Products.Archetypes.public import BooleanWidget
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import BooleanField
+from Products.Archetypes.atapi import BooleanWidget
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import SORT_INDICES

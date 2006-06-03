@@ -31,11 +31,11 @@ from AccessControl import ClassSecurityInfo
 from Acquisition import aq_base
 from ComputedAttribute import ComputedAttribute
 
-from Products.Archetypes.public import Schema
-from Products.Archetypes.public import ImageField
-from Products.Archetypes.public import ImageWidget
-from Products.Archetypes.public import PrimaryFieldMarshaller
-from Products.Archetypes.public import AnnotationStorage
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import ImageField
+from Products.Archetypes.atapi import ImageWidget
+from Products.Archetypes.atapi import PrimaryFieldMarshaller
+from Products.Archetypes.atapi import AnnotationStorage
 
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import HAS_PLONE2

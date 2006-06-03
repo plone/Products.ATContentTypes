@@ -38,14 +38,14 @@ from Acquisition import aq_inner
 from zExceptions import NotFound
 from webdav.Resource import Resource as WebdavResoure
 
-from Products.Archetypes.public import Schema
-from Products.Archetypes.public import BooleanField
-from Products.Archetypes.public import IntegerField
-from Products.Archetypes.public import LinesField
-from Products.Archetypes.public import BooleanWidget
-from Products.Archetypes.public import IntegerWidget
-from Products.Archetypes.public import InAndOutWidget
-from Products.Archetypes.public import DisplayList
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import BooleanField
+from Products.Archetypes.atapi import IntegerField
+from Products.Archetypes.atapi import LinesField
+from Products.Archetypes.atapi import BooleanWidget
+from Products.Archetypes.atapi import IntegerWidget
+from Products.Archetypes.atapi import InAndOutWidget
+from Products.Archetypes.atapi import DisplayList
 
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import HAS_PLONE2

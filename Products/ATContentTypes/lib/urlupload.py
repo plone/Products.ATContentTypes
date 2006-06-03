@@ -32,8 +32,8 @@ from ExtensionClass import Base
 
 from Products.CMFCore.permissions import View
 
-from Products.Archetypes.public import StringField
-from Products.Archetypes.public import StringWidget
+from Products.Archetypes.atapi import StringField
+from Products.Archetypes.atapi import StringWidget
 from Products.ATContentTypes import permission as ATCTPermissions
 
 class InvalidContentType(Exception):

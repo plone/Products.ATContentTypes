@@ -33,7 +33,7 @@ import time, transaction
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes.public import *
+from Products.Archetypes.atapi import *
 from Products.ATContentTypes.tests.utils import dcEdit
 
 from Products.ATContentTypes.content.document import ATDocument

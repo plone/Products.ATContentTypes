@@ -31,11 +31,11 @@ from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
-from Products.Archetypes.public import Schema
-from Products.Archetypes.public import FileField
-from Products.Archetypes.public import FileWidget
-from Products.Archetypes.public import PrimaryFieldMarshaller
-from Products.Archetypes.public import AnnotationStorage
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import FileField
+from Products.Archetypes.atapi import FileWidget
+from Products.Archetypes.atapi import PrimaryFieldMarshaller
+from Products.Archetypes.atapi import AnnotationStorage
 from Products.Archetypes.BaseContent import BaseContent
 from Products.PortalTransforms.utils import TransformException
 from Products.MimetypesRegistry.common import MimeTypeException

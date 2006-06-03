@@ -26,15 +26,15 @@ __old_name__ = 'Products.ATContentTypes.types.ATNewsItem'
 
 from AccessControl import ClassSecurityInfo
 
-from Products.Archetypes.public import Schema
-from Products.Archetypes.public import ImageField
-from Products.Archetypes.public import StringField
-from Products.Archetypes.public import TextField
-from Products.Archetypes.public import ImageWidget
-from Products.Archetypes.public import RichWidget
-from Products.Archetypes.public import StringWidget
-from Products.Archetypes.public import RFC822Marshaller
-from Products.Archetypes.public import AnnotationStorage
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import ImageField
+from Products.Archetypes.atapi import StringField
+from Products.Archetypes.atapi import TextField
+from Products.Archetypes.atapi import ImageWidget
+from Products.Archetypes.atapi import RichWidget
+from Products.Archetypes.atapi import StringWidget
+from Products.Archetypes.atapi import RFC822Marshaller
+from Products.Archetypes.atapi import AnnotationStorage
 
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import HAS_PLONE2

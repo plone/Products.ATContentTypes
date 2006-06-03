@@ -34,7 +34,7 @@ from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes.public import *
+from Products.Archetypes.atapi import *
 from Products.Archetypes.tests.atsitetestcase import portal_name
 
 from Products.ATContentTypes.content.favorite import ATFavorite

@@ -22,7 +22,7 @@ __author__  = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
 from Products.CMFCore.permissions import setDefaultRoles
-from Products.Archetypes.public import listTypes
+from Products.Archetypes.atapi import listTypes
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.interfaces import IATTopic
 from Products.ATContentTypes.interfaces import IATTopicCriterion

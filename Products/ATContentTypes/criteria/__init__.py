@@ -24,7 +24,7 @@ __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria'
 
 from UserDict import UserDict
-from Products.Archetypes.public import registerType
+from Products.Archetypes.atapi import registerType
 from Products.Archetypes.ClassGen import generateClass
 from Products.ATContentTypes.config import PROJECTNAME
 from types import StringType

@@ -22,7 +22,7 @@
 __author__  = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
-from Products.Archetypes.public import BaseContentMixin
+from Products.Archetypes.atapi import BaseContentMixin
 
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo

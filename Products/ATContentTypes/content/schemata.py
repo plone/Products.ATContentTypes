@@ -23,11 +23,11 @@
 __author__  = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
-from Products.Archetypes.public import BaseSchema
-from Products.Archetypes.public import MetadataSchema
-from Products.Archetypes.public import ReferenceField
-from Products.Archetypes.public import BooleanField
-from Products.Archetypes.public import BooleanWidget
+from Products.Archetypes.atapi import BaseSchema
+from Products.Archetypes.atapi import MetadataSchema
+from Products.Archetypes.atapi import ReferenceField
+from Products.Archetypes.atapi import BooleanField
+from Products.Archetypes.atapi import BooleanWidget
 
 from Products.CMFCore.permissions import ModifyPortalContent
 

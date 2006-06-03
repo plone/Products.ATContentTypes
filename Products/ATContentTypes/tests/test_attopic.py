@@ -33,7 +33,7 @@ from Products.ATContentTypes.tests.utils import dcEdit
 import transaction
 from Products.CMFCore.permissions import View
 from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes.public import *
+from Products.Archetypes.atapi import *
 
 from Products.ATContentTypes.content.topic import ATTopic
 from Products.ATContentTypes.content.topic import ChangeTopics

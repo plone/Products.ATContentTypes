@@ -35,7 +35,7 @@ import time, transaction
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes.public import *
+from Products.Archetypes.atapi import *
 from Products.ATContentTypes.tests.utils import dcEdit
 import StringIO
 
@@ -248,7 +248,7 @@ class TestCleanupFilename(unittest.TestCase):
 
     def test_cleanup_filename(self):
         from Products.ATContentTypes.content.base import cleanupFilename
-        text = 'Νίκος Τζάνος'
+        text = '????? ??????'
         self.assertEquals(cleanupFilename(text, 'utf-8'), 'Nikos_Tzanos')
 
 tests.append(TestCleanupFilename)
