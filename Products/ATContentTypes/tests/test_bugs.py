@@ -37,34 +37,7 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
 
     def afterSetUp(self):
         atcttestcase.ATCTSiteTestCase.afterSetUp(self)
-        self.qi = self.portal.portal_quickinstaller
-        self.pt = self.portal.portal_types
-        self.tool = self.portal.portal_atct
         self.wf = self.portal.portal_workflow
-
-    def test_reinstall_keeps_obj_wf_state(self):
-        wf = self.wf
-        self.folder.invokeFactory('Document', 'testdoc', title="test doc", 
-                                  text="test body")
-        obj = self.folder.testdoc
-        
-        state = wf.getInfoFor(obj, 'review_state', default=None)
-        self.failUnlessEqual(state, 'visible')
-        
-        self.qi.reinstallProducts(('ATContentTypes',))
-        
-        state = wf.getInfoFor(obj, 'review_state', default=None)
-        self.failUnlessEqual(state, 'visible')
-        
-        wf.doActionFor(obj, 'submit')
-        
-        state = wf.getInfoFor(obj, 'review_state', default=None)
-        self.failUnlessEqual(state, 'pending')
-
-        self.qi.reinstallProducts(('ATContentTypes',))
-        
-        state = wf.getInfoFor(obj, 'review_state', default=None)
-        self.failUnlessEqual(state, 'pending')
 
     def test_wfmapping(self):
         default = ('plone_workflow',)
@@ -87,19 +60,6 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
             pwf = self.wf.getChainFor(pt)
             self.failUnlessEqual(pwf, wf, (pt, pwf, wf))
     
-    def test_reinstall_keeps_wfmapping(self):
-        pt = 'Document'
-        wf = ('folder_workflow',)
-
-        self.wf.setChainForPortalTypes((pt,), wf)
-        pwf = self.wf.getChainFor(pt)
-        self.failUnlessEqual(pwf, wf, (pt, pwf, wf))
-
-        self.qi.reinstallProducts(('ATContentTypes',))
-        
-        pwf = self.wf.getChainFor(pt)
-        self.failUnlessEqual(pwf, wf, (pt, pwf, wf))
-
     def test_striphtmlbug(self):
         # Test for Plone tracker #4944
         self.folder.invokeFactory('Document', 'document')

@@ -147,15 +147,15 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         # Let folder use a restricted set of types
         self.portal.portal_types.Folder.filter_content_types = 1
         self.portal.portal_types.Folder.allowed_content_types = \
-            ('Document', 'Image', 'News Item', 'Topic', 'SimpleFolder', 'Folder')
+            ('Document', 'Image', 'News Item', 'Topic', 'CMF Folder', 'Folder')
         
         # Set up outer folder with restrictions enabled
         self.af.setConstrainTypesMode(constraintypes.ENABLED)
-        self.af.setLocallyAllowedTypes(['Folder', 'Image', 'SimpleFolder'])
+        self.af.setLocallyAllowedTypes(['Folder', 'Image', 'CMF Folder'])
         self.af.setImmediatelyAddableTypes(['Folder'])
   
         # Create inner type to acquire (default)
-        self.af.invokeFactory('SimpleFolder', 'outer', title='outer')
+        self.af.invokeFactory('CMF Folder', 'outer', title='outer')
         outer = self.af.outer
         
         outer.invokeFactory('Folder', 'inner', title='inner')
@@ -174,8 +174,8 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         
         # Fail - we didn't acquire this, really, since we can't acquire
         # from parent folder of different type
-        self.assertRaises((Unauthorized, ValueError), inner.invokeFactory, 'CMF Folder', 'a')
-        self.failIf('CMF Folder' in inner.getLocallyAllowedTypes())
+        self.assertRaises((Unauthorized, ValueError), inner.invokeFactory, 'Topic', 'a')
+        self.failIf('Topic' in inner.getLocallyAllowedTypes())
         try:
             # Will be OK, since we've got global defaults since we can't
             # acquire from parent with different type

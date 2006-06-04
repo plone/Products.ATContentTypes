@@ -113,8 +113,6 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager,
         ) + ATCTMigrationTool.manage_options + \
             PropertyManager.manage_options + \
             AccessControl.Owned.Owned.manage_options
-            #ActionProviderBase.manage_options + \
-            #SimpleItem.manage_options
 
     # properties and their default values
 
