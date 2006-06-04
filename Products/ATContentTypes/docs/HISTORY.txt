@@ -1,10 +1,13 @@
 1.2.0-devel unreleased
 ======================
 
+ * Adjusted some deprecated getActionById to getActionInfo calls.
+   [hannosch]
+
  * Removed five:traversable statements as they are no longer needed in Zope2.10.
    [hannosch]
 
- * Adjusted some tests due to changes in test setup.
+ * Simplified test setup and adjusted some tests accordingly.
    [hannosch]
 
 1.1.0-devel unreleased

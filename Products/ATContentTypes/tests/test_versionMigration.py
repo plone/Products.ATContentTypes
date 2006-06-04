@@ -180,15 +180,15 @@ class TestMigrations_v1(MigrationTest):
 
     def testFixFolderlistingAction(self):
         fixFolderlistingAction(self.portal, [])
-        self.assertEqual(self.portal.portal_types['Folder'].getActionById('folderlisting'), 'view')
-        self.assertEqual(self.portal.portal_types['Large Plone Folder'].getActionById('folderlisting'), 'view')
-        self.assertEqual(self.portal.portal_types['Topic'].getActionById('folderlisting'), 'view')
+        self.failUnless(self.portal.portal_types['Folder'].getActionInfo('folder/folderlisting')['url'].endswith('/view'))
+        self.failUnless(self.portal.portal_types['Large Plone Folder'].getActionInfo('folder/folderlisting')['url'].endswith('/view'))
+        self.failUnless(self.portal.portal_types['Topic'].getActionInfo('folder/folderlisting')['url'].endswith('/view'))
         
     def testFixFolderlistingActionTwice(self):
         fixFolderlistingAction(self.portal, [])
-        self.assertEqual(self.portal.portal_types['Folder'].getActionById('folderlisting'), 'view')
-        self.assertEqual(self.portal.portal_types['Large Plone Folder'].getActionById('folderlisting'), 'view')
-        self.assertEqual(self.portal.portal_types['Topic'].getActionById('folderlisting'), 'view')
+        self.failUnless(self.portal.portal_types['Folder'].getActionInfo('folder/folderlisting')['url'].endswith('/view'))
+        self.failUnless(self.portal.portal_types['Large Plone Folder'].getActionInfo('folder/folderlisting')['url'].endswith('/view'))
+        self.failUnless(self.portal.portal_types['Topic'].getActionInfo('folder/folderlisting')['url'].endswith('/view'))
         
     def testFixFolderlistingActionNoTool(self):
         self.portal._delObject('portal_types')
