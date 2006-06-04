@@ -1,6 +1,9 @@
 1.2.0-devel unreleased
 ======================
 
+ * Added an extension profile and an exportimport handler for the ATCT tool.
+   [hannosch]
+
  * Adjusted some deprecated getActionById to getActionInfo calls.
    [hannosch]
 

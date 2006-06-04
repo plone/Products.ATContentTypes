@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<export-steps>
+  <export-step id="atcttool"
+    handler="Products.ATContentTypes.exportimport.atcttool.exportATCTTool"
+    title="ATContentTypes Tool">
+    Export ATContentTypes specific configuration.
+  </export-step>
+</export-steps>
+
+

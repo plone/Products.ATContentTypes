@@ -81,25 +81,6 @@ class TestMigrations_v1(MigrationTest):
         self.int_crit.setValue(35)
         self.catalog.indexObject(self.int_crit)
 
-# These fail due to lacking subtransactions
-#     def testMigrateCMFTopics(self):
-#         # Should convert the CMFTopic
-#         migrateCMFTopics(self.portal,[])
-#         migrated = getattr(self.folder, 'test_cmftopic')
-#         self.assertEqual(migrated.portal_type,'Topic')
-# 
-#     def testMigrateCMFTopicsTwice(self):
-#         # Should not fail if migrated again
-#         migrateCMFTopics(self.portal,[])
-#         migrateCMFTopics(self.portal,[])
-#         migrated = getattr(self.folder, 'test_cmftopic')
-#         self.assertEqual(migrated.portal_type,'Topic')
-# 
-#     def testMigrateCMFTopicsNoCatalog(self):
-#         # Should not fail if portal_catalog is missing
-#         self.portal._delObject('portal_catalog')
-#         migrateCMFTopics(self.portal,[])
-
     def testUncatalogCriteria(self):
         # Should fix our broken date criteria
         self.failUnless(self.catalog(path='/'.join(self.int_crit.getPhysicalPath())))
@@ -137,7 +118,7 @@ class TestMigrations_v1(MigrationTest):
 
     def testUpdateIntegerCriteria(self):
         # Should fix our incomplete integer criteria
-        # XXX this relies on the current AttributeStorage implementation
+        # TODO this relies on the current AttributeStorage implementation
         updateIntegerCriteria(self.portal,[])
         self.assertEqual(self.int_crit.value2,None)
         self.assertEqual(self.int_crit.direction,'')
