@@ -1,4 +1,4 @@
-1.2.0 (svn/unreleased)
+1.2.0-devel unreleased
 ======================
 
  * Removed five:traversable statements as they are no longer needed in Zope2.10.
