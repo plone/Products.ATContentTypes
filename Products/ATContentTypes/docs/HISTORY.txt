@@ -1,6 +1,9 @@
 1.1.0-devel unreleased
 ======================
 
+ * Added TextIndexNG3 to list of indexes.
+   [ajung]
+
  * Moved css rules for the photo album view inside Plone's public.css, instead
    of having them inline in the template. This way they can be overridden.
    This closes http://dev.plone.org/plone/ticket/4765.
