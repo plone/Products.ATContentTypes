@@ -33,7 +33,7 @@ from Products.ATContentTypes.tests.utils import dcEdit
 import transaction
 from Products.CMFCore.permissions import View
 from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes.public import *
+from Products.Archetypes.atapi import *
 
 from Products.ATContentTypes.content.topic import ATTopic
 from Products.ATContentTypes.content.topic import ChangeTopics
@@ -394,6 +394,18 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         # Check the batch length
         self.assertEqual(len(topic.queryCatalog(batch=True)), 10)
 
+    def test_queryCatalogBSizeChangesBatchSize(self):
+        #Ensure that a set limit overrides batch size
+        topic = self._ATCT
+        crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
+        crit.setValue('Folder')
+        # Add a bunch of folders.
+        for i in range(1, 20):
+            self.folder.invokeFactory('Folder', str(i))
+        self.failUnless(isinstance(topic.queryCatalog(batch=True, b_size=5),Batch))
+        # Check the batch length
+        self.assertEqual(len(topic.queryCatalog(batch=True, b_size=5)), 5)
+
     def test_get_size(self):
         atct = self._ATCT
         self.failUnlessEqual(atct.get_size(), 1)
@@ -625,12 +637,12 @@ class TestATTopicFunctional(atctftestcase.ATCTIntegrationTestCase):
         # adding topics is restricted
         self.setRoles(['Manager', 'Member',])
         atctftestcase.ATCTIntegrationTestCase.afterSetUp(self)
-        
+
     def test_dynamic_view_without_view(self):
         # dynamic view magic should work
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) #
-    
+
     portal_type = 'Topic'
     views = ('atct_topic_view', 'criterion_edit_form', 'atct_topic_subtopics')
 

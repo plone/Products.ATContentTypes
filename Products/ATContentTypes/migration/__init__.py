@@ -57,9 +57,12 @@ def registerMigrations():
                              '1.0.3-final',
                              null)
     atct.registerUpgradePath('1.0.3-final',
-                             '1.0.4-devel (SVN/UNRELEASED)',
+                             '1.0.4-final',
                              null)
-    atct.registerUpgradePath('1.0.4-devel (SVN/UNRELEASED)',
+    atct.registerUpgradePath('1.0.4-final',
+                             '1.0.5-final',
+                             null)
+    atct.registerUpgradePath('1.0.5-final',
                              '1.1.0-alpha1',
                              null)
     atct.registerUpgradePath('1.1.0-alpha1',
@@ -69,5 +72,11 @@ def registerMigrations():
                              '1.1.0-beta1',
                              null)
     atct.registerUpgradePath('1.1.0-beta1',
-                             '1.1.0-devel (SVN/UNRELEASED)',
+                             '1.1.0-beta2',
+                             null)
+    atct.registerUpgradePath('1.1.0-beta2',
+                             '1.1.0-final',
+                             null)
+    atct.registerUpgradePath('1.1.0-final',
+                             '1.2.0-devel (svn/unreleased)',
                              null)

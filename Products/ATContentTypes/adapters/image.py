@@ -5,7 +5,7 @@ from Products.ATContentTypes.interface.folder import IFilterFolder
 from Products.ATContentTypes.content.folder import ATFolder
 
 from zope.interface import implements
-from Products.Archetypes.public import Schema
+from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import ReferenceField
 from Products.Archetypes.atapi import ReferenceWidget
 

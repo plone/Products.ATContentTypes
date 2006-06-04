@@ -41,8 +41,8 @@ if HAS_LINGUA_PLONE:
     from Products.LinguaPlone.public import process_types
     from Products.LinguaPlone.public import listTypes
 else:
-    from Products.Archetypes.public import process_types
-    from Products.Archetypes.public import listTypes
+    from Products.Archetypes.atapi import process_types
+    from Products.Archetypes.atapi import listTypes
 
 from Products.CMFCore.utils import ContentInit
 from Products.CMFCore.utils import ToolInit

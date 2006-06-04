@@ -28,12 +28,12 @@ from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
-from Products.Archetypes.public import Schema
-from Products.Archetypes.public import LinesField
-from Products.Archetypes.public import MultiSelectionWidget
-from Products.Archetypes.public import StringField
-from Products.Archetypes.public import SelectionWidget
-from Products.Archetypes.public import DisplayList
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import LinesField
+from Products.Archetypes.atapi import MultiSelectionWidget
+from Products.Archetypes.atapi import StringField
+from Products.Archetypes.atapi import SelectionWidget
+from Products.Archetypes.atapi import DisplayList
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import LIST_INDICES

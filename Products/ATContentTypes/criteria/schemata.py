@@ -22,10 +22,10 @@ __author__  = ''
 __docformat__ = 'restructuredtext'
 
 
-from Products.Archetypes.public import Schema
-from Products.Archetypes.public import StringField
-from Products.Archetypes.public import IdWidget
-from Products.Archetypes.public import StringWidget
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import StringField
+from Products.Archetypes.atapi import IdWidget
+from Products.Archetypes.atapi import StringWidget
 from Products.ATContentTypes.permission import ChangeTopics
 
 ###

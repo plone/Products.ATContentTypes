@@ -27,7 +27,7 @@ from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
-from Products.Archetypes.public import DisplayList
+from Products.Archetypes.atapi import DisplayList
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import FIELD_INDICES

@@ -27,9 +27,9 @@ __old_name__ = 'Products.ATContentTypes.types.criteria.ATDateRangeCriterion'
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 
-from Products.Archetypes.public import Schema
-from Products.Archetypes.public import DateTimeField
-from Products.Archetypes.public import CalendarWidget
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import DateTimeField
+from Products.Archetypes.atapi import CalendarWidget
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import DATE_INDICES

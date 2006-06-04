@@ -10,7 +10,7 @@ from Acquisition import aq_base
 from Products.CMFCore.permissions import ManagePortal
 from Products.ATContentTypes.interfaces import IATCTTopicsTool
 
-from Products.Archetypes.public import DisplayList
+from Products.Archetypes.atapi import DisplayList
 from Products.CMFPlone.CatalogTool import CatalogTool
 from Products.ATContentTypes.config import TOOLNAME
 

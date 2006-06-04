@@ -32,18 +32,18 @@ from AccessControl import ClassSecurityInfo
 from DateTime import DateTime
 from ComputedAttribute import ComputedAttribute
 
-from Products.Archetypes.public import Schema
-from Products.Archetypes.public import DateTimeField
-from Products.Archetypes.public import LinesField
-from Products.Archetypes.public import StringField
-from Products.Archetypes.public import TextField
-from Products.Archetypes.public import CalendarWidget
-from Products.Archetypes.public import LinesWidget
-from Products.Archetypes.public import KeywordWidget
-from Products.Archetypes.public import RichWidget
-from Products.Archetypes.public import StringWidget
-from Products.Archetypes.public import RFC822Marshaller
-from Products.Archetypes.public import AnnotationStorage
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import DateTimeField
+from Products.Archetypes.atapi import LinesField
+from Products.Archetypes.atapi import StringField
+from Products.Archetypes.atapi import TextField
+from Products.Archetypes.atapi import CalendarWidget
+from Products.Archetypes.atapi import LinesWidget
+from Products.Archetypes.atapi import KeywordWidget
+from Products.Archetypes.atapi import RichWidget
+from Products.Archetypes.atapi import StringWidget
+from Products.Archetypes.atapi import RFC822Marshaller
+from Products.Archetypes.atapi import AnnotationStorage
 
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import PROJECTNAME

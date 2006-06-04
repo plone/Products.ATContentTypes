@@ -18,7 +18,7 @@ from Products.MyATEvent.config import *
 if HAS_LINGUA_PLONE:
     from Products.LinguaPlone.public import *
 else:
-    from Products.Archetypes.public import *
+    from Products.Archetypes.atapi import *
 
 from Products.CMFCore import permissions
 from Products.CMFCore.utils import getToolByName

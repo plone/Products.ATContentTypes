@@ -41,13 +41,13 @@ try:
 except:
     from Products.CMFCore.PortalFolder import PortalFolder
 
-from Products.Archetypes.public import Schema
-from Products.Archetypes.public import LinesField
-from Products.Archetypes.public import IntegerField
-from Products.Archetypes.public import MultiSelectionWidget
-from Products.Archetypes.public import SelectionWidget
-from Products.Archetypes.public import IntDisplayList
-from Products.Archetypes.public import DisplayList
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import LinesField
+from Products.Archetypes.atapi import IntegerField
+from Products.Archetypes.atapi import MultiSelectionWidget
+from Products.Archetypes.atapi import SelectionWidget
+from Products.Archetypes.atapi import IntDisplayList
+from Products.Archetypes.atapi import DisplayList
 
 from Products.ATContentTypes import permission as ATCTPermissions
 

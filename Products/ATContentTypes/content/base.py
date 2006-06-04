@@ -36,11 +36,11 @@ if HAS_LINGUA_PLONE:
     from Products.LinguaPlone.public import BaseBTreeFolder
     from Products.LinguaPlone.public import registerType
 else:
-    from Products.Archetypes.public import BaseContent
-    from Products.Archetypes.public import BaseFolder
-    from Products.Archetypes.public import OrderedBaseFolder
-    from Products.Archetypes.public import BaseBTreeFolder
-    from Products.Archetypes.public import registerType
+    from Products.Archetypes.atapi import BaseContent
+    from Products.Archetypes.atapi import BaseFolder
+    from Products.Archetypes.atapi import OrderedBaseFolder
+    from Products.Archetypes.atapi import BaseBTreeFolder
+    from Products.Archetypes.atapi import registerType
 
 from Products.ATContentTypes.config import HAS_PLONE2
 

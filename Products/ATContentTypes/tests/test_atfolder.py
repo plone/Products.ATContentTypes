@@ -32,7 +32,7 @@ from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 import transaction
 from Acquisition import aq_base
 
-from Products.Archetypes.public import *
+from Products.Archetypes.atapi import *
 from Products.ATContentTypes.tests.utils import dcEdit
 
 from Products.ATContentTypes.content.folder import ATFolder
