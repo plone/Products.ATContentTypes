@@ -66,10 +66,6 @@ from Products.ATContentTypes.tool.atct import ATCTTool
 from Products.ATContentTypes.permission import wireAddPermissions
 wireAddPermissions()
 
-from Products.CMFPlone.interfaces import IPloneSiteRoot
-from Products.GenericSetup import EXTENSION, profile_registry
-
-
 # setup module aliases for old dotted pathes
 import Products.ATContentTypes.modulealiases
 
@@ -107,12 +103,4 @@ def initialize(context):
             extra_constructors = (constructor,),
             fti                = ftis,
             ).initialize(context)
-
-    profile_registry.registerProfile('ATContentTypes',
-            'ATContentTypes',
-            'Extension profile for default ATContentTypes setup',
-            'profiles/default',
-            'ATContentTypes',
-            EXTENSION,
-            for_=IPloneSiteRoot)
 

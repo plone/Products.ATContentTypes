@@ -27,17 +27,26 @@ class ATCTToolXMLAdapter(XMLAdapterBase):
 
     def _purgeSettings(self):
         self.context.setCMFTypesAreRecataloged()
+        self.context.setVersionFromFS()
 
     def _initSettings(self, node):
         for child in node.childNodes:
             if child.nodeName=='cmftypes_are_recataloged':
                 value=self._convertToBoolean(child.getAttribute('value'))
                 self.context.setCMFTypesAreRecataloged(value=value)
+            if child.nodeName=='atct_tool_version':
+                value=child.getAttribute('value')
+                if value == 'from_filesystem':
+                    self.context.setVersionFromFS()
+                else:
+                    self.context.setInstanceVersion(value)
 
     def _extractSettings(self):
         node=self._doc.createElement('cmftypes_are_recataloged')
         node.setAttribute('value', str(bool(self.context.getCMFTypesAreRecataloged())))
-
+        child=self._doc.createElement('atct_tool_version')
+        child.setAttribute('value', str(self.context.getVersion()))
+        node.appendChild(child)
         return node
 
 
