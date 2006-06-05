@@ -1,4 +1,10 @@
-1.1.0-devel unreleased
+1.1.1-devel unreleased
+======================
+
+ * Changed two logging.PROBLEM to logging.WARNING. PROBLEM level was zLOG only.
+   [hannosch]
+
+1.1.0-final 2006-06-03
 ======================
 
  * Added TextIndexNG3 to list of indexes.
