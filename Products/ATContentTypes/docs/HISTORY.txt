@@ -1,6 +1,11 @@
 1.2.0-devel unreleased
 ======================
 
+ * Removed ZConfig based configuration of the topic tool as it is now handled
+   by the GenericSetup profile. Removed magical recreation of indexes and
+   metadata on get* calls.
+   [hannosch]
+
  * Added an exportimport handler for the ATCT tool which is used by the Plone
    base profile.
    [hannosch]

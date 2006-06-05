@@ -32,14 +32,11 @@ class ATCTToolXMLAdapter(XMLAdapterBase):
         self.context.topic_indexes = {}
         self.context.topic_metadata = {}
         self.context.allowed_portal_types = []
-        self.context.createInitialIndexes()
-        self.context.createInitialMetadata()
+        #self.context.createInitialIndexes()
+        #self.context.createInitialMetadata()
 
     def _initSettings(self, node):
         for child in node.childNodes:
-            if child.nodeName=='cmftypes_are_recataloged':
-                value=self._convertToBoolean(child.getAttribute('value'))
-                self.context.setCMFTypesAreRecataloged(value=value)
             if child.nodeName=='atct_tool_version':
                 value=child.getAttribute('value')
                 if value == 'from_filesystem':
@@ -47,13 +44,51 @@ class ATCTToolXMLAdapter(XMLAdapterBase):
                 else:
                     self.context.setInstanceVersion(value)
 
+            if child.nodeName=='cmftypes_are_recataloged':
+                value=self._convertToBoolean(child.getAttribute('value'))
+                self.context.setCMFTypesAreRecataloged(value=value)
+
+            if child.nodeName=='topic_indexes':
+                for indexNode in child.childNodes:
+                    if indexNode.nodeName=='index':
+                        name=indexNode.getAttribute('name')
+                        description=indexNode.getAttribute('description')
+                        enabled=self._convertToBoolean(indexNode.getAttribute('enabled'))
+                        friendlyName=indexNode.getAttribute('friendlyName')
+                        criteria = []
+                        for critNode in indexNode.childNodes:
+                            if critNode.nodeName == 'criteria':
+                                for textNode in critNode.childNodes:
+                                    if textNode.nodeName != '#text' or \
+                                        not textNode.nodeValue.strip():
+                                        continue
+                                    criteria.append(str(textNode.nodeValue))
+                    
+                        self.context.addIndex(name,
+                                              friendlyName=friendlyName,
+                                              description=description,
+                                              enabled=enabled,
+                                              criteria=criteria)
+                    
+            if child.nodeName=='topic_metadata':
+                for metadataNode in child.childNodes:
+                    if metadataNode.nodeName=='metadata':
+                        name=metadataNode.getAttribute('name')
+                        description=metadataNode.getAttribute('description')
+                        enabled=self._convertToBoolean(metadataNode.getAttribute('enabled'))
+                        friendlyName=metadataNode.getAttribute('friendlyName')
+                        self.context.addMetadata(name,
+                                                 friendlyName=friendlyName,
+                                                 description=description,
+                                                 enabled=enabled)
+
     def _extractSettings(self):
         fragment = self._doc.createDocumentFragment()
-        node=self._doc.createElement('cmftypes_are_recataloged')
-        node.setAttribute('value', str(bool(self.context.getCMFTypesAreRecataloged())))
-        fragment.appendChild(node)
         node=self._doc.createElement('atct_tool_version')
         node.setAttribute('value', str(self.context.getVersion()[1]))
+        fragment.appendChild(node)
+        node=self._doc.createElement('cmftypes_are_recataloged')
+        node.setAttribute('value', str(bool(self.context.getCMFTypesAreRecataloged())))
         fragment.appendChild(node)
         # topic tool indexes
         indexes=self._doc.createElement('topic_indexes')
@@ -65,9 +100,10 @@ class ATCTToolXMLAdapter(XMLAdapterBase):
             child.setAttribute('description', str(index.description))
             child.setAttribute('enabled', str(bool(index.enabled)))
             for criteria in index.criteria:
-                sub = self._doc.createElement('criteria')
-                sub.appendChild(self._doc.createTextNode(criteria))
-                child.appendChild(sub)
+                if criteria != 'criterion':
+                    sub = self._doc.createElement('criteria')
+                    sub.appendChild(self._doc.createTextNode(criteria))
+                    child.appendChild(sub)
             indexes.appendChild(child)
         fragment.appendChild(indexes)
         # topic tool metadata
