@@ -374,7 +374,7 @@
     <metadata>
       name ExpirationDate
       friendlyName Expiration Date
-      description The time and date an item is no longer publically available
+      description The time and date an item is no longer publicly available
     </metadata>
     <metadata>
       name exclude_from_nav
