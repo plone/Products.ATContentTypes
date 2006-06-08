@@ -1,4 +1,4 @@
-1.1.1-devel unreleased
+1.1.1-final 2006-06-08
 ======================
 
  * Changed two logging.PROBLEM to logging.WARNING. PROBLEM level was zLOG only.
