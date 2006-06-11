@@ -13,7 +13,13 @@
  * Adjusted import locations of Archetypes.public to Archetypes.atapi for AT1.5.
    [hannosch]
 
-1.1.0-devel unreleased
+1.1.1-final 2006-06-08
+======================
+
+ * Changed two logging.PROBLEM to logging.WARNING. PROBLEM level was zLOG only.
+   [hannosch]
+
+1.1.0-final 2006-06-03
 ======================
 
  * Added TextIndexNG3 to list of indexes.
