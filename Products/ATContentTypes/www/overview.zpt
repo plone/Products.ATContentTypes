@@ -15,11 +15,6 @@
         <code>plone_migration</code> tool</dd>
     <dt>Image scales</dt>
     <dd>to recreate image scales</dd>
-    <dt>Type Migration</dt>
-    <dd>to migrate old CMF style types to new ATContentTypes types</dd>
-    <dt>Recatalog</dt>
-    <dd>to recatalog CMF and ATCT content types. Types migration requires
-        an up to date <code>portal_catalog</code>.</dd>
     <dt>Properties</dt>
     <dd>to set certain properties for migration, album view and more</dd>
   </dl>
@@ -56,42 +51,6 @@
     <dd>The default image scale name for the photo ablum view.</dd>
     <dt><code>single_image_scale</code></dt>
     <dd>The default image scale name used when showing a single image.</dd>
-    <dt><code>migration_catalog_patch</code></dt>
-    <dd>Use the portal catalog patch for migration. Enabling the patch might
-        increase the migration speed dramatically. Especially folder migration
-        speed can gain up to several 100%.
-    </dd>
-    <dt><code>migration_transaction_size</code></dt>
-    <dd>Amount of objects before a subtransaction, full transaction or
-        savepoint is created. A lower value will slow down migration but
-        decrease the memory usage. A higher value could increase the amount
-        of objects you have to migrate again in the case of an error.
-    </dd>
-    <dt><code>migration_transaction_style</code></dt>
-    <dd><dl>
-      <dt><code>None</code></dt>
-      <dd>Don't use any special transaction handling. A subtransaction is
-          going to be committed after <code>migration_transaction_size</code>
-          in order to decrease the memory usage.
-      </dd>
-      <dt><code>full transaction</code></dt>
-      <dd>A full transaction is going to be committed after
-          <code>migration_transaction_size</code> objects are migrated. In a
-          case of an error you can resume the migration at the last full
-          transaction. There is a slim chance that this setting can corrupt
-          your database
-      </dd>
-      <dt><code>savepoint</code></dt>
-      <dd><em>Requires Zope 2.8.1 or higher!</em> A savepoint is created after
-          <code>migration_transaction_size</code> objects are migrated. In the
-          case of an error the transaction is rolled back to the last
-          savepoint. All objects migrated between the last savepoint and the
-          error are reverted to their original state. After the migration is
-          finished you should fix the error and migrate the remaining old
-          objects.
-      </dd>
-    </dl>
-    </dd>
   </dl>
 
   <h3>README</h3>

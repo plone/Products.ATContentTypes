@@ -37,17 +37,12 @@ from Products.ATContentTypes.tests.utils import dcEdit
 
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATBTreeFolder
-from Products.ATContentTypes.migration.atctmigrator import FolderMigrator, \
-                                                        LargeFolderMigrator, \
-                                                        DocumentMigrator
 from Products.CMFPlone.PloneFolder import PloneFolder
 from Products.CMFPlone.LargePloneFolder import LargePloneFolder
 from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
 from Products.CMFPlone.interfaces.OrderedContainer import IOrderedContainer
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
-from Products.Five.traversable import FakeRequest
-from Products.ATContentTypes.tests.utils import FakeRequestSession
 
 from zope.interface.verify import verifyClass
 
@@ -88,34 +83,6 @@ class FolderTestMixin:
         iface = Z3IAutoSortSupport
         self.failUnless(Z3verifyObject(iface, self._ATCT))
 
-    def test_migrationKeepsLocallyAddedRoles(self):
-        atct = self.portal.portal_atct
-        ttool = self.portal.portal_types
-        old_fti = ttool[self.cmf_portal_type]
-        role = 'testrole'
-
-        # create old object
-        self.setRoles(['Manager',])
-        old_fti.global_allow = 1
-        self.folder.invokeFactory(self.cmf_portal_type, 'rolecheck')
-        obj = self.folder.rolecheck
-        self.failUnlessEqual(obj.portal_type, self.cmf_portal_type)
-
-        # add a role
-        self.failIf(role in obj.valid_roles())
-        obj._addRole(role)
-        self.failUnless(role in obj.userdefined_roles(), obj.userdefined_roles())
-
-        del obj # keep no references when migrating
-        # migrate types
-        transaction.savepoint() # subtransaction
-        atct.migrateContentTypesToATCT()
-
-        # check the new
-        obj = self.folder.rolecheck
-        self.failUnlessEqual(obj.portal_type, self.portal_type)
-        self.failUnless(role in obj.userdefined_roles(), obj.userdefined_roles())
-
 class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     klass = ATFolder
@@ -155,60 +122,6 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
                         % (old.Title(), new.Title()))
         self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
                         % (old.Description(), new.Description()))
-
-    def test_migration(self):
-        old = self._cmf
-        id  = old.getId()
-
-        # edit
-        editCMF(old)
-        title       = old.Title()
-        description = old.Description()
-        mod         = old.ModificationDate()
-        created     = old.CreationDate()
-
-        # migrated (needs subtransaction to work)
-        transaction.savepoint(optimistic=True)
-        m = FolderMigrator(old)
-        m(unittest=1)
-
-        self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
-        migrated = getattr(self.folder, id)
-
-        self.compareAfterMigration(migrated, mod=mod, created=created)
-        self.compareDC(migrated, title=title, description=description)
-
-        # TODO: more tests
-
-    def test_migrator_doesnt_migrate_non_contentish_sub_objects(self):
-        # Test that we don't try to migrate contained non-content objects
-        old = self._cmf
-        id  = old.getId()
-
-        # edit
-        editCMF(old)
-        title       = old.Title()
-        description = old.Description()
-        mod         = old.ModificationDate()
-        created     = old.CreationDate()
-
-        # Add non-contentish subobject to inherit portal_type from parent
-        factory = old.manage_addProduct['PythonScripts']
-        factory.manage_addPythonScript('index_html')
-        index = old.index_html
-
-        # Catalog it so that migration thinks it's a folder.
-        self.portal.portal_catalog.indexObject(index)
-
-        # migration will raise an error if it attempts to incorrectly migrate
-        # the index_html
-        transaction.savepoint(optimistic=True)
-        m = FolderMigrator(index)
-        try:
-            m(unittest=1)
-        except Exception, e:
-            import sys, traceback
-            self.fail('Error raised in Folder migration of non-content sub-object: %s \n %s'%(e,''.join(traceback.format_tb(sys.exc_traceback))))
 
     def test_implements_autoorder(self):
         self.failUnless(IAutoOrderSupport.isImplementedBy(self._ATCT))
@@ -266,58 +179,6 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
                         % (old.Title(), new.Title()))
         self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
                         % (old.Description(), new.Description()))
-
-    def test_migration(self):
-        old = self._cmf
-        id  = old.getId()
-
-        # edit
-        editCMF(old)
-        title       = old.Title()
-        description = old.Description()
-        mod         = old.ModificationDate()
-        created     = old.CreationDate()
-
-        # Add subobject to test child migration
-        old.invokeFactory('Document','bogus')
-        bogus = old.bogus
-
-        # migrated (needs subtransaction to work)
-        transaction.savepoint(optimistic=True)
-        m = LargeFolderMigrator(old)
-        m(unittest=1)
-
-        self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
-        migrated = getattr(self.folder, id)
-
-        self.compareAfterMigration(migrated, mod=mod, created=created)
-        self.compareDC(migrated, title=title, description=description)
-        self.assertEqual(aq_base(migrated.bogus), aq_base(bogus))
-
-    def test_subobj_migration(self):
-        old = self._cmf
-        id  = old.getId()
-
-        # edit
-        editCMF(old)
-        title       = old.Title()
-        description = old.Description()
-        mod         = old.ModificationDate()
-        created     = old.CreationDate()
-
-        # Add subobject to test child migration
-
-        bogus = self._createType(old, 'CMF Document', 'bogus')
-        bogus = old.bogus
-
-        # migrated (needs subtransaction to work)
-        transaction.savepoint(optimistic=True)
-        m = DocumentMigrator(bogus)
-        try:
-            m(unittest=1)
-        except Exception, e:
-            import sys, traceback
-            self.fail("Failed migrating subobject of LargePloneFolder: %s \n %s"%(e,''.join(traceback.format_tb(sys.exc_traceback))))
 
     def test_get_size(self):
         atct = self._ATCT

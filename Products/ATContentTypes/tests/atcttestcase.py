@@ -187,15 +187,6 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
 
         self.failUnlessEqual(first.Title(), title)
         self.failUnlessEqual(first.Description(), description)
-        # XXX more
-
-    def compareAfterMigration(self, migrated, mod=None, created=None):
-        self.failUnless(isinstance(migrated, self.klass),
-                        migrated.__class__)
-        self.failUnlessEqual(migrated.getTypeInfo().getId(), self.portal_type)
-        self.failUnlessEqual(migrated.ModificationDate(), mod)
-        self.failUnlessEqual(migrated.CreationDate(), created)
-
 
     def test_idValidation(self):
         self.setRoles(['Manager', 'Member']) # for ATTopic
@@ -233,65 +224,6 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
         except ImportError:
             pass
         self.failUnless(isinstance(marshall, tuple(marshallers)), marshall)
-
-    def test_migrationKeepsPermissions(self):
-        self.setRoles(['Manager'])
-        atct = self.portal.portal_atct
-
-        obj = self._createType(self.folder, self.cmf_portal_type, 'permcheck')
-        self.failUnlessEqual(obj.portal_type, self.cmf_portal_type)
-        # modify permissions
-        roles = obj.valid_roles() # we rely on the following order of roles
-        self.failUnlessEqual(roles, ('Anonymous', 'Authenticated', 'Manager',
-                                     'Member', 'Owner', 'Reviewer'))
-        obj.manage_permission('View', roles=['Manager', 'Reviewer'],
-                              acquire=0)
-        permsettings = obj.permission_settings('View')[0]
-        self.failUnlessEqual(permsettings['acquire'], '')
-        self.failUnlessEqual(permsettings['name'], 'View')
-        self.failUnlessEqual(permsettings['roles'][0]['checked'], '')
-        self.failUnlessEqual(permsettings['roles'][1]['checked'], '')
-        self.failUnlessEqual(permsettings['roles'][2]['checked'], 'CHECKED')
-        self.failUnlessEqual(permsettings['roles'][3]['checked'], '')
-        self.failUnlessEqual(permsettings['roles'][4]['checked'], '')
-        self.failUnlessEqual(permsettings['roles'][5]['checked'], 'CHECKED')
-        del obj # keep no references when migrating
-        # migrate types
-        transaction.savepoint() # subtransaction
-        atct.migrateContentTypesToATCT()
-        # check the new
-        obj = self.folder.permcheck
-        self.failUnlessEqual(obj.portal_type, self.portal_type)
-        roles = obj.valid_roles() # we rely on the following order of roles
-        self.failUnlessEqual(roles, ('Anonymous', 'Authenticated', 'Manager',
-                                     'Member', 'Owner', 'Reviewer'))
-        permsettings = obj.permission_settings('View')[0]
-        self.failUnlessEqual(permsettings['acquire'], '')
-        self.failUnlessEqual(permsettings['name'], 'View')
-        self.failUnlessEqual(permsettings['roles'][0]['checked'], '')
-        self.failUnlessEqual(permsettings['roles'][1]['checked'], '')
-        self.failUnlessEqual(permsettings['roles'][2]['checked'], 'CHECKED')
-        self.failUnlessEqual(permsettings['roles'][3]['checked'], '')
-        self.failUnlessEqual(permsettings['roles'][4]['checked'], '')
-        self.failUnlessEqual(permsettings['roles'][5]['checked'], 'CHECKED')
-
-    def test_tool_auto_migration(self):
-        self.setRoles(['Manager'])
-        # test if the atct tool migrates all types
-        atct = self.portal.portal_atct
-        obj = self._createType(self.folder, self.cmf_portal_type, 'migrationtest')
-        self.failUnless(isinstance(obj, self.cmf_klass), obj.__class__)
-        self.failUnlessEqual(obj.portal_type, self.cmf_portal_type)
-        del obj # keep no references when migrating
-
-        # migrate types
-        transaction.savepoint() # subtransaction
-        atct.migrateContentTypesToATCT()
-        # check the new
-        obj = self.folder.migrationtest
-        self.failUnless(isinstance(obj, self.klass), obj.__class__)
-        self.failUnlessEqual(obj.portal_type, self.portal_type)
-        self.failUnlessEqual(obj.meta_type, self.meta_type)
 
     def beforeTearDown(self):
         self.logout()
@@ -403,37 +335,4 @@ class ATCTFieldTestCase(BaseSchemaTest):
         self.failUnless(isinstance(field.widget, ReferenceBrowserWidget))
         vocab = field.Vocabulary(dummy)
         self.failUnless(isinstance(vocab, DisplayList))
-
-    def DISABLED_test_layout(self):
-        # layout field was removed in the favor of a property
-        dummy = self._dummy
-        field = dummy.getField('layout')
-
-        self.failUnless(ILayerContainer.isImplementedBy(field))
-        self.failUnlessEqual(field.required, False)
-        self.failUnlessEqual(field.default, '')
-        self.failUnlessEqual(field.searchable, False)
-        self.failUnlessEqual(getattr(field, 'primary', None), None)
-        vocab = field.vocabulary
-        self.failUnlessEqual(vocab, 'getAvailableLayouts')
-        self.failUnlessEqual(field.enforceVocabulary, False)
-        self.failUnlessEqual(field.multiValued, False)
-        self.failUnlessEqual(field.isMetadata, False)
-        self.failUnlessEqual(field.accessor, 'getLayout')
-        self.failUnlessEqual(field.mutator, 'setLayout')
-        self.failUnlessEqual(field.edit_accessor, 'getRawLayout')
-        self.failUnlessEqual(field.default_method, "getDefaultLayout")
-        self.failUnlessEqual(field.read_permission, View)
-        self.failUnlessEqual(field.write_permission,
-                             ATCTPermissions.ModifyViewTemplate)
-        self.failUnlessEqual(field.generateMode, 'veVc')
-        self.failUnlessEqual(field.force, '')
-        self.failUnlessEqual(field.type, 'string')
-        self.failUnless(isinstance(field.storage, AttributeStorage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage())
-        self.failUnlessEqual(field.validators, EmptyValidator)
-        self.failUnless(isinstance(field.widget, SelectionWidget))
-        vocab = field.Vocabulary(dummy)
-        self.failUnless(isinstance(vocab, DisplayList))
-        self.failUnless(len(tuple(vocab)) >= 1, tuple(vocab))
 

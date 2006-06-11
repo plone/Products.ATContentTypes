@@ -48,17 +48,6 @@ from Products.ATContentTypes.config import WWW_DIR
 from Products.ATContentTypes.tool.topic import ATTopicsTool
 from Products.ATContentTypes.tool.migration import ATCTMigrationTool
 
-try:
-    from ProgressHandler import ZLogHandler
-except ImportError:
-    def ZLogHandler(*args, **kwargs):
-        return False
-
-CMF_PRODUCTS = ('CMFPlone', 'CMFDefault', 'CMFTopic', 'CMFCalendar')
-ATCT_PRODUCTS = ('ATContentTypes', )
-SITE_TYPES = ('Portal Site', 'Plone Site',)
-
-LOG_MIGRATION = logging.getLogger('ATCT.migration')
 LOG = logging.getLogger('ATCT')
 
 configlets = ({
@@ -108,10 +97,8 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager,
 
     manage_options =  (
             {'label' : 'Overview', 'action' : 'manage_overview'},
-            {'label' : 'Version Migration', 'action' : 'manage_versionMigration'},
             {'label' : 'Image scales', 'action' : 'manage_imageScales'}
-        ) + ATCTMigrationTool.manage_options + \
-            PropertyManager.manage_options + \
+        ) + PropertyManager.manage_options + \
             AccessControl.Owned.Owned.manage_options
 
     # properties and their default values
@@ -152,10 +139,6 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager,
 
     security.declareProtected(ManagePortal, 'manage_imageScales')
     manage_imageScales = PageTemplateFile('imageScales', WWW_DIR)
-
-    security.declareProtected(ManagePortal, 'manage_versionMigration')
-    manage_versionMigration = PageTemplateFile('versionMigration', WWW_DIR)
-
 
     security.declareProtected(ManagePortal, 'manage_overview')
     manage_overview = PageTemplateFile('overview', WWW_DIR)

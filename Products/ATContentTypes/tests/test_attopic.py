@@ -38,10 +38,8 @@ from Products.Archetypes.atapi import *
 from Products.ATContentTypes.content.topic import ATTopic
 from Products.ATContentTypes.content.topic import ChangeTopics
 from Products.ATContentTypes.content.folder import ATFolder
-from Products.ATContentTypes.migration.atctmigrator import TopicMigrator
 from Products.CMFTopic.Topic import Topic
 from Products.ATContentTypes.tests.utils import EmptyValidator
-from Products.ATContentTypes.migration.atctmigrator import CRIT_MAP, REV_CRIT_MAP
 from Products.ATContentTypes.interfaces import IATTopic
 from Interface.Verify import verifyObject
 from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
@@ -81,6 +79,14 @@ CRITERIA_SETUP = {'Integer Criterion':      #Meta Type
                         ('getId',
                          False),            #Reversed
                 }
+
+CRIT_MAP = {'Integer Criterion': 'ATSimpleIntCriterion',
+            'String Criterion': 'ATSimpleStringCriterion',
+            'Friendly Date Criterion': 'ATFriendlyDateCriteria',
+            'List Criterion': 'ATListCriterion',
+            'Sort Criterion': 'ATSortCriterion'}
+
+REV_CRIT_MAP = dict([[v,k] for k,v in CRIT_MAP.items()])
 
 def editCMF(obj):
     dcEdit(obj)
@@ -284,51 +290,6 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
                                new_crit.getCriteriaItems()))
         self.failUnless(convert_old_catalog_query(old.buildQuery()) == new.buildQuery(), 'Build Query mismatch: %s / %s' \
                         % (convert_old_catalog_query(old.buildQuery()), new.buildQuery()))
-
-    def test_migration(self):
-        old = self._cmf
-        id  = old.getId()
-
-        # edit
-        editCMF(old)
-        title       = old.Title()
-        description = old.Description()
-        mod         = old.ModificationDate()
-        created     = old.CreationDate()
-
-        acquire = old.acquireCriteria
-        criteria_dict = dict([[c.meta_type,
-                              convert_old_catalog_usage(c.getCriteriaItems())]
-                                for c in old.listCriteria()])
-        old_query = convert_old_catalog_query(old.buildQuery())
-
-        # migrated (needs subtransaction to work)
-        transaction.savepoint(optimistic=True)
-        m = TopicMigrator(old)
-        m(unittest=1)
-
-        self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
-        migrated = getattr(self.folder, id)
-
-        self.compareAfterMigration(migrated, mod=mod, created=created)
-        self.compareDC(migrated, title=title, description=description)
-
-        #Test the one migrated property
-        #We only need to test truth '1'=1=True 0=None=False
-        self.failUnlessEqual(not migrated.getAcquireCriteria(), not acquire,
-                        'Acquire Criteria mismatch: %s / %s' \
-                        % (migrated.getAcquireCriteria(), acquire))
-        #Test that the criteria return the same query parameters
-        for new_crit in migrated.listCriteria():
-            OLD_META = REV_CRIT_MAP[new_crit.meta_type]
-            self.failUnless(new_crit.getCriteriaItems() == criteria_dict[OLD_META],
-                            'Migration Criteria Mismatch for criteria %s: %s / %s'\
-                            % (OLD_META, new_crit.getCriteriaItems(),
-                                criteria_dict[OLD_META]))
-        #Test that the final Topic query is the same
-        self.failUnlessEqual(old_query, migrated.buildQuery(),
-                            'Build Query mismatch: %s / %s' % \
-                                (old_query, migrated.buildQuery()))
 
     def test_hasSubTopics(self):
         #Ensure that has subtopics returns True if there are subtopics,

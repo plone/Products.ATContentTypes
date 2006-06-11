@@ -34,8 +34,6 @@ from Products.Archetypes.atapi import *
 
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.interfaces import IATFolder
-from Products.Five.traversable import FakeRequest
-from Products.ATContentTypes.tests.utils import FakeRequestSession
 
 from Products.ATContentTypes.interface.image import IPhotoAlbum
 from Products.ATContentTypes.interface.image import IPhotoAlbumAble

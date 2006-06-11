@@ -10,21 +10,9 @@ from Acquisition import aq_base
 from Products.CMFCore.permissions import ManagePortal
 from Products.ATContentTypes.interfaces import IATCTTopicsTool
 
-from Products.Archetypes.atapi import DisplayList
 from Products.CMFPlone.CatalogTool import CatalogTool
+from Products.Archetypes.atapi import DisplayList
 from Products.ATContentTypes.config import TOOLNAME
-
-# A couple of fields just don't make sense to sort (for a user),
-# some are just doubles.
-# Is this dangerous for migration?  What if these fields were used in a CMF Topic,
-# should the fields themselves be migrated?
-IGNORED_FIELDS = ('Date', 'allowedRolesAndUsers', 'id', 'in_reply_to',
-    'meta_type',
-    # 'portal_type' # portal type and Type might differ!
-    )
-# Favor ISO dates from DublinCore over actual DateTime
-IGNORED_COLUMNS = IGNORED_FIELDS + ('effective', 'expires', 'created', 'modified',
-    'getRemoteUrl', 'getIcon')
 
 class TopicIndex(SimpleItem, Persistence.Persistent):
 

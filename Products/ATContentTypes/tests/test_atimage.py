@@ -40,7 +40,6 @@ from Products.Archetypes.atapi import *
 from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
 
 from Products.ATContentTypes.content.image import ATImage
-from Products.ATContentTypes.migration.atctmigrator import ImageMigrator
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage
 
@@ -121,28 +120,6 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
                         % (old.Title(), new.Title()))
         self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
                         % (old.Description(), new.Description()))
-
-    def test_migration(self):
-        old = self._cmf
-        id  = old.getId()
-
-        # edit
-        editCMF(old)
-        title       = old.Title()
-        description = old.Description()
-        mod         = old.ModificationDate()
-        created     = old.CreationDate()
-
-        # migrated (needs subtransaction to work)
-        transaction.savepoint(optimistic=True)
-        m = ImageMigrator(old)
-        m(unittest=1)
-
-        self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
-        migrated = getattr(self.folder, id)
-
-        self.compareAfterMigration(migrated, mod=mod, created=created)
-        self.compareDC(migrated, title=title, description=description)
 
     def test_getEXIF(self):
         # NOTE: not a real test

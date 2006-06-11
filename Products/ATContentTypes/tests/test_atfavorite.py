@@ -38,7 +38,6 @@ from Products.Archetypes.atapi import *
 from Products.Archetypes.tests.atsitetestcase import portal_name
 
 from Products.ATContentTypes.content.favorite import ATFavorite
-from Products.ATContentTypes.migration.atctmigrator import FavoriteMigrator
 from Products.ATContentTypes.interfaces import IATFavorite
 from Products.CMFDefault.Favorite import Favorite
 from Interface.Verify import verifyObject
@@ -116,35 +115,6 @@ class TestSiteATFavorite(atcttestcase.ATCTTypeTestCase):
             if url:
                 u='%s/%s' % (u, url)
             self.failUnlessEqual(obj.getRemoteUrl(), u)
-
-    def XXX_DISABLED_test_migration(self):
-        old = self._cmf
-        id  = old.getId()
-
-        # edit
-        editCMF(old)
-        title       = old.Title()
-        description = old.Description()
-        mod         = old.ModificationDate()
-        created     = old.CreationDate()
-        url         = old.getRemoteUrl()
-
-
-        # migrated (needs subtransaction to work)
-        transaction.commit(1)
-        m = FavoriteMigrator(old)
-        m(unittest=1)
-
-        self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
-        migrated = getattr(self.folder, id)
-
-        self.compareAfterMigration(migrated, mod=mod, created=created)
-        self.compareDC(migrated, title=title, description=description)
-
-        # XXX more
-
-        self.failUnless(migrated.getRemoteUrl() == url, 'URL mismatch: %s / %s' \
-                        % (migrated.getRemoteUrl(), url))
 
     def test_get_size(self):
         atct = self._ATCT

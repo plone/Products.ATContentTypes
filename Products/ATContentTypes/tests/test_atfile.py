@@ -40,7 +40,6 @@ from Products.ATContentTypes.tests.utils import dcEdit
 import StringIO
 
 from Products.ATContentTypes.content.file import ATFile
-from Products.ATContentTypes.migration.atctmigrator import FileMigrator
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.interfaces import IFileContent
 from Products.CMFDefault.File import File
@@ -115,36 +114,6 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
     def testCompatibilityContentTypeAccess(self):
         new = self._ATCT
         editATCT(new)
-        # TODO: more tests
-
-    def test_migration(self):
-        old = self._cmf
-        id  = old.getId()
-
-        # edit
-        editCMF(old)
-        title       = old.Title()
-        description = old.Description()
-        mod         = old.ModificationDate()
-        created     = old.CreationDate()
-        file        = str(old)
-
-        time.sleep(1.5)
-
-        # migrated (needs subtransaction to work)
-        transaction.savepoint(optimistic=True)
-        m = FileMigrator(old)
-        m(unittest=1)
-
-        self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
-        migrated = getattr(self.folder, id)
-
-        self.compareAfterMigration(migrated, mod=mod, created=created)
-        self.compareDC(migrated, title=title, description=description)
-
-        self.failUnlessEqual(file, str(migrated.getFile()))
-        self.failIfEqual(migrated.data, None)
-        self.failIfEqual(migrated.data, '')
         # TODO: more tests
 
     def test_schema_marshall(self):

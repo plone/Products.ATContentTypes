@@ -36,7 +36,6 @@ from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.atapi import *
 
 from Products.ATContentTypes.content.link import ATLink
-from Products.ATContentTypes.migration.atctmigrator import LinkMigrator
 from Products.ATContentTypes.interfaces import IATLink
 from Products.CMFDefault.Link import Link
 from Interface.Verify import verifyObject
@@ -98,35 +97,6 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
                         % (old.Title(), new.Title()))
         self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
                         % (old.Description(), new.Description()))
-
-    def test_migration(self):
-        old = self._cmf
-        id  = old.getId()
-
-        # edit
-        editCMF(old)
-        title       = old.Title()
-        description = old.Description()
-        mod         = old.ModificationDate()
-        created     = old.CreationDate()
-        url         = old.getRemoteUrl()
-
-
-        # migrated (needs subtransaction to work)
-        transaction.savepoint(optimistic=True)
-        m = LinkMigrator(old)
-        m()
-
-        self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
-        migrated = getattr(self.folder, id)
-
-        self.compareAfterMigration(migrated, mod=mod, created=created)
-        self.compareDC(migrated, title=title, description=description)
-
-        # TODO: more tests
-
-        self.failUnless(migrated.getRemoteUrl() == url, 'URL mismatch: %s / %s' \
-                        % (migrated.getRemoteUrl(), url))
 
     def test_get_size(self):
         atct = self._ATCT

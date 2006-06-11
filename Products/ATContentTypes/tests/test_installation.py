@@ -33,7 +33,6 @@ from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.tool.atct import ATCTTool
-from Products.ATContentTypes.Extensions.Install import removeExteneralMethods
 from Products.CMFCore.utils import getToolByName
 from StringIO import StringIO
 

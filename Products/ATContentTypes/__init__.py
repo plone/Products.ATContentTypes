@@ -58,7 +58,6 @@ import Products.ATContentTypes.content
 import Products.ATContentTypes.criteria
 
 # misc imports
-import Products.ATContentTypes.Extensions.Install
 from Products.ATContentTypes import migration
 from Products.ATContentTypes.tool.atct import ATCTTool
 
