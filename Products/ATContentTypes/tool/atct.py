@@ -288,8 +288,8 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager,
 
         if self.needsVersionMigration():
             out.append((("The upgrade path did NOT reach "
-                        "current version"), logging.WARNING))
-            out.append(("Migration has failed", logging.WARNING))
+                        "current version"), logging.ERROR))
+            out.append(("Migration has failed", logging.ERROR))
         else:
             out.append((("Your ATCT instance is now up-to-date."), logging.INFO))
 

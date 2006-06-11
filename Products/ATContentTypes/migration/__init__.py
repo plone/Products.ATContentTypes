@@ -78,5 +78,8 @@ def registerMigrations():
                              '1.1.0-final',
                              null)
     atct.registerUpgradePath('1.1.0-final',
+                             '1.1.1-final',
+                             null)
+    atct.registerUpgradePath('1.1.1-final',
                              '1.2.0-devel (svn/unreleased)',
                              null)

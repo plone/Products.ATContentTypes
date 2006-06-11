@@ -32,8 +32,8 @@ class ATCTToolXMLAdapter(XMLAdapterBase):
         self.context.topic_indexes = {}
         self.context.topic_metadata = {}
         self.context.allowed_portal_types = []
-        #self.context.createInitialIndexes()
-        #self.context.createInitialMetadata()
+        self.context.createInitialIndexes()
+        self.context.createInitialMetadata()
 
     def _initSettings(self, node):
         for child in node.childNodes:
