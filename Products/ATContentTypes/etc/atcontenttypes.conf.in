@@ -123,8 +123,8 @@
     </index>
     <index>
       name id
-      friendlyName Short Name (duplicate)
-      description The short name of an item (duplicate)
+      friendlyName Short Name
+      description The short name of an item (used in the url)
       enabled off
       criterion ATSimpleStringCriterion
       criterion ATListCriterion
