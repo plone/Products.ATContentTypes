@@ -1,3 +1,6 @@
+ * Sanitized some more index and metadata friendly names and descriptions.
+   [hannosch]
+
  * Changed index friendly name of index id to the same as the getId index.
    [hannosch]
 
