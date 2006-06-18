@@ -189,21 +189,7 @@ def installTool(self, out):
     result = tool._initializeTopicTool()
     if result:
         print >>out, 'Initialized Topic Tool'
-    
-    # register tool as action provider, multiple installs are harmeless
-    # currently NOT used
-    #actions_tool = getToolByName(self, 'portal_actions')
-    #actions_tool.addActionProvider(TOOLNAME)
-    
-    # register ATCT tool as configlet 
-    group = 'atct|ATContentTypes|ATCT Setup'
-    cp = getToolByName(self, 'portal_controlpanel')
-    if 'atct' not in cp.getGroupIds():
-        cp._updateProperty('groups', tuple(cp.groups)+(group,))
-    for configlet in tool.getConfiglets():
-        cp.unregisterConfiglet(configlet['id'])
-    cp.registerConfiglets(tool.getConfiglets())
-    
+
     return tool
 
 def removeCMFTypesFromRegisteredTypes(self, qi_product, out):

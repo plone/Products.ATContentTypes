@@ -13,6 +13,12 @@
  * Adjusted import locations of Archetypes.public to Archetypes.atapi for AT1.5.
    [hannosch]
 
+1.1.2-final unreleased
+======================
+
+ * Don't setup a 'ATCT Setup' control panel category anymore, it's not used.
+   [hannosch]
+
 1.1.1-final 2006-06-08
 ======================
 
