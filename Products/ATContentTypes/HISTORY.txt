@@ -116,6 +116,12 @@
 1.0.6-final unreleased
 ======================
 
+ * Sanitized some more index and metadata friendly names and descriptions.
+   [hannosch]
+
+ * Changed index friendly name of index id to the same as the getId index.
+   [hannosch]
+
  * We don't translate the catalog and metadata id's anymore. Removed i18n markup
    from the configuration screens.
    [hannosch]

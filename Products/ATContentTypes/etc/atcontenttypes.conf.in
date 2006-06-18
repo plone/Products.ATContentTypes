@@ -123,8 +123,8 @@
     </index>
     <index>
       name id
-      friendlyName Short Name (duplicate)
-      description The short name of an item (duplicate)
+      friendlyName Short Name
+      description The short name of an item (used in the url)
       enabled off
       criterion ATSimpleStringCriterion
       criterion ATListCriterion
@@ -240,8 +240,8 @@
     </index>
     <index>
       name Date
-      friendlyName Modification Date (duplicate)
-      description The time and date an item was last modified (duplicate)
+      friendlyName Modification Date
+      description The time and date an item was last modified
       criterion ATFriendlyDateCriteria
       criterion ATDateRangeCriterion
       enabled off
@@ -288,7 +288,7 @@
     </metadata>
     <metadata>
       name id
-      friendlyName Short Name (duplicate)
+      friendlyName Short Name
       enabled off
     </metadata>
     <metadata>
@@ -346,7 +346,7 @@
     <metadata>
       name modified
       friendlyName Modification Date (non-ISO)
-      description The time and date an item was last modified (non-ISO)
+      description The time and date an item was last modified
       enabled off
     </metadata>
     <metadata>
@@ -357,7 +357,7 @@
     <metadata>
       name effective
       friendlyName Effective Date (non-ISO)
-      description The time and date an item becomes publicly available (non-ISO)
+      description The time and date an item becomes publicly available
       enabled off
     </metadata>
     <metadata>
@@ -368,7 +368,7 @@
     <metadata>
       name expires
       friendlyName Expiration Date (non-ISO)
-      description The time and date an item is no longer publicly available (non-ISO)
+      description The time and date an item is no longer publicly available
       enabled off
     </metadata>
     <metadata>
