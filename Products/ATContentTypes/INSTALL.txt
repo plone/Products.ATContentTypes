@@ -2,13 +2,9 @@
 Quick switching instructions for the impatient
 ==============================================
 
- * Back up your data! Seriously! This thing may break your content, it is still
-   experimental. But we need your feedback to make the migration perfect, so
-   please install and convert your site on a backup instance, and report any
-   failures/errors to us, so we can fix them.
-
- * Update or install all required software like Archetypes,
-   ATReferenceBrowserWidget and ATContentTypes
+ * Back up your data! Seriously!
+   
+ * Update or install all required software.
 
  * Restart Zope
 
@@ -22,10 +18,6 @@ Quick switching instructions for the impatient
  * Go to the ZMI (Zope management interface) and browse to the portal_atct tool.
    Click on the migration tab and run the migration in order to migrate the old
    CMF types to the new ATContentTypes types.
-
- * Don't forget to report any migration failures in the ATCT bug tracker on SF:
-   http://sourceforge.net/tracker/?atid=645337&group_id=55262&func=browse - we
-   need your bug report to make migration as smooth as possible!
 
 ============
 Requirements
@@ -51,7 +43,7 @@ AT Content Types is tested with the following AT version
 CMFQuickinstaller
 -----------------
 
-You have to install CMFQuickinstaller 1.5.4+ of the quickinstaller tool.
+You have to install CMFQuickinstaller 1.5.9.
 
 Plone 3.0
 ---------
@@ -66,7 +58,7 @@ Plone 2.5.
 ATReferenceBrowserWidget 1.4
 -----------------------------
 
-ATReferenceWidget 1.4 or higher is required for the related items field.
+ATReferenceWidget 1.4 or higher is required for the related items field. 
 
 CMF 1.6.0+
 ----------
@@ -74,7 +66,7 @@ CMF 1.6.0+
 Plone 2.5 and ATContentTypes 1.1 require CMF 1.6.0 or newer.
 Plone 3.0 and ATContentTypes 1.2 require CMF 1.6.0 or newer.
 
-CMFDynamicViewFTI 1.0.2
+CMFDynamicViewFTI 1.0.4
 -----------------------
 
 A special new FTI for dynamic views. It is the successor of TemplateMixin.
@@ -88,7 +80,7 @@ mxTidy
 
 Install egenix mxTidy to enable the validation of the body text of ATDocument.
 The text is checked and is rejected if it contains wrong xhtml syntax that may
-break the user interface of plone.
+break the user interface of plone. 
 You can download mxTidy from http://www.egenix.com/files/python/mxTidy.htm
 
 TextIndexNG 2.0.8+
@@ -96,8 +88,8 @@ TextIndexNG 2.0.8+
 
 If you want to use TextIndexNG to index the SearchableText attribute you should
 install version 2.0.7 or higher. Only newer versions uses the special hook that
-allows indexing the containment of ATFile.
-You can download TextIndexNG from http://zope.org/Members/ajung/TextIndexNG/
+allows indexing the containment of ATFile. You can download TextIndexNG from
+http://opensource.zopyx.biz/OpenSource/TextIndexNG
 
 PortalTransforms helper applications
 ------------------------------------
@@ -114,15 +106,6 @@ In order to enable the auto resizing feature of ATImage (Archetypes ImageField)
 you have to install PIL also known as python-imaging or Python Imaging Library.
 It's available under http://www.pythonware.com/products/pil/
 
-
-============
-Installation
-============
-
-Use the QuickInstaller to install AT Content Types. You should install
-Archetypes and PortalTransform before installing AT Content Types.
-
-
 =======================
 Reconfiguration of Zope
 =======================
@@ -130,7 +113,7 @@ Reconfiguration of Zope
 You need to reconfigure Zope to make it play nice with Plone and AT Content
 Types.
 
-At first you need to set reST header level to 2. For Zope 2.8 change the
+At first you need to set reST header level to 2. For Zope 2.8 change the 
 etc/zope.conf and adjust the environment section in the config file:
 
 <environment>
@@ -140,35 +123,3 @@ etc/zope.conf and adjust the environment section in the config file:
 For Zope 2.7 you also must set the rest-input-encoding and rest-out-encoding
 to the same encoding you are using as site-encoding for Plone. I suggest using
 utf-8 everywhere.
-
-=======================
-Migration from ATCT 0.2
-=======================
-
- * Make sure you have switched to ATCT and ATCT types are the default types!
-
- * Don't uninstall ATCT, instead stop Zope and install the updates for
-   Archetypes, QuickInstaller and ATContentTypes.
-
- * Start Zope in debug mode to check that all products are installed correctly.
-
- * Reinstall ATContentTypes using the quickinstaller tool. Do *NOT* uninstall
-   and install it!
-
-========================
-Migration from CMF types
-========================
-
-** BACKUP ** ** BACKUP ** ** BACKUP ** ** BACKUP ** ** BACKUP ** ** BACKUP **
-
-             YOU MUST (!) BACKUP YOUR ZODB BEFORE MIGRATING!
-
-** BACKUP ** ** BACKUP ** ** BACKUP ** ** BACKUP ** ** BACKUP ** ** BACKUP **
-
-Migration may fail and it could destroy your data. So please backup your ZODB
-before migrating to AT Content Types.
-
- * Install ATContentTypes as usually using the quickinstaller
-
- * browse to the portal_atct tool and run the type migration
-

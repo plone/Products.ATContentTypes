@@ -2,15 +2,14 @@ AT Content Types
 
 Installation
 
- Please read docs/INSTALL.txt for a list of requirements before installing this
+ Please read INSTALL.txt for a list of requirements before installing this
  product. ATContentTypes requires new versions of Python, Zope, Plone and
  Archetypes. Make sure you've updated all products.
 
 Reporting bugs / feature requests
 
- Please use the Plone issue tracker at http://dev.plone.org/plone and use the
- Content Types component! Please don't mail bug reports to the mailing lists or
- to a developer unless they are in the bug tracker, too.
+ Please use the Plone bug tracker at http://dev.plone.org/plone and use the
+ Content Types component!
 
 Comparing CMF types with ATContentTypes
 
@@ -26,22 +25,22 @@ Comparing CMF types with ATContentTypes
 
      o Easily enhanceable by subclassing or adding fields to the schema
 
-     o Transformations like restructured text, python source code
-       highlighting, pdf to html, office to html and many more.
+     o Transformations like restructured text, python source code highlighting,
+       pdf to html, office to html and many more.
 
      o plugable validation of fields
 
   * Clean and documented API.
 
   * Translateable using LinguaPlone.
-
+    
   * Dynamic Views: All types are using the new dynamic view FTI that allows you
     to choose the view template per instance. You can configure the templates in
     the portal_types tool. This features is used to turn an ordinary folder into
-    a photo ablum by simple switching to a different view.
-
-  * Permissions per type and feature: Every type has its own add permission
-    and all features like template mixin have their own modify permission, too.
+    a photo album by simple switching to a different view.
+    
+  * Permissions per type and feature: Every type has its own add permission and
+    all features like template mixin have their own modify permission, too.
 
   * Numerous small adjustments and enhancements to all types for example:
 
@@ -51,55 +50,6 @@ Comparing CMF types with ATContentTypes
 
     o Events have a body text
 
-    o Documents have a history tab to show the last changes as an unified
-      diff view using the ZODB history. (currently disabled)
-
-What is new in ATContentTypes 1.1
-
- ATContentTypes 1.1 features a number of bugfixes over 1.0, and also updates
- to ensure compatibility with the latest zope versions.
-
-What is new in ATContentTypes 1.0
-
- ATContentTypes 1.0 has a bunch of changes and additional features compared
- to 0.2.
-
-  * A related items reference field was added to all types. It can be used to
-    add relations between objects, for example a document is related to an event.
-    The relations will be shown in a portlet.
-
-  * The folder type has some new views that are showing the containing images
-    like a photo album view.
-
-  * Several new criteria were written for the topic type like portal type
-    criterion or reference criterion.
-
-  * A tool was added to replace the external methods. It contains some
-    additional features, too.
-
-  * The type switching was completly rewritten. It's safer and easier but
-    it's not possible to have ATContentTypes as additional types any morer.
-    ATContentTypes based types are now always the default types.
-
-  * The migration from CMF types to ATContentTypes types has some new helpers
-    to recatalog CMF or ATContentTypes based types to make sure neither an
-    object is missing nor that staled objects are in the catalog. The recatalog
-    features are exposed through the tool. In order to successfully migrate a
-    site you **must** recatalog it using the api or some objects like the
-    members folder or topic aren't migrated.
-
-  * Several hundreds of unit tests and integration tests were added, existing
-    unit tests were improved or fixed. Unit tests are based on ZopeTestCase
-    and PloneTestCase.
-
-  * New interfaces were added.
-
-  * For developers: Interfaces were moved to a single module interfaces.py and
-    schemata were moved to the module of their type classes. E.g. instead of
-    importing ATDocumentSchema from content.schemata you have to import it from
-    content.ATDocument.
-
-  * Zope 3/Five adapter - interfaces - browser view
-
-  * New migration features like savepoints and a catalog patch.
+    o Documents have a history tab to show the last changes as an unified diff
+      view using the ZODB history.
 

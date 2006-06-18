@@ -5,7 +5,7 @@ License
 ATContentType license
 ---------------------
 
- Copyright (c) 2003-2004 AT Content Types development team
+ Copyright (c) 2003-2006 AT Content Types development team
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ ATContentType license
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
- See docs/LICENSE.GPL
+ See LICENSE.GPL
 
 ATContentType ATTopic license
 -----------------------------
@@ -29,7 +29,7 @@ ATContentType ATTopic license
  ATTopic + its criteria are licensed under the ZPL 2.0 because major parts are
  derived and/or copied from CMFTopic without greater chances.
 
- See docs/LICENSE.ZPL
+ See LICENSE.ZPL
 
 Misc
 ----
