@@ -113,7 +113,7 @@
 
                 <tr class="" tal:attributes="class python:test(oddrow, 'even', 'odd')">
                     <td>
-                        <span tal:content="indexObj/index" i18n:translate="" i18n:domain="plone"/>
+                        <span tal:content="indexObj/index"/>
                         <input type="hidden"
                                value=""
                                name=""

@@ -1,3 +1,7 @@
+ * We don't translate the catalog and metadata id's anymore. Removed i18n markup
+   from the configuration screens.
+   [hannosch]
+
 1.0.5-final 2006-06-03
 ======================
 
