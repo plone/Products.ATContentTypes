@@ -30,9 +30,9 @@ from Products.Archetypes.atapi import BooleanField
 from Products.Archetypes.atapi import BooleanWidget
 
 from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFPlone import PloneMessageFactory as _
 
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
-
 
 # for ATContentTypes we want to have the description in the edit view
 # just like CMF
@@ -42,11 +42,8 @@ ATContentTypeSchema = BaseSchema.copy() + MetadataSchema((
         languageIndependent = True,
         schemata = 'metadata', # moved to 'default' for folders
         widget = BooleanWidget(
-            description="If selected, this item will not appear in the navigation tree",
-            description_msgid = "help_exclude_from_nav",
-            label = "Exclude from navigation",
-            label_msgid = "label_exclude_from_nav",
-            i18n_domain = "plone",
+            description=_(u'help_exclude_from_nav', default=u'If selected, this item will not appear in the navigation tree'),
+            label = _(u'label_exclude_from_nav', default=u'Exclude from navigation'),
             visible={'view' : 'hidden',
                      'edit' : 'visible'},
             ),
@@ -73,11 +70,8 @@ relatedItemsField = ReferenceField('relatedItems',
             show_indexes = False,
             force_close_on_insert = True,
 
-            label = "Related Item(s)",
-            label_msgid = "label_related_items",
-            description = "",
-            description_msgid = "help_related_items",
-            i18n_domain = "plone",
+            label = _(u'label_related_items', default=u'Related Item(s)'),
+            description = '',
             visible = {'edit' : 'visible', 'view' : 'invisible' }
             )
         )

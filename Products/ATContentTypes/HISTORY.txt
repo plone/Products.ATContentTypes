@@ -1,6 +1,10 @@
 1.2.0-devel unreleased
 ======================
 
+ * Changed type definitions to use Zope3 Messages for localizing descriptions
+   and labels instead of the old Archetypes approach using special attributes.
+   [hannosch]  
+
  * Adjusted some deprecated getActionById to getActionInfo calls.
    [hannosch]
 

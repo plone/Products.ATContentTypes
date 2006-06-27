@@ -55,6 +55,8 @@ from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument
 
+from Products.CMFPlone import PloneMessageFactory as _
+
 ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
     TextField('text',
               required=True,
@@ -67,12 +69,9 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
               default_output_type = 'text/x-html-safe',
               allowable_content_types = zconf.ATDocument.allowed_content_types,
               widget = RichWidget(
-                        description = "",
-                        description_msgid = "help_body_text",
-                        label = "Body Text",
-                        label_msgid = "label_body_text",
+                        description = '',
+                        label = _(u'label_body_text', default=u'Body Text'),
                         rows = 25,
-                        i18n_domain = "plone",
                         allow_file_upload = zconf.ATDocument.allow_document_upload)),
     ), marshall=RFC822Marshaller()
     )
@@ -91,8 +90,7 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
     immediate_view = 'document_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Document', 'meta_type' : 'Document'}
-    typeDescription= 'A page in the site. Can contain rich text.'
-    typeDescMsgId  = 'description_edit_document'
+    typeDescription= _(u'A page in the site. Can contain rich text.')
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
     assocFileExt   = ('txt', 'stx', 'rst', 'rest', 'py',)
     cmf_edit_kws   = ('text_format',)

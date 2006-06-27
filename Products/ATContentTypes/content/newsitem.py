@@ -48,6 +48,7 @@ from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
 from Products.CMFCore.permissions import View
+from Products.CMFPlone import PloneMessageFactory as _
 
 from Products.validation.config import validation
 from Products.validation.validators.SupplValidators import MaxSizeValidator
@@ -70,12 +71,9 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
         default_output_type = 'text/x-html-safe',
         allowable_content_types = zconf.ATNewsItem.allowed_content_types,
         widget = RichWidget(
-            description = "",
-            description_msgid = "help_body_text",
-            label = "Body Text",
-            label_msgid = "label_body_text",
+            description = '',
+            label = _(u'label_body_text', u'Body Text'),
             rows = 25,
-            i18n_domain = "plone",
             allow_file_upload = zconf.ATDocument.allow_document_upload)
         ),
     ImageField('image',
@@ -94,23 +92,17 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
         validators = (('isNonEmptyFile', V_REQUIRED),
                              ('checkNewsImageMaxSize', V_REQUIRED)),
         widget = ImageWidget(
-            description = "Will be shown in the news listing, and in the news item itself. Image will be scaled to a sensible size.",
-            description_msgid = "help_news_image",
-            label= "Image",
-            label_msgid = "label_news_image",
-            i18n_domain = "plone",
+            description = _(u'help_news_image', default=u'Will be shown in the news listing, and in the news item itself. Image will be scaled to a sensible size.'),
+            label= _(u'label_news_image', default=u'Image'),
             show_content_type = False)
         ),
     StringField('imageCaption',
         required = False,
         searchable = True,
         widget = StringWidget(
-            description = "",
-            description_msgid = "help_image_caption",
-            label = "Image Caption",
-            label_msgid = "label_image_caption",
-            size = 40,
-            i18n_domain = "plone")
+            description = '',
+            label = _(u'label_image_caption', default=u'Image Caption'),
+            size = 40)
         ),
     ), marshall=RFC822Marshaller()
     )
@@ -129,8 +121,7 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
     default_view   = 'newsitem_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF News Item', 'meta_type' : 'News Item'}
-    typeDescription = 'An announcement that will show up on the news portlet and in the news listing.'
-    typeDescMsgId  = 'description_edit_news_item'
+    typeDescription = _(u'An announcement that will show up on the news portlet and in the news listing.')
     assocMimetypes = ()
     assocFileExt   = ('news', )
     cmf_edit_kws   = ATDocument.cmf_edit_kws

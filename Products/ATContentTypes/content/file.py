@@ -49,8 +49,10 @@ from Products.ATContentTypes.content.base import ATCTFileContent
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.validation.validators.SupplValidators import MaxSizeValidator
 
+from Products.CMFPlone import PloneMessageFactory as _
+
+from Products.validation.validators.SupplValidators import MaxSizeValidator
 from Products.validation.config import validation
 from Products.validation import V_REQUIRED
 
@@ -68,12 +70,8 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
               validators = (('isNonEmptyFile', V_REQUIRED),
                              ('checkFileMaxSize', V_REQUIRED)),
               widget = FileWidget(
-                        #description = "Select the file to be added by clicking the 'Browse' button.",
-                        #description_msgid = "help_file",
-                        description = "",
-                        label= "File",
-                        label_msgid = "label_file",
-                        i18n_domain = "plone",
+                        description = '',
+                        label=_(u'label_file', default=u'File'),
                         show_content_type = False,)),
     ), marshall=PrimaryFieldMarshaller()
     )
@@ -92,8 +90,7 @@ class ATFile(ATCTFileContent):
     default_view   = 'file_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF File', 'meta_type' : 'Portal File'}
-    typeDescription= "An external file uploaded to the site."
-    typeDescMsgId  = 'description_edit_file'
+    typeDescription= _(u'An external file uploaded to the site.')
     assocMimetypes = ('application/*', 'audio/*', 'video/*', )
     assocFileExt   = ()
     cmf_edit_kws   = ()

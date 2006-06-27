@@ -59,6 +59,8 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.permission import ChangeEvents
 from Products.ATContentTypes.utils import DT2dt
 
+from Products.CMFPlone import PloneMessageFactory as _
+
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
     DateTimeField('startDate',
                   required=True,
@@ -68,11 +70,9 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   default_method=DateTime,
                   languageIndependent=True,
                   widget = CalendarWidget(
-                        description= "",
-                        description_msgid = "help_event_start",
-                        label="Event Starts",
-                        label_msgid = "label_event_start",
-                        i18n_domain = "plone")),
+                        description= '',
+                        label=_(u'label_event_start', default=u'Event Starts')
+                        )),
 
     DateTimeField('endDate',
                   required=True,
@@ -82,21 +82,16 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   default_method=DateTime,
                   languageIndependent=True,
                   widget = CalendarWidget(
-                        description = "",
-                        description_msgid = "help_event_end",
-                        label = "Event Ends",
-                        label_msgid = "label_event_end",
-                        i18n_domain = "plone")),
+                        description = '',
+                        label = _(u'label_event_end', default=u'Event Ends')
+                        )),
     StringField('location',
                 searchable=True,
                 write_permission = ChangeEvents,
                 widget = StringWidget(
-                    description = "",
-                    description_msgid = "help_event_location",
-                    label = "Event Location",
-                    label_msgid = "label_event_location",
-                    i18n_domain = "plone")),
-
+                    description = '',
+                    label = _(u'label_event_location', default=u'Event Location')
+                    )),
     TextField('text',
               required=False,
               searchable=True,
@@ -107,23 +102,19 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
               default_output_type = 'text/x-html-safe',
               allowable_content_types = zconf.ATEvent.allowed_content_types,
               widget = RichWidget(
-                        description = "",
-                        description_msgid = "help_event_announcement",
-                        label = "Event body text",
-                        label_msgid = "label_event_announcement",
+                        description = '',
+                        label = _(u'label_event_announcement', default=u'Event body text'),
                         rows = 25,
-                        i18n_domain = "plone",
                         allow_file_upload = zconf.ATDocument.allow_document_upload)),
 
     LinesField('attendees',
                languageIndependent=True,
                searchable=True,
                write_permission=ChangeEvents,
-               widget=LinesWidget(label="Attendees",
-                                  label_msgid="label_event_attendees",
-                                  description=(" "),
-                                  description_msgid="help_event_attendees",
-                                  i18n_domain="plone")),
+               widget=LinesWidget(
+                      description='',
+                      label=_(u'label_event_attendees', default=u'Attendees')
+                      )),
 
     LinesField('eventType',
                required=False,
@@ -132,11 +123,9 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                languageIndependent=True,
                widget = KeywordWidget(
                         size = 6,
-                        description="",
-                        description_msgid = "help_event_type",
-                        label = "Event Type(s)",
-                        label_msgid = "label_event_type",
-                        i18n_domain = "plone")),
+                        description='',
+                        label = _(u'label_event_type', default=u'Event Type(s)')
+                        )),
 
     StringField('eventUrl',
                 required=False,
@@ -144,13 +133,11 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 accessor='event_url',
                 write_permission = ChangeEvents,
                 widget = StringWidget(
-                        description = ("Web address with more info about the event. "
-                                       "Add http:// for external links."),
-                        description_msgid = "help_url",
-                        label = "Event URL",
-                        label_msgid = "label_url",
-                        i18n_domain = "plone")),
-
+                        description = _(u'help_url',
+                                        default=u"Web address with more info about the event. "
+                                                 "Add http:// for external links."),
+                        label = _(u'label_url', default=u'Event URL')
+                        )),
 
     StringField('contactName',
                 required=False,
@@ -158,11 +145,9 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 accessor='contact_name',
                 write_permission = ChangeEvents,
                 widget = StringWidget(
-                        description = "",
-                        description_msgid = "help_contact_name",
-                        label = "Contact Name",
-                        label_msgid = "label_contact_name",
-                        i18n_domain = "plone")),
+                        description = '',
+                        label = _(u'label_contact_name', default=u'Contact Name')
+                        )),
 
     StringField('contactEmail',
                 required=False,
@@ -171,11 +156,9 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 write_permission = ChangeEvents,
                 validators = ('isEmail',),
                 widget = StringWidget(
-                        description = "",
-                        description_msgid = "help_contact_email",
-                        label = "Contact E-mail",
-                        label_msgid = "label_contact_email",
-                        i18n_domain = "plone")),
+                        description = '',
+                        label = _(u'label_contact_email', default=u'Contact E-mail')
+                        )),
     StringField('contactPhone',
                 required=False,
                 searchable=True,
@@ -183,11 +166,9 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 write_permission = ChangeEvents,
                 validators= (),
                 widget = StringWidget(
-                        description = "",
-                        description_msgid = "help_contact_phone",
-                        label = "Contact Phone",
-                        label_msgid = "label_contact_phone",
-                        i18n_domain = "plone")),
+                        description = '',
+                        label = _(u'label_contact_phone', default=u'Contact Phone')
+                        )),
     ), marshall = RFC822Marshaller()
     )
 finalizeATCTSchema(ATEventSchema)
@@ -205,8 +186,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
     immediate_view = 'event_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Event', 'meta_type' : 'CMF Event'}
-    typeDescription= 'Information about an upcoming event, which can be displayed in the calendar.'
-    typeDescMsgId  = 'description_edit_event'
+    typeDescription= _(u'Information about an upcoming event, which can be displayed in the calendar.')
     assocMimetypes = ()
     assocFileExt   = ('event', )
     cmf_edit_kws   = ('effectiveDay', 'effectiveMo', 'effectiveYear',
