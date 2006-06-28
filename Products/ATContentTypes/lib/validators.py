@@ -39,8 +39,8 @@ import encodings
 import zLOG
 from ZPublisher.HTTPRequest import FileUpload
 
-from TAL.HTMLTALParser import HTMLTALParser
-from TAL.TALGenerator import TALGenerator
+from zope.tal.htmltalparser import HTMLTALParser
+from zope.tal.talgenerator import TALGenerator
 from Products.PageTemplates.Expressions import getEngine
 
 if HAS_MX_TIDY:
@@ -73,7 +73,6 @@ class TALValidator:
     """Validates a text to be valid TAL code
 
     """
-
     __implements__ = IValidator
 
     def __init__(self, name, title='', description=''):
