@@ -1,6 +1,15 @@
 1.2.0-devel unreleased
 ======================
 
+ * Changed criteria definitions to use Zope3 Messages for localizing
+   descriptions and labels instead of the old Archetypes approach using special
+   attributes. Added a ATCTMessageFactory for the Messages in the
+   'atcontenttypes' i18n domain.
+   [hannosch]
+
+ * Fixed some imports of transaction_note from CMFPlone to CMFPlone.utils.
+   [hannosch] 
+
  * Fixed deprecation warnings for TALValidator.
    [hannosch] 
 

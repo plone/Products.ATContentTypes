@@ -9,7 +9,7 @@
 ##title=Criterion Set Sort
 
 REQUEST=context.REQUEST
-from Products.CMFPlone import transaction_note
+from Products.CMFPlone.utils import transaction_note
 
 if field == 'no_sort':
     context.removeSortCriterion()

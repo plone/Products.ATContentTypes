@@ -48,6 +48,10 @@ from Products.CMFCore.utils import ContentInit
 from Products.CMFCore.utils import ToolInit
 from Products.CMFCore.DirectoryView import registerDirectory
 
+# Import "ATCTMessageFactory as _" to create messages in atcontenttypes domain
+from zope.i18nmessageid import MessageFactory
+ATCTMessageFactory = MessageFactory('atcontenttypes')
+
 # first level imports: configuration and validation
 import Products.ATContentTypes.configuration
 import Products.ATContentTypes.lib.validators

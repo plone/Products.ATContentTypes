@@ -39,19 +39,15 @@ from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 
+from Products.CMFPlone import PloneMessageFactory as _
+
 ATSortCriterionSchema = ATBaseCriterionSchema + Schema((
     BooleanField('reversed',
                 required=0,
                 mode="rw",
                 write_permission=ChangeTopics,
                 default=0,
-                widget=BooleanWidget(
-                    label="Reverse",
-                    #label_msgid="label_criterion_field_name",
-                    #description="Should not contain spaces, underscores or mixed case. "\
-                    #            "Short Name is part of the item's web address.",
-                    #description_msgid="help_criterion_field_name",
-                    i18n_domain="plone"),
+                widget=BooleanWidget(label=_(u'Reverse')),
                 ),
 
     ))
@@ -65,7 +61,6 @@ class ATSortCriterion(ATBaseCriterion):
     meta_type      = 'ATSortCriterion'
     archetype_name = 'Sort Criterion'
     typeDescription= ''
-    typeDescMsgId  = ''
 
     shortDesc      = 'Sort'
 

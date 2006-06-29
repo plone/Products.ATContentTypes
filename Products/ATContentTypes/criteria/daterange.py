@@ -38,6 +38,8 @@ from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 
+from Products.CMFPlone import PloneMessageFactory as _
+
 RELEVANT_INDICES=list(DATE_INDICES)
 RELEVANT_INDICES.remove('DateRangeIndex')
 RELEVANT_INDICES = tuple(RELEVANT_INDICES)
@@ -49,11 +51,10 @@ ATDateRangeCriterionSchema = ATBaseCriterionSchema + Schema((
                 write_permission=ChangeTopics,
                 default=None,
                 widget=CalendarWidget(
-                    label="Start Date",
-                    label_msgid="label_date_range_criteria_start",
-                    description="The beginning of the date range to search",
-                    description_msgid="help_date_range_criteria_start",
-                    i18n_domain="plone"),
+                    label=_(u'label_date_range_criteria_start', default=u'Start Date'),
+                    description=_(u'help_date_range_criteria_start',
+                                  default=u'The beginning of the date range to search')
+                    ),
                 ),
     DateTimeField('end',
                 required=1,
@@ -61,11 +62,11 @@ ATDateRangeCriterionSchema = ATBaseCriterionSchema + Schema((
                 write_permission=ChangeTopics,
                 default=None,
                 widget=CalendarWidget(
-                    label="End Date",
-                    label_msgid="label_date_range_criteria_end",
-                    description="The ending of the date range to search.",
-                    description_msgid="help_date_range_criteria_end",
-                    i18n_domain="plone"),
+                    label=_(u'label_date_range_criteria_end', default=u'End Date'),
+                    description=_(u'help_date_range_criteria_end',
+                                  default=u'The ending of the date range to search.')
+
+                    ),
                 ),
     ))
 
@@ -78,8 +79,6 @@ class ATDateRangeCriterion(ATBaseCriterion):
     meta_type      = 'ATDateRangeCriterion'
     archetype_name = 'Date Range Criterion'
     typeDescription= ''
-    typeDescMsgId  = ''
-
     shortDesc      = 'Date range'
 
     security.declareProtected(View, 'Value')

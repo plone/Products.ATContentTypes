@@ -42,11 +42,13 @@ from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 
+from Products.ATContentTypes import ATCTMessageFactory as _
+
 from types import StringType
 
 CompareOperators = DisplayList((
-                    ('and', 'and')
-                  , ('or', 'or')
+                    ('and', _(u'and'))
+                  , ('or', _(u'or'))
     ))
 
 ATSelectionCriterionSchema = ATBaseCriterionSchema + Schema((
@@ -59,11 +61,9 @@ ATSelectionCriterionSchema = ATBaseCriterionSchema + Schema((
                 default=[],
                 vocabulary="getCurrentValues",
                 widget=MultiSelectionWidget(
-                    label="Value",
-                    label_msgid="label_selection_criteria_value",
-                    description="Existing values.",
-                    description_msgid="help_selection_criteria_value",
-                    i18n_domain="plone"),
+                    label=_(u'label_selection_criteria_value', default=u'Value'),
+                    description=_(u'help_selection_criteria_value', default=u'Existing values.')
+                    ),
                 ),
     StringField('operator',
                 required=1,
@@ -72,12 +72,10 @@ ATSelectionCriterionSchema = ATBaseCriterionSchema + Schema((
                 default='or',
                 vocabulary=CompareOperators,
                 widget=SelectionWidget(
-                    label="operator name",
-                    label_msgid="label_list_criteria_operator",
-                    description="Operator used to join the tests "
-                    "on each value.",
-                    description_msgid="help_list_criteria_operator",
-                    i18n_domain="atcontenttypes"),
+                    label=_(u'label_list_criteria_operator', default=u'operator name'),
+                    description=_(u'help_list_criteria_operator',
+                                  default=u'Operator used to join the tests on each value.')
+                    ),
                 ),
     ))
 
@@ -90,10 +88,7 @@ class ATSelectionCriterion(ATBaseCriterion):
     meta_type      = 'ATSelectionCriterion'
     archetype_name = 'Selection Criterion'
     typeDescription= ''
-    typeDescMsgId  = ''
-
     shortDesc      = 'Select values from list'
-
 
     def getCurrentValues(self):
         catalog = getToolByName(self, 'portal_catalog')

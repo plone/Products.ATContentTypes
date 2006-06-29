@@ -37,6 +37,7 @@ from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 
+from Products.CMFPlone import PloneMessageFactory as _
 
 ATSimpleStringCriterionSchema = ATBaseCriterionSchema + Schema((
     StringField('value',
@@ -47,13 +48,10 @@ ATSimpleStringCriterionSchema = ATBaseCriterionSchema + Schema((
                 mutator="setValue",
                 default="",
                 widget=StringWidget(
-                    label="Value",
-                    label_msgid="label_string_criteria_value",
-                    description="A string value.",
-                    description_msgid="help_string_criteria_value",
-                    i18n_domain="plone"),
+                    label=_(u'label_string_criteria_value', default=u'Value'),
+                    description=_(u'help_string_criteria_value',
+                                  default=u'A string value.'))
                 ),
-
     ))
 
 
@@ -66,7 +64,6 @@ class ATSimpleStringCriterion(ATBaseCriterion):
     meta_type      = 'ATSimpleStringCriterion'
     archetype_name = 'Simple String Criterion'
     typeDescription= ''
-    typeDescMsgId  = ''
 
     shortDesc      = 'Text'
 

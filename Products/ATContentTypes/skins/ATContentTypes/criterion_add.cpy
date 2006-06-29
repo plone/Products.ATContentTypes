@@ -9,7 +9,7 @@
 ##title=Criterion Add
 
 REQUEST=context.REQUEST
-from Products.CMFPlone import transaction_note
+from Products.CMFPlone.utils import transaction_note
 
 context.addCriterion(field, criterion_type)
 

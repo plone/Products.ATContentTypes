@@ -68,7 +68,6 @@ class ATBaseCriterion(NonRefCatalogContent):
     meta_type = 'ATBaseCriterion'
     archetype_name = 'Base Criterion'
     typeDescription= ''
-    typeDescMsgId  = ''
     global_allow = 0
 
     def __init__(self, id=None, field=None, oid=None):

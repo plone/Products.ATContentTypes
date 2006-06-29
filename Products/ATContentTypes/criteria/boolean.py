@@ -39,6 +39,8 @@ from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 
+from Products.CMFPlone import PloneMessageFactory as _
+
 ATBooleanCriterionSchema = ATBaseCriterionSchema + Schema((
     BooleanField('bool',
                 required=1,
@@ -46,11 +48,10 @@ ATBooleanCriterionSchema = ATBaseCriterionSchema + Schema((
                 write_permission=ChangeTopics,
                 default=None,
                 widget=BooleanWidget(
-                    label="Value",
-                    label_msgid="label_boolean_criteria_bool",
-                    description="True or false",
-                    description_msgid="help_boolean_criteria_bool",
-                    i18n_domain="plone"),
+                    label=_(u'label_boolean_criteria_bool', default=u'Value'),
+                    description=_(u'help_boolean_criteria_bool',
+                                  default=u'True or false')
+                    ),
                 ),
     ))
 
@@ -63,8 +64,6 @@ class ATBooleanCriterion(ATBaseCriterion):
     meta_type      = 'ATBooleanCriterion'
     archetype_name = 'Boolean Criterion'
     typeDescription= ''
-    typeDescMsgId  = ''
-
     shortDesc      = 'Boolean (True/False)'
 
     security.declareProtected(View, 'getCriteriaItems')
