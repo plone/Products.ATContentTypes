@@ -49,6 +49,7 @@ from Products.Archetypes.atapi import SelectionWidget
 from Products.Archetypes.atapi import IntDisplayList
 from Products.Archetypes.atapi import DisplayList
 
+from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes import permission as ATCTPermissions
 
 from Products.ATContentTypes.interface import ISelectableConstrainTypes
@@ -65,9 +66,9 @@ ENABLED  = 1 # allow types from locallyAllowedTypes only
 #  behaviour (same as DISABLED).
 
 enableDisplayList = IntDisplayList((
-    (ACQUIRE,  'Use parent folder settings', 'constraintypes_acquire_label'),
-    (DISABLED, 'Use portal default', 'constraintypes_disable_label'),
-    (ENABLED,  'Select manually', 'constraintypes_enable_label'),
+    (ACQUIRE,  _(u'constraintypes_acquire_label', default=u'Use parent folder settings')),
+    (DISABLED, _(u'constraintypes_disable_label', default=u'Use portal default')),
+    (ENABLED,  _(u'constraintypes_enable_label', default=u'Select manually')),
     ))
 
 ConstrainTypesMixinSchema = Schema((
@@ -75,16 +76,13 @@ ConstrainTypesMixinSchema = Schema((
         required = False,
         default_method = "_ct_defaultConstrainTypesMode",
         vocabulary = enableDisplayList,
-        # XXX: AT doesn't support enforce on vocabs with int display list
-        #enforceVocabulary = True,
         languageIndependent = True,
         write_permissions = ATCTPermissions.ModifyConstrainTypes,
         widget = SelectionWidget(
-            label = 'Constrain types mode',
-            label_msgid = 'label_contrain_types_mode',
-            description = 'Select the constraint type mode for this folder.',
-            description_msgid = 'description_constrain_types_mode',
-            i18n_domain = 'atcontenttypes',
+            label = _(u'label_contrain_types_mode',
+                      default=u'Constrain types mode'),
+            description = _(u'description_constrain_types_mode',
+                            default=u'Select the constraint type mode for this folder.'),
             visible = {'view' : 'hidden',
                        'edit' : 'hidden',
                       },
@@ -101,12 +99,11 @@ ConstrainTypesMixinSchema = Schema((
         multiValued = True,
         widget = MultiSelectionWidget(
             size = 10,
-            label = 'Permitted types',
-            label_msgid = 'label_constrain_allowed_types',
-            description = 'Select the types which will be addable inside this '
-                          'folder.',
-            description_msgid = 'description_constrain_allowed_types',
-            i18n_domain = 'atcontenttypes',
+            label = _(u'label_constrain_allowed_types',
+                      default=u'Permitted types'),
+            description = _(u'description_constrain_allowed_types',
+                            default=u'Select the types which will be addable inside this folder.'
+                           ),
             visible = {'view' : 'hidden',
                        'edit' : 'hidden',
                       },
@@ -123,14 +120,12 @@ ConstrainTypesMixinSchema = Schema((
         multiValued=True,
         widget = MultiSelectionWidget(
             size = 10,
-            label = 'Preferred types',
-            label_msgid = 'label_constrain_preferred_types',
-            description = 'Select the types which will be addable from the '
-                          '"Add new item" menu. Any additional types set '
-                          'in the list above will be addable from a separate '
-                          'form.',
-            description_msgid = 'description_constrain_preferred_types',
-            i18n_domain = 'atcontenttypes',
+            label = _(u'label_constrain_preferred_types', u'Preferred types'),
+            description = _(u'description_constrain_preferred_types',
+                            default=u'Select the types which will be addable '
+                                     'from the "Add new item" menu. Any '
+                                     'additional types set in the list above '
+                                     'will be addable from a separate form.'),
             visible = {'view' : 'hidden',
                        'edit' : 'hidden',
                       },

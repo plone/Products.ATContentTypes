@@ -36,6 +36,8 @@ from Products.Archetypes.atapi import StringField
 from Products.Archetypes.atapi import StringWidget
 from Products.ATContentTypes import permission as ATCTPermissions
 
+from Products.CMFPlone import PloneMessageFactory as _
+
 class InvalidContentType(Exception):
     """Invalid content type (uploadFromURL)
     """
@@ -47,16 +49,13 @@ urlUploadField = StringField('urlUpload',
         validators = ('isURL',),
         write_permission = ATCTPermissions.UploadViaURL,
         widget = StringWidget(
-            description="Upload a file from another server by url.",
-            description_msgid = "help_upload_url",
-            label = "Upload from server",
-            label_msgid = "label_upload_url",
-            i18n_domain = "plone",
+            description=_(u'help_upload_url',
+                          default=u'Upload a file from another server by url.'),
+            label = _(u'label_upload_url', default=u'Upload from server'),
             visible={'view' : 'hidden',
-                     'edit' : 'hidden'},
+                     'edit' : 'hidden'}
             ),
         )
-
 
 class URLUpload(Base):
     
@@ -124,4 +123,3 @@ class URLUpload(Base):
         return self.getField('urlUpload').default
 
 InitializeClass(URLUpload)
-

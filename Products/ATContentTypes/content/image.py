@@ -80,9 +80,7 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
                validators = (('isNonEmptyFile', V_REQUIRED),
                              ('checkImageMaxSize', V_REQUIRED)),
                widget = ImageWidget(
-                        #description = "Select the image to be added by clicking the 'Browse' button.",
-                        #description_msgid = "help_image",
-                        description = "",
+                        description = '',
                         label= _(u'label_image', default=u'Image'),
                         show_content_type = False,)),
 
