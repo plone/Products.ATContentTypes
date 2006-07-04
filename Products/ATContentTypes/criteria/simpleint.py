@@ -39,11 +39,13 @@ from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 
+from Products.ATContentTypes import ATCTMessageFactory as _
+
 DirectionOperations = DisplayList((
-                    ('', 'Equal to')
-                  , ('min', 'Greater than')
-                  , ('max', 'Less than')
-                  , ('min:max', 'Between')
+                    ('', _(u'Equal to'))
+                  , ('min', _(u'Greater than'))
+                  , ('max', _(u'Less than'))
+                  , ('min:max', _(u'Between'))
     ))
 
 ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
@@ -55,11 +57,10 @@ ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
                 mutator="setValue",
                 default=None,
                 widget=IntegerWidget(
-                    label="Value",
-                    label_msgid="label_int_criteria_value",
-                    description="An integer number.",
-                    description_msgid="help_int_criteria_value",
-                    i18n_domain="atcontenttypes"),
+                    label=_(u'label_int_criteria_value', default=u'Value'),
+                    description=_(u'help_int_criteria_value',
+                                  default=u'An integer number.')
+                    ),
                 ),
     IntegerField('value2',
                 required=0,
@@ -69,11 +70,10 @@ ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
                 mutator="setValue2",
                 default=None,
                 widget=IntegerWidget(
-                    label="Second Value",
-                    label_msgid="label_int_criteria_value2",
-                    description="An integer number used as the maximum value if the between direction is selected.",
-                    description_msgid="help_int_criteria_value2",
-                    i18n_domain="atcontenttypes"),
+                    label=_(u'label_int_criteria_value2', default=u'Second Value'),
+                    description=_(u'help_int_criteria_value2',
+                                  default=u'An integer number used as the maximum value if the between direction is selected.')
+                    ),
                 ),
     StringField('direction',
                 required=0,
@@ -83,11 +83,10 @@ ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
                 vocabulary=DirectionOperations,
                 enforceVocabulary=1,
                 widget=SelectionWidget(
-                    label="Direction",
-                    label_msgid="label_int_criteria_direction",
-                    description="Specify whether you want to find values lesser than, greater than, equal to, or between the chosen value(s).",
-                    description_msgid="help_int_criteria_direction",
-                    i18n_domain="atcontenttypes"),
+                    label=_(u'label_int_criteria_direction', default=u'Direction'),
+                    description=_(u'help_int_criteria_direction',
+                                  default=u'Specify whether you want to find values lesser than, greater than, equal to, or between the chosen value(s).')
+                    ),
                 ),
     ))
 
@@ -100,8 +99,6 @@ class ATSimpleIntCriterion(ATBaseCriterion):
     meta_type      = 'ATSimpleIntCriterion'
     archetype_name = 'Simple Int Criterion'
     typeDescription= ''
-    typeDescMsgId  = ''
-
     shortDesc      = 'Integer value or range'
 
     security.declareProtected(View, 'getCriteriaItems')
@@ -130,6 +127,5 @@ class ATSimpleIntCriterion(ATBaseCriterion):
             errors['value2']='You must enter a second value to do a "Between" search.'
         errors['value2']='You must enter a second value to do a "Between" search.'
         return errors
-        
 
 registerCriterion(ATSimpleIntCriterion, LIST_INDICES)

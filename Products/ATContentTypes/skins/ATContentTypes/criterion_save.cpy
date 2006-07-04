@@ -8,9 +8,9 @@
 ##parameters=
 ##title=Criterion Save
 
-REQUEST=context.REQUEST
-from Products.CMFPlone import transaction_note
+from Products.ATContentTypes import ATCTMessageFactory as _
 
+REQUEST=context.REQUEST
 criteria = context.listCriteria()
 
 MARKER=[]
@@ -29,7 +29,7 @@ for criterion in criteria:
             mutator = field.getMutator(criterion)
             mutator(rval)
 
-msg = context.translate('Changes saved.')
-transaction_note(msg)
+msg = _(u'Changes saved.')
+context.plone_utils.addPortalMessage(msg)
 
-return state.set(portal_status_message=msg)
+return state

@@ -39,6 +39,8 @@ from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
 from Products.ATContentTypes.lib.autosort import AutoSortSupport
 from Products.ATContentTypes.lib.autosort import AutoOrderSupport
 
+from Products.CMFPlone import PloneMessageFactory as _
+
 ATFolderSchema      = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 
@@ -59,8 +61,7 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
     default_view   = 'folder_listing'
     suppl_views    = ('folder_summary_view', 'folder_tabular_view', 'atct_album_view')
     _atct_newTypeFor = {'portal_type' : 'CMF Folder', 'meta_type' : 'Plone Folder'}
-    typeDescription= 'A folder which can contain other items.'
-    typeDescMsgId  = 'description_edit_folder'
+    typeDescription= _(u'A folder which can contain other items.')
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()
@@ -93,8 +94,7 @@ class ATBTreeFolder(AutoSortSupport, ATCTBTreeFolder):
     global_allow   = False
     _atct_newTypeFor = {'portal_type' : 'CMF Large Plone Folder',
                         'meta_type' : 'Large Plone Folder'}
-    typeDescription= 'A folder suitable for holding a very large number of items'
-    typeDescMsgId  = 'description_edit_large_folder'
+    typeDescription= _(u'A folder suitable for holding a very large number of items')
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()

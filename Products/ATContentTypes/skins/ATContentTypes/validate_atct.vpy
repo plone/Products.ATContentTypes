@@ -7,6 +7,8 @@
 ##bind subpath=traverse_subpath
 ##parameters=
 ##
+from Products.ATContentTypes import ATCTMessageFactory as _
+
 errors  = {}
 request = context.REQUEST
 form    = request.form
@@ -32,13 +34,8 @@ if pfield:
 errors  = context.validate(REQUEST=request, errors=errors, data=1, metadata=0)
 
 if errors:
-    return state.set(status='failure', errors=errors, portal_status_message='Please correct the indicated errors.')
+    msg = _(u'Please correct the indicated errors.')
+    context.plone_utils.addPortalMessage(msg)
+    return state.set(status='failure', errors=errors)
 
-message = context.translate('Changes saved.')
-#TODO: This should be an additional status message, which should be possible
-#in Plone 2.5. Reactivate then but right now it's not possible to i18n-ize this.
-#tidiedFields = request.get('tidiedFields', None)
-#if tidiedFields:
-#    message = '%s mxTidy has fixed the HTML code.' % message
-
-return state.set(portal_status_message=message)
+return state

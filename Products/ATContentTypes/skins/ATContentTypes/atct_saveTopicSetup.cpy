@@ -8,6 +8,8 @@
 ##parameters=
 ##title=Save topic setup modifications
 
+from Products.ATContentTypes import ATCTMessageFactory as _ 
+
 if state.button == 'index_save':
     next_page = 'atct_manageTopicIndex'
 elif state.button == 'metadata_save':
@@ -16,7 +18,6 @@ elif state.button == 'metadata_save':
 result = context.portal_atct.manage_saveTopicSetup(context.REQUEST)
 
 state.setNextAction('redirect_to:string:%s'%next_page)
-
-state.setKwargs({'portal_status_message':'Smart Folder setup saved'})
+context.plone_utils.addPortalMessage(_(u'Smart Folder setup saved.'))
 
 return state

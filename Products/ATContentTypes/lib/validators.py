@@ -73,7 +73,6 @@ class TALValidator:
     """Validates a text to be valid TAL code
 
     """
-
     __implements__ = IValidator
 
     def __init__(self, name, title='', description=''):

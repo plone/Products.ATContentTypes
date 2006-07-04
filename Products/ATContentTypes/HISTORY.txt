@@ -1,6 +1,26 @@
 1.2.0-devel unreleased
 ======================
 
+ * Reworked i18n of Python scripts to use the new MessageFactory and based
+   portal status messages on the statusmessages product.
+   [hannosch]
+
+ * Changed criteria definitions to use Zope3 Messages for localizing
+   descriptions and labels instead of the old Archetypes approach using special
+   attributes. Added a ATCTMessageFactory for the Messages in the
+   'atcontenttypes' i18n domain.
+   [hannosch]
+
+ * Fixed some imports of transaction_note from CMFPlone to CMFPlone.utils.
+   [hannosch]
+
+ * Fixed deprecation warnings for TALValidator.
+   [hannosch]
+
+ * Changed type definitions to use Zope3 Messages for localizing descriptions
+   and labels instead of the old Archetypes approach using special attributes.
+   [hannosch]
+
  * Removed ZConfig based configuration of the topic tool as it is now handled
    by the GenericSetup profile. Removed magical recreation of indexes and
    metadata on get* calls.
@@ -20,6 +40,12 @@
    [hannosch]
 
  * Adjusted import locations of Archetypes.public to Archetypes.atapi for AT1.5.
+   [hannosch]
+
+1.1.2-final unreleased
+======================
+
+ * Don't setup a 'ATCT Setup' control panel category anymore, it's not used.
    [hannosch]
 
 1.1.1-final 2006-06-08
@@ -131,17 +157,67 @@
    cmfcore.permissions and removing use of format_stx
    [k_vertigo, hannosch]
 
-1.0.4-devel unreleased
+1.0.6-final unreleased
 ======================
 
- * Made manage_afterPUT and manage_afterMKCOL use PATH_INFO to get at
-   the original id for usage in the Title, so that in a WebDAV
-   name-mangling environment the Title gets set to the original
-   filename.
-   [sidnei]
+ * We don't translate the catalog and metadata id's anymore. Removed i18n markup
+   from the configuration screens.
+   [hannosch]
 
- * Added test for ATFolder and ATBTreeFolder MKCOL.
-   [sidnei]
+1.0.5-final 2006-06-03
+======================
+
+ * Made ATTopic queryCatalog properly support b_size, thanks to patch from
+   Bader.  Fixes http://dev.plone.org/plone/ticket/5526
+   [alecm]
+
+ * Added TextIndexNG3 to list of indexes.
+   [ajung]
+
+1.0.4-final 2006-05-17
+======================
+
+ * Folded ftests into unit tests. The distinction was arbitrary anyway.
+   [stefan]
+
+ * Removed the unused locales folder. Translation files are part of the
+   PloneTranslation product.
+   [hannosch]
+
+ * Uploading HTML via WebDAV now supports reading <title> tag to use
+   as the title of the new content item.
+   http://dev.plone.org/plone/ticket/4877
+   [rocky]
+
+ * Semi-intelligent sniffing adding for figuring out the charset
+   when using mx.Tidy.  This closes
+   http://dev.plone.org/plone/ticket/5006
+   [rocky]
+
+ * Internal links didn't work for event url field. This closes
+   http://dev.plone.org/plone/ticket/5004
+   [hannosch]
+
+ * Various fixes for the iCal/vCal export (thx Steve for the patch):
+    - timezone problems
+    - folding lines longer than 75 octests (per RFC)
+    - escaping commas, colons and semi-colons (per RFC)
+    - adding URL and CONTACT fields
+   This closes http://dev.plone.org/plone/ticket/4512.
+   [hannosch]
+
+ * the EventType field in an event lists all relevant event types for
+   an event, not just one. Modify the iCal output logic to properly
+   produce comma-seperated event types. Fixes
+   http://dev.plone.org/plone/ticket/4881
+   [wichert]
+
+ * Updated thirdparty/icalendar to version iCalendar-0.11. Dropped the
+   svn:external to codespeak SVN. This has the side-effect of ridding us
+   of the annoying test failure with the Zope 2.9 testrunner which would
+   pick up the icalendar tests even though they are neither importable nor
+   pass in this setting.
+   [stefan]
 
  * Made manage_afterPUT and manage_afterMKCOL use PATH_INFO to get at
    the original id for usage in the Title, so that in a WebDAV

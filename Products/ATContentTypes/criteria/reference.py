@@ -43,8 +43,6 @@ class ATReferenceCriterion(ATSelectionCriterion):
     meta_type      = 'ATReferenceCriterion'
     archetype_name = 'Reference Criterion'
     typeDescription= ''
-    typeDescMsgId  = ''
-
     shortDesc      = 'Select referenced content'
 
 

@@ -8,12 +8,14 @@
 ##parameters=field, criterion_type
 ##title=Criterion Add
 
-REQUEST=context.REQUEST
-from Products.CMFPlone import transaction_note
+from Products.ATContentTypes import ATCTMessageFactory as _
+from Products.CMFPlone.utils import transaction_note
 
 context.addCriterion(field, criterion_type)
 
-msg = 'Added criterion %s for field %s' % (criterion_type, field)
+msg = _(u'Added criterion ${criterion} for field ${field}.',
+        mapping={'criterion' : criterion_type, 'field' : field})
 transaction_note(msg)
+context.plone_utils.addPortalMessage(msg)
 
-return state.set(portal_status_message=msg)
+return state

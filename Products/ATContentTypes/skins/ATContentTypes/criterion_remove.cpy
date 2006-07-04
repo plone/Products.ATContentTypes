@@ -8,8 +8,8 @@
 ##parameters=criterion_ids=[]
 ##title=Criterion Remove
 
-REQUEST=context.REQUEST
-from Products.CMFPlone import transaction_note
+from Products.ATContentTypes import ATCTMessageFactory as _
+from Products.CMFPlone.utils import transaction_note
 
 remove=[]
 
@@ -22,7 +22,9 @@ for crit in criteria:
         
 context.deleteCriterion(remove)
 
-msg = 'Remove criterion(s) %s' % ','.join(remove)
+msg = _(u'Removed criteria ${criteria}.',
+        mapping={'criteria' : u','.join(remove)})
 transaction_note(msg)
+context.plone_utils.addPortalMessage(msg)
 
-return state.set(portal_status_message=msg)
+return state

@@ -47,6 +47,8 @@ from Products.ATContentTypes.interfaces import IATFavorite
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
+from Products.CMFPlone import PloneMessageFactory as _
+
 LOG = logging.getLogger('ATCT')
 
 ATFavoriteSchema = ATContentTypeSchema.copy() + Schema((
@@ -57,11 +59,9 @@ ATFavoriteSchema = ATContentTypeSchema.copy() + Schema((
                 primary=True,
                 validators = (),
                 widget = StringWidget(
-                        description=("Add http:// to link outside the site."),
-                        description_msgid = "help_url",
-                        label = "URL",
-                        label_msgid = "label_url",
-                        i18n_domain = "plone")),
+                        description=_(u'help_url', default=u'Add http:// to link outside the site.'),
+                        label = _(u'label_url', default=u'URL')
+                        )),
     ))
 finalizeATCTSchema(ATFavoriteSchema, moveDiscussion=False)
 
@@ -82,8 +82,7 @@ class ATFavorite(ATCTContent):
     filter_content_types  = True
     allowed_content_types = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Favorite', 'meta_type' : 'Favorite'}
-    typeDescription = 'A placeholder item linking to a favorite object in the portal.'
-    typeDescMsgId  = 'description_edit_favorite'
+    typeDescription = _(u'A placeholder item linking to a favorite object in the portal.')
     assocMimetypes = ()
     assocFileExt   = ('fav', )
     cmf_edit_kws   = ('remote_url',)

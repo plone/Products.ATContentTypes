@@ -41,6 +41,8 @@ from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 
+from Products.CMFPlone import PloneMessageFactory as _
+
 ATPathCriterionSchema = ATBaseCriterionSchema + Schema((
     ReferenceField('value',
                 required=1,
@@ -53,14 +55,12 @@ ATPathCriterionSchema = ATBaseCriterionSchema + Schema((
                 relationship="paths",
                 widget=ReferenceBrowserWidget(
                     allow_search=1,
-                    label="Folders",
-                    label_msgid="label_path_criteria_value",
-                    description="Folders to search in.",
-                    description_msgid="help_path_criteria_value",
-                    i18n_domain="plone",
+                    label=_(u'label_path_criteria_value', default=u'Folders'),
+                    description=_(u'help_path_criteria_value',
+                                  default=u'Folders to search in.'),
                     base_query={'is_folderish':True},
                     restrict_browse=True,
-                    startup_directory='../'),
+                    startup_directory='../')
                 ),
     BooleanField('recurse',
                 mode="rw",
@@ -68,11 +68,9 @@ ATPathCriterionSchema = ATBaseCriterionSchema + Schema((
                 accessor="Recurse",
                 default=False,
                 widget=BooleanWidget(
-                    label="Search Sub-Folders",
-                    label_msgid="label_path_criteria_recurse",
-                    description="",
-                    description_msgid="help_path_criteria_recurse",
-                    i18n_domain="plone"),
+                    label=_(u'label_path_criteria_recurse', default=u'Search Sub-Folders'),
+                    description='',
+                    ),
                 ),
     ))
 
@@ -85,8 +83,6 @@ class ATPathCriterion(ATBaseCriterion):
     meta_type      = 'ATPathCriterion'
     archetype_name = 'Path Criterion'
     typeDescription= ''
-    typeDescMsgId  = ''
-
     shortDesc      = 'Location in site'
 
     def getNavTypes(self):

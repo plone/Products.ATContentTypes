@@ -5,7 +5,7 @@
 ##bind script=script
 ##bind subpath=traverse_subpath
 ##parameters=method,param,value
-##title=Get a DisplayList and format fot XML request
+##title=Get a DisplayList and format for XML request
 
 params = {param:value}
 
@@ -13,10 +13,9 @@ vocab = getattr(context, method)(**params)
 
 RESPONSE = context.REQUEST.RESPONSE
 RESPONSE.setHeader('Content-Type', 'text/xml')
-trans = context.translate
+translate = context.translate
 
-results = [(trans(vocab.getMsgId(item), default=vocab.getValue(item)),item)
-                    for item in vocab]
+results = [(translate(vocab.getValue(item)),item) for item in vocab]
 
 item_strings = ['^'.join(a) for a in results]
 result_string = '|'.join(item_strings)

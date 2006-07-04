@@ -34,12 +34,13 @@ from Products.ATContentTypes.criteria import FIELD_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
 
+from Products.CMFPlone import PloneMessageFactory as _
+
 ATPortalTypeCriterionSchema = ATSelectionCriterion.schema.copy()
 
 val_widget = ATPortalTypeCriterionSchema['value'].widget
-val_widget.description="One of the available content types."
-val_widget.description_msgid="help_portal_type_criteria_value"
-val_widget.label_msgid="label_portal_type_criteria_value"
+val_widget.description=_(u'help_portal_type_criteria_value',
+                         default=u'One of the available content types.')
 ATPortalTypeCriterionSchema['value'].widget = val_widget
 
     
@@ -52,8 +53,6 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
     meta_type      = 'ATPortalTypeCriterion'
     archetype_name = 'Portal Types Criterion'
     typeDescription= ''
-    typeDescMsgId  = ''
-
     shortDesc      = 'Select content types'
 
     security.declareProtected(View, 'getCriteriaItems')

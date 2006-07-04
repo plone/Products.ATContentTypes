@@ -41,31 +41,32 @@ from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 
+from Products.ATContentTypes import ATCTMessageFactory as _
+
 DateOptions = IntDisplayList((
-                    (     0, 'Now'      )
-                  , (     1, '1 Day'    )
-                  , (     2, '2 Days'   )
-                  , (     5, '5 Days'   )
-                  , (     7, '1 Week'   )
-                  , (    14, '2 Weeks'  )
-                  , (    31, '1 Month'  )
-                  , (  31*3, '3 Months' )
-                  , (  31*6, '6 Months' )
-                  , (   365, '1 Year'   )
-                  , ( 365*2, '2 Years'  )
+                    (     0, _(u'Now')      )
+                  , (     1, _(u'1 Day')    )
+                  , (     2, _(u'2 Days')   )
+                  , (     5, _(u'5 Days')   )
+                  , (     7, _(u'1 Week')   )
+                  , (    14, _(u'2 Weeks')  )
+                  , (    31, _(u'1 Month')  )
+                  , (  31*3, _(u'3 Months') )
+                  , (  31*6, _(u'6 Months') )
+                  , (   365, _(u'1 Year')   )
+                  , ( 365*2, _(u'2 Years')  )
     ))
 
 CompareOperations = DisplayList((
-                    ('more', 'More than')
-                  , ('less', 'Less than')
-                  , ('within_day', 'On the day')
+                    ('more', _(u'More than'))
+                  , ('less', _(u'Less than'))
+                  , ('within_day', _(u'On the day'))
     ))
 
 RangeOperations = DisplayList((
-                    ('-', 'in the past')
-                  , ('+', 'in the future')
+                    ('-', _(u'in the past'))
+                  , ('+', _(u'in the future'))
     ))
-
 
 ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
     StringField('operation',
@@ -76,11 +77,9 @@ ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
                 vocabulary=CompareOperations,
                 enforceVocabulary=1,
                 widget=SelectionWidget(
-                    label="More or less",
-                    label_msgid="label_date_criteria_operation",
-                    description="Select the date criteria operation.",
-                    description_msgid="help_date_criteria_operation",
-                    i18n_domain="atcontenttypes",
+                    label=_(u'label_date_criteria_operation', default=u'More or less'),
+                    description=_(u'help_date_criteria_operation',
+                                  default=u'Select the date criteria operation.'),
                     format="select"),
                 ),
     IntegerField('value',
@@ -92,11 +91,10 @@ ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
                 default=None,
                 vocabulary=DateOptions,
                 widget=SelectionWidget(
-                    label="Which day",
-                    label_msgid="label_date_criteria_value",
-                    description="Select the date criteria value.",
-                    description_msgid="help_date_criteria_value",
-                    i18n_domain="atcontenttypes"),
+                    label=_(u'label_date_criteria_value', default=u'Which day'),
+                    description=_(u'help_date_criteria_value',
+                                  default=u'Select the date criteria value.')
+                    ),
                 ),
     StringField('dateRange',
                 required=1,
@@ -106,15 +104,13 @@ ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
                 vocabulary=RangeOperations,
                 enforceVocabulary=1,
                 widget=SelectionWidget(
-                    label="In the past or future",
-                    label_msgid="label_date_criteria_range",
-                    description="Select the date criteria range. Ignore this if you selected 'Now' above.",
-                    description_msgid="help_date_criteria_range",
-                    i18n_domain="atcontenttypes",
+                    label=_(u'label_date_criteria_range',
+                            default=u'In the past or future'),
+                    description=_(u'help_date_criteria_range',
+                                  default=u"Select the date criteria range. Ignore this if you selected 'Now' above."),
                     format="select"),
                 ),
     ))
-
 
 class ATDateCriteria(ATBaseCriterion):
     """A relative date criterion"""
@@ -127,8 +123,6 @@ class ATDateCriteria(ATBaseCriterion):
     meta_type      = 'ATFriendlyDateCriteria'
     archetype_name = 'Friendly Date Criteria'
     typeDescription= ''
-    typeDescMsgId  = ''
-
     shortDesc      = 'Relative date'
 
     security.declareProtected(View, 'getCriteriaItems')

@@ -33,9 +33,7 @@ from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 
-
 ATCurrentAuthorSchema = ATBaseCriterionSchema
-
 
 class ATCurrentAuthorCriterion(ATBaseCriterion):
     """A criterion that searches for the currently logged in user's id"""
@@ -46,8 +44,6 @@ class ATCurrentAuthorCriterion(ATBaseCriterion):
     meta_type      = 'ATCurrentAuthorCriterion'
     archetype_name = 'Current Author Criterion'
     typeDescription= ''
-    typeDescMsgId  = ''
-
     shortDesc      = 'Restrict to current user'
 
     security.declareProtected(View, 'getCriteriaItems')

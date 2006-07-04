@@ -32,6 +32,8 @@ sys.path.insert(3, os.path.join(ATCT_DIR, 'thirdparty'))
 
 __version__ = open(os.path.join(__path__[0], 'version.txt')).read().strip()
 
+from AccessControl import ModuleSecurityInfo
+
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.config import SKINS_DIR
 from Products.ATContentTypes.config import PROJECTNAME
@@ -47,6 +49,11 @@ else:
 from Products.CMFCore.utils import ContentInit
 from Products.CMFCore.utils import ToolInit
 from Products.CMFCore.DirectoryView import registerDirectory
+
+# Import "ATCTMessageFactory as _" to create messages in atcontenttypes domain
+from zope.i18nmessageid import MessageFactory
+ATCTMessageFactory = MessageFactory('atcontenttypes')
+ModuleSecurityInfo('Products.ATContentTypes').declarePublic('ATCTMessageFactory')
 
 # first level imports: configuration and validation
 import Products.ATContentTypes.configuration

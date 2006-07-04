@@ -62,6 +62,7 @@ from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 from Products.ATContentTypes.config import TOOLNAME
 
+from Products.CMFPlone import PloneMessageFactory as _
 from Products.CMFPlone.PloneBatch import Batch
 
 # A couple of fields just don't make sense to sort (for a user),
@@ -78,12 +79,10 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 default=False,
                 write_permission = ChangeTopics,
                 widget=BooleanWidget(
-                        label="Inherit Criteria",
-                        label_msgid="label_inherit_criteria",
-                        description=("Narrow down the search results from the parent Smart Folder(s) "
-                                     "by using the criteria from this Smart Folder."),
-                        description_msgid="help_inherit_criteria",
-                        i18n_domain = "plone",
+                        label=_(u'label_inherit_criteria', default=u'Inherit Criteria'),
+                        description=_(u'help_inherit_criteria',
+                                      default=u"Narrow down the search results from the parent Smart Folder(s) "
+                                               "by using the criteria from this Smart Folder."),
                         # Only show when the parent object is a Topic also,
                         # for some reason the checkcondition passes the
                         #template as 'object', and the object as 'folder'.
@@ -95,12 +94,11 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 default=False,
                 write_permission = ChangeTopics,
                 widget=BooleanWidget(
-                        label="Limit Search Results",
-                        label_msgid="label_limit_number",
-                        description=("If selected, only the 'Number of Items' "
-                                     "indicated below will be displayed."),
-                        description_msgid="help_limit_number",
-                        i18n_domain = "plone"),
+                        label=_(u'label_limit_number', default=u'Limit Search Results'),
+                        description=_(u'help_limit_number',
+                                      default=u"If selected, only the 'Number of Items' "
+                                               "indicated below will be displayed.")
+                        ),
                 ),
     IntegerField('itemCount',
                 required=False,
@@ -108,11 +106,9 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 default=0,
                 write_permission = ChangeTopics,
                 widget=IntegerWidget(
-                        label="Number of Items",
-                        label_msgid="label_item_count",
-                        description="",
-                        description_msgid="help_item_count",
-                        i18n_domain = "plone"),
+                        label=_(u'label_item_count', default=u'Number of Items'),
+                        description=''
+                        ),
                  ),
     BooleanField('customView',
                 required=False,
@@ -120,12 +116,11 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 default=False,
                 write_permission = ChangeTopics,
                 widget=BooleanWidget(
-                        label="Display as Table",
-                        label_msgid="label_custom_view",
-                        description="Columns in the table are controlled by "
-                        "'Table Columns' below.",
-                        description_msgid="help_custom_view",
-                        i18n_domain = "plone"),
+                        label=_(u'label_custom_view', default=u'Display as Table'),
+                        description=_(u'help_custom_view',
+                                      default=u"Columns in the table are controlled "
+                                               "by 'Table Columns' below.")
+                        ),
                  ),
     LinesField('customViewFields',
                 required=False,
@@ -135,12 +130,11 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 enforceVocabulary=True,
                 write_permission = ChangeTopics,
                 widget=InAndOutWidget(
-                        label="Table Columns",
-                        label_msgid="label_custom_view_fields",
-                        description="Select which fields to display when "
-                        "'Display as Table' is checked.",
-                        description_msgid="help_custom_view_fields",
-                        i18n_domain = "plone"),
+                        label=_(u'label_custom_view_fields', default=u'Table Columns'),
+                        description=_(u'help_custom_view_fields',
+                                      default=u"Select which fields to display when "
+                                               "'Display as Table' is checked.")
+                        ),
                  ),
     ))
 finalizeATCTSchema(ATTopicSchema, folderish=True, moveDiscussion=False)
@@ -159,8 +153,7 @@ class ATTopic(ATCTFolder):
     default_view   = 'atct_topic_view'
     suppl_views    = ('folder_listing', 'folder_summary_view', 'folder_tabular_view', 'atct_album_view')
     _atct_newTypeFor = {'portal_type' : 'CMF Topic', 'meta_type' : 'Portal Topic'}
-    typeDescription= 'An automatically updated stored search that can be used to display items matching criteria you specify.'
-    typeDescMsgId  = 'description_edit_topic'
+    typeDescription= _(u'An automatically updated stored search that can be used to display items matching criteria you specify.')
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()

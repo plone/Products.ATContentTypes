@@ -48,6 +48,8 @@ from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.imagetransform import ATCTImageTransform
 
+from Products.CMFPlone import PloneMessageFactory as _
+
 from Products.validation.config import validation
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 from Products.validation import V_REQUIRED
@@ -78,12 +80,8 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
                validators = (('isNonEmptyFile', V_REQUIRED),
                              ('checkImageMaxSize', V_REQUIRED)),
                widget = ImageWidget(
-                        #description = "Select the image to be added by clicking the 'Browse' button.",
-                        #description_msgid = "help_image",
-                        description = "",
-                        label= "Image",
-                        label_msgid = "label_image",
-                        i18n_domain = "plone",
+                        description = '',
+                        label= _(u'label_image', default=u'Image'),
                         show_content_type = False,)),
 
     ), marshall=PrimaryFieldMarshaller()
@@ -105,8 +103,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     default_view   = 'image_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Image', 'meta_type' : 'Portal Image'}
-    typeDescription= 'An image, which can be referenced in documents or displayed in an album.'
-    typeDescMsgId  = 'description_edit_image'
+    typeDescription= _(u'An image, which can be referenced in documents or displayed in an album.')
     assocMimetypes = ('image/*', )
     assocFileExt   = ('jpg', 'jpeg', 'png', 'gif', )
     cmf_edit_kws   = ('file', )

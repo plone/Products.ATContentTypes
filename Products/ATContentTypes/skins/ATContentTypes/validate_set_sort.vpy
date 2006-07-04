@@ -6,14 +6,17 @@
 ##bind subpath=traverse_subpath
 ##parameters=
 ##
-request = context.REQUEST
-indexId=request.get('field')
+from Products.ATContentTypes import ATCTMessageFactory as _
+
+indexId=context.REQUEST.get('field')
 if indexId == 'no_sort':
     return state.set(status='success')
 supported = context.validateAddCriterion(indexId, 'ATSortCriterion')
 if not supported:
-    msg = 'Sort order on field ' +\
-          '"%s" not set, it cannot be used for ordering.' % (indexId)
-    return state.set(status='failure', portal_status_message=msg )
+    msg = _(u'Sort order on field '
+             '${field} not set, it cannot be used for ordering.',
+             mapping={'field' : indexId})
+    context.plone_utils.addPortalMessage(msg)
+    return state.set(status='failure')
 else:
     return state.set(status='success')

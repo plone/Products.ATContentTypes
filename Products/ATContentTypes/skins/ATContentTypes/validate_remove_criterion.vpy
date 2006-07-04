@@ -6,10 +6,12 @@
 ##bind subpath=traverse_subpath
 ##parameters=
 ##
-request = context.REQUEST
-criterion_ids=request.get('criterion_ids')
+from Products.ATContentTypes import ATCTMessageFactory as _
+ 
+criterion_ids=context.REQUEST.get('criterion_ids')
 if not criterion_ids:
-    msg = 'You must first select a criterion to remove.'
-    return state.set(status='failure', portal_status_message=msg )
+    msg = _(u'You must first select a criterion to remove.')
+    context.plone_utils.addPortalMessage(msg)
+    return state.set(status='failure')
 else:
     return state.set(status='success')

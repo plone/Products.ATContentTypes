@@ -2,15 +2,14 @@ AT Content Types
 
 Installation
 
- Please read docs/INSTALL.txt for a list of requirements before installing this
+ Please read INSTALL.txt for a list of requirements before installing this
  product. ATContentTypes requires new versions of Python, Zope, Plone and
  Archetypes. Make sure you've updated all products.
 
 Reporting bugs / feature requests
 
- Please use the Plone issue tracker at http://dev.plone.org/plone and use the
- Content Types component! Please don't mail bug reports to the mailing lists or
- to a developer unless they are in the bug tracker, too.
+ Please use the Plone bug tracker at http://dev.plone.org/plone and use the
+ Content Types component!
 
 Comparing CMF types with ATContentTypes
 
@@ -26,22 +25,22 @@ Comparing CMF types with ATContentTypes
 
      o Easily enhanceable by subclassing or adding fields to the schema
 
-     o Transformations like restructured text, python source code
-       highlighting, pdf to html, office to html and many more.
+     o Transformations like restructured text, python source code highlighting,
+       pdf to html, office to html and many more.
 
      o plugable validation of fields
 
   * Clean and documented API.
 
   * Translateable using LinguaPlone.
-
+    
   * Dynamic Views: All types are using the new dynamic view FTI that allows you
     to choose the view template per instance. You can configure the templates in
     the portal_types tool. This features is used to turn an ordinary folder into
-    a photo ablum by simple switching to a different view.
-
-  * Permissions per type and feature: Every type has its own add permission
-    and all features like template mixin have their own modify permission, too.
+    a photo album by simple switching to a different view.
+    
+  * Permissions per type and feature: Every type has its own add permission and
+    all features like template mixin have their own modify permission, too.
 
   * Numerous small adjustments and enhancements to all types for example:
 
@@ -51,6 +50,6 @@ Comparing CMF types with ATContentTypes
 
     o Events have a body text
 
-    o Documents have a history tab to show the last changes as an unified
-      diff view using the ZODB history.
+    o Documents have a history tab to show the last changes as an unified diff
+      view using the ZODB history.
 

@@ -42,6 +42,8 @@ from Products.ATContentTypes.interfaces import IATLink
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
+from Products.CMFPlone import PloneMessageFactory as _
+
 ATLinkSchema = ATContentTypeSchema.copy() + Schema((
     StringField('remoteUrl',
         required=True,
@@ -51,11 +53,9 @@ ATLinkSchema = ATContentTypeSchema.copy() + Schema((
         # either mailto, absolute url or relative url
         validators = (),
         widget = StringWidget(
-            description = "",
-            description_msgid = "help_url",
-            label = "URL",
-            label_msgid = "label_url",
-            i18n_domain = "plone")),
+            description = '',
+            label = _(u'label_url', default=u'URL')
+            )),
     ))
 finalizeATCTSchema(ATLinkSchema)
 
@@ -72,8 +72,7 @@ class ATLink(ATCTContent):
     default_view   = 'link_view'
     suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Link', 'meta_type' : 'Link'}
-    typeDescription= 'A link to an internal or external resource.'
-    typeDescMsgId  = 'description_edit_link_item'
+    typeDescription= _(u'A link to an internal or external resource.')
     assocMimetypes = ()
     assocFileExt   = ('link', 'url', )
     cmf_edit_kws   = ('remote_url', )
@@ -87,7 +86,7 @@ class ATLink(ATCTContent):
         """remute url mutator
 
         Use urlparse to sanify the url
-        Also see http://plone.org/collector/3296
+        Also see http://dev.plone.org/plone/ticket/3296
         """
         if value:
             value = urlparse.urlunparse(urlparse.urlparse(value))

@@ -9,14 +9,17 @@
 ##title=Criterion Set Sort
 
 REQUEST=context.REQUEST
-from Products.CMFPlone import transaction_note
+from Products.ATContentTypes import ATCTMessageFactory as _
+from Products.CMFPlone.utils import transaction_note
 
 if field == 'no_sort':
     context.removeSortCriterion()
 else:
     context.setSortCriterion(field, reversed)
 
-msg = 'Sort order set on field %s' % (field)
+msg = _(u'Sort order set on field ${field}.',
+        mapping={'field':field})
 transaction_note(msg)
+context.plone_utils.addPortalMessage(msg)
 
-return state.set(portal_status_message=msg)
+return state
