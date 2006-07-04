@@ -15,7 +15,7 @@ supported = context.validateAddCriterion(indexId, 'ATSortCriterion')
 if not supported:
     msg = _(u'Sort order on field '
              '${field} not set, it cannot be used for ordering.',
-             mapping={'field' : indexId}
+             mapping={'field' : indexId})
     context.plone_utils.addPortalMessage(msg)
     return state.set(status='failure')
 else:
