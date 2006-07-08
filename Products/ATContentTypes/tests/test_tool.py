@@ -80,9 +80,7 @@ tests.append(TestTool)
 
 class TestATCTToolFunctional(atctftestcase.IntegrationTestCase):
     
-    zmi_tabs = ('manage_imageScales', 'manage_versionMigration',
-                'manage_overview',
-               )
+    zmi_tabs = ('manage_imageScales', 'manage_overview', )
     
     def setupTestObject(self):
         self.obj_id = TOOLNAME

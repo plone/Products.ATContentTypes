@@ -171,12 +171,6 @@ class ATTopic(ATCTFolder):
     security       = ClassSecurityInfo()
     actions = updateActions(ATCTFolder,
         (
-        #{
-        #'id'          : 'view',
-        #'name'        : 'View',
-        #'action'      : 'string:${folder_url}/',
-        #'permissions' : (View,)
-        #},
         {
         'id'          : 'edit',
         'name'        : 'Edit',
