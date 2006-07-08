@@ -1,6 +1,10 @@
 1.1.2-final unreleased
 ======================
 
+ * Added review state coloring to atct_topic_view. This closes
+   http://dev.plone.org/plone/ticket/5481.
+   [hannosch]
+
  * Added i18n statement to atct_topic_view content, as for example review states
    and type names should be translated here as well. This closes
    http://dev.plone.org/plone/ticket/5436.
@@ -31,7 +35,7 @@
    [hannosch]
 
  * Made ATTopic queryCatalog properly support b_size, thanks to patch from
-   Bader.  Fixes http://dev.plone.org/plone/ticket/5526
+   Bader. Fixes http://dev.plone.org/plone/ticket/5526
    [alecm]
 
  * Removed the unused locales folder. Translation files are part of the
