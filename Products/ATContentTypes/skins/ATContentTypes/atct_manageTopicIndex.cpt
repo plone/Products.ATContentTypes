@@ -134,19 +134,30 @@
                                                checked python:test(indexObj.enabled, 'checked', None)"/>
                     </td>
                     <td>
-                        <input type="text"
+                        <span tal:content="indexObj/friendlyName"
+                              i18n:translate=""
+                              i18n:domain="plone" />
+                        <input type="hidden"
                                value=""
                                name=""
                                id=""
-                               size="10"
                                tal:attributes="name string:index.friendlyName:records;
                                                id string:${indexObj/index}_friendlyName;
-                                               value indexObj/friendlyName;
-                                               tabindex tabindex/next;"
-                               i18n:attributes="value"
-                               i18n:domain="plone"/>
+                                               value indexObj/friendlyName;" />
                     </td>
                     <td>
+                        <div tal:content="indexObj/description"
+                              i18n:translate=""
+                              i18n:domain="plone">
+                            index description
+                        </div>
+                        <input type="hidden"
+                               value=""
+                               name="index.description:records"
+                               id=""
+                               tal:attributes="id string:${indexObj/index}_description;
+                                               value indexObj/description" />
+                        <br />
                         <span i18n:translate="label_allowed_criteria">
                             Allowed Criteria:
                         </span>
@@ -166,19 +177,6 @@
                                     i18n:translate=""
                                     i18n:domain="plone"/>
                         </select>
-                        <br />
-                        <span i18n:translate="label_help_text">
-                            Help Text:
-                        </span>
-                        <textarea cols="50" rows="2" type="text"
-                               value=""
-                               name="index.description:records"
-                               id=""
-                               tal:attributes="id string:${indexObj/index}_description;
-                                               tabindex tabindex/next;"
-                               tal:content="indexObj/description"
-                               i18n:translate=""
-                               i18n:domain="plone"></textarea>
                     </td>
 
                 </tr>
