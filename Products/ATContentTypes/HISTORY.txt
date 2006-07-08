@@ -1,6 +1,10 @@
 1.1.2-final unreleased
 ======================
 
+ * Fixed selection criteria to allow Unicode values. This fixes
+   http://dev.plone.org/plone/ticket/5229.
+   [hannosch]
+
  * Don't setup a 'ATCT Setup' control panel category anymore, it's not used.
    [hannosch]
 
