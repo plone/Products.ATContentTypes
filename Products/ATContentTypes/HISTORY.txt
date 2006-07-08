@@ -1,6 +1,11 @@
 1.1.2-final unreleased
 ======================
 
+ * Added i18n statement to atct_topic_view content, as for example review states
+   and type names should be translated here as well. This closes
+   http://dev.plone.org/plone/ticket/5436.
+   [hannosch]
+
  * Fixed selection criteria to allow Unicode values. This fixes
    http://dev.plone.org/plone/ticket/5229.
    [hannosch]

@@ -81,7 +81,8 @@
                                                 title_or_id obj/pretty_title_or_id">
                             <tal:block define="value python: getattr(obj, field, None)">
                                 <td tal:condition="python: field != 'Title'"
-                                    tal:content="python:here.formatCatalogMetadata(value)"/>
+                                    tal:content="python:here.formatCatalogMetadata(value)"
+                                    i18n:translate=""/>
                                 <td tal:condition="python: field == 'Title'">
                                     <a href="#" tal:attributes="href url">
                                         <img src="#"
