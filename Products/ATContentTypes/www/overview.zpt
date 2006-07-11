@@ -10,27 +10,12 @@
   </p>
 
   <dl>
-    <dt>Version migration</dt>
-    <dd>used to migrate ATContentTypes to a newer version just like the
-        <code>plone_migration</code> tool</dd>
     <dt>Image scales</dt>
     <dd>to recreate image scales</dd>
     <dt>Properties</dt>
-    <dd>to set certain properties for migration, album view and more</dd>
+    <dd>to set certain properties for album view and more</dd>
   </dl>
   
-  <h3>Version information</h3>
-  
-    <h4>File System</h4>
-    
-    <div tal:define="info here/getVersionFromFS"
-         tal:content="python: '%s [numeric: %s]' % (info[1], str(info[0]))" /> 
-
-    <h4>Plone Site</h4>
-    
-    <div tal:define="info here/getVersion"
-         tal:content="python: '%s [numeric: %s]' % (info[1], str(info[0]))" />
-       
   <h3>Properties</h3>
   
   <dl>
@@ -52,10 +37,6 @@
     <dt><code>single_image_scale</code></dt>
     <dd>The default image scale name used when showing a single image.</dd>
   </dl>
-
-  <h3>README</h3>
-  
-  <div tal:content="structure here/getReadme" />
 
 </tal:body>
 <tal:footer tal:replace="structure here/manage_page_footer|nothing">footer</tal:footer>

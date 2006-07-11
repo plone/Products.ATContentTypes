@@ -86,10 +86,6 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
     def test_quickinstall_locked(self):
         self.failUnless(self.qi_atct['isLocked'])
 
-    def test_installsetsCMFcataloged(self):
-        t = self.tool
-        self.failUnless(t.getCMFTypesAreRecataloged())
-
     def test_release_settings_SAVE_TO_FAIL_FOR_DEVELOPMENT(self):
         self.failUnlessEqual(SWALLOW_IMAGE_RESIZE_EXCEPTIONS, True)
 

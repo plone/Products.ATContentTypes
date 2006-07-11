@@ -1,13 +1,3 @@
-"""Skeleton ATContentTypes tests
-
-Use this file as a skeleton for your own tests
-
-
-"""
-
-__author__ = 'Alec Mitchell'
-__docformat__ = 'restructuredtext'
-
 import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))

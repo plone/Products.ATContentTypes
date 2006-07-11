@@ -26,8 +26,6 @@ class ATCTToolXMLAdapter(XMLAdapterBase):
         self._logger.info('ATCTTool settings imported.')
 
     def _purgeSettings(self):
-        self.context.setCMFTypesAreRecataloged()
-        self.context.setVersionFromFS()
         # initialize topic tool
         self.context.topic_indexes = {}
         self.context.topic_metadata = {}
@@ -37,17 +35,6 @@ class ATCTToolXMLAdapter(XMLAdapterBase):
 
     def _initSettings(self, node):
         for child in node.childNodes:
-            if child.nodeName=='atct_tool_version':
-                value=child.getAttribute('value')
-                if value == 'from_filesystem':
-                    self.context.setVersionFromFS()
-                else:
-                    self.context.setInstanceVersion(value)
-
-            if child.nodeName=='cmftypes_are_recataloged':
-                value=self._convertToBoolean(child.getAttribute('value'))
-                self.context.setCMFTypesAreRecataloged(value=value)
-
             if child.nodeName=='topic_indexes':
                 for indexNode in child.childNodes:
                     if indexNode.nodeName=='index':
@@ -84,12 +71,6 @@ class ATCTToolXMLAdapter(XMLAdapterBase):
 
     def _extractSettings(self):
         fragment = self._doc.createDocumentFragment()
-        node=self._doc.createElement('atct_tool_version')
-        node.setAttribute('value', str(self.context.getVersion()[1]))
-        fragment.appendChild(node)
-        node=self._doc.createElement('cmftypes_are_recataloged')
-        node.setAttribute('value', str(bool(self.context.getCMFTypesAreRecataloged())))
-        fragment.appendChild(node)
         # topic tool indexes
         indexes=self._doc.createElement('topic_indexes')
         for indexname in self.context.getIndexes():
