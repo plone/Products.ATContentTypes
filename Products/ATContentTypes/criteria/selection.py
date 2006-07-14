@@ -61,8 +61,8 @@ ATSelectionCriterionSchema = ATBaseCriterionSchema + Schema((
                 default=[],
                 vocabulary="getCurrentValues",
                 widget=MultiSelectionWidget(
-                    label=_(u'label_selection_criteria_value', default=u'Value'),
-                    description=_(u'help_selection_criteria_value', default=u'Existing values.')
+                    label=_(u'label_criteria_values', default=u'Values'),
+                    description=_(u'help_criteria_values', default=u'Existing values.')
                     ),
                 ),
     StringField('operator',

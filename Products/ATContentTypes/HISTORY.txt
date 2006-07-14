@@ -1,9 +1,12 @@
 1.2.0-devel unreleased
 ======================
 
+ * Fixed some minor i18n issues.
+   [hannosch]
+
  * Reworked i18n of Python scripts to use the new MessageFactory and based
    portal status messages on the statusmessages product.
-   [hannosch] 
+   [hannosch]
 
  * Changed criteria definitions to use Zope3 Messages for localizing
    descriptions and labels instead of the old Archetypes approach using special
@@ -12,14 +15,14 @@
    [hannosch]
 
  * Fixed some imports of transaction_note from CMFPlone to CMFPlone.utils.
-   [hannosch] 
+   [hannosch]
 
  * Fixed deprecation warnings for TALValidator.
-   [hannosch] 
+   [hannosch]
 
  * Changed type definitions to use Zope3 Messages for localizing descriptions
    and labels instead of the old Archetypes approach using special attributes.
-   [hannosch]  
+   [hannosch]
 
  * Adjusted some deprecated getActionById to getActionInfo calls.
    [hannosch]
@@ -57,7 +60,7 @@
    [hannosch]
 
  * Made ATTopic queryCatalog properly support b_size, thanks to patch from
-   Bader.  Fixes http://dev.plone.org/plone/ticket/5526
+   Bader. Fixes http://dev.plone.org/plone/ticket/5526
    [alecm]
 
  * Removed the unused locales folder. Translation files are part of the
@@ -70,8 +73,7 @@
    [rocky]
 
  * Semi-intelligent sniffing adding for figuring out the charset
-   when using mx.Tidy.  This closes
-   http://dev.plone.org/plone/ticket/5006
+   when using mx.Tidy. This closes http://dev.plone.org/plone/ticket/5006.
    [rocky]
 
  * Internal links didn't work for event url field. This closes
