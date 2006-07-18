@@ -82,7 +82,9 @@
                             <tal:block define="value python: getattr(obj, field, None)">
                                 <td tal:condition="python: field != 'Title'"
                                     tal:content="python:here.formatCatalogMetadata(value)"/>
-                                <td tal:condition="python: field == 'Title'">
+                                <td tal:define="item_wf_state obj/review_state|python: wtool.getInfoFor(item, 'review_state', '');
+                                                item_wf_state_class python:'state-' + normalizeString(item_wf_state);"
+                                    tal:condition="python: field == 'Title'">
                                     <a href="#" tal:attributes="href url">
                                         <img src="#"
                                              height="16"
@@ -91,11 +93,13 @@
                                     </a>
 
                                     <a href="#" tal:condition="python: obj.portal_type not in ['Link', 'Image']"
-                                                tal:attributes="href url"
+                                                tal:attributes="href url;
+                                                                class string:$item_wf_state_class"
                                                 tal:content="title_or_id" />
 
                                     <a href="#" tal:condition="python: obj.portal_type == 'Image'"
-                                                tal:attributes="href string:${url}/view"
+                                                tal:attributes="href string:${url}/view;
+                                                                class string:$item_wf_state_class"
                                                 tal:content="title_or_id" />
 
                                     <a href="#"
