@@ -129,6 +129,12 @@
 1.0.6-final unreleased
 ======================
 
+ * Disabled the possibility to change index and metadata names and descriptions
+   on the smart folder configuration screens. Saving these with a browser locale
+   set to non-english would destroy the internationalization of all these texts.
+   This closes http://dev.plone.org/plone/ticket/5612.
+   [hannosch]
+
  * Sanitized some more index and metadata friendly names and descriptions.
    [hannosch]
 
