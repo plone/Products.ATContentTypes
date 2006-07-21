@@ -44,8 +44,6 @@ from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 
-from types import StringType
-
 CompareOperators = DisplayList((
                     ('and', _(u'and'))
                   , ('or', _(u'or'))
@@ -97,7 +95,7 @@ class ATSelectionCriterion(ATBaseCriterion):
         # DisplayList keys though it is supposed to (it should
         # probably accept Booleans as well) so we only accept strings
         # for now
-        options = [(o.lower(),o) for o in options if type(o) is StringType]
+        options = [(o.lower(),o) for o in options if isinstance(o, basestring)]
         options.sort()
         return [o[1] for o in options]
 
