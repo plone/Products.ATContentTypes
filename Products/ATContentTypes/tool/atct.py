@@ -43,7 +43,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
         ) + PropertyManager.manage_options + \
             AccessControl.Owned.Owned.manage_options
 
-    # properties and their default values
+    # properties
 
     _properties = PropertyManager._properties + (
         {'id' : 'image_types', 'type' : 'multiple selection',
@@ -54,18 +54,6 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
         {'id' : 'album_image_scale', 'type' : 'string', 'mode' : 'w'},
         {'id' : 'single_image_scale', 'type' : 'string', 'mode' : 'w'},
         )
-
-    # list of portal types with an Image field used for rescale
-    # and album listing
-    image_types = ('Image', 'News Item',)
-    # list of portal types to display as album folder
-    folder_types = ('Folder', 'Large Plone Folder')
-    # album batch size
-    album_batch_size = 30
-    # scale name for image in batch view
-    album_image_scale = 'thumb'
-    # scale name for image in single view
-    single_image_scale = 'preview'
 
     # templates
 

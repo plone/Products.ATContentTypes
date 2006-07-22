@@ -1,10 +1,11 @@
 from Products.ATContentTypes.interface import IATCTTool
+from Products.GenericSetup.utils import PropertyManagerHelpers
 from Products.GenericSetup.utils import XMLAdapterBase
 from Products.GenericSetup.utils import exportObjects
 from Products.GenericSetup.utils import importObjects
 from Products.CMFCore.utils import getToolByName
 
-class ATCTToolXMLAdapter(XMLAdapterBase):
+class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
     """Node in- and exporter for ATCTTool.
     """
     __used_for__ = IATCTTool
@@ -14,6 +15,7 @@ class ATCTToolXMLAdapter(XMLAdapterBase):
         """
         node=self._doc.createElement('atcttool')
         node.appendChild(self._extractSettings())
+        node.appendChild(self._extractProperties())
 
         self._logger.info('ATCTTool settings exported.')
         return node
@@ -21,8 +23,10 @@ class ATCTToolXMLAdapter(XMLAdapterBase):
     def _importNode(self, node):
         if self.environ.shouldPurge():
             self._purgeSettings()
+            self._purgeProperties()
 
         self._initSettings(node)
+        self._initProperties(node)
         self._logger.info('ATCTTool settings imported.')
 
     def _purgeSettings(self):
