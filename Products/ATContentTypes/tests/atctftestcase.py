@@ -99,7 +99,8 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
     def setupTestObject(self):
         # create test object
         self.obj_id = 'test_object'
-        self.folder.invokeFactory(self.portal_type, self.obj_id, title=self.obj_id)
+        self.title = u'test \xf6bject'
+        self.folder.invokeFactory(self.portal_type, self.obj_id, title=self.title)
         self.obj = getattr(self.folder.aq_explicit, self.obj_id)
         self.obj_url = self.obj.absolute_url()
         self.obj_path = '/%s' % self.obj.absolute_url(1)
