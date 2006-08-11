@@ -7,7 +7,7 @@
 
     <metal:block fill-slot="css_slot">
         <style type="text/css" media="screen"
-               tal:content="string:@import url($portal_url/atcontenttypes.css);"></style>
+               tal:content="structure string:<!-- @import url($portal_url/atcontenttypes.css); -->"></style>
     </metal:block>
 
 </head>
