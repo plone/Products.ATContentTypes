@@ -30,6 +30,11 @@ from Products.PloneTestCase import PloneTestCase
 ZopeTestCase.installProduct('SiteAccess')
 PloneTestCase.setupPloneSite()
 
+# BBB once we don't have to deal with non-unicode anymore
+# For the transition phase of mixed Unicode and encoded string usage applying
+# this patch is mandatory or we will see endless UnicodeDecodeErrors
+from Products.PlacelessTranslationService import PatchStringIO
+
 import os
 import transaction
 
