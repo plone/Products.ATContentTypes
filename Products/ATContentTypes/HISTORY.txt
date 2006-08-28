@@ -39,6 +39,13 @@
 1.1.2-final unreleased
 ======================
 
+ * Changed integration tests to test Unicode titles instead of plain ascii.
+   [hannosch]
+
+ * Added review state coloring to atct_topic_view. This closes
+   http://dev.plone.org/plone/ticket/5481.
+   [hannosch]
+
  * Don't setup a 'ATCT Setup' control panel category anymore, it's not used.
    [hannosch]
 
