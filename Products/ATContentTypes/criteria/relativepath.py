@@ -99,6 +99,7 @@ class ATRelativePathCriterion(ATBaseCriterion):
             path = '/'.join(self.aq_parent.aq_parent.getPhysicalPath())
         else:
             relPath = self.getCustomRelativePath()
+            relPath = relPath.replace("\\","/") # you never know, with all those windoze users out there
             folders = relPath.split('/')
 
             path = list(self.aq_parent.getPhysicalPath())
@@ -112,7 +113,9 @@ class ATRelativePathCriterion(ATBaseCriterion):
                         raise "Todo"
                     else:
                         path = path[:-1]
-                elif folder == '.': #don't need this but for being complete
+                elif folder == '.': 
+                    # don't really need this but for being complete
+                    # strictly speaking some user may use a . aswell
                     pass # do nothing
                 else:
                     path.append(folder)
