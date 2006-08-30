@@ -145,6 +145,13 @@
       criterion ATPathCriterion
     </index>
     <index>
+      name path
+      friendlyName Relative Location
+      description The location of an item in the site (path) relative to the smart folder's location.
+      enabled on
+      criterion ATRelativePathCriterion
+    </index>    
+    <index>
       name portal_type
       friendlyName Item Type (internal)
       enabled off
