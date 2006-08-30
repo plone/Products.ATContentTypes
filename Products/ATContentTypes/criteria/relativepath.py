@@ -20,7 +20,7 @@
 
 """
 
-__author__  = 'Alec Mitchell'
+__author__  = 'Alec Mitchell, Danny Bloemendaal'
 __docformat__ = 'restructuredtext'
 # __old_name__ = 'Products.ATContentTypes.types.criteria.ATPathCriterion'
 
@@ -39,9 +39,11 @@ from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 
+from Products.CMFCore.utils import getToolByName
+
 ATRelativePathCriterionSchema = ATBaseCriterionSchema + Schema((
     StringField('relativePath',
-                vocabulary=DisplayList( (('currentfolder', 'Current folder'), ('parentfolder','Parent folder'), ('custompath','Custom relative path'))),
+                vocabulary=DisplayList( (('.', 'Current folder'), ('..','Parent folder'), ('custompath','Custom relative path'))),
                 widget=SelectionWidget(label='Relative path', 
                                        label_msgid="label_relativepath_criteria_relativepath",
                                        description_msgid="help_relativepath_criteria_relativepath",
@@ -88,15 +90,38 @@ class ATRelativePathCriterion(ATBaseCriterion):
 
     security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
-        #result = []
-        #depth = (not self.Recurse() and 1) or -1
-        #paths = ['/'.join(o.getPhysicalPath()) for o in self.Value()]
+        result = []
+        depth = (not self.Recurse() and 1) or -1
+        relPath = self.getRelativePath()
+        if relPath=='.':
+            path = '/'.join(self.aq_parent.getPhysicalPath())
+        elif relPath=='..':
+            path = '/'.join(self.aq_parent.aq_parent.getPhysicalPath())
+        else:
+            relPath = self.getCustomRelativePath()
+            folders = relPath.split('/')
 
-        #if paths is not '':
-            #result.append((self.Field(), {'query': paths, 'depth': depth}))
+            path = list(self.aq_parent.getPhysicalPath())
+            
+            # now construct an aboslute path based on the relative custom path
+            # eat away from 'path' whenever we encounter a '..' in the relative path
+            for folder in folders:
+                if folder == '..':
+                    # chop off one level from result
+                    if len(path)==0:
+                        raise "Todo"
+                    else:
+                        path = path[:-1]
+                elif folder == '.': #don't need this but for being complete
+                    pass # do nothing
+                else:
+                    path.append(folder)
+            path = '/'.join(path)
 
-        #return tuple( result )
-        return 
+        if path is not '':
+            result.append((self.Field(), {'query': path, 'depth': depth}))
+
+        return tuple(result)
 
 
 registerCriterion(ATRelativePathCriterion, PATH_INDICES)
