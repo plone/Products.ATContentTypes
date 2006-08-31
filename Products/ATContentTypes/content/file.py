@@ -107,10 +107,12 @@ class ATFile(ATCTFileContent):
         """Download the file
         """
         field = self.getPrimaryField()
-        if field.getContentType(self).startswith('text/'): 
-            # return the content in line.
+
+        if field.getContentType(self) in ('application/msword', 'application/x-msexcel', 'application/vnd.ms-powerpoint', 'application/pdf'):
+            # return the PDF and Office file formats inline
             return ATCTFileContent.index_html(self, REQUEST, RESPONSE)
-        # otherwise return the content as an attachment
+        # otherwise return the content as an attachment 
+        # Please note that text/* cannot be returned inline, as this is a security risk since IE renders anything as HTML :(
         return field.download(self)
 
     security.declareProtected(ModifyPortalContent, 'setFile')
