@@ -55,6 +55,7 @@ from Products.ATContentTypes.criteria.portaltype import ATPortalTypeCriterion
 from Products.ATContentTypes.criteria.currentauthor import \
     ATCurrentAuthorCriterion
 from Products.ATContentTypes.criteria.path import ATPathCriterion
+from Products.ATContentTypes.criteria.relativepath import ATRelativePathCriterion
 tests = []
 
 # z3 imports
@@ -584,6 +585,60 @@ class TestATCurrentAuthorCriterion(CriteriaTest):
 
 tests.append(TestATCurrentAuthorCriterion)
 
+
+class TestATRelativePathCriterion(CriteriaTest):
+    klass = ATRelativePathCriterion
+    title = 'Relative Path Criterion'
+    meta_type = 'ATRelativePathCriterion'
+    portal_type = 'ATRelativePathCriterion'
+
+    def test_relative_path_query(self):
+        self.setRoles(['Manager'])
+        
+        # build folder structure
+        # /plone/folderA
+        # /plone/folderA/folderA1
+        # /plone/folderB
+        # /plone/folderB/folderB1
+        
+        self.portal.invokeFactory('Folder', 'folderA')
+        self.portal.invokeFactory('Folder', 'folderB')
+        self.portal.folderA.invokeFactory('Folder', 'folderA1')
+        self.portal.folderB.invokeFactory('Folder', 'folderB1')
+        
+        # create topic in folderA1
+        self.portal.folderA.folderA1.invokeFactory('Topic', 'new_topic', title='New Topic')
+        
+        topic  = self.portal.folderA.folderA1.new_topic
+        # Add a path criterion
+        path_crit = topic.addCriterion('path', 'ATRelativePathCriterion')
+        
+        path_crit.setRelativePath('..')   # should give the parent==folderA1 
+        self.failUnless(path_crit.getCriteriaItems() == (('path', {'query': '/plone/folderA/folderA1', 'depth': 1}),))
+        
+        path_crit.setRelativePath('../..')   # should give folderA
+        self.failUnless(path_crit.getCriteriaItems() == (('path', {'query': '/plone/folderA', 'depth': 1}),))
+
+        path_crit.setRelativePath('../../..')   # should give the /plone (portal) 
+        self.failUnless(path_crit.getCriteriaItems() == (('path', {'query': '/plone', 'depth': 1}),))
+        
+        path_crit.setRelativePath('../../../../../../..')   # should give the /plone (portal): cannot go higher than the portal
+        self.failUnless(path_crit.getCriteriaItems() == (('path', {'query': '/plone', 'depth': 1}),))
+        
+        path_crit.setRelativePath('../../../folderB')   # should give folderB 
+        self.failUnless(path_crit.getCriteriaItems() == (('path', {'query': '/plone/folderB', 'depth': 1}),))
+        
+        path_crit.setRelativePath('/folderB')   # should give folderB also (absolute paths are supported)
+        self.failUnless(path_crit.getCriteriaItems() == (('path', {'query': '/plone/folderB', 'depth': 1}),))
+
+        path_crit.setRelativePath('../../folderA1/../../folderB/folderB1/..')   # should give folderB 
+        self.failUnless(path_crit.getCriteriaItems() == (('path', {'query': '/plone/folderB', 'depth': 1}),))
+
+        path_crit.setRelativePath('.')   # should give the new_topic 
+        self.failUnless(path_crit.getCriteriaItems() == (('path', {'query': '/plone/folderA/folderA1/new_topic', 'depth': 1}),))
+
+        
+tests.append(TestATRelativePathCriterion)
 
 class TestATPathCriterion(CriteriaTest):
     klass = ATPathCriterion

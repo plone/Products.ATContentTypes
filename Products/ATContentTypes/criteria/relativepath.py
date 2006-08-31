@@ -43,19 +43,12 @@ from Products.CMFCore.utils import getToolByName
 
 ATRelativePathCriterionSchema = ATBaseCriterionSchema + Schema((
     StringField('relativePath',
-                vocabulary=DisplayList( (('.', 'Current folder'), ('..','Parent folder'), ('custompath','Custom relative path'))),
-                widget=SelectionWidget(label='Relative path', 
-                                       label_msgid="label_relativepath_criteria_relativepath",
-                                       description_msgid="help_relativepath_criteria_relativepath",
-                                       i18n_domain="plone",
-                                       description=''),
-                default='currentfolder'),
-    StringField('customRelativePath',
-                widget=StringWidget(label='Custom relative path', 
+                default='..',
+                widget=StringWidget(label='Relative path', 
                                     label_msgid="label_relativepath_criteria_customrelativepath",
                                     description_msgid="help_relativepath_criteria_customrelativepath",
                                     i18n_domain="plone",
-                                    description='Enter a relative path, relative to the current location e.g. ../../somefolder')),
+                                    description="Enter a relative path e.g.: <br /> '..' points to the parent folder <br /> '../..' points to the parent's parent <br />'../folder' points to a sibling folder")),
     BooleanField('recurse',
                 mode="rw",
                 write_permission=ChangeTopics,
@@ -81,7 +74,7 @@ class ATRelativePathCriterion(ATBaseCriterion):
     typeDescription= ''
     typeDescMsgId  = ''
 
-    shortDesc      = 'Relative Location in site'
+    shortDesc      = 'Location in site relative to the current location'
 
     def getNavTypes(self):
         ptool = self.plone_utils
@@ -93,24 +86,36 @@ class ATRelativePathCriterion(ATBaseCriterion):
         result = []
         depth = (not self.Recurse() and 1) or -1
         relPath = self.getRelativePath()
-        if relPath=='.':
-            path = '/'.join(self.aq_parent.getPhysicalPath())
-        elif relPath=='..':
+        
+        # sanitize a bit: you never know, with all those windoze users out there
+        relPath = relPath.replace("\\","/") 
+
+        # get the path to the portal object 
+        portalPath = list(getToolByName(self, 'portal_url').getPortalObject().getPhysicalPath())
+    
+        if relPath[0]=='/':
+            # someone didn't enter a relative path.
+            # simply use that one, relative to the portal
+            path = '/'.join(portalPath) + relPath
+        elif relPath=='..' or relPath=='../':
+            # do a shortcut
             path = '/'.join(self.aq_parent.aq_parent.getPhysicalPath())
         else:
-            relPath = self.getCustomRelativePath()
-            relPath = relPath.replace("\\","/") # you never know, with all those windoze users out there
             folders = relPath.split('/')
 
-            path = list(self.aq_parent.getPhysicalPath())
+            # set the path to the smartfolder's path
+            path = list(self.aq_parent.getPhysicalPath()) 
             
             # now construct an aboslute path based on the relative custom path
             # eat away from 'path' whenever we encounter a '..' in the relative path
+            # apend all other elements other than ..
             for folder in folders:
                 if folder == '..':
-                    # chop off one level from result
-                    if len(path)==0:
-                        raise "Todo"
+                    # chop off one level from path
+                    if path == portalPath:
+                        # can't chop off more
+                        # just return this path and leave the loop
+                        break
                     else:
                         path = path[:-1]
                 elif folder == '.': 
