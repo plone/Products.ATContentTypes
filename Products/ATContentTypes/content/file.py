@@ -108,7 +108,7 @@ class ATFile(ATCTFileContent):
         """
         field = self.getPrimaryField()
 
-        if field.getContentType(self) in ['application/msword', 'application/x-msexcel', 'application/vnd.ms-powerpoint', 'application/pdf']: 
+        if field.getContentType(self) in ()'application/msword', 'application/x-msexcel', 'application/vnd.ms-powerpoint', 'application/pdf'): 
             # return the PDF and Office file formats inline
             return ATCTFileContent.index_html(self, REQUEST, RESPONSE)
         # otherwise return the content as an attachment 
