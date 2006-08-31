@@ -48,7 +48,7 @@ ATRelativePathCriterionSchema = ATBaseCriterionSchema + Schema((
                                     label_msgid="label_relativepath_criteria_customrelativepath",
                                     description_msgid="help_relativepath_criteria_customrelativepath",
                                     i18n_domain="plone",
-                                    description="Enter a relative path e.g.: <br /> '..' points to the parent folder <br /> '../..' points to the parent's parent <br />'../folder' points to a sibling folder")),
+                                    description="Enter a relative path e.g.: <br /> '..' for the parent folder <br /> '../..' for the parent's parent <br />'../somefolder' for a sibling folder")),
     BooleanField('recurse',
                 mode="rw",
                 write_permission=ChangeTopics,
