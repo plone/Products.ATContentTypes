@@ -538,7 +538,7 @@ class ATTopic(ATCTFolder):
         """
         return False
 
-    security.declarePublic('getCriterionUniqueWidgetAttributes')
+    security.declarePublic('getCriterionUniqueWidgetAttr')
     def getCriteriaUniqueWidgetAttr(self, attr):
         """Get a unique list values for a specific attribute for all widgets
            on all criteria"""
