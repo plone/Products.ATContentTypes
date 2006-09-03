@@ -1,10 +1,10 @@
 ##############################################################################
 #
-# ATContentTypes http://sf.net/projects/collective/
+# ATContentTypes http://plone.org/products/atcontenttypes/
 # Archetypes reimplementation of the CMF core types
 #
 # Copyright (c) 2001 Zope Corporation and Contributors. All Rights Reserved.
-# Copyright (c) 2003-2005 AT Content Types development team
+# Copyright (c) 2003-2006 AT Content Types development team
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
