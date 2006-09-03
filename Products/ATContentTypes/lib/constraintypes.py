@@ -1,6 +1,6 @@
 #  ATContentTypes http://plone.org/products/atcontenttypes/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2005 AT Content Types development team
+#  Copyright (c) 2003-2006 AT Content Types development team
 #
 # GNU General Public Licence (GPL)
 #
