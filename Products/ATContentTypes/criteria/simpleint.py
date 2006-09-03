@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# ATContentTypes http://sf.net/projects/collective/
+# ATContentTypes http://plone.org/products/atcontenttypes/
 # Archetypes reimplementation of the CMF core types
 #
 # Copyright (c) 2001 Zope Corporation and Contributors. All Rights Reserved.

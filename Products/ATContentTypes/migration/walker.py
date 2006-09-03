@@ -1,7 +1,7 @@
 """Walkers for Migration suite
 
 Migration system for the migration from CMFDefault/Event types to archetypes
-based CMFPloneTypes (http://sf.net/projects/collective/).
+based CMFPloneTypes (http://plone.org/products/atcontenttypes/).
 
 Copyright (c) 2004-2005, Christian Heimes <tiran@cheimes.de> and contributors
 All rights reserved.
