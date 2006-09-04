@@ -1,6 +1,6 @@
-#  ATContentTypes http://sf.net/projects/collective/
+#  ATContentTypes http://plone.org/products/atcontenttypes/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2005 AT Content Types development team
+#  Copyright (c) 2003-2006 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -44,8 +44,6 @@ from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 
-from types import StringType
-
 CompareOperators = DisplayList((
                     ('and', _(u'and'))
                   , ('or', _(u'or'))
@@ -61,8 +59,8 @@ ATSelectionCriterionSchema = ATBaseCriterionSchema + Schema((
                 default=[],
                 vocabulary="getCurrentValues",
                 widget=MultiSelectionWidget(
-                    label=_(u'label_selection_criteria_value', default=u'Value'),
-                    description=_(u'help_selection_criteria_value', default=u'Existing values.')
+                    label=_(u'label_criteria_values', default=u'Values'),
+                    description=_(u'help_criteria_values', default=u'Existing values.')
                     ),
                 ),
     StringField('operator',
@@ -97,7 +95,7 @@ class ATSelectionCriterion(ATBaseCriterion):
         # DisplayList keys though it is supposed to (it should
         # probably accept Booleans as well) so we only accept strings
         # for now
-        options = [(o.lower(),o) for o in options if type(o) is StringType]
+        options = [(o.lower(),o) for o in options if isinstance(o, basestring)]
         options.sort()
         return [o[1] for o in options]
 

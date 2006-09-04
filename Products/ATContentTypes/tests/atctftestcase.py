@@ -1,6 +1,6 @@
-#  ATContentTypes http://sf.net/projects/collective/
+#  ATContentTypes http://plone.org/products/atcontenttypes/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2005 AT Content Types development team
+#  Copyright (c) 2003-2006 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -99,7 +99,8 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
     def setupTestObject(self):
         # create test object
         self.obj_id = 'test_object'
-        self.folder.invokeFactory(self.portal_type, self.obj_id, title=self.obj_id)
+        self.title = u'test \xf6bject'
+        self.folder.invokeFactory(self.portal_type, self.obj_id, title=self.title)
         self.obj = getattr(self.folder.aq_explicit, self.obj_id)
         self.obj_url = self.obj.absolute_url()
         self.obj_path = '/%s' % self.obj.absolute_url(1)

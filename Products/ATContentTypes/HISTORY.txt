@@ -1,6 +1,9 @@
 1.2.0-devel unreleased
 ======================
 
+ * Fixed some minor i18n issues.
+   [hannosch]
+
  * Reworked i18n of Python scripts to use the new MessageFactory and based
    portal status messages on the statusmessages product.
    [hannosch]
@@ -45,6 +48,13 @@
 1.1.2-final unreleased
 ======================
 
+ * Changed integration tests to test Unicode titles instead of plain ascii.
+   [hannosch]
+
+ * Added review state coloring to atct_topic_view. This closes
+   http://dev.plone.org/plone/ticket/5481.
+   [hannosch]
+
  * Don't setup a 'ATCT Setup' control panel category anymore, it's not used.
    [hannosch]
 
@@ -66,7 +76,7 @@
    [hannosch]
 
  * Made ATTopic queryCatalog properly support b_size, thanks to patch from
-   Bader.  Fixes http://dev.plone.org/plone/ticket/5526
+   Bader. Fixes http://dev.plone.org/plone/ticket/5526
    [alecm]
 
  * Removed the unused locales folder. Translation files are part of the
@@ -79,8 +89,7 @@
    [rocky]
 
  * Semi-intelligent sniffing adding for figuring out the charset
-   when using mx.Tidy.  This closes
-   http://dev.plone.org/plone/ticket/5006
+   when using mx.Tidy. This closes http://dev.plone.org/plone/ticket/5006.
    [rocky]
 
  * Internal links didn't work for event url field. This closes
@@ -159,6 +168,18 @@
 
 1.0.6-final unreleased
 ======================
+
+ * Disabled the possibility to change index and metadata names and descriptions
+   on the smart folder configuration screens. Saving these with a browser locale
+   set to non-english would destroy the internationalization of all these texts.
+   This closes http://dev.plone.org/plone/ticket/5612.
+   [hannosch]
+
+ * Sanitized some more index and metadata friendly names and descriptions.
+   [hannosch]
+
+ * Changed index friendly name of index id to the same as the getId index.
+   [hannosch]
 
  * We don't translate the catalog and metadata id's anymore. Removed i18n markup
    from the configuration screens.

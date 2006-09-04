@@ -1,6 +1,6 @@
-#  ATContentTypes http://sf.net/projects/collective/
+#  ATContentTypes http://plone.org/products/atcontenttypes/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2005 AT Content Types development team
+#  Copyright (c) 2003-2006 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -104,10 +104,12 @@ class ATFile(ATCTFileContent):
         """Download the file
         """
         field = self.getPrimaryField()
-        if field.getContentType(self).startswith('text/'): 
-            # return the content in line.
+
+        if field.getContentType(self) in ('application/msword', 'application/x-msexcel', 'application/vnd.ms-powerpoint', 'application/pdf'):
+            # return the PDF and Office file formats inline
             return ATCTFileContent.index_html(self, REQUEST, RESPONSE)
-        # otherwise return the content as an attachment
+        # otherwise return the content as an attachment 
+        # Please note that text/* cannot be returned inline, as this is a security risk since IE renders anything as HTML :(
         return field.download(self)
 
     security.declareProtected(ModifyPortalContent, 'setFile')

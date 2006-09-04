@@ -201,11 +201,10 @@
             <div class="formControls">
                 <input class="context"
                        type="submit"
-                       value="Add"
+                       value="Add criteria"
                        name="form.button.AddCriterion"
                        tabindex=""
-                       i18n:domain="plone"
-                       i18n:attributes="value label_add;"
+                       i18n:attributes="value label_add_criteria;"
                        tal:attributes="tabindex tabindex/next;"
                        />
             </div>
