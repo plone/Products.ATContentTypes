@@ -588,5 +588,4 @@ def modify_fti(fti):
     actions = []
     for action in fti['actions']:
         if action['id'] == 'folderlisting':
-                action['visible'] = False
-
+            action['visible'] = False
