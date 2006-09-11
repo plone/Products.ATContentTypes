@@ -97,6 +97,11 @@ class ATFile(ATCTFileContent):
     assocMimetypes = ('application/*', 'audio/*', 'video/*', )
     assocFileExt   = ()
     cmf_edit_kws   = ()
+    inlineMimetypes= ('application/msword',
+                      'application/x-msexcel', # ?
+                      'application/vnd.ms-excel',
+                      'application/vnd.ms-powerpoint',
+                      'application/pdf')
 
     __implements__ = ATCTFileContent.__implements__, IATFile
 
@@ -108,11 +113,12 @@ class ATFile(ATCTFileContent):
         """
         field = self.getPrimaryField()
 
-        if field.getContentType(self) in ('application/msword', 'application/x-msexcel', 'application/vnd.ms-powerpoint', 'application/pdf'):
+        if field.getContentType(self) in self.inlineMimetypes:
             # return the PDF and Office file formats inline
             return ATCTFileContent.index_html(self, REQUEST, RESPONSE)
         # otherwise return the content as an attachment 
-        # Please note that text/* cannot be returned inline, as this is a security risk since IE renders anything as HTML :(
+        # Please note that text/* cannot be returned inline as
+        # this is a security risk (IE renders anything as HTML).
         return field.download(self)
 
     security.declareProtected(ModifyPortalContent, 'setFile')
