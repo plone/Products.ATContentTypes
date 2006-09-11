@@ -1,3 +1,9 @@
+1.0.6-final 2006-09-11
+======================
+
+ * Backported limi's fix for content-disposition issues from 1.1.
+   [alecm] [stefan]
+
  * Disabled the possibility to change index and metadata names and descriptions
    on the smart folder configuration screens. Saving these with a browser locale
    set to non-english would destroy the internationalization of all these texts.
