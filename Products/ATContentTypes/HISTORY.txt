@@ -1,4 +1,4 @@
-1.1.2-final unreleased
+1.1.2-final 2006-09-11
 ======================
 
  * Changed integration tests to test Unicode titles instead of plain ascii.
