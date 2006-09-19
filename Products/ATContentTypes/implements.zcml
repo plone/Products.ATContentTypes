@@ -118,6 +118,12 @@
         />
 
     <implements
+        class=".criteria.relativepath.ATRelativePathCriterion"
+        interface=".interface.IATTopicSearchCriterion"
+        />
+
+
+    <implements
         class=".criteria.portaltype.ATPortalTypeCriterion"
         interface=".interface.IATTopicSearchCriterion"
         />
