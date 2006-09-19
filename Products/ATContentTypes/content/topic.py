@@ -1,6 +1,6 @@
-#  ATContentTypes http://sf.net/projects/collective/
+#  ATContentTypes http://plone.org/products/atcontenttypes/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2005 AT Content Types development team
+#  Copyright (c) 2003-2006 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -538,7 +538,7 @@ class ATTopic(ATCTFolder):
         """
         return False
 
-    security.declarePublic('getCriterionUniqueWidgetAttributes')
+    security.declarePublic('getCriterionUniqueWidgetAttr')
     def getCriteriaUniqueWidgetAttr(self, attr):
         """Get a unique list values for a specific attribute for all widgets
            on all criteria"""

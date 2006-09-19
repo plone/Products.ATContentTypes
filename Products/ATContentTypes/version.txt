@@ -1,1 +1,1 @@
-1.1.2-devel (SVN/UNRELEASED)
+1.1.3-devel (SVN/UNRELEASED)

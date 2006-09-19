@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-#  ATContentTypes http://sf.net/projects/collective/
+#  ATContentTypes http://plone.org/products/atcontenttypes/
 #  Archetypes reimplementation of the CMF core types
-#  Copyright (c) 2003-2005 AT Content Types development team
+#  Copyright (c) 2003-2006 AT Content Types development team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -257,6 +257,51 @@ class TestATFileFunctional(atctftestcase.ATCTIntegrationTestCase):
     
     portal_type = 'File'
     views = ('file_view', 'download', )
+
+    def test_inlineMimetypes_Office(self):
+        # Only PDF and Office docs are shown inline
+        self.obj.setFormat('application/msword')
+        response = self.publish(self.obj_path)
+        self.assertEqual(response.getStatus(), 200)
+        self.assertEqual(response.getHeader('Content-Disposition'), None)
+
+        self.obj.setFormat('application/x-msexcel')
+        response = self.publish(self.obj_path)
+        self.assertEqual(response.getStatus(), 200)
+        self.assertEqual(response.getHeader('Content-Disposition'), None)
+
+        self.obj.setFormat('application/vnd.ms-excel')
+        response = self.publish(self.obj_path)
+        self.assertEqual(response.getStatus(), 200)
+        self.assertEqual(response.getHeader('Content-Disposition'), None)
+
+        self.obj.setFormat('application/vnd.ms-powerpoint')
+        response = self.publish(self.obj_path)
+        self.assertEqual(response.getStatus(), 200)
+        self.assertEqual(response.getHeader('Content-Disposition'), None)
+
+    def test_inlineMimetypes_PDF(self):
+        # Only PDF and Office docs are shown inline
+        self.obj.setFormat('application/pdf')
+        response = self.publish(self.obj_path)
+        self.assertEqual(response.getStatus(), 200)
+        self.assertEqual(response.getHeader('Content-Disposition'), None)
+
+    def test_inlineMimetypes_Text(self):
+        # Only PDF and Office docs are shown inline
+        self.obj.setFilename('foo.txt')
+        self.obj.setFormat('text/plain')
+        response = self.publish(self.obj_path)
+        self.assertEqual(response.getStatus(), 200)
+        self.assertEqual(response.getHeader('Content-Disposition'), 'attachment; filename="foo.txt"')
+
+    def test_inlineMimetypes_Binary(self):
+        # Only PDF and Office docs are shown inline
+        self.obj.setFilename('foo.exe')
+        self.obj.setFormat('application/octet-stream')
+        response = self.publish(self.obj_path)
+        self.assertEqual(response.getStatus(), 200)
+        self.assertEqual(response.getHeader('Content-Disposition'), 'attachment; filename="foo.exe"')
 
 tests.append(TestATFileFunctional)
 

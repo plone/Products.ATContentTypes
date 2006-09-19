@@ -1,4 +1,4 @@
-1.1.2-final unreleased
+1.1.2-final 2006-09-11
 ======================
  * Added a relative path criterion for Smart Folders to allow search paths
    like "../somefolder"
