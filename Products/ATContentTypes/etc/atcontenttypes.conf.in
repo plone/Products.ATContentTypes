@@ -143,7 +143,6 @@
       description The location of an item in the site (path)
       enabled on
       criterion ATPathCriterion
-      criterion ATRelativePathCriterion
     </index>
     <index>
       name portal_type

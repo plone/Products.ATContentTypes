@@ -1,8 +1,5 @@
 1.1.2-final 2006-09-11
 ======================
- * Added a relative path criterion for Smart Folders to allow search paths
-   like "../somefolder"
-   [ender, elvix] 
 
  * Changed integration tests to test Unicode titles instead of plain ascii.
    [hannosch]

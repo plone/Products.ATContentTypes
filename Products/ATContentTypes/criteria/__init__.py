@@ -146,4 +146,3 @@ from Products.ATContentTypes.criteria.simplestring import ATSimpleStringCriterio
 from Products.ATContentTypes.criteria.sort import ATSortCriterion
 from Products.ATContentTypes.criteria.currentauthor import ATCurrentAuthorCriterion
 from Products.ATContentTypes.criteria.path import ATPathCriterion
-from Products.ATContentTypes.criteria.relativepath import ATRelativePathCriterion
