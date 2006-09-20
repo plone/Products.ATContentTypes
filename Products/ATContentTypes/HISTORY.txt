@@ -3,7 +3,7 @@
    like "../somefolder"
    [ender, elvix] 
 
-1.1.3-final 2006-9-20
+1.1.3-final 2006-09-20
 ======================
 
  * Disabled translation of AJAX-ified smart folder info to temporarily remedy
