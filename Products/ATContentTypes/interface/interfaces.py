@@ -18,7 +18,6 @@
 #
 """AT Content Types general interface
 
-
 """
 __author__  = 'Jean-Francois Roche <jfroche@jfroche.be>'
 __docformat__ = 'restructuredtext'
@@ -31,11 +30,8 @@ from Products.Archetypes.interfaces import IBaseFolder
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 from Products.Archetypes.interfaces import IATHistoryAware
 
-try:
-    from Products.CMFPlone.interfaces.constrains import \
-        ISelectableConstrainTypes as IPloneSelectableConstrainTypes
-except ImportError:
-    IPloneSelectableConstrainTypes = Interface
+from Products.CMFPlone.interfaces.constrains import \
+    ISelectableConstrainTypes
 
 
 class IATContentType(ISelectableBrowserDefault, IBaseContent):
@@ -112,10 +108,6 @@ class ITextContent(Interface):
 from Products.ATContentTypes.interface.link import IATLink
 class IATFavorite(IATLink):
     """AT Favorite marker interface
-    """
-
-class ISelectableConstrainTypes(IPloneSelectableConstrainTypes):
-    """Marker interface based on IPloneSelectableConstrainTypes or Interface
     """
 
 class IATCTTool(Interface):

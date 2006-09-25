@@ -48,7 +48,6 @@ from Products.Archetypes.atapi import InAndOutWidget
 from Products.Archetypes.atapi import DisplayList
 
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFolder
 from Products.ATContentTypes.content.base import updateActions

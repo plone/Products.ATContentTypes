@@ -102,6 +102,5 @@ def initialize(context):
             content_types      = (atype,),
             permission         = permissions[atype.portal_type],
             extra_constructors = (constructor,),
-            fti                = ftis,
             ).initialize(context)
 

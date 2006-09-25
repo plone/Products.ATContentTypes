@@ -27,7 +27,6 @@ __old_name__ = 'Products.ATContentTypes.types.ATFolder'
 from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTOrderedFolder
 from Products.ATContentTypes.content.base import ATCTBTreeFolder

@@ -49,15 +49,6 @@ GLOBALS = globals()
 ## swallow PIL exceptions when resizing the image?
 SWALLOW_IMAGE_RESIZE_EXCEPTIONS = zconf.swallowImageResizeExceptions.enable
 
-## using special plone 2 stuff?
-try:
-    from Products.CMFPlone.PloneFolder import ReplaceableWrapper
-except ImportError:
-    HAS_PLONE2 = False
-else:
-    HAS_PLONE2 = True
-    del ReplaceableWrapper
-
 ## mxTidy available?
 try:
     from mx import Tidy

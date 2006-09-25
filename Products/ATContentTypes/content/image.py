@@ -38,7 +38,6 @@ from Products.Archetypes.atapi import PrimaryFieldMarshaller
 from Products.Archetypes.atapi import AnnotationStorage
 
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
@@ -57,7 +56,6 @@ from Products.validation import V_REQUIRED
 validation.register(MaxSizeValidator('checkImageMaxSize',
                                      maxsize=zconf.ATImage.max_file_size))
 
-from Products.validation.validators.SupplValidators import MaxSizeValidator
 
 ATImageSchema = ATContentTypeSchema.copy() + Schema((
     ImageField('image',

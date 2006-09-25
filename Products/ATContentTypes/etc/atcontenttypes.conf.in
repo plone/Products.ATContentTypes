@@ -33,8 +33,6 @@
     allowed text/x-rst
     allowed text/html
     allowed text/plain
-    #allowed text/plain-pre
-    #allowed text/python-source
   </contenttypes>
 </archetype>
 
@@ -49,7 +47,6 @@
     allowed text/x-rst
     allowed text/html
     allowed text/plain
-    #allowed text/plain-pre
   </contenttypes>
 </archetype>
 
@@ -71,7 +68,6 @@
     allowed text/x-rst
     allowed text/html
     allowed text/plain
-    #allowed text/plain-pre
   </contenttypes>
 </archetype>
 

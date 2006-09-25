@@ -20,7 +20,6 @@
 """
 __author__  = 'Christian Heimes <tiran@cheimes.de>'
 
-import os, sys, traceback
 import logging
 from cStringIO import StringIO
 
@@ -34,12 +33,10 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.CMFCore.utils import UniqueObject
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import ManagePortal
-from Products.CMFCore.permissions import View
 
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATCTTool
 from Products.ATContentTypes.config import TOOLNAME
-from Products.ATContentTypes.config import ATCT_DIR
 from Products.ATContentTypes.config import WWW_DIR
 from Products.ATContentTypes.tool.topic import ATTopicsTool
 

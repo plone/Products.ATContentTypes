@@ -5,7 +5,6 @@ from AccessControl import ClassSecurityInfo
 import Persistence
 from OFS.SimpleItem import SimpleItem
 from ExtensionClass import Base
-from Acquisition import aq_base
 
 from Products.CMFCore.permissions import ManagePortal
 from Products.ATContentTypes.interfaces import IATCTTopicsTool
