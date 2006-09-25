@@ -38,7 +38,7 @@ class ATTopicsTool(Base):
     id = TOOLNAME
     meta_type= 'ATTopics Tool'
     title = 'ATTopics Tool'
-    plone_tool = 1
+    plone_tool = True
 
     def __init__(self):
         self.topic_indexes = {}
