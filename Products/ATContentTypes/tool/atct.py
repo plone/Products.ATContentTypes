@@ -23,11 +23,13 @@ __author__  = 'Christian Heimes <tiran@cheimes.de>'
 import logging
 from cStringIO import StringIO
 
+import AccessControl.Owned
+from AccessControl import ClassSecurityInfo
+from Globals import InitializeClass
 from OFS.SimpleItem import SimpleItem
 from OFS.PropertyManager import PropertyManager
-from Globals import InitializeClass
-from AccessControl import ClassSecurityInfo
-import AccessControl.Owned
+from ZODB.POSException import ConflictError
+
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from Products.CMFCore.utils import UniqueObject
@@ -42,7 +44,7 @@ from Products.ATContentTypes.tool.topic import ATTopicsTool
 
 LOG = logging.getLogger('ATCT')
 
-def log(message,summary='',severity=0):
+def log(message,summary='',severity=logging.DEBUG):
     LOG.log(severity, 'ATCT: %s \n%s', summary, message)
 
 class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
@@ -84,11 +86,9 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
     manage_overview = PageTemplateFile('overview', WWW_DIR)
 
     def om_icons(self):
-        icons = ({
-                    'path':'misc_/ATContentTypes/tool.gif',
-                    'alt':self.meta_type,
-                    'title':self.meta_type,
-                 },)
+        icons = ({'path':'misc_/ATContentTypes/tool.gif',
+                  'alt':self.meta_type,
+                  'title':self.meta_type},)
         return icons
 
     # image scales
@@ -108,29 +108,30 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
             obj = brain.getObject()
             if obj is None:
                 continue
-
             if not IImageContent.isImplementedBy(obj):
                 continue
-
-            try: state = obj._p_changed
-            except: state = 0
+            try:
+                state = obj._p_changed
+            except (ConflictError, KeyboardInterrupt):
+                raise
+            except:
+                state = 0
 
             field = obj.getField('image')
             if field is not None:
-                print >>out, 'Updating %s' % obj.absolute_url(1)
+                print >> out, 'Updating %s' % obj.absolute_url(1)
                 field.removeScales(obj)
                 field.createScales(obj)
 
-            if state is None: obj._p_deactivate()
+            if state is None:
+                obj._p_deactivate()
 
         print >> out, "Updated AT Image scales"
         return out.getvalue()
 
     security.declareProtected(ManagePortal, 'listContentTypes')
     def listContentTypes(self):
-        """List all available content types
-
-        Used for properties
+        """List all content types. Used for image/folder_types property.
         """
         ttool = getToolByName(self, 'portal_types')
         return ttool.listContentTypes()
