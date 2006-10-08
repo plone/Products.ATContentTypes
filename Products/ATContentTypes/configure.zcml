@@ -3,11 +3,11 @@
     xmlns:five="http://namespaces.zope.org/five"
     >
 
+  <include file="adapters.zcml"/>
+  <include file="browser.zcml"/>
   <include file="implements.zcml"/>
 
-  <include file="adapters.zcml"/>
-
-  <include file="browser.zcml"/>
+  <include package=".exportimport" />
 
   <five:deprecatedManageAddDelete
       class=".content.document.ATDocument" />

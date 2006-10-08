@@ -28,8 +28,6 @@ from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 _marker = object()
-from Products.Archetypes.OrderedBaseFolder import IOrderedContainer
-from Products.Archetypes.OrderedBaseFolder import IZopeOrderedContainer
 from Products.Archetypes.OrderedBaseFolder import OrderedBaseFolder
 from Products.Archetypes.OrderedBaseFolder import OrderedContainer
 from Products.ATContentTypes.interfaces import IAutoSortSupport

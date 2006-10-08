@@ -42,8 +42,6 @@ else:
     from Products.Archetypes.atapi import BaseBTreeFolder
     from Products.Archetypes.atapi import registerType
 
-from Products.ATContentTypes.config import HAS_PLONE2
-
 from AccessControl import ClassSecurityInfo, Permissions
 from ComputedAttribute import ComputedAttribute
 from Globals import InitializeClass
@@ -61,10 +59,10 @@ from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import ManageProperties
 from Products.CMFCore.utils import getToolByName
-
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
-from Products.ATContentTypes import permission as ATCTPermissions
+from Products.CMFPlone.PloneFolder import ReplaceableWrapper
 
+from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.config import CHAR_MAPPING
 from Products.ATContentTypes.config import GOOD_CHARS
 from Products.ATContentTypes.config import MIME_ALIAS
@@ -74,22 +72,6 @@ from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
 DEBUG = True
 LOG = logging.getLogger('ATCT')
-
-if HAS_PLONE2:
-    # the browser default checks for isinstance()
-    from Products.CMFPlone.PloneFolder import ReplaceableWrapper
-else:
-    class ReplaceableWrapper:
-        """A wrapper around an object to make it replaceable
-        """
-        def __init__(self, ob):
-            self.__ob = ob
-
-        def __getattr__(self, name):
-            if name == '__replaceable__':
-                return REPLACEABLE
-            return getattr(self.__ob, name)
-
 
 def registerATCT(class_, project):
     """Registers an ATContentTypes based type
@@ -595,10 +577,7 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
     def __browser_default__(self, request):
         """ Set default so we can return whatever we want instead
         of index_html """
-        if HAS_PLONE2:
-            return getToolByName(self, 'plone_utils').browserDefault(self)
-        else:
-            return self, [self.getLayout(),]
+        return getToolByName(self, 'plone_utils').browserDefault(self)
 
     security.declareProtected(View, 'get_size')
     def get_size(self):

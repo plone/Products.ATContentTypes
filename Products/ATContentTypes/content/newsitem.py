@@ -37,7 +37,6 @@ from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import AnnotationStorage
 
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import translateMimetypeAlias
@@ -57,7 +56,6 @@ from Products.validation import V_REQUIRED
 validation.register(MaxSizeValidator('checkNewsImageMaxSize',
                                      maxsize=zconf.ATNewsItem.max_file_size))
 
-from Products.validation.validators.SupplValidators import MaxSizeValidator
 
 ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
     TextField('text',

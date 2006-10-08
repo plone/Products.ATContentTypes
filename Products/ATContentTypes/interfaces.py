@@ -33,18 +33,15 @@ from Interface import Interface
 from Interface import Attribute
 
 from Products.Archetypes.interfaces.base import IBaseContent
-from Products.Archetypes.interfaces.base import IBaseFolder
 from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
 
 from Products.Archetypes.OrderedBaseFolder import IOrderedContainer
 from Products.Archetypes.OrderedBaseFolder import IZopeOrderedContainer
 from Products.Archetypes.interfaces.athistoryaware import IATHistoryAware
 
-try:
-    from Products.CMFPlone.interfaces.ConstrainTypes import \
-        ISelectableConstrainTypes as IPloneSelectableConstrainTypes
-except ImportError:
-    IPloneSelectableConstrainTypes = Interface
+from Products.CMFPlone.interfaces.ConstrainTypes import \
+    ISelectableConstrainTypes
+
 _marker = object()
 
 class IAutoSortSupport(Interface):
@@ -395,8 +392,4 @@ class IATCTTool(Interface):
 
 class IATCTTopicsTool(Interface):
     """Mixin class for providing features to customize the display of topics
-    """
-
-class ISelectableConstrainTypes(IPloneSelectableConstrainTypes):
-    """Marker interface based on IPloneSelectableConstrainTypes or Interface
     """

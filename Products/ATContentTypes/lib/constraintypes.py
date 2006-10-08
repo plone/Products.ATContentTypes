@@ -23,8 +23,6 @@ which types can be added in a folder-instance
 __author__  = 'Jens Klein <jens.klein@jensquadrat.de>'
 __docformat__ = 'plaintext'
 
-from zope.interface import implements
-
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from Globals import InitializeClass
@@ -35,11 +33,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import AddPortalContent
-# BBB
-try:
-    from Products.CMFCore.PortalFolder import PortalFolderBase as PortalFolder
-except:
-    from Products.CMFCore.PortalFolder import PortalFolder
+from Products.CMFCore.PortalFolder import PortalFolderBase as PortalFolder
 
 from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import LinesField

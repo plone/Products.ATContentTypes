@@ -40,7 +40,6 @@ from Products.ATContentTypes.content.document import ATDocument
 from Products.ATContentTypes.lib.validators import TidyHtmlWithCleanupValidator
 from Products.ATContentTypes.tests.utils import TidyHTMLValidator
 from Products.ATContentTypes.tests.utils import input_file_path
-from Products.ATContentTypes.migration.atctmigrator import DocumentMigrator
 from Products.CMFDefault.Document import Document
 from Products.ATContentTypes.interfaces import IHistoryAware
 from Products.ATContentTypes.interfaces import ITextContent
@@ -134,37 +133,6 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
 
     def test_cmf_edit_failure(self):
         self._ATCT.edit(thisisnotcmfandshouldbeignored=1)
-
-    def test_migration(self):
-        old = self._cmf
-        id  = old.getId()
-
-        # edit
-        editCMF(old)
-        title       = old.Title()
-        description = old.Description()
-        mod         = old.ModificationDate()
-        created     = old.CreationDate()
-        body        = old.CookedBody(stx_level=2)
-
-        time.sleep(1.0)
-
-        # migrated (needs subtransaction to work)
-        transaction.savepoint(optimistic=True)
-        m = DocumentMigrator(old)
-        m(unittest=1)
-        transaction.savepoint(optimistic=True)
-
-        self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
-        migrated = getattr(self.folder, id)
-
-        self.compareAfterMigration(migrated, mod=mod, created=created)
-        self.compareDC(migrated, title=title, description=description)
-
-        self.assertEquals(migrated.Schema()['text'].getContentType(migrated),
-                            'text/structured')
-        self.failUnless(migrated.CookedBody() == body, 'Body mismatch: %s / %s' \
-                        % (migrated.CookedBody(), body))
 
     def test_rename_keeps_contenttype(self):
         doc = self._ATCT

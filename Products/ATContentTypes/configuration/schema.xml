@@ -34,7 +34,4 @@
   <section type="archetype" name="ATImage"
   attribute="ATImage" required="yes" />
 
-  <section type="atct_tool" name="*"
-           attribute="atct_tool" required="no" />
-
 </schema>

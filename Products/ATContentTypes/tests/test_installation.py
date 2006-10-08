@@ -33,7 +33,6 @@ from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.tool.atct import ATCTTool
-from Products.ATContentTypes.Extensions.Install import removeExteneralMethods
 from Products.CMFCore.utils import getToolByName
 from StringIO import StringIO
 
@@ -86,10 +85,6 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
     def test_quickinstall_locked(self):
         self.failUnless(self.qi_atct['isLocked'])
-
-    def test_installsetsCMFcataloged(self):
-        t = self.tool
-        self.failUnless(t.getCMFTypesAreRecataloged())
 
     def test_release_settings_SAVE_TO_FAIL_FOR_DEVELOPMENT(self):
         self.failUnlessEqual(SWALLOW_IMAGE_RESIZE_EXCEPTIONS, True)

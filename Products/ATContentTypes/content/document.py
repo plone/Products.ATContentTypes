@@ -34,7 +34,6 @@ from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
 
-from Products.CMFDefault.utils import html_headcheck
 from Products.CMFDefault.utils import SimpleHTMLParser
 
 from Products.Archetypes.atapi import Schema
@@ -45,7 +44,6 @@ from Products.Archetypes.atapi import AnnotationStorage
 
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import updateActions

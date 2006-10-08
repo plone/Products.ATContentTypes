@@ -27,7 +27,6 @@ __old_name__ = 'Products.ATContentTypes.types.ATEvent'
 from types import StringType
 
 from Products.CMFCore.permissions import ModifyPortalContent, View
-from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from DateTime import DateTime
 from ComputedAttribute import ComputedAttribute
@@ -47,7 +46,6 @@ from Products.Archetypes.atapi import AnnotationStorage
 
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import updateActions

@@ -65,8 +65,6 @@ import Products.ATContentTypes.content
 import Products.ATContentTypes.criteria
 
 # misc imports
-import Products.ATContentTypes.Extensions.Install
-from Products.ATContentTypes import migration
 from Products.ATContentTypes.tool.atct import ATCTTool
 
 # wire the add permission after all types are registered
@@ -79,10 +77,6 @@ import Products.ATContentTypes.modulealiases
 registerDirectory(SKINS_DIR,GLOBALS)
 
 def initialize(context):
-    # Setup migrations
-    migration.executeMigrations()
-    migration.registerMigrations()
-
     # process our custom types
 
     ToolInit(
@@ -108,6 +102,5 @@ def initialize(context):
             content_types      = (atype,),
             permission         = permissions[atype.portal_type],
             extra_constructors = (constructor,),
-            fti                = ftis,
             ).initialize(context)
 

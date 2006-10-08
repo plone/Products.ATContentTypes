@@ -63,9 +63,4 @@ from Products.ATContentTypes.interface.topic import IATCTTopicsTool
 from Products.ATContentTypes.interface.autosort import IAutoSortSupport
 from Products.ATContentTypes.interface.autosort import IAutoOrderSupport
 
-# Avoid Plone dependency (for some reason...)
-try:
-    from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes
-except ImportError:
-    from zope.interface import Interface
-    ISelectableConstrainTypes = Interface
+from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes

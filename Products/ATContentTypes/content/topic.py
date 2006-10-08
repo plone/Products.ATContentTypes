@@ -48,7 +48,6 @@ from Products.Archetypes.atapi import InAndOutWidget
 from Products.Archetypes.atapi import DisplayList
 
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFolder
 from Products.ATContentTypes.content.base import updateActions
@@ -171,12 +170,6 @@ class ATTopic(ATCTFolder):
     security       = ClassSecurityInfo()
     actions = updateActions(ATCTFolder,
         (
-        #{
-        #'id'          : 'view',
-        #'name'        : 'View',
-        #'action'      : 'string:${folder_url}/',
-        #'permissions' : (View,)
-        #},
         {
         'id'          : 'edit',
         'name'        : 'Edit',
@@ -594,5 +587,4 @@ def modify_fti(fti):
     actions = []
     for action in fti['actions']:
         if action['id'] == 'folderlisting':
-                action['visible'] = False
-
+            action['visible'] = False

@@ -1,31 +1,26 @@
+from Products.Archetypes.atapi import DisplayList
 from Products.ATContentTypes.interface.image import IPhotoAlbum
 from Products.ATContentTypes.interface.dataExtractor import IDataExtractor
 from Products.ATContentTypes.interface.folder import IFilterFolder
 
-from Products.ATContentTypes.content.folder import ATFolder
-
 from zope.interface import implements
-from Products.Archetypes.atapi import Schema
-from Products.Archetypes.atapi import ReferenceField
-from Products.Archetypes.atapi import ReferenceWidget
 
 
 class PhotoDataExtractor(object):
     """
     """
-
     implements(IDataExtractor)
     def __init__(self, context):
         self.context = context
 
     def getData(self, format=None,width=None,height=None,**kwargs):
         if format:
-### changeFormat
+            ### changeFormat
             pass
         if width or height:
-### changeSize
+            ### changeSize
             pass
-        return data
+        return None
 
 class PhotoAlbumFilter(object):
     """
@@ -42,9 +37,7 @@ class PhotoAlbum(object):
     """
     interface that adapts a folder into a photo album
     """
-
     implements(IPhotoAlbum)
-
 
     def __init__(self, context):
         self.context = context
@@ -54,7 +47,6 @@ class PhotoAlbum(object):
         set the photo which represents the album
         """
         pass
-
 
     def getSymbolicPhoto():
         """
@@ -69,5 +61,4 @@ class PhotoAlbum(object):
         brains = self.getFolderContents(contentFilter={'meta_type':['ATPhoto']})
         photos_list = [(b.getObject().UID(), str(b.Title or b.getId)[:70]) for b in brains]
         return DisplayList( [('','<no reference>')] + photos_list )
-
 

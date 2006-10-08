@@ -37,7 +37,6 @@ from Products.Archetypes.atapi import *
 from Products.ATContentTypes.tests.utils import dcEdit
 
 from Products.ATContentTypes.content.event import ATEvent
-from Products.ATContentTypes.migration.atctmigrator import EventMigrator
 from Products.CMFCalendar.Event import Event
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.tests.utils import EmailValidator
@@ -153,64 +152,6 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         self.assertEquals(new.start_date, DT2dt(S_DATE))
         self.assertEquals(new.end_date, DT2dt(E_DATE))
         self.assertEquals(new.duration, new.end_date - new.start_date)
-
-    def test_migration(self):
-        old = self._cmf
-        id  = old.getId()
-
-        # edit
-        editCMF(old)
-        title       = old.Title()
-        description = old.Description()
-        mod         = old.ModificationDate()
-        created     = old.CreationDate()
-
-        start = old.start()
-        end   = old.end()
-        location = old.location
-        c_name = old.contact_name
-        c_email = old.contact_email
-        c_phone = old.contact_phone
-        ev_url = old.event_url
-        ev_type = old.Subject()
-
-        # migrated (needs subtransaction to work)
-        transaction.savepoint(optimistic=True)
-        m = EventMigrator(old)
-        m(unittest=1)
-
-        self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
-        migrated = getattr(self.folder, id)
-
-        self.compareAfterMigration(migrated, mod=mod, created=created)
-        self.compareDC(migrated, title=title, description=description)
-
-        self.failUnless(migrated.location == location,
-                        'Location mismatch: %s / %s' %
-                        (migrated.location, location))
-        self.failUnless(migrated.Subject() == ev_type,
-                        'EventType mismatch: %s / %s' %
-                        (migrated.Subject(), ev_type))
-        self.failUnless(migrated.event_url() == ev_url,
-                        'EventUrl mismatch: %s / %s' %
-                        (migrated.event_url(), ev_url))
-        self.failUnless(migrated.start() == start,
-                        'Start mismatch: %s / %s' %
-                        (migrated.start(), start))
-        self.failUnless(migrated.end() == end,
-                        'End mismatch: %s / %s' % (migrated.end(), end))
-        self.failUnless(migrated.contact_name() == c_name,
-                        'contact_name mismatch: %s / %s' %
-                        (migrated.contact_name(), c_name))
-        self.failUnless(migrated.contact_phone() == c_phone,
-                        'contact_phone mismatch: %s / %s' %
-                        (migrated.contact_phone(), c_phone))
-        self.failUnless(migrated.contact_email() == c_email,
-                        'contact_email mismatch: %s / %s' %
-                        (migrated.contact_email(), c_email))
-        self.failUnless(migrated.getAttendees() == (),
-                        'attendees mismatch: %s / %s' %
-                        (migrated.getAttendees(), ()))
 
     def test_cmp(self):
         e1 = self._ATCT

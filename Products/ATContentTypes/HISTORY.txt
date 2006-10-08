@@ -24,6 +24,15 @@
    and labels instead of the old Archetypes approach using special attributes.
    [hannosch]
 
+ * Removed ZConfig based configuration of the topic tool as it is now handled
+   by the GenericSetup profile. Removed magical recreation of indexes and
+   metadata on get* calls.
+   [hannosch]
+
+ * Added an exportimport handler for the ATCT tool which is used by the Plone
+   base profile.
+   [hannosch]
+
  * Adjusted some deprecated getActionById to getActionInfo calls.
    [hannosch]
 

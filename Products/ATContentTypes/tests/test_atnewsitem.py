@@ -38,7 +38,6 @@ from Products.ATContentTypes.tests.utils import dcEdit
 
 from Products.ATContentTypes.content.newsitem import ATNewsItem
 from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
-from Products.ATContentTypes.migration.atctmigrator import NewsItemMigrator
 from Products.ATContentTypes.interfaces import ITextContent
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATNewsItem
@@ -109,32 +108,6 @@ class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
                         % (old.Title(), new.Title()))
         self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
                         % (old.Description(), new.Description()))
-
-    def test_migration(self):
-        old = self._cmf
-        id  = old.getId()
-
-        # edit
-        editCMF(old)
-        title       = old.Title()
-        description = old.Description()
-        mod         = old.ModificationDate()
-        created     = old.CreationDate()
-
-        time.sleep(1.5)
-
-        # migrated (needs subtransaction to work)
-        transaction.savepoint(optimistic=True)
-        m = NewsItemMigrator(old)
-        m(unittest=1)
-
-        self.failUnless(id in self.folder.objectIds(), self.folder.objectIds())
-        migrated = getattr(self.folder, id)
-
-        self.compareAfterMigration(migrated, mod=mod, created=created)
-        self.compareDC(migrated, title=title, description=description)
-
-        # XXX more
 
     def test_get_size(self):
         atct = self._ATCT

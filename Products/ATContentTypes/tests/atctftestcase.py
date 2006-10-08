@@ -113,8 +113,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
         self.assertStatusEqual(response.getStatus(), 302) # Redirect to edit
 
-        # omit ?portal_status_message=...
-        body = response.getBody().split('?')[0]
+        body = response.getBody()
 
         self.failUnless(body.startswith(self.folder_url), body)
         # The url may end with /edit or /atct_edit depending on method aliases

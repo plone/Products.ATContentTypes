@@ -41,7 +41,6 @@ from Products.PortalTransforms.utils import TransformException
 from Products.MimetypesRegistry.common import MimeTypeException
 
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.config import HAS_PLONE2
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import ICONMAP
 from Products.ATContentTypes.content.base import registerATCT

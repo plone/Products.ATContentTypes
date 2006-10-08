@@ -1,13 +1,3 @@
-"""Skeleton ATContentTypes tests
-
-Use this file as a skeleton for your own tests
-
-
-"""
-
-__author__ = 'Alec Mitchell'
-__docformat__ = 'restructuredtext'
-
 import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
@@ -20,14 +10,10 @@ from Products.CMFPlone.CatalogTool import CatalogTool
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.interfaces import IATCTTopicsTool
 from Interface.Verify import verifyObject
-from Products.ATContentTypes.configuration import zconf
 
 # z3 imports
 from Products.ATContentTypes.interface import IATCTTopicsTool as Z3IATCTTopicsTool
 from zope.interface.verify import verifyObject as Z3verifyObject
-
-tool_config = zconf.atct_tool.topic_tool
-
 
 tests = []
 index_def = {'index'        : 'end',
@@ -39,9 +25,6 @@ meta_def =  {'metadata'        : 'ModificationDate',
              'friendlyName' : 'Modification Date For Test',
              'description'  : ''
             }
-
-conf_index_def = [i for i in tool_config.indexes if i.name == index_def['index']][0]
-conf_meta_def = [m for m in tool_config.metadata if m.name == meta_def['metadata']][0]
 
 class TestTool(atcttestcase.ATCTSiteTestCase):
 
@@ -64,7 +47,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(index.index, index_def['index'])
         self.failUnlessEqual(index.friendlyName, index_def['friendlyName'])
         self.failUnlessEqual(index.description, index_def['description'])
-        #Only need to test truth not actual value
+        # Only need to test truth not actual value
         self.failUnless(index.enabled)
         self.failUnlessEqual(index.criteria, tuple(index_def['criteria']))
 
@@ -81,7 +64,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(index.index, index_def['index'])
         self.failUnlessEqual(index.friendlyName, index_def['friendlyName'])
         self.failUnlessEqual(index.description, index_def['description'])
-        #Only need to test truth not actual value
+        # Only need to test truth not actual value
         self.failIf(index.enabled)
         self.failUnlessEqual(index.criteria, tuple(index_def['criteria']))
 
@@ -90,39 +73,29 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.failIf(index_def['index'] in t.getIndexes(1))
         self.failIf(index_def['index'] in t.getIndexDisplay(True).keys())
         self.failUnless(index_def['friendlyName'] not in t.getIndexDisplay(True).values())
-        #Make sure it's still in the un-limited list
+        # Make sure it's still in the un-limited list
         self.failUnless(index_def['index'] in t.getIndexDisplay(False).keys())
         self.failUnless(index_def['friendlyName'] in t.getIndexDisplay(False).values())
         self.failUnless(index_def['index'] in t.getIndexes())
 
     def test_add_bogus_index(self):
-        """An metdatum that's not in the catalog should be deleted automatically
-           on any call to one of the index list methods."""
+        # You can add metadata that's not in the catalog
         t = self.tool
         t.addIndex('bogosity', enabled = True)
-        error = False
-        #The methods getEnabledFields, getEnabledIndexes, getIndexes,
-        #getIndexDisplay, and getIndex all automatically restore fields
-        #from the catalog
-        
-        try:
-            t.getIndex('bogosity')
-        except AttributeError:
-            error = True
-        self.failUnless(error)
+        self.failUnless(t.getIndex('bogosity'))
         
         #Add
         t.addIndex('bogosity', enabled = True)
-        self.failIf('bogosity' in [a[0] for a in t.getEnabledFields()])
+        self.failUnless('bogosity' in [a[0] for a in t.getEnabledFields()])
         #Add
         t.addIndex('bogosity', enabled = True)
-        self.failIf('bogosity' in t.getIndexDisplay(True).keys())
+        self.failUnless('bogosity' in t.getIndexDisplay(True).keys())
         #Add
         t.addIndex('bogosity', enabled = True)
-        self.failIf('bogosity' in t.getIndexes(1))
+        self.failUnless('bogosity' in t.getIndexes(1))
         #Add
         t.addIndex('bogosity', enabled = True)
-        self.failIf('bogosity' in [i.index for i in t.getEnabledIndexes()])
+        self.failUnless('bogosity' in [i.index for i in t.getEnabledIndexes()])
         
     def test_remove_index(self):
         t = self.tool
@@ -134,20 +107,18 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         except KeyError:
             error = True
         self.failUnless(error)
-        #Should be restored automatically by getIndex and friends
-        error = None
+
+        error = True
         try:
             index = t.getIndex(index_def['index'])
         except AttributeError:
-            error = True
+            error = False
         self.failIf(error)
-        #Make sure the FriendlyName is reset to default
-        self.failUnlessEqual(index.friendlyName, getattr(conf_index_def,'friendlyName'))
         
     def test_update_index(self):
-        """An index with no criteria set should set all available criteria,
-           also changes made using updateIndex should not reset already set
-           values"""
+        # An index with no criteria set should set all available criteria,
+        # also changes made using updateIndex should not reset already set
+        # values
         t = self.tool
         t.addIndex(enabled = True, **index_def)
         t.updateIndex(index_def['index'], criteria = None,
@@ -160,7 +131,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.failUnless(index.enabled)
 
     def test_all_indexes(self):
-        """Ensure that the tool includes all indexes in the catalog"""
+        # Ensure that the tool includes all indexes in the catalog
         t = self.tool
         cat = getToolByName(self.tool, CatalogTool.id)
         indexes = [field for field in cat.indexes()]
@@ -170,17 +141,15 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.failIf(unique_indexes)
 
     def test_change_catalog_index(self):
-        """Make sure tool updates when indexes are added to or deleted from
-           the catalog"""
         t = self.tool
         cat = getToolByName(self.tool, CatalogTool.id)
         #add
-        error = False
+        error = True
         cat.manage_addIndex('nonsense', 'FieldIndex')
         try:
             t.getIndex('nonsense')
         except AttributeError:
-            error = True
+            error = False
         self.failIf(error)
         #remove
         error = False
@@ -191,7 +160,6 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
             error = True
         self.failUnless(error)
 
-
     #Metadata tests
     def test_add_metadata(self):
         t = self.tool
@@ -200,7 +168,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(meta.index, meta_def['metadata'])
         self.failUnlessEqual(meta.friendlyName, meta_def['friendlyName'])
         self.failUnlessEqual(meta.description, meta_def['description'])
-        #Only need to test truth not actual value
+        # Only need to test truth not actual value
         self.failUnless(meta.enabled)
 
         self.failUnless(meta in t.getEnabledMetadata())
@@ -215,42 +183,33 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(meta.index, meta_def['metadata'])
         self.failUnlessEqual(meta.friendlyName, meta_def['friendlyName'])
         self.failUnlessEqual(meta.description, meta_def['description'])
-        #Only need to test truth not actual value
+        # Only need to test truth not actual value
         self.failIf(meta.enabled)
 
         self.failUnless(meta not in t.getEnabledMetadata())
         self.failIf(meta_def['metadata'] in t.getAllMetadata(1))
         self.failIf(meta_def['metadata'] in t.getMetadataDisplay(True).keys())
         self.failIf(meta_def['friendlyName'] in t.getMetadataDisplay(True).values())
-        #Make sure it's still in the un-limited list
+        # Make sure it's still in the un-limited list
         self.failUnless(meta_def['metadata'] in t.getMetadataDisplay(False).keys())
         self.failUnless(meta_def['friendlyName'] in t.getMetadataDisplay(False).values())
         self.failUnless(meta_def['metadata'] in t.getAllMetadata())
 
     def test_add_bogus_metadata(self):
-        """An metdatum that's not in the catalog should be deleted automatically
-           on any call to one of the index list methods"""
+        # You can add metdata that's not in the catalog
         t = self.tool
         t.addMetadata('bogosity', enabled = True)
-        
-        error = False
-        #The methods getEnabledMetadata, getAllMetadata, getMetadataDisplay,
-        #and getMetadata all automatically restore fields from the catalog
-        try:
-            t.getMetadata('bogosity')
-        except AttributeError:
-            error = True
-        self.failUnless(error)
+        self.failUnless(t.getMetadata('bogosity'))
 
         #Add
         t.addMetadata('bogosity', enabled = True)
-        self.failIf('bogosity' in t.getMetadataDisplay(True).keys())
+        self.failUnless('bogosity' in t.getMetadataDisplay(True).keys())
         #Add
         t.addMetadata('bogosity', enabled = True)
-        self.failIf('bogosity' in t.getAllMetadata(1))
+        self.failUnless('bogosity' in t.getAllMetadata(1))
         #Add
         t.addMetadata('bogosity', enabled = True)
-        self.failIf('bogosity' in [i.index for i in t.getEnabledMetadata()])
+        self.failUnless('bogosity' in [i.index for i in t.getEnabledMetadata()])
 
     def test_remove_metadata(self):
         t = self.tool
@@ -262,19 +221,17 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         except KeyError:
             error = True
         self.failUnless(error)
-        #Should be restored automatically by getMetadata and friends
-        error = None
+
+        error = True
         try:
             meta = t.getMetadata(meta_def['metadata'])
         except AttributeError:
-            error = True
+            error = False
         self.failIf(error)
-        #Make sure the FriendlyName is reset to default
-        self.failUnlessEqual(meta.friendlyName, getattr(conf_meta_def,'friendlyName'))
         
     def test_update_metadata(self):
-        """Changes made using updateMetadata should not reset already set
-           values"""
+        # Changes made using updateMetadata should not reset already set
+        # values
         t = self.tool
         t.addMetadata(enabled = True, **meta_def)
         t.updateMetadata(meta_def['metadata'], friendlyName = 'New Name')
@@ -283,7 +240,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.failUnless(meta.enabled)
 
     def test_all_metadata(self):
-        """Ensure that the tool includes all metadata in the catalog"""
+        # Ensure that the tool includes all metadata in the catalog
         t = self.tool
         cat = getToolByName(self.tool, CatalogTool.id)
         metadata = [field for field in cat.schema()]
@@ -293,17 +250,15 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.failIf(unique_metadata)
 
     def test_change_catalog_schema(self):
-        """Make sure tool updates when columns are added to or deleted from
-           the catalog"""
         t = self.tool
         cat = getToolByName(self.tool, CatalogTool.id)
         #add
-        error = False
+        error = True
         cat.manage_addColumn('nonsense')
         try:
             t.getMetadata('nonsense')
         except AttributeError:
-            error = True
+            error = False
         self.failIf(error)
         #remove
         error = False

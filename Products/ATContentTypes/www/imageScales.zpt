@@ -23,7 +23,7 @@
   
   <p><em>This may take a very long time!</em></p>
  
-  <form method="put" action="" tal:attributes="action template/getId">
+  <form method="put" action="" tal:attributes="action string:manage_imageScales">
     <input type="hidden" name="submitted" value="1" />
     <input type="submit" name="submit" value="recreate" />
   </form>
