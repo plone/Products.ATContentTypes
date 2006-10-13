@@ -56,7 +56,7 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
 
     shortDesc      = 'Select content types'
 
-    security.declareProtected(View, 'getCriteriaItems')
+    security.declareProtected(View, 'getCurrentValues')
     def getCurrentValues(self):
          """Return enabled portal types"""
          plone_tool = getToolByName(self, 'plone_utils')
