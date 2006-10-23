@@ -41,7 +41,8 @@
             </div>
         </tal:images>
 
-        <tal:albums tal:condition="albums" tal:repeat="album albums">
+        <div class="photoAlbum" tal:condition="albums">
+        <tal:albums tal:repeat="album albums">
             <div class="photoAlbumEntry photoAlbumFolder"
                  tal:define="image_brains_in_album python:album.atctListAlbum(subimages=1)['subimages'];
                              number_of_images python:len(image_brains_in_album);
@@ -61,6 +62,7 @@
                         </a>
             </div>
         </tal:albums>
+        </div>
 
         <div class="visualClear"><!-- --></div>
 
