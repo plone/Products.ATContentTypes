@@ -1,5 +1,5 @@
-1.2.0-devel unreleased
-======================
+1.2.0-alpha1 2006-10-02
+=======================
 
  * Fixed some minor i18n issues.
    [hannosch]
@@ -45,7 +45,7 @@
  * Adjusted import locations of Archetypes.public to Archetypes.atapi for AT1.5.
    [hannosch]
 
-1.1.2-final unreleased
+1.1.2-final 2006-09-11
 ======================
 
  * Changed integration tests to test Unicode titles instead of plain ascii.
