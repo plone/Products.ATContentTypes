@@ -103,4 +103,3 @@ def initialize(context):
             extra_constructors = (constructor,),
             fti                = ftis,
             ).initialize(context)
-
