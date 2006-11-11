@@ -36,7 +36,9 @@ from Products.validation.interfaces.IValidator import IValidator
 
 import re
 import encodings
-import zLOG
+import logging
+logger = logging.getLogger('ATCT')
+
 from ZPublisher.HTTPRequest import FileUpload
 
 from TAL.HTMLTALParser import HTMLTALParser
@@ -328,7 +330,7 @@ def correctEncoding(value):
             try:
                 return unicode(value, html_encoding).encode(char_encoding)
             except:
-                zLOG.LOG('validators', zLOG.INFO, "Error correcting encoding from %s to %s" % (html_encoding, char_encoding))
+                logger.info("Error correcting encoding from %s to %s" % (html_encoding, char_encoding))
     return value
 
 def parseErrorData(data, removeWarnings=0):

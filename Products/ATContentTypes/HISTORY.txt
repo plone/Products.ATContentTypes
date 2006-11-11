@@ -1,4 +1,7 @@
 
+ * Got rid of last remnants of zLOG. Grep is our friend!
+   [stefan]
+
  * Added a relative path criterion for Smart Folders to allow search paths
    like "../somefolder"
    [ender, elvix] 
