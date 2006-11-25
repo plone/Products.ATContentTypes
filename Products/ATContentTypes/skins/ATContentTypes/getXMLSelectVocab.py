@@ -10,17 +10,17 @@
 params = {param:value, 'display_list': True}
 
 vocab = getattr(context, method)(**params)
+site_encoding = context.plone_utils.getSiteEncoding()
+trans = context.translate
 
 RESPONSE = context.REQUEST.RESPONSE
-RESPONSE.setHeader('Content-Type', 'text/xml')
+RESPONSE.setHeader('Content-Type', 'text/xml;charset=%s' % site_encoding)
 
-# this is broken (for example: language german + field=review_state)
-##results = [(trans(vocab.getMsgId(item), default=vocab.getValue(item)), item)
-##                    for item in vocab]
+results = [(trans(vocab.getMsgId(item), default=vocab.getValue(item)), item)
+                    for item in vocab]
 
-results = [(vocab.getValue(item), item) for item in vocab]
 
-item_strings = ['^'.join(a) for a in results]
-result_string = '|'.join(item_strings)
+item_strings = [u'^'.join(a) for a in results]
+result_string = u'|'.join(item_strings)
 
-return "<div>%s</div>" % result_string
+return "<div>%s</div>" % result_string.encode(site_encoding)

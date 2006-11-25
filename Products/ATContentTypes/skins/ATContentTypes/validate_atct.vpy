@@ -34,7 +34,7 @@ errors  = context.validate(REQUEST=request, errors=errors, data=1, metadata=0)
 if errors:
     return state.set(status='failure', errors=errors, portal_status_message='Please correct the indicated errors.')
 
-message = context.translate('Changes saved.')
+message = 'Changes saved.'
 #TODO: This should be an additional status message, which should be possible
 #in Plone 2.5. Reactivate then but right now it's not possible to i18n-ize this.
 #tidiedFields = request.get('tidiedFields', None)

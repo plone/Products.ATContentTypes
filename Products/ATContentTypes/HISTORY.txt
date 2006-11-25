@@ -1,3 +1,6 @@
+ * Reenabled translation of AJAX-ified smart folder info. This closes
+   http://dev.plone.org/plone/ticket/5806.
+   [hannosch]
 
  * Got rid of last remnants of zLOG. Grep is our friend!
    [stefan]

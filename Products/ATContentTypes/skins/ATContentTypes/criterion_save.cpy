@@ -29,7 +29,7 @@ for criterion in criteria:
             mutator = field.getMutator(criterion)
             mutator(rval)
 
-msg = context.translate('Changes saved.')
+msg = 'Changes saved.'
 transaction_note(msg)
 
 return state.set(portal_status_message=msg)
