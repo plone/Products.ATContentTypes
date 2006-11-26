@@ -183,7 +183,6 @@ class ATCTMixin(BrowserDefaultMixin):
     aliases = {
         '(Default)'  : '(dynamic view)',
         'view'       : '(selected layout)',
-        'index.html' : '(dynamic view)',
         'edit'       : 'atct_edit',
         'properties' : 'base_metadata',
         'sharing'    : 'folder_localrole_form',

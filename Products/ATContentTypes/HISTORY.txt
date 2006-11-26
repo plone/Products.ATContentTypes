@@ -1,6 +1,14 @@
 1.2.0-devel unreleased
 ======================
 
+ * Removed the view alias of index.html for all standard content types. This
+   makes it possible to create and upload files called index.html to the
+   site, which is quite common when batch importing old sites into the site.
+   As someone might rely on the former behaviour, we do not migrate
+   any existing type information. This closes
+   http://dev.plone.org/plone/ticket/4837.
+   [hannosch]
+
  * Got rid of last remnants of zLOG. Grep is our friend!
    [stefan]
 

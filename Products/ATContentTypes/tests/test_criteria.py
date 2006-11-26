@@ -112,7 +112,7 @@ class CriteriaTest(atcttestcase.ATCTSiteTestCase):
             dummy = klass(field=field, oid=id)
             self.failUnless(dummy.getId(), id)
             self.failUnless(dummy.Field(), field)
-    
+
     def test_typeInfo(self):
         if self.dummy is not None:
             ti = self.dummy.getTypeInfo()
