@@ -51,6 +51,27 @@
  * Adjusted import locations of Archetypes.public to Archetypes.atapi for AT1.5.
    [hannosch]
 
+1.1.4-devel unreleased
+======================
+
+ * Reenabled translation of AJAX-ified smart folder info. This closes
+   http://dev.plone.org/plone/ticket/5806.
+   [hannosch]
+
+ * Got rid of last remnants of zLOG. Grep is our friend!
+   [stefan]
+
+ * Added a relative path criterion for Smart Folders to allow search paths
+   like "../somefolder"
+   [ender, elvix] 
+
+1.1.3-final 2006-09-20
+======================
+
+ * Disabled translation of AJAX-ified smart folder info to temporarily remedy
+   http://dev.plone.org/plone/ticket/5806
+   [jensens]
+
 1.1.2-final 2006-09-11
 ======================
 
