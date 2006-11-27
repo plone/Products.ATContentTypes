@@ -63,6 +63,9 @@ def registerMigrations():
                              '1.0.5-final',
                              null)
     atct.registerUpgradePath('1.0.5-final',
+                             '1.0.6-final',
+                             null)
+    atct.registerUpgradePath('1.0.6-final',
                              '1.1.0-alpha1',
                              null)
     atct.registerUpgradePath('1.1.0-alpha1',
