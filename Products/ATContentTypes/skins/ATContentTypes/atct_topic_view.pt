@@ -89,7 +89,8 @@
                                         <img src="#"
                                              height="16"
                                              width="16"
-                                             tal:attributes="src icon"/>
+                                             tal:attributes="src icon;
+                                                             alt obj/Type|obj_type"/>
                                     </a>
 
                                     <a href="#" tal:condition="python: obj.portal_type not in ['Link', 'Image']"

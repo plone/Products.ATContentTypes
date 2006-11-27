@@ -1,3 +1,7 @@
+ * Add alt attributes to Topic table view type icons.  This closes
+   http://dev.plone.org/plone/ticket/5562
+   [alecm]
+
  * Fixed validation of filenames uploaded from IE.  This closes
    http://dev.plone.org/plone/ticket/5889.
    [alecm]
