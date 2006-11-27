@@ -231,7 +231,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
         if type(value) is StringType:
             v = (value, )
         elif value:
-            v = value[0]
+            v = value
         else:
             v = ()
 

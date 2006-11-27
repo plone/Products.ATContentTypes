@@ -62,6 +62,18 @@
 1.1.4-devel unreleased
 ======================
 
+ * ATEvent.setSubject needs to set multiple EventTypes to avoid pruning
+   the subject list.  Applied patch from rossp.  Fixes
+   http://dev.plone.org/plone/ticket/5770
+
+ * Add alt attributes to Topic table view type icons.  This closes
+   http://dev.plone.org/plone/ticket/5562
+   [alecm]
+
+ * Fixed validation of filenames uploaded from IE.  This closes
+   http://dev.plone.org/plone/ticket/5889.
+   [alecm]
+
  * Reenabled translation of AJAX-ified smart folder info. This closes
    http://dev.plone.org/plone/ticket/5806.
    [hannosch]

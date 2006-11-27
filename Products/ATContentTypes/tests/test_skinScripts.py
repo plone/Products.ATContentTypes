@@ -41,12 +41,14 @@ class TestFormatCatalogMetadata(atcttestcase.ATCTSiteTestCase):
         self.script = self.portal.formatCatalogMetadata
 
     def testFormatDate(self):
+        date = '2005-11-02 13:52:25'
+        format = '%m-%d-%Y %I:%M %p'
         self.portal.portal_properties.site_properties.manage_changeProperties(
                             localLongTimeFormat='%m-%d-%Y %I:%M %p')
-        self.assertEqual(self.script('2005-11-02 13:52:25'),
-                                                    '11-02-2005 01:52 PM')
-        self.assertEqual(self.script(DateTime('2005-11-02 13:52:25')),
-                                                    '11-02-2005 01:52 PM')
+        self.assertEqual(self.script(date),
+                         DateTime(date).strftime(format))
+        self.assertEqual(self.script(DateTime(date)),
+                         DateTime(date).strftime(format))
 
     def testFormatDict(self):
         self.assertEqual(self.script({'a':1,'b':2}), 'a: 1, b: 2')

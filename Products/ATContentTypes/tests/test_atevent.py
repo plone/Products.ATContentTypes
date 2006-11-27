@@ -210,6 +210,13 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         editATCT(atct)
         self.failUnlessEqual(atct.get_size(), len(TEXT))
 
+    def test_set_subject_sets_eventtype(self):
+        atct = self._ATCT
+        atct.setSubject(['a','b','c'])
+        self.failUnless('a' in atct.getEventType())
+        self.failUnless('b' in atct.getEventType())
+        self.failUnless('c' in atct.getEventType())
+
 tests.append(TestSiteATEvent)
 
 class TestATEventFields(atcttestcase.ATCTFieldTestCase):
