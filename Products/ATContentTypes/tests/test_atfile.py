@@ -192,6 +192,34 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         self.failIf(id in self.folder.objectIds())
         self.failUnless('Zope-Plo-ne .txt' in self.folder.objectIds())
 
+    def testWindowsUploadFilename(self):
+        class fakefile(StringIO.StringIO):
+            pass
+        fakefile = fakefile()
+        fakefile.filename = 'c:\\Windows\\Is\\Worthless\\file.txt'
+        id = 'file.2005-11-18.4066860574'
+        self.folder.invokeFactory(self.portal_type, id)
+        self.folder[id].setFile(fakefile)
+        self.failIf(id in self.folder.objectIds())
+        self.failIf(fakefile.filename in self.folder.objectIds())
+        self.failUnless('file.txt' in self.folder.objectIds())
+
+    def testWindowsDuplicateFiles(self):
+        class fakefile(StringIO.StringIO):
+            pass
+        fakefile = fakefile()
+        fakefile.filename = 'c:\\Windows\\Is\\Worthless\\file.txt'
+        id = 'file.2005-11-18.4066860574'
+        self.folder.invokeFactory(self.portal_type, id)
+        self.folder[id].setFile(fakefile)
+        self.folder.invokeFactory(self.portal_type, id)
+        request = self.folder.REQUEST
+        request.form['id'] = id
+        request.form['file_file'] = fakefile
+        errors = {}
+        self.folder[id].post_validate(request, errors)
+        self.failUnless(errors.has_key('file'))
+
 tests.append(TestSiteATFile)
 
 class TestATFileFields(atcttestcase.ATCTFieldTestCase):
