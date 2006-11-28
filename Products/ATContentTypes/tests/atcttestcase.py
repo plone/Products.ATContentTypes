@@ -143,7 +143,7 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
         self.failUnlessEqual(ti.getIcon(), self.icon)
         self.failUnlessEqual(ti.Metatype(), self.meta_type)
 
-    def test_doesImplemendDC(self):
+    def test_doesImplementDC(self):
         self.failUnless(IDublinCore.isImplementedBy(self._ATCT))
         self.failUnless(IMutableDublinCore.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(IDublinCore, self._ATCT))
@@ -176,7 +176,7 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
     def test_implements_ISelectableBrowserDefault(self):
         iface = ISelectableBrowserDefault
         self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def compareDC(self, first, second=None, **kwargs):
         """
