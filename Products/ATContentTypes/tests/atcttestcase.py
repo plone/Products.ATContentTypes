@@ -89,7 +89,8 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
     def afterSetUp(self):
         #self.setRoles(['Manager', 'Member'])
         self._ATCT = self._createType(self.folder, self.portal_type, 'ATCT')
-        self._cmf = self._createType(self.folder, self.cmf_portal_type, 'cmf')
+        if self.cmf_klass:
+            self._cmf = self._createType(self.folder, self.cmf_portal_type, 'cmf')
 
     def _createType(self, context, portal_type, id, **kwargs):
         """Helper method to create a new type
@@ -107,31 +108,33 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
         # test if we really have the right test setup
         # vars
         self.failUnless(self.klass)
-        self.failUnless(self.cmf_klass)
         self.failUnless(self.portal_type)
-        self.failUnless(self.cmf_portal_type)
         self.failUnless(self.title)
         self.failUnless(self.meta_type)
         self.failUnless(self.icon)
+        if self.cmf_klass:
+            self.failUnless(self.cmf_klass)
+            self.failUnless(self.cmf_portal_type)
 
         # portal types
         self.failUnlessEqual(self._ATCT.portal_type, self.portal_type)
-        self.failUnlessEqual(self._cmf.portal_type, self.cmf_portal_type)
+        if self.cmf_klass:
+            self.failUnlessEqual(self._cmf.portal_type, self.cmf_portal_type)
 
         # classes
         atct_class = self._ATCT.__class__
-        cmf_class = self._cmf.__class__
         self.failUnlessEqual(self.klass, atct_class)
-        self.failUnlessEqual(self.cmf_klass, cmf_class)
+        if self.cmf_klass:
+            cmf_class = self._cmf.__class__
+            self.failUnlessEqual(self.cmf_klass, cmf_class)
 
     def test_dcEdit(self):
-        #if not hasattr(self, '_cmf') or not hasattr(self, '_ATCT'):
-        #    return
-        old = self._cmf
         new = self._ATCT
-        dcEdit(old)
         dcEdit(new)
-        self.compareDC(old, new)
+        if self.cmf_klass:
+            old = self._cmf
+            dcEdit(old)
+            self.compareDC(old, new)
 
     def test_typeInfo(self):
         ti = self._ATCT.getTypeInfo()

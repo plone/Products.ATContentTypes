@@ -24,12 +24,6 @@ __docformat__ = 'restructuredtext'
 
 from Testing import ZopeTestCase
 from Products.ATContentTypes.tests import atcttestcase
-try:
-    from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
-    NO_PAS = False
-except ImportError:
-    NO_PAS = True
-
 
 import transaction
 from Products.PloneTestCase.setup import default_user
@@ -39,6 +33,8 @@ from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
 from Products.CMFCore.utils import getToolByName
+from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
+
 
 class IntegrationTestCase(atcttestcase.ATCTFunctionalSiteTestCase):
 
@@ -58,12 +54,9 @@ class IntegrationTestCase(atcttestcase.ATCTFunctionalSiteTestCase):
         self.error_log._ignored_exceptions = ()
 
         # We want 401 responses, not redirects to a login page
-        if NO_PAS:
-            self.portal._delObject('cookie_authentication')
-        else:
-            plugins = self.portal.acl_users.plugins
-            for id in plugins.listPluginIds(IChallengePlugin):
-                plugins.deactivatePlugin(IChallengePlugin, id)
+        plugins = self.portal.acl_users.plugins
+        for id in plugins.listPluginIds(IChallengePlugin):
+            plugins.deactivatePlugin(IChallengePlugin, id)
 
         # disable portal_factory as it's a nuisance here
         self.portal.portal_factory.manage_setPortalFactoryTypes(listOfTypeIds=[])
@@ -163,38 +156,35 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         response = self.publish('%s/content_status_history' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
 
-    def test_linguaplone_views(self):
-        if not HAS_LINGUA_PLONE:
-            return
+    # LinguaPlone specific tests
+    if HAS_LINGUA_PLONE:
 
-        response = self.publish('%s/translate_item' % self.obj_path, self.basic_auth)
-        self.assertStatusEqual(response.getStatus(), 200) # OK
-        response = self.publish('%s/manage_translations_form' % self.obj_path, self.basic_auth)
-        self.assertStatusEqual(response.getStatus(), 200) # OK
+        def test_linguaplone_views(self):
+            response = self.publish('%s/translate_item' % self.obj_path, self.basic_auth)
+            self.assertStatusEqual(response.getStatus(), 200) # OK
+            response = self.publish('%s/manage_translations_form' % self.obj_path, self.basic_auth)
+            self.assertStatusEqual(response.getStatus(), 200) # OK
 
-    def test_linguaplone_create_translation(self):
-        if not HAS_LINGUA_PLONE:
-            return
+        def test_linguaplone_create_translation(self):
+            # create translation creates a new object
+            response = self.publish('%s/createTranslation?language=de&set_language=de'
+                                     % self.obj_path, self.basic_auth)
+            self.assertStatusEqual(response.getStatus(), 302) # Redirect
 
-        # create translation creates a new object
-        response = self.publish('%s/createTranslation?language=de&set_language=de'
-                                 % self.obj_path, self.basic_auth)
-        self.assertStatusEqual(response.getStatus(), 302) # Redirect
+            # omit ?portal_status_message=...
+            body = response.getBody().split('?')[0]
 
-        # omit ?portal_status_message=...
-        body = response.getBody().split('?')[0]
+            self.failUnless(body.startswith(self.folder_url))
+            self.failUnless(body.endswith('/translate_item'))
 
-        self.failUnless(body.startswith(self.folder_url))
-        self.failUnless(body.endswith('/translate_item'))
+            # Perform the redirect
+            form_path = body[len(self.app.REQUEST.SERVER_URL):]
+            response = self.publish(form_path, self.basic_auth)
+            self.assertStatusEqual(response.getStatus(), 200) # OK
 
-        # Perform the redirect
-        form_path = body[len(self.app.REQUEST.SERVER_URL):]
-        response = self.publish(form_path, self.basic_auth)
-        self.assertStatusEqual(response.getStatus(), 200) # OK
-
-        translated_id = "%s-de" % self.obj_id
-        self.failUnless(translated_id in self.folder.objectIds(),
-                        self.folder.objectIds())
+            translated_id = "%s-de" % self.obj_id
+            self.failUnless(translated_id in self.folder.objectIds(),
+                            self.folder.objectIds())
 
     def test_additional_view(self):
         # additional views:
@@ -204,7 +194,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
                 "%s: %s" % (view, response.getStatus())) # OK
 
     def test_discussion(self):
-        # enable discussion for  the type
+        # enable discussion for the type
         ttool = getToolByName(self.portal, 'portal_types')
         ttool[self.portal_type].allow_discussion = True
 
@@ -216,17 +206,17 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
                                  % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 302) # Redirect
 
-        # omit ?portal_status_message=...
-        body = response.getBody().split('?')[0]
-
+        body = response.getBody()
         self.failUnless(body.startswith(self.folder_url))
 
-        # Perform the redirect
-        form_path = body[len(self.app.REQUEST.SERVER_URL):]
-        response = self.publish(form_path, self.basic_auth)
-#         self.assertStatusEqual(response.getStatus(), 200) # OK
-
         self.failUnless(hasattr(self.obj.aq_explicit, 'talkback'))
+
+        form_path = body[len(self.app.REQUEST.SERVER_URL):]
+        discussionId = form_path.split('#')[1]
+
+        reply = self.obj.talkback.getReply(discussionId)
+        self.assertEquals(reply.title, 'test')
+        self.assertEquals(reply.text, 'testbody')
 
     def test_dynamicViewContext(self):
         # register and add a testing template (it's a script)

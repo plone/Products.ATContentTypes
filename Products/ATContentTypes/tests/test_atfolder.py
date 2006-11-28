@@ -38,7 +38,6 @@ from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATBTreeFolder
 from Products.CMFPlone.PloneFolder import PloneFolder
-from Products.CMFPlone.LargePloneFolder import LargePloneFolder
 from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
 from Products.CMFPlone.interfaces.OrderedContainer import IOrderedContainer
 from Products.ATContentTypes.interfaces import IATFolder
@@ -146,8 +145,7 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     klass = ATBTreeFolder
     portal_type = 'Large Plone Folder'
-    cmf_portal_type = 'CMF Large Plone Folder'
-    cmf_klass = LargePloneFolder
+    cmf_klass = None
     title = 'Large Folder'
     meta_type = 'ATBTreeFolder'
     icon = 'folder_icon.gif'
@@ -171,14 +169,10 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         self.failIf(iface.isImplementedBy(self._ATCT))
 
     def test_edit(self):
-        old = self._cmf
         new = self._ATCT
-        editCMF(old)
         editATCT(new)
-        self.failUnless(old.Title() == new.Title(), 'Title mismatch: %s / %s' \
-                        % (old.Title(), new.Title()))
-        self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
-                        % (old.Description(), new.Description()))
+        self.failUnless('Test title' == new.Title())
+        self.failUnless('Test description' == new.Description())
 
     def test_get_size(self):
         atct = self._ATCT
