@@ -1,6 +1,11 @@
+ * Setting a sort criterion should not prevent search criteria for the same
+   field from being set.  Fixes http://dev.plone.org/plone/ticket/5435
+   [alecm]
+
  * ATEvent.setSubject needs to set multiple EventTypes to avoid pruning
    the subject list.  Applied patch from rossp.  Fixes
    http://dev.plone.org/plone/ticket/5770
+   [alecm]
 
  * Add alt attributes to Topic table view type icons.  This closes
    http://dev.plone.org/plone/ticket/5562

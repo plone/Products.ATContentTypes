@@ -417,6 +417,21 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
     def test_schema_marshall(self):
         pass
 
+    def test_sort_criterion_does_not_affect_available_fields(self):
+        topic = self._ATCT
+        # set a sort criterion
+        topic.setSortCriterion('created', False)
+        print  topic.listAvailableFields()
+        # It should still be available for other criteria
+        self.failUnless([i for i in topic.listAvailableFields()
+                         if i[0] == 'created'])
+        # Add a normal criteria for the same field
+        crit = topic.addCriterion('created', 'ATFriendlyDateCriteria')
+        # It should no longer be available
+        self.failIf([i for i in topic.listAvailableFields()
+                     if i[0] == 'created'])
+
+
 tests.append(TestSiteATTopic)
 
 class TestATTopicFields(atcttestcase.ATCTFieldTestCase):

@@ -349,7 +349,8 @@ class ATTopic(ATCTFolder):
     def listAvailableFields(self):
         """Return a list of available fields for new criteria.
         """
-        current   = [ crit.Field() for crit in self.listCriteria() ]
+        current   = [ crit.Field() for crit in self.listCriteria()
+                      if not IATTopicSortCriterion.isImplementedBy(crit)]
         fields = self.listFields()
         val = [ field
                  for field in fields
