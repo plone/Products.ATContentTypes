@@ -32,9 +32,6 @@ Sidneys tests for Archetypes.
   >>> portal = self.portal
   >>> ppath = '/'.join(portal.getPhysicalPath())
 
-  Plone's default error message template is too verbose and far too long
-  >>> portal.default_error_message = None
-
   Dates use for If-* requests
 
   >>> from App.Common import rfc1123_date

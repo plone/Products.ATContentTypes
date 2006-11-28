@@ -331,6 +331,7 @@ class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
         # Should be allowed for member
         self.assertStatusEqual(response2.getStatus(), 200) # OK
         # Should fail for anonymous
+        self.error_log._ignored_exceptions = ('Unauthorized', )
         response3 = self.publish(self.obj_path+'/image')
         self.assertStatusEqual(response3.getStatus(), 401)
 
