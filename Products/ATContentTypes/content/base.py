@@ -173,19 +173,12 @@ class ATCTMixin(BrowserDefaultMixin):
         'action'      : 'string:${object_url}/edit',
         'permissions' : (ModifyPortalContent,),
          },
-        {
-        'id'          : 'metadata',
-        'name'        : 'Properties',
-        'action'      : 'string:${object_url}/properties',
-        'permissions' : (ModifyPortalContent,),
-         },
         )
 
     aliases = {
         '(Default)'  : '(dynamic view)',
         'view'       : '(selected layout)',
         'edit'       : 'atct_edit',
-        'properties' : 'base_metadata',
         'sharing'    : 'folder_localrole_form',
         'gethtml'    : '',
         'mkdir'      : '',

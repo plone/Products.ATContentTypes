@@ -1,6 +1,13 @@
 1.2.0-devel unreleased
 ======================
 
+ * Moved fields of content types into several schemas.
+   [fschulze]
+
+ * Removed properties tab, as we now use the all-schemas-on-one-page feature
+   of Archetypes.
+   [fschulze]
+
  * Some general test cleanup in order to make the test output readable.
    [hannosch]
 
