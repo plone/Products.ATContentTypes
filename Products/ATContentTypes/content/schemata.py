@@ -77,6 +77,26 @@ relatedItemsField = ReferenceField('relatedItems',
         )
 ATContentTypeSchema.addField(relatedItemsField.copy())
 
+#Enabling next / previous navigation
+
+NextPreviousAwareSchema = MetadataSchema((
+    BooleanField('nextPreviousEnabled',
+        #required = False,
+        languageIndependent = True,
+        schemata = 'metadata',
+        widget = BooleanWidget(
+            description="This enables next/previous widget on content items contained in this folder",
+            description_msgid = "help_nextprevious",
+            label = "Enable next previous navigation",
+            label_msgid = "label_nextprevious",
+            i18n_domain = "plone",
+            visible={'view' : 'hidden',
+                     'edit' : 'visible'},
+            ),
+        default_method="getNextPreviousParentValue"
+        ),
+    ),)
+
 def marshall_register(schema):
     try:
         # It's a soft dependency, if not available ignore it.
@@ -141,6 +161,8 @@ def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
         schema.changeSchemataForField('allowDiscussion', 'settings')
     if schema.has_key('excludeFromNav'):
         schema.changeSchemataForField('excludeFromNav', 'settings')
+    if schema.has_key('nextPreviousEnabled'):
+        schema.changeSchemataForField('nextPreviousEnabled', 'settings')
 
     marshall_register(schema)
     return schema

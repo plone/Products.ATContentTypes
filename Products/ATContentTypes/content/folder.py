@@ -33,6 +33,7 @@ from Products.ATContentTypes.content.base import ATCTBTreeFolder
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
+from Products.ATContentTypes.content.schemata import NextPreviousAwareSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
 from Products.ATContentTypes.lib.autosort import AutoSortSupport
@@ -40,7 +41,9 @@ from Products.ATContentTypes.lib.autosort import AutoOrderSupport
 
 from Products.CMFPlone import PloneMessageFactory as _
 
-ATFolderSchema      = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
+from Products.CMFCore.permissions import View
+
+ATFolderSchema      = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema + NextPreviousAwareSchema
 ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 
 finalizeATCTSchema(ATFolderSchema, folderish=True, moveDiscussion=False)
@@ -72,6 +75,19 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
     __dav_marshall__ = True
 
     security       = ClassSecurityInfo()
+
+    security.declareProtected(View, 'getNextPreviousParentValue')
+    def getNextPreviousParentValue(self):
+        """If the parent node is also an IATFolder and has next/previous
+        navigation enabled, then let this folder have it enabled by
+        default as well.
+        """
+        parent = self.getParentNode()
+        from Products.ATContentTypes.interface.folder import IATFolder as IATFolder_
+        if IATFolder_.providedBy(parent):
+            return parent.getNextPreviousEnabled()
+        else:
+            return False
 
     def manage_afterAdd(self, item, container):
         ATCTOrderedFolder.manage_afterAdd(self, item, container)
