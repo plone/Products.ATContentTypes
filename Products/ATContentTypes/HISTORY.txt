@@ -1,3 +1,7 @@
+ * Reenabled editing the names and descriptions of the smart folder indices
+   and metadata.
+   [alecm]
+
  * Setting a sort criterion should not prevent search criteria for the same
    field from being set.  Fixes http://dev.plone.org/plone/ticket/5435
    [alecm]

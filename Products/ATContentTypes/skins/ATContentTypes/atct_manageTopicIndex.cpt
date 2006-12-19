@@ -134,30 +134,17 @@
                                                checked python:test(indexObj.enabled, 'checked', None)"/>
                     </td>
                     <td>
-                        <span tal:content="indexObj/friendlyName"
-                              i18n:translate=""
-                              i18n:domain="plone" />
-                        <input type="hidden"
+                        <input type="text"
                                value=""
                                name=""
                                id=""
+                               size="10"
                                tal:attributes="name string:index.friendlyName:records;
                                                id string:${indexObj/index}_friendlyName;
-                                               value indexObj/friendlyName;" />
+                                               value indexObj/friendlyName;
+                                               tabindex tabindex/next;"/>
                     </td>
                     <td>
-                        <div tal:content="indexObj/description"
-                              i18n:translate=""
-                              i18n:domain="plone">
-                            index description
-                        </div>
-                        <input type="hidden"
-                               value=""
-                               name="index.description:records"
-                               id=""
-                               tal:attributes="id string:${indexObj/index}_description;
-                                               value indexObj/description" />
-                        <br />
                         <span i18n:translate="label_allowed_criteria">
                             Allowed Criteria:
                         </span>
@@ -173,10 +160,19 @@
                             <option tal:repeat="criterion python:atct_tool.getCriteriaForIndex(indexObj.index, as_dict= True)"
                                     tal:attributes="value criterion/name;
                                                     selected python:test(criterion['name'] in indexObj.criteria, 'selected', None);"
-                                    tal:content="criterion/description"
-                                    i18n:translate=""
-                                    i18n:domain="plone"/>
+                                    tal:content="criterion/description"/>
                         </select>
+                        <br />
+                        <span i18n:translate="label_help_text">
+                            Help Text:
+                        </span>
+                        <textarea cols="50" rows="2" type="text"
+                               value=""
+                               name="index.description:records"
+                               id=""
+                               tal:attributes="id string:${indexObj/index}_description;
+                                               tabindex tabindex/next;"
+                               tal:content="indexObj/description"></textarea>
                     </td>
 
                 </tr>
