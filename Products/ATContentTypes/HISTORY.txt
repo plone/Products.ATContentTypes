@@ -1,3 +1,7 @@
+ * removed schemata='default' for allowDiscussion field in finalizeATCTSchema.
+   It makes no sense and prevents customization by patching.
+   [ender]
+
 1.1.4-final 2006-12-18
 ======================
 
