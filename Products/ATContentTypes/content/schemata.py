@@ -127,7 +127,6 @@ def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
         schema['relatedItems'].widget.visible['edit'] = 'invisible'
     schema.moveField('excludeFromNav', after='allowDiscussion')
     if moveDiscussion:
-        schema['allowDiscussion'].schemata = 'default'
         schema.moveField('allowDiscussion', after='relatedItems')
 
     # Categorization

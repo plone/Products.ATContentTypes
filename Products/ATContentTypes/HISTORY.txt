@@ -1,5 +1,8 @@
 1.2.0-devel unreleased
 ======================
+ * removed schemata='default' for allowDiscussion field in finalizeATCTSchema.
+   It makes no sense and prevents customization by patching.
+   [ender]
 
  * Moved fields of content types into several schemas.
    [fschulze]
