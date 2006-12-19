@@ -1,3 +1,6 @@
+1.1.4-final 2006-12-18
+======================
+
  * Reenabled editing the names and descriptions of the smart folder indices
    and metadata.
    [alecm]
