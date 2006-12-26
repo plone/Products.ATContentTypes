@@ -43,20 +43,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
     def afterSetUp(self):
         self.tool = getattr(self.portal.aq_explicit, TOOLNAME)
         self.ttool = getattr(self.portal.aq_explicit, 'portal_types')
-        self.qi = getattr(self.portal.aq_explicit, 'portal_quickinstaller')
         self.cat = getattr(self.portal.aq_explicit, 'portal_catalog')
-        qi_atct = [prod for prod in self.qi.listInstalledProducts()
-                        if prod['id'] == 'ATContentTypes']
-        self.qi_atct = qi_atct[0]
-
-    def test_installed_products(self):
-        qi = self.qi
-        installed = [ prod['id'] for prod in qi.listInstalledProducts() ]
-        self.failUnless('MimetypesRegistry' in installed, installed)
-        self.failUnless('PortalTransforms' in installed, installed)
-        self.failUnless('Archetypes' in installed, installed)
-        self.failUnless('ATContentTypes' in installed, installed)
-        self.failUnless('ATReferenceBrowserWidget' in installed, installed)
 
     def test_tool_installed(self):
         t = getToolByName(self.portal, TOOLNAME, None)
@@ -83,8 +70,10 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
             tinfo = ttool[id]
             self.failUnless(tinfo.product == 'ATContentTypes', tinfo.product)
 
-    def test_quickinstall_locked(self):
-        self.failUnless(self.qi_atct['isLocked'])
+    def test_not_quickinstalled(self):
+        qi = getattr(self.portal, 'portal_quickinstaller')
+        products = [prod['id'] for prod in qi.listInstalledProducts()]
+        self.failIf('ATContentTypes' in products)
 
     def test_release_settings_SAVE_TO_FAIL_FOR_DEVELOPMENT(self):
         self.failUnlessEqual(SWALLOW_IMAGE_RESIZE_EXCEPTIONS, True)

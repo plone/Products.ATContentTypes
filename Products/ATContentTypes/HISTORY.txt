@@ -1,5 +1,9 @@
 1.2.0-devel unreleased
 ======================
+
+ * Updated installation tests, as ATCT is no longer 'quickinstalled' anymore.
+   [hannosch]
+
  * removed schemata='default' for allowDiscussion field in finalizeATCTSchema.
    It makes no sense and prevents customization by patching.
    [ender]
