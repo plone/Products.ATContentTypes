@@ -65,9 +65,7 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
         storage = AnnotationStorage(migrate=True),
         validators = ('isTidyHtmlWithCleanup',),
         #validators = ('isTidyHtml',),
-        default_content_type = zconf.ATNewsItem.default_content_type,
         default_output_type = 'text/x-html-safe',
-        allowable_content_types = zconf.ATNewsItem.allowed_content_types,
         widget = RichWidget(
             description = '',
             label = _(u'label_body_text', u'Body Text'),

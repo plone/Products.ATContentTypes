@@ -164,12 +164,12 @@ class TestATNewsItemFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
         self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
-        self.failUnless(field.default_content_type == 'text/html',
+        self.failUnless(field.default_content_type is None,
                         'Value is %s' % field.default_content_type)
         self.failUnless(field.default_output_type == 'text/x-html-safe',
                         'Value is %s' % field.default_output_type)
-        self.failUnless('text/html' in field.allowable_content_types)
-        self.failUnless('text/structured'  in field.allowable_content_types)
+        self.failUnless('text/html' in field.getAllowedContentTypes(dummy))
+        self.failUnless('text/structured'  in field.getAllowedContentTypes(dummy))
 
 tests.append(TestATNewsItemFields)
 

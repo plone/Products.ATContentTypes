@@ -96,9 +96,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
               primary=True,
               storage = AnnotationStorage(migrate=True),
               validators = ('isTidyHtmlWithCleanup',),
-              default_content_type = zconf.ATEvent.default_content_type,
               default_output_type = 'text/x-html-safe',
-              allowable_content_types = zconf.ATEvent.allowed_content_types,
               widget = RichWidget(
                         description = '',
                         label = _(u'label_event_announcement', default=u'Event body text'),
