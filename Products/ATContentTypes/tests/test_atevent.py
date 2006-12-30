@@ -643,7 +643,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.default_output_type == 'text/x-html-safe',
                         'Value is %s' % field.default_output_type)
         self.failUnless('text/html' in field.getAllowedContentTypes(dummy))
-        self.failUnless('text/structured'  in field.getAllowedContentTypes(dummy))
+        self.failUnless('text/restructured'  in field.getAllowedContentTypes(dummy))
 
     def beforeTearDown(self):
         # more

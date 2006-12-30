@@ -302,7 +302,7 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.default_output_type)
 
         self.failUnless('text/html' in field.getAllowedContentTypes(dummy))
-        self.failUnless('text/structured'  in field.getAllowedContentTypes(dummy))
+        self.failUnless('text/restructured'  in field.getAllowedContentTypes(dummy))
 
 tests.append(TestATDocumentFields)
 
