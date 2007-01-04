@@ -179,7 +179,7 @@ class ATCTMixin(BrowserDefaultMixin):
         '(Default)'  : '(dynamic view)',
         'view'       : '(selected layout)',
         'edit'       : 'atct_edit',
-        'sharing'    : 'folder_localrole_form',
+        'sharing'    : '@@sharing',
         'gethtml'    : '',
         'mkdir'      : '',
         }

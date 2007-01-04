@@ -148,7 +148,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
     def test_local_sharing_view(self):
         # sharing tab should work
-        response = self.publish('%s/folder_localrole_form' % self.obj_path, self.basic_auth)
+        response = self.publish('%s/sharing' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
 
     def test_workflow_view(self):
