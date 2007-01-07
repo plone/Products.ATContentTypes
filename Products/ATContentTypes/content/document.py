@@ -46,7 +46,6 @@ from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
-from Products.ATContentTypes.content.base import updateActions
 from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
@@ -97,10 +96,6 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
                      )
 
     security       = ClassSecurityInfo()
-
-    actions = updateActions(ATCTContent,
-                            HistoryAwareMixin.actions
-                           )
 
     security.declareProtected(View, 'CookedBody')
     def CookedBody(self, stx_level='ignored'):

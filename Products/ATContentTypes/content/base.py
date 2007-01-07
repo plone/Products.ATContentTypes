@@ -25,7 +25,6 @@ __docformat__ = 'restructuredtext'
 
 import os
 import posixpath
-from copy import copy
 import logging
 import transaction
 
@@ -82,31 +81,6 @@ def registerATCT(class_, project):
     assert IATContentType.isImplementedByInstancesOf(class_)
     registerType(class_, project)
 
-def updateActions(klass, actions):
-    """Merge the actions from a class with a list of actions
-    """
-    kactions = copy(klass.actions)
-    aids  = [action.get('id') for action in actions ]
-    actions = list(actions)
-
-    for kaction in kactions:
-        kaid = kaction.get('id')
-        if kaid not in aids:
-            actions.append(kaction)
-
-    return tuple(actions)
-
-def updateAliases(klass, aliases):
-    """Merge the method aliases from a class with a dict of aliases
-    """
-    oldAliases = copy(klass.aliases)
-
-    for aliasId, aliasTarget in oldAliases.items():
-        if aliasId not in aliases:
-            aliases[aliasId] = aliasTarget
-
-    return aliases
-
 def cleanupFilename(filename, context=None, encoding='utf-8'):
     """Removes bad chars from file names to make them a good id
     """
@@ -161,29 +135,6 @@ class ATCTMixin(BrowserDefaultMixin):
 
     security       = ClassSecurityInfo()
 
-    actions = ({
-        'id'          : 'view',
-        'name'        : 'View',
-        'action'      : 'string:${object_url}',
-        'permissions' : (View,)
-         },
-        {
-        'id'          : 'edit',
-        'name'        : 'Edit',
-        'action'      : 'string:${object_url}/edit',
-        'permissions' : (ModifyPortalContent,),
-         },
-        )
-
-    aliases = {
-        '(Default)'  : '(dynamic view)',
-        'view'       : '(selected layout)',
-        'edit'       : 'atct_edit',
-        'sharing'    : '@@sharing',
-        'gethtml'    : '',
-        'mkdir'      : '',
-        }
-
     security.declareProtected(ModifyPortalContent,
                               'initializeArchetype')
     def initializeArchetype(self, **kwargs):
@@ -208,7 +159,6 @@ class ATCTMixin(BrowserDefaultMixin):
             if DEBUG and str(msg) not in ('SESSION',):
                 # debug code
                 raise
-                #_default_logger.log_exc()
 
     security.declarePrivate('copyLayoutFromParent')
     def copyLayoutFromParent(self):
@@ -277,23 +227,6 @@ class ATCTContent(ATCTMixin, BaseContent):
                       ATCTMixin.__implements__)
 
     security       = ClassSecurityInfo()
-    actions = updateActions(ATCTMixin,
-        ({
-          'id'          : 'external_edit',
-          'name'        : 'External Edit',
-          'action'      : 'string:${object_url}/external_edit',
-          'condition'   : 'object/externalEditorEnabled',
-          'permissions' : (ModifyPortalContent,),
-          'visible'     : 0,
-         },
-        {
-        'id'          : 'local_roles',
-        'name'        : 'Sharing',
-        'action'      : 'string:${object_url}/sharing',
-        'permissions' : (ManageProperties,),
-         },
-        )
-    )
 
     security.declarePrivate('manage_afterPUT')
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
@@ -329,29 +262,6 @@ class ATCTFileContent(ATCTContent):
     precondition = ''
 
     security = ClassSecurityInfo()
-    actions = updateActions(ATCTContent,
-        ({
-        'id'          : 'view',
-        'name'        : 'View',
-        'action'      : 'string:${object_url}/view',
-        'permissions' : (View,)
-         },
-         {
-        'id'          : 'download',
-        'name'        : 'Download',
-        'action'      : 'string:${object_url}/download',
-        'permissions' : (View,),
-        'condition'   : 'member', # don't show border for anon user
-        'visible'     :  False,
-         },
-        )
-    )
-
-    aliases = updateAliases(ATCTMixin,
-        {
-        '(Default)' : 'index_html',
-        'view'      : '(selected layout)',
-        })
 
     security.declareProtected(View, 'download')
     def download(self, REQUEST=None, RESPONSE=None):
@@ -409,12 +319,8 @@ class ATCTFileContent(ATCTContent):
             kwargs['mimetype'] = content_type
         mutator = self.getPrimaryField().getMutator(self)
         mutator(data, **kwargs)
-        ##self.ZCacheable_invalidate()
-        ##self.ZCacheable_set(None)
-        ##self.http__refreshEtag()
 
-    security.declareProtected(ModifyPortalContent,
-                              'manage_edit')
+    security.declareProtected(ModifyPortalContent, 'manage_edit')
     def manage_edit(self, title, content_type, precondition='',
                     filedata=None, REQUEST=None):
         """
@@ -538,22 +444,6 @@ class ATCTFolder(ATCTMixin, BaseFolder):
 
     security       = ClassSecurityInfo()
 
-    actions = updateActions(ATCTMixin,
-        ({
-        'id'          : 'local_roles',
-        'name'        : 'Sharing',
-        'action'      : 'string:${object_url}/sharing',
-        'permissions' : (ManageProperties,),
-         },
-        {
-        'id'          : 'view',
-        'name'        : 'View',
-        'action'      : 'string:${folder_url}/',
-        'permissions' : (View,),
-         },
-        )
-    )
-
     security.declareProtected(View, 'get_size')
     def get_size(self):
         """Returns 1 as folders have no size."""
@@ -631,22 +521,6 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
 
     security       = ClassSecurityInfo()
 
-    actions = updateActions(ATCTMixin,
-        ({
-        'id'          : 'local_roles',
-        'name'        : 'Sharing',
-        'action'      : 'string:${object_url}/sharing',
-        'permissions' : (ManageProperties,),
-         },
-        {
-        'id'          : 'view',
-        'name'        : 'View',
-        'action'      : 'string:${folder_url}/',
-        'permissions' : (View,),
-         },
-        )
-    )
-
     security.declareProtected(View, 'index_html')
     def index_html(self, REQUEST=None, RESPONSE=None):
         """Special case index_html"""
@@ -680,22 +554,6 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
                      BaseBTreeFolder.__implements__
 
     security       = ClassSecurityInfo()
-
-    actions = updateActions(ATCTMixin,
-        ({
-        'id'          : 'local_roles',
-        'name'        : 'Sharing',
-        'action'      : 'string:${object_url}/sharing',
-        'permissions' : (ManageProperties,),
-         },
-        {
-        'id'          : 'view',
-        'name'        : 'View',
-        'action'      : 'string:${folder_url}/',
-        'permissions' : (View,),
-         },
-        )
-    )
 
     security.declareProtected(View, 'index_html')
     def index_html(self, REQUEST=None, RESPONSE=None):

@@ -50,7 +50,6 @@ from Products.Archetypes.atapi import DisplayList
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFolder
-from Products.ATContentTypes.content.base import updateActions
 from Products.ATContentTypes.criteria import _criterionRegistry
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.permission import AddTopics
@@ -168,28 +167,6 @@ class ATTopic(ATCTFolder):
     __dav_marshall__ = True
 
     security       = ClassSecurityInfo()
-    actions = updateActions(ATCTFolder,
-        (
-        {
-        'id'          : 'edit',
-        'name'        : 'Edit',
-        'action'      : 'string:${object_url}/edit',
-        'permissions' : (ChangeTopics,)
-        },
-        {
-        'id'          : 'criteria',
-        'name'        : 'Criteria',
-        'action'      : 'string:${folder_url}/criterion_edit_form',
-        'permissions' : (ChangeTopics,)
-         },
-        {
-        'id'          : 'subtopics',
-        'name'        : 'Subfolders',
-        'action'      : 'string:${folder_url}/atct_topic_subtopics',
-        'permissions' : (ChangeTopics,)
-        },
-       )
-    )
 
     # Override initializeArchetype to turn on syndication by default
     def initializeArchetype(self, **kwargs):
@@ -580,11 +557,3 @@ class ATTopic(ATCTFolder):
         return WebdavResoure.HEAD(self, REQUEST, RESPONSE)
 
 registerATCT(ATTopic, PROJECTNAME)
-
-def modify_fti(fti):
-    """Remove folderlisting action
-    """
-    actions = []
-    for action in fti['actions']:
-        if action['id'] == 'folderlisting':
-            action['visible'] = False

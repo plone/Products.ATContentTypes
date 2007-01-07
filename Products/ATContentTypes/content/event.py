@@ -48,7 +48,6 @@ from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
-from Products.ATContentTypes.content.base import updateActions
 from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
@@ -196,9 +195,6 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
                       HistoryAwareMixin.__implements__)
 
     security       = ClassSecurityInfo()
-
-    actions = updateActions(ATCTContent, CalendarSupportMixin.actions +
-                            HistoryAwareMixin.actions)
 
     security.declareProtected(ChangeEvents, 'setEventType')
     def setEventType(self, value, alreadySet=False, **kw):

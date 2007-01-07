@@ -77,7 +77,6 @@ class _CriterionRegistry(UserDict):
             indices = ALL_INDICES
 
         assert IATTopicCriterion.isImplementedByInstancesOf(criterion)
-        #generateClass(criterion)
         registerType(criterion, PROJECTNAME)
 
         crit_id = criterion.meta_type

@@ -1,6 +1,10 @@
 1.2.0-devel unreleased
 ======================
 
+ * Removed unused class attributes actions and aliases from content types. These
+   are managed by GenericSetup profiles now.
+   [hannosch]
+
  * Updated installation tests, as ATCT is no longer 'quickinstalled' anymore.
    [hannosch]
 

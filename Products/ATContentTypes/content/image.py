@@ -41,7 +41,6 @@ from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
-from Products.ATContentTypes.content.base import updateActions
 from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
@@ -107,8 +106,6 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     cmf_edit_kws   = ('file', )
 
     __implements__ = ATCTFileContent.__implements__, IATImage
-
-    actions = updateActions(ATCTFileContent, ATCTImageTransform.actions)
 
     security       = ClassSecurityInfo()
 
