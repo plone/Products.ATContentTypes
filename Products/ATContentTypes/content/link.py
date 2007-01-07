@@ -63,13 +63,8 @@ class ATLink(ATCTContent):
 
     schema         =  ATLinkSchema
 
-    content_icon   = 'link_icon.gif'
-    meta_type      = 'ATLink'
     portal_type    = 'Link'
     archetype_name = 'Link'
-    immediate_view = 'link_view'
-    default_view   = 'link_view'
-    suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Link', 'meta_type' : 'Link'}
     typeDescription= _(u'A link to an internal or external resource.')
     assocMimetypes = ()

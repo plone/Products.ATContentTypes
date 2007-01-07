@@ -143,21 +143,13 @@ class ATTopic(ATCTFolder):
 
     schema         =  ATTopicSchema
 
-    content_icon   = 'topic_icon.gif'
-    meta_type      = 'ATTopic'
     portal_type    = 'Topic'
     archetype_name = 'Smart Folder'
-    immediate_view = 'atct_topic_view'
-    default_view   = 'atct_topic_view'
-    suppl_views    = ('folder_listing', 'folder_summary_view', 'folder_tabular_view', 'atct_album_view')
     _atct_newTypeFor = {'portal_type' : 'CMF Topic', 'meta_type' : 'Portal Topic'}
     typeDescription= _(u'An automatically updated stored search that can be used to display items matching criteria you specify.')
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()
-
-    filter_content_types  = 1
-    allowed_content_types = ('Topic',)
 
     use_folder_tabs = 0
 

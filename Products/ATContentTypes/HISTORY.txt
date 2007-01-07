@@ -1,7 +1,7 @@
 1.2.0-devel unreleased
 ======================
 
- * Removed unused class attributes actions and aliases from content types. These
+ * Removed various obsolete class attributes from content type classes. These
    are managed by GenericSetup profiles now.
    [hannosch]
 

@@ -109,13 +109,8 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
 
     schema         =  ATNewsItemSchema
 
-    content_icon   = 'newsitem_icon.gif'
-    meta_type      = 'ATNewsItem'
     portal_type    = 'News Item'
     archetype_name = 'News Item'
-    immediate_view = 'newsitem_view'
-    default_view   = 'newsitem_view'
-    suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF News Item', 'meta_type' : 'News Item'}
     typeDescription = _(u'An announcement that will show up on the news portlet and in the news listing.')
     assocMimetypes = ()

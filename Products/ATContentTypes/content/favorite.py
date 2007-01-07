@@ -70,17 +70,8 @@ class ATFavorite(ATCTContent):
 
     schema         =  ATFavoriteSchema
 
-    content_icon   = 'favorite_icon.gif'
-    meta_type      = 'ATFavorite'
     portal_type    = 'Favorite'
     archetype_name = 'Favorite'
-    default_view   = 'favorite_view'
-    immediate_view = 'favorite_view'
-    suppl_views    = ()
-    include_default_actions = False
-    global_allow   = True
-    filter_content_types  = True
-    allowed_content_types = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Favorite', 'meta_type' : 'Favorite'}
     typeDescription = _(u'A placeholder item linking to a favorite object in the portal.')
     assocMimetypes = ()

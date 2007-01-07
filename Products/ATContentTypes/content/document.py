@@ -77,13 +77,8 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
 
     schema         =  ATDocumentSchema
 
-    content_icon   = 'document_icon.gif'
-    meta_type      = 'ATDocument'
     portal_type    = 'Document'
     archetype_name = 'Page'
-    default_view   = 'document_view'
-    immediate_view = 'document_view'
-    suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Document', 'meta_type' : 'Document'}
     typeDescription= _(u'A page in the site. Can contain rich text.')
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)

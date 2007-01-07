@@ -173,13 +173,8 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
 
     schema         =  ATEventSchema
 
-    content_icon   = 'event_icon.gif'
-    meta_type      = 'ATEvent'
     portal_type    = 'Event'
     archetype_name = 'Event'
-    default_view   = 'event_view'
-    immediate_view = 'event_view'
-    suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Event', 'meta_type' : 'CMF Event'}
     typeDescription= _(u'Information about an upcoming event, which can be displayed in the calendar.')
     assocMimetypes = ()

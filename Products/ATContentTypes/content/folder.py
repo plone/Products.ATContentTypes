@@ -55,13 +55,8 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
 
     schema         =  ATFolderSchema
 
-    content_icon   = 'folder_icon.gif'
-    meta_type      = 'ATFolder'
     portal_type    = 'Folder'
     archetype_name = 'Folder'
-    immediate_view = 'folder_listing'
-    default_view   = 'folder_listing'
-    suppl_views    = ('folder_summary_view', 'folder_tabular_view', 'atct_album_view')
     _atct_newTypeFor = {'portal_type' : 'CMF Folder', 'meta_type' : 'Plone Folder'}
     typeDescription= _(u'A folder which can contain other items.')
     assocMimetypes = ()

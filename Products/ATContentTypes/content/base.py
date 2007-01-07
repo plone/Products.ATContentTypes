@@ -113,16 +113,12 @@ def translateMimetypeAlias(alias):
 
 class ATCTMixin(BrowserDefaultMixin):
     """Mixin class for AT Content Types"""
+
     schema         =  ATContentTypeSchema
 
-    # content_icon   = 'document_icon.gif'
-    meta_type      = 'ATContentType'
     archetype_name = 'AT Content Type'
-    immediate_view = 'base_view'
-    suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : None, 'meta_type' : None}
     typeDescription= ''
-    typeDescMsgId  = ''
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()

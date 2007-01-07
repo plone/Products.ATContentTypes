@@ -92,13 +92,8 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
 
     schema         =  ATImageSchema
 
-    content_icon   = 'image_icon.gif'
-    meta_type      = 'ATImage'
     portal_type    = 'Image'
     archetype_name = 'Image'
-    immediate_view = 'image_view'
-    default_view   = 'image_view'
-    suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF Image', 'meta_type' : 'Portal Image'}
     typeDescription= _(u'An image, which can be referenced in documents or displayed in an album.')
     assocMimetypes = ('image/*', )

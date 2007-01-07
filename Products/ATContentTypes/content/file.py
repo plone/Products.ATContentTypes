@@ -81,13 +81,8 @@ class ATFile(ATCTFileContent):
 
     schema         =  ATFileSchema
 
-    content_icon   = 'file_icon.gif'
-    meta_type      = 'ATFile'
     portal_type    = 'File'
     archetype_name = 'File'
-    immediate_view = 'file_view'
-    default_view   = 'file_view'
-    suppl_views    = ()
     _atct_newTypeFor = {'portal_type' : 'CMF File', 'meta_type' : 'Portal File'}
     typeDescription= _(u'An external file uploaded to the site.')
     assocMimetypes = ('application/*', 'audio/*', 'video/*', )
