@@ -73,7 +73,6 @@ class ATFavorite(ATCTContent):
     portal_type    = 'Favorite'
     archetype_name = 'Favorite'
     _atct_newTypeFor = {'portal_type' : 'CMF Favorite', 'meta_type' : 'Favorite'}
-    typeDescription = _(u'A placeholder item linking to a favorite object in the portal.')
     assocMimetypes = ()
     assocFileExt   = ('fav', )
     cmf_edit_kws   = ('remote_url',)

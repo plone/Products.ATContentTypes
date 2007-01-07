@@ -80,7 +80,6 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
     portal_type    = 'Document'
     archetype_name = 'Page'
     _atct_newTypeFor = {'portal_type' : 'CMF Document', 'meta_type' : 'Document'}
-    typeDescription= _(u'A page in the site. Can contain rich text.')
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
     assocFileExt   = ('txt', 'stx', 'rst', 'rest', 'py',)
     cmf_edit_kws   = ('text_format',)

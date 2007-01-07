@@ -42,7 +42,6 @@ class ATReferenceCriterion(ATSelectionCriterion):
     security       = ClassSecurityInfo()
     meta_type      = 'ATReferenceCriterion'
     archetype_name = 'Reference Criterion'
-    typeDescription= ''
     shortDesc      = 'Select referenced content'
 
 

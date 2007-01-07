@@ -122,7 +122,6 @@ class ATDateCriteria(ATBaseCriterion):
     schema         = ATDateCriteriaSchema
     meta_type      = 'ATFriendlyDateCriteria'
     archetype_name = 'Friendly Date Criteria'
-    typeDescription= ''
     shortDesc      = 'Relative date'
 
     security.declareProtected(View, 'getCriteriaItems')

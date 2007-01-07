@@ -60,8 +60,6 @@ class ATSortCriterion(ATBaseCriterion):
     schema         = ATSortCriterionSchema
     meta_type      = 'ATSortCriterion'
     archetype_name = 'Sort Criterion'
-    typeDescription= ''
-
     shortDesc      = 'Sort'
 
     security.declareProtected(View, 'getCriteriaItems')

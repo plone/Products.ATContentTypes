@@ -52,7 +52,6 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
     schema         = ATPortalTypeCriterionSchema
     meta_type      = 'ATPortalTypeCriterion'
     archetype_name = 'Portal Types Criterion'
-    typeDescription= ''
     shortDesc      = 'Select content types'
 
     security.declareProtected(View, 'getCurrentValues')

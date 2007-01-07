@@ -67,7 +67,6 @@ class ATBaseCriterion(NonRefCatalogContent):
     schema = ATBaseCriterionSchema
     meta_type = 'ATBaseCriterion'
     archetype_name = 'Base Criterion'
-    typeDescription= ''
 
     def __init__(self, id=None, field=None, oid=None):
         if oid is not None:

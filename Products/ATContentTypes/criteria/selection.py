@@ -85,7 +85,6 @@ class ATSelectionCriterion(ATBaseCriterion):
     schema         = ATSelectionCriterionSchema
     meta_type      = 'ATSelectionCriterion'
     archetype_name = 'Selection Criterion'
-    typeDescription= ''
     shortDesc      = 'Select values from list'
 
     def getCurrentValues(self):

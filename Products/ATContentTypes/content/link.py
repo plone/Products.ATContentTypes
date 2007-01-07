@@ -66,7 +66,6 @@ class ATLink(ATCTContent):
     portal_type    = 'Link'
     archetype_name = 'Link'
     _atct_newTypeFor = {'portal_type' : 'CMF Link', 'meta_type' : 'Link'}
-    typeDescription= _(u'A link to an internal or external resource.')
     assocMimetypes = ()
     assocFileExt   = ('link', 'url', )
     cmf_edit_kws   = ('remote_url', )

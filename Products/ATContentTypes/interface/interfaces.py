@@ -43,9 +43,6 @@ class IATContentType(ISelectableBrowserDefault, IBaseContent):
 
     _atct_newTypeFor = Attribute('''XXX''')
 
-    typeDescription = Attribute('''A short description used for the edit screen''')
-    typeDescMsgId = Attribute('''The i18n msgid of the type description''')
-
     assocMimetypes = Attribute('''A tuple of mimetypes that are associated
                                   with this type. Format: ('bar/foo', 'foo/*',)
                                ''')

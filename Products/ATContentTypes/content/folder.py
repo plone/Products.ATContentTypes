@@ -58,7 +58,6 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
     portal_type    = 'Folder'
     archetype_name = 'Folder'
     _atct_newTypeFor = {'portal_type' : 'CMF Folder', 'meta_type' : 'Plone Folder'}
-    typeDescription= _(u'A folder which can contain other items.')
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()
@@ -94,17 +93,11 @@ class ATBTreeFolder(AutoSortSupport, ATCTBTreeFolder):
     """A folder suitable for holding a very large number of items"""
     schema         =  ATBTreeFolderSchema
 
-    content_icon   = 'folder_icon.gif'
-    meta_type      = 'ATBTreeFolder'
+
     portal_type    = 'Large Plone Folder'
     archetype_name = 'Large Folder'
-    immediate_view = 'folder_listing'
-    default_view   = 'folder_listing'
-    suppl_views    = ('folder_summary_view', 'folder_tabular_view', 'atct_album_view')
-    global_allow   = False
     _atct_newTypeFor = {'portal_type' : 'CMF Large Plone Folder',
                         'meta_type' : 'Large Plone Folder'}
-    typeDescription= _(u'A folder suitable for holding a very large number of items')
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()

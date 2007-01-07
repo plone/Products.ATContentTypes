@@ -63,7 +63,6 @@ class ATBooleanCriterion(ATBaseCriterion):
     schema         = ATBooleanCriterionSchema
     meta_type      = 'ATBooleanCriterion'
     archetype_name = 'Boolean Criterion'
-    typeDescription= ''
     shortDesc      = 'Boolean (True/False)'
 
     security.declareProtected(View, 'getCriteriaItems')

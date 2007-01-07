@@ -126,9 +126,6 @@ class IATContentType(ISelectableBrowserDefault, IBaseContent):
 
     _atct_newTypeFor = Attribute('''XXX''')
 
-    typeDescription = Attribute('''A short description used for the edit screen''')
-    typeDescMsgId = Attribute('''The i18n msgid of the type description''')
-
     assocMimetypes = Attribute('''A tuple of mimetypes that are associated
                                   with this type. Format: ('bar/foo', 'foo/*',)
                                ''')
@@ -354,9 +351,6 @@ class IATTopic(IATContentType):
 class IATTopicCriterion(Interface):
     """AT Topic Criterion interface
     """
-
-    typeDescription = Attribute('''A short description used for the edit screen''')
-    typeDescMsgId = Attribute('''The i18n msgid of the type description''')
 
     def widget(field_name, mode="view", field=None, **kwargs):
         """redefine widget() to allow seperate field_names from field

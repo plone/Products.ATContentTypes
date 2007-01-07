@@ -71,9 +71,6 @@ class ATRelativePathCriterion(ATBaseCriterion):
     schema         = ATRelativePathCriterionSchema
     meta_type      = 'ATRelativePathCriterion'
     archetype_name = 'Relative Path Criterion'
-    typeDescription= ''
-    typeDescMsgId  = ''
-
     shortDesc      = 'Location in site relative to the current location'
 
     def getNavTypes(self):

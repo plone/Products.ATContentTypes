@@ -114,9 +114,6 @@ class IATTopicCriterion(Interface):
     """AT Topic Criterion interface
     """
 
-    typeDescription = Attribute('''A short description used for the edit screen''')
-    typeDescMsgId = Attribute('''The i18n msgid of the type description''')
-
     def widget(field_name, mode="view", field=None, **kwargs):
         """redefine widget() to allow seperate field_names from field
         """

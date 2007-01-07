@@ -118,7 +118,6 @@ class ATCTMixin(BrowserDefaultMixin):
 
     archetype_name = 'AT Content Type'
     _atct_newTypeFor = {'portal_type' : None, 'meta_type' : None}
-    typeDescription= ''
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()

@@ -63,8 +63,6 @@ class ATSimpleStringCriterion(ATBaseCriterion):
     schema         = ATSimpleStringCriterionSchema
     meta_type      = 'ATSimpleStringCriterion'
     archetype_name = 'Simple String Criterion'
-    typeDescription= ''
-
     shortDesc      = 'Text'
 
     security.declareProtected(View, 'getCriteriaItems')

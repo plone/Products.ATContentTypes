@@ -78,7 +78,6 @@ class ATDateRangeCriterion(ATBaseCriterion):
     schema         = ATDateRangeCriterionSchema
     meta_type      = 'ATDateRangeCriterion'
     archetype_name = 'Date Range Criterion'
-    typeDescription= ''
     shortDesc      = 'Date range'
 
     security.declareProtected(View, 'Value')

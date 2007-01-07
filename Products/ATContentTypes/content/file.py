@@ -84,7 +84,6 @@ class ATFile(ATCTFileContent):
     portal_type    = 'File'
     archetype_name = 'File'
     _atct_newTypeFor = {'portal_type' : 'CMF File', 'meta_type' : 'Portal File'}
-    typeDescription= _(u'An external file uploaded to the site.')
     assocMimetypes = ('application/*', 'audio/*', 'video/*', )
     assocFileExt   = ()
     cmf_edit_kws   = ()

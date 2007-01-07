@@ -112,7 +112,6 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
     portal_type    = 'News Item'
     archetype_name = 'News Item'
     _atct_newTypeFor = {'portal_type' : 'CMF News Item', 'meta_type' : 'News Item'}
-    typeDescription = _(u'An announcement that will show up on the news portlet and in the news listing.')
     assocMimetypes = ()
     assocFileExt   = ('news', )
     cmf_edit_kws   = ATDocument.cmf_edit_kws

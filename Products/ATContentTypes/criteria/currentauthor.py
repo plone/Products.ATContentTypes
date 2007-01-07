@@ -43,7 +43,6 @@ class ATCurrentAuthorCriterion(ATBaseCriterion):
     schema         = ATCurrentAuthorSchema
     meta_type      = 'ATCurrentAuthorCriterion'
     archetype_name = 'Current Author Criterion'
-    typeDescription= ''
     shortDesc      = 'Restrict to current user'
 
     security.declareProtected(View, 'getCriteriaItems')

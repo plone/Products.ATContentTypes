@@ -67,16 +67,5 @@
 </tr>
 </table>
 
-<metal:typedescription metal:define-macro="typedescription">
-    <tal:description define="description context/typeDescription| nothing;"
-                     condition="description">
-
-        <p tal:content="description" i18n:translate="">
-            type description
-        </p>
-
-    </tal:description>
-</metal:typedescription>
-
 </body>
 </html>

@@ -95,7 +95,6 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     portal_type    = 'Image'
     archetype_name = 'Image'
     _atct_newTypeFor = {'portal_type' : 'CMF Image', 'meta_type' : 'Portal Image'}
-    typeDescription= _(u'An image, which can be referenced in documents or displayed in an album.')
     assocMimetypes = ('image/*', )
     assocFileExt   = ('jpg', 'jpeg', 'png', 'gif', )
     cmf_edit_kws   = ('file', )

@@ -146,7 +146,6 @@ class ATTopic(ATCTFolder):
     portal_type    = 'Topic'
     archetype_name = 'Smart Folder'
     _atct_newTypeFor = {'portal_type' : 'CMF Topic', 'meta_type' : 'Portal Topic'}
-    typeDescription= _(u'An automatically updated stored search that can be used to display items matching criteria you specify.')
     assocMimetypes = ()
     assocFileExt   = ()
     cmf_edit_kws   = ()

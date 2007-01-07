@@ -82,7 +82,6 @@ class ATPathCriterion(ATBaseCriterion):
     schema         = ATPathCriterionSchema
     meta_type      = 'ATPathCriterion'
     archetype_name = 'Path Criterion'
-    typeDescription= ''
     shortDesc      = 'Location in site'
 
     def getNavTypes(self):

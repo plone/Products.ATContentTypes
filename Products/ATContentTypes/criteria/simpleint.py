@@ -98,7 +98,6 @@ class ATSimpleIntCriterion(ATBaseCriterion):
     schema         = ATSimpleIntCriterionSchema
     meta_type      = 'ATSimpleIntCriterion'
     archetype_name = 'Simple Int Criterion'
-    typeDescription= ''
     shortDesc      = 'Integer value or range'
 
     security.declareProtected(View, 'getCriteriaItems')

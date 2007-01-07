@@ -83,7 +83,6 @@ class ATListCriterion(ATBaseCriterion):
     schema         = ATListCriterionSchema
     meta_type      = 'ATListCriterion'
     archetype_name = 'List Criterion'
-    typeDescription= ''
     shortDesc      = 'List of values'
 
     security.declareProtected(View, 'getCriteriaItems')

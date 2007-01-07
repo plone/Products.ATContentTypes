@@ -176,7 +176,6 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
     portal_type    = 'Event'
     archetype_name = 'Event'
     _atct_newTypeFor = {'portal_type' : 'CMF Event', 'meta_type' : 'CMF Event'}
-    typeDescription= _(u'Information about an upcoming event, which can be displayed in the calendar.')
     assocMimetypes = ()
     assocFileExt   = ('event', )
     cmf_edit_kws   = ('effectiveDay', 'effectiveMo', 'effectiveYear',
