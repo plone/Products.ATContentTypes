@@ -118,7 +118,7 @@ class IAutoOrderSupport(IAutoSortSupport, IOrderedContainer, IZopeOrderedContain
 
 
 class IATContentType(ISelectableBrowserDefault, IBaseContent):
-    """Marker interface for AT Content Types
+    """interface for AT Content Types
     """
 
     default_view = Attribute('''Default view template - used for dynamic view''')
