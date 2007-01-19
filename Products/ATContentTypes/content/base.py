@@ -341,18 +341,6 @@ class ATCTContent(ATCTMixin, BaseContent):
                     id = posixpath.basename(path_info)
             self.setTitle(id)
 
-    #def PUT(self, *args, **kwargs):
-    #    """Overwrite PUT to delete ignored content after it is created
-    #    """
-    #    created = getattr(self, ' __null_resource__', False)
-    #    result = BaseContent.PUT(self, *args, **kwargs)
-    #    if created and self._PUT_ignorematch(self):
-    #        parent = getattr(self, '__parent__', None)
-    #        name = getattr(self, '__name__', None)
-    #        if parent is not None or name is not None:
-    #            parent.manage_delObjects([name])
-    #    return result
-
 InitializeClass(ATCTContent)
 
 class ATCTFileContent(ATCTContent):
@@ -462,13 +450,8 @@ class ATCTFileContent(ATCTContent):
             raise ResourceLockedError, "File is locked via WebDAV"
 
         self.setTitle(title)
-        ##self.setContentType(content_type)
-        ##if precondition: self.precondition=str(precondition)
-        ##elif self.precondition: del self.precondition
         if filedata is not None:
             self.update_data(filedata, content_type, len(filedata))
-        ##else:
-        ##    self.ZCacheable_invalidate()
         if REQUEST:
             message="Saved changes."
             return self.manage_main(self,REQUEST,manage_tabs_message=message)
@@ -612,9 +595,6 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
                       ConstrainTypesMixin.__implements__,)
 
     security       = ClassSecurityInfo()
-
-    # copy from PloneFolder's
-    security.declareProtected(Permissions.copy_or_move, 'manage_copyObjects')
 
     def __browser_default__(self, request):
         """ Set default so we can return whatever we want instead
