@@ -133,27 +133,23 @@
                                                checked python:test(indexObj.enabled, 'checked', None)"/>
                     </td>
                     <td>
-                        <span tal:content="indexObj/friendlyName"
-                              i18n:translate=""
-                              i18n:domain="plone" />
-                        <input type="hidden"
+                        <input type="text"
                                value=""
                                name=""
                                id=""
+                               size="10"
                                tal:attributes="name string:metadata.friendlyName:records;
-                                               value indexObj/friendlyName; "/>
+                                               value indexObj/friendlyName;
+                                               tabindex tabindex/next;"/>
                     </td>
                     <td>
-                        <div tal:content="indexObj/description"
-                             i18n:translate=""
-                             i18n:domain="plone">
-                            metadata description
-                        </div>
-                        <input type="hidden"
+                        <textarea cols="30" rows="4" type="text"
                                value=""
                                name=""
+                               id=""
                                tal:attributes="name string:metadata.description:records;
-                                               value indexObj/description" />
+                                               tabindex tabindex/next;"
+                               tal:content="indexObj/description"></textarea>
                     </td>
 
                 </tr>

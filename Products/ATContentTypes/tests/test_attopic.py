@@ -378,6 +378,20 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
     def test_schema_marshall(self):
         pass
 
+    def test_sort_criterion_does_not_affect_available_fields(self):
+        topic = self._ATCT
+        # set a sort criterion
+        topic.setSortCriterion('created', False)
+        # It should still be available for other criteria
+        self.failUnless([i for i in topic.listAvailableFields()
+                         if i[0] == 'created'])
+        # Add a normal criteria for the same field
+        crit = topic.addCriterion('created', 'ATFriendlyDateCriteria')
+        # It should no longer be available
+        self.failIf([i for i in topic.listAvailableFields()
+                     if i[0] == 'created'])
+
+
 tests.append(TestSiteATTopic)
 
 class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
@@ -585,10 +599,6 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, InAndOutWidget),
                         'Value is %s' % id(field.widget))
-#         vocab = field.Vocabulary(dummy)
-#         self.failUnless(isinstance(vocab, DisplayList),
-#                         'Value is %s' % type(vocab))
-#         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
 tests.append(TestATTopicFields)
 

@@ -303,7 +303,8 @@ class ATTopic(ATCTFolder):
     def listAvailableFields(self):
         """Return a list of available fields for new criteria.
         """
-        current   = [ crit.Field() for crit in self.listCriteria() ]
+        current   = [ crit.Field() for crit in self.listCriteria()
+                      if not IATTopicSortCriterion.isImplementedBy(crit)]
         fields = self.listFields()
         val = [ field
                  for field in fields
@@ -316,11 +317,11 @@ class ATTopic(ATCTFolder):
         """Return a list of our subtopics.
         """
         val = self.objectValues(self.meta_type)
-        check_p = getToolByName(self.portal_membership).checkPermission
+        check_p = getToolByName(self, 'portal_membership').checkPermission
         tops = []
         for top in val:
             if check_p('View', top):
-                tops.append((top.getTitle().lower(),top))
+                tops.append((top.Title().lower(),top))
         tops.sort()
         tops = [t[1] for t in tops]
         return val
