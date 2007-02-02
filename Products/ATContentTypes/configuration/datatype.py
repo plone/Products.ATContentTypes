@@ -106,7 +106,7 @@ def pil_algo(value):
     """Get PIL image filter algo from PIL.Image
     """
     try:
-        import PIL.Image
+        import Image
     except ImportError:
         return None
     
@@ -114,8 +114,8 @@ def pil_algo(value):
     available = ('NEAREST', 'BILINEAR', 'BICUBIC', 'ANTIALIAS')
     if value not in available:
         raise ValueError, "unknown algo %s" % value
-    import PIL.Image
-    return getattr(PIL.Image, value)
+    import Image
+    return getattr(Image, value)
 
 class BaseFactory(object):
     """Basic factory
