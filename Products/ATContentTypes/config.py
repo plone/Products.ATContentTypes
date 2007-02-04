@@ -85,7 +85,7 @@ else:
     del registerType
 
 try:
-    import Image
+    from PIL import Image
 except ImportError:
     HAS_PIL = False
 else:

@@ -44,11 +44,11 @@ import exif
 
 # the following code is based on the rotation code of Photo
 if HAS_PIL:
-    import Image
+    import PIL.Image
 
 LOG = logging.getLogger('ATCT.image')
 
-# transpose constants, taken from Image to maintain compatibilty
+# transpose constants, taken from PIL.Image to maintain compatibilty
 FLIP_LEFT_RIGHT = 0
 FLIP_TOP_BOTTOM = 1
 ROTATE_90 = 2
@@ -231,7 +231,7 @@ class ATCTImageTransform(Base):
         image2 = StringIO()
         
         if image is not None:
-            img = Image.open(image)
+            img = PIL.Image.open(image)
             del image
             fmt = img.format
             img = img.transpose(method)
