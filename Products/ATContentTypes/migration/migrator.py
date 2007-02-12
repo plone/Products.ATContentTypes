@@ -243,7 +243,7 @@ class BaseMigrator:
             if getattr(aq_base(self.new), id, _marker) is not _marker:
                 continue
             try:
-                self.new.manage_addProperty(id, value, typ)
+                self.new._setProperty(id, value, typ)
             except ConflictError:
                 raise
             except:
