@@ -1,5 +1,12 @@
+1.2.0-alpha3 unreleased
+=======================
+
+ * Merged plip174-reusable-i18n branch. Content name normalization from title
+   is now based on plone.i18n.normalizer.
+   [hannosch]
+
 1.2.0-alpha2 2007-02-08
-======================
+=======================
 
  * Removed various obsolete class attributes from content type classes. These
    are managed by GenericSetup profiles now.

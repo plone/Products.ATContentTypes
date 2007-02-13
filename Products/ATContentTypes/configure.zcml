@@ -8,6 +8,7 @@
   <include file="implements.zcml"/>
 
   <include package=".exportimport" />
+  <include package="plone.i18n.normalizer" />
 
   <five:deprecatedManageAddDelete
       class=".content.document.ATDocument" />

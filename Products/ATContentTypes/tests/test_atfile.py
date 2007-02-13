@@ -241,12 +241,14 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
 
 tests.append(TestATFileFields)
 
-class TestCleanupFilename(unittest.TestCase):
+class TestCleanupFilename(atcttestcase.ATCTSiteTestCase):
 
     def test_cleanup_filename(self):
+        self.app.REQUEST.set('HTTP_ACCEPT_LANGUAGE', 'el')
         from Products.ATContentTypes.content.base import cleanupFilename
-        text = 'Νίκος Τζάνος'
-        self.assertEquals(cleanupFilename(text, 'utf-8'), 'Nikos_Tzanos')
+        text = unicode('Νίκος Τζάνος', 'utf-8')
+        self.assertEquals(cleanupFilename(text, request=self.app.REQUEST),
+                          'Nikos Tzanos')
 
 tests.append(TestCleanupFilename)
 
