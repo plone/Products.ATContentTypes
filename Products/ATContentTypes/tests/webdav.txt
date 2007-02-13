@@ -604,10 +604,10 @@ Now for the real thing, doing a PUT request, back to Member role:
   HTTP/1.1 201 Created
   ...
 
-  >>> 'foto-do-parana.jpg' in self.folder.objectIds()
+  >>> 'Foto-do-Parana.jpg' in self.folder.objectIds()
   True
 
-  >>> image = self.folder['foto-do-parana.jpg']
+  >>> image = self.folder['Foto-do-Parana.jpg']
 
   >>> print image.getPortalTypeName()
   Image
