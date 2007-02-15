@@ -68,7 +68,7 @@ from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixin
 from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
-from plone.i18n.normalizer.interfaces import IUserPreferredURLNormalizer
+from plone.i18n.normalizer.interfaces import IUserPreferredFileNameNormalizer
 
 DEBUG = True
 LOG = logging.getLogger('ATCT')
@@ -87,7 +87,7 @@ def cleanupFilename(filename, request=None):
     if not filename:
         return
     if request is not None:
-        return IUserPreferredURLNormalizer(request).normalize(filename)
+        return IUserPreferredFileNameNormalizer(request).normalize(filename)
     return None
 
 def translateMimetypeAlias(alias):
