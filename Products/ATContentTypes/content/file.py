@@ -64,6 +64,7 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
     FileField('file',
               required=True,
               primary=True,
+              searchable=True,
               languageIndependent=True,
               storage = AnnotationStorage(migrate=True),
               validators = (('isNonEmptyFile', V_REQUIRED),

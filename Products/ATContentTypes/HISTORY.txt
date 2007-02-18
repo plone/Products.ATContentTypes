@@ -1,6 +1,12 @@
 1.2.0-alpha3 unreleased
 =======================
 
+ * Set ATFile's file field to be 'searchable'.  This means that it'll
+   be indexed correctly including transforms.  If you don't want this,
+   set your own 'index_method', or set 'searchable' to False in your
+   code.
+   [nouri]
+
  * Extinguished last occurrences of old portal_status_message in URL support.
    [hannosch]
 
