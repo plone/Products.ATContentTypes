@@ -321,9 +321,7 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
 
         self.assertStatusEqual(response.getStatus(), 302) # Redirect to edit
 
-        # omit ?portal_status_message=...
-        location = response.getHeader('Location').split('?')[0]
-
+        location = response.getHeader('Location')
         self.failUnless(location.startswith(self.folder_url), location)
         self.failUnless(location.endswith('edit'), location)
 

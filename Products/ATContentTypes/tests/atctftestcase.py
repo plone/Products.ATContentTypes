@@ -171,9 +171,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
                                      % self.obj_path, self.basic_auth)
             self.assertStatusEqual(response.getStatus(), 302) # Redirect
 
-            # omit ?portal_status_message=...
-            body = response.getBody().split('?')[0]
-
+            body = response.getBody()
             self.failUnless(body.startswith(self.folder_url))
             self.failUnless(body.endswith('/translate_item'))
 

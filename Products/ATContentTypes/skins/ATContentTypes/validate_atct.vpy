@@ -7,9 +7,11 @@
 ##bind subpath=traverse_subpath
 ##parameters=
 ##
+
 errors  = {}
 request = context.REQUEST
 form    = request.form
+from Products.CMFPlone import PloneMessageFactory as _
 
 ## It's hacky and not nice but it's working
 # Set the title from the filename of uploaded image or field
@@ -32,13 +34,10 @@ if pfield:
 errors  = context.validate(REQUEST=request, errors=errors, data=1, metadata=0)
 
 if errors:
-    return state.set(status='failure', errors=errors, portal_status_message='Please correct the indicated errors.')
+    msg = _(u'Please correct the indicated errors.')
+    context.plone_utils.addPortalMessage(msg)
+    return state.set(status='failure', errors=errors)
 
-message = 'Changes saved.'
-#TODO: This should be an additional status message, which should be possible
-#in Plone 2.5. Reactivate then but right now it's not possible to i18n-ize this.
-#tidiedFields = request.get('tidiedFields', None)
-#if tidiedFields:
-#    message = '%s mxTidy has fixed the HTML code.' % message
-
-return state.set(portal_status_message=message)
+msg = _(u'Changes saved.')
+context.plone_utils.addPortalMessage(msg)
+return state

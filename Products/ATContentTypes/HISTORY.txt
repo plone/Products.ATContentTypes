@@ -1,6 +1,9 @@
 1.2.0-alpha3 unreleased
 =======================
 
+ * Extinguished last occurrences of old portal_status_message in URL support.
+   [hannosch]
+
  * Merged plip174-reusable-i18n branch. Normalization of uploaded file names
    is now based on plone.i18n.normalizer.
    [hannosch]
