@@ -83,6 +83,19 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
                 u'help_enable_presentation_description', 
                 default=u'If selected, this item will have an option to view as a presentation.')
             ),
+    ),
+    BooleanField('tableContents',
+        required = False,
+        languageIndependent = True,
+        schemata = 'settings',
+        widget = BooleanWidget(
+            label= _(
+                u'help_enable_table_of_contents', 
+                default=u'Enable table of contents'),
+            description = _(
+                u'help_enable_table_of_contents_description', 
+                default=u'If selected, this item will show a table of contents at the top of the page.')
+            ),
     )),
     marshall=RFC822Marshaller()
     )
