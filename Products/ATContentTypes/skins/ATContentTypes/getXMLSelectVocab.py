@@ -7,7 +7,7 @@
 ##parameters=method,param,value
 ##title=Get a DisplayList and format for XML request
 
-params = {param:value}
+params = {param:value, 'display_list': True}
 
 vocab = getattr(context, method)(**params)
 site_encoding = context.plone_utils.getSiteEncoding()
