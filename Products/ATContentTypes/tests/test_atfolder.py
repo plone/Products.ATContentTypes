@@ -58,9 +58,6 @@ from Products.ATContentTypes.interface import IATFolder as Z3IATFolder
 from Products.ATContentTypes.interface import IATBTreeFolder as Z3IATBTreeFolder
 from zope.interface.verify import verifyObject as Z3verifyObject
 
-def editCMF(obj):
-    dcEdit(obj)
-
 def editATCT(obj):
     dcEdit(obj)
 
@@ -86,8 +83,6 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     klass = ATFolder
     portal_type = 'Folder'
-    cmf_portal_type = 'CMF Folder'
-    cmf_klass = PloneFolder
     title = 'Folder'
     meta_type = 'ATFolder'
     icon = 'folder_icon.gif'
@@ -113,14 +108,8 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_edit(self):
-        old = self._cmf
         new = self._ATCT
-        editCMF(old)
         editATCT(new)
-        self.failUnless(old.Title() == new.Title(), 'Title mismatch: %s / %s' \
-                        % (old.Title(), new.Title()))
-        self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
-                        % (old.Description(), new.Description()))
 
     def test_implements_autoorder(self):
         self.failUnless(IAutoOrderSupport.isImplementedBy(self._ATCT))
@@ -145,7 +134,6 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     klass = ATBTreeFolder
     portal_type = 'Large Plone Folder'
-    cmf_klass = None
     title = 'Large Folder'
     meta_type = 'ATBTreeFolder'
     icon = 'folder_icon.gif'

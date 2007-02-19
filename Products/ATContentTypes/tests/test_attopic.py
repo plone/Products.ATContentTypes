@@ -38,7 +38,6 @@ from Products.Archetypes.atapi import *
 from Products.ATContentTypes.content.topic import ATTopic
 from Products.ATContentTypes.content.topic import ChangeTopics
 from Products.ATContentTypes.content.folder import ATFolder
-from Products.CMFTopic.Topic import Topic
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.interfaces import IATTopic
 from Interface.Verify import verifyObject
@@ -64,8 +63,6 @@ CRITERIA_SETUP = {'Integer Criterion':      #Meta Type
                   'String Criterion':
                         ('SearchableText',
                          'portal'),
-                  # within day should behave identically for both CMF and ATTopics
-                  # the others not so much. [alecm]
                   'Friendly Date Criterion':
                         ('start',
                          '10',
@@ -87,16 +84,6 @@ CRIT_MAP = {'Integer Criterion': 'ATSimpleIntCriterion',
             'Sort Criterion': 'ATSortCriterion'}
 
 REV_CRIT_MAP = dict([[v,k] for k,v in CRIT_MAP.items()])
-
-def editCMF(obj):
-    dcEdit(obj)
-    obj.edit(acquireCriteria = ACQUIRE, description = obj.Description())
-    for meta in CRITERIA_SETUP.keys():
-        CRIT_FIELD = CRITERIA_SETUP[meta][0]
-        obj.addCriterion(CRIT_FIELD, meta)
-    for crit in obj.listCriteria():
-        params = CRITERIA_SETUP[crit.meta_type][1:]
-        crit.edit(*params)
 
 def editATCT(obj):
     dcEdit(obj)
@@ -173,8 +160,6 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
 
     klass = ATTopic
     portal_type = 'Topic'
-    cmf_portal_type = 'CMF Topic'
-    cmf_klass = Topic
     title = 'Smart Folder'
     meta_type = 'ATTopic'
     icon = 'topic_icon.gif'
@@ -182,7 +167,6 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
     def afterSetUp(self):
         self.setRoles(['Manager', 'Member'])
         self._ATCT = self._createType(self.folder, self.portal_type, 'ATCT')
-        self._cmf = self._createType(self.folder, self.cmf_portal_type, 'cmf')
         self.setRoles(['Member'])
 
     def test_implementsATTopic(self):
@@ -265,31 +249,8 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.assertEquals( query['baz'], 'bam' )
 
     def test_edit(self):
-        old = self._cmf
         new = self._ATCT
-        editCMF(old)
         editATCT(new)
-        self.failUnless(old.Title() == new.Title(), 'Title mismatch: %s / %s' \
-                        % (old.Title(), new.Title()))
-        self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
-                        % (old.Description(), new.Description()))
-        #We only need to test truth '1'=1=True 0=None=False
-        self.failUnlessEqual(not old.acquireCriteria, not new.getAcquireCriteria(), 'Acquire Criteria mismatch: %s / %s' \
-                        % (old.acquireCriteria, new.getAcquireCriteria()))
-        #Test all criteria
-        for old_crit in old.listCriteria():
-            OLD_META = old_crit.meta_type
-            FIELD = old_crit.field or old_crit.index
-            NEW_META = CRIT_MAP[OLD_META]
-            new_crit = new.getCriterion('%s_%s'%(FIELD, NEW_META))
-            self.failUnless(convert_old_catalog_usage(
-                        old_crit.getCriteriaItems()) == new_crit.getCriteriaItems(),
-                        'Criteria mismatch for criteria %s: %s / %s' \
-                            % (NEW_META,
-                               convert_old_catalog_usage(old_crit.getCriteriaItems()),
-                               new_crit.getCriteriaItems()))
-        self.failUnless(convert_old_catalog_query(old.buildQuery()) == new.buildQuery(), 'Build Query mismatch: %s / %s' \
-                        % (convert_old_catalog_query(old.buildQuery()), new.buildQuery()))
 
     def test_hasSubTopics(self):
         #Ensure that has subtopics returns True if there are subtopics,

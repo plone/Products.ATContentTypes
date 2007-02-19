@@ -39,7 +39,6 @@ from Products.Archetypes.tests.atsitetestcase import portal_name
 
 from Products.ATContentTypes.content.favorite import ATFavorite
 from Products.ATContentTypes.interfaces import IATFavorite
-from Products.CMFDefault.Favorite import Favorite
 from Interface.Verify import verifyObject
 
 # z3 imports
@@ -47,13 +46,6 @@ from Products.ATContentTypes.interface import IATFavorite as Z3IATFavorite
 from zope.interface.verify import verifyObject as Z3verifyObject
 
 URL='/%s/Members' % portal_name
-
-def editCMF(obj):
-    obj.setTitle('Test Title')
-    obj.setDescription('Test description')
-    obj.edit(remote_url=URL)
-    assert obj.remote_url == 'Members'
-    return obj
 
 def editATCT(obj):
     obj.setTitle('Test Title')
@@ -67,11 +59,10 @@ class TestSiteATFavorite(atcttestcase.ATCTTypeTestCase):
 
     klass = ATFavorite
     portal_type = 'Favorite'
-    cmf_portal_type = 'CMF Favorite'
-    cmf_klass = Favorite
     title = 'Favorite'
     meta_type = 'ATFavorite'
     icon = 'favorite_icon.gif'
+
     def test_implementsZ3ATFavorite(self):
         iface = Z3IATFavorite
         self.failUnless(Z3verifyObject(iface, self._ATCT))
@@ -80,30 +71,6 @@ class TestSiteATFavorite(atcttestcase.ATCTTypeTestCase):
         iface = IATFavorite
         self.failUnless(iface.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
-
-    def XXX_DISABLED_test_edit(self):
-        old = editCMF(self._cmf)
-        new = editATCT(self._ATCT)
-        transaction.savepoint()
-
-        # CMF uid handling test ... had some issues with it
-        obj = self.portal.unrestrictedTraverse(URL)
-        handler = getToolByName(self.portal, 'portal_uidhandler')
-        uid = old.remote_uid
-        self.failUnlessEqual(handler.queryObject(uid).getPhysicalPath(),
-                             obj.getPhysicalPath())
-
-        self.failUnlessEqual(old.Title(), new.Title())
-        self.failUnlessEqual(old.Description(), new.Description())
-
-        url = 'http://nohost%s' % URL
-        self.failUnlessEqual(url, obj.absolute_url())
-
-        self.failUnlessEqual(old.remote_url, URL[len(portal_name)+2:])
-        self.failUnlessEqual(old.remote_url, new.remote_url)
-        self.failUnlessEqual(old.getRemoteUrl(), url)
-        self.failUnlessEqual(new.getRemoteUrl(), url)
-        self.failUnlessEqual(old.getRemoteUrl(), new.getRemoteUrl())
 
     def testLink(self):
         obj = self._ATCT

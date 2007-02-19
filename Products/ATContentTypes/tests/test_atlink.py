@@ -37,7 +37,6 @@ from Products.Archetypes.atapi import *
 
 from Products.ATContentTypes.content.link import ATLink
 from Products.ATContentTypes.interfaces import IATLink
-from Products.CMFDefault.Link import Link
 from Interface.Verify import verifyObject
 
 # z3 imports
@@ -45,11 +44,6 @@ from Products.ATContentTypes.interface import IATLink as Z3IATLink
 from zope.interface.verify import verifyObject as Z3verifyObject
 
 URL='http://www.example.org/'
-
-def editCMF(obj):
-    obj.setTitle('Test Title')
-    obj.setDescription('Test description')
-    obj.edit(remote_url=URL)
 
 def editATCT(obj):
     obj.setTitle('Test Title')
@@ -62,8 +56,6 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
 
     klass = ATLink
     portal_type = 'Link'
-    cmf_portal_type = 'CMF Link'
-    cmf_klass = Link
     title = 'Link'
     meta_type = 'ATLink'
     icon = 'link_icon.gif'
@@ -89,14 +81,8 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
         self.failUnlessEqual(obj.getRemoteUrl(), url)
 
     def test_edit(self):
-        old = self._cmf
         new = self._ATCT
-        editCMF(old)
         editATCT(new)
-        self.failUnless(old.Title() == new.Title(), 'Title mismatch: %s / %s' \
-                        % (old.Title(), new.Title()))
-        self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
-                        % (old.Description(), new.Description()))
 
     def test_get_size(self):
         atct = self._ATCT

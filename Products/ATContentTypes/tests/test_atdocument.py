@@ -40,7 +40,6 @@ from Products.ATContentTypes.content.document import ATDocument
 from Products.ATContentTypes.lib.validators import TidyHtmlWithCleanupValidator
 from Products.ATContentTypes.tests.utils import TidyHTMLValidator
 from Products.ATContentTypes.tests.utils import input_file_path
-from Products.CMFDefault.Document import Document
 from Products.ATContentTypes.interfaces import IHistoryAware
 from Products.ATContentTypes.interfaces import ITextContent
 from Products.ATContentTypes.interfaces import IATDocument
@@ -74,11 +73,6 @@ Text, text, text
 * List
 """
 
-def editCMF(obj):
-    text_format='stx'
-    dcEdit(obj)
-    obj.edit(text_format = text_format, text = example_stx)
-
 def editATCT(obj):
     text_format='text/structured'
     dcEdit(obj)
@@ -90,8 +84,6 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
 
     klass = ATDocument
     portal_type = 'Document'
-    cmf_portal_type = 'CMF Document'
-    cmf_klass = Document
     title = 'Page'
     meta_type = 'ATDocument'
     icon = 'document_icon.gif'
@@ -124,12 +116,8 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_edit(self):
-        old = self._cmf
         new = self._ATCT
-        editCMF(old)
         editATCT(new)
-        self.failUnless(old.CookedBody(stx_level=2) == new.CookedBody(), 'Body mismatch: %s / %s' \
-                        % (old.CookedBody(stx_level=2), new.CookedBody()))
 
     def test_cmf_edit_failure(self):
         self._ATCT.edit(thisisnotcmfandshouldbeignored=1)

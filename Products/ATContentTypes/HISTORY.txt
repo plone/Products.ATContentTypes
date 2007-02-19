@@ -1,6 +1,10 @@
 1.2.0-alpha3 unreleased
 =======================
 
+ * Adjusted tests to deal with the removal of the old CMF types from the
+   GenericSetup profiles. This refs http://dev.plone.org/plone/ticket/6156.
+   [hannosch]
+
  * Set ATFile's file field to be 'searchable'.  This means that it'll
    be indexed correctly including transforms.  If you don't want this,
    set your own 'index_method', or set 'searchable' to False in your

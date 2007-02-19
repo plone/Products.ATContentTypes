@@ -42,7 +42,6 @@ import StringIO
 from Products.ATContentTypes.content.file import ATFile
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.interfaces import IFileContent
-from Products.CMFDefault.File import File
 from Interface.Verify import verifyObject
 
 # z3 imports
@@ -55,10 +54,6 @@ file_text = """
 foooooo
 """
 
-def editCMF(obj):
-    dcEdit(obj)
-    obj.edit(file=file_text)
-
 def editATCT(obj):
     dcEdit(obj)
     obj.edit(file=file_text)
@@ -69,8 +64,6 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
 
     klass = ATFile
     portal_type = 'File'
-    cmf_portal_type = 'CMF File'
-    cmf_klass = File
     title = 'File'
     meta_type = 'ATFile'
     icon = 'file_icon.gif'
@@ -94,12 +87,8 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_edit(self):
-        old = self._cmf
         new = self._ATCT
-        editCMF(old)
         editATCT(new)
-        self.compareDC(old, new)
-        self.failUnlessEqual(str(old), str(new.getFile()))
 
     def testCompatibilityFileAccess(self):
         new = self._ATCT

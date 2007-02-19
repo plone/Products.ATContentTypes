@@ -37,7 +37,6 @@ from Products.Archetypes.atapi import *
 from Products.ATContentTypes.tests.utils import dcEdit
 
 from Products.ATContentTypes.content.event import ATEvent
-from Products.CMFCalendar.Event import Event
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.tests.utils import EmailValidator
 from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
@@ -67,17 +66,6 @@ EV_ATTENDEES = ('john@doe.com',
                 'john@example.org')
 TEXT = "lorem ipsum"
 
-def editCMF(obj):
-    dcEdit(obj)
-    obj.setStartDate(S_DATE)
-    obj.setEndDate(E_DATE)
-    obj.location=LOCATION
-    obj.contact_name=C_NAME
-    obj.contact_email=C_EMAIL
-    obj.contact_phone=C_PHONE
-    obj.event_url=EV_URL
-    obj.setSubject((EV_TYPE,))
-
 def editATCT(obj):
     dcEdit(obj)
     obj.setLocation(LOCATION)
@@ -98,8 +86,6 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
 
     klass = ATEvent
     portal_type = 'Event'
-    cmf_portal_type = 'CMF Event'
-    cmf_klass = Event
     title = 'Event'
     meta_type = 'ATEvent'
     icon = 'event_icon.gif'
@@ -122,31 +108,8 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_edit(self):
-        old = self._cmf
         new = self._ATCT
-        editCMF(old)
         editATCT(new)
-        self.failUnless(old.Title() == new.Title(), 'Title mismatch: %s / %s' \
-                        % (old.Title(), new.Title()))
-        self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
-                        % (old.Description(), new.Description()))
-
-        self.failUnless(old.location == new.getLocation(), 'Location mismatch: %s / %s' \
-                        % (old.location, new.getLocation()))
-        self.failUnless(old.Subject() == new.getEventType(), 'EventType mismatch: %s / %s' \
-                        % (old.Subject(), new.getEventType()))
-        self.failUnless(old.event_url == new.event_url(), 'EventUrl mismatch: %s / %s' \
-                        % (old.event_url, new.event_url()))
-        self.failUnless(old.start() == new.start(), 'Start mismatch: %s / %s' \
-                        % (old.start(), new.start()))
-        self.failUnless(old.end() == new.end(), 'End mismatch: %s / %s' \
-                        % (old.end(), new.end()))
-        self.failUnless(old.contact_name == new.contact_name(), 'contact_name mismatch: %s / %s' \
-                        % (old.contact_name, new.contact_name()))
-        self.failUnless(old.contact_phone == new.contact_phone(), 'contact_phone mismatch: %s / %s' \
-                        % (old.contact_phone, new.contact_phone()))
-        self.failUnless(old.contact_email == new.contact_email(), 'contact_email mismatch: %s / %s' \
-                        % (old.contact_email, new.contact_email()))
         self.assertEquals(new.start_date, DT2dt(new.start()))
         self.assertEquals(new.end_date, DT2dt(new.end()))
         self.assertEquals(new.start_date, DT2dt(S_DATE))

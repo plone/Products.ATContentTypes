@@ -43,7 +43,6 @@ from Products.ATContentTypes.content.image import ATImage
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage
 
-from Products.CMFDefault.Image import Image
 from Interface.Verify import verifyObject
 
 # z3 imports
@@ -73,10 +72,6 @@ TEST_JPEG_FILE = open(os.path.join(PACKAGE_HOME, 'input', 'canoneye.jpg'), 'rb')
 TEST_JPEG = loadImage('canoneye.jpg')
 TEST_JPEG_LEN = len(TEST_JPEG)
 
-def editCMF(obj):
-    obj.update_data(TEST_GIF, content_type="image/gif")
-    dcEdit(obj)
-
 def editATCT(obj):
     obj.setImage(TEST_GIF, content_type="image/gif")
     dcEdit(obj)
@@ -87,8 +82,6 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
 
     klass = ATImage
     portal_type = 'Image'
-    cmf_portal_type = 'CMF Image'
-    cmf_klass = Image
     title = 'Image'
     meta_type = 'ATImage'
     icon = 'image_icon.gif'
@@ -112,14 +105,8 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_edit(self):
-        old = self._cmf
         new = self._ATCT
-        editCMF(old)
         editATCT(new)
-        self.failUnless(old.Title() == new.Title(), 'Title mismatch: %s / %s' \
-                        % (old.Title(), new.Title()))
-        self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
-                        % (old.Description(), new.Description()))
 
     def test_getEXIF(self):
         # NOTE: not a real test
@@ -194,31 +181,11 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         self.failUnless(isinstance(marshall, tuple(marshallers)), marshall)
 
     def test_dcEdit(self):
-        #if not hasattr(self, '_cmf') or not hasattr(self, '_ATCT'):
-        #    return
-        old = self._cmf
         new = self._ATCT
         new.setImage(TEST_GIF, content_type="image/gif")
-        dcEdit(old)
         dcEdit(new)
-        self.compareDC(old, new)
 
     def test_broken_exif(self):
-        #EXIF data in images from Canon digicams breaks EXIF of 2005.05.12 with following exception
-        #
-        #2005-05-01T19:21:16 ERROR(200) Archetypes None
-        #Traceback (most recent call last):
-        #  File "/home/russ/cb/var/zope/Products/ATContentTypes/content/image.py", line 207, in getEXIF
-        #    exif_data = exif.process_file(img, debug=False, noclose=True)
-        #  File "/home/russ/cb/var/zope/Products/ATContentTypes/lib/exif.py", line 1013, in process_file
-        #    hdr.decode_maker_note()
-        #  File "/home/russ/cb/var/zope/Products/ATContentTypes/lib/exif.py", line 919, in decode_maker_note
-        #    dict=MAKERNOTE_CANON_TAGS)
-        #  File "/home/russ/cb/var/zope/Products/ATContentTypes/lib/exif.py", line 753, in dump_IFD
-        #    raise ValueError, \
-        #ValueError: unknown type 768 in tag 0x0100
-        #
-
         # This test fails even with the 2005.05.12 exif version from
         #    http://home.cfl.rr.com/genecash/
         f = StringIO(TEST_EXIF_ERROR)

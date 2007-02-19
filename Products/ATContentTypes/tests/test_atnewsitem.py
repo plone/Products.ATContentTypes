@@ -41,7 +41,6 @@ from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
 from Products.ATContentTypes.interfaces import ITextContent
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATNewsItem
-from Products.CMFDefault.NewsItem import NewsItem
 from Interface.Verify import verifyObject
 
 # z3 imports
@@ -55,9 +54,6 @@ tests = []
 
 TEXT = "lorum ipsum"
 
-def editCMF(obj):
-    dcEdit(obj)
-
 def editATCT(obj):
     dcEdit(obj)
     obj.setText(TEXT)
@@ -66,8 +62,6 @@ class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
 
     klass = ATNewsItem
     portal_type = 'News Item'
-    cmf_portal_type = 'CMF News Item'
-    cmf_klass = NewsItem
     title = 'News Item'
     meta_type = 'ATNewsItem'
     icon = 'newsitem_icon.gif'
@@ -100,14 +94,8 @@ class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
         self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_edit(self):
-        old = self._cmf
         new = self._ATCT
-        editCMF(old)
         editATCT(new)
-        self.failUnless(old.Title() == new.Title(), 'Title mismatch: %s / %s' \
-                        % (old.Title(), new.Title()))
-        self.failUnless(old.Description() == new.Description(), 'Description mismatch: %s / %s' \
-                        % (old.Description(), new.Description()))
 
     def test_get_size(self):
         atct = self._ATCT
