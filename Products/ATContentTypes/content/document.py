@@ -38,7 +38,9 @@ from Products.CMFDefault.utils import SimpleHTMLParser
 
 from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import TextField
+from Products.Archetypes.atapi import BooleanField
 from Products.Archetypes.atapi import RichWidget
+from Products.Archetypes.atapi import BooleanWidget
 from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import AnnotationStorage
 
@@ -65,11 +67,26 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
               default_output_type = 'text/x-html-safe',
               widget = RichWidget(
                         description = '',
-                        label = _(u'label_body_text', default=u'Body Text'),
+                        label = _(u'label_body_text', default=u'Floopy Text'),
                         rows = 25,
-                        allow_file_upload = zconf.ATDocument.allow_document_upload)),
-    ), marshall=RFC822Marshaller()
+                        allow_file_upload = zconf.ATDocument.allow_document_upload),
+    ),
+    BooleanField('presentation',
+        required = False,
+        languageIndependent = True,
+        schemata = 'settings',
+        widget = BooleanWidget(
+            label= _(
+                u'help_enable_presentation', 
+                default=u'Enable presentation mode'),
+            description = _(
+                u'help_enable_presentation_description', 
+                default=u'If selected, this item will have an option to view as a presentation.')
+            ),
+    )),
+    marshall=RFC822Marshaller()
     )
+
 finalizeATCTSchema(ATDocumentSchema)
 
 class ATDocument(ATCTContent, HistoryAwareMixin):
