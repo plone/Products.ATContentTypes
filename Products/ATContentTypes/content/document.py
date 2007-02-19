@@ -222,13 +222,6 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
 
-    def deferring(self):
-        """
-        """
-        t = time.time()
-        time.sleep(10)
-        return str(time.time(), t)
-
     security.declarePrivate('manage_afterPUT')
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
                         filename, REQUEST, RESPONSE):
