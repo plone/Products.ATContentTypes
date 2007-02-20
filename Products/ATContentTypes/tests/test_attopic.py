@@ -160,7 +160,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
 
     klass = ATTopic
     portal_type = 'Topic'
-    title = 'Smart Folder'
+    title = 'Collection'
     meta_type = 'ATTopic'
     icon = 'topic_icon.gif'
 

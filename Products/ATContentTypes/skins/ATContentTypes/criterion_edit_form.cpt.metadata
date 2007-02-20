@@ -1,5 +1,5 @@
 [default]
-title = Edit Smart Folder Criteria
+title = Edit Collection Criteria
 
 [validators]
 validators..AddCriterion = validate_add_criterion

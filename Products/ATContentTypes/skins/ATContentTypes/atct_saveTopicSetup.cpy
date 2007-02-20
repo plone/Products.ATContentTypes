@@ -18,6 +18,6 @@ elif state.button == 'metadata_save':
 result = context.portal_atct.manage_saveTopicSetup(context.REQUEST)
 
 state.setNextAction('redirect_to:string:%s'%next_page)
-context.plone_utils.addPortalMessage(_(u'Smart Folder setup saved.'))
+context.plone_utils.addPortalMessage(_(u'Collection settings saved.'))
 
 return state

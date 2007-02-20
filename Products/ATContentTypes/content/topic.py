@@ -79,8 +79,8 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 widget=BooleanWidget(
                         label=_(u'label_inherit_criteria', default=u'Inherit Criteria'),
                         description=_(u'help_inherit_criteria',
-                                      default=u"Narrow down the search results from the parent Smart Folder(s) "
-                                               "by using the criteria from this Smart Folder."),
+                                      default=u"Narrow down the search results from the parent Collection(s) "
+                                               "by using the criteria from this Collection."),
                         # Only show when the parent object is a Topic also,
                         # for some reason the checkcondition passes the
                         #template as 'object', and the object as 'folder'.
@@ -144,7 +144,7 @@ class ATTopic(ATCTFolder):
     schema         =  ATTopicSchema
 
     portal_type    = 'Topic'
-    archetype_name = 'Smart Folder'
+    archetype_name = 'Collection'
     _atct_newTypeFor = {'portal_type' : 'CMF Topic', 'meta_type' : 'Portal Topic'}
     assocMimetypes = ()
     assocFileExt   = ()

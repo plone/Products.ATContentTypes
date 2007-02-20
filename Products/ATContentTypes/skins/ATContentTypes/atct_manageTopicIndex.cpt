@@ -22,12 +22,12 @@
         <li class="selected">
           <a href=""
              tal:attributes="href string:${here/absolute_url}/${template/id}"
-             i18n:translate="label_topic_indexes">Smart Folder Indexes</a>
+             i18n:translate="label_topic_indexes">Collection Indexes</a>
         </li>
         <li class="">
           <a href=""
              tal:attributes="href string:${here/absolute_url}/atct_manageTopicMetadata"
-             i18n:translate="label_topic_metadata">Smart Folder Metadata</a>
+             i18n:translate="label_topic_metadata">Collection Metadata</a>
         </li>
     </ul>
 
@@ -41,7 +41,7 @@
 
     <h1 i18n:domain="atcontenttypes"
         i18n:translate="heading_smart_folder_settings">
-        Smart Folder Settings
+        Collection Settings
     </h1>
 
     <a href=""
@@ -54,7 +54,7 @@
     <p i18n:domain="atcontenttypes"
        i18n:translate="description_configure_indices">
         Configure which indices will be displayed while creating criteria
-        for Smart Folders, and how they will be displayed.
+        for Collections, and how they will be displayed.
     </p>
 
     <form method="post"

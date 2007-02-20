@@ -147,7 +147,7 @@
                        define="folderContents here/getFolderContents">
             <h2 i18n:domain="atcontenttypes"
                 i18n:translate="sub_topics_heading">
-                Contained Smart Folders:
+                Contained Collections:
             </h2>
             <metal:list metal:use-macro="here/base/macros/folderlisting"/>
         </tal:subtopics>
