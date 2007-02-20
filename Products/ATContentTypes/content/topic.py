@@ -28,7 +28,9 @@ from types import ListType
 from types import TupleType
 from types import StringType
 
+from ZPublisher.HTTPRequest import HTTPRequest
 from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.CatalogTool import CatalogTool
 from AccessControl import ClassSecurityInfo
@@ -39,14 +41,18 @@ from zExceptions import NotFound
 from webdav.Resource import Resource as WebdavResoure
 
 from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import TextField
 from Products.Archetypes.atapi import BooleanField
 from Products.Archetypes.atapi import IntegerField
 from Products.Archetypes.atapi import LinesField
 from Products.Archetypes.atapi import BooleanWidget
 from Products.Archetypes.atapi import IntegerWidget
 from Products.Archetypes.atapi import InAndOutWidget
+from Products.Archetypes.atapi import RichWidget
 from Products.Archetypes.atapi import DisplayList
+from Products.Archetypes.atapi import AnnotationStorage
 
+from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFolder
@@ -71,6 +77,20 @@ IGNORED_FIELDS = ['Date', 'allowedRolesAndUsers', 'getId', 'in_reply_to',
     ]
 
 ATTopicSchema = ATContentTypeSchema.copy() + Schema((
+    TextField('text',
+              required=True,
+              searchable=True,
+              primary=True,
+              storage = AnnotationStorage(migrate=True),
+              validators = ('isTidyHtmlWithCleanup',),
+              #validators = ('isTidyHtml',),
+              default_output_type = 'text/x-html-safe',
+              widget = RichWidget(
+                        description = '',
+                        label = _(u'label_body_text', default=u'Body Text'),
+                        rows = 25,
+                        allow_file_upload = zconf.ATDocument.allow_document_upload),
+    ),
     BooleanField('acquireCriteria',
                 required=False,
                 mode="rw",
@@ -135,7 +155,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                         ),
                  ),
     ))
-finalizeATCTSchema(ATTopicSchema, folderish=True, moveDiscussion=False)
+finalizeATCTSchema(ATTopicSchema, folderish=False, moveDiscussion=False)
 
 
 class ATTopic(ATCTFolder):
@@ -547,5 +567,44 @@ class ATTopic(ATCTFolder):
                         raise NotFound, 'The requested resource is empty.'
 
         return WebdavResoure.HEAD(self, REQUEST, RESPONSE)
+
+    security.declareProtected(ModifyPortalContent, 'setText')
+    def setText(self, value, **kwargs):
+        """Body text mutator
+        
+        * hook into mxTidy an replace the value with the tidied value
+        """
+        field = self.getField('text')
+        # XXX this is ugly
+        # When an object is initialized the first time we have to 
+        # set the filename and mimetype.
+        # In the case the value is empty/None we must not set the value because
+        # it will overwrite uploaded data like a pdf file.
+        if (value is None or value == ""):
+            if not field.getRaw(self):
+                # set mimetype and file name although the fi
+                if 'mimetype' in kwargs and kwargs['mimetype']:
+                    field.setContentType(self, kwargs['mimetype'])
+                if 'filename' in kwargs and kwargs['filename']:
+                    field.setFilename(self, kwargs['filename'])
+            else:
+                return
+
+        # hook for mxTidy / isTidyHtmlWithCleanup validator
+        tidyOutput = self.getTidyOutput(field)
+        if tidyOutput:
+            value = tidyOutput
+
+        field.set(self, value, **kwargs) # set is ok
+
+    security.declarePrivate('getTidyOutput')
+    def getTidyOutput(self, field):
+        """Get the tidied output for a specific field from the request
+        if available
+        """
+        request = self.REQUEST
+        tidyAttribute = '%s_tidier_data' % field.getName()
+        if isinstance(request, HTTPRequest):
+            return request.get(tidyAttribute, None)
 
 registerATCT(ATTopic, PROJECTNAME)
