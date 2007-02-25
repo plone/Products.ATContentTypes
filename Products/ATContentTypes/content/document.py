@@ -74,7 +74,6 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
     BooleanField('presentation',
         required = False,
         languageIndependent = True,
-        schemata = 'settings',
         widget = BooleanWidget(
             label= _(
                 u'help_enable_presentation', 
@@ -87,7 +86,6 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
     BooleanField('tableContents',
         required = False,
         languageIndependent = True,
-        schemata = 'settings',
         widget = BooleanWidget(
             label= _(
                 u'help_enable_table_of_contents', 
@@ -101,6 +99,10 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
     )
 
 finalizeATCTSchema(ATDocumentSchema)
+# moved schema setting after finalizeATCTSchema, so the order of the fieldsets
+# is preserved
+ATDocumentSchema.changeSchemataForField('presentation', 'settings')
+ATDocumentSchema.changeSchemataForField('tableContents', 'settings')
 
 class ATDocument(ATCTContent, HistoryAwareMixin):
     """A page in the site. Can contain rich text."""
