@@ -78,7 +78,7 @@ IGNORED_FIELDS = ['Date', 'allowedRolesAndUsers', 'getId', 'in_reply_to',
 
 ATTopicSchema = ATContentTypeSchema.copy() + Schema((
     TextField('text',
-              required=True,
+              required=False,
               searchable=True,
               primary=True,
               storage = AnnotationStorage(migrate=True),
