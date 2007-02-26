@@ -77,10 +77,10 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
         widget = BooleanWidget(
             label= _(
                 u'help_enable_presentation', 
-                default=u'Enable presentation mode'),
+                default=u'Presentation mode'),
             description = _(
                 u'help_enable_presentation_description', 
-                default=u'If selected, this item will have an option to view as a presentation.')
+                default=u'If selected, this will give users the ability to view the contents as presentation slides.')
             ),
     ),
     BooleanField('tableContents',
@@ -89,10 +89,10 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
         widget = BooleanWidget(
             label= _(
                 u'help_enable_table_of_contents', 
-                default=u'Enable table of contents'),
+                default=u'Table of contents'),
             description = _(
                 u'help_enable_table_of_contents_description', 
-                default=u'If selected, this item will show a table of contents at the top of the page.')
+                default=u'If selected, this will show a table of contents at the top of the page.')
             ),
     )),
     marshall=RFC822Marshaller()
