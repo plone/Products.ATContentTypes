@@ -38,7 +38,7 @@ from Products.ATContentTypes.tests.utils import dcEdit
 
 from Products.ATContentTypes.content.document import ATDocument
 from Products.ATContentTypes.lib.validators import TidyHtmlWithCleanupValidator
-from Products.ATContentTypes.tests.utils import TidyHTMLValidator
+from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
 from Products.ATContentTypes.tests.utils import input_file_path
 from Products.ATContentTypes.interfaces import IHistoryAware
 from Products.ATContentTypes.interfaces import ITextContent
@@ -247,7 +247,7 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
         field = dummy.getField('text')
 
         self.failUnless(ILayerContainer.isImplementedBy(field))
-        self.failUnless(field.required == 1, 'Value is %s' % field.required)
+        self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == '', 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
         self.failUnless(field.vocabulary == (),
@@ -274,7 +274,7 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
-        self.failUnless(field.validators == TidyHTMLValidator,
+        self.failUnless(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
         self.failUnless(isinstance(field.widget, RichWidget),
                         'Value is %s' % id(field.widget))
