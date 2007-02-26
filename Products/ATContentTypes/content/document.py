@@ -58,7 +58,7 @@ from Products.CMFPlone import PloneMessageFactory as _
 
 ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
     TextField('text',
-              required=True,
+              required=False,
               searchable=True,
               primary=True,
               storage = AnnotationStorage(migrate=True),
