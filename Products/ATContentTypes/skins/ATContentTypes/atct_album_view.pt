@@ -15,14 +15,26 @@
                  b_start python:request.get('b_start', 0);
                  batch python:Batch(images, 12, int(b_start), orphan=1)">
 
-    <div metal:use-macro="here/document_actions/macros/document_actions">
-        Document actions (print, sendto etc)
-    </div>
+    <div tal:replace="structure provider:plone.abovecontenttitle" />
 
     <h1 tal:content="here/pretty_title_or_id" class="documentFirstHeading">Title or id</h1>
 
+    <div tal:replace="structure provider:plone.belowcontenttitle" />
+
     <div tal:content="here/Description" tal:condition="here/Description" class="documentDescription">
         Description
+    </div>
+
+    <div tal:replace="structure provider:plone.abovecontentbody" />
+
+    <div metal:define-macro="text-field-view" id="parent-fieldname-text" class="stx"
+         tal:define="kss_field_decorator_view kss_field_decorator_view | context/@@kss_field_decorator_view;
+                     kss_class python:kss_field_decorator_view.kss_class('text', 'view'); 
+                     text here/getText|nothing"
+         tal:condition="text"
+         tal:attributes="class python:test(here.Format() in ('text/structured',
+                                               'text/x-rst', ), 'stx' + kss_class, 'plain' + kss_class)">
+        <div tal:replace="structure text" />
     </div>
 
     <tal:albumsimages tal:condition="python:albums or images">

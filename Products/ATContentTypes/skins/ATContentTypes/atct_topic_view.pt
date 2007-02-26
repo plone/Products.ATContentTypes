@@ -9,26 +9,19 @@
 <metal:main_macro define-macro="main">
     <metal:body define-macro="body_macro">
 
-        <div metal:use-macro="here/document_actions/macros/document_actions">
-             Document actions (print, sendto etc)
-        </div>
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
 
         <h1 tal:content="here/title_or_id" class="documentFirstHeading">
             Title or id
         </h1>
 
-        <a href=""
-           class="link-parent"
-           tal:define="parent_url python:here.navigationParent(here, template_id)"
-           tal:condition="parent_url"
-           tal:attributes="href parent_url"
-           i18n:translate="go_to_parent_url">
-            Up one level
-        </a>
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
 
         <div class="documentDescription" tal:content="structure here/Description">
             description
         </div>
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
 
         <metal:listingmacro define-macro="listing">
         <tal:topiccontents define="topicContents python:here.queryCatalog(batch=True);
@@ -43,8 +36,15 @@
                 Download PDF
             </a>
 
-            <!-- Navigation -->
-            <div metal:use-macro="here/batch_macros/macros/navigation" />
+            <div metal:define-macro="text-field-view" id="parent-fieldname-text" class="stx"
+                 tal:define="kss_field_decorator_view kss_field_decorator_view | context/@@kss_field_decorator_view;
+                             kss_class python:kss_field_decorator_view.kss_class('text', 'view'); 
+                             text here/getText|nothing"
+                 tal:condition="text"
+                 tal:attributes="class python:test(here.Format() in ('text/structured',
+                                                       'text/x-rst', ), 'stx' + kss_class, 'plain' + kss_class)">
+                <div tal:replace="structure text" />
+            </div>
 
             <tal:default condition="not:here/getCustomView|nothing"
                          define="folderContents topicContents">
@@ -152,6 +152,9 @@
             <metal:list metal:use-macro="here/base/macros/folderlisting"/>
         </tal:subtopics>
     </metal:body>
+
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+
 </metal:main_macro>
 
 </div>
