@@ -1,3 +1,9 @@
+1.1.5 unreleased
+================
+
+* Adjusted tests to deal with the new default vocabulary for boolean fields.
+  [wichert]
+
  * removed schemata='default' for allowDiscussion field in finalizeATCTSchema.
    It makes no sense and prevents customization by patching.
    [ender]
