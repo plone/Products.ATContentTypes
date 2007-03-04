@@ -35,6 +35,7 @@ from Products.CMFCore.permissions import View
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.atapi import *
 
+from Products.Archetypes.Field import BooleanField
 from Products.ATContentTypes.content.topic import ATTopic
 from Products.ATContentTypes.content.topic import ChangeTopics
 from Products.ATContentTypes.content.folder import ATFolder
@@ -364,12 +365,13 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
     def test_acquireCriteriaField(self):
         dummy = self._dummy
         field = dummy.getField('acquireCriteria')
+        field_vocab = BooleanField._properties.get('vocabulary', ())
 
         self.failUnless(ILayerContainer.isImplementedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == False, 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 0, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == (),
+        self.failUnless(field.vocabulary == field_vocab,
                         'Value is %s' % str(field.vocabulary))
         self.failUnless(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
@@ -399,17 +401,19 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         vocab = field.Vocabulary(dummy)
         self.failUnless(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
-        self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+        self.failUnless(tuple(vocab) == tuple([x[0] for x in field_vocab]),
+                        'Value is %s' % str(tuple(vocab)))
 
     def test_limitNumberField(self):
         dummy = self._dummy
         field = dummy.getField('limitNumber')
+        field_vocab = BooleanField._properties.get('vocabulary', ())
 
         self.failUnless(ILayerContainer.isImplementedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == False, 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 0, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == (),
+        self.failUnless(field.vocabulary == field_vocab,
                         'Value is %s' % str(field.vocabulary))
         self.failUnless(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
@@ -439,7 +443,8 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         vocab = field.Vocabulary(dummy)
         self.failUnless(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
-        self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+        self.failUnless(tuple(vocab) == tuple([x[0] for x in field_vocab]),
+                        'Value is %s' % str(tuple(vocab)))
 
     def test_itemCountField(self):
         dummy = self._dummy
