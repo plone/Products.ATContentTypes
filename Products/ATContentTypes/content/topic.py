@@ -28,6 +28,12 @@ from types import ListType
 from types import TupleType
 from types import StringType
 
+from zope.component import getUtility, queryUtility
+from Products.CMFCore.interfaces import ICatalogTool
+from Products.CMFCore.interfaces import IMembershipTool
+from Products.CMFCore.interfaces import ISyndicationTool
+from Products.CMFPlone.interfaces import IPloneTool
+
 from ZPublisher.HTTPRequest import HTTPRequest
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
@@ -183,7 +189,7 @@ class ATTopic(ATCTFolder):
     def initializeArchetype(self, **kwargs):
         ret_val = ATCTFolder.initializeArchetype(self, **kwargs)
         # Enable topic syndication by default
-        syn_tool = getToolByName(self, 'portal_syndication', None)
+        syn_tool = queryUtility(ISyndicationTool)
         if syn_tool is not None:
             if (syn_tool.isSiteSyndicationAllowed() and
                                     not syn_tool.isSyndicationAllowed(self)):
@@ -337,7 +343,7 @@ class ATTopic(ATCTFolder):
         """Return a list of our subtopics.
         """
         val = self.objectValues(self.meta_type)
-        check_p = getToolByName(self, 'portal_membership').checkPermission
+        check_p = getUtility(IMembershipTool).checkPermission
         tops = []
         for top in val:
             if check_p('View', top):
@@ -431,7 +437,7 @@ class ATTopic(ATCTFolder):
             else:
                 kw[k]=v
         #kw.update(q)
-        pcatalog = getToolByName(self, 'portal_catalog')
+        pcatalog = getUtility(ICatalogTool)
         limit = self.getLimitNumber()
         max_items = self.getItemCount()
         # Batch based on limit size if b_szie is unspecified
@@ -499,7 +505,7 @@ class ATTopic(ATCTFolder):
     def synContentValues(self):
         """Getter for syndacation support
         """
-        syn_tool = getToolByName(self, 'portal_syndication')
+        syn_tool = getUtility(ISyndicationTool)
         limit = int(syn_tool.getMaxItems(self))
         brains = self.queryCatalog(sort_limit=limit)[:limit]
         objs = [brain.getObject() for brain in brains]
@@ -535,7 +541,7 @@ class ATTopic(ATCTFolder):
     def displayContentsTab(self, *args, **kwargs):
         """Only display a contents tab when we are the default page
            because we have our own"""
-        putils = getToolByName(self, 'plone_utils', None)
+        putils = queryUtility(IPloneTool)
         if putils is not None:
             if putils.isDefaultPage(self):
                 script = putils.displayContentsTab.__of__(self)

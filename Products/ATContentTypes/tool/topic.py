@@ -6,6 +6,9 @@ from Persistence import Persistent
 from OFS.SimpleItem import SimpleItem
 from ExtensionClass import Base
 
+from zope.component import getUtility
+from Products.CMFCore.interfaces import ITypesTool
+
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.interfaces import IATCTTopicsTool
 from Products.Archetypes.atapi import DisplayList
@@ -178,7 +181,7 @@ class ATTopicsTool(Base):
 
     def getAllPortalTypes(self):
         """ returns a list of (id, title)-tuples for each type """
-        types_tool = getToolByName(self, 'portal_types')
+        types_tool = getUtility(ITypesTool)
         types = types_tool.listTypeInfo()
 
         all_types=[(t.id, t.title or t.id) for t in types]

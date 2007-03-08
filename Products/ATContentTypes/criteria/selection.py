@@ -25,8 +25,10 @@ __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATSelectionCriterion'
 
 from Products.CMFCore.permissions import View
-from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
+
+from zope.component import getUtility
+from Products.CMFCore.interfaces import ICatalogTool
 
 from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import LinesField
@@ -88,7 +90,7 @@ class ATSelectionCriterion(ATBaseCriterion):
     shortDesc      = 'Select values from list'
 
     def getCurrentValues(self):
-        catalog = getToolByName(self, 'portal_catalog')
+        catalog = getUtility(ICatalogTool)
         options = catalog.uniqueValuesFor(self.Field())
         # AT is currently broken, and does not accept ints as
         # DisplayList keys though it is supposed to (it should

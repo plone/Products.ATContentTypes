@@ -7,9 +7,9 @@
 ##bind subpath=traverse_subpath
 ##parameters=obj
 
-from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.utils import getToolByInterfaceName
 
-iface = getToolByName(context, 'portal_interface')
+iface = getToolByInterfaceName('Products.CMFPlone.interfaces.IInterfaceTool')
 
 return iface.objectImplements(obj,
            'Products.ATContentTypes.interfaces.IATContentType')

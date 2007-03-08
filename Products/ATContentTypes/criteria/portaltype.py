@@ -24,8 +24,11 @@ __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATPortalTypeCriterion'
 
 from Products.CMFCore.permissions import View
-from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
+
+from zope.component import getUtility
+from Products.CMFCore.interfaces import ITypesTool
+from Products.CMFPlone.interfaces import IPloneTool
 
 from Products.Archetypes.atapi import DisplayList
 
@@ -57,12 +60,12 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
     security.declareProtected(View, 'getCurrentValues')
     def getCurrentValues(self):
          """Return enabled portal types"""
-         plone_tool = getToolByName(self, 'plone_utils')
+         plone_tool = getUtility(IPloneTool)
          portal_types = plone_tool.getUserFriendlyTypes()
          getSortTuple = lambda x: (x.lower(),x)
 
          if self.Field() == 'Type':
-            types_tool = getToolByName(self, 'portal_types')
+            types_tool = getUtility(ITypesTool)
             get_type = types_tool.getTypeInfo
             portal_types = [getSortTuple(get_type(t).Title() or t) for t in portal_types]
          else:

@@ -8,6 +8,10 @@ from plone.memoize.instance import memoize
 
 from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
+from zope.component import getUtility
+from Products.CMFCore.interfaces import ICatalogTool
+from Products.CMFCore.interfaces import IPropertiesTool
+
 
 class ATFolderNextPrevious(object):
     """Let a folder act as a next/previous provider. This will be 
@@ -20,7 +24,7 @@ class ATFolderNextPrevious(object):
     def __init__(self, context):
         self.context  = context
         
-        sp = getToolByName(self.context, 'portal_properties').site_properties
+        sp = getUtility(IPropertiesTool).site_properties
         self.view_action_types = sp.getProperty('typesUseViewActionInListings', ())
 
     def getNextItem(self, obj):
@@ -40,7 +44,7 @@ class ATFolderNextPrevious(object):
         """Get the relative next and previous items
         """
         folder   = self.context
-        catalog  = getToolByName(self.context, 'portal_catalog')
+        catalog  = getUtility(ICatalogTool)
         position = folder.getObjectPosition(oid)
 
         previous = None

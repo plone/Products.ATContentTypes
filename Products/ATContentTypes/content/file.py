@@ -26,6 +26,10 @@ __old_name__ = 'Products.ATContentTypes.types.ATFile'
 import logging
 from urllib import quote
 
+from zope.component import getUtility
+from Products.CMFCore.interfaces import IPropertiesTool
+from Products.CMFCore.interfaces import IURLTool
+
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
@@ -136,7 +140,7 @@ class ATFile(ATCTFileContent):
         contenttype_major = contenttype and contenttype.split('/')[0] or ''
 
         mtr   = getToolByName(self, 'mimetypes_registry', None)
-        utool = getToolByName( self, 'portal_url' )
+        utool = getUtility(IURLTool)
 
         if ICONMAP.has_key(contenttype):
             icon = quote(ICONMAP[contenttype])
@@ -180,7 +184,7 @@ class ATFile(ATCTFileContent):
         encoding = 'utf-8'
 
         # stage 1: get the searchable text and convert it to utf8
-        sp    = getToolByName(self, 'portal_properties').site_properties
+        sp    = getUtility(IPropertiesTool).site_properties
         stEnc = getattr(sp, 'default_charset', 'utf-8')
         st    = self.SearchableText()
         source+=unicode(st, stEnc).encode('utf-8')

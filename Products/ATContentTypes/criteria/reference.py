@@ -24,6 +24,10 @@ __author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATReferenceCriterion'
 
+from zope.component import getUtility
+from Products.CMFCore.interfaces import ICatalogTool
+from Products.CMFPlone.interfaces import IPloneTool
+
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
@@ -46,9 +50,9 @@ class ATReferenceCriterion(ATSelectionCriterion):
 
 
     def getCurrentValues(self):
-        catalog = getToolByName(self, 'portal_catalog')
+        catalog = getUtility(ICatalogTool)
         uid_cat = getToolByName(self, 'uid_catalog')
-        putils = getToolByName(self, 'plone_utils')
+        putils = getUtility(IPloneTool)
         options = catalog.uniqueValuesFor(self.Field())
 
         brains = uid_cat(UID=options, sort_on='Title')

@@ -29,6 +29,10 @@ from Globals import InitializeClass
 from Acquisition import aq_parent
 from Acquisition import aq_inner
 
+from zope.component import getUtility
+from Products.CMFCore.interfaces import IMembershipTool
+from Products.CMFCore.interfaces import ITypesTool
+
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
@@ -283,7 +287,7 @@ class ConstrainTypesMixin:
         if not type_name in [fti.getId() for fti in self.allowedContentTypes()]:
             raise Unauthorized('Disallowed subobject type: %s' % type_name)
 
-        pt = getToolByName( self, 'portal_types' )
+        pt = getUtility(ITypesTool)
         args = (type_name, self, id, RESPONSE) + args
         return pt.constructContent(*args, **kw)
 
@@ -298,7 +302,7 @@ class ConstrainTypesMixin:
             context = self
 
         result = []
-        portal_types = getToolByName(self, 'portal_types')
+        portal_types = getUtility(ITypesTool)
         myType = portal_types.getTypeInfo(self)
         if myType is not None:
             for contentType in portal_types.listTypeInfo(context):
@@ -314,7 +318,7 @@ class ConstrainTypesMixin:
     def canSetConstrainTypes(self):
         """Find out if the current user is allowed to set the allowable types
         """
-        mtool = getToolByName(self, 'portal_membership')
+        mtool = getUtility(IMembershipTool)
         member = mtool.getAuthenticatedMember()
         return member.has_permission(ATCTPermissions.ModifyConstrainTypes, self)
 

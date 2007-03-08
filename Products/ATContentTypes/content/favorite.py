@@ -32,7 +32,9 @@ from AccessControl import Unauthorized
 from ComputedAttribute import ComputedAttribute
 from ZODB.POSException import ConflictError
 
-from Products.CMFCore.utils import getToolByName
+from zope.component import getUtility
+from Products.CMFCore.interfaces import IURLTool
+
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 
@@ -87,7 +89,7 @@ class ATFavorite(ATCTContent):
         """returns the remote URL of the Link
         """
         # need to check why this is different than PortalLink
-        utool  = getToolByName(self, 'portal_url')
+        utool  = getUtility(IURLTool)
         portal_url = utool()
         remote = self._getRemoteUrl()
         if remote:
@@ -108,7 +110,7 @@ class ATFavorite(ATCTContent):
     def setRemoteUrl(self, remote_url):
         """Set url relative to portal root
         """
-        utool  = getToolByName(self, 'portal_url')
+        utool  = getUtility(IURLTool)
         # strip off scheme and machine from URL if present
         tokens = urlparse.urlparse(remote_url, 'http')
         if tokens[1]:
@@ -142,7 +144,7 @@ class ATFavorite(ATCTContent):
         """Return the actual object that the Favorite is
         linking to
         """
-        utool  = getToolByName(self, 'portal_url')
+        utool  = getUtility(IURLTool)
         portal = utool.getPortalObject()
         relative_url = self._getRemoteUrl()
         try:
