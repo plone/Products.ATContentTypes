@@ -22,6 +22,7 @@ __author__  = 'Christian Heimes <tiran@cheimes.de>'
 
 import logging
 from cStringIO import StringIO
+from zope.interface import implements
 
 import AccessControl.Owned
 from AccessControl import ClassSecurityInfo
@@ -40,7 +41,8 @@ from Products.CMFCore.utils import UniqueObject
 from Products.CMFCore.permissions import ManagePortal
 
 from Products.ATContentTypes.interfaces import IImageContent
-from Products.ATContentTypes.interfaces import IATCTTool
+from Products.ATContentTypes.interfaces import IATCTTool as z2IATCTTool
+from Products.ATContentTypes.interface import IATCTTool
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import WWW_DIR
 from Products.ATContentTypes.tool.topic import ATTopicsTool
@@ -59,8 +61,10 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
     meta_type= 'ATCT Tool'
     title = 'ATContentTypes Tool'
 
-    __implements__ = (SimpleItem.__implements__, IATCTTool,
+    __implements__ = (SimpleItem.__implements__, z2IATCTTool,
                       ATTopicsTool.__implements__)
+
+    implements(IATCTTool)
 
     manage_options =  (
             {'label' : 'Overview', 'action' : 'manage_overview'},
