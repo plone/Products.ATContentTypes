@@ -134,6 +134,8 @@ def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
         schema.changeSchemataForField('subject', 'categorization')
     if schema.has_key('relatedItems'):
         schema.changeSchemataForField('relatedItems', 'categorization')
+    if schema.has_key('location'):
+        schema.changeSchemataForField('location', 'categorization')
     if schema.has_key('language'):
         schema.changeSchemataForField('language', 'categorization')
 
