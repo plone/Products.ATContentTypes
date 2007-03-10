@@ -1,9 +1,11 @@
+from zope.component import getUtility
+from zope.component import queryUtility
+
 from Products.ATContentTypes.interface import IATCTTool
 from Products.GenericSetup.utils import PropertyManagerHelpers
 from Products.GenericSetup.utils import XMLAdapterBase
 from Products.GenericSetup.utils import exportObjects
 from Products.GenericSetup.utils import importObjects
-from Products.CMFCore.utils import getToolByName
 
 class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
     """Node in- and exporter for ATCTTool.
@@ -109,7 +111,7 @@ def importATCTTool(context):
     """Import ATCT Tool configuration.
     """
     site = context.getSite()
-    tool = getToolByName(site, 'portal_atct')
+    tool = getUtility(IATCTTool)
 
     importObjects(tool, '', context)
 
@@ -117,7 +119,7 @@ def exportATCTTool(context):
     """Export ATCT Tool configuration.
     """
     site = context.getSite()
-    tool = getToolByName(site, 'portal_atct', None)
+    tool = queryUtility(IATCTTool)
     if tool is None:
         logger = context.getLogger("atcttool")
         logger.info("Nothing to export.")

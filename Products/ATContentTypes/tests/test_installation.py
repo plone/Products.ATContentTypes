@@ -28,13 +28,13 @@ if __name__ == '__main__':
 
 from Testing import ZopeTestCase # side effect import. leave it here.
 
-import transaction
+from zope.component import queryUtility
+
+from Products.ATContentTypes.interface import IATCTTool
 from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.tool.atct import ATCTTool
-from Products.CMFCore.utils import getToolByName
-from StringIO import StringIO
 
 tests = []
 
@@ -46,7 +46,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         self.cat = getattr(self.portal.aq_explicit, 'portal_catalog')
 
     def test_tool_installed(self):
-        t = getToolByName(self.portal, TOOLNAME, None)
+        t = queryUtility(IATCTTool)
         self.failUnless(t, t)
         self.failUnless(isinstance(t, ATCTTool), t.__class__)
         self.failUnlessEqual(t.meta_type, 'ATCT Tool')

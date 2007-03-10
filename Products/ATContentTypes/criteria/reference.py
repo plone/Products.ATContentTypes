@@ -28,9 +28,9 @@ from zope.component import getUtility
 from Products.CMFCore.interfaces import ICatalogTool
 from Products.CMFPlone.interfaces import IPloneTool
 
-from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
+from Products.Archetypes.interfaces import IUIDCatalog
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import REFERENCE_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
@@ -51,7 +51,7 @@ class ATReferenceCriterion(ATSelectionCriterion):
 
     def getCurrentValues(self):
         catalog = getUtility(ICatalogTool)
-        uid_cat = getToolByName(self, 'uid_catalog')
+        uid_cat = getUtility(IUIDCatalog)
         putils = getUtility(IPloneTool)
         options = catalog.uniqueValuesFor(self.Field())
 

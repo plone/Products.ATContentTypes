@@ -37,8 +37,6 @@ from Products.CMFPlone.interfaces import IPloneTool
 from ZPublisher.HTTPRequest import HTTPRequest
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.CatalogTool import CatalogTool
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from Acquisition import aq_parent
@@ -67,10 +65,10 @@ from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.permission import AddTopics
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.interface import IATCTTool
 from Products.ATContentTypes.interfaces import IATTopic
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces import IATTopicSortCriterion
-from Products.ATContentTypes.config import TOOLNAME
 
 from Products.CMFPlone import PloneMessageFactory as _
 from Products.CMFPlone.PloneBatch import Batch
@@ -204,7 +202,7 @@ class ATTopic(ATCTFolder):
 
     security.declareProtected(ChangeTopics, 'criteriaByIndexId')
     def criteriaByIndexId(self, indexId):
-        catalog_tool = getToolByName(self, CatalogTool.id)
+        catalog_tool = getUtility(ICatalogTool)
         indexObj = catalog_tool.Indexes[indexId]
         results = _criterionRegistry.criteriaByIndex(indexObj.meta_type)
         return results
@@ -314,7 +312,7 @@ class ATTopic(ATCTFolder):
     def listFields(self):
         """Return a list of fields from portal_catalog.
         """
-        tool = getToolByName(self, TOOLNAME)
+        tool = getUtility(IATCTTool)
         return tool.getEnabledFields()
 
     security.declareProtected(ChangeTopics, 'listSortFields')
@@ -363,7 +361,7 @@ class ATTopic(ATCTFolder):
     def listMetaDataFields(self, exclude=True):
         """Return a list of metadata fields from portal_catalog.
         """
-        tool = getToolByName(self, TOOLNAME)
+        tool = getUtility(IATCTTool)
         return tool.getMetadataDisplay(exclude)
 
     security.declareProtected(View, 'allowedCriteriaForField')
@@ -371,7 +369,7 @@ class ATTopic(ATCTFolder):
         """ Return all valid criteria for a given field.  Optionally include
             descriptions in list in format [(desc1, val1) , (desc2, val2)] for
             javascript selector."""
-        tool = getToolByName(self, TOOLNAME)
+        tool = getUtility(IATCTTool)
         criteria = tool.getIndex(field).criteria
         allowed = [crit for crit in criteria
                                 if self.validateAddCriterion(field, crit)]

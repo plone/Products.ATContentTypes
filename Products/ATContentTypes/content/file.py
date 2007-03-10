@@ -27,12 +27,13 @@ import logging
 from urllib import quote
 
 from zope.component import getUtility
+from zope.component import queryUtility
+
 from Products.CMFCore.interfaces import IPropertiesTool
 from Products.CMFCore.interfaces import IURLTool
 
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.atapi import Schema
@@ -54,6 +55,8 @@ from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
 from Products.CMFPlone import PloneMessageFactory as _
+from Products.MimetypesRegistry.interfaces import IMimetypesRegistryTool
+from Products.PortalTransforms.interfaces import IPortalTransformsTool
 
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 from Products.validation.config import validation
@@ -139,7 +142,7 @@ class ATFile(ATCTFileContent):
         contenttype       = field.getContentType(self)
         contenttype_major = contenttype and contenttype.split('/')[0] or ''
 
-        mtr   = getToolByName(self, 'mimetypes_registry', None)
+        mtr   = queryUtility(IMimetypesRegistryTool)
         utool = getUtility(IURLTool)
 
         if ICONMAP.has_key(contenttype):
@@ -190,7 +193,7 @@ class ATFile(ATCTFileContent):
         source+=unicode(st, stEnc).encode('utf-8')
 
         # get the file and try to convert it to utf8 text
-        ptTool = getToolByName(self, 'portal_transforms')
+        ptTool = getUtility(IPortalTransformsTool)
         f  = self.getFile()
         if f:
             mt = f.getContentType()

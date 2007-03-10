@@ -27,32 +27,27 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
+
+from zope.component import getUtility
+
+from Products.ATContentTypes.interface import IATCTTool
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 from Products.ATContentTypes.config import TOOLNAME
-from Products.ATContentTypes.interfaces import IATCTTool
-from Interface.Verify import verifyObject
-from Products.CMFCore.utils import getToolByName
 
 # z3 imports
-from Products.ATContentTypes.interface import IATCTTool as Z3IATCTTool
-from zope.interface.verify import verifyObject as Z3verifyObject
+from zope.interface.verify import verifyObject
 
 tests = []
 
 class TestTool(atcttestcase.ATCTSiteTestCase):
 
     def afterSetUp(self):
-        self.tool = getToolByName(self.portal, TOOLNAME)
+        self.tool = getUtility(IATCTTool)
         
     def test_interface(self):
         t = self.tool
-        self.failUnless(IATCTTool.isImplementedBy(t))
+        self.failUnless(IATCTTool.providedBy(t))
         self.failUnless(verifyObject(IATCTTool, t))
-
-    def test_Z3interface(self):
-        t = self.tool
-        iface = Z3IATCTTool
-        self.failUnless(Z3verifyObject(iface, t))
         
     def test_names(self):
         t = self.tool
@@ -69,7 +64,7 @@ class TestATCTToolFunctional(atctftestcase.IntegrationTestCase):
     
     def setupTestObject(self):
         self.obj_id = TOOLNAME
-        self.obj = getToolByName(self.portal, TOOLNAME)
+        self.obj = getUtility(IATCTTool)
         self.obj_url = self.obj.absolute_url()
         self.obj_path = '/%s' % self.obj.absolute_url(1)
 

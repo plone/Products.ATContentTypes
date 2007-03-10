@@ -7,7 +7,6 @@ from Products.ATContentTypes.interface.folder import IATFolder
 from plone.memoize.instance import memoize
 
 from Acquisition import aq_base
-from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
 from Products.CMFCore.interfaces import ICatalogTool
 from Products.CMFCore.interfaces import IPropertiesTool
