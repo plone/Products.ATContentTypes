@@ -59,6 +59,13 @@ from Products.ATContentTypes.utils import DT2dt
 from Products.CMFPlone import PloneMessageFactory as _
 
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
+    StringField('location',
+                searchable=True,
+                write_permission = ChangeEvents,
+                widget = StringWidget(
+                    description = '',
+                    label = _(u'label_event_location', default=u'Event Location')
+                    )),
     DateTimeField('startDate',
                   required=True,
                   searchable=False,
@@ -82,13 +89,6 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                         description = '',
                         label = _(u'label_event_end', default=u'Event Ends')
                         )),
-    StringField('location',
-                searchable=True,
-                write_permission = ChangeEvents,
-                widget = StringWidget(
-                    description = '',
-                    label = _(u'label_event_location', default=u'Event Location')
-                    )),
     TextField('text',
               required=False,
               searchable=True,
@@ -167,6 +167,9 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
     ), marshall = RFC822Marshaller()
     )
 finalizeATCTSchema(ATEventSchema)
+# finalizeATCTSchema moves 'location' into 'categories', we move it back:
+ATEventSchema.changeSchemataForField('location', 'default')
+ATEventSchema.moveField('location', before='startDate')
 
 class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
     """Information about an upcoming event, which can be displayed in the calendar."""
