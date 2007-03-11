@@ -11,25 +11,27 @@ from Products.ATContentTypes.interface import IATCTTool
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.migration.v1_2 import upgradeATCTTool
 
+
 class TestMigrations_v1_2(atcttestcase.ATCTSiteTestCase):
 
     def afterSetUp(self):
         self.tool = getUtility(IATCTTool)
 
     def testUpgradeATCTTool(self):
-        self.assertEquals(self.tool.album_batch_size, 30)
-        self.tool.album_batch_size = 99
+        self.assertEquals(self.tool.getProperty('album_batch_size'), 30)
+        self.tool._setPropValue('album_batch_size', 99)
         self.tool._setPropValue('_version', '1.1.x (svn/testing)')
         upgradeATCTTool(self.portal, [])
-        self.assertEquals(self.tool.album_batch_size, 99)
+        self.assertEquals(self.tool.getProperty('album_batch_size'), 99)
 
     def testUpgradeATCTToolTwice(self):
-        self.assertEquals(self.tool.album_batch_size, 30)
-        self.tool.album_batch_size = 99
+        self.assertEquals(self.tool.getProperty('album_batch_size'), 30)
+        self.tool._setPropValue('album_batch_size', 99)
         self.tool._setPropValue('_version', '1.1.x (svn/testing)')
         upgradeATCTTool(self.portal, [])
         upgradeATCTTool(self.portal, [])
-        self.assertEquals(self.tool.album_batch_size, 99)
+        self.assertEquals(self.tool.getProperty('album_batch_size'), 99)
+
 
 def test_suite():
     from unittest import TestSuite, makeSuite

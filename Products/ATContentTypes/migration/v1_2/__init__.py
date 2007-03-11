@@ -18,11 +18,11 @@ def upgradeATCTTool(portal, out):
     # First we get all relevant old configuration and make sure we get
     # real copies of the various objects
     old_conf = {}
-    old_conf['album_batch_size'] = int(tool.get('album_batch_size', 30))
-    old_conf['album_image_scale'] = str(tool.get('album_image_scale', 'thumb'))
-    old_conf['image_types'] = list(tool.get('image_types', ['Image', 'News Item']))
-    old_conf['folder_types'] = list(tool.get('folder_types', ['Image']))
-    old_conf['single_image_scale'] = str(tool.get('single_image_scale', 'preview'))
+    old_conf['album_batch_size'] = int(tool.getProperty('album_batch_size', 30))
+    old_conf['album_image_scale'] = str(tool.getProperty('album_image_scale', 'thumb'))
+    old_conf['image_types'] = list(tool.getProperty('image_types', ['Image', 'News Item']))
+    old_conf['folder_types'] = list(tool.getProperty('folder_types', ['Image']))
+    old_conf['single_image_scale'] = str(tool.getProperty('single_image_scale', 'preview'))
     old_conf['topic_indexes'] = tool.topic_indexes.copy()
     old_conf['topic_metadata'] = tool.topic_metadata.copy()
     old_conf['allowed_portal_types'] = tuple(tool.allowed_portal_types)
