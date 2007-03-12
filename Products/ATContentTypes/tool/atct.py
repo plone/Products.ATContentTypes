@@ -37,6 +37,7 @@ from zope.component import getUtility
 from Products.CMFCore.interfaces import ICatalogTool
 from Products.CMFCore.interfaces import ITypesTool
 
+from Products.CMFCore.utils import registerToolInterface
 from Products.CMFCore.utils import UniqueObject
 from Products.CMFCore.permissions import ManagePortal
 
@@ -144,3 +145,4 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
         return ttool.listContentTypes()
 
 InitializeClass(ATCTTool)
+registerToolInterface('portal_atct', IATCTTool)
