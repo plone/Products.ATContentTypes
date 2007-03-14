@@ -22,10 +22,6 @@
 __author__ = 'Leonardo Almeida and Martin Aspeli <optilude@gmx.net>'
 __docformat__ = 'restructuredtext'
 
-import os, sys
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
-
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
@@ -186,12 +182,7 @@ tests.append(TestConstrainTypes)
 
 import unittest
 def test_suite():
-    # framework.py test_suite is trying to run ATCT*TestCase
-    # so we have to provide our own
     suite = unittest.TestSuite()
     for test in tests:
         suite.addTest(unittest.makeSuite(test))
     return suite
-
-if __name__ == '__main__':
-    framework()

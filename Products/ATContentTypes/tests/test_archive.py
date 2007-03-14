@@ -2,11 +2,6 @@
 """
 """
 
-import os, sys
-
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
-
 from Testing import ZopeTestCase
 
 from Products.ATContentTypes.tests.atcttestcase import ATCTFunctionalSiteTestCase 
@@ -22,6 +17,3 @@ def test_suite():
                                 test_class=ATCTFunctionalSiteTestCase)
                      )
     return suite
-
-if __name__ == '__main__':
-    framework(descriptions=1, verbosity=1)

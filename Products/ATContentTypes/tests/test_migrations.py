@@ -1,6 +1,3 @@
-import os, sys
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
@@ -38,6 +35,3 @@ def test_suite():
     suite = TestSuite()
     suite.addTest(makeSuite(TestMigrations_v1_2))
     return suite
-
-if __name__ == '__main__':
-    framework()

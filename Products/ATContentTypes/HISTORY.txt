@@ -1,6 +1,11 @@
 1.2.0-alpha3 unreleased
 =======================
 
+ * Removed tests/runalltests.py and tests/framework.py.
+   To run tests use Zope's testrunner:
+   ./bin/zopectl test --nowarn -s Products.ATContentTypes
+   [stefan]
+
  * Adjusted tests to deal with the new default vocabulary for boolean fields.
    [wichert]
 

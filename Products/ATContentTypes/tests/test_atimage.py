@@ -304,15 +304,9 @@ class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
 
 tests.append(TestATImageFunctional)
 
-
-if __name__ == '__main__':
-    framework()
-else:
-    # While framework.py provides its own test_suite()
-    # method the testrunner utility does not.
-    import unittest
-    def test_suite():
-        suite = unittest.TestSuite()
-        for test in tests:
-            suite.addTest(unittest.makeSuite(test))
-        return suite
+import unittest
+def test_suite():
+    suite = unittest.TestSuite()
+    for test in tests:
+        suite.addTest(unittest.makeSuite(test))
+    return suite
