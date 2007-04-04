@@ -108,7 +108,7 @@ class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
                         if enabled is not None:
                             enabled=self._convertToBoolean(enabled)
                         friendlyName=safeGetAttribute(metadataNode, 'friendlyName')
-                        self.context.addMetadata(name,
+                        self.context.updateMetadata(name,
                                                  friendlyName=friendlyName,
                                                  description=description,
                                                  enabled=enabled)
