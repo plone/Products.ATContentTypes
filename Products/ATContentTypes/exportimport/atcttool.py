@@ -23,7 +23,11 @@ class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
         return node
 
     def _importNode(self, node):
-        if self.environ.shouldPurge():
+        purge = self.environ.shouldPurge()
+        if node.getAttribute('purge'):
+            purge = self._convertToBoolean(node.getAttribute('purge'))
+
+        if purge:
             self._purgeSettings()
             self._purgeProperties()
 
