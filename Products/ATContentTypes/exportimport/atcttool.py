@@ -7,6 +7,15 @@ from Products.GenericSetup.utils import XMLAdapterBase
 from Products.GenericSetup.utils import exportObjects
 from Products.GenericSetup.utils import importObjects
 
+def safeGetAttribute(node, attribute):
+    """Get an attribute froma node, but return None if it does not exist.
+    """
+    if not node.hasAttribute(attribute):
+        return None
+    else:
+        return node.getAttribute(attribute)
+
+
 class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
     """Node in- and exporter for ATCTTool.
     """
@@ -49,19 +58,33 @@ class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
                 for indexNode in child.childNodes:
                     if indexNode.nodeName=='index':
                         name=indexNode.getAttribute('name')
-                        description=indexNode.getAttribute('description')
-                        enabled=self._convertToBoolean(indexNode.getAttribute('enabled'))
-                        friendlyName=indexNode.getAttribute('friendlyName')
-                        criteria = []
+                        if indexNode.hasAttribute("remove"):
+                            self.context.removeIndex(name)
+                            continue
+
+                        try:
+                            self.context.getIndex(name)
+                        except AttributeError:
+                            self.context.addIndex(name)
+
+                        description=safeGetAttribute(indexNode, 'description')
+                        enabled=safeGetAttribute(indexNode, 'enabled')
+                        if enabled is not None:
+                            enabled=self._convertToBoolean(enabled)
+                        friendlyName=safeGetAttribute(indexNode, 'friendlyName')
+
+                        criteria = None
                         for critNode in indexNode.childNodes:
                             if critNode.nodeName == 'criteria':
                                 for textNode in critNode.childNodes:
                                     if textNode.nodeName != '#text' or \
                                         not textNode.nodeValue.strip():
                                         continue
+                                    if criteria is None:
+                                        criteria = []
                                     criteria.append(str(textNode.nodeValue))
                     
-                        self.context.addIndex(name,
+                        self.context.updateIndex(name,
                                               friendlyName=friendlyName,
                                               description=description,
                                               enabled=enabled,
@@ -71,9 +94,20 @@ class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
                 for metadataNode in child.childNodes:
                     if metadataNode.nodeName=='metadata':
                         name=metadataNode.getAttribute('name')
-                        description=metadataNode.getAttribute('description')
-                        enabled=self._convertToBoolean(metadataNode.getAttribute('enabled'))
-                        friendlyName=metadataNode.getAttribute('friendlyName')
+                        if metadataNode.hasAttribute("remove"):
+                            self.context.removeMetadata(name)
+                            continue
+
+                        try:
+                            self.context.getMetadata(name)
+                        except AttributeError:
+                            self.context.addMetadata(name)
+
+                        description=safeGetAttribute(metadataNode, 'description')
+                        enabled=safeGetAttribute(metadataNode, 'enabled')
+                        if enabled is not None:
+                            enabled=self._convertToBoolean(enabled)
+                        friendlyName=safeGetAttribute(metadataNode, 'friendlyName')
                         self.context.addMetadata(name,
                                                  friendlyName=friendlyName,
                                                  description=description,

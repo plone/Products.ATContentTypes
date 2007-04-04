@@ -1,6 +1,10 @@
 1.2.0-alpha3 unreleased
 =======================
 
+ * Add support for updating existing topic indexes and metadata from
+   GenericSetup profiles
+   [wichert]
+
  * Removed tests/runalltests.py and tests/framework.py.
    To run tests use Zope's testrunner:
    ./bin/zopectl test --nowarn -s Products.ATContentTypes
