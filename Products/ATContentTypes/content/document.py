@@ -105,20 +105,10 @@ finalizeATCTSchema(ATDocumentSchema)
 ATDocumentSchema.changeSchemataForField('presentation', 'settings')
 ATDocumentSchema.changeSchemataForField('tableContents', 'settings')
 
-class ATDocument(ATCTContent, HistoryAwareMixin):
+class ATDocumentBase(ATCTContent, HistoryAwareMixin):
     """A page in the site. Can contain rich text."""
 
-    schema         =  ATDocumentSchema
-
-    portal_type    = 'Document'
-    archetype_name = 'Page'
-    _atct_newTypeFor = {'portal_type' : 'CMF Document', 'meta_type' : 'Document'}
-    assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
-    assocFileExt   = ('txt', 'stx', 'rst', 'rest', 'py',)
-    cmf_edit_kws   = ('text_format',)
-
     __implements__ = (ATCTContent.__implements__,
-                      IATDocument,
                       HistoryAwareMixin.__implements__,
                      )
 
@@ -279,5 +269,19 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         ATCTContent.manage_afterPUT(self, data, marshall_data, file,
                                     context, mimetype, filename, REQUEST,
                                     RESPONSE)
+
+class ATDocument(ATDocumentBase):
+    """A page in the site. Can contain rich text."""
+
+    schema         =  ATDocumentSchema
+
+    portal_type    = 'Document'
+    archetype_name = 'Page'
+    _atct_newTypeFor = {'portal_type' : 'CMF Document', 'meta_type' : 'Document'}
+    assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
+    assocFileExt   = ('txt', 'stx', 'rst', 'rest', 'py',)
+    cmf_edit_kws   = ('text_format',)
+
+    __implements__ = ATDocumentBase.__implements__, IATDocument
 
 registerATCT(ATDocument, PROJECTNAME)

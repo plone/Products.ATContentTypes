@@ -40,7 +40,7 @@ from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import translateMimetypeAlias
-from Products.ATContentTypes.content.document import ATDocument
+from Products.ATContentTypes.content.document import ATDocumentBase
 from Products.ATContentTypes.content.image import ATCTImageTransform
 from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
@@ -104,7 +104,7 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
     )
 finalizeATCTSchema(ATNewsItemSchema)
 
-class ATNewsItem(ATDocument, ATCTImageTransform):
+class ATNewsItem(ATDocumentBase, ATCTImageTransform):
     """An announcement that will show up on the news portlet and in the news listing."""
 
     schema         =  ATNewsItemSchema
@@ -114,9 +114,9 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
     _atct_newTypeFor = {'portal_type' : 'CMF News Item', 'meta_type' : 'News Item'}
     assocMimetypes = ()
     assocFileExt   = ('news', )
-    cmf_edit_kws   = ATDocument.cmf_edit_kws
+    cmf_edit_kws   = ATDocumentBase.cmf_edit_kws
 
-    __implements__ = ATDocument.__implements__, IATNewsItem
+    __implements__ = ATDocumentBase.__implements__, IATNewsItem
 
     security = ClassSecurityInfo()
 
@@ -151,6 +151,6 @@ class ATNewsItem(ATDocument, ATCTImageTransform):
                 # image might be None or '' for empty images
                 return image
 
-        return ATDocument.__bobo_traverse__(self, REQUEST, name)
+        return ATDocumentBase.__bobo_traverse__(self, REQUEST, name)
 
 registerATCT(ATNewsItem, PROJECTNAME)
