@@ -422,7 +422,6 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         topic = self._ATCT
         # set a sort criterion
         topic.setSortCriterion('created', False)
-        print  topic.listAvailableFields()
         # It should still be available for other criteria
         self.failUnless([i for i in topic.listAvailableFields()
                          if i[0] == 'created'])
