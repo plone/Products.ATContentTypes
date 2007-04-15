@@ -6,8 +6,8 @@ description: test document description
 contributors: John Dow
   Example User
 creators: test_user_1_
-effectiveDate: 2005/01/01
-expirationDate: 2005/02/01
+effectiveDate: 2005-01-01
+expirationDate: 2005-02-01
 language: de
 rights: GPL
 creation_date: 2005/05/27 00:00:00 GMT
