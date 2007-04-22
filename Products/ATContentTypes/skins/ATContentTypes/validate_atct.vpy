@@ -35,7 +35,7 @@ errors  = context.validate(REQUEST=request, errors=errors, data=1, metadata=0)
 
 if errors:
     msg = _(u'Please correct the indicated errors.')
-    context.plone_utils.addPortalMessage(msg)
+    context.plone_utils.addPortalMessage(msg, 'error')
     return state.set(status='failure', errors=errors)
 
 msg = _(u'Changes saved.')

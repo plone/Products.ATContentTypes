@@ -16,7 +16,7 @@ if not supported:
     msg = _(u'Sort order on field '
              '${field} not set, it cannot be used for ordering.',
              mapping={'field' : indexId})
-    context.plone_utils.addPortalMessage(msg)
+    context.plone_utils.addPortalMessage(msg, 'error')
     return state.set(status='failure')
 else:
     return state.set(status='success')

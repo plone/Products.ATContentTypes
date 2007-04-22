@@ -1,6 +1,9 @@
 1.2.0-alpha3 unreleased
 =======================
 
+ * Changed some status messages to type 'error'.
+   [hannosch]
+
  * Add support for updating existing topic indexes and metadata from
    GenericSetup profiles
    [wichert]

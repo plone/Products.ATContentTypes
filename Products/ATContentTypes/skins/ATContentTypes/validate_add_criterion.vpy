@@ -21,7 +21,7 @@ if not supported or criterion_type not in allowed_criteria:
     msg = _(u'Criterion of type '
             '${type} not added, it does not work with index ${index}.',
             mapping={'type' : criterion_type, 'index' : indexId})
-    context.plone_utils.addPortalMessage(msg)
+    context.plone_utils.addPortalMessage(msg, 'error')
     return state.set(status='failure')
 else:
     return state.set(status='success')
