@@ -28,15 +28,11 @@ from types import ListType
 from types import TupleType
 from types import StringType
 
-from zope.component import getUtility, queryUtility
-from Products.CMFCore.interfaces import ICatalogTool
-from Products.CMFCore.interfaces import IMembershipTool
-from Products.CMFCore.interfaces import ISyndicationTool
-from Products.CMFPlone.interfaces import IPloneTool
-
 from ZPublisher.HTTPRequest import HTTPRequest
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.CatalogTool import CatalogTool
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from Acquisition import aq_parent
@@ -65,10 +61,10 @@ from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.permission import AddTopics
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.interface import IATCTTool
 from Products.ATContentTypes.interfaces import IATTopic
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces import IATTopicSortCriterion
+from Products.ATContentTypes.config import TOOLNAME
 
 from Products.CMFPlone import PloneMessageFactory as _
 from Products.CMFPlone.PloneBatch import Batch
@@ -187,7 +183,7 @@ class ATTopic(ATCTFolder):
     def initializeArchetype(self, **kwargs):
         ret_val = ATCTFolder.initializeArchetype(self, **kwargs)
         # Enable topic syndication by default
-        syn_tool = queryUtility(ISyndicationTool)
+        syn_tool = getToolByName(self, 'portal_syndication', None)
         if syn_tool is not None:
             if (syn_tool.isSiteSyndicationAllowed() and
                                     not syn_tool.isSyndicationAllowed(self)):
@@ -202,7 +198,7 @@ class ATTopic(ATCTFolder):
 
     security.declareProtected(ChangeTopics, 'criteriaByIndexId')
     def criteriaByIndexId(self, indexId):
-        catalog_tool = getUtility(ICatalogTool)
+        catalog_tool = getToolByName(self, CatalogTool.id)
         indexObj = catalog_tool.Indexes[indexId]
         results = _criterionRegistry.criteriaByIndex(indexObj.meta_type)
         return results
@@ -312,7 +308,7 @@ class ATTopic(ATCTFolder):
     def listFields(self):
         """Return a list of fields from portal_catalog.
         """
-        tool = getUtility(IATCTTool)
+        tool = getToolByName(self, TOOLNAME)
         return tool.getEnabledFields()
 
     security.declareProtected(ChangeTopics, 'listSortFields')
@@ -341,7 +337,7 @@ class ATTopic(ATCTFolder):
         """Return a list of our subtopics.
         """
         val = self.objectValues(self.meta_type)
-        check_p = getUtility(IMembershipTool).checkPermission
+        check_p = getToolByName(self, 'portal_membership').checkPermission
         tops = []
         for top in val:
             if check_p('View', top):
@@ -361,7 +357,7 @@ class ATTopic(ATCTFolder):
     def listMetaDataFields(self, exclude=True):
         """Return a list of metadata fields from portal_catalog.
         """
-        tool = getUtility(IATCTTool)
+        tool = getToolByName(self, TOOLNAME)
         return tool.getMetadataDisplay(exclude)
 
     security.declareProtected(View, 'allowedCriteriaForField')
@@ -369,7 +365,7 @@ class ATTopic(ATCTFolder):
         """ Return all valid criteria for a given field.  Optionally include
             descriptions in list in format [(desc1, val1) , (desc2, val2)] for
             javascript selector."""
-        tool = getUtility(IATCTTool)
+        tool = getToolByName(self, TOOLNAME)
         criteria = tool.getIndex(field).criteria
         allowed = [crit for crit in criteria
                                 if self.validateAddCriterion(field, crit)]
@@ -435,7 +431,7 @@ class ATTopic(ATCTFolder):
             else:
                 kw[k]=v
         #kw.update(q)
-        pcatalog = getUtility(ICatalogTool)
+        pcatalog = getToolByName(self, 'portal_catalog')
         limit = self.getLimitNumber()
         max_items = self.getItemCount()
         # Batch based on limit size if b_szie is unspecified
@@ -503,7 +499,7 @@ class ATTopic(ATCTFolder):
     def synContentValues(self):
         """Getter for syndacation support
         """
-        syn_tool = getUtility(ISyndicationTool)
+        syn_tool = getToolByName(self, 'portal_syndication')
         limit = int(syn_tool.getMaxItems(self))
         brains = self.queryCatalog(sort_limit=limit)[:limit]
         objs = [brain.getObject() for brain in brains]
@@ -539,7 +535,7 @@ class ATTopic(ATCTFolder):
     def displayContentsTab(self, *args, **kwargs):
         """Only display a contents tab when we are the default page
            because we have our own"""
-        putils = queryUtility(IPloneTool)
+        putils = getToolByName(self, 'plone_utils', None)
         if putils is not None:
             if putils.isDefaultPage(self):
                 script = putils.displayContentsTab.__of__(self)

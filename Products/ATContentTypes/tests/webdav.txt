@@ -553,7 +553,7 @@ title to end up with the original file/folder name even if the
 destination filename ends up mangled.
 
   >>> body = """
-  ... from Products.CMFCore.utils import getToolByInterfaceName
+  ... from Products.CMFCore.utils import getToolByName
   ...
   ... # Only act on PUT, MKCOL
   ... method = request.get('REQUEST_METHOD', 'GET').upper()
@@ -562,7 +562,7 @@ destination filename ends up mangled.
   ...
   ... # See if we can find the plone tool and the method that is
   ... # supposed to normalize strings.
-  ... pt = getToolByInterfaceName('Products.CMFPlone.interfaces.IPloneTool')
+  ... pt = getToolByName(parent, 'plone_utils', None)
   ... if pt is None:
   ...     return
   ... normalize = getattr(pt, 'normalizeString', None)

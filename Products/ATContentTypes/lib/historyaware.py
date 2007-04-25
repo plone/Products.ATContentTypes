@@ -28,9 +28,7 @@ import difflib
 from DocumentTemplate.DT_Util import html_quote
 from Globals import InitializeClass
 
-from zope.component import getUtility
-from Products.CMFCore.interfaces import IMembershipTool
-
+from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 
@@ -91,7 +89,7 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
     def getDocumentComparisons(self, max=10, filterComment=0):
         """Get history as unified diff
         """
-        mTool = getUtility(IMembership)
+        mTool = getToolByName(self, 'portal_membership')
 
         histories = list(self.getHistories())
         if max > len(histories):

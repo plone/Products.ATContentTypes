@@ -39,8 +39,7 @@ from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 
-from zope.component import getUtility
-from Products.CMFCore.interfaces import IURLTool
+from Products.CMFCore.utils import getToolByName
 
 ATRelativePathCriterionSchema = ATBaseCriterionSchema + Schema((
     StringField('relativePath',
@@ -89,7 +88,7 @@ class ATRelativePathCriterion(ATBaseCriterion):
         relPath = relPath.replace("\\","/") 
 
         # get the path to the portal object 
-        portalPath = list(getUtility(IURLTool).getPortalObject().getPhysicalPath())
+        portalPath = list(getToolByName(self, 'portal_url').getPortalObject().getPhysicalPath())
     
         if relPath[0]=='/':
             # someone didn't enter a relative path.

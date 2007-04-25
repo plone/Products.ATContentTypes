@@ -2,17 +2,15 @@
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from zope.component import getUtility
-
-from Products.ATContentTypes.interface import IATCTTool
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.migration.v1_2 import upgradeATCTTool
+from Products.CMFCore.utils import getToolByName
 
 
 class TestMigrations_v1_2(atcttestcase.ATCTSiteTestCase):
 
     def afterSetUp(self):
-        self.tool = getUtility(IATCTTool)
+        self.tool = getToolByName(self.portal, TOOLNAME)
 
     def testUpgradeATCTTool(self):
         self.assertEquals(self.tool.getProperty('album_batch_size'), 30)

@@ -24,11 +24,13 @@ __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.ATDocument'
 
 from types import TupleType
-from zope.component import getUtility
+
+import time
 
 from ZPublisher.HTTPRequest import HTTPRequest
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
 
@@ -51,9 +53,6 @@ from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument
-
-from Products.MimetypesRegistry.interfaces import IMimetypesRegistryTool
-
 
 from Products.CMFPlone import PloneMessageFactory as _
 
@@ -181,7 +180,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
     def guessMimetypeOfText(self):
         """For ftp/webdav upload: get the mimetype from the id and data
         """
-        mtr  = getUtility(IMimetypesRegistryTool)
+        mtr  = getToolByName(self, 'mimetypes_registry')
         id   = self.getId()
         data = self.getRawText()
         ext  = id.split('.')[-1]

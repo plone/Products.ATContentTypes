@@ -24,6 +24,7 @@ __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATCurrentAuthorCriterion'
 
 from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.criteria import registerCriterion, \
@@ -31,9 +32,6 @@ from Products.ATContentTypes.criteria import registerCriterion, \
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
-
-from zope.component import getUtility
-from Products.CMFCore.interfaces import IMembershipTool
 
 ATCurrentAuthorSchema = ATBaseCriterionSchema
 
@@ -51,7 +49,7 @@ class ATCurrentAuthorCriterion(ATBaseCriterion):
     def getCriteriaItems(self):
         result = []
 
-        user = getUtility(IMembershipTool).getAuthenticatedMember().getId()
+        user = getToolByName(self, 'portal_membership').getAuthenticatedMember().getId()
 
         if user is not '':
             result.append((self.Field(), user))

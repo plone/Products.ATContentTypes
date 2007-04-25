@@ -24,13 +24,9 @@ __author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATReferenceCriterion'
 
-from zope.component import getUtility
-from Products.CMFCore.interfaces import ICatalogTool
-from Products.CMFPlone.interfaces import IPloneTool
-
+from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
-from Products.Archetypes.interfaces import IUIDCatalog
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import REFERENCE_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
@@ -50,9 +46,9 @@ class ATReferenceCriterion(ATSelectionCriterion):
 
 
     def getCurrentValues(self):
-        catalog = getUtility(ICatalogTool)
-        uid_cat = getUtility(IUIDCatalog)
-        putils = getUtility(IPloneTool)
+        catalog = getToolByName(self, 'portal_catalog')
+        uid_cat = getToolByName(self, 'uid_catalog')
+        putils = getToolByName(self, 'plone_utils')
         options = catalog.uniqueValuesFor(self.Field())
 
         brains = uid_cat(UID=options, sort_on='Title')

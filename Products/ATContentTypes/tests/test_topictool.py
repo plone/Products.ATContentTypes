@@ -2,9 +2,8 @@
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
-from zope.component import getUtility
-
-from Products.CMFCore.interfaces import ICatalogTool
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.CatalogTool import CatalogTool
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.interfaces import IATCTTopicsTool
 from Interface.Verify import verifyObject
@@ -131,7 +130,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
     def test_all_indexes(self):
         # Ensure that the tool includes all indexes in the catalog
         t = self.tool
-        cat = getUtility(ICatalogTool)
+        cat = getToolByName(self.tool, CatalogTool.id)
         indexes = [field for field in cat.indexes()]
         init_indexes = list(t.getIndexes())
         unique_indexes = [i for i in indexes if i not in init_indexes]
@@ -140,7 +139,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
 
     def test_change_catalog_index(self):
         t = self.tool
-        cat = getUtility(ICatalogTool)
+        cat = getToolByName(self.tool, CatalogTool.id)
         #add
         error = True
         cat.manage_addIndex('nonsense', 'FieldIndex')
@@ -240,7 +239,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
     def test_all_metadata(self):
         # Ensure that the tool includes all metadata in the catalog
         t = self.tool
-        cat = getUtility(ICatalogTool)
+        cat = getToolByName(self.tool, CatalogTool.id)
         metadata = [field for field in cat.schema()]
         init_metadata = list(t.getAllMetadata())
         unique_metadata = [i for i in metadata if i not in init_metadata]
@@ -249,7 +248,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
 
     def test_change_catalog_schema(self):
         t = self.tool
-        cat = getUtility(ICatalogTool)
+        cat = getToolByName(self.tool, CatalogTool.id)
         #add
         error = True
         cat.manage_addColumn('nonsense')

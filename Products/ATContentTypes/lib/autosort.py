@@ -25,14 +25,13 @@ from ExtensionClass import Base
 from Globals import InitializeClass
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 _marker = object()
 from Products.Archetypes.OrderedBaseFolder import OrderedBaseFolder
 from Products.Archetypes.OrderedBaseFolder import OrderedContainer
 from Products.ATContentTypes.interfaces import IAutoSortSupport
 from Products.ATContentTypes.interfaces import IAutoOrderSupport
-from zope.component import getUtility
-from Products.CMFPlone.interfaces import IPloneTool
 # implementation
 
 class AutoSortSupport(Base):
@@ -147,7 +146,7 @@ class AutoOrderSupport(AutoSortSupport, OrderedContainer):
         old_sort_auto = self.getSortAuto()
         result = OrderedBaseFolder.manage_renameObject(self, id, new_id, REQUEST)
         self.moveObjectToPosition(new_id, old_position)
-        putils = getUtility(IPloneTool)
+        putils = getToolByName(self, 'plone_utils')
         putils.reindexOnReorder(self)
         self.setSortAuto(old_sort_auto)
         return result

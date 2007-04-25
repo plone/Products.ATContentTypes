@@ -26,14 +26,9 @@ __old_name__ = 'Products.ATContentTypes.types.ATFile'
 import logging
 from urllib import quote
 
-from zope.component import getUtility
-from zope.component import queryUtility
-
-from Products.CMFCore.interfaces import IPropertiesTool
-from Products.CMFCore.interfaces import IURLTool
-
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.atapi import Schema
@@ -55,8 +50,6 @@ from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
 from Products.CMFPlone import PloneMessageFactory as _
-from Products.MimetypesRegistry.interfaces import IMimetypesRegistryTool
-from Products.PortalTransforms.interfaces import IPortalTransformsTool
 
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 from Products.validation.config import validation
@@ -142,8 +135,8 @@ class ATFile(ATCTFileContent):
         contenttype       = field.getContentType(self)
         contenttype_major = contenttype and contenttype.split('/')[0] or ''
 
-        mtr   = queryUtility(IMimetypesRegistryTool)
-        utool = getUtility(IURLTool)
+        mtr   = getToolByName(self, 'mimetypes_registry', None)
+        utool = getToolByName( self, 'portal_url' )
 
         if ICONMAP.has_key(contenttype):
             icon = quote(ICONMAP[contenttype])
@@ -187,13 +180,13 @@ class ATFile(ATCTFileContent):
         encoding = 'utf-8'
 
         # stage 1: get the searchable text and convert it to utf8
-        sp    = getUtility(IPropertiesTool).site_properties
+        sp    = getToolByName(self, 'portal_properties').site_properties
         stEnc = getattr(sp, 'default_charset', 'utf-8')
         st    = self.SearchableText()
         source+=unicode(st, stEnc).encode('utf-8')
 
         # get the file and try to convert it to utf8 text
-        ptTool = getUtility(IPortalTransformsTool)
+        ptTool = getToolByName(self, 'portal_transforms')
         f  = self.getFile()
         if f:
             mt = f.getContentType()

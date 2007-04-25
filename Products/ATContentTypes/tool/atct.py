@@ -33,12 +33,9 @@ from ZODB.POSException import ConflictError
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
-from zope.component import getUtility
-from Products.CMFCore.interfaces import ICatalogTool
-from Products.CMFCore.interfaces import ITypesTool
-
 from Products.CMFCore.utils import registerToolInterface
 from Products.CMFCore.utils import UniqueObject
+from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import ManagePortal
 
 from Products.ATContentTypes.interfaces import IImageContent
@@ -109,7 +106,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
             portal_type = tuple(self.image_types)
         out = StringIO()
         print >> out, "Updating AT Image scales"
-        catalog = getUtility(ICatalogTool)
+        catalog = getToolByName(self, 'portal_catalog')
         brains = catalog(portal_type = portal_type,
                          portal_type_operator = 'or')
         for brain in brains:
@@ -141,7 +138,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
     def listContentTypes(self):
         """List all content types. Used for image/folder_types property.
         """
-        ttool = getUtility(ITypesTool)
+        ttool = getToolByName(self, 'portal_types')
         return ttool.listContentTypes()
 
 InitializeClass(ATCTTool)

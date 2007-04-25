@@ -57,9 +57,8 @@ from Products.ATContentTypes.tests.utils import idValidator
 from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
+from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.Translatable import ITranslatable
-from zope.component import getUtility
-from Products.CMFCore.interfaces import ITypesTool
 
 # Z3 imports
 from Products.ATContentTypes.interface import IATContentType as Z3IATContentType
@@ -96,7 +95,7 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
     def _createType(self, context, portal_type, id, **kwargs):
         """Helper method to create a new type
         """
-        ttool = getUtility(ITypesTool)
+        ttool = getToolByName(context, 'portal_types')
         cat = self.portal.portal_catalog
 
         fti = ttool.getTypeInfo(portal_type)

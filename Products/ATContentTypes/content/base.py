@@ -55,12 +55,10 @@ from zExceptions import MethodNotAllowed
 from zExceptions import NotFound
 from ZODB.POSException import ConflictError
 
-from zope.component import getUtility
-from Products.CMFPlone.interfaces import IPloneTool
-
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import ManageProperties
+from Products.CMFCore.utils import getToolByName
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.CMFPlone.PloneFolder import ReplaceableWrapper
 
@@ -454,7 +452,7 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
     def __browser_default__(self, request):
         """ Set default so we can return whatever we want instead
         of index_html """
-        return getUtility(IPloneTool).browserDefault(self)
+        return getToolByName(self, 'plone_utils').browserDefault(self)
 
     security.declareProtected(View, 'get_size')
     def get_size(self):

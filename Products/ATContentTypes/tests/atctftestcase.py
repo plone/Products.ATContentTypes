@@ -32,9 +32,8 @@ from Products.PloneTestCase.setup import portal_owner
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
+from Products.CMFCore.utils import getToolByName
 from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
-from zope.component import getUtility
-from Products.CMFCore.interfaces import ITypesTool
 
 
 class IntegrationTestCase(atcttestcase.ATCTFunctionalSiteTestCase):
@@ -194,7 +193,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
     def test_discussion(self):
         # enable discussion for the type
-        ttool = getUtility(ITypesTool)
+        ttool = getToolByName(self.portal, 'portal_types')
         ttool[self.portal_type].allow_discussion = True
 
         response = self.publish('%s/discussion_reply_form'

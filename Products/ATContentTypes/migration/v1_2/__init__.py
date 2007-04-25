@@ -2,16 +2,15 @@
    usual CMFPlone migration.
 """
 import transaction
-from zope.component import getUtility
-from zope.component import queryUtility
 
 from Acquisition import aq_base
+
 from Products.ATContentTypes.config import TOOLNAME
-from Products.ATContentTypes.interface import IATCTTool
 from Products.ATContentTypes.tool.atct import ATCTTool
+from Products.CMFCore.utils import getToolByName
 
 def upgradeATCTTool(portal, out):
-    tool = queryUtility(IATCTTool)
+    tool = getToolByName(portal, TOOLNAME, None)
     if not hasattr(aq_base(tool), '_version'):
         # the tool already has been upgraded
         return
@@ -34,7 +33,7 @@ def upgradeATCTTool(portal, out):
     
     # Create new tool
     portal._setObject(TOOLNAME, ATCTTool())
-    tool = queryUtility(IATCTTool)
+    tool = getToolByName(portal, TOOLNAME, None)
     # And apply the configuration again
     tool._setPropValue('album_batch_size', old_conf['album_batch_size'])
     tool._setPropValue('album_image_scale', old_conf['album_image_scale'])

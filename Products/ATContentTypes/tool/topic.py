@@ -1,20 +1,16 @@
 from Globals import InitializeClass
+from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.criteria import _criterionRegistry
 from AccessControl import ClassSecurityInfo
 from Persistence import Persistent
 from OFS.SimpleItem import SimpleItem
 from ExtensionClass import Base
 
-from zope.component import getUtility
-
-from Products.CMFCore.interfaces import ICatalogTool
-from Products.CMFCore.interfaces import ITypesTool
-
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.interfaces import IATCTTopicsTool
 from Products.Archetypes.atapi import DisplayList
 from Products.CMFCore.permissions import ManagePortal
-
+from Products.CMFPlone.CatalogTool import CatalogTool
 
 class TopicIndex(SimpleItem, Persistent):
 
@@ -51,7 +47,7 @@ class ATTopicsTool(Base):
 
     def getCriteriaForIndex(self, index, as_dict=False):
         """ Returns the valid criteria for a given index """
-        catalog_tool = getUtility(ICatalogTool)
+        catalog_tool = getToolByName(self, CatalogTool.id)
         try:
             indexObj = catalog_tool.Indexes[index]
         except KeyError:
@@ -165,7 +161,7 @@ class ATTopicsTool(Base):
     security.declarePrivate('listCatalogFields')
     def listCatalogFields(self):
         """ Return a list of fields from portal_catalog. """
-        pcatalog = getUtility(ICatalogTool)
+        pcatalog = getToolByName( self,  CatalogTool.id )
         available = pcatalog.indexes()
         val = [ field for field in available ]
         val.sort()
@@ -174,7 +170,7 @@ class ATTopicsTool(Base):
     security.declarePrivate('listCatalogMetadata')
     def listCatalogMetadata(self):
         """ Return a list of columns from portal_catalog. """
-        pcatalog = getUtility(ICatalogTool)
+        pcatalog = getToolByName( self,  CatalogTool.id )
         available = pcatalog.schema()
         val = [ field for field in available ]
         val.sort()
@@ -182,7 +178,7 @@ class ATTopicsTool(Base):
 
     def getAllPortalTypes(self):
         """ returns a list of (id, title)-tuples for each type """
-        types_tool = getUtility(ITypesTool)
+        types_tool = getToolByName(self, 'portal_types')
         types = types_tool.listTypeInfo()
 
         all_types=[(t.id, t.title or t.id) for t in types]

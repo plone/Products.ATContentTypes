@@ -23,23 +23,17 @@ which types can be added in a folder-instance
 __author__  = 'Jens Klein <jens.klein@jensquadrat.de>'
 __docformat__ = 'plaintext'
 
-from zope.component import queryUtility
-
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from Globals import InitializeClass
 from Acquisition import aq_parent
 from Acquisition import aq_inner
 
-from zope.component import getUtility
-from Products.CMFCore.interfaces import IMembershipTool
-from Products.CMFCore.interfaces import ITypesTool
-
+from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import AddPortalContent
 from Products.CMFCore.PortalFolder import PortalFolderBase as PortalFolder
-from Products.CMFPlone.interfaces import IFactoryTool
 
 from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import LinesField
@@ -141,7 +135,7 @@ def parentPortalTypeEqual(obj):
         False - unequal
         True - equal
     """
-    portal_factory = queryUtility(IFactoryTool)
+    portal_factory = getToolByName(obj, 'portal_factory', None)
     if portal_factory is not None and portal_factory.isTemporary(obj):
         # created by portal_factory
         parent = aq_parent(aq_parent(aq_parent(aq_inner(obj))))
@@ -289,7 +283,7 @@ class ConstrainTypesMixin:
         if not type_name in [fti.getId() for fti in self.allowedContentTypes()]:
             raise Unauthorized('Disallowed subobject type: %s' % type_name)
 
-        pt = getUtility(ITypesTool)
+        pt = getToolByName( self, 'portal_types' )
         args = (type_name, self, id, RESPONSE) + args
         return pt.constructContent(*args, **kw)
 
@@ -304,7 +298,7 @@ class ConstrainTypesMixin:
             context = self
 
         result = []
-        portal_types = getUtility(ITypesTool)
+        portal_types = getToolByName(self, 'portal_types')
         myType = portal_types.getTypeInfo(self)
         if myType is not None:
             for contentType in portal_types.listTypeInfo(context):
@@ -320,7 +314,7 @@ class ConstrainTypesMixin:
     def canSetConstrainTypes(self):
         """Find out if the current user is allowed to set the allowable types
         """
-        mtool = getUtility(IMembershipTool)
+        mtool = getToolByName(self, 'portal_membership')
         member = mtool.getAuthenticatedMember()
         return member.has_permission(ATCTPermissions.ModifyConstrainTypes, self)
 
@@ -352,7 +346,7 @@ class ConstrainTypesMixin:
        ACQUIRE if parent support ISelectableConstrainTypes
        DISABLE if not
        """
-       portal_factory = queryUtility(IFactoryTool)
+       portal_factory = getToolByName(self, 'portal_factory', None)
        if portal_factory is not None and portal_factory.isTemporary(self):
            # created by portal_factory
            parent = aq_parent(aq_parent(aq_parent(aq_inner(self))))
