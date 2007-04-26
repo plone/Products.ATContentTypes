@@ -1,6 +1,11 @@
 1.1.5 unreleased
 ================
 
+ * http://dev.plone.org/plone/ticket/6481: During event post_validate, don't
+   attempt to parse the startDate and endDate form fields when validation
+   already found errors for them.
+   [mj]
+
  * Adjusted tests to deal with the new default vocabulary for boolean fields.
    [wichert]
 

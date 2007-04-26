@@ -315,6 +315,10 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
 
         End date must be after start date
         """
+        if 'startDate' in errors or 'endDate' in errors:
+            # No point in validating bad input
+            return
+        
         rstartDate = REQUEST.get('startDate', None)
         rendDate = REQUEST.get('endDate', None)
 
