@@ -1,5 +1,5 @@
-1.1.5 unreleased
-================
+1.1.5-final 2007-04-28
+======================
 
  * http://dev.plone.org/plone/ticket/6481: During event post_validate, don't
    attempt to parse the startDate and endDate form fields when validation
