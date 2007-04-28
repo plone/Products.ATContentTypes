@@ -130,7 +130,6 @@
                                tal:attributes="name string:index.enabled:records;
                                                value python:test(indexObj.enabled, '1', '0');
                                                id string:${indexObj/index}_enabled;
-                                               tabindex tabindex/next;
                                                checked python:test(indexObj.enabled, 'checked', None)"/>
                     </td>
                     <td>
@@ -141,8 +140,7 @@
                                size="10"
                                tal:attributes="name string:index.friendlyName:records;
                                                id string:${indexObj/index}_friendlyName;
-                                               value indexObj/friendlyName;
-                                               tabindex tabindex/next;"/>
+                                               value indexObj/friendlyName;"/>
                     </td>
                     <td>
                         <span i18n:translate="label_allowed_criteria">
@@ -155,8 +153,7 @@
                                id=""
                                size="3"
                                width="100%"
-                               tal:attributes="id string:${indexObj/index}_criteria;
-                                               tabindex tabindex/next;">
+                               tal:attributes="id string:${indexObj/index}_criteria;">
                             <option tal:repeat="criterion python:atct_tool.getCriteriaForIndex(indexObj.index, as_dict= True)"
                                     tal:attributes="value criterion/name;
                                                     selected python:test(criterion['name'] in indexObj.criteria, 'selected', None);"
@@ -170,8 +167,7 @@
                                value=""
                                name="index.description:records"
                                id=""
-                               tal:attributes="id string:${indexObj/index}_description;
-                                               tabindex tabindex/next;"
+                               tal:attributes="id string:${indexObj/index}_description;"
                                tal:content="indexObj/description"></textarea>
                     </td>
 
@@ -182,13 +178,11 @@
             </tbody>
             </table>
             <input class="context"
-                   tabindex=""
                    type="submit"
                    name="form.button.index_save"
                    value="Save"
                    i18n:domain="plone"
                    i18n:attributes="value label_save;"
-                   tal:attributes="tabindex tabindex/next;"
                    />
        </tal:indices>
 

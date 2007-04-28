@@ -6,8 +6,6 @@
 <body>
 
 <div metal:fill-slot="main" tal:define="image nocall:here;
-                                        Iterator python:modules['Products.CMFPlone'].IndexIterator;
-                                        tabindex python:Iterator();
                                         size python:here.getObjSize(here)">
 
     <div class="contentHeader">
@@ -51,8 +49,7 @@
     <div class="field"
          tal:define="transforms image/getTransformMap">
       <form tal:attributes="action string:${request/URL1}/transformImage">
-        <select name="method"
-                tal:attributes="tabindex tabindex/next">
+        <select name="method">
           <option disabled="disabled"
                   value=""
                   i18n:translate="label_select_method">Select method</option>

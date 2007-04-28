@@ -14,9 +14,7 @@
                      batch python:Batch(images, 1, int(b_start), orphan=0);
                      image python:batch[0];
                      photo_display python:request.cookies.get('photo_display', 'large');
-                     photo_display python:'large';
-                     Iterator python:modules['Products.CMFPlone'].IndexIterator;
-                     tabindex python:Iterator()">
+                     photo_display python:'large';">
 
       <div class="contentHeader">
         <h1 tal:content="image/pretty_title_or_id">Title or id</h1>

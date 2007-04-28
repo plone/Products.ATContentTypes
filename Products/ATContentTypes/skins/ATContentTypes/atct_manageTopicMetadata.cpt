@@ -129,7 +129,6 @@
                                id=""
                                tal:attributes="name string:metadata.enabled:records;
                                                value python:test(indexObj.enabled, '1', '0');
-                                               tabindex tabindex/next;
                                                checked python:test(indexObj.enabled, 'checked', None)"/>
                     </td>
                     <td>
@@ -139,16 +138,14 @@
                                id=""
                                size="10"
                                tal:attributes="name string:metadata.friendlyName:records;
-                                               value indexObj/friendlyName;
-                                               tabindex tabindex/next;"/>
+                                               value indexObj/friendlyName;" />
                     </td>
                     <td>
                         <textarea cols="30" rows="4" type="text"
                                value=""
                                name=""
                                id=""
-                               tal:attributes="name string:metadata.description:records;
-                                               tabindex tabindex/next;"
+                               tal:attributes="name string:metadata.description:records;"
                                tal:content="indexObj/description"></textarea>
                     </td>
 
@@ -159,13 +156,11 @@
             </tbody>
             </table>
             <input class="context"
-                   tabindex=""
                    type="submit"
                    name="form.button.metadata_save"
                    value="Save"
                    i18n:domain="plone"
                    i18n:attributes="value label_save;"
-                   tal:attributes="tabindex tabindex/next;"
                    />
        </tal:indices>
 

@@ -103,25 +103,19 @@
                  type="submit"
                  value="Save"
                  name="form.button.Save"
-                 tabindex=""
                  i18n:attributes="value label_save;"
-                 tal:attributes="tabindex tabindex/next;"
                  />
           <input class="context"
                  type="submit"
                  value="Remove"
                  name="form.button.Remove"
-                 tabindex=""
                  i18n:attributes="value label_remove;"
-                 tal:attributes="tabindex tabindex/next;"
                  />
           <input class="standalone"
                  type="submit"
                  value="Cancel"
                  name="form.button.Cancel"
-                 tabindex=""
                  i18n:attributes="value label_cancel;"
-                 tal:attributes="tabindex tabindex/next;"
                  />
         </div>
 
@@ -151,10 +145,8 @@
 
                 <select name="field"
                         id="field"
-                        tabindex=""
                         onchange=""
-                        tal:attributes="tabindex tabindex/next;
-                                        onchange string:javascript:showHelp(this.options[this.selectedIndex], 'fieldHelp');"
+                        tal:attributes="onchange string:javascript:showHelp(this.options[this.selectedIndex], 'fieldHelp');"
                         i18n:domain="plone">
                 <tal:options tal:repeat="field fields">
                     <option value=""
@@ -182,9 +174,7 @@
 
                 <select name="criterion_type"
                     id="criterion_type"
-                    tabindex=""
                     tal:define="types here/listSearchCriteriaTypes;"
-                    tal:attributes="tabindex tabindex/next;"
                     i18n:domain="plone">
 
                     <option value="" tal:repeat="type types"
@@ -203,9 +193,7 @@
                        type="submit"
                        value="Add criteria"
                        name="form.button.AddCriterion"
-                       tabindex=""
                        i18n:attributes="value label_add_criteria;"
-                       tal:attributes="tabindex tabindex/next;"
                        />
             </div>
 
@@ -235,10 +223,8 @@
 
                 <select name="field"
                         id="field"
-                        tabindex=""
                         tal:define="fields here/listSortFields"
-                        tal:attributes="tabindex tabindex/next;
-                                        onchange string:javascript:showHelp(this.options[this.selectedIndex], 'fieldHelpSort');">
+                        tal:attributes="onchange string:javascript:showHelp(this.options[this.selectedIndex], 'fieldHelpSort');">
 
                      <option value="no_sort"
                              tal:attributes="selected python:not here.hasSortCriterion();"
@@ -283,10 +269,8 @@
                        type="submit"
                        value="Save"
                        name="form.button.SetSortCriterion"
-                       tabindex=""
                        i18n:attributes="value label_save;"
                        i18n:domain="plone"
-                       tal:attributes="tabindex tabindex/next;"
                        />
             </div>
 
