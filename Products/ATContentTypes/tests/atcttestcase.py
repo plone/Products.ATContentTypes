@@ -30,7 +30,7 @@ from Products.PloneTestCase import PloneTestCase
 from Products.PloneTestCase.setup import portal_name
 from Products.PloneTestCase.setup import portal_owner
 ZopeTestCase.installProduct('SiteAccess')
-PloneTestCase.setupPloneSite()
+PloneTestCase.setupPloneSite(extension_profiles=['Products.CMFPlone:testfixture'])
 
 import os
 import transaction
