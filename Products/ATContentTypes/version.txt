@@ -1,1 +1,1 @@
-1.2.0 (SVN/Unreleased)
+1.2.0-beta2

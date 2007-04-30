@@ -1,4 +1,4 @@
-1.2.0-alpha3 2007-04-29
+1.2.0-beta2 2007-04-29
 =======================
 
  * Changed some status messages to type 'error'.
@@ -12,6 +12,9 @@
    To run tests use Zope's testrunner:
    ./bin/zopectl test --nowarn -s Products.ATContentTypes
    [stefan]
+
+1.2.0-beta1 2007-03-04
+======================
 
  * Adjusted tests to deal with the new default vocabulary for boolean fields.
    [wichert]
