@@ -71,14 +71,14 @@ ConstrainTypesMixinSchema = Schema((
         default_method = "_ct_defaultConstrainTypesMode",
         vocabulary = enableDisplayList,
         languageIndependent = True,
-        write_permissions = ATCTPermissions.ModifyConstrainTypes,
+        write_permission = ATCTPermissions.ModifyConstrainTypes,
         widget = SelectionWidget(
             label = _(u'label_contrain_types_mode',
                       default=u'Constrain types mode'),
             description = _(u'description_constrain_types_mode',
                             default=u'Select the constraint type mode for this folder.'),
-            visible = {'view' : 'hidden',
-                       'edit' : 'hidden',
+            visible = {'view' : 'invisible',
+                       'edit' : 'invisible',
                       },
             ),
         ),
@@ -89,7 +89,7 @@ ConstrainTypesMixinSchema = Schema((
         languageIndependent = True,
         default_method = '_ct_defaultAddableTypeIds',
         accessor = 'getLocallyAllowedTypes', # Respects ENABLE/DISABLE/ACQUIRE
-        write_permissions = ATCTPermissions.ModifyConstrainTypes,
+        write_permission = ATCTPermissions.ModifyConstrainTypes,
         multiValued = True,
         widget = MultiSelectionWidget(
             size = 10,
@@ -98,8 +98,8 @@ ConstrainTypesMixinSchema = Schema((
             description = _(u'description_constrain_allowed_types',
                             default=u'Select the types which will be addable inside this folder.'
                            ),
-            visible = {'view' : 'hidden',
-                       'edit' : 'hidden',
+            visible = {'view' : 'invisible',
+                       'edit' : 'invisible',
                       },
             ),
         ),
@@ -110,7 +110,7 @@ ConstrainTypesMixinSchema = Schema((
         languageIndependent = True,
         default_method = '_ct_defaultAddableTypeIds',
         accessor = 'getImmediatelyAddableTypes', # Respects ENABLE/DISABLE/ACQUIRE
-        write_permissions = ATCTPermissions.ModifyConstrainTypes,
+        write_permission = ATCTPermissions.ModifyConstrainTypes,
         multiValued=True,
         widget = MultiSelectionWidget(
             size = 10,
@@ -120,8 +120,8 @@ ConstrainTypesMixinSchema = Schema((
                                      'from the "Add new item" menu. Any '
                                      'additional types set in the list above '
                                      'will be addable from a separate form.'),
-            visible = {'view' : 'hidden',
-                       'edit' : 'hidden',
+            visible = {'view' : 'invisible',
+                       'edit' : 'invisible',
                       },
             ),
         ),
