@@ -112,6 +112,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
                      )
 
     security       = ClassSecurityInfo()
+    cmf_edit_kws   = ('text_format',)
 
     security.declareProtected(View, 'CookedBody')
     def CookedBody(self, stx_level='ignored'):
@@ -279,7 +280,6 @@ class ATDocument(ATDocumentBase):
     _atct_newTypeFor = {'portal_type' : 'CMF Document', 'meta_type' : 'Document'}
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
     assocFileExt   = ('txt', 'stx', 'rst', 'rest', 'py',)
-    cmf_edit_kws   = ('text_format',)
 
     __implements__ = ATDocumentBase.__implements__, IATDocument
 

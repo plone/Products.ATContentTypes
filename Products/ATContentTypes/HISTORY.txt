@@ -1,5 +1,13 @@
+1.2.0
+=====
+
+* Corrected cmf_edit_kws on the new ATDocumentBase class, which is used as a
+  base for ATNewsItem. It's absence caused a test failure in CMFPlone for the
+  text_format which needs special handling.
+  [hannosch]
+
 1.2.0-beta2 2007-04-29
-=======================
+======================
 
  * Changed some status messages to type 'error'.
    [hannosch]
