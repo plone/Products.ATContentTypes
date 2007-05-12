@@ -38,6 +38,7 @@ from OFS.Image import Pdata
 
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import HAS_PIL
+from Products.ATContentTypes import ATCTMessageFactory as _
 
 # third party extension
 import exif
@@ -57,11 +58,11 @@ ROTATE_270 = 4
 
 
 TRANSPOSE_MAP = {
-    FLIP_LEFT_RIGHT : "Flip around vertical axis",
-    FLIP_TOP_BOTTOM : "Flip around horizontal axis",
-    ROTATE_270      : "Rotate 90 clockwise",
-    ROTATE_180      : "Rotate 180",
-    ROTATE_90       : "Rotate 90 counterclockwise",
+    FLIP_LEFT_RIGHT : _(u'Flip around vertical axis'),
+    FLIP_TOP_BOTTOM : _(u'Flip around horizontal axis'),
+    ROTATE_270      : _(u'Rotate 90 clockwise'),
+    ROTATE_180      : _(u'Rotate 180'),
+    ROTATE_90       : _(u'Rotate 90 counterclockwise'),
    }
    
 AUTO_ROTATE_MAP = {

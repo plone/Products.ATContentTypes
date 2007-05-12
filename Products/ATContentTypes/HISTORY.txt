@@ -1,6 +1,9 @@
 1.2.0
 =====
 
+ * Properly i18n-ize imagetransforms TRANSPOSE_MAP by using ATCTMessageFactory.
+   [hannosch]
+
  * Removed all usage of PloneMessageFactory and replaced it by using ATCT's own
    message factory. The extraction tools aren't able to deal with two different
    message factories used for a single package.
