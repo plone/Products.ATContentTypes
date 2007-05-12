@@ -100,7 +100,7 @@ class ATRelativePathCriterion(ATBaseCriterion):
         else:
             folders = relPath.split('/')
 
-            # set the path to the smartfolder's path
+            # set the path to the collections path
             path = list(self.aq_parent.getPhysicalPath()) 
             
             # now construct an aboslute path based on the relative custom path

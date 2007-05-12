@@ -98,7 +98,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 write_permission = ChangeTopics,
                 widget=BooleanWidget(
                         label=_(u'label_inherit_criteria', default=u'Inherit Criteria'),
-                        description=_(u'help_inherit_criteria',
+                        description=_(u'help_inherit_collection_criteria',
                                       default=u"Narrow down the search results from the parent Collection(s) "
                                                "by using the criteria from this Collection."),
                         # Only show when the parent object is a Topic also,

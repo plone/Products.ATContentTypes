@@ -22,12 +22,12 @@
         <li class="selected">
           <a href=""
              tal:attributes="href string:${here/absolute_url}/${template/id}"
-             i18n:translate="label_topic_indexes">Collection Indexes</a>
+             i18n:translate="label_collection_indexes">Collection Indexes</a>
         </li>
         <li class="">
           <a href=""
              tal:attributes="href string:${here/absolute_url}/atct_manageTopicMetadata"
-             i18n:translate="label_topic_metadata">Collection Metadata</a>
+             i18n:translate="label_collection_metadata">Collection Metadata</a>
         </li>
     </ul>
 
@@ -40,7 +40,7 @@
     <div class="documentContent">
 
     <h1 i18n:domain="atcontenttypes"
-        i18n:translate="heading_smart_folder_settings">
+        i18n:translate="heading_collection_settings">
         Collection Settings
     </h1>
 
@@ -52,7 +52,7 @@
     </a>
 
     <p i18n:domain="atcontenttypes"
-       i18n:translate="description_configure_indices">
+       i18n:translate="description_configure_collection_indices">
         Configure which indices will be displayed while creating criteria
         for Collections, and how they will be displayed.
     </p>
