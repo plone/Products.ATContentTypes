@@ -34,7 +34,7 @@ from Products.ATContentTypes.criteria import FIELD_INDICES
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
 
-from Products.CMFPlone import PloneMessageFactory as _
+from Products.ATContentTypes import ATCTMessageFactory as _
 
 ATPortalTypeCriterionSchema = ATSelectionCriterion.schema.copy()
 

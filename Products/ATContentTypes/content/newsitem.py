@@ -46,8 +46,9 @@ from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
+from Products.ATContentTypes import ATCTMessageFactory as _
+
 from Products.CMFCore.permissions import View
-from Products.CMFPlone import PloneMessageFactory as _
 
 from Products.validation.config import validation
 from Products.validation.validators.SupplValidators import MaxSizeValidator

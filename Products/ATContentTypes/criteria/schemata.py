@@ -26,7 +26,7 @@ from Products.Archetypes.atapi import IdWidget
 from Products.Archetypes.atapi import StringWidget
 from Products.ATContentTypes.permission import ChangeTopics
 
-from Products.CMFPlone import PloneMessageFactory as _
+from Products.ATContentTypes import ATCTMessageFactory as _
 
 ###
 # AT Base Criterion

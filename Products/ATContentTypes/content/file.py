@@ -49,7 +49,7 @@ from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
-from Products.CMFPlone import PloneMessageFactory as _
+from Products.ATContentTypes import ATCTMessageFactory as _
 
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 from Products.validation.config import validation

@@ -41,7 +41,7 @@ from Products.ATContentTypes.interfaces import IATLink
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
-from Products.CMFPlone import PloneMessageFactory as _
+from Products.ATContentTypes import ATCTMessageFactory as _
 
 ATLinkSchema = ATContentTypeSchema.copy() + Schema((
     StringField('remoteUrl',

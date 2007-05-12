@@ -36,7 +36,7 @@ from Products.Archetypes.atapi import StringField
 from Products.Archetypes.atapi import StringWidget
 from Products.ATContentTypes import permission as ATCTPermissions
 
-from Products.CMFPlone import PloneMessageFactory as _
+from Products.ATContentTypes import ATCTMessageFactory as _
 
 class InvalidContentType(Exception):
     """Invalid content type (uploadFromURL)

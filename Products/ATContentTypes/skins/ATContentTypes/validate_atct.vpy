@@ -11,7 +11,7 @@
 errors  = {}
 request = context.REQUEST
 form    = request.form
-from Products.CMFPlone import PloneMessageFactory as _
+from Products.ATContentTypes import ATCTMessageFactory as _
 
 ## It's hacky and not nice but it's working
 # Set the title from the filename of uploaded image or field

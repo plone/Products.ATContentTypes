@@ -39,7 +39,7 @@ from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
 from Products.ATContentTypes.lib.autosort import AutoSortSupport
 from Products.ATContentTypes.lib.autosort import AutoOrderSupport
 
-from Products.CMFPlone import PloneMessageFactory as _
+from Products.ATContentTypes import ATCTMessageFactory as _
 
 from Products.CMFCore.permissions import View
 

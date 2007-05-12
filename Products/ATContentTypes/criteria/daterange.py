@@ -38,7 +38,7 @@ from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 
-from Products.CMFPlone import PloneMessageFactory as _
+from Products.ATContentTypes import ATCTMessageFactory as _
 
 RELEVANT_INDICES=list(DATE_INDICES)
 RELEVANT_INDICES.remove('DateRangeIndex')

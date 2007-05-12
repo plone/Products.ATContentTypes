@@ -28,9 +28,8 @@ from Products.Archetypes.atapi import MetadataSchema
 from Products.Archetypes.atapi import ReferenceField
 from Products.Archetypes.atapi import BooleanField
 from Products.Archetypes.atapi import BooleanWidget
-
+from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFPlone import PloneMessageFactory as _
 
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 

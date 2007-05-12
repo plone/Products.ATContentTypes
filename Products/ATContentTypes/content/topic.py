@@ -66,7 +66,7 @@ from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 from Products.ATContentTypes.config import TOOLNAME
 
-from Products.CMFPlone import PloneMessageFactory as _
+from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.CMFPlone.PloneBatch import Batch
 
 # A couple of fields just don't make sense to sort (for a user),
