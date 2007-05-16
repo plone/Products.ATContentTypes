@@ -1,4 +1,4 @@
-1.1.6-devel unreleased
+1.1.6-final 2007-05-16
 =======================
 
  * Fix a minor XSS issue resulting from lack of output sanitization on
