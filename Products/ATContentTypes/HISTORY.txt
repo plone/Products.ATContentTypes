@@ -1,6 +1,8 @@
 1.1.6-devel unreleased
 =======================
 
+ * Fix a minor XSS issue resulting from lack of output sanitization on
+   the remoteUrl field of ATLink.
 
 1.1.5-final 2007-04-28
 ======================

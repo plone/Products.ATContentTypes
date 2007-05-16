@@ -89,6 +89,14 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
         obj.setRemoteUrl(url)
         self.failUnlessEqual(obj.getRemoteUrl(), url)
 
+    def testLinkSanitizesOutput(self):
+        obj = self._ATCT
+
+        url = 'javascript:alert("test")'
+        obj.setRemoteUrl(url)
+        self.failUnlessEqual(obj.getRemoteUrl(),
+                             'javascript:alert%28%22test%22%29')
+
     def test_edit(self):
         old = self._cmf
         new = self._ATCT

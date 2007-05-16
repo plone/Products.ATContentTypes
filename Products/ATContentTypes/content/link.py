@@ -25,6 +25,7 @@ __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.ATLink'
 
 import urlparse
+from urllib import quote
 
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
@@ -104,5 +105,13 @@ class ATLink(ATCTContent):
         if not remote_url:
             remote_url = kwargs.get('remote_url', None)
         self.update(remoteUrl = remote_url, **kwargs)
+
+    security.declareProtected(View, 'getRemoteUrl')
+    def getRemoteUrl(self):
+        """Sanitize output
+        """
+        value = self.Schema()['remoteUrl'].get(self)
+        if not value: value = '' # ensure we have a string
+        return quote(value, safe='?$#@/:=+;$,')
 
 registerATCT(ATLink, PROJECTNAME)
