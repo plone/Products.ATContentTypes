@@ -118,7 +118,7 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         class fakefile(StringIO.StringIO):
             pass
         fakefile = fakefile()
-        fakefile.filename = 'some_filename'
+        fakefile.filename = 'some-filename'
         id = self.folder.invokeFactory(self.portal_type,
                                        'image.2005-11-18.4066860572',
                                        file=fakefile)
@@ -128,7 +128,7 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         class fakefile(StringIO.StringIO):
             pass
         fakefile = fakefile()
-        fakefile.filename = 'Some_filename_With_Uppercase.txt'
+        fakefile.filename = 'Some-filename-With-Uppercase.txt'
         id = 'file.2005-11-18.4066860573'
         self.folder.invokeFactory(self.portal_type, id)
         self.folder[id].setFile(fakefile)
