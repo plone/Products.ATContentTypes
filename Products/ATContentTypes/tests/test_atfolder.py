@@ -35,6 +35,7 @@ from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATBTreeFolder
 from Products.CMFPlone.PloneFolder import PloneFolder
 from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
+from OFS.interfaces import IOrderedContainer as OFSIOrderedContainer
 from Products.CMFPlone.interfaces.OrderedContainer import IOrderedContainer
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
@@ -84,6 +85,7 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
     icon = 'folder_icon.gif'
 
     def test_implementsOrderInterface(self):
+        self.failUnless(OFSIOrderedContainer.providedBy(self._ATCT))
         self.failUnless(IZopeOrderedContainer.isImplementedBy(self._ATCT))
         self.failUnless(IOrderedContainer.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(IZopeOrderedContainer, self._ATCT))
