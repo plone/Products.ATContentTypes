@@ -292,14 +292,24 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
         rendDate = REQUEST.get('endDate', None)
 
         if rendDate:
-            end = DateTime(rendDate)
+            try:
+                end = DateTime(rendDate)
+            except:
+                errors['endDate'] = "End date is not valid"
         else:
             end = self.end()
         if rstartDate:
-            start = DateTime(rstartDate)
+            try:
+                start = DateTime(rstartDate)
+            except:
+                errors['startDate'] = "Start date is not valid"
         else:
             start = self.start()
 
+        if 'startDate' in errors or 'endDate' in errors:
+            # No point in validating bad input
+            return
+        
         if start > end:
             errors['endDate'] = "End date must be after start date"
 
