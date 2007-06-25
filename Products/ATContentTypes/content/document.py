@@ -205,9 +205,9 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
         """Get the tidied output for a specific field from the request
         if available
         """
-        request = self.REQUEST
-        tidyAttribute = '%s_tidier_data' % field.getName()
-        if isinstance(request, HTTPRequest):
+        request = getattr(self, 'REQUEST', None)
+        if request is not None and isinstance(request, HTTPRequest):
+            tidyAttribute = '%s_tidier_data' % field.getName()
             return request.get(tidyAttribute, None)
 
     def _notifyOfCopyTo(self, container, op=0):
