@@ -566,4 +566,4 @@ InitializeClass(ATCTBTreeFolder)
 
 
 __all__ = ('ATCTContent', 'ATCTFolder', 'ATCTOrderedFolder',
-           'ATCTBTreeFolder', 'updateActions' )
+           'ATCTBTreeFolder' )
