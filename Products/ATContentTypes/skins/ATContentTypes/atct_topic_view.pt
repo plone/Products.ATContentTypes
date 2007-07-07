@@ -27,6 +27,10 @@
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
+        <metal:block use-macro="here/document_view/macros/text-field-view">
+          <!-- output the text field here -->
+        </metal:block>
+
         <metal:listingmacro define-macro="listing">
         <tal:topiccontents define="topicContents python:here.queryCatalog(batch=True);
                                    batch topicContents;">
