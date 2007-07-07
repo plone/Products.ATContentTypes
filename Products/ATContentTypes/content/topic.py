@@ -422,8 +422,18 @@ class ATTopic(ATCTFolder):
                         for r in related]
         related=LazyCat([related])
 
+        limit = self.getLimitNumber()
+        max_items = self.getItemCount()
+        # Batch based on limit size if b_szie is unspecified
+        if max_items and b_size is None:
+            b_size = int(max_items)
+        else:
+            b_size = b_size or 20
+
         q = self.buildQuery()
-        if q is not None:
+        if q is None:
+            results=LazyCat([])
+        else:
             # Allow parameters to further limit existing criterias
             for k,v in q.items():
                 if kw.has_key(k):
@@ -437,13 +447,6 @@ class ATTopic(ATCTFolder):
                 else:
                     kw[k]=v
             #kw.update(q)
-            limit = self.getLimitNumber()
-            max_items = self.getItemCount()
-            # Batch based on limit size if b_szie is unspecified
-            if max_items and b_size is None:
-                b_size = int(max_items)
-            else:
-                b_size = b_size or 20
             if not batch and limit and max_items and self.hasSortCriterion():
                 # Sort limit helps Zope 2.6.1+ to do a faster query
                 # sorting when sort is involved
@@ -452,10 +455,11 @@ class ATTopic(ATCTFolder):
             __traceback_info__ = (self, kw,)
             results = pcatalog.searchResults(REQUEST, **kw)
 
+
         if full_objects and not limit:
             results = list(related) + [b.getObject() for b in results]
         if batch:
-            results=related
+            results=related+results
             batch = Batch(results, b_size, int(b_start), orphan=0)
             return batch
         if limit:
