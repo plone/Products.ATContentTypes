@@ -29,6 +29,7 @@ from types import TupleType
 from types import StringType
 
 from ZPublisher.HTTPRequest import HTTPRequest
+from Products.ZCatalog.Lazy import LazyCat
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
@@ -412,50 +413,57 @@ class ATTopic(ATCTFolder):
             REQUEST = getattr(self, 'REQUEST', {})
         b_start = REQUEST.get('b_start', 0)
 
+        pcatalog = getToolByName(self, 'portal_catalog')
+        mt = getToolByName(self, 'portal_membership')
+        related = [ i for i in self.getRelatedItems() \
+                        if mt.checkPermission(View, i) ]
+        if not full_objects:
+            related = [ pcatalog(path='/'.join(r.getPhysicalPath()))[0] 
+                        for r in related]
+        related=LazyCat([related])
+
         q = self.buildQuery()
-        if q is None:
-            # empty query - do not show anything
-            if batch:
-                return Batch([], 20, int(b_start), orphan=0)
-            return []
-        # Allow parameters to further limit existing criterias
-        for k,v in q.items():
-            if kw.has_key(k):
-                arg = kw.get(k)
-                if isinstance(arg, (ListType,TupleType)) and isinstance(v, (ListType,TupleType)):
-                    kw[k] = [x for x in arg if x in v]
-                elif isinstance(arg, StringType) and isinstance(v, (ListType,TupleType)) and arg in v:
-                    kw[k] = [arg]
+        if q is not None:
+            # Allow parameters to further limit existing criterias
+            for k,v in q.items():
+                if kw.has_key(k):
+                    arg = kw.get(k)
+                    if isinstance(arg, (ListType,TupleType)) and isinstance(v, (ListType,TupleType)):
+                        kw[k] = [x for x in arg if x in v]
+                    elif isinstance(arg, StringType) and isinstance(v, (ListType,TupleType)) and arg in v:
+                        kw[k] = [arg]
+                    else:
+                        kw[k]=v
                 else:
                     kw[k]=v
+            #kw.update(q)
+            limit = self.getLimitNumber()
+            max_items = self.getItemCount()
+            # Batch based on limit size if b_szie is unspecified
+            if max_items and b_size is None:
+                b_size = int(max_items)
             else:
-                kw[k]=v
-        #kw.update(q)
-        pcatalog = getToolByName(self, 'portal_catalog')
-        limit = self.getLimitNumber()
-        max_items = self.getItemCount()
-        # Batch based on limit size if b_szie is unspecified
-        if max_items and b_size is None:
-            b_size = int(max_items)
-        else:
-            b_size = b_size or 20
-        if not batch and limit and max_items and self.hasSortCriterion():
-            # Sort limit helps Zope 2.6.1+ to do a faster query
-            # sorting when sort is involved
-            # See: http://zope.org/Members/Caseman/ZCatalog_for_2.6.1
-            kw.setdefault('sort_limit', max_items)
-        __traceback_info__ = (self, kw,)
-        results = pcatalog.searchResults(REQUEST, **kw)
+                b_size = b_size or 20
+            if not batch and limit and max_items and self.hasSortCriterion():
+                # Sort limit helps Zope 2.6.1+ to do a faster query
+                # sorting when sort is involved
+                # See: http://zope.org/Members/Caseman/ZCatalog_for_2.6.1
+                kw.setdefault('sort_limit', max_items)
+            __traceback_info__ = (self, kw,)
+            results = pcatalog.searchResults(REQUEST, **kw)
+
         if full_objects and not limit:
-            results = [b.getObject() for b in results]
+            results = list(related) + [b.getObject() for b in results]
         if batch:
+            results=related
             batch = Batch(results, b_size, int(b_start), orphan=0)
             return batch
         if limit:
             if full_objects:
-                return [b.getObject() for b in results[:max_items]]
-            return results[:max_items]
-        return results
+                return related[:max_items] + \
+                       [b.getObject() for b in results[:max_items-len(related)]]
+            return related[:max_items] + results[:max_items-len(related)]
+        return related+results
 
     security.declareProtected(ChangeTopics, 'addCriterion')
     def addCriterion(self, field, criterion_type):

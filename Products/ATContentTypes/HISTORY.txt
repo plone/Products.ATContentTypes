@@ -1,6 +1,9 @@
 1.2.0
 =====
 
+ * Show the text field and related items in the Topic view.
+   [wichert]
+
  * Properly i18n-ize imagetransforms TRANSPOSE_MAP by using ATCTMessageFactory.
    [hannosch]
 
