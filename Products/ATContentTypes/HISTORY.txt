@@ -1,6 +1,11 @@
 1.2.0
 =====
 
+ * Fixed migration bug in the atct tool migration. This closes
+   http://dev.plone.org/plone/ticket/6549 and
+   http://dev.plone.org/plone/ticket/6550.
+   [hannosch]
+
  * Show the text field and related items in the Topic view.
    [wichert]
 

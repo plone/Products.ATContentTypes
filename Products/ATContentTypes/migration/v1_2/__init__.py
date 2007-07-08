@@ -33,7 +33,7 @@ def upgradeATCTTool(portal, out):
     
     # Create new tool
     portal._setObject(TOOLNAME, ATCTTool())
-    tool = getToolByName(portal, TOOLNAME, None)
+    tool = portal.get(TOOLNAME)
     # And apply the configuration again
     tool._setPropValue('album_batch_size', old_conf['album_batch_size'])
     tool._setPropValue('album_image_scale', old_conf['album_image_scale'])
