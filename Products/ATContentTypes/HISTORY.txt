@@ -1,5 +1,8 @@
-1.2.0
-=====
+1.2.0-rc1 2007-06-08
+====================
+
+ * Fix concatenation issues between related items and query results in Topics.
+   [alecm]
 
  * Fixed migration bug in the atct tool migration. This closes
    http://dev.plone.org/plone/ticket/6549 and
