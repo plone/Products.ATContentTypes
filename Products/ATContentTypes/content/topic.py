@@ -432,7 +432,7 @@ class ATTopic(ATCTFolder):
 
         q = self.buildQuery()
         if q is None:
-            results=LazyCat([])
+            results=LazyCat([[]])
         else:
             # Allow parameters to further limit existing criterias
             for k,v in q.items():
@@ -456,18 +456,20 @@ class ATTopic(ATCTFolder):
             results = pcatalog.searchResults(REQUEST, **kw)
 
 
-        if full_objects and not limit:
-            results = list(related) + [b.getObject() for b in results]
-        if batch:
-            results=related+results
-            batch = Batch(results, b_size, int(b_start), orphan=0)
-            return batch
-        if limit:
+        if limit and not batch:
             if full_objects:
                 return related[:max_items] + \
                        [b.getObject() for b in results[:max_items-len(related)]]
             return related[:max_items] + results[:max_items-len(related)]
-        return related+results
+        elif full_objects:
+            results = related + LazyCat([[b.getObject() for b in results]])
+        else:
+            results = related + results
+        if batch:
+            results=related+results
+            batch = Batch(results, b_size, int(b_start), orphan=0)
+            return batch
+        return results
 
     security.declareProtected(ChangeTopics, 'addCriterion')
     def addCriterion(self, field, criterion_type):
