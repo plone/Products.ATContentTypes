@@ -96,6 +96,11 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
         obj.setRemoteUrl(url)
         self.failUnlessEqual(obj.getRemoteUrl(),
                              'javascript:alert%28%22test%22%29')
+        # Keep question marks and ampersands intact, please.
+        url = 'http://something.sane/f.php?p1=value&p2=value'
+        obj.setRemoteUrl(url)
+        self.failUnlessEqual(obj.getRemoteUrl(),
+                             'http://something.sane/f.php?p1=value&p2=value')
 
     def test_edit(self):
         old = self._cmf
