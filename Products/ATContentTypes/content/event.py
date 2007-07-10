@@ -143,6 +143,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 searchable=True,
                 accessor='event_url',
                 write_permission = ChangeEvents,
+                validators=('isURL',),
                 widget = StringWidget(
                         description = ("Web address with more info about the event. "
                                        "Add http:// for external links."),
