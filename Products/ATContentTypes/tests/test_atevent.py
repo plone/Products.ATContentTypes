@@ -35,6 +35,7 @@ from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.content.event import ATEvent
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.tests.utils import EmailValidator
+from Products.ATContentTypes.tests.utils import URLValidator
 from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
 from Products.ATContentTypes.permission import ChangeEvents
 from Products.ATContentTypes.utils import DT2dt
@@ -294,7 +295,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.isImplementedBy(field))
-        self.failUnlessEqual(field.validators, EmptyValidator)
+        self.failUnlessEqual(field.validators, URLValidator)
         self.failUnless(isinstance(field.widget, StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
