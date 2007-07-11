@@ -1,4 +1,4 @@
-1.2.0-rc2 2007-06-08
+1.2.0-rc2 2007-06-11
 ====================
 
  * Add link validation to event field.
