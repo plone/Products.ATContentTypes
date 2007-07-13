@@ -346,16 +346,20 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
         If other is a DateTime instance, compare start date with date
         In all other cases there is no specific order
         """
+        # Please note that we can not use self.Title() here: the generated
+        # edit accessor uses getToolByName, which ends up in
+        # five.localsitemanager looking for a parent using a comparison
+        # on this object -> infinite recursion.
         if IATEvent.isImplementedBy(other):
-            return cmp((self.start_date, self.duration, self.Title()),
-                       (other.start_date, other.duration, other.Title()))
+            return cmp((self.start_date, self.duration, self.title),
+                       (other.start_date, other.duration, other.title))
         #elif isinstance(other, (int, long, float)):
         #    return cmp(self.duration, other)
         elif isinstance(other, DateTime):
             return cmp(self.start(), other)
         else:
             # TODO come up with a nice cmp for types
-            return cmp(self.Title(), other)
+            return cmp(self.title, other)
 
     def __hash__(self):
         return hash((self.start_date, self.duration, self.title))
