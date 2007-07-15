@@ -296,14 +296,16 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
             try:
                 end = DateTime(rendDate)
             except:
-                errors['endDate'] = "End date is not valid"
+                errors['endDate'] = _(u'error_invalid_end_date',
+                                      default=u'End date is not valid.')
         else:
             end = self.end()
         if rstartDate:
             try:
                 start = DateTime(rstartDate)
             except:
-                errors['startDate'] = "Start date is not valid"
+                errors['startDate'] = _(u'error_invalid_start_date',
+                                        default=u'Start date is not valid.')
         else:
             start = self.start()
 
@@ -312,7 +314,8 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
             return
         
         if start > end:
-            errors['endDate'] = "End date must be after start date"
+            errors['endDate'] = _(u'error_end_must_be_after_start_date',
+                                  default=u'End date must be after start date.')
 
     def _start_date(self):
         value = self['startDate']

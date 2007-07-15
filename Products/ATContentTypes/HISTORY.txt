@@ -1,8 +1,14 @@
+1.2.0-rc3 unreleased
+====================
+
+ * Fixed i18n markup for event date validation error messages.
+   [hannosch]
+
 1.2.0-rc2 2007-06-11
 ====================
 
  * Add link validation to event field.
- [alecm]
+   [alecm]
 
 1.2.0-rc1 2007-06-08
 ====================
