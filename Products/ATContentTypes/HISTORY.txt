@@ -4,6 +4,9 @@
  * Fixed i18n markup for event date validation error messages.
    [hannosch]
 
+ * Only show related items once instead of twice.
+   [wichert]
+
 1.2.0-rc2 2007-06-11
 ====================
 

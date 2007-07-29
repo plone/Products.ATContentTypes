@@ -466,7 +466,6 @@ class ATTopic(ATCTFolder):
         else:
             results = related + results
         if batch:
-            results=related+results
             batch = Batch(results, b_size, int(b_start), orphan=0)
             return batch
         return results
