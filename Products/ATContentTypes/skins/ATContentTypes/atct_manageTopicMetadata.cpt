@@ -8,11 +8,9 @@
 
 <body>
 
-<div metal:fill-slot="prefs_configlet_main"
+<div metal:fill-slot="prefs_configlet_content"
      tal:define="errors python:request.get('errors', {});
                  props python:here.portal_properties;">
-
-<div class="configlet">
 
 <div class="documentEditable">
 
@@ -40,7 +38,8 @@
 
     <div class="documentContent">
 
-    <h1 i18n:domain="atcontenttypes"
+    <h1 class="documentFirstHeading"
+        i18n:domain="atcontenttypes"
         i18n:translate="heading_collection_settings">
         Collection Settings
     </h1>
@@ -165,7 +164,6 @@
        </tal:indices>
 
     </form>
-    </div>
     </div>
     </div>
 </div>
