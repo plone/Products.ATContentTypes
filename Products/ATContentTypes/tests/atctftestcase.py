@@ -131,11 +131,6 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         response = self.publish('%s/atct_edit' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
 
-    def test_metadata_edit_view(self):
-        # metadata edit should work
-        response = self.publish('%s/base_metadata' % self.obj_path, self.basic_auth)
-        self.assertStatusEqual(response.getStatus(), 200) # OK
-
     def test_base_view(self):
         # base view should work
         response = self.publish('%s/base_view' % self.obj_path, self.basic_auth)
@@ -149,11 +144,6 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
     def test_local_sharing_view(self):
         # sharing tab should work
         response = self.publish('%s/sharing' % self.obj_path, self.basic_auth)
-        self.assertStatusEqual(response.getStatus(), 200) # OK
-
-    def test_workflow_view(self):
-        # workflow tab should work
-        response = self.publish('%s/content_status_history' % self.obj_path, self.basic_auth)
         self.assertStatusEqual(response.getStatus(), 200) # OK
 
     # LinguaPlone specific tests
