@@ -85,7 +85,7 @@ ConstrainTypesMixinSchema = Schema((
 
     LinesField('locallyAllowedTypes',
         vocabulary = '_ct_vocabularyPossibleTypes',
-        enforceVocabulary = True,
+        enforceVocabulary = False,
         languageIndependent = True,
         default_method = '_ct_defaultAddableTypeIds',
         accessor = 'getLocallyAllowedTypes', # Respects ENABLE/DISABLE/ACQUIRE
@@ -106,7 +106,7 @@ ConstrainTypesMixinSchema = Schema((
 
      LinesField('immediatelyAddableTypes',
         vocabulary = '_ct_vocabularyPossibleTypes',
-        enforceVocabulary = True,
+        enforceVocabulary = False,
         languageIndependent = True,
         default_method = '_ct_defaultAddableTypeIds',
         accessor = 'getImmediatelyAddableTypes', # Respects ENABLE/DISABLE/ACQUIRE
