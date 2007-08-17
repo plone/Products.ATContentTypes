@@ -1,6 +1,9 @@
 1.3.0 unreleased
 ================
 
+ * Removed the unmaintained utilities folder including the report scripts.
+   [hannosch]
+
  * Moved old_folder_contents over from CMFPlone as it is still used in
    atct_topic_subtopics.pt.
    [hannosch]
