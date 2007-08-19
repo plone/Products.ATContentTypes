@@ -28,6 +28,7 @@ __docformat__ = 'restructuredtext'
 from Testing import ZopeTestCase
 from Products.PloneTestCase import PloneTestCase
 from Products.PloneTestCase.layer import PloneSiteLayer
+from Products.PloneTestCase.setup import default_user
 from Products.PloneTestCase.setup import portal_name
 from Products.PloneTestCase.setup import portal_owner
 ZopeTestCase.installProduct('SiteAccess')
