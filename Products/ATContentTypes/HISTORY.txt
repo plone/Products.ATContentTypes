@@ -1,8 +1,8 @@
 1.3.0 unreleased
 ================
 
- * Ported events.txt and reindex_sanity.txt tests from Archetypes and adjusted
-   them for the ATContentTypes specific behavior.
+ * Ported events.txt, reindex_sanity.txt and traversal.txt tests from
+   Archetypes and adjusted them for the ATContentTypes specific behavior.
    [hannosch]
 
  * Adjusted tests to changed test base classes of Archetypes.

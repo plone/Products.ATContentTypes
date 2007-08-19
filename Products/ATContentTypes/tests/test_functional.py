@@ -6,7 +6,7 @@ from Testing import ZopeTestCase
 from Products.ATContentTypes.tests.atcttestcase import ATCTFunctionalSiteTestCase 
 
 FILES = [
-    'webdav.txt', 'http_access.txt', 'reindex_sanity.txt'
+    'webdav.txt', 'http_access.txt', 'reindex_sanity.txt', 'traversal.txt'
 ]
 
 from zope.testing import doctest
