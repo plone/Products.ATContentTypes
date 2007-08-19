@@ -27,6 +27,7 @@ __docformat__ = 'restructuredtext'
 
 from Testing import ZopeTestCase
 from Products.PloneTestCase import PloneTestCase
+from Products.PloneTestCase.layer import PloneSiteLayer
 from Products.PloneTestCase.setup import portal_name
 from Products.PloneTestCase.setup import portal_owner
 ZopeTestCase.installProduct('SiteAccess')
@@ -46,7 +47,6 @@ from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
-from Products.Archetypes.tests.atsitetestcase import ATSiteTestCase
 from Products.Archetypes.tests.test_baseschema import BaseSchemaTest
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes import permission as ATCTPermissions
@@ -231,13 +231,15 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
     def beforeTearDown(self):
         self.logout()
 
-class ATCTFieldTestCase(BaseSchemaTest):
+class ATCTFieldTestCase(ATCTSiteTestCase, BaseSchemaTest):
     """ ATContentTypes test including AT schema tests """
+
+    layer = PloneSiteLayer
 
     def afterSetUp(self):
         # initalize the portal but not the base schema test
         # because we want to overwrite the dummy and don't need it
-        ATSiteTestCase.afterSetUp(self)
+        ATCTSiteTestCase.afterSetUp(self)
         self.setRoles(['Manager',])
 
     def createDummy(self, klass, id='dummy'):
