@@ -6,7 +6,7 @@ from Testing import ZopeTestCase
 
 from Products.ATContentTypes.tests.atcttestcase import ATCTFunctionalSiteTestCase 
 
-FILES = ['events.txt']
+FILES = ['events.txt', 'editing.txt']
 
 def test_suite():
     import unittest
