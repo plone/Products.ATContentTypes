@@ -39,7 +39,7 @@ We'll try and set the title (a required field) to the empty string:
 We're not allowed to do so:
   
   >>> document.title_or_id()
-  'Test document'
+  u'Test document'
 
 What if title was in a different schemata? This is interesting to examine
 since the default edit view now includes fields from all schematas and
@@ -55,7 +55,7 @@ we want to make sure all of them are validated.
   >>> browser.getControl('Title').value = ''
   >>> browser.getControl('Save').click()
   >>> document.title_or_id()
-  'Test document'
+  u'Test document'
 
   >>> schema['title'].schemata = previous_schemata
 

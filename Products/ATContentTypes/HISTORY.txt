@@ -1,6 +1,9 @@
 1.3.0 unreleased
 ================
 
+ * Adjusted tests to new Archetypes policy on return values.
+   [hannosch]
+
  * Ported editing.txt, events.txt, reindex_sanity.txt and traversal.txt tests
    from Archetypes and adjusted them for the ATContentTypes specific behavior.
    [hannosch]

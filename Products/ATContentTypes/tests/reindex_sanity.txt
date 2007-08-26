@@ -108,7 +108,7 @@ setting:
   ------------------------------------------------------------
 
   >>> self.folder['new_doc1'].Title()
-  ''
+  u''
 
   >>> self.folder['new_doc1'].Description()
   ''
@@ -145,7 +145,7 @@ More complex invokeFactory call, setting title and description:
   ------------------------------------------------------------
 
   >>> self.folder['new_doc2'].Title()
-  'Title'
+  u'Title'
 
   >>> self.folder['new_doc2'].Description()
   'Description'
@@ -243,7 +243,7 @@ setting:
   ------------------------------------------------------------
 
   >>> self.folder['new_folder1'].Title()
-  ''
+  u''
 
   >>> self.folder['new_folder1'].Description()
   ''
@@ -280,7 +280,7 @@ More complex invokeFactory call, setting title and description:
   ------------------------------------------------------------
 
   >>> self.folder['new_folder2'].Title()
-  'Title'
+  u'Title'
 
   >>> self.folder['new_folder2'].Description()
   'Description'
@@ -384,7 +384,7 @@ setting, but we need to allow the creation of the Large Folders first:
   ------------------------------------------------------------
 
   >>> self.folder['new_btree_folder1'].Title()
-  ''
+  u''
 
   >>> self.folder['new_btree_folder1'].Description()
   ''
@@ -421,7 +421,7 @@ More complex invokeFactory call, setting title and description:
   ------------------------------------------------------------
 
   >>> self.folder['new_btree_folder2'].Title()
-  'Title'
+  u'Title'
 
   >>> self.folder['new_btree_folder2'].Description()
   'Description'

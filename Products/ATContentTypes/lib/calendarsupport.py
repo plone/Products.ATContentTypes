@@ -248,6 +248,8 @@ class CalendarSupportMixin:
 InitializeClass(CalendarSupportMixin)
 
 def vformat(s):
+    if isinstance(s, unicode):
+        s = s.encode('utf-8')
     # return string with escaped commas, colons and semicolons
     return s.strip().replace(',','\,').replace(':','\:').replace(';','\;')
 

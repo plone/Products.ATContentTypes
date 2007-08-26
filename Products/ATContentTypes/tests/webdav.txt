@@ -74,13 +74,13 @@ Document
   text/html
 
   >>> print document.Subject()
-  ('test keyword 1', 'test keyword 2')
+  (u'test keyword 1', u'test keyword 2')
 
   >>> print document.Contributors()
-  ('John Dow', 'Example User')
+  (u'John Dow', u'Example User')
 
   >>> print document.Creators()
-  ('test_user_1_',)
+  (u'test_user_1_',)
 
   >>> print document.EffectiveDate(zone='UTC')
   2005-01-01 00:00:00
@@ -517,7 +517,7 @@ Folder
   ...
 
   >>> self.folder['test-folder-name'].Title()
-  'test-folder-name'
+  u'test-folder-name'
 
 BTreeFolder
 -----------
@@ -539,7 +539,7 @@ Need to make a BTreeFolder manually, and then do a MKCOL inside it:
   ...
 
   >>> self.folder['test-btree']['test-btreefolder-name'].Title()
-  'test-btreefolder-name'
+  u'test-btreefolder-name'
 
   >>> lpf.global_allow = lpf_allow
 

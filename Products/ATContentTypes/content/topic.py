@@ -436,11 +436,15 @@ class ATTopic(ATCTFolder):
         else:
             # Allow parameters to further limit existing criterias
             for k,v in q.items():
+                if isinstance(k, unicode):
+                    k = k.encode('utf-8')
+                if isinstance(v, unicode):
+                    v = v.encode('utf-8')
                 if kw.has_key(k):
                     arg = kw.get(k)
-                    if isinstance(arg, (ListType,TupleType)) and isinstance(v, (ListType,TupleType)):
+                    if isinstance(arg, (list, tuple)) and isinstance(v, (list, tuple)):
                         kw[k] = [x for x in arg if x in v]
-                    elif isinstance(arg, StringType) and isinstance(v, (ListType,TupleType)) and arg in v:
+                    elif isinstance(arg, basestring) and isinstance(v, (list, tuple)) and arg in v:
                         kw[k] = [arg]
                     else:
                         kw[k]=v
