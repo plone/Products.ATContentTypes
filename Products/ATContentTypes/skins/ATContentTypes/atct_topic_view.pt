@@ -15,15 +15,19 @@
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
-        <h1 tal:content="here/title_or_id" class="documentFirstHeading">
-            Title or id
+        <h1 class="documentFirstHeading"> 
+            <metal:field use-macro="python:here.widget('title', mode='view')">
+            Title
+            </metal:field>
         </h1>
 
         <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-        <div class="documentDescription" tal:content="structure here/Description">
-            description
-        </div>
+        <p class="documentDescription">
+            <metal:field use-macro="python:here.widget('description', mode='view')">
+            Description
+            </metal:field>
+        </p>
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
