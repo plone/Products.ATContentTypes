@@ -1,5 +1,12 @@
+1.2.1 2007-09-10
+================
+
+ * Use widget views for standard view templates to simpify inline editing.
+   [limi]
+
+
 1.2.0-final 2007-08-16
-====================
+======================
 
  * No longer enforce vocabularies on constraintypes fields, it's essentially
    pointless, and not enforcing them helps workaround a strange bug:
