@@ -16,32 +16,30 @@
                  kssClassesView context/@@kss_field_decorator_view;
                  getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
                  templateId template/getId;
-                 batch python:Batch(images, 12, int(b_start), orphan=1);
-                 text here/getText|nothing;">
+                 batch python:Batch(images, 12, int(b_start), orphan=1)">
 
     <div tal:replace="structure provider:plone.abovecontenttitle" />
 
-    <h1 class="documentFirstHeading"> 
-        <metal:field use-macro="python:here.widget('title', mode='view')">
-        Title
-        </metal:field>
-    </h1>
+    <h1 tal:content="here/pretty_title_or_id" class="documentFirstHeading">Title or id</h1>
 
     <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-    <p class="documentDescription">
-        <metal:field use-macro="python:here.widget('description', mode='view')">
+    <p metal:use-macro="here/kss_generic_macros/macros/generic_description_view">
         Description
-        </metal:field>
     </p>
         
     <div tal:replace="structure provider:plone.abovecontentbody" />
 
-    <tal:bodytext condition="text">
-    <metal:field use-macro="python:here.widget('text', mode='view')">
-    Body text
-    </metal:field>
-    </tal:bodytext>
+    <div metal:define-macro="text-field-view"
+         id="parent-fieldname-text" class="stx"
+         tal:define="kss_class python:getKssClasses('text',
+                     templateId=templateId, macro='text-field-view');
+                     text here/getText|nothing"
+         tal:condition="text"
+         tal:attributes="class python:test(here.Format() in ('text/structured',
+                                               'text/x-rst', ), 'stx' + kss_class, 'plain' + kss_class)">
+        <div metal:define-slot="inside" tal:replace="structure text">The body</div>
+    </div>
 
     <tal:albumsimages tal:condition="python:albums or images">
         <tal:images tal:condition="batch" tal:repeat="image batch">
