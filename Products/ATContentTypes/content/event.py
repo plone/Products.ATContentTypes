@@ -167,6 +167,11 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                         )),
     ), marshall = RFC822Marshaller()
     )
+
+# Remove the subject field because the eventType field is a proxy for this
+ATEventSchema['subject'].widget.visible = {'edit': 'invisible'}
+ATEventSchema['subject'].mode = 'r'
+
 finalizeATCTSchema(ATEventSchema)
 # finalizeATCTSchema moves 'location' into 'categories', we move it back:
 ATEventSchema.changeSchemataForField('location', 'default')
