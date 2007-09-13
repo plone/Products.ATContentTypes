@@ -1,6 +1,9 @@
-1.2.1 2007-09-10
+1.2.1 2007-09-12
 ================
 
+ * Remove use of AT widget rendering from templates used for non-AT types.
+   [ldr]
+ 
  * Make subject field read-only and invisible for events.  This fixes
    http://dev.plone.org/plone/ticket/6967
    [alecm]
