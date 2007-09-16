@@ -75,6 +75,11 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
                         show_content_type = False,)),
     ), marshall=PrimaryFieldMarshaller()
     )
+
+# Title is pulled from the file name if we don't specify anything,
+# so it's not strictly required, unlike in the rest of ATCT.
+ATFileSchema['title'].required = False
+
 finalizeATCTSchema(ATFileSchema)
 
 class ATFile(ATCTFileContent):
