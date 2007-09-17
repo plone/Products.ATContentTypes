@@ -224,6 +224,11 @@ tests.append(TestSiteATImage)
 
 class TestATImageFields(atcttestcase.ATCTFieldTestCase):
 
+    # Title is not a required field, since we don't require them 
+    # on File/Image - they are taken from the filename if not present.
+    # "Add the comment 'damn stupid fucking test'" -- optilude ;)
+    def test_title(self):
+        pass
 
     def afterSetUp(self):
         atcttestcase.ATCTFieldTestCase.afterSetUp(self)

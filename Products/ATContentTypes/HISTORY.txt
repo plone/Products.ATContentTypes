@@ -1,3 +1,11 @@
+1.2.2 (unreleased)
+==================
+
+- Files and Images don't need to enforce the Title field, since it is pulled
+  from the uploaded file name if missing. This fixes
+  http://dev.plone.org/plone/ticket/6051, which is a common source of user
+  frustration when uploading files/images. 
+
 1.2.1 2007-09-12
 ================
 
