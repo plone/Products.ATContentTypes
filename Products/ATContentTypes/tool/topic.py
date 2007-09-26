@@ -261,6 +261,7 @@ class ATTopicsTool(Base):
         if enabledOnly:
             indexes_dec = [(i.index.lower(), i.index) for i in self.getEnabledIndexes()]
         else:
+            self.createInitialIndexes() # update in case of new catalogue indexes
             indexes_dec = [(i.lower(), i) for i in self.topic_indexes.keys()]
 
         indexes_dec.sort()
@@ -274,6 +275,7 @@ class ATTopicsTool(Base):
         if enabledOnly:
             meta_dec = [(i.index.lower(), i.index) for i in self.getEnabledMetadata()]
         else:
+            self.createInitialMetadata() # update in case of new catalogue metadata
             meta_dec = [(i.lower(), i) for i in self.topic_metadata.keys()]
 
         meta_dec.sort()
