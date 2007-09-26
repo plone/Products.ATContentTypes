@@ -3,6 +3,7 @@
 
 - Update catalogue indexes and metadata list in collection control panel when
   'All fields' requested.
+  [ldr]
 
 - Files and Images don't need to enforce the Title field, since it is pulled
   from the uploaded file name if missing. This fixes
