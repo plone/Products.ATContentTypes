@@ -18,6 +18,9 @@
    atct_topic_subtopics.pt.
    [hannosch]
 
+ * Reorder ATDateCriteria schema fields => more intuitive for users.
+   [zegor]
+
 1.2.0-final 2007-08-16
 ======================
 
