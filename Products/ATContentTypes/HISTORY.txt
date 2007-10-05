@@ -1,3 +1,12 @@
+1.1.7-final 2007-10-05
+======================
+
+ * Fixed issue with quoting of '&' in link urls.
+   [reinout]
+
+ * Added validator for for url fields to prevent simple XSS.
+   [alecm]
+
 1.1.6-final 2007-05-16
 =======================
 
