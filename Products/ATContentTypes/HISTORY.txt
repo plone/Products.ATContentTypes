@@ -1,14 +1,17 @@
 1.2.2 2007-10-05
 ==================
 
-- Update catalogue indexes and metadata list in collection control panel when
-  'All fields' requested.
-  [ldr]
+ * Fix ATLink XSS issue.
+   [alecm, reinout]
 
-- Files and Images don't need to enforce the Title field, since it is pulled
-  from the uploaded file name if missing. This fixes
-  http://dev.plone.org/plone/ticket/6051, which is a common source of user
-  frustration when uploading files/images. 
+ * Update catalogue indexes and metadata list in collection control panel when
+   'All fields' requested.
+   [ldr]
+
+ * Files and Images don't need to enforce the Title field, since it is pulled
+   from the uploaded file name if missing. This fixes
+   http://dev.plone.org/plone/ticket/6051, which is a common source of user
+   frustration when uploading files/images. 
 
 1.2.1 2007-09-12
 ================
