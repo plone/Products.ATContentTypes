@@ -1,3 +1,10 @@
+1.2.3 Not Released
+==================
+
+ * Reorder ATDateCriteria schema fields => more intuitive for users.
+   [zegor]
+
+
 1.2.2 2007-10-05
 ==================
 

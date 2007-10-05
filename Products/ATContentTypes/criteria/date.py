@@ -69,19 +69,6 @@ RangeOperations = DisplayList((
     ))
 
 ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
-    StringField('operation',
-                required=1,
-                mode="rw",
-                default=None,
-                write_permission=ChangeTopics,
-                vocabulary=CompareOperations,
-                enforceVocabulary=1,
-                widget=SelectionWidget(
-                    label=_(u'label_date_criteria_operation', default=u'More or less'),
-                    description=_(u'help_date_criteria_operation',
-                                  default=u'Select the date criteria operation.'),
-                    format="select"),
-                ),
     IntegerField('value',
                 required=1,
                 mode="rw",
@@ -108,6 +95,19 @@ ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
                             default=u'In the past or future'),
                     description=_(u'help_date_criteria_range',
                                   default=u"Select the date criteria range. Ignore this if you selected 'Now' above."),
+                    format="select"),
+                ),
+    StringField('operation',
+                required=1,
+                mode="rw",
+                default=None,
+                write_permission=ChangeTopics,
+                vocabulary=CompareOperations,
+                enforceVocabulary=1,
+                widget=SelectionWidget(
+                    label=_(u'label_date_criteria_operation', default=u'More or less'),
+                    description=_(u'help_date_criteria_operation',
+                                  default=u'Select the date criteria operation.'),
                     format="select"),
                 ),
     ))
