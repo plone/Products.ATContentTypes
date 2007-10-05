@@ -1,4 +1,4 @@
-1.2.2 (unreleased)
+1.2.2 2007-10-05
 ==================
 
 - Update catalogue indexes and metadata list in collection control panel when
