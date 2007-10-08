@@ -1,0 +1,103 @@
+<tal:header tal:replace="structure here/manage_page_header|nothing">Header</tal:header>
+<tal:message tal:define="manage_tabs_message options/manage_tabs_message | request/manage_tabs_message | nothing"
+    tal:replace="structure here/manage_tabs">Tabs</tal:message>
+<tal:body tal:define="recatalogCMF request/recatalogCMF | nothing;
+                      recatalogATCT request/recatalogATCT | nothing;
+                      setRecatalogInstall request/setRecatalogInstall | nothing;
+                      remove request/remove | nothing;
+                      submitted request/submitted  | nothing;
+    ">
+
+ <tal:form tal:condition="not: submitted">
+
+  <h3>Recatalog</h3>
+
+  <p>The migration system of ATContentTypes requires an up to date 
+     portal_catalog in order to work. By default the catalog is recataloged
+     when you install ATContentTypes. But if you are doing a manual migration
+     with <code>SUPPRESS_ATCT_INSTALLATION="YES"</code> or if you have
+     imported or copied objects into your site you have to recatalog again.
+  </p>
+  
+  <p>The find and recataloging code is using ZopeFindAndApply to walk
+     recursivly throught your site and index all content types based on
+     their meta type. <em>This may take a very long time!</em>
+  </p>
+  
+  <p>If you check <code>Remove old objects first?</code> all CMF resp. ATCT
+     content objects are purged from the catalog before they are reindexed.
+  </p>
+  
+  <p>Don't forget to disable recataloging at install time after you have
+     done a manual recataloging!
+  </p>
+ 
+  <form method="put" action="" tal:attributes="action template/getId">
+    <input type="hidden" name="submitted" value="1" />
+ 
+    <h4>Recatalog CMF types</h4>
+    <fieldset>
+      <p>Find and recatalog all CMF content types based on their meta_type.
+      </p>
+      <input type="checkbox" name="remove" checked="checked" />Remove old objects first?<br />
+      <input type="submit" name="recatalogCMF" value="Recatalog CMF types" />
+    </fieldset>
+    
+    <h4>Set recatalog at install time option</h4>
+    <fieldset tal:define="recat here/getCMFTypesAreRecataloged">
+      <p>ATContentTypes is recataloging all CMF based types at install time.
+          You can change the behavior below.
+      </p>
+      <p>Current setting: 
+        <tal:block tal:condition="not: recat">CMF types are going to be recataloged.</tal:block>
+        <tal:block tal:condition="recat">CMF types will <b>not</b> be recataloged again.</tal:block>
+      <p>
+      <input type="submit" name="setRecatalogInstall" value=""
+         tal:attributes="value python: recat and 'enable' or 'disable'" />
+    </fieldset>
+    
+    <h4>Recatalog ATContentTypes types</h4>
+    <fieldset>
+      <p>Find and recatalog ATCT content types based on their content types.
+         You can use this feature to make sure all ATCT types are in your
+         <code>portal_catalog</code>
+      </p>
+      <input type="checkbox" name="remove" />Remove old objects first?<br />
+      <input type="submit" name="recatalogATCT" value="Recatalog ATCT types" />
+    </fieldset>
+  </form>
+
+ </tal:form>
+
+ <tal:recatalogCMF tal:condition="recatalogCMF">
+   <h3>Recatalog CMF types. </h3>
+
+  <tal:execute tal:define="result python: here.recatalogCMFTypes(remove)">
+    Time: <tal:time tal:content="python: '%0.3f' % result[0]" /> seconds, 
+    CPU time: <tal:time tal:content="python: '%0.3f' % result[1]" /> seconds
+  </tal:execute>
+ </tal:recatalogCMF>
+
+ <tal:recatalogInstall tal:condition="setRecatalogInstall"
+    tal:define="new_value not: here/getCMFTypesAreRecataloged">
+   <h3>Set recataloging at install. </h3>
+   
+   <p>Recatalog at install time is now set to
+    <em tal:content="python:new_value and 'disabled' or 'enabled'">value</em>.
+   </p>
+
+   <tal:execute tal:define="dummy python: here.setCMFTypesAreRecataloged(new_value)"/>
+ </tal:recatalogInstall>
+
+ <tal:recatalogATCT tal:condition="recatalogATCT">
+   <h3>Recatalog ATContentTypes types. </h3>
+   
+  <tal:execute tal:define="result python: here.recatalogATCTTypes(remove)">
+    Time: <tal:time tal:content="python: '%0.3f' % result[0]" /> seconds, 
+    CPU time: <tal:time tal:content="python: '%0.3f' % result[1]" /> seconds
+  </tal:execute>
+</tal:recatalogATCT>
+
+
+</tal:body>
+<tal:footer tal:replace="structure here/manage_page_footer|nothing">footer</tal:footer>
