@@ -1,4 +1,4 @@
-1.1.7-final 2007-10-05
+1.1.7-final 2007-10-08
 ======================
 
  * Fixed issue with quoting of '&' in link urls.
