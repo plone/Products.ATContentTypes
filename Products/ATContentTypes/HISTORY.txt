@@ -21,6 +21,11 @@
  * Reorder ATDateCriteria schema fields => more intuitive for users.
    [zegor]
 
+ * Forwarded fix for http://dev.plone.org/collective/changeset/51803: the
+   validation layer for the 'id' field wasn't being initialized. Closes
+   http://dev.plone.org/plone/ticket/7221
+   [deo]
+
 1.2.0-final 2007-08-16
 ======================
 
@@ -229,7 +234,7 @@
 
  * Added a relative path criterion for Smart Folders to allow search paths
    like "../somefolder"
-   [ender, elvix] 
+   [ender, elvix]
 
 1.1.3-final 2006-09-20
 ======================

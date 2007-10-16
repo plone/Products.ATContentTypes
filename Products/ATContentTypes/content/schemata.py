@@ -49,8 +49,12 @@ ATContentTypeSchema = BaseSchema.copy() + MetadataSchema((
         ),
     ),)
 
-ATContentTypeSchema['id'].validators = ('isValidId',)
 ATContentTypeSchema['id'].searchable = True
+ATContentTypeSchema['id'].validators = ('isValidId',)
+
+# Update the validation layer after change the validator in runtime
+ATContentTypeSchema['id']._validationLayer()
+
 ATContentTypeSchema['description'].schemata = 'default'
 
 # BBB
@@ -167,5 +171,7 @@ def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
     marshall_register(schema)
     return schema
 
+# Make sure the base ATCT schema is correctly finalized
+finalizeATCTSchema(ATContentTypeSchema)
 
 __all__ = ('ATContentTypeSchema', 'relatedItemsField',)
