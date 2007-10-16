@@ -24,6 +24,8 @@ __docformat__ = 'restructuredtext'
 
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
+from Products.validation.interfaces.IValidator import IValidationChain
+from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
 from Products.Archetypes.atapi import *
 
@@ -38,7 +40,7 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
     def test_wfmapping(self):
         default = ('plone_workflow',)
         folder = ('folder_workflow',)
-        
+
         mapping = {
             'Document' : default,
             'Event' : default,
@@ -51,18 +53,22 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
             'News Item' : default,
             'Topic' : folder,
             }
-        
+
         for pt, wf in mapping.items():
             pwf = self.wf.getChainFor(pt)
             self.failUnlessEqual(pwf, wf, (pt, pwf, wf))
-    
+
     def test_striphtmlbug(self):
         # Test for Plone tracker #4944
         self.folder.invokeFactory('Document', 'document')
         d = getattr(self.folder, 'document')
         d.setTitle("HTML end tags start with </ and end with >")
         self.assertEqual(d.Title(), "HTML end tags start with </ and end with >")
-        
+
+    def test_validation_layer_from_id_field_from_base_schema_was_initialized(self):
+        field = ATContentTypeSchema['id']
+        self.failUnless(IValidationChain.isImplementedBy(field.validators))
+
 
 tests.append(TestBugs)
 

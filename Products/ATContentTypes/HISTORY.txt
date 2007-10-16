@@ -4,6 +4,10 @@
  * Reorder ATDateCriteria schema fields => more intuitive for users.
    [zegor]
 
+ * Fixed a misterious error that happened when the ATContentTypeSchema
+   was directly used: the validation layer for the 'id' field wasn't
+   being initialized. This fixes http://dev.plone.org/plone/ticket/7221
+   [deo]
 
 1.2.2 2007-10-05
 ==================
@@ -18,21 +22,20 @@
  * Files and Images don't need to enforce the Title field, since it is pulled
    from the uploaded file name if missing. This fixes
    http://dev.plone.org/plone/ticket/6051, which is a common source of user
-   frustration when uploading files/images. 
+   frustration when uploading files/images.
 
 1.2.1 2007-09-12
 ================
 
  * Remove use of AT widget rendering from templates used for non-AT types.
    [ldr]
- 
+
  * Make subject field read-only and invisible for events.  This fixes
    http://dev.plone.org/plone/ticket/6967
    [alecm]
 
  * Use widget views for standard view templates to simpify inline editing.
    [limi]
-
 
 1.2.0-final 2007-08-16
 ======================
@@ -242,7 +245,7 @@
 
  * Added a relative path criterion for Smart Folders to allow search paths
    like "../somefolder"
-   [ender, elvix] 
+   [ender, elvix]
 
 1.1.3-final 2006-09-20
 ======================
