@@ -28,6 +28,8 @@ if __name__ == '__main__':
 
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
+from Products.validation.interfaces.IValidator import IValidationChain
+from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
 from Products.Archetypes.atapi import *
 
@@ -44,32 +46,32 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
 
     def test_reinstall_keeps_obj_wf_state(self):
         wf = self.wf
-        self.folder.invokeFactory('Document', 'testdoc', title="test doc", 
+        self.folder.invokeFactory('Document', 'testdoc', title="test doc",
                                   text="test body")
         obj = self.folder.testdoc
-        
+
         state = wf.getInfoFor(obj, 'review_state', default=None)
         self.failUnlessEqual(state, 'visible')
-        
+
         self.qi.reinstallProducts(('ATContentTypes',))
-        
+
         state = wf.getInfoFor(obj, 'review_state', default=None)
         self.failUnlessEqual(state, 'visible')
-        
+
         wf.doActionFor(obj, 'submit')
-        
+
         state = wf.getInfoFor(obj, 'review_state', default=None)
         self.failUnlessEqual(state, 'pending')
 
         self.qi.reinstallProducts(('ATContentTypes',))
-        
+
         state = wf.getInfoFor(obj, 'review_state', default=None)
         self.failUnlessEqual(state, 'pending')
 
     def test_wfmapping(self):
         default = ('plone_workflow',)
         folder = ('folder_workflow',)
-        
+
         mapping = {
             'Document' : default,
             'Event' : default,
@@ -82,11 +84,11 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
             'News Item' : default,
             'Topic' : folder,
             }
-        
+
         for pt, wf in mapping.items():
             pwf = self.wf.getChainFor(pt)
             self.failUnlessEqual(pwf, wf, (pt, pwf, wf))
-    
+
     def test_reinstall_keeps_wfmapping(self):
         pt = 'Document'
         wf = ('folder_workflow',)
@@ -96,7 +98,7 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(pwf, wf, (pt, pwf, wf))
 
         self.qi.reinstallProducts(('ATContentTypes',))
-        
+
         pwf = self.wf.getChainFor(pt)
         self.failUnlessEqual(pwf, wf, (pt, pwf, wf))
 
@@ -106,7 +108,11 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
         d = getattr(self.folder, 'document')
         d.setTitle("HTML end tags start with </ and end with >")
         self.assertEqual(d.Title(), "HTML end tags start with </ and end with >")
-        
+
+    def test_validation_layer_from_id_field_from_base_schema_was_initialized(self):
+        field = ATContentTypeSchema['id']
+        self.failUnless(IValidationChain.isImplementedBy(field.validators))
+
 
 tests.append(TestBugs)
 

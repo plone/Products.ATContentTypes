@@ -1,3 +1,10 @@
+1.1.8-svn unreleased
+====================
+
+ * Backported fix for http://dev.plone.org/plone/ticket/7221: the validation
+   layer for the 'id' field from ATContentTypeSchema isn't being initialized.
+   [deo]
+
 1.1.7-final 2007-10-08
 ======================
 
@@ -61,7 +68,7 @@
 
  * Added a relative path criterion for Smart Folders to allow search paths
    like "../somefolder"
-   [ender, elvix] 
+   [ender, elvix]
 
 1.1.3-final 2006-09-20
 ======================
