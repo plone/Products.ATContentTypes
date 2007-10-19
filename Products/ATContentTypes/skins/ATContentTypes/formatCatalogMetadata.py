@@ -43,9 +43,16 @@ if items is not None and safe_callable(items):
     value = ', '.join(['%s: %s'%(a,b) for a,b in items()])
 if same_type(value,[]) or same_type(value,()):
     # Return list as comma separated values
-    value = ', '.join([str(v) for v in value])
+    alist = []
+    for item in value:
+        if same_type(item, u''):
+            alist.append(item)
+        else:
+            alist.append(str(item))
+    value = ', '.join(alist)
 
-value = str(value)
+if not same_type(value, u''):
+    value = str(value)
 
 pt = context.portal_properties
 site_props = getattr(pt, 'site_properties', None)

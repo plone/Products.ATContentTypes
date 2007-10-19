@@ -1,6 +1,12 @@
 1.2.3 Not Released
 ==================
 
+ * Fix Unicode encode error in formatCatalogMetadata.py when atct_topic_view.py
+   uses it to display in a table a text field (like 'location') whose contents
+   can't be encoded to ascii.
+   http://dev.plone.org/plone/ticket/7237
+   [stevem]
+
  * Reorder ATDateCriteria schema fields => more intuitive for users.
    [zegor]
 
