@@ -68,7 +68,7 @@ class TestFormatCatalogMetadata(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(self.script(None), '')
         self.assertEqual(self.script(Missing.Value()), '')
 
-    def testFormatStrange(self):
+    def testUnicodeValue(self):
         """ Make sure non-ascii encodable unicode is acceptable """
         
         ustr = 'i\xc3\xadacute'.decode('utf8')
