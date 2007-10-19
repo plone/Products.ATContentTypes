@@ -52,6 +52,9 @@ class TestFormatCatalogMetadata(atcttestcase.ATCTSiteTestCase):
     def testFormatList(self):
         self.assertEqual(self.script(('a','b',1,2,3,4)), 'a, b, 1, 2, 3, 4')
         self.assertEqual(self.script(['a','b',1,2,3,4]), 'a, b, 1, 2, 3, 4')
+        # this also needs to be able to handle unicode that won't encode to ascii
+        ustr = 'i\xc3\xadacute'.decode('utf8')
+        self.assertEqual(self.script(['a','b',ustr]), 'a, b, i\xc3\xadacute'.decode('utf8'))
 
     def testFormatString(self):
         self.assertEqual(self.script('fkj dsh ekjhsdf kjer'), 'fkj dsh ekjhsdf kjer')
@@ -64,6 +67,12 @@ class TestFormatCatalogMetadata(atcttestcase.ATCTSiteTestCase):
     def testFormatStrange(self):
         self.assertEqual(self.script(None), '')
         self.assertEqual(self.script(Missing.Value()), '')
+
+    def testFormatStrange(self):
+        """ Make sure non-ascii encodable unicode is acceptable """
+        
+        ustr = 'i\xc3\xadacute'.decode('utf8')
+        self.assertEqual(self.script(ustr), ustr)
 
 tests.append(TestFormatCatalogMetadata)
 
