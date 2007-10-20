@@ -1,6 +1,9 @@
 1.3.0 unreleased
 ================
 
+ * Moved interface declarations from ZCML to the classes themselves.
+   [hannosch]
+
  * Fix Unicode encode error in formatCatalogMetadata.py when atct_topic_view.py
    uses it to display in a table a text field (like 'location') whose contents
    can't be encoded to ascii.

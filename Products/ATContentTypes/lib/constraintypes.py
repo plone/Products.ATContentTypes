@@ -23,6 +23,8 @@ which types can be added in a folder-instance
 __author__  = 'Jens Klein <jens.klein@jensquadrat.de>'
 __docformat__ = 'plaintext'
 
+from zope.interface import implements
+
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from Globals import InitializeClass
@@ -157,6 +159,7 @@ class ConstrainTypesMixin:
     """
 
     __implements__ = (ZopeTwoISelectableConstrainTypes, )
+    implements(ISelectableConstrainTypes)
 
     security = ClassSecurityInfo()
 

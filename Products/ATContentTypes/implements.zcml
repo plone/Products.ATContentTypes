@@ -152,41 +152,4 @@
         interface=".interface.IATTopicSearchCriterion"
         />
 
-  <!-- lib -->
-
-    <implements
-        class=".lib.autosort.AutoSortSupport"
-        interface=".interface.IAutoSortSupport"
-        />
-
-    <implements
-        class=".lib.autosort.AutoOrderSupport"
-        interface=".interface.IAutoOrderSupport"
-        />
-
-    <implements
-        class=".lib.calendarsupport.CalendarSupportMixin"
-        interface=".interface.ICalendarSupport"
-        />
-
-    <implements
-        class=".lib.constraintypes.ConstrainTypesMixin"
-        interface=".interface.ISelectableConstrainTypes"
-        />
-
-    <implements
-      class=".lib.historyaware.HistoryAwareMixin"
-      interface=".interface.IHistoryAware"
-      />
-
-    <implements
-        class=".tool.atct.ATCTTool"
-        interface=".interface.IATCTTool"
-        />
-
-    <implements
-        class=".tool.topic.ATTopicsTool"
-        interface=".interface.IATCTTopicsTool"
-        />
-
 </configure>
