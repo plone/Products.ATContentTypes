@@ -28,6 +28,8 @@ import posixpath
 import logging
 import transaction
 
+from zope.interface import implements
+
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 if HAS_LINGUA_PLONE:
     from Products.LinguaPlone.public import BaseContent
@@ -65,7 +67,9 @@ from Products.CMFPlone.PloneFolder import ReplaceableWrapper
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.config import MIME_ALIAS
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixin
-from Products.ATContentTypes.interfaces import IATContentType
+from Products.ATContentTypes.interfaces import IATContentType as z2IATContentType
+from Products.ATContentTypes.interface import IATContentType
+from Products.ATContentTypes.interface import ISelectableConstrainTypes
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
 from plone.i18n.normalizer.interfaces import IUserPreferredFileNameNormalizer
@@ -78,7 +82,7 @@ def registerATCT(class_, project):
 
     One reason to use it is to hide the lingua plone related magic.
     """
-    assert IATContentType.isImplementedByInstancesOf(class_)
+    assert z2IATContentType.isImplementedByInstancesOf(class_)
     registerType(class_, project)
 
 def cleanupFilename(filename, request=None):
@@ -116,7 +120,8 @@ class ATCTMixin(BrowserDefaultMixin):
     isDocTemp = False
     _at_rename_after_creation = True # rename object according to the title?
 
-    __implements__ = (IATContentType, BrowserDefaultMixin.__implements__)
+    __implements__ = (z2IATContentType, BrowserDefaultMixin.__implements__)
+    implements(IATContentType)
 
     security       = ClassSecurityInfo()
 
@@ -446,6 +451,7 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
 
     __implements__ = (ATCTMixin.__implements__,
                       ConstrainTypesMixin.__implements__,)
+    implements(ISelectableConstrainTypes)
 
     security       = ClassSecurityInfo()
 

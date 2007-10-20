@@ -9,7 +9,7 @@
         attribute="getZipFile"
         permission="zope2.View"
         />
-        
+
     <!-- Enable next/previous links for folders -->
     <adapter factory=".browser.nextprevious.ATFolderNextPrevious" />
 

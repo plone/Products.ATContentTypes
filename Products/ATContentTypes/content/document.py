@@ -27,6 +27,8 @@ from types import TupleType
 
 import time
 
+from zope.interface import implements
+
 from ZPublisher.HTTPRequest import HTTPRequest
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
@@ -52,7 +54,9 @@ from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
-from Products.ATContentTypes.interfaces import IATDocument
+from Products.ATContentTypes.interfaces import IATDocument as z2IATDocument
+from Products.ATContentTypes.interface import IATDocument
+from Products.ATContentTypes.interface import IArchivable
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 
@@ -281,6 +285,7 @@ class ATDocument(ATDocumentBase):
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
     assocFileExt   = ('txt', 'stx', 'rst', 'rest', 'py',)
 
-    __implements__ = ATDocumentBase.__implements__, IATDocument
+    __implements__ = ATDocumentBase.__implements__, z2IATDocument
+    implements(IATDocument, IArchivable)
 
 registerATCT(ATDocument, PROJECTNAME)

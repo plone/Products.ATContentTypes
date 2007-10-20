@@ -26,6 +26,8 @@ __old_name__ = 'Products.ATContentTypes.types.ATFile'
 import logging
 from urllib import quote
 
+from zope.interface import implements
+
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
@@ -45,9 +47,10 @@ from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import ICONMAP
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
-from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.interfaces import IATFile as z2IATFile
+from Products.ATContentTypes.interface import IATFile
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 
@@ -99,7 +102,8 @@ class ATFile(ATCTFileContent):
                       'application/vnd.ms-powerpoint',
                       'application/pdf')
 
-    __implements__ = ATCTFileContent.__implements__, IATFile
+    __implements__ = ATCTFileContent.__implements__, z2IATFile
+    implements(IATFile)
 
     security       = ClassSecurityInfo()
 

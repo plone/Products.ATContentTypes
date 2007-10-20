@@ -25,6 +25,8 @@ __author__  = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.ATImage'
 
+from zope.interface import implements
+
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
@@ -41,9 +43,11 @@ from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
-from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.interfaces import IATImage as z2IATImage
+from Products.ATContentTypes.interface import IATImage
+
 from Products.ATContentTypes.lib.imagetransform import ATCTImageTransform
 
 from Products.ATContentTypes import ATCTMessageFactory as _
@@ -103,7 +107,8 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     assocFileExt   = ('jpg', 'jpeg', 'png', 'gif', )
     cmf_edit_kws   = ('file', )
 
-    __implements__ = ATCTFileContent.__implements__, IATImage
+    __implements__ = ATCTFileContent.__implements__, z2IATImage
+    implements(IATImage)
 
     security       = ClassSecurityInfo()
 

@@ -18,7 +18,6 @@
 #
 """
 
-
 """
 __author__  = 'Christian Heimes <tiran@cheimes.de>, Alec Mitchell'
 __docformat__ = 'restructuredtext'
@@ -27,6 +26,8 @@ __old_name__ = 'Products.ATContentTypes.types.ATTopic'
 from types import ListType
 from types import TupleType
 from types import StringType
+
+from zope.interface import implements
 
 from ZPublisher.HTTPRequest import HTTPRequest
 from Products.ZCatalog.Lazy import LazyCat
@@ -62,9 +63,11 @@ from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.permission import AddTopics
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.interfaces import IATTopic
+from Products.ATContentTypes.interface import IATTopic
+from Products.ATContentTypes.interfaces import IATTopic as z2IATTopic
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces import IATTopicSortCriterion
+
 from Products.ATContentTypes.config import TOOLNAME
 
 from Products.ATContentTypes import ATCTMessageFactory as _
@@ -173,7 +176,8 @@ class ATTopic(ATCTFolder):
 
     use_folder_tabs = 0
 
-    __implements__ = ATCTFolder.__implements__, IATTopic
+    __implements__ = ATCTFolder.__implements__, z2IATTopic
+    implements(IATTopic)
 
     # Enable marshalling via WebDAV/FTP/ExternalEditor.
     __dav_marshall__ = True

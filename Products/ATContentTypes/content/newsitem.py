@@ -18,11 +18,12 @@
 #
 """
 
-
 """
 __author__  = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.ATNewsItem'
+
+from zope.interface import implements
 
 from AccessControl import ClassSecurityInfo
 
@@ -42,9 +43,10 @@ from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.ATContentTypes.content.document import ATDocumentBase
 from Products.ATContentTypes.content.image import ATCTImageTransform
-from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.interfaces import IATNewsItem as z2IATNewsItem
+from Products.ATContentTypes.interface import IATNewsItem
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 
@@ -117,7 +119,8 @@ class ATNewsItem(ATDocumentBase, ATCTImageTransform):
     assocFileExt   = ('news', )
     cmf_edit_kws   = ATDocumentBase.cmf_edit_kws
 
-    __implements__ = ATDocumentBase.__implements__, IATNewsItem
+    __implements__ = ATDocumentBase.__implements__, z2IATNewsItem
+    implements(IATNewsItem)
 
     security = ClassSecurityInfo()
 

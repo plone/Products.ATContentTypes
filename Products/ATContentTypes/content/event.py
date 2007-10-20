@@ -18,13 +18,14 @@
 #
 """
 
-
 """
 __author__  = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.ATEvent'
 
 from types import StringType
+
+from zope.interface import implements
 
 from Products.CMFCore.permissions import ModifyPortalContent, View
 from AccessControl import ClassSecurityInfo
@@ -48,9 +49,10 @@ from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
-from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.interfaces import IATEvent as z2IATEvent
+from Products.ATContentTypes.interface import IATEvent
 from Products.ATContentTypes.lib.calendarsupport import CalendarSupportMixin
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.permission import ChangeEvents
@@ -188,9 +190,10 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
                       'start_date', 'end_date', 'contact_name', 'contact_email',
                       'contact_phone', 'event_url')
 
-    __implements__ = (ATCTContent.__implements__, IATEvent,
+    __implements__ = (ATCTContent.__implements__, z2IATEvent,
                       CalendarSupportMixin.__implements__,
                       HistoryAwareMixin.__implements__)
+    implements(IATEvent)
 
     security       = ClassSecurityInfo()
 
@@ -353,11 +356,9 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
         # edit accessor uses getToolByName, which ends up in
         # five.localsitemanager looking for a parent using a comparison
         # on this object -> infinite recursion.
-        if IATEvent.isImplementedBy(other):
+        if IATEvent.providedBy(other):
             return cmp((self.start_date, self.duration, self.title),
                        (other.start_date, other.duration, other.title))
-        #elif isinstance(other, (int, long, float)):
-        #    return cmp(self.duration, other)
         elif isinstance(other, DateTime):
             return cmp(self.start(), other)
         else:

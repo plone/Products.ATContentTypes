@@ -18,7 +18,6 @@
 #
 """
 
-
 """
 __author__  = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
@@ -26,6 +25,8 @@ __old_name__ = 'Products.ATContentTypes.types.ATFavorite'
 
 import urlparse
 import logging
+
+from zope.interface import implements
 
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
@@ -43,9 +44,10 @@ from Products.Archetypes.atapi import StringWidget
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
-from Products.ATContentTypes.interfaces import IATFavorite
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.interfaces import IATFavorite as z2IATFavorite
+from Products.ATContentTypes.interface import IATFavorite
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 
@@ -77,7 +79,8 @@ class ATFavorite(ATCTContent):
     assocFileExt   = ('fav', )
     cmf_edit_kws   = ('remote_url',)
 
-    __implements__ = ATCTContent.__implements__, IATFavorite
+    __implements__ = ATCTContent.__implements__, z2IATFavorite
+    implements(IATFavorite)
 
     security       = ClassSecurityInfo()
 

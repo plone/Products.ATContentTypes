@@ -18,20 +18,26 @@
 #
 """
 
-
 """
 __author__  = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.ATFolder'
 
+from zope.interface import implements
+
 from AccessControl import ClassSecurityInfo
+from OFS.interfaces import IOrderedContainer
 
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTOrderedFolder
 from Products.ATContentTypes.content.base import ATCTBTreeFolder
-from Products.ATContentTypes.interfaces import IATFolder
-from Products.ATContentTypes.interfaces import IATBTreeFolder
+from Products.ATContentTypes.interfaces import IATFolder as z2IATFolder
+from Products.ATContentTypes.interfaces import IATBTreeFolder as z2IATBTreeFolder
+from Products.ATContentTypes.interface import IArchivable
+from Products.ATContentTypes.interface import IATFolder
+from Products.ATContentTypes.interface import IATBTreeFolder
+from Products.ATContentTypes.interface import IPhotoAlbumAble
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import NextPreviousAwareSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
@@ -62,8 +68,9 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
     assocFileExt   = ()
     cmf_edit_kws   = ()
 
-    __implements__ = (ATCTOrderedFolder.__implements__, IATFolder,
+    __implements__ = (ATCTOrderedFolder.__implements__, z2IATFolder,
                      AutoOrderSupport.__implements__)
+    implements(IATFolder, IArchivable, IPhotoAlbumAble, IOrderedContainer)
 
     # Enable marshalling via WebDAV/FTP/ExternalEditor.
     __dav_marshall__ = True
@@ -77,8 +84,7 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
         default as well.
         """
         parent = self.getParentNode()
-        from Products.ATContentTypes.interface.folder import IATFolder as IATFolder_
-        if IATFolder_.providedBy(parent):
+        if IATFolder.providedBy(parent):
             return parent.getNextPreviousEnabled()
         else:
             return False
@@ -102,8 +108,9 @@ class ATBTreeFolder(AutoSortSupport, ATCTBTreeFolder):
     assocFileExt   = ()
     cmf_edit_kws   = ()
 
-    __implements__ = (ATCTBTreeFolder.__implements__, IATBTreeFolder,
+    __implements__ = (ATCTBTreeFolder.__implements__, z2IATBTreeFolder,
                       AutoSortSupport.__implements__)
+    implements(IATBTreeFolder)
 
     # Enable marshalling via WebDAV/FTP/ExternalEditor.
     __dav_marshall__ = True
