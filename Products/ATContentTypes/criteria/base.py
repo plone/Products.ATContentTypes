@@ -22,6 +22,8 @@
 __author__  = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
+from zope.interface import implements
+
 from Products.Archetypes.atapi import BaseContentMixin
 
 from Products.CMFCore.permissions import View
@@ -29,8 +31,10 @@ from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 
 from Products.Archetypes.ClassGen import generateClass
-from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
+from Products.ATContentTypes.interfaces import IATTopicCriterion as \
+    z2IATTopicCriterion
+from Products.ATContentTypes.interface import IATTopicCriterion
 
 from Products.CMFCore.PortalContent import PortalContent
 from Products.Archetypes.interfaces.base import IBaseContent
@@ -41,8 +45,9 @@ class NonRefCatalogContent(BaseContentMixin):
 
     isReferenceable = None
 
-    __implements__ = (PortalContent.__implements__, IATTopicCriterion,
+    __implements__ = (PortalContent.__implements__, z2IATTopicCriterion,
                       IBaseContent)
+    implements(IATTopicCriterion)
 
     # reference register / unregister methods
     def _register(self, *args, **kwargs): pass
@@ -62,7 +67,8 @@ class ATBaseCriterion(NonRefCatalogContent):
 
     security = ClassSecurityInfo()
 
-    __implements__ = (IATTopicCriterion, NonRefCatalogContent.__implements__)
+    __implements__ = (z2IATTopicCriterion, NonRefCatalogContent.__implements__)
+    implements(IATTopicCriterion)
 
     schema = ATBaseCriterionSchema
     meta_type = 'ATBaseCriterion'

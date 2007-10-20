@@ -24,13 +24,17 @@ __author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATReferenceCriterion'
 
+from zope.interface import implements
+
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import REFERENCE_INDICES
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion as \
+    z2IATTopicSearchCriterion
+from Products.ATContentTypes.interface import IATTopicSearchCriterion
 from Products.Archetypes.atapi import DisplayList
 
 ATReferenceCriterionSchema = ATSelectionCriterion.schema
@@ -38,7 +42,9 @@ ATReferenceCriterionSchema = ATSelectionCriterion.schema
 class ATReferenceCriterion(ATSelectionCriterion):
     """A reference criterion"""
 
-    __implements__ = ATSelectionCriterion.__implements__ + (IATTopicSearchCriterion, )
+    __implements__ = ATSelectionCriterion.__implements__ + (z2IATTopicSearchCriterion, )
+    implements(IATTopicSearchCriterion)
+
     security       = ClassSecurityInfo()
     meta_type      = 'ATReferenceCriterion'
     archetype_name = 'Reference Criterion'

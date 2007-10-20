@@ -24,6 +24,8 @@ __author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATDateRangeCriterion'
 
+from zope.interface import implements
+
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 
@@ -33,10 +35,12 @@ from Products.Archetypes.atapi import CalendarWidget
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import DATE_INDICES
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
-from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion as \
+    z2IATTopicSearchCriterion
+from Products.ATContentTypes.interface import IATTopicSearchCriterion
+from Products.ATContentTypes.permission import ChangeTopics
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 
@@ -73,7 +77,9 @@ ATDateRangeCriterionSchema = ATBaseCriterionSchema + Schema((
 class ATDateRangeCriterion(ATBaseCriterion):
     """A date range criterion"""
 
-    __implements__ = ATBaseCriterion.__implements__ + (IATTopicSearchCriterion, )
+    __implements__ = ATBaseCriterion.__implements__ + (z2IATTopicSearchCriterion, )
+    implements(IATTopicSearchCriterion)
+
     security       = ClassSecurityInfo()
     schema         = ATDateRangeCriterionSchema
     meta_type      = 'ATDateRangeCriterion'

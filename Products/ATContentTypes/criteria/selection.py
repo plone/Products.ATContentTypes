@@ -24,6 +24,8 @@ __author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATSelectionCriterion'
 
+from zope.interface import implements
+
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
@@ -37,7 +39,9 @@ from Products.Archetypes.atapi import DisplayList
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import LIST_INDICES
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion as \
+    z2IATTopicSearchCriterion
+from Products.ATContentTypes.interface import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
@@ -80,7 +84,9 @@ ATSelectionCriterionSchema = ATBaseCriterionSchema + Schema((
 class ATSelectionCriterion(ATBaseCriterion):
     """A selection criterion"""
 
-    __implements__ = ATBaseCriterion.__implements__ + (IATTopicSearchCriterion, )
+    __implements__ = ATBaseCriterion.__implements__ + (z2IATTopicSearchCriterion, )
+    implements(IATTopicSearchCriterion)
+
     security       = ClassSecurityInfo()
     schema         = ATSelectionCriterionSchema
     meta_type      = 'ATSelectionCriterion'

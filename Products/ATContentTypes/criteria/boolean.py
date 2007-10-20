@@ -23,6 +23,9 @@
 __author__  = 'Alec Mitchell'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATBooleanCriterion'
+
+from zope.interface import implements
+
 from Missing import MV
 
 from Products.CMFCore.permissions import View
@@ -34,10 +37,12 @@ from Products.Archetypes.atapi import BooleanWidget
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import FIELD_INDICES
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
-from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion as \
+    z2IATTopicSearchCriterion
+from Products.ATContentTypes.interface import IATTopicSearchCriterion
+from Products.ATContentTypes.permission import ChangeTopics
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 
@@ -58,7 +63,9 @@ ATBooleanCriterionSchema = ATBaseCriterionSchema + Schema((
 class ATBooleanCriterion(ATBaseCriterion):
     """A boolean criterion"""
 
-    __implements__ = ATBaseCriterion.__implements__ + (IATTopicSearchCriterion, )
+    __implements__ = ATBaseCriterion.__implements__ + (z2IATTopicSearchCriterion, )
+    implements(IATTopicSearchCriterion)
+
     security       = ClassSecurityInfo()
     schema         = ATBooleanCriterionSchema
     meta_type      = 'ATBooleanCriterion'

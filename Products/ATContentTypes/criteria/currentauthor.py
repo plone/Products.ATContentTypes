@@ -16,12 +16,13 @@
 ##############################################################################
 """ Topic:
 
-
 """
 
 __author__  = 'Alec Mitchell <apm13@columbia.edu>'
 __docformat__ = 'restructuredtext'
 __old_name__ = 'Products.ATContentTypes.types.criteria.ATCurrentAuthorCriterion'
+
+from zope.interface import implements
 
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
@@ -29,16 +30,21 @@ from AccessControl import ClassSecurityInfo
 
 from Products.ATContentTypes.criteria import registerCriterion, \
                                              LIST_INDICES
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion as \
+    z2IATTopicSearchCriterion
+from Products.ATContentTypes.interface import IATTopicSearchCriterion
 
 ATCurrentAuthorSchema = ATBaseCriterionSchema
+
 
 class ATCurrentAuthorCriterion(ATBaseCriterion):
     """A criterion that searches for the currently logged in user's id"""
 
-    __implements__ = ATBaseCriterion.__implements__ + (IATTopicSearchCriterion, )
+    __implements__ = ATBaseCriterion.__implements__ + (z2IATTopicSearchCriterion, )
+    implements(IATTopicSearchCriterion)
+
     security       = ClassSecurityInfo()
     schema         = ATCurrentAuthorSchema
     meta_type      = 'ATCurrentAuthorCriterion'
