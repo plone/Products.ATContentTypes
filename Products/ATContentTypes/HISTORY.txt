@@ -1,10 +1,16 @@
 1.3.0 unreleased
 ================
 
+ * Fixed bug in portaltype criterion - it used portal type Title as both
+   key and value in multiselection widget, but Id and Title should be used.
+   Title (as DisplayList key) was incorrectly translated and caused #6981 
+   http://dev.plone.org/plone/ticket/6981
+   [naro, jensens]
+ 
  * Moved interface declarations from ZCML to the classes themselves.
    [hannosch]
 
- * Fix Unicode encode error in formatCatalogMetadata.py when atct_topic_view.py
+* Fix Unicode encode error in formatCatalogMetadata.py when atct_topic_view.py
    uses it to display in a table a text field (like 'location') whose contents
    can't be encoded to ascii.
    http://dev.plone.org/plone/ticket/7237
