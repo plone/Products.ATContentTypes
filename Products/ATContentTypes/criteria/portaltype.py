@@ -59,18 +59,19 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
          """Return enabled portal types"""
          plone_tool = getToolByName(self, 'plone_utils')
          portal_types = plone_tool.getUserFriendlyTypes()
-         getSortTuple = lambda x: (x.lower(),x)
+         getSortTuple = lambda x: ((x.Title() or x).lower(), x.getId(), x.Title() or x)        
 
          if self.Field() == 'Type':
             types_tool = getToolByName(self, 'portal_types')
             get_type = types_tool.getTypeInfo
-            portal_types = [getSortTuple(get_type(t).Title() or t) for t in portal_types]
+            # first item in tuple is sortkey, second is portal type ID and third is Title
+            portal_types = [getSortTuple(get_type(t)) for t in portal_types]
          else:
-            portal_types = [(t.lower(),t) for t in portal_types]
+            portal_types = [(t.lower(), t, t) for t in portal_types]
 
          portal_types.sort()
-         portal_types = [p[1] for p in portal_types]
-         return DisplayList(zip(portal_types,portal_types))
+         portal_types = [(p[1], p[2]) for p in portal_types]
+         return DisplayList(portal_types)
 
     security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):

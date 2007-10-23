@@ -524,30 +524,51 @@ class TestATPortalTypeCriterion(CriteriaTest):
     def test_vocabulary(self):
         #Should return standard types, but not blacklisted types
         self.dummy.Schema()['field'].set(self.dummy,'portal_types')
-        self.failUnless('Document' in self.dummy.getCurrentValues())
-        self.failUnless('ATSimpleStringCriterion' not in self.dummy.getCurrentValues())
+        self.failUnless('Document' in self.dummy.getCurrentValues().keys())
+        self.failUnless('ATSimpleStringCriterion' not in self.dummy.getCurrentValues().keys())
 
     def test_vocabulary_sorts_by_type(self):
         #Should return standard types, but not blacklisted types
         self.dummy.Schema()['field'].set(self.dummy,'Type')
-        vocab = list(self.dummy.getCurrentValues())
-        self.failUnless(vocab.index('Page') > vocab.index('Event'))
+        type_ids, type_names = self.dummy.getCurrentValues().keys(), self.dummy.getCurrentValues().values()
+        self.failUnless(type_names.index('Page') > type_names.index('Event'))
+        # Document's name is "Page", so it is after "Event". Values are sorted on names, not ids.
+        self.failUnless(type_ids.index('Document') > type_ids.index('Event'))
         self.dummy.Schema()['field'].set(self.dummy,'portal_types')
-        vocab = list(self.dummy.getCurrentValues())
-        self.failUnless(vocab.index('Document')< vocab.index('Event'))
+        type_ids, type_names = self.dummy.getCurrentValues().keys(), self.dummy.getCurrentValues().values()
+        self.failUnless(type_names.index('Document')< type_names.index('Event'))
 
     def test_types_v_portaltypes(self):
         #Using the Types index as field should cause the vocabulary to use the
         #type Title rather than the type name
         self.dummy.Schema()['field'].set(self.dummy,'portal_type')
-        self.failUnless('Large Plone Folder' in self.dummy.getCurrentValues())
-        self.failUnless('Large Folder' not in self.dummy.getCurrentValues())
+        type_ids, type_names = self.dummy.getCurrentValues().keys(), self.dummy.getCurrentValues().values()
+        self.failUnless('Large Plone Folder' in type_names)
+        self.failUnless('Large Folder' not in type_names)
         self.dummy.Schema()['field'].set(self.dummy,'Type')
-        self.failUnless('Large Plone Folder' not in self.dummy.getCurrentValues())
-        self.failUnless('Large Folder' in self.dummy.getCurrentValues())
+        type_ids, type_names = self.dummy.getCurrentValues().keys(), self.dummy.getCurrentValues().values()
+        self.failUnless('Large Plone Folder' not in type_names)
+        self.failUnless('Large Folder' in type_names)
         #ensure that blacklisted types aren't here either
-        self.failUnless('Simple String Criterion' not in self.dummy.getCurrentValues())
+        self.failUnless('Simple String Criterion' not in type_names)
 
+    def test_type_ids_names(self):
+        # test introduced when fixing Plone bug #6981
+        self.dummy.Schema()['field'].set(self.dummy,'Type')
+        type_ids, type_names = self.dummy.getCurrentValues().keys(), self.dummy.getCurrentValues().values()
+        self.failUnless('Document' in type_ids)
+        self.failUnless('Page' in type_names)
+        self.failIf('Page' in type_ids)
+        self.failIf('Document' in type_names)
+        # use type id everytime
+        self.dummy.Schema()['field'].set(self.dummy,'portal_type')
+        type_ids, type_names = self.dummy.getCurrentValues().keys(), self.dummy.getCurrentValues().values()
+        self.failUnless('Document' in type_ids)
+        self.failUnless('Document' in type_names)
+        self.failIf('Page' in type_ids)
+        self.failIf('Page' in type_names)
+        
+        
 tests.append(TestATPortalTypeCriterion)
 
 
