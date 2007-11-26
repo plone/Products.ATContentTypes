@@ -260,7 +260,7 @@ class ATDocument(ATCTContent, HistoryAwareMixin):
         else:
             content = data
 
-        if -1 != content.lower().find("<html>"):
+        if -1 != content.lower().find("<html"):
             parser = SimpleHTMLParser()
             parser.feed(content)
             if parser.title:
