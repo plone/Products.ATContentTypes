@@ -480,7 +480,7 @@ News Item
   >>> input.close()
 
 HTML Page - verify that title is extracted
-------------------------------------------
+-------------------------------------------
 
   >>> input = open(os.path.join(input_dir, 'test-html-title.html'), 'rb')
 
@@ -497,6 +497,34 @@ HTML Page - verify that title is extracted
   >>> htdoc = self.folder['test-html-title.html']
   >>> print htdoc.Title()
   HTML Title
+  >>> print htdoc.Format()
+  text/html
+
+XHTML Page - verify that title and body are extracted
+------------------------------------------------------
+
+  >>> input = open(os.path.join(input_dir, 'test-xhtml-title.html'), 'rb')
+
+  >>> input.seek(0)
+  >>> print http(r"""
+  ... PUT /%s/test-xhtml-title.html HTTP/1.1
+  ... Authorization: Basic %s:%s
+  ... Depth: 0
+  ...
+  ... %s""" % (fpath, user_name, user_password, input.read()))
+  HTTP/1.1 201 Created
+  ...
+
+  >>> htdoc = self.folder['test-xhtml-title.html']
+  >>> print htdoc.Title()
+  HTML Title
+  >>> print htdoc.Format()
+  text/html
+
+  >>> print htdoc.CookedBody()
+  <BLANKLINE>
+  <h1>A body</h1>
+  <BLANKLINE>
 
 WebDAV MKCOL
 ============
