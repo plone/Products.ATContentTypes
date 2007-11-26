@@ -1,4 +1,3 @@
-# -*- coding: latin1 -*-
 #  ATContentTypes http://plone.org/products/atcontenttypes/
 #  Archetypes reimplementation of the CMF core types
 #  Copyright (c) 2003-2006 AT Content Types development team
@@ -41,8 +40,8 @@ import transaction
 from Interface.Verify import verifyObject
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.interfaces.DublinCore import DublinCore as IDublinCore
-from Products.CMFCore.interfaces.DublinCore import MutableDublinCore as IMutableDublinCore
+from Products.CMFCore.interfaces import IDublinCore
+from Products.CMFCore.interfaces import IMutableDublinCore
 from Products.Archetypes.interfaces.base import IBaseContent
 from Products.Archetypes.atapi import *
 from Products.Archetypes.interfaces.layer import ILayerContainer
@@ -146,10 +145,8 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
         self.failUnlessEqual(ti.Metatype(), self.meta_type)
 
     def test_doesImplementDC(self):
-        self.failUnless(IDublinCore.isImplementedBy(self._ATCT))
-        self.failUnless(IMutableDublinCore.isImplementedBy(self._ATCT))
-        self.failUnless(verifyObject(IDublinCore, self._ATCT))
-        self.failUnless(verifyObject(IMutableDublinCore, self._ATCT))
+        self.failUnless(Z3verifyObject(IDublinCore, self._ATCT))
+        self.failUnless(Z3verifyObject(IMutableDublinCore, self._ATCT))
 
     def test_doesImplementATCT(self):
         self.failUnless(IATContentType.isImplementedBy(self._ATCT))
