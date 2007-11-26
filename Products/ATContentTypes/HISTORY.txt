@@ -1,7 +1,7 @@
 1.1.8-svn unreleased
 ====================
 
- * Fixed https://dev.plone.org/plone/ticket/7102: uploading xhtml
+ * Fixed http://dev.plone.org/plone/ticket/7102: uploading xhtml
    files was not working correctly.  Thanks to lucie for the patch.
    [alecm]
 
