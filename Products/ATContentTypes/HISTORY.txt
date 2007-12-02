@@ -1,4 +1,4 @@
-1.2.3 Not Released
+1.2.3 2007-12-02
 ==================
 
  * Fixed http://dev.plone.org/plone/ticket/7102: uploading xhtml
@@ -20,7 +20,7 @@
  * Reorder ATDateCriteria schema fields => more intuitive for users.
    [zegor]
 
- * Fixed a misterious error that happened when the ATContentTypeSchema
+ * Fixed a mysterious error that happened when the ATContentTypeSchema
    was directly used: the validation layer for the 'id' field wasn't
    being initialized. This fixes http://dev.plone.org/plone/ticket/7221
    [deo]
