@@ -1,5 +1,5 @@
-1.1.8-svn unreleased
-====================
+1.1.8-final 2007-12-02
+======================
 
  * Fixed http://dev.plone.org/plone/ticket/7102: uploading xhtml
    files was not working correctly.  Thanks to lucie for the patch.

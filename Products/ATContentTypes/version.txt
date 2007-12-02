@@ -1,1 +1,1 @@
-1.1.8-devel (svn/unreleased)
+1.1.8-final
