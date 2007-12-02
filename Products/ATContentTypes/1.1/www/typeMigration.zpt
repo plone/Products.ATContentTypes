@@ -1,0 +1,128 @@
+<tal:header tal:replace="structure here/manage_page_header|nothing">Header</tal:header>
+<tal:message tal:define="manage_tabs_message options/manage_tabs_message | request/manage_tabs_message | nothing"
+    tal:replace="structure here/manage_tabs">Tabs</tal:message>
+<tal:body tal:define="submitted request/submitted | nothing;
+                      domigrate request/domigrate | nothing;
+                      fixportaltypes request/fixPortalTypes | nothing;
+                      addportaltypes request/fixMissingPortalTypes | nothing;">
+
+ <tal:form tal:condition="not: submitted">
+
+  <h3>Type Migration</h3>
+
+  <p>Invoke the migration system to migrate CMF content types to ATCT
+     content types.
+  </p>
+  
+  <p><strong>BACKUP your ZODB before running the migration system!</strong>
+     Type migration is a very complex and delicate process that may corrupt
+     your data.
+  </p>
+  
+  <p>Before you are invoking the migration system you have to recatalog all 
+     CMF content objects to make sure that your <code>portal_catalog</code>
+     is up to date and contains all CMF content objects. For more informations
+     please refer to the recatalog tab.
+  </p>
+  
+  <p><em>Migration may take a very long time!</em>. For larger sites you may
+     want to tweak the settings in the property tab. The options are explained
+     in the overview tab.
+  </p>
+  
+  <p>You should follow the
+     Zope event log to follow the migration and see errors immediately.
+     On unix systems like Linux, Mac OS X or BSD either start Zope
+     with <code>bin/zopectl fg</code> or attach to the event log of a running
+     Zope server with <code>bin/zopectl logtail</code> from within your
+     instance home.
+  </p>
+  
+  <p>After you have migrated all content objects successfully you should
+     update your portal catalog. Go to the advanced tab of the 
+     <code>portal_catalog</code> tool and press update.
+  </p>
+ 
+  <form method="put" action="" tal:attributes="action template/getId">
+    <input type="hidden" name="submitted" value="1" />
+    <input type="submit" name="domigrate" value="Migrate" />
+  </form>
+
+  <h3>Fix portal type names</h3>
+  
+  <p>If you have imported or copied CMF based contenet objects from a 
+     none migrated site to a migrated site their <code>portal_type</code>
+     name has to be fixed first. The portal type name of a Document
+     based on CMFDocument gets the new portal type name CMF Document and
+     so on.
+  </p>
+  
+  <p>The code is using the portal catalog to find objects which have to
+     be fixed. Please make sure your catalog is up to date or some
+     objects might be missed.
+  </p>
+  
+  <form method="put" action="" tal:attributes="action template/getId">
+    <input type="hidden" name="submitted" value="1" />
+    <input type="submit" name="fixPortalTypes" value="Fix" />
+  </form>
+
+
+  <h3>Fix missing portal type</h3>
+  
+  <p>If you have created CMF based content objects using the ZMI or through
+     badly designed python code, there will be objects without portal_type set
+     in your portal.  If these objects are folders they will cause migration
+     to fail.  To find and fix all CMF objects with missing portal_type use
+     the button below.
+  </p>
+  
+  <p>The code is using the portal catalog to find objects which have to
+     be fixed. Please make sure your catalog is up to date or some
+     objects might be missed.
+  </p>
+  
+  <form method="put" action="" tal:attributes="action template/getId">
+    <input type="hidden" name="submitted" value="1" />
+    <input type="submit" name="fixMissingPortalTypes" value="Fix" />
+  </form>
+
+ </tal:form>
+ <tal:submitted tal:condition="submitted">
+  <tal:migrate tal:condition="domigrate">
+   <h3>Migrating types from CMF to ATContentTypes</h3>
+
+    <span tal:define="result here/migrateContentTypesToATCT">
+      Time: <tal:time tal:content="python: '%0.3f' % result[1]" /> seconds, 
+      CPU time: <tal:time tal:content="python: '%0.3f' % result[2]" /> seconds
+     <br />
+     <pre tal:content="python: result[0]" />
+    </span>
+
+  </tal:migrate>
+
+  <tal:fixportaltypes tal:condition="fixportaltypes">
+   <h3>Fixing portal type names</h3>
+
+    <span tal:define="result here/migrationFixCMFPortalTypes">
+      Time: <tal:time tal:content="python: '%0.3f' % result[1]" /> seconds, 
+      CPU time: <tal:time tal:content="python: '%0.3f' % result[2]" /> seconds
+     <br />
+     <pre tal:content="python: result[0]" />
+    </span>
+  </tal:fixportaltypes>
+
+  <tal:addportaltypes tal:condition="addportaltypes">
+   <h3>Fixing missing portal types</h3>
+
+    <span tal:define="result here/fixObjectsWithMissingPortalType">
+      Time: <tal:time tal:content="python: '%0.3f' % result[1]" /> seconds, 
+      CPU time: <tal:time tal:content="python: '%0.3f' % result[2]" /> seconds
+     <br />
+     <pre tal:content="python: result[0]" />
+    </span>
+  </tal:addportaltypes>
+ </tal:submitted>
+
+</tal:body>
+<tal:footer tal:replace="structure here/manage_page_footer|nothing">footer</tal:footer>
