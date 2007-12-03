@@ -1,6 +1,10 @@
 1.3.0 unreleased
 ================
 
+ * Added tests for utils.dt2DT and utils.DT2dt that expose a bug as found
+   in Vice regarding converted dates becoming naive of timezones.  Fixed.
+   [matthewwilkes]
+
  * Fixed http://dev.plone.org/plone/ticket/7102: uploading xhtml
    files was not working correctly.  Thanks to lucie for the patch.
    [alecm]
