@@ -5,7 +5,7 @@
 from Testing import ZopeTestCase
 from Products.ATContentTypes.tests.atcttestcase import ATCTFunctionalSiteTestCase 
 
-FILES = ['webdav.txt', 'http_access.txt']
+FILES = ['webdav.txt', 'http_access.txt', 'portaltype_criterion.txt']
 
 def test_suite():
     import unittest

@@ -59,12 +59,14 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
          """Return enabled portal types"""
          plone_tool = getToolByName(self, 'plone_utils')
          portal_types = plone_tool.getUserFriendlyTypes()
-         getSortTuple = lambda x: ((x.Title() or x).lower(), x.getId(), x.Title() or x)        
+         getSortTuple = lambda x: ((x.Title() or x).lower(),
+           unicode(x.Title() or x), x.Title() or x)
 
          if self.Field() == 'Type':
             types_tool = getToolByName(self, 'portal_types')
             get_type = types_tool.getTypeInfo
-            # first item in tuple is sortkey, second is portal type ID and third is Title
+            # first item in tuple is sortkey, second is untranslated Title
+            # and third is Title as a translatable Message object
             portal_types = [getSortTuple(get_type(t)) for t in portal_types]
          else:
             portal_types = [(t.lower(), t, t) for t in portal_types]
