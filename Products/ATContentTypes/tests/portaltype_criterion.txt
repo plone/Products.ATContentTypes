@@ -75,14 +75,25 @@ We select Page and save our selection.
 View collection
 ----------------------
 
+We add a document to test whether the collection works. We test the portal type Document specifically
+because its portal_type ('Document') is different from its catalog Type ('Page').
+
+    >>> self.loginAsPortalOwner()
+    >>> self.portal.invokeFactory('Document', 'doc1')
+    'doc1'
+    >>> self.portal.doc1.setTitle('Test Document')
+    >>> self.portal.doc1.content_status_modify(workflow_action='publish')
+    'http://nohost/plone/doc1'
+
 We now view the collection.
 
     >>> browser.getLink('View').click()
     >>> browser.url
     'http://nohost/plone/my-collection/'
 
-The default "Welcome to Plone" page should be in the browser contents.
-    >>> 'Welcome to Plone' in browser.contents
+The test document should be in the collection.
+
+    >>> 'Test Document' in browser.contents
     True
 
 
