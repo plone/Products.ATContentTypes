@@ -485,7 +485,7 @@
 ======================
 
  * Fixed non-clickable thumbnails in thumbnail view for IE.
-   http://trac.plone.org/plone/ticket/5119
+   http://dev.plone.org/plone/ticket/5119
    [hannosch]
 
 1.0.2-final 2006-01-03
@@ -493,7 +493,7 @@
 
  * Fixed #5028: constraintypes.py doesn't work properly with PortalFactory when
    acquiring types.
-   http://trac.plone.org/plone/ticket/5028
+   http://dev.plone.org/plone/ticket/5028
    [panjunyong]
 
  * fixed styles for thumbnailview.
@@ -507,19 +507,19 @@
 
  * Fixed #5026: Setting a ZCatalog sort limit was interfering with result
    batching. Only use the sort_limit optimization when batching is disabled.
-   http://trac.plone.org/plone/ticket/5026
+   http://dev.plone.org/plone/ticket/5026
    [alecm]
 
  * Fixed #4567: Added portal_atct method to fix portal_type on CMF objects that
    have empty portal_type because they were incorrectly instantiated. Such
    situations caused migration to fail. This method is available in the type
    migration form, and also runs automatically on install.
-   http://trac.plone.org/plone/ticket/4567
+   http://dev.plone.org/plone/ticket/4567
    [alecm]
 
  * Fixed #4937: Removed list criteria from text indices, because it makes no
    sense, AND and OR must be used explicitly.
-   http://trac.plone.org/plone/ticket/4937
+   http://dev.plone.org/plone/ticket/4937
    [alecm]
 
  * Added migration for #4865 to fix the grammar on existing instances.
@@ -530,7 +530,7 @@
 
  * Fixed #4915: Smart Folders with path criteria where throwing errors on
    unindex due to partial reference support.
-   http://trac.plone.org/plone/ticket/4915
+   http://dev.plone.org/plone/ticket/4915
    [alecm]
 
  * Added And/Or operator to selection criterion.
@@ -538,11 +538,11 @@
 
  * Fixed #4590: Subfolders inherit the selected layout of their parent folders
    if they are of the same type.
-   http://trac.plone.org/plone/ticket/4590
+   http://dev.plone.org/plone/ticket/4590
    [alecm]
 
  * Fixed #4512 - vCal export was not working with outlook.
-   http://trac.plone.org/plone/ticket/4512.
+   http://dev.plone.org/plone/ticket/4512.
    [hannosch]
 
  * Use the ControlledMarshaller from the Marshall product if
