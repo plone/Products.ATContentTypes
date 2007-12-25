@@ -246,6 +246,11 @@ class ATCTFileContent(ATCTContent):
     # (not yet) supported.
     precondition = ''
 
+    manage_options = (
+        ATCTContent.manage_options[0:1] +
+        ATCTContent.manage_options[2:]
+        )
+
     security = ClassSecurityInfo()
 
     security.declareProtected(View, 'download')
