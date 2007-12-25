@@ -379,6 +379,11 @@ class ATCTFileContent(ATCTContent):
         'view'      : '(selected layout)',
         })
 
+    manage_options = (
+        ATCTContent.manage_options[0:1] +
+        ATCTContent.manage_options[2:]
+        )
+
     security.declareProtected(View, 'download')
     def download(self, REQUEST=None, RESPONSE=None):
         """Download the file (use default index_html)

@@ -1,3 +1,10 @@
+1.1.9-final Unreleased
+======================
+
+ * Backported fix for http://dev.plone.org/archetypes/ticket/763: The edit
+   tab in ZMI should not be displayed for ATImage/ATFile objects.
+   [deo]
+
 1.1.8-final 2007-12-02
 ======================
 
