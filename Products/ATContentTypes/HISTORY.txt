@@ -1,6 +1,10 @@
 1.3.0 unreleased
 ================
 
+ * The edit tab in ZMI should not be displayed for ATImage/ATFIle objects.
+   http://dev.plone.org/archetypes/ticket/763
+   [deo]
+
  * Added tests for utils.dt2DT and utils.DT2dt that expose a bug as found
    in Vice regarding converted dates becoming naive of timezones.  Fixed.
    [matthewwilkes]
@@ -11,14 +15,14 @@
 
  * Fixed bug in portaltype criterion - it used portal type Title as both
    key and value in multiselection widget, but Id and Title should be used.
-   Title (as DisplayList key) was incorrectly translated and caused #6981 
+   Title (as DisplayList key) was incorrectly translated and caused #6981
    http://dev.plone.org/plone/ticket/6981
    [naro, jensens]
- 
+
  * Moved interface declarations from ZCML to the classes themselves.
    [hannosch]
 
-* Fix Unicode encode error in formatCatalogMetadata.py when atct_topic_view.py
+ * Fix Unicode encode error in formatCatalogMetadata.py when atct_topic_view.py
    uses it to display in a table a text field (like 'location') whose contents
    can't be encoded to ascii.
    http://dev.plone.org/plone/ticket/7237
@@ -481,7 +485,7 @@
 ======================
 
  * Fixed non-clickable thumbnails in thumbnail view for IE.
-   https://trac.plone.org/plone/ticket/5119
+   http://trac.plone.org/plone/ticket/5119
    [hannosch]
 
 1.0.2-final 2006-01-03
@@ -489,7 +493,7 @@
 
  * Fixed #5028: constraintypes.py doesn't work properly with PortalFactory when
    acquiring types.
-   https://trac.plone.org/plone/ticket/5028
+   http://trac.plone.org/plone/ticket/5028
    [panjunyong]
 
  * fixed styles for thumbnailview.
@@ -503,14 +507,14 @@
 
  * Fixed #5026: Setting a ZCatalog sort limit was interfering with result
    batching. Only use the sort_limit optimization when batching is disabled.
-   https://trac.plone.org/plone/ticket/5026
+   http://trac.plone.org/plone/ticket/5026
    [alecm]
 
  * Fixed #4567: Added portal_atct method to fix portal_type on CMF objects that
    have empty portal_type because they were incorrectly instantiated. Such
    situations caused migration to fail. This method is available in the type
    migration form, and also runs automatically on install.
-   https://trac.plone.org/plone/ticket/4567
+   http://trac.plone.org/plone/ticket/4567
    [alecm]
 
  * Fixed #4937: Removed list criteria from text indices, because it makes no
@@ -534,11 +538,11 @@
 
  * Fixed #4590: Subfolders inherit the selected layout of their parent folders
    if they are of the same type.
-   https://trac.plone.org/plone/ticket/4590
+   http://trac.plone.org/plone/ticket/4590
    [alecm]
 
  * Fixed #4512 - vCal export was not working with outlook.
-   https://trac.plone.org/plone/ticket/4512.
+   http://trac.plone.org/plone/ticket/4512.
    [hannosch]
 
  * Use the ControlledMarshaller from the Marshall product if
@@ -1199,8 +1203,8 @@ Snapshot 2005 07 05
    [panjunyong]
 
  * Merged uiteam-plip73-sanitize-short-names from the old plone
-   svn repos: diff https://svn.plone.org/svn/plone/ATContentTypes/branches/1.0@6168
-   https://svn.plone.org/svn/plone/ATContentTypes/branches/uiteam-plip73-sanitize-short-names
+   svn repos: diff http://svn.plone.org/svn/plone/ATContentTypes/branches/1.0@6168
+   http://svn.plone.org/svn/plone/ATContentTypes/branches/uiteam-plip73-sanitize-short-names
    [tiran]
 
  * Added flag to determine whether an content object has undergone a successful
