@@ -5,6 +5,14 @@
    tab in ZMI should not be displayed for ATImage/ATFile objects.
    [deo]
 
+ * Fixed #7467 http://dev.plone.org/plone/ticket/7467: Modify
+   "Item Type" criterion to store the untranslated Type instead
+   of portal_type, but to show the translated Type to the user.
+   Added a browser test for #6981
+   http://dev.plone.org/plone/ticket/6981 which is currently
+   disabled because the test browser does not translate pages
+   [sirgarr]
+
 1.2.3 2007-12-02
 ==================
 
