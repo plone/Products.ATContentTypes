@@ -13,11 +13,13 @@
    files was not working correctly.  Thanks to lucie for the patch.
    [alecm]
 
- * Fixed bug in portaltype criterion - it used portal type Title as both
-   key and value in multiselection widget, but Id and Title should be used.
-   Title (as DisplayList key) was incorrectly translated and caused #6981
-   http://dev.plone.org/plone/ticket/6981
-   [naro, jensens]
+ * Fixed bug in "Item Type" criterion - it used portal type Title as both
+   key and value in multiselection widget, but the key was incorrectly
+   translated and caused #6981 http://dev.plone.org/plone/ticket/6981.
+   An initial fix caused #7467 http://dev.plone.org/plone/ticket/7467.
+   Fixed to show the translated portal type Title to the user, but to
+   store the untranslated Title.
+   [naro, jensens, sirgarr]
 
  * Moved interface declarations from ZCML to the classes themselves.
    [hannosch]
