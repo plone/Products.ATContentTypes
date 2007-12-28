@@ -532,8 +532,6 @@ class TestATPortalTypeCriterion(CriteriaTest):
         self.dummy.Schema()['field'].set(self.dummy,'Type')
         type_ids, type_names = self.dummy.getCurrentValues().keys(), self.dummy.getCurrentValues().values()
         self.failUnless(type_names.index('Page') > type_names.index('Event'))
-        # Document's name is "Page", so it is after "Event". Values are sorted on names, not ids.
-        self.failUnless(type_ids.index('Document') > type_ids.index('Event'))
         self.dummy.Schema()['field'].set(self.dummy,'portal_types')
         type_ids, type_names = self.dummy.getCurrentValues().keys(), self.dummy.getCurrentValues().values()
         self.failUnless(type_names.index('Document')< type_names.index('Event'))
@@ -556,9 +554,9 @@ class TestATPortalTypeCriterion(CriteriaTest):
         # test introduced when fixing Plone bug #6981
         self.dummy.Schema()['field'].set(self.dummy,'Type')
         type_ids, type_names = self.dummy.getCurrentValues().keys(), self.dummy.getCurrentValues().values()
-        self.failUnless('Document' in type_ids)
+        self.failUnless('Page' in type_ids)
         self.failUnless('Page' in type_names)
-        self.failIf('Page' in type_ids)
+        self.failIf('Document' in type_ids)
         self.failIf('Document' in type_names)
         # use type id everytime
         self.dummy.Schema()['field'].set(self.dummy,'portal_type')
