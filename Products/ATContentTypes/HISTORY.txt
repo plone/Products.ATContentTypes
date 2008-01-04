@@ -1,4 +1,4 @@
-1.2.4 Unreleased
+1.2.4 2007-01-03
 ==================
 
  * Backported fix for http://dev.plone.org/archetypes/ticket/763: The edit
