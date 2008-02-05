@@ -1,6 +1,10 @@
 1.3.0 unreleased
 ================
 
+ * Corrected i18n markup in schemata.py for the nextprevious field. This closes
+   http://dev.plone.org/plone/ticket/7517.
+   [hannosch]
+
  * The edit tab in ZMI should not be displayed for ATImage/ATFIle objects.
    http://dev.plone.org/archetypes/ticket/763
    [deo]
