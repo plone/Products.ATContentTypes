@@ -72,7 +72,6 @@ relatedItemsField = ReferenceField('relatedItems',
             allow_browse = True,
             show_indexes = False,
             force_close_on_insert = True,
-
             label = _(u'label_related_items', default=u'Related Items'),
             description = '',
             visible = {'edit' : 'visible', 'view' : 'invisible' }
@@ -88,11 +87,8 @@ NextPreviousAwareSchema = MetadataSchema((
         languageIndependent = True,
         schemata = 'metadata',
         widget = BooleanWidget(
-            description="This enables next/previous widget on content items contained in this folder",
-            description_msgid = "help_nextprevious",
-            label = "Enable next previous navigation",
-            label_msgid = "label_nextprevious",
-            i18n_domain = "plone",
+            description=_(u'help_nextprevious', default=u'This enables next/previous widget on content items contained in this folder.'),
+            label = _(u'label_nextprevious', default=u'Enable next previous navigation'),
             visible={'view' : 'hidden',
                      'edit' : 'visible'},
             ),
