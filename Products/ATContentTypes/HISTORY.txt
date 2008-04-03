@@ -1,6 +1,9 @@
 1.3.0 unreleased
 ================
 
+ * Remove leading whitespace in hrefs.
+   [wichert]
+
  * Remove __bobo_traverse__ from ATNewsItem and ATImage. Instead rely on the
    generic ImageTraverse publish traverser from Archetypes.
    [wichert]
