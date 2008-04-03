@@ -1,6 +1,9 @@
 1.2.5 Unreleased
 ==================
 
+ * Remove leading whitespace in hrefs.
+   [wichert]
+
  * Corrected i18n markup in schemata.py for the nextprevious field. This closes
    http://dev.plone.org/plone/ticket/7517.
    [hannosch]
