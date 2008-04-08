@@ -238,6 +238,21 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
         self.assertEquals(field.getFilename(dummy), '')
         self.assertEquals(field.getContentType(dummy), 'text/plain')
 
+    def test_text_setEmptyText(self):
+        dummy = self._dummy
+        field = dummy.getField('text')
+
+        # set text to a non-trivial value
+        mutator = field.getMutator(dummy)
+        mutator('Hello World!')
+
+        # now, set an empty text
+        mutator('')
+
+        # verify that text is indeed empty
+        accessor = field.getAccessor(dummy)
+        self.assertEquals(accessor(), '')
+
     def test_textField(self):
         dummy = self._dummy
         field = dummy.getField('text')
