@@ -8,7 +8,7 @@
    http://dev.plone.org/plone/ticket/7517.
    [hannosch]
 
-1.2.4 2007-01-03
+1.2.4 2008-01-03
 ==================
 
  * Backported fix for http://dev.plone.org/archetypes/ticket/763: The edit
