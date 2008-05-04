@@ -5,8 +5,8 @@ version = '1.3.0'
 setup(name='Products.ATContentTypes',
       version=version,
       description="Default Content Types for Plone",
-      long_description="""\
-""",
+      long_description=open("README.txt").read() + "\n" + \
+                       open(os.path.join("docs", "HISTORY.txt")).read(),
       classifiers=[
         "Framework :: Plone",
         ],

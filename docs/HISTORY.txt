@@ -8,8 +8,8 @@
    generic ImageTraverse publish traverser from Archetypes.
    [wichert]
 
- * Corrected i18n markup in schemata.py for the nextprevious field. This closes
-   http://dev.plone.org/plone/ticket/7517.
+ * Corrected i18n markup in schemata.py for the nextprevious field.
+   This closes http://dev.plone.org/plone/ticket/7517.
    [hannosch]
 
  * The edit tab in ZMI should not be displayed for ATImage/ATFIle objects.
@@ -17,11 +17,11 @@
    [deo]
 
  * Added tests for utils.dt2DT and utils.DT2dt that expose a bug as found
-   in Vice regarding converted dates becoming naive of timezones.  Fixed.
+   in Vice regarding converted dates becoming naive of timezones. Fixed.
    [matthewwilkes]
 
  * Fixed http://dev.plone.org/plone/ticket/7102: uploading xhtml
-   files was not working correctly.  Thanks to lucie for the patch.
+   files was not working correctly. Thanks to lucie for the patch.
    [alecm]
 
  * Fixed #6981 http://dev.plone.org/plone/ticket/6981 and #7467
@@ -29,7 +29,7 @@
    criterion - it used portal type Title as both key and value
    in multiselection widget, but the key was incorrectly translated.
    Fixed to show the translated portal type Title to the user, but to
-   store the untranslated Title. Added a browser test for #6981
+   store the untranslated Title. Added a browser test for #6981,
    which is currently disabled because the test browser does not
    translate pages
    [naro, jensens, sirgarr]
@@ -342,10 +342,12 @@
    [hannosch]
 
  * Various fixes for the iCal/vCal export (thx Steve for the patch):
-    - timezone problems
-    - folding lines longer than 75 octests (per RFC)
-    - escaping commas, colons and semi-colons (per RFC)
-    - adding URL and CONTACT fields
+
+     - timezone problems
+     - folding lines longer than 75 octests (per RFC)
+     - escaping commas, colons and semi-colons (per RFC)
+     - adding URL and CONTACT fields
+
    This closes http://dev.plone.org/plone/ticket/4512.
    [hannosch]
 
@@ -462,14 +464,6 @@
 
  * Internal links didn't work for event url field. This closes
    http://dev.plone.org/plone/ticket/5004
-   [hannosch]
-
- * Various fixes for the iCal/vCal export (thx Steve for the patch):
-    - timezone problems
-    - folding lines longer than 75 octests (per RFC)
-    - escaping commas, colons and semi-colons (per RFC)
-    - adding URL and CONTACT fields
-   This closes http://dev.plone.org/plone/ticket/4512.
    [hannosch]
 
  * the EventType field in an event lists all relevant event types for
@@ -937,16 +931,17 @@
    [alecm]
 
  * Enhanced migration code:
-    o CatalogWalkerWithLevel is now based on ExtendedPathIndex
+    - CatalogWalkerWithLevel is now based on ExtendedPathIndex
       and behaves like CatalogWalker.
-    o Added walker arguments for transaction size, full transactions.
+    - Added walker arguments for transaction size, full transactions.
       and savepoints. The migration system can use ZODB savepoints to
       roll back to a sane point.
-    o Migrators are also registered by (src,dst) meta_type.
-    o The new function migratePortalType() can be used to migrate a single
+    - Migrators are also registered by (src,dst) meta_type.
+    - The new function migratePortalType() can be used to migrate a single
       content type by just passing the src and dst portal type to the
       function. Both portal types must be registerd in portal_types and a
       migration from src to dst meta_type must exist.
+
    [tiran]
 
  * Don't catalog all types in _catalogTypesByMetatype it the passed list is
@@ -960,21 +955,22 @@
    nice macro from folder_listing.
    [alecm]
 
- * Zope2.7 compatibility again:
-    o replaced import transaction with from Products.CMFPlone import transaction
+ * Zope2.7 compatibility again: replaced import transaction with from
+   Products.CMFPlone import transaction.
    [hannosch]
 
- * some minor i18n tweaks
+ * Some minor i18n tweaks.
    [hannosch]
 
  * Updated INSTALL.txt for CMF 1.5. Zope 2.8 and more
    [tiran]
 
  * CMF 1.5 / Zope2.8 compatibility:
-    o replaced CMFCorePermissions with permissions
-    o replaced get_transaction() with transaction
-    o removed product argument from TooolInit()
-    o logging.getLogger() and LOG.debug() etc.
+    - replaced CMFCorePermissions with permissions
+    - replaced get_transaction() with transaction
+    - removed product argument from TooolInit()
+    - logging.getLogger() and LOG.debug() etc.
+
    [tiran]
 
  * Greatly enhanced logging during migration.
@@ -1243,6 +1239,7 @@ Snapshot 2005 07 05
     * immediatelyAddableTypes field - for subset of allowed types to show in
       the "add" menu
     * turned off and removed disable constrain-types flag
+
    [tiran]
 
  * Turn on TemplateMixin for everything - now directly supported in Plone
@@ -1251,6 +1248,7 @@ Snapshot 2005 07 05
 
  * Merged plip #3 branch: auto ordering / sorting into the 1.0 branch.
    Features / Changes:
+
     * Added getObjPositioninParent and getObjSize as helper methods for
       the catalog based folder listing to all types
     * Added AutoSortSuppot and AutoOrderSupport to ATCT. AutoSortSupport is
@@ -1258,6 +1256,7 @@ Snapshot 2005 07 05
       adds some auto ordering based on OrderedFolder
     * Subclass ATFolder from AutoOrderSupport+AutoSortSupport, ATBTreeFolder
       only from AutoSortSupport
+
    [tiran]
 
  * ATEvent: Removed end date and start date from searchable text.
@@ -1334,10 +1333,12 @@ Snapshot 2005 07 05
    [tiran]
 
  * Replaced the config vars for permissions with new permissions:
+
     o ModifyConstrainTypes for constrain types mixin
     o ModifyViewTemplate for template mixin
     o ViewHistory for history mixin
     o UploadViaURL for the new upload via url feature
+
    By default the permissions are restricted to manager only.
    [tiran]
 
@@ -1348,9 +1349,11 @@ Snapshot 2005 07 05
 
  * Implemented some very useful functions based on CMFPhoto code for ATImage.
    The new features are:
+
     * getting the exif informations from images using Gene Cash's exif lib
     * getting the image orientation from exif data (rotation and mirror)
     * Rotating and flipping images using the PIL library incl. a new tab
+
    [tiran]
 
    The CMFPhoto exif and transform code was written by several ppl including
@@ -1458,7 +1461,7 @@ Snapshot 2005 07 05
  * Added content module which contains all important classes.
    [tiran]
 
- * Replaced all "from foo import *" by explicit imports.
+ * Replaced all `from foo import *` by explicit imports.
    [tiran]
 
  * Used some code from Ben's great Bricolite product to have an add permission
