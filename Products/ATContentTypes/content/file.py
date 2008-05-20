@@ -49,7 +49,6 @@ from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.interfaces import IATFile as z2IATFile
 from Products.ATContentTypes.interface import IATFile
 
 from Products.ATContentTypes import ATCTMessageFactory as _
@@ -102,7 +101,6 @@ class ATFile(ATCTFileContent):
                       'application/vnd.ms-powerpoint',
                       'application/pdf')
 
-    __implements__ = ATCTFileContent.__implements__, z2IATFile
     implements(IATFile)
 
     security       = ClassSecurityInfo()

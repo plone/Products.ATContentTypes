@@ -32,15 +32,12 @@ from AccessControl import ClassSecurityInfo
 _marker = object()
 from Products.Archetypes.OrderedBaseFolder import OrderedBaseFolder
 from Products.Archetypes.OrderedBaseFolder import OrderedContainer
-from Products.ATContentTypes.interfaces import IAutoSortSupport as z2IAutoSortSupport
-from Products.ATContentTypes.interfaces import IAutoOrderSupport as z2IAutoOrderSupport
 from Products.ATContentTypes.interface import IAutoSortSupport
 from Products.ATContentTypes.interface import IAutoOrderSupport
 
 
 class AutoSortSupport(Base):
 
-    __implements__ = (z2IAutoSortSupport, )
     implements(IAutoSortSupport)
 
     security = ClassSecurityInfo()
@@ -105,7 +102,6 @@ InitializeClass(AutoSortSupport)
 
 class AutoOrderSupport(AutoSortSupport, OrderedContainer):
 
-    __implements__ = (z2IAutoOrderSupport, )
     implements(IAutoOrderSupport)
 
     security = ClassSecurityInfo()

@@ -107,7 +107,6 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     assocFileExt   = ('jpg', 'jpeg', 'png', 'gif', )
     cmf_edit_kws   = ('file', )
 
-    __implements__ = ATCTFileContent.__implements__, z2IATImage
     implements(IATImage)
 
     security       = ClassSecurityInfo()

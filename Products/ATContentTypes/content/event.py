@@ -51,7 +51,6 @@ from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.interfaces import IATEvent as z2IATEvent
 from Products.ATContentTypes.interface import IATEvent
 from Products.ATContentTypes.lib.calendarsupport import CalendarSupportMixin
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
@@ -190,9 +189,6 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
                       'start_date', 'end_date', 'contact_name', 'contact_email',
                       'contact_phone', 'event_url')
 
-    __implements__ = (ATCTContent.__implements__, z2IATEvent,
-                      CalendarSupportMixin.__implements__,
-                      HistoryAwareMixin.__implements__)
     implements(IATEvent)
 
     security       = ClassSecurityInfo()

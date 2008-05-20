@@ -66,8 +66,8 @@ class TestDataExtractors(atcttestcase.ATCTSiteTestCase):
         self.docobj = self.folder.d1
 
     def test_adapter(self):
-        IDataExtractor.implementedBy(DocumentDataExtractor)
-        IDataExtractor.implementedBy(DocumentRawDataExtractor)
+        IDataExtractor.providedBy(DocumentDataExtractor)
+        IDataExtractor.providedBy(DocumentRawDataExtractor)
 
 tests.append(TestDataExtractors)
 

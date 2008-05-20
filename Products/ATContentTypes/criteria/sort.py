@@ -27,6 +27,7 @@ __old_name__ = 'Products.ATContentTypes.types.criteria.ATSortCriterion'
 
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
+from zope.interface import implements
 
 from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import BooleanField
@@ -55,7 +56,7 @@ ATSortCriterionSchema = ATBaseCriterionSchema + Schema((
 class ATSortCriterion(ATBaseCriterion):
     """A sort criterion"""
 
-    __implements__ = ATBaseCriterion.__implements__ + (IATTopicSortCriterion, )
+    implements(IATTopicSortCriterion)
     security       = ClassSecurityInfo()
     schema         = ATSortCriterionSchema
     meta_type      = 'ATSortCriterion'

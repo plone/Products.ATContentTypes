@@ -64,7 +64,6 @@ from Products.ATContentTypes.permission import AddTopics
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interface import IATTopic
-from Products.ATContentTypes.interfaces import IATTopic as z2IATTopic
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 
@@ -176,7 +175,6 @@ class ATTopic(ATCTFolder):
 
     use_folder_tabs = 0
 
-    __implements__ = ATCTFolder.__implements__, z2IATTopic
     implements(IATTopic)
 
     # Enable marshalling via WebDAV/FTP/ExternalEditor.
@@ -271,7 +269,7 @@ class ATTopic(ATCTFolder):
         """Return a list of our search criteria objects.
         """
         return [val for val in self.listCriteria() if
-             IATTopicSearchCriterion.isImplementedBy(val)]
+             IATTopicSearchCriterion.providedBy(val)]
 
     security.declareProtected(ChangeTopics, 'hasSortCriterion')
     def hasSortCriterion(self):
@@ -284,7 +282,7 @@ class ATTopic(ATCTFolder):
         """Return the Sort criterion if setup.
         """
         for criterion in self.listCriteria():
-            if IATTopicSortCriterion.isImplementedBy(criterion):
+            if IATTopicSortCriterion.providedBy(criterion):
                 return criterion
         return None
 
@@ -329,7 +327,7 @@ class ATTopic(ATCTFolder):
         """Return a list of available fields for new criteria.
         """
         current   = [ crit.Field() for crit in self.listCriteria()
-                      if not IATTopicSortCriterion.isImplementedBy(crit)]
+                      if not IATTopicSortCriterion.providedBy(crit)]
         fields = self.listFields()
         val = [ field
                  for field in fields

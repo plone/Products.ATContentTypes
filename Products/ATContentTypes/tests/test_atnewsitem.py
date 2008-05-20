@@ -37,7 +37,7 @@ from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
 from Products.ATContentTypes.interfaces import ITextContent
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATNewsItem
-from Interface.Verify import verifyObject
+from zope.interface.verify import verifyObject
 
 # z3 imports
 from Products.ATContentTypes.interface import ITextContent as Z3ITextContent
@@ -64,7 +64,7 @@ class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
 
     def test_implementsTextContent(self):
         iface = ITextContent
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_implementsZ3TextContent(self):
@@ -73,7 +73,7 @@ class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
 
     def test_implementsImageContent(self):
         iface = IImageContent
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_implementsZ3ImageContent(self):
@@ -82,7 +82,7 @@ class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
 
     def test_implementsATNewsItem(self):
         iface = IATNewsItem
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_implementsZ3ATNewsItem(self):
@@ -110,7 +110,7 @@ class TestATNewsItemFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('text')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == '', 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
@@ -137,7 +137,7 @@ class TestATNewsItemFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
         self.failUnless(isinstance(field.widget, RichWidget),

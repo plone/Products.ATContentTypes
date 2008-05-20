@@ -31,7 +31,6 @@ from Globals import InitializeClass
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.interfaces import ICalendarSupport as z2ICalendarSupport
 from Products.ATContentTypes.interface import ICalendarSupport
 
 PRODID = "-//AT Content Types//AT Event//EN"
@@ -108,7 +107,6 @@ class CalendarSupportMixin:
     """Mixin class for iCal/vCal support
     """
 
-    __implements__ = (z2ICalendarSupport, )
     implements(ICalendarSupport)
 
     security       = ClassSecurityInfo()

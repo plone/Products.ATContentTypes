@@ -26,7 +26,7 @@ from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.interfaces import IATCTTool
-from Interface.Verify import verifyObject
+from zope.interface.verify import verifyObject
 from Products.CMFCore.utils import getToolByName
 
 # z3 imports
@@ -42,7 +42,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         
     def test_interface(self):
         t = self.tool
-        self.failUnless(IATCTTool.isImplementedBy(t))
+        self.failUnless(IATCTTool.providedBy(t))
         self.failUnless(verifyObject(IATCTTool, t))
 
     def test_Z3interface(self):

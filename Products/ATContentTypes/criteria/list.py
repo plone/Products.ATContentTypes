@@ -38,8 +38,6 @@ from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import LIST_INDICES
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion as \
-    z2IATTopicSearchCriterion
 from Products.ATContentTypes.interface import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 
@@ -82,7 +80,6 @@ ATListCriterionSchema = ATBaseCriterionSchema + Schema((
 class ATListCriterion(ATBaseCriterion):
     """A list criterion"""
 
-    __implements__ = ATBaseCriterion.__implements__ + (z2IATTopicSearchCriterion, )
     implements(IATTopicSearchCriterion)
 
     security       = ClassSecurityInfo()

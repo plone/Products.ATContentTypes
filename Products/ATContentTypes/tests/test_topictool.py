@@ -6,7 +6,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.CatalogTool import CatalogTool
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.interfaces import IATCTTopicsTool
-from Interface.Verify import verifyObject
+from zope.interface.verify import verifyObject
 
 # z3 imports
 from Products.ATContentTypes.interface import IATCTTopicsTool as Z3IATCTTopicsTool
@@ -29,7 +29,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.tool = getattr(self.portal.aq_explicit, TOOLNAME)
 
     def test_interface(self):
-        self.failUnless(IATCTTopicsTool.isImplementedBy(self.tool))
+        self.failUnless(IATCTTopicsTool.providedBy(self.tool))
         self.failUnless(verifyObject(IATCTTopicsTool, self.tool))
 
     def test_Z3interface(self):

@@ -32,8 +32,6 @@ from Products.ATContentTypes.criteria import registerCriterion, \
                                              LIST_INDICES
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion as \
-    z2IATTopicSearchCriterion
 from Products.ATContentTypes.interface import IATTopicSearchCriterion
 
 ATCurrentAuthorSchema = ATBaseCriterionSchema
@@ -42,7 +40,6 @@ ATCurrentAuthorSchema = ATBaseCriterionSchema
 class ATCurrentAuthorCriterion(ATBaseCriterion):
     """A criterion that searches for the currently logged in user's id"""
 
-    __implements__ = ATBaseCriterion.__implements__ + (z2IATTopicSearchCriterion, )
     implements(IATTopicSearchCriterion)
 
     security       = ClassSecurityInfo()

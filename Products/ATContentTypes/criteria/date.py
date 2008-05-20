@@ -119,8 +119,6 @@ ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
 class ATDateCriteria(ATBaseCriterion):
     """A relative date criterion"""
 
-
-    __implements__ = ATBaseCriterion.__implements__ + (z2IATTopicSearchCriterion, )
     implements(IATTopicSearchCriterion)
 
     security       = ClassSecurityInfo()

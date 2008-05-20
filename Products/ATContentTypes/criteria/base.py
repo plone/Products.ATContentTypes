@@ -22,7 +22,7 @@
 __author__  = 'Christian Heimes <tiran@cheimes.de>'
 __docformat__ = 'restructuredtext'
 
-from zope.interface import implements
+from zope.interface import implements, classImplementsOnly, implementedBy
 
 from Products.Archetypes.atapi import BaseContentMixin
 
@@ -32,22 +32,17 @@ from Globals import InitializeClass
 
 from Products.Archetypes.ClassGen import generateClass
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
-from Products.ATContentTypes.interfaces import IATTopicCriterion as \
-    z2IATTopicCriterion
 from Products.ATContentTypes.interface import IATTopicCriterion
 
 from Products.CMFCore.PortalContent import PortalContent
 from Products.Archetypes.interfaces.base import IBaseContent
+from Products.Archetypes.interfaces.referenceable import IReferenceable
 
 class NonRefCatalogContent(BaseContentMixin):
     """Base class for content that is neither referenceable nor in the catalog
     """
 
     isReferenceable = None
-
-    __implements__ = (PortalContent.__implements__, z2IATTopicCriterion,
-                      IBaseContent)
-    implements(IATTopicCriterion)
 
     # reference register / unregister methods
     def _register(self, *args, **kwargs): pass
@@ -62,12 +57,13 @@ class NonRefCatalogContent(BaseContentMixin):
     def unindexObject(self, *args, **kwargs): pass
     def reindexObject(self, *args, **kwargs): pass
 
+classImplementsOnly(NonRefCatalogContent, *(iface for iface in implementedBy(BaseContentMixin) if iface is not IReferenceable))
+
 class ATBaseCriterion(NonRefCatalogContent):
     """A basic criterion"""
 
     security = ClassSecurityInfo()
 
-    __implements__ = (z2IATTopicCriterion, NonRefCatalogContent.__implements__)
     implements(IATTopicCriterion)
 
     schema = ATBaseCriterionSchema

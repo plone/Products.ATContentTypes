@@ -34,8 +34,6 @@ from Products.Archetypes.atapi import DisplayList
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import FIELD_INDICES
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion as \
-    z2IATTopicSearchCriterion
 from Products.ATContentTypes.interface import IATTopicSearchCriterion
 
 from Products.ATContentTypes import ATCTMessageFactory as _
@@ -51,7 +49,6 @@ ATPortalTypeCriterionSchema['value'].widget = val_widget
 class ATPortalTypeCriterion(ATSelectionCriterion):
     """A portal_types criterion"""
 
-    __implements__ = ATSelectionCriterion.__implements__ + (z2IATTopicSearchCriterion, )
     implements(IATTopicSearchCriterion)
 
     security       = ClassSecurityInfo()

@@ -35,7 +35,7 @@ from Products.ATContentTypes.tests.atcttestcase import portal_name
 
 from Products.ATContentTypes.content.favorite import ATFavorite
 from Products.ATContentTypes.interfaces import IATFavorite
-from Interface.Verify import verifyObject
+from zope.interface.verify import verifyObject
 
 # z3 imports
 from Products.ATContentTypes.interface import IATFavorite as Z3IATFavorite
@@ -65,7 +65,7 @@ class TestSiteATFavorite(atcttestcase.ATCTTypeTestCase):
 
     def test_implementsATFavorite(self):
         iface = IATFavorite
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def testLink(self):
@@ -99,7 +99,7 @@ class TestATFavoriteFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('remoteUrl')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 1, 'Value is %s' % field.required)
         self.failUnless(field.default == '', 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
@@ -126,7 +126,7 @@ class TestATFavoriteFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == (),
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, StringWidget),

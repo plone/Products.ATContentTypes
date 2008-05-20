@@ -68,8 +68,6 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
     assocFileExt   = ()
     cmf_edit_kws   = ()
 
-    __implements__ = (ATCTOrderedFolder.__implements__, z2IATFolder,
-                     AutoOrderSupport.__implements__)
     implements(IATFolder, IArchivable, IPhotoAlbumAble, IOrderedContainer)
 
     # Enable marshalling via WebDAV/FTP/ExternalEditor.
@@ -108,8 +106,6 @@ class ATBTreeFolder(AutoSortSupport, ATCTBTreeFolder):
     assocFileExt   = ()
     cmf_edit_kws   = ()
 
-    __implements__ = (ATCTBTreeFolder.__implements__, z2IATBTreeFolder,
-                      AutoSortSupport.__implements__)
     implements(IATBTreeFolder)
 
     # Enable marshalling via WebDAV/FTP/ExternalEditor.

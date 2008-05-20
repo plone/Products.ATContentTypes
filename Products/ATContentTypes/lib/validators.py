@@ -44,6 +44,7 @@ from ZPublisher.HTTPRequest import FileUpload
 from zope.tal.htmltalparser import HTMLTALParser
 from zope.tal.talgenerator import TALGenerator
 from Products.PageTemplates.Expressions import getEngine
+from zope.interface import implements
 
 if HAS_MX_TIDY:
     from mx.Tidy import tidy as mx_tidy
@@ -75,7 +76,7 @@ class TALValidator:
     """Validates a text to be valid TAL code
 
     """
-    __implements__ = IValidator
+    implements(IValidator)
 
     def __init__(self, name, title='', description=''):
         self.name = name
@@ -101,7 +102,7 @@ class TidyHtmlValidator:
     Do not clean up the value
     """
 
-    __implements__ = IValidator
+    implements(IValidator)
 
     def __init__(self, name, title='', description=''):
         self.name = name
@@ -138,7 +139,7 @@ class TidyHtmlWithCleanupValidator:
     Clean up
     """
 
-    __implements__ = IValidator
+    implements(IValidator)
 
     def __init__(self, name, title='', description=''):
         self.name = name
@@ -182,7 +183,7 @@ class NonEmptyFileValidator:
     """Fails on empty non-existant files
     """
 
-    __implements__ = IValidator
+    implements(IValidator)
 
     def __init__(self, name, title='', description=''):
         self.name = name

@@ -53,7 +53,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.failUnless(isinstance(self.af,
                                    constraintypes.ConstrainTypesMixin),
                         "ConstrainTypesMixin was not mixed in to ATFolder")
-        self.failUnless(ZopeTwoISelectableConstrainTypes.isImplementedBy(self.af),
+        self.failUnless(ZopeTwoISelectableConstrainTypes.providedBy(self.af),
                         "ISelectableConstrainTypes not implemented by ATFolder instance")
         self.failUnless(ISelectableConstrainTypes.providedBy(self.af),
                         "ISelectableConstrainTypes not implemented by ATFolder instance")

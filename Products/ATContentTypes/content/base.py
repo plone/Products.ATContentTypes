@@ -82,7 +82,7 @@ def registerATCT(class_, project):
 
     One reason to use it is to hide the lingua plone related magic.
     """
-    assert z2IATContentType.isImplementedByInstancesOf(class_)
+    assert IATContentType.implementedBy(class_)
     registerType(class_, project)
 
 def cleanupFilename(filename, request=None):
@@ -120,7 +120,6 @@ class ATCTMixin(BrowserDefaultMixin):
     isDocTemp = False
     _at_rename_after_creation = True # rename object according to the title?
 
-    __implements__ = (z2IATContentType, BrowserDefaultMixin.__implements__)
     implements(IATContentType)
 
     security       = ClassSecurityInfo()
@@ -212,9 +211,6 @@ InitializeClass(ATCTMixin)
 
 class ATCTContent(ATCTMixin, BaseContent):
     """Base class for non folderish AT Content Types"""
-
-    __implements__ = (BaseContent.__implements__,
-                      ATCTMixin.__implements__)
 
     security       = ClassSecurityInfo()
 
@@ -438,9 +434,6 @@ class ATCTFolder(ATCTMixin, BaseFolder):
     AT Topic. It doesn't support constrain types!
     """
 
-    __implements__ = (ATCTMixin.__implements__,
-                      BaseFolder.__implements__)
-
     security       = ClassSecurityInfo()
 
     security.declareProtected(View, 'get_size')
@@ -454,8 +447,6 @@ InitializeClass(ATCTFolder)
 class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
     """ Constrained folderish type """
 
-    __implements__ = (ATCTMixin.__implements__,
-                      ConstrainTypesMixin.__implements__,)
     implements(ISelectableConstrainTypes)
 
     security       = ClassSecurityInfo()
@@ -516,9 +507,6 @@ InitializeClass(ATCTFolderMixin)
 class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
     """Base class for orderable folderish AT Content Types"""
 
-    __implements__ = (ATCTFolderMixin.__implements__,
-                      OrderedBaseFolder.__implements__)
-
     security       = ClassSecurityInfo()
 
     security.declareProtected(View, 'index_html')
@@ -549,9 +537,6 @@ InitializeClass(ATCTOrderedFolder)
 
 class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
     """Base class for folderish AT Content Types using a BTree"""
-
-    __implements__ = ATCTFolderMixin.__implements__, \
-                     BaseBTreeFolder.__implements__
 
     security       = ClassSecurityInfo()
 

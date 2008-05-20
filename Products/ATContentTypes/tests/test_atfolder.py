@@ -34,7 +34,6 @@ from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATBTreeFolder
 from Products.CMFPlone.PloneFolder import PloneFolder
-from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
 from OFS.interfaces import IOrderedContainer as OFSIOrderedContainer
 from Products.CMFPlone.interfaces.OrderedContainer import IOrderedContainer
 from Products.ATContentTypes.interfaces import IATFolder
@@ -44,7 +43,7 @@ from zope.interface.verify import verifyClass
 
 from Products.ATContentTypes.interfaces import IAutoSortSupport
 from Products.ATContentTypes.interfaces import IAutoOrderSupport
-from Interface.Verify import verifyObject
+from zope.interface.verify import verifyObject
 
 from Products.CMFPlone.interfaces.ConstrainTypes import ISelectableConstrainTypes
 
@@ -65,11 +64,11 @@ class FolderTestMixin:
     """Contains some general tests for both ATFolder and ATBTreeFolder
     """
     def test_implementsConstrainTypes(self):
-        self.failUnless(ISelectableConstrainTypes.isImplementedBy(self._ATCT))
+        self.failUnless(ISelectableConstrainTypes.providedBy(self._ATCT))
         self.failUnless(verifyObject(ISelectableConstrainTypes, self._ATCT))
 
     def test_implements_autosort(self):
-        self.failUnless(IAutoSortSupport.isImplementedBy(self._ATCT))
+        self.failUnless(IAutoSortSupport.providedBy(self._ATCT))
         self.failUnless(verifyObject(IAutoSortSupport, self._ATCT))
 
     def test_implementsZ3_autosort(self):
@@ -86,14 +85,13 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     def test_implementsOrderInterface(self):
         self.failUnless(OFSIOrderedContainer.providedBy(self._ATCT))
-        self.failUnless(IZopeOrderedContainer.isImplementedBy(self._ATCT))
-        self.failUnless(IOrderedContainer.isImplementedBy(self._ATCT))
-        self.failUnless(verifyObject(IZopeOrderedContainer, self._ATCT))
+        self.failUnless(IOrderedContainer.providedBy(self._ATCT))
+        self.failUnless(verifyObject(OFSIOrderedContainer, self._ATCT))
         self.failUnless(verifyObject(IOrderedContainer, self._ATCT))
 
     def test_implementsATFolder(self):
         iface = IATFolder
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_Z3implementsATFolder(self):
@@ -102,7 +100,7 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     def test_implementsConstrainTypes(self):
         iface = ISelectableConstrainTypes
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_edit(self):
@@ -110,7 +108,7 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         editATCT(new)
 
     def test_implements_autoorder(self):
-        self.failUnless(IAutoOrderSupport.isImplementedBy(self._ATCT))
+        self.failUnless(IAutoOrderSupport.providedBy(self._ATCT))
         self.failUnless(verifyObject(IAutoOrderSupport, self._ATCT))
 
     def test_Z3implements_autoorder(self):
@@ -138,7 +136,7 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     def test_implementsATBTreeFolder(self):
         iface = IATBTreeFolder
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_Z3implementsATBTreeFolder(self):
@@ -147,12 +145,12 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     def test_implementsConstrainTypes(self):
         iface = ISelectableConstrainTypes
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_isNotOrdered(self):
-        iface = IZopeOrderedContainer
-        self.failIf(iface.isImplementedBy(self._ATCT))
+        iface = OFSIOrderedContainer
+        self.failIf(iface.providedBy(self._ATCT))
 
     def test_edit(self):
         new = self._ATCT

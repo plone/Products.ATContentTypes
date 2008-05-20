@@ -49,7 +49,6 @@ from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes import permission as ATCTPermissions
 
 from Products.ATContentTypes.interface import ISelectableConstrainTypes
-from Products.ATContentTypes.interfaces import ISelectableConstrainTypes as ZopeTwoISelectableConstrainTypes
 
 # constants for enableConstrainMixin
 ACQUIRE = -1 # acquire locallyAllowedTypes from parent (default)
@@ -158,7 +157,6 @@ class ConstrainTypesMixin:
         constrain the addable types on a per-folder basis.
     """
 
-    __implements__ = (ZopeTwoISelectableConstrainTypes, )
     implements(ISelectableConstrainTypes)
 
     security = ClassSecurityInfo()

@@ -111,10 +111,6 @@ ATDocumentSchema.changeSchemataForField('tableContents', 'settings')
 class ATDocumentBase(ATCTContent, HistoryAwareMixin):
     """A page in the site. Can contain rich text."""
 
-    __implements__ = (ATCTContent.__implements__,
-                      HistoryAwareMixin.__implements__,
-                     )
-
     security       = ClassSecurityInfo()
     cmf_edit_kws   = ('text_format',)
 
@@ -285,7 +281,6 @@ class ATDocument(ATDocumentBase):
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
     assocFileExt   = ('txt', 'stx', 'rst', 'rest', 'py',)
 
-    __implements__ = ATDocumentBase.__implements__, z2IATDocument
     implements(IATDocument, IArchivable)
 
 registerATCT(ATDocument, PROJECTNAME)

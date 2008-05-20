@@ -76,7 +76,7 @@ class _CriterionRegistry(UserDict):
         if indices == ():
             indices = ALL_INDICES
 
-        assert IATTopicCriterion.isImplementedByInstancesOf(criterion)
+        assert IATTopicCriterion.implementedBy(criterion)
         registerType(criterion, PROJECTNAME)
 
         crit_id = criterion.meta_type
@@ -104,11 +104,11 @@ class _CriterionRegistry(UserDict):
 
     def listSortTypes(self):
         return [key for key in self.keys()
-                    if IATTopicSortCriterion.isImplementedByInstancesOf(self[key])]
+                    if IATTopicSortCriterion.implementedBy(self[key])]
 
     def listSearchTypes(self):
         return [key for key in self.keys()
-                    if IATTopicSearchCriterion.isImplementedByInstancesOf(self[key])]
+                    if IATTopicSearchCriterion.implementedBy(self[key])]
 
     def listCriteria(self):
         return self.values()

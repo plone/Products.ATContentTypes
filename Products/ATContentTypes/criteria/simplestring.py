@@ -33,8 +33,6 @@ from Products.Archetypes.atapi import StringWidget
 
 from Products.ATContentTypes.criteria import registerCriterion, \
     STRING_INDICES
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion as \
-    z2IATTopicSearchCriterion
 from Products.ATContentTypes.interface import IATTopicSearchCriterion
 
 from Products.ATContentTypes.permission import ChangeTopics
@@ -62,7 +60,6 @@ ATSimpleStringCriterionSchema = ATBaseCriterionSchema + Schema((
 class ATSimpleStringCriterion(ATBaseCriterion):
     """A simple string criterion"""
 
-    __implements__ = ATBaseCriterion.__implements__ + (z2IATTopicSearchCriterion, )
     implements(IATTopicSearchCriterion)
 
     security       = ClassSecurityInfo()

@@ -39,8 +39,6 @@ from Products.Archetypes.atapi import DisplayList
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import LIST_INDICES
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion as \
-    z2IATTopicSearchCriterion
 from Products.ATContentTypes.interface import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
@@ -84,7 +82,6 @@ ATSelectionCriterionSchema = ATBaseCriterionSchema + Schema((
 class ATSelectionCriterion(ATBaseCriterion):
     """A selection criterion"""
 
-    __implements__ = ATBaseCriterion.__implements__ + (z2IATTopicSearchCriterion, )
     implements(IATTopicSearchCriterion)
 
     security       = ClassSecurityInfo()

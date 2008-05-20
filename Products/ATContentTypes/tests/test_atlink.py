@@ -33,7 +33,7 @@ from Products.Archetypes.atapi import *
 
 from Products.ATContentTypes.content.link import ATLink
 from Products.ATContentTypes.interfaces import IATLink
-from Interface.Verify import verifyObject
+from zope.interface.verify import verifyObject
 
 # z3 imports
 from Products.ATContentTypes.interface import IATLink as Z3IATLink
@@ -58,7 +58,7 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
 
     def test_implementsATLink(self):
         iface = IATLink
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_implementsATLink(self):
@@ -110,7 +110,7 @@ class TestATLinkFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('remoteUrl')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 1, 'Value is %s' % field.required)
         self.failUnless(field.default == 'http://', 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
@@ -137,7 +137,7 @@ class TestATLinkFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == (),
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, StringWidget),

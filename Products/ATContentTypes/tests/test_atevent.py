@@ -42,7 +42,7 @@ from Products.ATContentTypes.utils import DT2dt
 from DateTime import DateTime
 from Products.ATContentTypes.interfaces import ICalendarSupport
 from Products.ATContentTypes.interfaces import IATEvent
-from Interface.Verify import verifyObject
+from zope.interface.verify import verifyObject
 
 # z3 imports
 from Products.ATContentTypes.interface import ICalendarSupport as Z3ICalendarSupport
@@ -88,7 +88,7 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
     icon = 'event_icon.gif'
 
     def test_doesImplementCalendarSupport(self):
-        self.failUnless(ICalendarSupport.isImplementedBy(self._ATCT))
+        self.failUnless(ICalendarSupport.providedBy(self._ATCT))
         self.failUnless(verifyObject(ICalendarSupport, self._ATCT))
 
     def test_doesImplementZ3CalendarSupport(self):
@@ -97,7 +97,7 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
 
     def test_implementsATEvent(self):
         iface = IATEvent
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_implementsZ3ATEvent(self):
@@ -189,7 +189,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('location')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == '', 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
@@ -216,7 +216,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, StringWidget),
@@ -229,7 +229,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
     def test_eventTypeField(self):
         dummy = self._dummy
         field = dummy.getField('eventType')
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == (), 'Value is %s' % str(str(field.default)))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
@@ -255,7 +255,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == EmptyValidator,
                         'Value is %s' % repr(field.validators))
         self.failUnless(isinstance(field.widget, KeywordWidget),
@@ -266,7 +266,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('eventUrl')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == '', 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
@@ -294,7 +294,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnlessEqual(field.validators, URLValidator)
         self.failUnless(isinstance(field.widget, StringWidget),
                         'Value is %s' % id(field.widget))
@@ -307,7 +307,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('startDate')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 1, 'Value is %s' % field.required)
         self.failUnless(field.default == None , 'Value is %s' % str(field.default))
         self.failUnless(field.default_method == DateTime , 'Value is %s' % str(field.default_method))
@@ -336,7 +336,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == (),
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, CalendarWidget),
@@ -351,7 +351,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('endDate')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 1, 'Value is %s' % field.required)
         self.failUnless(field.default == None , 'Value is %s' % str(field.default))
         self.failUnless(field.default_method == DateTime , 'Value is %s' % str(field.default_method))
@@ -380,7 +380,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == (),
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, CalendarWidget),
@@ -394,7 +394,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('contactName')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == '', 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
@@ -422,7 +422,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, StringWidget),
@@ -436,7 +436,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('contactEmail')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == '', 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
@@ -464,7 +464,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == EmailValidator,
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, StringWidget),
@@ -478,7 +478,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('contactPhone')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == '', 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
@@ -506,7 +506,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnlessEqual(field.validators, EmptyValidator)
         self.failUnless(isinstance(field.widget, StringWidget),
                         'Value is %s' % id(field.widget))
@@ -519,7 +519,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('attendees')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == (), 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
@@ -547,7 +547,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(isinstance(field.widget, LinesWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
@@ -559,7 +559,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('text')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == '', 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
@@ -587,7 +587,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
         self.failUnless(isinstance(field.widget, RichWidget),

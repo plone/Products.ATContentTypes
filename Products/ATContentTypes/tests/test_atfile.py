@@ -38,7 +38,7 @@ import StringIO
 from Products.ATContentTypes.content.file import ATFile
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.interfaces import IFileContent
-from Interface.Verify import verifyObject
+from zope.interface.verify import verifyObject
 
 # z3 imports
 from Products.ATContentTypes.interface import IATFile as Z3IATFile
@@ -66,7 +66,7 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
 
     def test_implementsFileContent(self):
         iface = IFileContent
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_implementsZ3FileContent(self):
@@ -75,7 +75,7 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
 
     def test_implementsATFile(self):
         iface = IATFile
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_implementsZ3ATFile(self):
@@ -192,7 +192,7 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('file')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 1, 'Value is %s' % field.required)
         self.failUnless(field.default == '', 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == True, 'Value is %s' % field.searchable)
@@ -219,7 +219,7 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == "(('isNonEmptyFile', V_REQUIRED), ('checkFileMaxSize', V_REQUIRED))",
                         'Value is %s' % str(field.validators))
         self.failUnless(isinstance(field.widget, FileWidget),

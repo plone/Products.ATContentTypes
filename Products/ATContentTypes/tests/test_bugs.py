@@ -87,7 +87,7 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
 
     def test_validation_layer_from_id_field_from_base_schema_was_initialized(self):
         field = ATContentTypeSchema['id']
-        self.failUnless(IValidationChain.isImplementedBy(field.validators))
+        self.failUnless(IValidationChain.providedBy(field.validators))
 
 
 tests.append(TestBugs)

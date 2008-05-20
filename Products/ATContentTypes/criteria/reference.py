@@ -32,8 +32,6 @@ from AccessControl import ClassSecurityInfo
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import REFERENCE_INDICES
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion as \
-    z2IATTopicSearchCriterion
 from Products.ATContentTypes.interface import IATTopicSearchCriterion
 from Products.Archetypes.atapi import DisplayList
 
@@ -42,7 +40,6 @@ ATReferenceCriterionSchema = ATSelectionCriterion.schema
 class ATReferenceCriterion(ATSelectionCriterion):
     """A reference criterion"""
 
-    __implements__ = ATSelectionCriterion.__implements__ + (z2IATTopicSearchCriterion, )
     implements(IATTopicSearchCriterion)
 
     security       = ClassSecurityInfo()

@@ -36,7 +36,6 @@ from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.atapi import ATHistoryAwareMixin
 from Products.ATContentTypes import permission as ATCTPermissions
-from Products.ATContentTypes.interfaces import IHistoryAware as z2IHistoryAware
 from Products.ATContentTypes.interface import IHistoryAware
 
 class HistoryAwareMixin(ATHistoryAwareMixin):
@@ -51,7 +50,6 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
     managers.
     """
 
-    __implements__ = (z2IHistoryAware ,)
     implements(IHistoryAware)
 
     security       = ClassSecurityInfo()

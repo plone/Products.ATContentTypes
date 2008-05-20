@@ -29,7 +29,7 @@ from Missing import MV
 
 from Products.Archetypes.atapi import *
 
-from Interface.Verify import verifyObject
+from zope.interface.verify import verifyObject
 from Products.Archetypes.interfaces.base import IBaseContent
 from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.Archetypes.interfaces import IExtensibleMetadata
@@ -118,11 +118,11 @@ class CriteriaTest(atcttestcase.ATCTSiteTestCase):
         
     def test_implements(self):
         if self.dummy is not None:
-            self.failIf(IReferenceable.isImplementedBy(self.dummy))
+            self.failIf(IReferenceable.providedBy(self.dummy))
             self.failIf(IExtensibleMetadata.providedBy(self.dummy))
             self.failIf(self.dummy.isReferenceable)
-            self.failUnless(IBaseContent.isImplementedBy(self.dummy))
-            self.failUnless(IATTopicCriterion.isImplementedBy(self.dummy))
+            self.failUnless(IBaseContent.providedBy(self.dummy))
+            self.failUnless(IATTopicCriterion.providedBy(self.dummy))
             self.failUnless(verifyObject(IBaseContent, self.dummy))
             self.failUnless(verifyObject(IATTopicCriterion, self.dummy))
 

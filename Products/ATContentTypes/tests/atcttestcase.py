@@ -37,7 +37,7 @@ PloneTestCase.setupPloneSite(extension_profiles=['Products.CMFPlone:testfixture'
 import os
 import transaction
 
-from Interface.Verify import verifyObject
+from zope.interface.verify import verifyObject
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.interfaces import IDublinCore
@@ -149,7 +149,7 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
         self.failUnless(Z3verifyObject(IMutableDublinCore, self._ATCT))
 
     def test_doesImplementATCT(self):
-        self.failUnless(IATContentType.isImplementedBy(self._ATCT))
+        self.failUnless(IATContentType.providedBy(self._ATCT))
         self.failUnless(verifyObject(IATContentType, self._ATCT))
 
     def test_doesImplementZ3ATCT(self):
@@ -157,8 +157,8 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
         self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_doesImplementAT(self):
-        self.failUnless(IBaseContent.isImplementedBy(self._ATCT))
-        self.failUnless(IReferenceable.isImplementedBy(self._ATCT))
+        self.failUnless(IBaseContent.providedBy(self._ATCT))
+        self.failUnless(IReferenceable.providedBy(self._ATCT))
         self.failUnless(verifyObject(IBaseContent, self._ATCT))
         self.failUnless(verifyObject(IReferenceable, self._ATCT))
 
@@ -166,11 +166,11 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
         # lingua plone is adding the ITranslatable interface to all types
         if not HAS_LINGUA_PLONE:
             return
-        self.failUnless(ITranslatable.isImplementedBy(self._ATCT))
+        self.failUnless(ITranslatable.providedBy(self._ATCT))
         self.failUnless(verifyObject(ITranslatable, self._ATCT))
 
     def test_not_implements_ITemplateMixin(self):
-        self.failIf(ITemplateMixin.isImplementedBy(self._ATCT))
+        self.failIf(ITemplateMixin.providedBy(self._ATCT))
 
     def test_implements_ISelectableBrowserDefault(self):
         iface = ISelectableBrowserDefault
@@ -254,7 +254,7 @@ class ATCTFieldTestCase(ATCTSiteTestCase, BaseSchemaTest):
         dummy = self._dummy
         field = dummy.getField('description')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnlessEqual(field.required, False)
         self.failUnlessEqual(field.default, '')
         self.failUnlessEqual(field.searchable, True)
@@ -285,7 +285,7 @@ class ATCTFieldTestCase(ATCTSiteTestCase, BaseSchemaTest):
         dummy = self._dummy
         field = dummy.getField('id')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnlessEqual(field.required, False)
         self.failUnlessEqual(field.default, None)
         self.failUnlessEqual(field.searchable, True)
@@ -315,7 +315,7 @@ class ATCTFieldTestCase(ATCTSiteTestCase, BaseSchemaTest):
         dummy = self._dummy
         field = dummy.getField('relatedItems')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnlessEqual(field.required, False)
         self.failUnlessEqual(field.default, None)
         self.failUnlessEqual(field.searchable, False)

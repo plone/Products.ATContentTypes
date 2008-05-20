@@ -39,7 +39,7 @@ from Products.ATContentTypes.tests.utils import input_file_path
 from Products.ATContentTypes.interfaces import IHistoryAware
 from Products.ATContentTypes.interfaces import ITextContent
 from Products.ATContentTypes.interfaces import IATDocument
-from Interface.Verify import verifyObject
+from zope.interface.verify import verifyObject
 from cgi import FieldStorage
 from Products.ATContentTypes import config as atct_config
 from ZPublisher.HTTPRequest import FileUpload
@@ -86,7 +86,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
 
     def test_doesImplementHistoryAware(self):
         iface = IHistoryAware
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_doesImplementZ3HistoryAware(self):
@@ -95,7 +95,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
 
     def test_implementsTextContent(self):
         iface = ITextContent
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_implementsZ3TextContent(self):
@@ -104,7 +104,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
 
     def test_implementsATDocument(self):
         iface = IATDocument
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_implementsZ3ATDocument(self):
@@ -257,7 +257,7 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('text')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == '', 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
@@ -284,7 +284,7 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
         self.failUnless(isinstance(field.widget, RichWidget),

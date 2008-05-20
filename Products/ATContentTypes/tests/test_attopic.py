@@ -37,8 +37,7 @@ from Products.ATContentTypes.content.topic import ChangeTopics
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.interfaces import IATTopic
-from Interface.Verify import verifyObject
-from OFS.IOrderSupport import IOrderedContainer as IZopeOrderedContainer
+from zope.interface.verify import verifyObject
 
 from Products.CMFPlone.PloneBatch import Batch
 
@@ -168,7 +167,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
 
     def test_implementsATTopic(self):
         iface = IATTopic
-        self.failUnless(iface.isImplementedBy(self._ATCT))
+        self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_Z3implementsATTopic(self):
@@ -176,9 +175,9 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_isNotOrdered(self):
-        iface = IZopeOrderedContainer
-        self.failIf(iface.isImplementedBy(self._ATCT))
-        self.failIf(iface.isImplementedByInstancesOf(self.klass))
+        iface = OFSIOrderedContainer
+        self.failIf(iface.providedBy(self._ATCT))
+        self.failIf(iface.providedBy(self.klass))
 
     def test_Empty( self ):
         topic = self._ATCT
@@ -363,7 +362,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         field = dummy.getField('acquireCriteria')
         field_vocab = BooleanField._properties.get('vocabulary', ())
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == False, 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 0, 'Value is %s' % field.searchable)
@@ -405,7 +404,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         field = dummy.getField('limitNumber')
         field_vocab = BooleanField._properties.get('vocabulary', ())
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == False, 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 0, 'Value is %s' % field.searchable)
@@ -446,7 +445,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('itemCount')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == 0, 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 0, 'Value is %s' % field.searchable)
@@ -488,7 +487,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('customView')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == False, 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 0, 'Value is %s' % field.searchable)
@@ -530,7 +529,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('customViewFields')
 
-        self.failUnless(ILayerContainer.isImplementedBy(field))
+        self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == ('Title',), 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 0, 'Value is %s' % field.searchable)

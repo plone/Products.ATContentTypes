@@ -79,7 +79,6 @@ class ATFavorite(ATCTContent):
     assocFileExt   = ('fav', )
     cmf_edit_kws   = ('remote_url',)
 
-    __implements__ = ATCTContent.__implements__, z2IATFavorite
     implements(IATFavorite)
 
     security       = ClassSecurityInfo()

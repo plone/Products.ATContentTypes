@@ -50,7 +50,7 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
     def test_isMixedIn(self):
         self.failUnless(isinstance(self.af, BrowserDefaultMixin),
                         "ISelectableBrowserDefault was not mixed in to ATFolder")
-        self.failUnless(ZopeTwoISelectableBrowserDefault.isImplementedBy(self.af),
+        self.failUnless(ZopeTwoISelectableBrowserDefault.providedBy(self.af),
                         "ISelectableBrowserDefault not implemented by ATFolder instance")
         self.failUnless(ISelectableBrowserDefault.providedBy(self.af),
                         "ISelectableBrowserDefault not implemented by ATFolder instance")

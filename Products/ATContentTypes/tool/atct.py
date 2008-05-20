@@ -39,7 +39,6 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import ManagePortal
 
 from Products.ATContentTypes.interfaces import IImageContent
-from Products.ATContentTypes.interfaces import IATCTTool as z2IATCTTool
 from Products.ATContentTypes.interface import IATCTTool
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import WWW_DIR
@@ -58,9 +57,6 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
     id = TOOLNAME
     meta_type= 'ATCT Tool'
     title = 'ATContentTypes Tool'
-
-    __implements__ = (SimpleItem.__implements__, z2IATCTTool,
-                      ATTopicsTool.__implements__)
 
     implements(IATCTTool)
 
@@ -113,7 +109,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
             obj = brain.getObject()
             if obj is None:
                 continue
-            if not IImageContent.isImplementedBy(obj):
+            if not IImageContent.providedBy(obj):
                 continue
             try:
                 state = obj._p_changed

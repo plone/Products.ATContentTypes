@@ -41,7 +41,6 @@ from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.interfaces import IATLink as z2IATLink
 from Products.ATContentTypes.interface import IATLink
 
 from Products.ATContentTypes import ATCTMessageFactory as _
@@ -73,7 +72,6 @@ class ATLink(ATCTContent):
     assocFileExt   = ('link', 'url', )
     cmf_edit_kws   = ('remote_url', )
 
-    __implements__ = ATCTContent.__implements__, z2IATLink
     implements(IATLink)
 
     security       = ClassSecurityInfo()

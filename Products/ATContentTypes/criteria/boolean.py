@@ -39,8 +39,6 @@ from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import FIELD_INDICES
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion as \
-    z2IATTopicSearchCriterion
 from Products.ATContentTypes.interface import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 
@@ -63,7 +61,6 @@ ATBooleanCriterionSchema = ATBaseCriterionSchema + Schema((
 class ATBooleanCriterion(ATBaseCriterion):
     """A boolean criterion"""
 
-    __implements__ = ATBaseCriterion.__implements__ + (z2IATTopicSearchCriterion, )
     implements(IATTopicSearchCriterion)
 
     security       = ClassSecurityInfo()
