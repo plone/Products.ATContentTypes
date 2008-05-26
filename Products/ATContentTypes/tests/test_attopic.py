@@ -38,6 +38,7 @@ from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.interfaces import IATTopic
 from zope.interface.verify import verifyObject
+from OFS.interfaces import IOrderedContainer
 
 from Products.CMFPlone.PloneBatch import Batch
 
@@ -175,7 +176,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_isNotOrdered(self):
-        iface = OFSIOrderedContainer
+        iface = IOrderedContainer
         self.failIf(iface.providedBy(self._ATCT))
         self.failIf(iface.providedBy(self.klass))
 
