@@ -1045,8 +1045,8 @@ def process_file(file, debug=0):
         gps_off=hdr.tags.get(IFD_name+' GPSInfo')
         if gps_off:
             if debug:
-                print ' GPS SubIFD at offset %d:' % gps_off.values[0]
-            hdr.dump_IFD(gps_off.values[0], 'GPS', dict=GPS_TAGS)
+                print ' GPS SubIFD at offset %d:' % gps_off[0]
+            hdr.dump_IFD(gps_off[0], 'GPS', dict=GPS_TAGS)
         ctr+=1
 
     if hdr.tags.has_key('EXIF MakerNote'):

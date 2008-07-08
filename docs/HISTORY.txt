@@ -1,6 +1,10 @@
 1.3.0 unreleased
 ================
 
+ * Fixed problem in parsing GPS information in exif metadata. This closes
+   https://dev.plone.org/plone/ticket/7057.
+   [hannosch]
+
  * Increased the maxlength for the url field of links from 255 to 511. This
    closes https://dev.plone.org/plone/ticket/6422.
    [hannosch]
