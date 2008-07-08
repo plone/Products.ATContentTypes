@@ -18,10 +18,6 @@
    This closes https://dev.plone.org/plone/ticket/7759.
    [hannosch]
 
- * Adjust accessor for location field to ensure the catalog metadata is always
-   populated correctly. This refs https://dev.plone.org/plone/ticket/6424.
-   [hannosch]
-
  * Removed txng_get method from file content type. The hook is deprecated and
    TextIndexNG 3 doesn't use it anymore. This closes
    https://dev.plone.org/plone/ticket/4297.

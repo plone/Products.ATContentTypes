@@ -62,7 +62,6 @@ from Products.ATContentTypes import ATCTMessageFactory as _
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
     StringField('location',
                 searchable=True,
-                accessor='location',
                 write_permission = ChangeEvents,
                 widget = StringWidget(
                     description = '',
