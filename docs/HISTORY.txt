@@ -1,6 +1,11 @@
 1.3.0 unreleased
 ================
 
+ * Fixed invalid field condition that prevented you from being able to edit
+   the "Inherit Criteria" value on a collection once it had been created.
+   This closes https://dev.plone.org/plone/ticket/6527.
+   [hannosch]
+
  * Removed confusing behavior of ATEvent mixing eventType and Subject.
    This closes https://dev.plone.org/plone/ticket/5058.
    [hannosch]

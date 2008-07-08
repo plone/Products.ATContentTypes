@@ -105,9 +105,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                                       default=u"Narrow down the search results from the parent Collection(s) "
                                                "by using the criteria from this Collection."),
                         # Only show when the parent object is a Topic also,
-                        # for some reason the checkcondition passes the
-                        #template as 'object', and the object as 'folder'.
-                        condition = "python:folder.getParentNode().portal_type == 'Topic'"),
+                        condition = "python:object.getParentNode().portal_type == 'Topic'"),
                 ),
     BooleanField('limitNumber',
                 required=False,
