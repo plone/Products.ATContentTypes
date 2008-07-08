@@ -1,6 +1,10 @@
 1.3.0 unreleased
 ================
 
+ * Removed a shortcut in the relative path criterion, which wouldn't work in
+   all cases. This closes https://dev.plone.org/plone/ticket/7785.
+   [hannosch]
+
  * The photo album view never showed the number of images in subfolders.
    This closes https://dev.plone.org/plone/ticket/7759.
    [hannosch]

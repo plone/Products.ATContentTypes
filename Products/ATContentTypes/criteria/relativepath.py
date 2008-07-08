@@ -97,9 +97,6 @@ class ATRelativePathCriterion(ATBaseCriterion):
             # someone didn't enter a relative path.
             # simply use that one, relative to the portal
             path = '/'.join(portalPath) + relPath
-        elif relPath=='..' or relPath=='../':
-            # do a shortcut
-            path = '/'.join(self.aq_parent.aq_parent.getPhysicalPath())
         else:
             folders = relPath.split('/')
 
