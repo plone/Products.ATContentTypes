@@ -55,7 +55,8 @@ ATLinkSchema = ATContentTypeSchema.copy() + Schema((
         validators = (),
         widget = StringWidget(
             description = '',
-            label = _(u'label_url', default=u'URL')
+            label = _(u'label_url', default=u'URL'),
+            maxlength = '511',
             )),
     ))
 finalizeATCTSchema(ATLinkSchema)
