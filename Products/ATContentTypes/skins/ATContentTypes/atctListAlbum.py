@@ -28,7 +28,7 @@ if subimages:
     else:
         path = '/'.join(context.getPhysicalPath())
     # Explicitly set path to remove default depth
-    result['subimages'] = queryMethod({'Type':('Image',), 'path':path})
+    result['subimages'] = queryMethod({'portal_type':('Image',), 'path':path})
 if others:
     searchContentTypes = context.plone_utils.getUserFriendlyTypes()
     filtered = [p_type for p_type in searchContentTypes
