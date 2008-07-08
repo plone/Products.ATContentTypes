@@ -196,9 +196,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
 
     security.declareProtected(ChangeEvents, 'setEventType')
     def setEventType(self, value, alreadySet=False, **kw):
-        """CMF compatibility method
-
-        Changing the event type changes also the subject.
+        """Set the event type.
         """
         if type(value) is StringType:
             value = (value,)
@@ -207,28 +205,13 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
             value = ()
         f = self.getField('eventType')
         f.set(self, value, **kw) # set is ok
-        if not alreadySet:
-            self.setSubject(value, alreadySet=True, **kw)
 
     security.declareProtected(ModifyPortalContent, 'setSubject')
     def setSubject(self, value, alreadySet=False, **kw):
-        """CMF compatibility method
-
-        Changing the subject changes also the event type.
+        """Set the subject.
         """
         f = self.getField('subject')
         f.set(self, value, **kw) # set is ok
-
-        # set the event type to the first subject
-        if type(value) is StringType:
-            v = (value, )
-        elif value:
-            v = value
-        else:
-            v = ()
-
-        if not alreadySet:
-            self.setEventType(v, alreadySet=True, **kw)
 
     security.declareProtected(View, 'getEventTypes')
     def getEventTypes(self):
