@@ -2,42 +2,42 @@
 ================
 
  * Fixed duplicate link icon in the custom topic view. This closes
-   https://dev.plone.org/plone/ticket/6049.
+   http://dev.plone.org/plone/ticket/6049.
    [hannosch]
 
  * Fixed invalid field condition that prevented you from being able to edit
    the "Inherit Criteria" value on a collection once it had been created.
-   This closes https://dev.plone.org/plone/ticket/6527.
+   This closes http://dev.plone.org/plone/ticket/6527.
    [hannosch]
 
  * Removed confusing behavior of ATEvent mixing eventType and Subject.
-   This closes https://dev.plone.org/plone/ticket/5058.
+   This closes http://dev.plone.org/plone/ticket/5058.
    [hannosch]
 
  * Added application/x-shockwave-flash to the inline mimetypes, so they can
    be shown in a page without causing a download prompt. This closes
-   https://dev.plone.org/plone/ticket/5778.
+   http://dev.plone.org/plone/ticket/5778.
    [hannosch]
 
  * Removed a shortcut in the relative path criterion, which wouldn't work in
-   all cases. This closes https://dev.plone.org/plone/ticket/7785.
+   all cases. This closes http://dev.plone.org/plone/ticket/7785.
    [hannosch]
 
  * The photo album view never showed the number of images in subfolders.
-   This closes https://dev.plone.org/plone/ticket/7759.
+   This closes http://dev.plone.org/plone/ticket/7759.
    [hannosch]
 
  * Removed txng_get method from file content type. The hook is deprecated and
    TextIndexNG 3 doesn't use it anymore. This closes
-   https://dev.plone.org/plone/ticket/4297.
+   http://dev.plone.org/plone/ticket/4297.
    [hannosch]
 
  * Fixed problem in parsing GPS information in exif metadata. This closes
-   https://dev.plone.org/plone/ticket/7057.
+   http://dev.plone.org/plone/ticket/7057.
    [hannosch]
 
  * Increased the maxlength for the url field of links from 255 to 511. This
-   closes https://dev.plone.org/plone/ticket/6422.
+   closes http://dev.plone.org/plone/ticket/6422.
    [hannosch]
 
  * Purged old Zope 2 Interface interfaces for Zope 2.12 compatibility.
