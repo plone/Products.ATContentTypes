@@ -1,3 +1,11 @@
+1.2.6
+==================
+
+ * Changed default topic view to alway show body text (if available) even if the
+   collection does not have any results. This closes
+   http://dev.plone.org/plone/ticket/8270.
+   [dunlapm]
+
 1.2.5 2008-04-22
 ==================
 
