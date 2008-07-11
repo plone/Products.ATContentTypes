@@ -1,5 +1,9 @@
 1.3.0 unreleased
 ================
+ * Changed default topic view to alway show body text (if available) even if the
+   collection does not have any results. This closes
+   http://dev.plone.org/plone/ticket/8270.
+   [dunlapm]
 
  * Fixed duplicate link icon in the custom topic view. This closes
    http://dev.plone.org/plone/ticket/6049.

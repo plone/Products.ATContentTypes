@@ -31,7 +31,7 @@
         <tal:topiccontents define="topicContents python:here.queryCatalog(batch=True);
                                    batch topicContents;">
 
-            <tal:listing condition="topicContents">
+        <tal:listing condition="topicContents">
             <a style='text-align: right' href="#"
                tal:condition="nocall: here/asPDF|nothing"
                tal:attributes="href string:${here_url}/asPDF/atct_topic_pdf_template/atct_topic_pdf"
@@ -39,18 +39,20 @@
                i18n:domain="atcontenttypes">
                 Download PDF
             </a>
-            
-            <div metal:define-macro="text-field-view"
-                 id="parent-fieldname-text" class="stx"
-                 tal:define="kss_class python:getKssClasses('text',
-                             templateId=templateId, macro='text-field-view');
-                             text here/getText|nothing"
-                 tal:condition="text"
-                 tal:attributes="class python:test(here.Format() in ('text/structured',
-                                                       'text/x-rst', ), 'stx' + kss_class, 'plain' + kss_class)">
-                <div metal:define-slot="inside" tal:replace="structure text">The body</div>
-            </div>
+        </tal:listing>
+    
+        <div metal:define-macro="text-field-view"
+             id="parent-fieldname-text" class="stx"
+             tal:define="kss_class python:getKssClasses('text',
+                         templateId=templateId, macro='text-field-view');
+                         text here/getText|nothing"
+             tal:condition="text"
+             tal:attributes="class python:test(here.Format() in ('text/structured',
+                                                   'text/x-rst', ), 'stx' + kss_class, 'plain' + kss_class)">
+            <div metal:define-slot="inside" tal:replace="structure text">The body</div>
+        </div>
 
+        <tal:listing condition="topicContents">
             <tal:default condition="not:here/getCustomView|nothing"
                          define="folderContents topicContents">
                 <metal:listing metal:use-macro="here/folder_listing/macros/listing">
