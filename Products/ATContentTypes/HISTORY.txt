@@ -1,6 +1,10 @@
 1.2.6
 ==================
 
+ * Changed "Contained Collections" text to "Inside this section".
+   This closes http://dev.plone.org/plone/ticket/8106.
+   [davisagli]
+
  * Changed default topic view to alway show body text (if available) even if the
    collection does not have any results. This closes
    http://dev.plone.org/plone/ticket/8270.
