@@ -1,5 +1,10 @@
 1.3.0 unreleased
 ================
+
+ * Use human understandable language for describing the relative date range
+   criteria. This closes http://dev.plone.org/plone/ticket/6841.
+   [hannosch]
+
  * Changed default topic view to alway show body text (if available) even if the
    collection does not have any results. This closes
    http://dev.plone.org/plone/ticket/8270.

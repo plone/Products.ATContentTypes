@@ -204,7 +204,7 @@ class TestATDateCriteria(CriteriaTest):
         self.assertEquals(query['range'], 'max')
 
     def test_MoreThanFuture(self):
-        # A query of the form 'More than 14 days in the future' should generate
+        # A query of the form 'More than 14 days from now' should generate
         # a min query with the value set to a date 14 days in the future.
         self.dummy.Schema()['field'].set(self.dummy,'created')
         self.dummy.setOperation('more')
@@ -236,7 +236,7 @@ class TestATDateCriteria(CriteriaTest):
         self.assertEquals(query['query'].earliestTime(), expected_begin)
         self.assertEquals(query['range'], 'min')
 
-    def test_MoreThanNow(self):
+    def test_LessThanNow(self):
         # A query of the form 'Less than Now' should generate
         # a max query with the value set to the present, regardless of the
         # past future setting.

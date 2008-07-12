@@ -68,8 +68,8 @@ CompareOperations = DisplayList((
     ))
 
 RangeOperations = DisplayList((
-                    ('-', _(u'in the past'))
-                  , ('+', _(u'in the future'))
+                    ('-', _(u'ago'))
+                  , ('+', _(u'from now'))
     ))
 
 ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
