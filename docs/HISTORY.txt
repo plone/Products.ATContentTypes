@@ -1,6 +1,10 @@
 1.3.0 unreleased
 ================
 
+ * Changed "Contained Collections" text to "Inside this section".
+   This closes http://dev.plone.org/plone/ticket/8106.
+   [davisagli]
+
  * Use human understandable language for describing the relative date range
    criteria. This closes http://dev.plone.org/plone/ticket/6841.
    [hannosch]
