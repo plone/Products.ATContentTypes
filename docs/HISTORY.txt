@@ -1,6 +1,10 @@
 1.3.0 unreleased
 ================
 
+ * Changed a msgid for the url field of events to have a distinct value.
+   This closes http://dev.plone.org/plone/ticket/8197.
+   [hannosch]
+
  * Changed "Contained Collections" text to "Inside this section".
    This closes http://dev.plone.org/plone/ticket/8106.
    [davisagli]
