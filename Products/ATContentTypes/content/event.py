@@ -129,10 +129,10 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 write_permission = ChangeEvents,
                 validators=('isURL',),
                 widget = StringWidget(
-                        description = _(u'help_url',
+                        description = _(u'help_event_url',
                                         default=u"Web address with more info about the event. "
                                                  "Add http:// for external links."),
-                        label = _(u'label_url', default=u'Event URL')
+                        label = _(u'label_event_url', default=u'Event URL')
                         )),
 
     StringField('contactName',
