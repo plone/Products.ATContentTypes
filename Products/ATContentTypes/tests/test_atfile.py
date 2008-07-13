@@ -62,7 +62,7 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
     portal_type = 'File'
     title = 'File'
     meta_type = 'ATFile'
-    icon = 'file_icon.gif'
+    icon = 'file_icon.png'
 
     def test_implementsFileContent(self):
         iface = IFileContent

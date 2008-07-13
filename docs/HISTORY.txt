@@ -1,6 +1,9 @@
 1.3.0 unreleased
 ================
 
+ * Adjusted tests to reflect using png instead of gifs for content types.
+   [hannosch]
+
  * Changed a msgid for the url field of events to have a distinct value.
    This closes http://dev.plone.org/plone/ticket/8197.
    [hannosch]

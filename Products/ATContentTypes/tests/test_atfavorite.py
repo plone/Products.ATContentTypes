@@ -57,7 +57,7 @@ class TestSiteATFavorite(atcttestcase.ATCTTypeTestCase):
     portal_type = 'Favorite'
     title = 'Favorite'
     meta_type = 'ATFavorite'
-    icon = 'favorite_icon.gif'
+    icon = 'favorite_icon.png'
 
     def test_implementsZ3ATFavorite(self):
         iface = Z3IATFavorite

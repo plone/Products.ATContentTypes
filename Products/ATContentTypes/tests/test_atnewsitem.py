@@ -60,7 +60,7 @@ class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
     portal_type = 'News Item'
     title = 'News Item'
     meta_type = 'ATNewsItem'
-    icon = 'newsitem_icon.gif'
+    icon = 'newsitem_icon.png'
 
     def test_implementsTextContent(self):
         iface = ITextContent

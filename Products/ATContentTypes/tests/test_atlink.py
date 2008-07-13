@@ -54,7 +54,7 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
     portal_type = 'Link'
     title = 'Link'
     meta_type = 'ATLink'
-    icon = 'link_icon.gif'
+    icon = 'link_icon.png'
 
     def test_implementsATLink(self):
         iface = IATLink
