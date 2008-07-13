@@ -137,21 +137,6 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         atct.setImage(TEST_GIF, mimetype='image/gif', filename='test.gif')
         self.failUnlessEqual(atct.getImage().data, TEST_GIF)
 
-    def test_bobo_hook(self):
-        atct = self._ATCT
-        REQUEST = {'method' : 'GET'}
-        scales = atct.getField('image').getAvailableSizes(atct)
-        atct.setImage(TEST_GIF, mimetype='image/gif', filename='test.gif')
-
-        img = atct.__bobo_traverse__(REQUEST, 'image')
-        self.failUnless(isinstance(img, OFSImage), img)
-
-        # test if all scales exist
-        for scale in scales.keys():
-            name = 'image_' + scale
-            img = atct.__bobo_traverse__(REQUEST, name)
-            self.failUnless(isinstance(img, OFSImage), img)
-
     def test_division_by_0_pil(self):
         # pil generates a division by zero error on some images
         atct = self._ATCT
@@ -160,7 +145,6 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         atct.setImage(TEST_DIV_ERROR, mimetype='image/jpeg',
                       filename='divisionerror.jpg')
         self.failUnlessEqual(atct.getImage().data, TEST_DIV_ERROR)
-
 
     def test_get_size(self):
         atct = self._ATCT

@@ -71,8 +71,9 @@
    [wichert]
 
  * Remove __bobo_traverse__ from ATNewsItem and ATImage. Instead rely on the
-   generic ImageTraverse publish traverser from Archetypes.
-   [wichert]
+   generic ImageTraverse publish traverser from Archetypes and removed the
+   accompanying tests for it.
+   [wichert, hannosch]
 
  * Corrected i18n markup in schemata.py for the nextprevious field.
    This closes http://dev.plone.org/plone/ticket/7517.
