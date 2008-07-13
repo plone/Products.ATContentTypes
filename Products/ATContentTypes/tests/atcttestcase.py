@@ -211,10 +211,6 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
             request.form = {'id':id}
             self.assertEquals(asdf.validate(REQUEST=request), {})
 
-    def test_getobjpositioninparent(self):
-        # TODO: not a real test
-        self._ATCT.getObjPositionInParent()
-
     def test_schema_marshall(self):
         atct = self._ATCT
         schema = atct.Schema()

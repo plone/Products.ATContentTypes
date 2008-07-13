@@ -1,6 +1,9 @@
 1.3.0 unreleased
 ================
 
+ * Removed empty test_getobjpositioninparent test from the base test case.
+   [hannosch]
+
  * Adjusted tests to reflect using png instead of gifs for content types.
    [hannosch]
 
