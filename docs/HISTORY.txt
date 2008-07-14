@@ -7,22 +7,9 @@
  * Adjusted tests to reflect using png instead of gifs for content types.
    [hannosch]
 
- * Changed a msgid for the url field of events to have a distinct value.
-   This closes http://dev.plone.org/plone/ticket/8197.
-   [hannosch]
-
- * Changed "Contained Collections" text to "Inside this section".
-   This closes http://dev.plone.org/plone/ticket/8106.
-   [davisagli]
-
  * Use human understandable language for describing the relative date range
    criteria. This closes http://dev.plone.org/plone/ticket/6841.
    [hannosch]
-
- * Changed default topic view to alway show body text (if available) even if the
-   collection does not have any results. This closes
-   http://dev.plone.org/plone/ticket/8270.
-   [dunlapm]
 
  * Fixed duplicate link icon in the custom topic view. This closes
    http://dev.plone.org/plone/ticket/6049.
@@ -67,48 +54,17 @@
    Consider branching before this revision if release required before Plone 4.
    [elro]
 
- * Remove leading whitespace in hrefs.
-   [wichert]
-
  * Remove __bobo_traverse__ from ATNewsItem and ATImage. Instead rely on the
    generic ImageTraverse publish traverser from Archetypes and removed the
    accompanying tests for it.
    [wichert, hannosch]
 
- * Corrected i18n markup in schemata.py for the nextprevious field.
-   This closes http://dev.plone.org/plone/ticket/7517.
-   [hannosch]
-
- * The edit tab in ZMI should not be displayed for ATImage/ATFIle objects.
-   http://dev.plone.org/archetypes/ticket/763
-   [deo]
-
  * Added tests for utils.dt2DT and utils.DT2dt that expose a bug as found
    in Vice regarding converted dates becoming naive of timezones. Fixed.
    [matthewwilkes]
 
- * Fixed http://dev.plone.org/plone/ticket/7102: uploading xhtml
-   files was not working correctly. Thanks to lucie for the patch.
-   [alecm]
-
- * Fixed #6981 http://dev.plone.org/plone/ticket/6981 and #7467
-   http://dev.plone.org/plone/ticket/7467, bugs in "Item Type"
-   criterion - it used portal type Title as both key and value
-   in multiselection widget, but the key was incorrectly translated.
-   Fixed to show the translated portal type Title to the user, but to
-   store the untranslated Title. Added a browser test for #6981,
-   which is currently disabled because the test browser does not
-   translate pages
-   [naro, jensens, sirgarr]
-
  * Moved interface declarations from ZCML to the classes themselves.
    [hannosch]
-
- * Fix Unicode encode error in formatCatalogMetadata.py when atct_topic_view.py
-   uses it to display in a table a text field (like 'location') whose contents
-   can't be encoded to ascii.
-   http://dev.plone.org/plone/ticket/7237
-   [stevem]
 
  * Adjusted tests to new Archetypes policy on return values.
    [hannosch]
@@ -126,20 +82,109 @@
  * Moved old_folder_contents over from CMFPlone as it is still used in
    atct_topic_subtopics.pt.
    [hannosch]
-
- * Reorder ATDateCriteria schema fields => more intuitive for users.
-   [zegor]
-
- * Forwarded fix for http://dev.plone.org/collective/changeset/51803: the
-   validation layer for the 'id' field wasn't being initialized. Closes
-   http://dev.plone.org/plone/ticket/7221
-   [deo]
  
  * Fixed editing.txt browser test by opening 'http://nohost/plone' instead
    of 'http://nohost/plone/login_form', because the latter incorrectly
    redirected to 'http://nohost/plone/localhost'
    [sirgarr]
- 
+   
+1.2.6
+==================
+
+* Made it possible to set an empty value to a document text field.  This closes
+  http://dev.plone.org/plone/ticket/7324.
+  [davisagli]
+
+* Changed a msgid for the url field of events to have a distinct value.
+  This closes http://dev.plone.org/plone/ticket/8197.
+  [hannosch]
+
+* Changed "Contained Collections" text to "Also in this section".
+  This closes http://dev.plone.org/plone/ticket/8106.
+  [davisagli]
+
+* Changed default topic view to alway show body text (if available) even if the
+  collection does not have any results. This closes
+  http://dev.plone.org/plone/ticket/8270.
+  [dunlapm]
+   
+1.2.5 2008-04-22
+==================
+
+* Remove leading whitespace in hrefs.
+  [wichert]
+
+* Corrected i18n markup in schemata.py for the nextprevious field. This closes
+  http://dev.plone.org/plone/ticket/7517.
+  [hannosch]
+
+1.2.4 2008-01-03
+==================
+
+* The edit tab in ZMI should not be displayed for ATImage/ATFIle objects.
+  http://dev.plone.org/archetypes/ticket/763
+  [deo]
+
+* Fixed #7467 http://dev.plone.org/plone/ticket/7467: Modify
+  "Item Type" criterion to store the untranslated Type instead
+  of portal_type, but to show the translated Type to the user.
+  Added a browser test for #6981
+  http://dev.plone.org/plone/ticket/6981 which is currently
+  disabled because the test browser does not translate pages
+  [sirgarr]
+
+1.2.3 2007-12-02
+==================
+
+* Fixed http://dev.plone.org/plone/ticket/7102: uploading xhtml
+  files was not working correctly.  Thanks to lucie for the patch.
+  [alecm]
+
+* Fixed bug in portaltype criterion - it used portal type Title as both
+  key and value in multiselection widget, but Id and Title should be used.
+  Title (as DisplayList key) was incorrectly translated and caused #6981
+  http://dev.plone.org/plone/ticket/6981
+  [naro, jensens]
+
+* Fix Unicode encode error in formatCatalogMetadata.py when atct_topic_view.py
+  uses it to display in a table a text field (like 'location') whose contents
+  can't be encoded to ascii.
+  http://dev.plone.org/plone/ticket/7237
+  [stevem]
+
+* Reorder ATDateCriteria schema fields => more intuitive for users.
+  [zegor]
+
+* Fixed a mysterious error that happened when the ATContentTypeSchema
+  was directly used: the validation layer for the 'id' field wasn't
+  being initialized. This fixes http://dev.plone.org/plone/ticket/7221
+  [deo]
+
+1.2.2 2007-10-05
+==================
+
+* Fix ATLink XSS issue.
+  [alecm, reinout]
+  
+* Update catalogue indexes and metadata list in collection control panel when
+  'All fields' requested.
+  [ldr]
+
+* Files and Images don't need to enforce the Title field, since it is pulled
+  from the uploaded file name if missing. This fixes
+  http://dev.plone.org/plone/ticket/6051, which is a common source of user
+  frustration when uploading files/images.
+
+1.2.1 2007-09-12
+================
+
+* Make subject field read-only and invisible for events.  This fixes
+  http://dev.plone.org/plone/ticket/6967
+  [alecm]
+
+* Use widget views for standard view templates to simpify inline editing.
+  [limi]
+
 1.2.0-final 2007-08-16
 ======================
 
