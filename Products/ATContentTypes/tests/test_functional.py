@@ -5,9 +5,12 @@
 from Testing import ZopeTestCase
 from Products.ATContentTypes.tests.atcttestcase import ATCTFunctionalSiteTestCase 
 
-# traversal.txt registers the browser page "document_view", and this registration stays active in different doctests, so we make sure to include it last
 FILES = [
-    'portaltype_criterion.txt', 'webdav.txt', 'http_access.txt', 'reindex_sanity.txt', 'traversal.txt',
+    'portaltype_criterion.txt', 'webdav.txt', 'http_access.txt', 'reindex_sanity.txt',
+    'uploading.txt',
+    # traversal.txt registers the browser page "document_view", and this registration
+    # stays active in different doctests, so we make sure to include it last.
+    'traversal.txt',
 ]
 
 from zope.testing import doctest
