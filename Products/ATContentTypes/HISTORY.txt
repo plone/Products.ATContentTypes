@@ -1,6 +1,10 @@
 1.2.6
 ==================
 
+ * Made it possible to set an empty value to a document text field.  This closes
+   http://dev.plone.org/plone/ticket/7324.
+   [davisagli]
+
  * Changed a msgid for the url field of events to have a distinct value.
    This closes http://dev.plone.org/plone/ticket/8197.
    [hannosch]
