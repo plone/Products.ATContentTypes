@@ -242,7 +242,7 @@ EXIF_TAGS={
     0x920A: ('FocalLength', ),
     0x927C: ('MakerNote', ),
     # print as string
-    0x9286: ('UserComment', lambda x: ''.join(map(chr, x))),
+    0x9286: ('UserComment', lambda x: isinstance(x, str) and x or ''.join(map(chr, x))),
     0x9290: ('SubSecTime', ),
     0x9291: ('SubSecTimeOriginal', ),
     0x9292: ('SubSecTimeDigitized', ),
