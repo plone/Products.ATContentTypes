@@ -1,6 +1,10 @@
 1.3.0 unreleased
 ================
 
+ * Forward-port fix for http://dev.plone.org/plone/ticket/8336: already 
+   quoted characters in a "Link" url should not be quoted again on edit. 
+   [witsch] 
+
  * Removed empty test_getobjpositioninparent test from the base test case.
    [hannosch]
 

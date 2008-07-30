@@ -88,6 +88,13 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
         obj.setRemoteUrl(url)
         self.failUnlessEqual(obj.getRemoteUrl(),
                              'http://something.sane/f.php?p1=value&p2=value')
+        # already quoted values should also remain intact
+        url = 'http://something.sane/except with spaces in it'
+        expected = 'http://something.sane/except%20with%20spaces%20in%20it'
+        obj.setRemoteUrl(url)
+        self.failUnlessEqual(obj.getRemoteUrl(), expected)
+        obj.setRemoteUrl(obj.getRemoteUrl())
+        self.failUnlessEqual(obj.getRemoteUrl(), expected)
 
     def test_edit(self):
         new = self._ATCT

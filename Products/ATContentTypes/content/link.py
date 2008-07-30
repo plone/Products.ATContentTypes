@@ -106,6 +106,6 @@ class ATLink(ATCTContent):
         """
         value = self.Schema()['remoteUrl'].get(self)
         if not value: value = '' # ensure we have a string
-        return quote(value, safe='?$#@/:=+;$,&')
+        return quote(value, safe='?$#@/:=+;$,&%')
 
 registerATCT(ATLink, PROJECTNAME)
