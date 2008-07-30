@@ -1,6 +1,10 @@
 1.1.9-final Unreleased
 ======================
 
+ * Backported fix for http://dev.plone.org/plone/ticket/8336: already
+   quoted characters in a "Link" url should not be quoted again on edit.
+   [witsch]
+
  * Backported fix for http://dev.plone.org/archetypes/ticket/763: The edit
    tab in ZMI should not be displayed for ATImage/ATFile objects.
    [deo]
