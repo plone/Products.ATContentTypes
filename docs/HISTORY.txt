@@ -95,6 +95,9 @@
 1.2.6
 ==================
 
+* Avoid acquiring getText from parent objects in atct_album_view. This refs
+  http://dev.plone.org/plone/ticket/8190.
+
 * Removed parameters that has to be controlled through CSS from 
   atct_topic_view.pt. This closes http://dev.plone.org/plone/ticket/6803
   [spliter]
