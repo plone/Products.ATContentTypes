@@ -1,6 +1,10 @@
 1.2.6
 ==================
 
+ * Avoid acquiring getText from parent objects in atct_album_view. This refs
+   http://dev.plone.org/plone/ticket/8190.
+   [hannosch]
+
  * Already quoted characters in a "Link" url should not be quoted again
    on edit. This closes http://dev.plone.org/plone/ticket/8336.
    [witsch]
