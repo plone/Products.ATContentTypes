@@ -75,9 +75,9 @@
                                    query_path python:path('contentFilter/path|nothing') or request.get('path',None);
                                    orderable_iface string:OFS.interfaces.IOrderedContainer;
                                    preSorted python:query_path or ((contentFilter and contentFilter.get('sort_on', 'getObjPositionInParent')!='getObjPositionInParent') or (not contentFilter and request.get('sort_on', 'getObjPositionInParent')!='getObjPositionInParent'));
-                                   isOrderable python:ifacetool.objectImplements(here, orderable_iface);
+                                   isOrderable python:context.portal_interface.objectImplements(here, orderable_iface);
                                    nosortclass python:test(isOrderable, 'nosort', '');
-                                   canModifyFolderContent is_editable;">
+                                   canModifyFolderContent context/@@plone_context_state/is_editable;">
 
         <div class="visualClear" id="clear-space-before-navigation"><!-- --></div>
 
@@ -126,11 +126,14 @@
             </thead>
 
             <metal:block tal:condition="batch|not:standalone|nothing">
-            <tbody tal:define="arrowUp nocall:portal/arrowUp.gif;
+            <tbody tal:define="portal context/@@plone_portal_state/portal;
+                               arrowUp nocall:portal/arrowUp.gif;
                                arrowUp python:arrowUp.tag(alt='Move Up');
                                arrowDown nocall:portal/arrowDown.gif;
                                arrowDown python:arrowDown.tag(alt='Move Down');
-                               getRelativeContentURL nocall:utool/getRelativeContentURL
+                               getRelativeContentURL nocall:context/portal_url/getRelativeContentURL;
+                               normalizeString nocall:context/@@plone/normalizeString;
+                               wtool portal/portal_workflow;
                                ">
                 <tal:items tal:repeat="item batch">
                    <tr tal:define="oddrow               repeat/item/odd;
@@ -203,7 +206,8 @@
                             tal:content="item_size"
                             tal:attributes="class item_wf_state_class"> size </span>
                     </td>
-                    <td tal:content="python:toLocalizedTime(item_modified, long_format=1)"
+                    <td tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;"
+                        tal:content="python:toLocalizedTime(item_modified, long_format=1)"
                         tal:attributes="class item_wf_state_class">
                         08/19/2001 03:01 AM
                     </td>
