@@ -256,7 +256,7 @@ def doTidy(value, field, request, cleanup=0):
 
     # parse and change the error data
     errordata = parseErrorData(errordata, removeWarnings=cleanup)
-    if cleanup:
+    if cleanup and outputdata:
         # unwrap tidied output data
         outputdata = unwrapValueFromHTML(outputdata)
 
