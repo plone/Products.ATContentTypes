@@ -1,6 +1,10 @@
 1.2.6
 ==================
 
+ * Fixed the tidy validation which errored out and rasied the wrong error.
+   This closes https://dev.plone.org/plone/ticket/8243.
+   [jlagarde, garbas, calvinhp]
+
  * Avoid acquiring getText from parent objects in atct_album_view. This refs
    http://dev.plone.org/plone/ticket/8190.
    [hannosch]
