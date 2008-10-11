@@ -175,7 +175,7 @@ class ATTopic(ATCTFolder):
 
     implements(IATTopic)
 
-    # Enable marshalling via WebDAV/FTP/ExternalEditor.
+    # Enable marshalling via WebDAV/FTP
     __dav_marshall__ = True
 
     security       = ClassSecurityInfo()

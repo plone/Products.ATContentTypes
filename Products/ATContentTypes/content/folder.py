@@ -70,7 +70,7 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
 
     implements(IATFolder, IArchivable, IPhotoAlbumAble, IOrderedContainer)
 
-    # Enable marshalling via WebDAV/FTP/ExternalEditor.
+    # Enable marshalling via WebDAV/FTP.
     __dav_marshall__ = True
 
     security       = ClassSecurityInfo()
@@ -108,7 +108,7 @@ class ATBTreeFolder(AutoSortSupport, ATCTBTreeFolder):
 
     implements(IATBTreeFolder)
 
-    # Enable marshalling via WebDAV/FTP/ExternalEditor.
+    # Enable marshalling via WebDAV/FTP.
     __dav_marshall__ = True
 
     security       = ClassSecurityInfo()
