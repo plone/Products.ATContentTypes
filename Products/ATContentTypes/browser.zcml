@@ -13,4 +13,18 @@
     <!-- Enable next/previous links for folders -->
     <adapter factory=".browser.nextprevious.ATFolderNextPrevious" />
 
+    <browser:page
+        for=".interface.folder.IATFolder"
+        name="calendar.ics"
+        class=".browser.calendar.CalendarView"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        name="calendar.ics"
+        class=".browser.calendar.CalendarView"
+        permission="zope2.View"
+        />
+
 </configure>
