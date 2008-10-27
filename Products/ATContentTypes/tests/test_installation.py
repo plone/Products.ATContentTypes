@@ -56,7 +56,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
     def test_installedAllTypes(self):
         # test that all types are installed well
         ttool = self.ttool
-        ids = ('Document', 'Favorite', 'File',
+        ids = ('Document', 'File',
             'Folder', 'Image', 'Large Plone Folder', 'Link',
             'News Item', 'Topic', 'Event')
 

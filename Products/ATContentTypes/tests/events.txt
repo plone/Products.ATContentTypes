@@ -63,4 +63,4 @@ Doing a `PUT` request will also fire the modified event:
   >>> handler.print_and_flush() #doctest: +ELLIPSIS
   1 events:
   [(<ATDocument at /.../Members/test_user_1_/a>,
-    <zope.app.event.objectevent.ObjectModifiedEvent object at ...>)]
+    <Products.Archetypes.event.WebDAVObjectEditedEvent object at ...>)]

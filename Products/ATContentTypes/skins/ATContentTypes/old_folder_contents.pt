@@ -26,7 +26,8 @@
                      view_title view_title|request/view_title|string:;
                      contentsMethod python:test(here.portal_type=='Topic', here.queryCatalog, here.getFolderContents);
                      batch batch|python:contentsMethod(contentFilter,batch=True, b_size=b_size);
-                     full_view full_view|request/full_view|python:True;">
+                     full_view full_view|request/full_view|python:True;
+                     here_url context/@@plone_context_state/object_url;">
 
       <form name="folderContentsForm"
             method="post"
@@ -224,14 +225,14 @@
                       <a href=""
                          title="Move item up"
                          i18n:attributes="title title_move_item_up;"
-                         tal:attributes="href string:$here_url/folder_position?position=up&amp;id=$quoted_item_id&amp;template_id=${template_id}">
+                         tal:attributes="href string:$here_url/folder_position?position=up&amp;id=$quoted_item_id">
                          <img tal:replace="structure arrowUp" />
                       </a>
                       &nbsp;
                       <a href=""
                          title="Move item down"
                          i18n:attributes="title title_move_item_down;"
-                         tal:attributes="href string:$here_url/folder_position?position=down&amp;id=$quoted_item_id&amp;template_id=${template_id}">
+                         tal:attributes="href string:$here_url/folder_position?position=down&amp;id=$quoted_item_id">
                          <img tal:replace="structure arrowDown" />
                       </a>
                     </td>
@@ -246,8 +247,6 @@
         </metal:listing>
 
         <metal:buttons define-macro="folder_buttons">
-        <input type="hidden" name="orig_template"
-               tal:attributes="value template_id"/>
         <tal:buttons tal:repeat="button actions/folder_buttons|nothing"
                      tal:define="contentFilter contentFilter|python:{'path':'/'};
                                  query_path python:path('contentFilter/path|nothing') or request.get('path',None) or context.portal_type == 'Topic';">

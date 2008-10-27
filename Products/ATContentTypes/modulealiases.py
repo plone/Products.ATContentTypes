@@ -35,7 +35,6 @@ from Products.ATContentTypes.content import file
 from Products.ATContentTypes.content import event
 from Products.ATContentTypes.content import newsitem
 from Products.ATContentTypes.content import folder
-from Products.ATContentTypes.content import favorite
 from Products.ATContentTypes.content import topic
 
 from Products.ATContentTypes import criteria

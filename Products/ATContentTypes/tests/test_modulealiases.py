@@ -35,7 +35,6 @@ class TestModuleAliases(atcttestcase.ATCTSiteTestCase):
     def test_import_content_type(self):
         from Products.ATContentTypes.types.ATDocument import ATDocument
         from Products.ATContentTypes.types.ATEvent import ATEvent
-        from Products.ATContentTypes.types.ATFavorite import ATFavorite
         from Products.ATContentTypes.types.ATFile import ATFile
         from Products.ATContentTypes.types.ATFolder import ATFolder
         from Products.ATContentTypes.types.ATFolder import ATBTreeFolder
@@ -48,8 +47,6 @@ class TestModuleAliases(atcttestcase.ATCTSiteTestCase):
             'Products.ATContentTypes.content.document')
         self.failUnlessEqual(ATEvent.__module__,
             'Products.ATContentTypes.content.event')
-        self.failUnlessEqual(ATFavorite.__module__,
-            'Products.ATContentTypes.content.favorite')
         self.failUnlessEqual(ATFile.__module__,
             'Products.ATContentTypes.content.file')
         self.failUnlessEqual(ATFolder.__module__,

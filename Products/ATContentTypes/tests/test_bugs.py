@@ -44,7 +44,6 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
         mapping = {
             'Document' : default,
             'Event' : default,
-            'Favorite' : default,
             'File' : (),
             'Folder' : folder,
             'Large Plone Folder' : folder,

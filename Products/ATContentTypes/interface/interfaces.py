@@ -102,11 +102,6 @@ class ITextContent(Interface):
         """
         """
 
-from Products.ATContentTypes.interface.link import IATLink
-class IATFavorite(IATLink):
-    """AT Favorite marker interface
-    """
-
 class IATCTTool(Interface):
     """
     """

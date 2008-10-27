@@ -13,8 +13,6 @@
   <five:deprecatedManageAddDelete
       class=".content.event.ATEvent" />
   <five:deprecatedManageAddDelete
-      class=".content.favorite.ATFavorite" />
-  <five:deprecatedManageAddDelete
       class=".content.file.ATFile" />
   <five:deprecatedManageAddDelete
       class=".content.folder.ATFolder" />

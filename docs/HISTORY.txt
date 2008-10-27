@@ -1,6 +1,9 @@
 1.3.0 unreleased
 ================
 
+ * Removed unmaintained and unused Favorite content type.
+   [hannosch]
+
  * Removed references to external editor in comments.
    [hannosch]
 

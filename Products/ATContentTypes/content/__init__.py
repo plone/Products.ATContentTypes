@@ -30,7 +30,4 @@ import Products.ATContentTypes.content.file
 import Products.ATContentTypes.content.event
 import Products.ATContentTypes.content.newsitem
 import Products.ATContentTypes.content.folder
-import Products.ATContentTypes.content.favorite
 import Products.ATContentTypes.content.topic
-
-
