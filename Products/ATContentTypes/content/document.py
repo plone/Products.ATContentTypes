@@ -56,7 +56,6 @@ from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument as z2IATDocument
 from Products.ATContentTypes.interface import IATDocument
-from Products.ATContentTypes.interface import IArchivable
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 
@@ -275,6 +274,6 @@ class ATDocument(ATDocumentBase):
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
     assocFileExt   = ('txt', 'stx', 'rst', 'rest', 'py',)
 
-    implements(IATDocument, IArchivable)
+    implements(IATDocument)
 
 registerATCT(ATDocument, PROJECTNAME)

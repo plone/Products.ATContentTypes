@@ -18,25 +18,6 @@
 #
 from zope.interface import Interface
 
-class IPhotoAlbum(Interface):
-    """
-    interface that adapts a folder into a photo album
-    """
-    def setSymbolicPhoto(photo=None):
-        """
-        set the photo which represents the album
-        """
-
-    def getSymbolicPhoto():
-        """
-        get the photo which represents the album
-        """
-
-
-class IPhotoAlbumAble(Interface):
-    """
-    marker interface for possible photoalbum object
-    """
 
 class IImageContent(Interface):
     """Interface for types containing an image

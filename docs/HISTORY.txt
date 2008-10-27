@@ -1,6 +1,9 @@
 1.3.0 unreleased
 ================
 
+ * Removed half-implemented and unmaintained archive and adapters code.
+   [hannosch]
+
  * Removed unmaintained and unused Favorite content type.
    [hannosch]
 

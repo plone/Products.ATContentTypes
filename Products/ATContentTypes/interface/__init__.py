@@ -25,14 +25,6 @@ from Products.ATContentTypes.interface.interfaces import ITextContent
 from Products.ATContentTypes.interface.interfaces import ISelectableConstrainTypes
 from Products.ATContentTypes.interface.interfaces import IATCTTool
 
-from Products.ATContentTypes.interface.archive import IArchiveAccumulator
-from Products.ATContentTypes.interface.archive import IFilterFolder
-from Products.ATContentTypes.interface.archive import IArchiver
-from Products.ATContentTypes.interface.archive import IDataExtractor
-from Products.ATContentTypes.interface.archive import IArchivable
-
-from Products.ATContentTypes.interface.dataExtractor import IDataExtractor
-
 from Products.ATContentTypes.interface.document import IATDocument
 
 from Products.ATContentTypes.interface.event import IATEvent
@@ -44,8 +36,6 @@ from Products.ATContentTypes.interface.folder import IFilterFolder
 from Products.ATContentTypes.interface.folder import IATFolder
 from Products.ATContentTypes.interface.folder import IATBTreeFolder
 
-from Products.ATContentTypes.interface.image import IPhotoAlbum
-from Products.ATContentTypes.interface.image import IPhotoAlbumAble
 from Products.ATContentTypes.interface.image import IImageContent
 from Products.ATContentTypes.interface.image import IATImage
 

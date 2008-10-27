@@ -34,10 +34,8 @@ from Products.ATContentTypes.content.base import ATCTOrderedFolder
 from Products.ATContentTypes.content.base import ATCTBTreeFolder
 from Products.ATContentTypes.interfaces import IATFolder as z2IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder as z2IATBTreeFolder
-from Products.ATContentTypes.interface import IArchivable
 from Products.ATContentTypes.interface import IATFolder
 from Products.ATContentTypes.interface import IATBTreeFolder
-from Products.ATContentTypes.interface import IPhotoAlbumAble
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import NextPreviousAwareSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
@@ -68,7 +66,7 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
     assocFileExt   = ()
     cmf_edit_kws   = ()
 
-    implements(IATFolder, IArchivable, IPhotoAlbumAble, IOrderedContainer)
+    implements(IATFolder, IOrderedContainer)
 
     # Enable marshalling via WebDAV/FTP.
     __dav_marshall__ = True
