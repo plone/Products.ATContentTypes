@@ -5,7 +5,7 @@
   feature releases for the Plone 3.x line.
   [hannosch]
 
-- Adjusted events test to no reality including zope.app.container and
+- Adjusted events test to new reality including zope.app.container and
   DCWorkflow events.
   [hannosch]
 
