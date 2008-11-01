@@ -1,5 +1,9 @@
-1.3.0 unreleased
-================
+2.0 unreleased
+==============
+
+- Increase the version number to 2.0, to make it possible to release minor
+  feature releases for the Plone 3.x line.
+  [hannosch]
 
 - Adjusted events test to no reality including zope.app.container and
   DCWorkflow events.
