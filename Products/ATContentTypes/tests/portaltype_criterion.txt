@@ -14,7 +14,7 @@ First, we need to log in.
 
 
 Add Collection
-------------
+--------------
 
 What we do next is we 
 
@@ -60,7 +60,7 @@ We add a criterion for Type:
 
     >>> browser.getControl(name='field', index=0).value = ['Type']
     >>> browser.getControl(name='criterion_type', index=0).value = ['ATPortalTypeCriterion']
-    >>> browser.getControl('Add criteria').click()
+    >>> browser.getControl(name='form.button.AddCriterion').click()
     >>> 'Added criterion ATPortalTypeCriterion for field Type.' in browser.contents
     True
 

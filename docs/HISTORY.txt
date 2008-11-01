@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Fixed some test failures concerning criterion editing.
+  [hannosch]
+
 - Adjusted reindex sanity tests to changed order of the indexing calls.
   [hannosch]
 
