@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Adjusted reindex sanity tests to changed order of the indexing calls.
+  [hannosch]
+
 - Increase the version number to 2.0, to make it possible to release minor
   feature releases for the Plone 3.x line.
   [hannosch]
