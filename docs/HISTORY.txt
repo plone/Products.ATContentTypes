@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Removed never fully implemented autosort and urlupload modules.
+  [hannosch]
+
 - Removed the weird Zope2 Interface to zope.interface bridging code.
   [hannosch]
 

@@ -16,8 +16,6 @@ from Products.ATContentTypes.interfaces import IATBTreeFolder
 
 from zope.interface.verify import verifyClass
 
-from Products.ATContentTypes.interfaces import IAutoSortSupport
-from Products.ATContentTypes.interfaces import IAutoOrderSupport
 from zope.interface.verify import verifyObject
 from Products.ATContentTypes.interface import ISelectableConstrainTypes
 
@@ -33,10 +31,6 @@ class FolderTestMixin:
     def test_implementsConstrainTypes(self):
         self.failUnless(ISelectableConstrainTypes.providedBy(self._ATCT))
         self.failUnless(verifyObject(ISelectableConstrainTypes, self._ATCT))
-
-    def test_implements_autosort(self):
-        self.failUnless(IAutoSortSupport.providedBy(self._ATCT))
-        self.failUnless(verifyObject(IAutoSortSupport, self._ATCT))
 
 
 class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
@@ -66,9 +60,6 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
     def test_edit(self):
         new = self._ATCT
         editATCT(new)
-
-    def test_implements_autoorder(self):
-        self.failUnless(IAutoOrderSupport.providedBy(self._ATCT))
 
     def test_get_size(self):
         atct = self._ATCT
@@ -140,55 +131,6 @@ class TestATBTreeFolderFields(TestATFolderFields):
 
 tests.append(TestATBTreeFolderFields)
 
-class TestAutoSortSupport(atcttestcase.ATCTSiteTestCase):
-
-    def afterSetUp(self):
-        atcttestcase.ATCTSiteTestCase.afterSetUp(self)
-        self.folder.invokeFactory('Folder', 'fobj', title='folder 1')
-        self.fobj = self.folder.fobj
-        self.objs = (('Document', 'x1', 'Document 3'),
-                     ('Document', 'x2', 'Document 4'),
-                     ('Document', 'doc1', 'Document 1'),
-                     ('Document', 'doc2', 'Document 2'),
-                     ('Folder', 'folder1', 'Folder 1'),
-                     ('Folder', 'folder2', 'Folder 2'),
-                    )
-        for pt, id, title in self.objs:
-            self.fobj.invokeFactory(pt, id, title=title)
-
-    def test_autoordering(self):
-        f = self.fobj
-        self.failUnlessEqual(f.getDefaultSorting(), ('Title', False))
-        self.failUnlessEqual(f.getSortFolderishFirst(), True)
-        self.failUnlessEqual(f.getSortReverse(), False)
-        self.failUnlessEqual(f.getSortAuto(), True)
-
-        f.setDefaultSorting('getId', reverse=True)
-        f.setSortFolderishFirst(False)
-        f.setSortReverse(True)
-        f.setSortAuto(False)
-
-        self.failUnlessEqual(f.getDefaultSorting(), ('getId', True))
-        self.failUnlessEqual(f.getSortFolderishFirst(), False)
-        self.failUnlessEqual(f.getSortReverse(), True)
-        self.failUnlessEqual(f.getSortAuto(), False)
-
-    def test_strangeUnallowedIds(self):
-        """ Certain IDs used to give an error and are unusable
-
-        They're set in zope's lib/python/App/Product.py. Examples:
-        home, version. This test used to include 'icon', too, but that's
-        apparently really an id that's already been taken (instead of
-        a bug).
-        """
-        strangeIds = ['home', 'version']
-        for id in strangeIds:
-            self.folder.invokeFactory('Folder', id)
-            self.assert_(id in self.folder.objectIds())
-
-    # TODO: more tests
-
-tests.append(TestAutoSortSupport)
 
 class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
     

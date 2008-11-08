@@ -28,6 +28,3 @@ from Products.ATContentTypes.interface.topic import IATTopicCriterion
 from Products.ATContentTypes.interface.topic import IATTopicSearchCriterion
 from Products.ATContentTypes.interface.topic import IATTopicSortCriterion
 from Products.ATContentTypes.interface.topic import IATCTTopicsTool
-
-from Products.ATContentTypes.interface.autosort import IAutoSortSupport
-from Products.ATContentTypes.interface.autosort import IAutoOrderSupport
