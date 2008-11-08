@@ -33,7 +33,6 @@ from Products.ATContentTypes.tests.utils import dcEdit
 
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATBTreeFolder
-from Products.CMFPlone.PloneFolder import PloneFolder
 from OFS.interfaces import IOrderedContainer as OFSIOrderedContainer
 from Products.CMFPlone.interfaces.OrderedContainer import IOrderedContainer
 from Products.ATContentTypes.interfaces import IATFolder
