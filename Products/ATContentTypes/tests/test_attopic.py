@@ -18,10 +18,6 @@ from OFS.interfaces import IOrderedContainer
 
 from Products.CMFPlone.PloneBatch import Batch
 
-# z3 imports
-from Products.ATContentTypes.interface import IATTopic as Z3IATTopic
-from zope.interface.verify import verifyObject as Z3verifyObject
-
 
 ACQUIRE  = True
 LIMIT    = False
@@ -146,10 +142,6 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         iface = IATTopic
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
-
-    def test_Z3implementsATTopic(self):
-        iface = Z3IATTopic
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_isNotOrdered(self):
         iface = IOrderedContainer

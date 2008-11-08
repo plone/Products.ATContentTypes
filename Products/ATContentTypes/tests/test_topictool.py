@@ -7,10 +7,6 @@ from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.interfaces import IATCTTopicsTool
 from zope.interface.verify import verifyObject
 
-# z3 imports
-from Products.ATContentTypes.interface import IATCTTopicsTool as Z3IATCTTopicsTool
-from zope.interface.verify import verifyObject as Z3verifyObject
-
 tests = []
 index_def = {'index'        : 'end',
              'friendlyName' : 'End Date For Test',
@@ -30,10 +26,6 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
     def test_interface(self):
         self.failUnless(IATCTTopicsTool.providedBy(self.tool))
         self.failUnless(verifyObject(IATCTTopicsTool, self.tool))
-
-    def test_Z3interface(self):
-        iface = Z3IATCTTopicsTool
-        self.failUnless(Z3verifyObject(iface,self.tool))
  
     #Index tests
     def test_add_index(self):

@@ -21,13 +21,6 @@ from Products.ATContentTypes.interfaces import IAutoOrderSupport
 from zope.interface.verify import verifyObject
 from Products.ATContentTypes.interface import ISelectableConstrainTypes
 
-# z3 imports
-from Products.ATContentTypes.interface import IAutoSortSupport as Z3IAutoSortSupport
-from Products.ATContentTypes.interface import IAutoOrderSupport as Z3IAutoOrderSupport
-from Products.ATContentTypes.interface import IATFolder as Z3IATFolder
-from Products.ATContentTypes.interface import IATBTreeFolder as Z3IATBTreeFolder
-from zope.interface.verify import verifyObject as Z3verifyObject
-
 def editATCT(obj):
     dcEdit(obj)
 
@@ -45,9 +38,6 @@ class FolderTestMixin:
         self.failUnless(IAutoSortSupport.providedBy(self._ATCT))
         self.failUnless(verifyObject(IAutoSortSupport, self._ATCT))
 
-    def test_implementsZ3_autosort(self):
-        iface = Z3IAutoSortSupport
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
 class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
@@ -68,10 +58,6 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
-    def test_Z3implementsATFolder(self):
-        iface = Z3IATFolder
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
-
     def test_implementsConstrainTypes(self):
         iface = ISelectableConstrainTypes
         self.failUnless(iface.providedBy(self._ATCT))
@@ -83,14 +69,6 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     def test_implements_autoorder(self):
         self.failUnless(IAutoOrderSupport.providedBy(self._ATCT))
-        #self.failUnless(verifyObject(IAutoOrderSupport, self._ATCT))
-        # XXX this is now z3, `The updateOrder attribute was not provided.`
-
-    def test_Z3implements_autoorder(self):
-        pass
-        #iface = Z3IAutoOrderSupport
-        #self.failUnless(Z3verifyObject(iface, self._ATCT))
-        # XXX Archetypes not ready for Zope3 OrderedContainer (see zope.app.container.interfaces)
 
     def test_get_size(self):
         atct = self._ATCT
@@ -113,10 +91,6 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         iface = IATBTreeFolder
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
-
-    def test_Z3implementsATBTreeFolder(self):
-        iface = Z3IATBTreeFolder
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_implementsConstrainTypes(self):
         iface = ISelectableConstrainTypes

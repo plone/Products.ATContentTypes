@@ -5,27 +5,18 @@ from Products.ATContentTypes.interfaces import IATCTTool
 from zope.interface.verify import verifyObject
 from Products.CMFCore.utils import getToolByName
 
-# z3 imports
-from Products.ATContentTypes.interface import IATCTTool as Z3IATCTTool
-from zope.interface.verify import verifyObject as Z3verifyObject
-
 tests = []
 
 class TestTool(atcttestcase.ATCTSiteTestCase):
 
     def afterSetUp(self):
         self.tool = getToolByName(self.portal, TOOLNAME)
-        
+
     def test_interface(self):
         t = self.tool
         self.failUnless(IATCTTool.providedBy(t))
         self.failUnless(verifyObject(IATCTTool, t))
 
-    def test_Z3interface(self):
-        t = self.tool
-        iface = Z3IATCTTool
-        self.failUnless(Z3verifyObject(iface, t))
-        
     def test_names(self):
         t = self.tool
         self.failUnlessEqual(t.meta_type, 'ATCT Tool')

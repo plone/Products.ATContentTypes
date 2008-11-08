@@ -34,10 +34,6 @@ from Products.ATContentTypes.tests.utils import DummySessionDataManager
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 from Products.CMFCore.utils import getToolByName
 
-# Z3 imports
-from Products.ATContentTypes.interface import IATContentType as Z3IATContentType
-from zope.interface.verify import verifyObject as Z3verifyObject
-
 test_home = os.path.dirname(__file__)
 
 class ATCTSiteTestCase(PloneTestCase.PloneTestCase):
@@ -118,16 +114,12 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
         self.failUnlessEqual(ti.Metatype(), self.meta_type)
 
     def test_doesImplementDC(self):
-        self.failUnless(Z3verifyObject(IDublinCore, self._ATCT))
-        self.failUnless(Z3verifyObject(IMutableDublinCore, self._ATCT))
+        self.failUnless(verifyObject(IDublinCore, self._ATCT))
+        self.failUnless(verifyObject(IMutableDublinCore, self._ATCT))
 
     def test_doesImplementATCT(self):
         self.failUnless(IATContentType.providedBy(self._ATCT))
         self.failUnless(verifyObject(IATContentType, self._ATCT))
-
-    def test_doesImplementZ3ATCT(self):
-        iface = Z3IATContentType
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_doesImplementAT(self):
         self.failUnless(IBaseContent.providedBy(self._ATCT))
@@ -150,7 +142,7 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
     def test_implements_ISelectableBrowserDefault(self):
         iface = ISelectableBrowserDefault
         self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
+        self.failUnless(verifyObject(iface, self._ATCT))
 
     def compareDC(self, first, second=None, **kwargs):
         """

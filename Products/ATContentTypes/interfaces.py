@@ -1,12 +1,7 @@
-"""AT Content Types general Zope 2 interfaces
+"""AT Content Types general interfaces
 
-All these interfaces are DEPRECATED.
-Please use Z3 interfaces defined in the interface folder
-
-
+We provide an alias here, as interfaces is the conventional name for the
+module or package containing interfaces and not interface.
 """
-
-__author__  = 'Christian Heimes <tiran@cheimes.de>'
-__docformat__ = 'restructuredtext'
 
 from interface import *

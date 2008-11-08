@@ -20,12 +20,6 @@ from cgi import FieldStorage
 from Products.ATContentTypes import config as atct_config
 from ZPublisher.HTTPRequest import FileUpload
 
-# z3 imports
-from Products.ATContentTypes.interface import IHistoryAware as Z3IHistoryAware
-from Products.ATContentTypes.interface import ITextContent as Z3TextContent
-from Products.ATContentTypes.interface import IATDocument as Z3IATDocument
-from zope.interface.verify import verifyObject as Z3verifyObject
-
 example_stx = """
 Header
 
@@ -65,27 +59,15 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
-    def test_doesImplementZ3HistoryAware(self):
-        iface = Z3IHistoryAware
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
-
     def test_implementsTextContent(self):
         iface = ITextContent
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
-    def test_implementsZ3TextContent(self):
-        iface = Z3TextContent
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
-
     def test_implementsATDocument(self):
         iface = IATDocument
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
-
-    def test_implementsZ3ATDocument(self):
-        iface = Z3IATDocument
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         new = self._ATCT

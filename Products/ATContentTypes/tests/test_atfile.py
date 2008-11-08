@@ -17,11 +17,6 @@ from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.interfaces import IFileContent
 from zope.interface.verify import verifyObject
 
-# z3 imports
-from Products.ATContentTypes.interface import IATFile as Z3IATFile
-from Products.ATContentTypes.interface import IFileContent as Z3IFileContent
-from zope.interface.verify import verifyObject as Z3verifyObject
-
 
 file_text = """
 foooooo
@@ -46,18 +41,10 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
-    def test_implementsZ3FileContent(self):
-        iface = Z3IFileContent
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
-
     def test_implementsATFile(self):
         iface = IATFile
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
-
-    def test_implementsZ3ATFile(self):
-        iface = Z3IATFile
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         new = self._ATCT

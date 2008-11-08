@@ -11,10 +11,6 @@ from Products.ATContentTypes.content.link import ATLink
 from Products.ATContentTypes.interfaces import IATLink
 from zope.interface.verify import verifyObject
 
-# z3 imports
-from Products.ATContentTypes.interface import IATLink as Z3IATLink
-from zope.interface.verify import verifyObject as Z3verifyObject
-
 URL='http://www.example.org/'
 
 def editATCT(obj):
@@ -36,10 +32,6 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
         iface = IATLink
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
-
-    def test_implementsATLink(self):
-        iface = Z3IATLink
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def testLink(self):
         obj = self._ATCT

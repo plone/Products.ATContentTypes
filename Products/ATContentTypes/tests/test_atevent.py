@@ -20,11 +20,6 @@ from Products.ATContentTypes.interfaces import ICalendarSupport
 from Products.ATContentTypes.interfaces import IATEvent
 from zope.interface.verify import verifyObject
 
-# z3 imports
-from Products.ATContentTypes.interface import ICalendarSupport as Z3ICalendarSupport
-from Products.ATContentTypes.interface import IATEvent as Z3IATEvent
-from zope.interface.verify import verifyObject as Z3verifyObject
-
 
 LOCATION = 'my location'
 EV_TYPE  = 'Meeting'
@@ -67,18 +62,10 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         self.failUnless(ICalendarSupport.providedBy(self._ATCT))
         self.failUnless(verifyObject(ICalendarSupport, self._ATCT))
 
-    def test_doesImplementZ3CalendarSupport(self):
-        iface = Z3ICalendarSupport
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
-
     def test_implementsATEvent(self):
         iface = IATEvent
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
-
-    def test_implementsZ3ATEvent(self):
-        iface = Z3IATEvent
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         new = self._ATCT

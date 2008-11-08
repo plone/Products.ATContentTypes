@@ -19,11 +19,6 @@ from Products.ATContentTypes.interfaces import IATImage
 
 from zope.interface.verify import verifyObject
 
-# z3 imports
-from Products.ATContentTypes.interface import IATImage as Z3IATImage
-from Products.ATContentTypes.interface import IImageContent as Z3IImageContent
-from zope.interface.verify import verifyObject as Z3verifyObject
-
 # third party extension
 import exif
 
@@ -65,18 +60,10 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
-    def test_z3ImplementsImageContent(self):
-        iface = Z3IImageContent
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
-
     def test_implementsATImage(self):
         iface = IATImage
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
-
-    def test_z3ImplementsImageContent(self):
-        iface = Z3IATImage
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         new = self._ATCT

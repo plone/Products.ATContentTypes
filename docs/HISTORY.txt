@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Removed the weird Zope2 Interface to zope.interface bridging code.
+  [hannosch]
+
 - Removed annoying license statements from the source files. We have a central
   license.txt for that.
   [hannosch]

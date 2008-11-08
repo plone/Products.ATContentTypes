@@ -15,12 +15,6 @@ from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATNewsItem
 from zope.interface.verify import verifyObject
 
-# z3 imports
-from Products.ATContentTypes.interface import ITextContent as Z3ITextContent
-from Products.ATContentTypes.interface import IImageContent as Z3IImageContent
-from Products.ATContentTypes.interface import IATNewsItem as Z3IATNewsItem
-from zope.interface.verify import verifyObject as Z3verifyObject
-
 
 tests = []
 
@@ -43,27 +37,15 @@ class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
-    def test_implementsZ3TextContent(self):
-        iface = Z3ITextContent
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
-
     def test_implementsImageContent(self):
         iface = IImageContent
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
-    def test_implementsZ3ImageContent(self):
-        iface = Z3IImageContent
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
-
     def test_implementsATNewsItem(self):
         iface = IATNewsItem
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
-
-    def test_implementsZ3ATNewsItem(self):
-        iface = Z3IATNewsItem
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         new = self._ATCT
