@@ -20,7 +20,7 @@ from Products.Archetypes.atapi import StringWidget
 from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import AnnotationStorage
 
-from Products.ATContentTypes.configuration import zconf
+from Products.ATContentTypes.config import ALLOW_DOCUMENT_UPLOAD
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
@@ -76,7 +76,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                         description = '',
                         label = _(u'label_event_announcement', default=u'Event body text'),
                         rows = 25,
-                        allow_file_upload = zconf.ATDocument.allow_document_upload)),
+                        allow_file_upload = ALLOW_DOCUMENT_UPLOAD)),
 
     LinesField('attendees',
                languageIndependent=True,

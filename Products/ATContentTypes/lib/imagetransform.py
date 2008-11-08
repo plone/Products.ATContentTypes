@@ -10,8 +10,8 @@ from Globals import InitializeClass
 from OFS.Image import Image as OFSImage
 from OFS.Image import Pdata
 
-from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import HAS_PIL
+from Products.ATContentTypes.config import PIL_CONFIG_QUALITY
 from Products.ATContentTypes import ATCTMessageFactory as _
 
 # third party extension
@@ -210,7 +210,7 @@ class ATCTImageTransform(Base):
             del image
             fmt = img.format
             img = img.transpose(method)
-            img.save(image2, fmt, quality=zconf.pil_config.quality)
+            img.save(image2, fmt, quality=PIL_CONFIG_QUALITY)
 
             field = self.getField('image')
             mimetype = field.getContentType(self)

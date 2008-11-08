@@ -47,7 +47,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         products = [prod['id'] for prod in qi.listInstalledProducts()]
         self.failIf('ATContentTypes' in products)
 
-    def test_release_settings_SAVE_TO_FAIL_FOR_DEVELOPMENT(self):
+    def test_release_settings(self):
         self.failUnlessEqual(SWALLOW_IMAGE_RESIZE_EXCEPTIONS, True)
 
     def test_reindex_doesnt_add_tools(self):

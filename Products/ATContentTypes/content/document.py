@@ -21,7 +21,8 @@ from Products.Archetypes.atapi import BooleanWidget
 from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import AnnotationStorage
 
-from Products.ATContentTypes.configuration import zconf
+from Products.ATContentTypes.config import ALLOW_DOCUMENT_UPLOAD
+from Products.ATContentTypes.config import DEFAULT_CONTENT_TYPE
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
@@ -47,7 +48,7 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
                         description = '',
                         label = _(u'label_body_text', default=u'Body Text'),
                         rows = 25,
-                        allow_file_upload = zconf.ATDocument.allow_document_upload),
+                        allow_file_upload = ALLOW_DOCUMENT_UPLOAD),
     ),
     BooleanField('presentation',
         required = False,
@@ -115,7 +116,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
 
         """
         if not value:
-            value = zconf.ATDocument.default_content_type
+            value = DEFAULT_CONTENT_TYPE
         else:
             value = translateMimetypeAlias(value)
         ATCTContent.setFormat(self, value)

@@ -12,8 +12,12 @@ from Products.Archetypes.atapi import ImageWidget
 from Products.Archetypes.atapi import PrimaryFieldMarshaller
 from Products.Archetypes.atapi import AnnotationStorage
 
+from Products.ATContentTypes.config import MAX_FILE_SIZE
+from Products.ATContentTypes.config import MAX_IMAGE_DIMENSION
+from Products.ATContentTypes.config import PIL_CONFIG_QUALITY
+from Products.ATContentTypes.config import PIL_CONFIG_RESIZE_ALGO
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.configuration import zconf
+from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
@@ -30,7 +34,7 @@ from Products.validation.validators.SupplValidators import MaxSizeValidator
 from Products.validation import V_REQUIRED
 
 validation.register(MaxSizeValidator('checkImageMaxSize',
-                                     maxsize=zconf.ATImage.max_file_size))
+                                     maxsize=MAX_FILE_SIZE))
 
 
 ATImageSchema = ATContentTypeSchema.copy() + Schema((
@@ -39,10 +43,10 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
                primary=True,
                languageIndependent=True,
                storage = AnnotationStorage(migrate=True),
-               swallowResizeExceptions = zconf.swallowImageResizeExceptions.enable,
-               pil_quality = zconf.pil_config.quality,
-               pil_resize_algo = zconf.pil_config.resize_algo,
-               max_size = zconf.ATImage.max_image_dimension,
+               swallowResizeExceptions = SWALLOW_IMAGE_RESIZE_EXCEPTIONS,
+               pil_quality = PIL_CONFIG_QUALITY,
+               pil_resize_algo = PIL_CONFIG_RESIZE_ALGO,
+               max_size = MAX_IMAGE_DIMENSION,
                sizes= {'large'   : (768, 768),
                        'preview' : (400, 400),
                        'mini'    : (200, 200),

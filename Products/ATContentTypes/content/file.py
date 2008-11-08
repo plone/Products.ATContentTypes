@@ -18,7 +18,7 @@ from Products.PortalTransforms.utils import TransformException
 from Products.MimetypesRegistry.common import MimeTypeException
 
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.configuration import zconf
+from Products.ATContentTypes.config import MAX_FILE_SIZE
 from Products.ATContentTypes.config import ICONMAP
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
@@ -35,7 +35,7 @@ from Products.validation import V_REQUIRED
 LOG = logging.getLogger('ATCT')
 
 validation.register(MaxSizeValidator('checkFileMaxSize',
-                                     maxsize=zconf.ATFile.max_file_size))
+                                     maxsize=MAX_FILE_SIZE))
 
 ATFileSchema = ATContentTypeSchema.copy() + Schema((
     FileField('file',

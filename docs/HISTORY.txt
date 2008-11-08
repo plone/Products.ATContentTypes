@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Removed the unmaintained atcontentypes.conf support.
+  [hannosch]
+
 - Removed never fully implemented autosort and urlupload modules.
   [hannosch]
 

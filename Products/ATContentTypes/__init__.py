@@ -30,12 +30,8 @@ from zope.i18nmessageid import MessageFactory
 ATCTMessageFactory = MessageFactory('atcontenttypes')
 ModuleSecurityInfo('Products.ATContentTypes').declarePublic('ATCTMessageFactory')
 
-# first level imports: configuration and validation
-import Products.ATContentTypes.configuration
+# the content types are depending on the validators
 import Products.ATContentTypes.lib.validators
-
-# second leven imports: content types, criteria
-# the content types are depending on the validators and configuration
 import Products.ATContentTypes.content
 import Products.ATContentTypes.criteria
 

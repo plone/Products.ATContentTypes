@@ -29,7 +29,7 @@ from Products.Archetypes.atapi import RichWidget
 from Products.Archetypes.atapi import DisplayList
 from Products.Archetypes.atapi import AnnotationStorage
 
-from Products.ATContentTypes.configuration import zconf
+from Products.ATContentTypes.config import ALLOW_DOCUMENT_UPLOAD
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFolder
@@ -67,7 +67,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                         description = '',
                         label = _(u'label_body_text', default=u'Body Text'),
                         rows = 25,
-                        allow_file_upload = zconf.ATDocument.allow_document_upload),
+                        allow_file_upload = ALLOW_DOCUMENT_UPLOAD),
     ),
     BooleanField('acquireCriteria',
                 required=False,

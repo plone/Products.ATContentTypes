@@ -1,14 +1,24 @@
 """AT Content Types configuration file
 """
 
-import string
 import os
-from Products.ATContentTypes.configuration import zconf
 
 ## options for mx tidy
 ## read http://www.egenix.com/files/python/mxTidy.html for more informations
-MX_TIDY_ENABLED = zconf.mxtidy.enable
-MX_TIDY_OPTIONS= zconf.mxtidy.options
+MX_TIDY_ENABLED = True
+MX_TIDY_OPTIONS= dict(
+    drop_font_tags=True,
+    drop_empty_paras=True,
+    input_xml=False,
+    output_xhtml=True,
+    quiet=True,
+    show_warnings=True,
+    indent_spaces=True,
+    word_2000=True,
+    wrap=72,
+    tab_size=4,
+    char_encoding='utf8',
+)
 
 PROJECTNAME = "ATContentTypes"
 TOOLNAME = "portal_atct"
@@ -69,3 +79,12 @@ MIME_ALIAS = {
     'restructuredtext' : 'text/x-rst',
     'text/restructured' : 'text/x-rst',
     }
+
+
+PIL_CONFIG_QUALITY = 90
+PIL_CONFIG_RESIZE_ALGO = 'antialias'
+
+ALLOW_DOCUMENT_UPLOAD = True
+DEFAULT_CONTENT_TYPE = 'text/html'
+MAX_FILE_SIZE = False
+MAX_IMAGE_DIMENSION = (0, 0)

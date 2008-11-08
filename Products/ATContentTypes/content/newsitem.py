@@ -12,8 +12,10 @@ from Products.Archetypes.atapi import StringWidget
 from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import AnnotationStorage
 
+from Products.ATContentTypes.config import ALLOW_DOCUMENT_UPLOAD
+from Products.ATContentTypes.config import MAX_FILE_SIZE
+from Products.ATContentTypes.config import MAX_IMAGE_DIMENSION
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.ATContentTypes.content.document import ATDocumentBase
@@ -31,7 +33,7 @@ from Products.validation.validators.SupplValidators import MaxSizeValidator
 from Products.validation import V_REQUIRED
 
 validation.register(MaxSizeValidator('checkNewsImageMaxSize',
-                                     maxsize=zconf.ATNewsItem.max_file_size))
+                                     maxsize=MAX_FILE_SIZE))
 
 
 ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
@@ -47,13 +49,13 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
             description = '',
             label = _(u'label_body_text', u'Body Text'),
             rows = 25,
-            allow_file_upload = zconf.ATDocument.allow_document_upload)
+            allow_file_upload = ALLOW_DOCUMENT_UPLOAD)
         ),
     ImageField('image',
         required = False,
         storage = AnnotationStorage(migrate=True),
         languageIndependent = True,
-        max_size = zconf.ATNewsItem.max_image_dimension,
+        max_size = MAX_IMAGE_DIMENSION,
         sizes= {'large'   : (768, 768),
                 'preview' : (400, 400),
                 'mini'    : (200, 200),
