@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Removed module aliases for content created before ATCT 1.0.
+  [hannosch]
+
 - Adjusted code to current Plone trunk after some deprecated code got removed.
   Moved old_folder_contents code into atct_topic_subtopics.
   [hannosch]

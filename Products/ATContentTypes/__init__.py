@@ -30,8 +30,6 @@ logger = logging.getLogger('ATCT')
 ATCT_DIR = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(3, os.path.join(ATCT_DIR, 'thirdparty'))
 
-__version__ = open(os.path.join(__path__[0], 'version.txt')).read().strip()
-
 from AccessControl import ModuleSecurityInfo
 
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
@@ -70,9 +68,6 @@ from Products.ATContentTypes.tool.atct import ATCTTool
 # wire the add permission after all types are registered
 from Products.ATContentTypes.permission import wireAddPermissions
 wireAddPermissions()
-
-# setup module aliases for old dotted pathes
-import Products.ATContentTypes.modulealiases
 
 registerDirectory(SKINS_DIR,GLOBALS)
 

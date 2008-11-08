@@ -1,27 +1,3 @@
-##############################################################################
-#
-# ATContentTypes http://plone.org/products/atcontenttypes/
-# Archetypes reimplementation of the CMF core types
-#
-# Copyright (c) 2001 Zope Corporation and Contributors. All Rights Reserved.
-# Copyright (c) 2003-2006 AT Content Types development team
-#
-# This software is subject to the provisions of the Zope Public License,
-# Version 2.0 (ZPL).  A copy of the ZPL should accompany this distribution.
-# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
-# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
-# FOR A PARTICULAR PURPOSE
-#
-##############################################################################
-""" Topic:
-
-"""
-
-__author__  = 'Alec Mitchell <apm13@columbia.edu>'
-__docformat__ = 'restructuredtext'
-__old_name__ = 'Products.ATContentTypes.types.criteria.ATCurrentAuthorCriterion'
-
 from zope.interface import implements
 
 from Products.CMFCore.permissions import View
