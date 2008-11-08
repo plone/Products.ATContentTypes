@@ -29,7 +29,6 @@ from AccessControl import Unauthorized
 from AccessControl.SecurityManagement import newSecurityManager
 
 from Products.ATContentTypes.lib import constraintypes
-from Products.CMFPlone.interfaces.ConstrainTypes import ISelectableConstrainTypes as ZopeTwoISelectableConstrainTypes
 from Products.CMFPlone.interfaces import ISelectableConstrainTypes
 
 tests = []
@@ -53,8 +52,6 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.failUnless(isinstance(self.af,
                                    constraintypes.ConstrainTypesMixin),
                         "ConstrainTypesMixin was not mixed in to ATFolder")
-        self.failUnless(ZopeTwoISelectableConstrainTypes.providedBy(self.af),
-                        "ISelectableConstrainTypes not implemented by ATFolder instance")
         self.failUnless(ISelectableConstrainTypes.providedBy(self.af),
                         "ISelectableConstrainTypes not implemented by ATFolder instance")
 

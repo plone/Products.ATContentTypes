@@ -43,8 +43,7 @@ from zope.interface.verify import verifyClass
 from Products.ATContentTypes.interfaces import IAutoSortSupport
 from Products.ATContentTypes.interfaces import IAutoOrderSupport
 from zope.interface.verify import verifyObject
-
-from Products.CMFPlone.interfaces.ConstrainTypes import ISelectableConstrainTypes
+from Products.ATContentTypes.interface import ISelectableConstrainTypes
 
 # z3 imports
 from Products.ATContentTypes.interface import IAutoSortSupport as Z3IAutoSortSupport

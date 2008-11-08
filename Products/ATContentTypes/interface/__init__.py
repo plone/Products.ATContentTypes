@@ -51,5 +51,3 @@ from Products.ATContentTypes.interface.topic import IATCTTopicsTool
 
 from Products.ATContentTypes.interface.autosort import IAutoSortSupport
 from Products.ATContentTypes.interface.autosort import IAutoOrderSupport
-
-from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes

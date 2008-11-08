@@ -1,6 +1,10 @@
 2.0 unreleased
 ==============
 
+- Adjusted code to current Plone trunk after some deprecated code got removed.
+  Moved old_folder_contents code into atct_topic_subtopics.
+  [hannosch]
+
 - Fixed some test failures concerning criterion editing.
   [hannosch]
 

@@ -29,9 +29,7 @@ from Products.Archetypes.interfaces import IBaseContent
 from Products.Archetypes.interfaces import IBaseFolder
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 from Products.Archetypes.interfaces import IATHistoryAware
-
-from Products.CMFPlone.interfaces.constrains import \
-    ISelectableConstrainTypes
+from Products.CMFPlone.interfaces import ISelectableConstrainTypes
 
 
 class IATContentType(ISelectableBrowserDefault, IBaseContent):
