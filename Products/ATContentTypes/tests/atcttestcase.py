@@ -59,7 +59,6 @@ from Products.ATContentTypes.tests.utils import FakeRequestSession
 from Products.ATContentTypes.tests.utils import DummySessionDataManager
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.Translatable import ITranslatable
 
 # Z3 imports
 from Products.ATContentTypes.interface import IATContentType as Z3IATContentType
@@ -166,8 +165,10 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
         # lingua plone is adding the ITranslatable interface to all types
         if not HAS_LINGUA_PLONE:
             return
-        self.failUnless(ITranslatable.providedBy(self._ATCT))
-        self.failUnless(verifyObject(ITranslatable, self._ATCT))
+        else:
+            from Products.LinguaPlone.interfaces import ITranslatable
+            self.failUnless(ITranslatable.providedBy(self._ATCT))
+            self.failUnless(verifyObject(ITranslatable, self._ATCT))
 
     def test_not_implements_ITemplateMixin(self):
         self.failIf(ITemplateMixin.providedBy(self._ATCT))
