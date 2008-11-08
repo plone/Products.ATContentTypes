@@ -1,6 +1,4 @@
 # -*- coding: UTF-8 -*-
-"""
-"""
 
 from Testing import ZopeTestCase
 from Products.ATContentTypes.tests.atcttestcase import ATCTFunctionalSiteTestCase 

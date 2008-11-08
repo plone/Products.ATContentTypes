@@ -1,7 +1,7 @@
 Third party extensions
 ======================
 
-This dirctory contains additional third party python modules and package
+This directory contains additional third party python modules and package
 required by ATContentTypes. Third party extensions might be covered by
 a different license.
 

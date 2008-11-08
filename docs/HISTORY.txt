@@ -1,6 +1,10 @@
 2.0 unreleased
 ==============
 
+- Removed annoying license statements from the source files. We have a central
+  license.txt for that.
+  [hannosch]
+
 - Removed module aliases for content created before ATCT 1.0.
   [hannosch]
 
