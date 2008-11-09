@@ -58,9 +58,6 @@ class ATFolder(ATCTOrderedFolder):
         else:
             return False
 
-    def manage_afterAdd(self, item, container):
-        ATCTOrderedFolder.manage_afterAdd(self, item, container)
-
 
 registerATCT(ATFolder, PROJECTNAME)
 

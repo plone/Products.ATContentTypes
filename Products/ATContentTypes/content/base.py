@@ -507,6 +507,16 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
 
     index_html = ComputedAttribute(index_html, 1)
 
+    def manage_renameObject(self, id, new_id, REQUEST=None):
+        """Rename a particular sub-object without changing its position.
+        """
+        old_position = self.getObjectPosition(id)
+        result = OrderedBaseFolder.manage_renameObject(self, id, new_id, REQUEST)
+        self.moveObjectToPosition(new_id, old_position)
+        putils = getToolByName(self, 'plone_utils')
+        putils.reindexOnReorder(self)
+        return result
+
 InitializeClass(ATCTOrderedFolder)
 
 
