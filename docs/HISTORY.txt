@@ -1,6 +1,10 @@
 2.0 unreleased
 ==============
 
+- Removed icalendar package from the thirdparty folder. We don't use it
+  ourselves and it's easy installable nowadays for anyone who wants it.
+  [hannosch]
+
 - Removed the unmaintained atcontentypes.conf support.
   [hannosch]
 
