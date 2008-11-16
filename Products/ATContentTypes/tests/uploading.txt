@@ -6,7 +6,7 @@ Test setup.
     >>> import cStringIO
     >>> from Products.Five.testbrowser import Browser
     >>> browser = Browser()
-    >>> browser.open('http://nohost/plone')
+    >>> browser.open('http://nohost/plone/login')
     
 Log in.
     
@@ -17,6 +17,7 @@ Log in.
     
 Let's create a new document, ending up at its edit form.
 
+    >>> browser.open('http://nohost/plone')
     >>> browser.getLink('Add new').click()
     >>> 'Add new item' in browser.contents
     True

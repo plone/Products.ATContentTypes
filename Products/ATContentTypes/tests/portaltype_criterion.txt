@@ -3,7 +3,7 @@ Adding an ATTopic criterion for Type
 
     >>> from Products.Five.testbrowser import Browser
     >>> browser = Browser()
-    >>> browser.open('http://nohost/plone/')
+    >>> browser.open('http://nohost/plone/login')
 
 First, we need to log in.
 
@@ -23,10 +23,7 @@ What we do next is we
   - ...save the page,
   - ...and along the way we check that everything works as expected.
 
-Note that this is slightly different to how the testrecorder result
-looks like because we're navigating the page with a JavaScript- less
-browser.
-
+    >>> browser.open('http://nohost/plone')
     >>> browser.getLink('Add new').click()
     >>> 'Add new item' in browser.contents
     True

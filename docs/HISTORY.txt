@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Adjusted functional tests to not rely on login portlet.
+  [hannosch]
+
 - Moved a manage_renameObject method from the autosort code into the ordered
   base class. It wasn't quite obvious, but the code was actually used.
   [hannosch]
