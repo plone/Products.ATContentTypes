@@ -77,6 +77,9 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
     marshall=RFC822Marshaller()
     )
 
+ATDocumentSchema['description'].widget.label = \
+    _(u'label_summary', default=u'Summary')
+
 finalizeATCTSchema(ATDocumentSchema)
 # moved schema setting after finalizeATCTSchema, so the order of the fieldsets
 # is preserved

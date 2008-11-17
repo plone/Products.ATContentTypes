@@ -1,6 +1,10 @@
 2.0 unreleased
 ==============
 
+- Changed description label to summary for page and news item. This closes
+  http://dev.plone.org/plone/ticket/8700.
+  [hannosch]
+
 - Adjusted functional tests to not rely on login portlet.
   [hannosch]
 
