@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Moved default public pages for all our content types over from CMFPlone.
+  [hannosch]
+
 - Changed description label to summary for page and news item. This closes
   http://dev.plone.org/plone/ticket/8700.
   [hannosch]
