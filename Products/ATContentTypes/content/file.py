@@ -97,7 +97,8 @@ class ATFile(ATCTFileContent):
                       'application/x-msexcel', # ?
                       'application/vnd.ms-excel',
                       'application/vnd.ms-powerpoint',
-                      'application/pdf')
+                      'application/pdf',
+                      'application/x-shockwave-flash')
 
     __implements__ = ATCTFileContent.__implements__, IATFile
 

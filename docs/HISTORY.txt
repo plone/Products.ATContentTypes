@@ -1,3 +1,10 @@
+1.2.7-devel
+==================
+
+* Made Flash files display inline since Flash 10 requires this.  Fixes
+  http://dev.plone.org/plone/ticket/8624
+  [alecm]
+
 1.2.6 2008-10-06
 ==================
 
