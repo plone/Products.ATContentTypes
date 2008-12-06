@@ -61,8 +61,8 @@
                          templateId=templateId, macro='text-field-view');
                          text text|context/getText|nothing"
              tal:condition="text"
-             tal:attributes="class python:test(context.Format() in ('text/structured',
-                                                   'text/x-rst', ), 'stx' + kss_class, 'plain' + kss_class)">
+             tal:attributes="class python: context.Format() in ('text/structured',
+                                   'text/x-rst', ) and 'stx' + kss_class or 'plain' + kss_class">
             <div metal:define-slot="inside" tal:replace="structure text">The body</div>
         </div>
         
@@ -77,4 +77,3 @@
 
 </body>
 </html>
-

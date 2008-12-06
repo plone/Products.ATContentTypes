@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Moved default views for non-folderish content types to browser pages.
+  [hannosch]
+
 - Moved default public pages for all our content types over from CMFPlone.
   [hannosch]
 

@@ -1,8 +1,0 @@
-<configure
-    xmlns="http://namespaces.zope.org/zope"
-    xmlns:browser="http://namespaces.zope.org/browser">
-
-    <!-- Enable next/previous links for folders -->
-    <adapter factory=".browser.nextprevious.ATFolderNextPrevious" />
-
-</configure>

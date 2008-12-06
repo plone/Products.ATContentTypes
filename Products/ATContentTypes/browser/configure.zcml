@@ -1,0 +1,49 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:browser="http://namespaces.zope.org/browser">
+
+  <adapter factory=".nextprevious.ATFolderNextPrevious" />
+
+  <browser:page
+      for="Products.ATContentTypes.interfaces.IATDocument"
+      class=".content.DocumentView"
+      name="document_view"
+      template="document.pt"
+      permission="zope2.View" />
+
+  <browser:page
+      for="Products.ATContentTypes.interfaces.IATEvent"
+      class=".content.EventView"
+      name="event_view"
+      template="event.pt"
+      permission="zope2.View" />
+
+  <browser:page
+      for="Products.ATContentTypes.interfaces.IATFile"
+      class=".content.FileView"
+      name="file_view"
+      template="file.pt"
+      permission="zope2.View" />
+
+  <browser:page
+      for="Products.ATContentTypes.interfaces.IATImage"
+      class=".content.ImageView"
+      name="image_view"
+      template="image.pt"
+      permission="zope2.View" />
+
+  <browser:page
+      for="Products.ATContentTypes.interfaces.IATLink"
+      class=".content.LinkView"
+      name="link_view"
+      template="link.pt"
+      permission="zope2.View" />
+
+  <browser:page
+      for="Products.ATContentTypes.interfaces.IATNewsItem"
+      class=".content.NewsItemView"
+      name="newsitem_view"
+      template="newsitem.pt"
+      permission="zope2.View" />
+
+</configure>

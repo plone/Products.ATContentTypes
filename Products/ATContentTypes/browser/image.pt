@@ -52,7 +52,7 @@
                 File size
             </span>
 
-            <span tal:condition="python:test(size, 0, 1)"
+            <span tal:condition="size"
                   i18n:translate="no_image_uploaded">
                 (No image has been uploaded yet)
             </span>
@@ -70,4 +70,3 @@
 </body>
 
 </html>
-
