@@ -73,6 +73,7 @@
                            getRelativeContentURL nocall:context/portal_url/getRelativeContentURL;
                            normalizeString nocall:context/@@plone/normalizeString;
                            wtool portal/portal_workflow;
+                           isExpired nocall:context/@@plone_context_state/is_expired;
                            ">
             <tal:items tal:repeat="item batch">
                <tr tal:define="oddrow               repeat/item/odd;
@@ -129,7 +130,7 @@
                     </span>
 
                     <span class="state-expired"
-                          tal:condition="python:portal.isExpired(item)"
+                          tal:condition="python:isExpired(item)"
                           i18n:translate="time_expired">expired</span>
                 </td>
 
