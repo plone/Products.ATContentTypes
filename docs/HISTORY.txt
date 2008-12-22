@@ -1,6 +1,11 @@
 2.0 unreleased
 ==============
 
+- Changed parameter name at script getXMLSelectVocab.py from 'method' to 
+  'vocab_method' to avoid getting overridden from ZPublisher.HTTPRequest.
+  This closes https://dev.plone.org/plone/ticket/6960.
+  [igbun]
+
 - Adjusted subtopics listing to use the is_expired method from the context
   view instead of the former Python script.
   [hannosch]

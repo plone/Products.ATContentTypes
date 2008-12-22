@@ -184,7 +184,7 @@ function registerDynamicSelect(form_name, master_id, slave_id, action, vocab_met
         url = 'getXMLSlaveValue?method='+vocab_method+'&param='+param+'&value=';
         break;
     case "vocabulary":
-        url = 'getXMLSelectVocab?method='+vocab_method+'&param='+param+'&value=';
+        url = 'getXMLSelectVocab?vocab_method='+vocab_method+'&param='+param+'&value=';
         break;
     default:
         // should not happen
