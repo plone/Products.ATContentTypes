@@ -45,7 +45,7 @@
 
 <body>
 
-<div class="visualWrapper">
+<div id="region-content" class="visualWrapper">
     <a href=""
        tal:attributes="href request/HTTP_REFERER"
        tal:condition="request/HTTP_REFERER"
