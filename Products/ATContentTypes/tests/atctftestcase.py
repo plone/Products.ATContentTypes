@@ -53,10 +53,8 @@ class IntegrationTestCase(atcttestcase.ATCTFunctionalSiteTestCase):
             entries = self.error_log.getLogEntries()
             if entries:
                 msg = entries[0]['tb_text']
-            else:
-                if not msg:
-                    msg = 'no error log msg available'
-        self.failUnlessEqual(a, b, msg)
+                self.failUnlessEqual(a, b, msg)
+        self.failUnlessEqual(a, b)
 
 
 class ATCTIntegrationTestCase(IntegrationTestCase):
