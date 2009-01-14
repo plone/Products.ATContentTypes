@@ -1,6 +1,10 @@
 2.0 unreleased
 ==============
 
+- Declare package dependencies and fixed deprecation warnings for use
+  of Globals.
+  [hannosch]
+
 - Merged change r24257 from 3.2 branch of the event.pt view to use the new
   time_only prop so it gets correct localization of the times.  Closes
   http://dev.plone.org/plone/ticket/8607

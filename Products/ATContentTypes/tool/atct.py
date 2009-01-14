@@ -4,7 +4,7 @@ from zope.interface import implements
 
 import AccessControl.Owned
 from AccessControl import ClassSecurityInfo
-from Globals import InitializeClass
+from App.class_init import InitializeClass
 from OFS.SimpleItem import SimpleItem
 from OFS.PropertyManager import PropertyManager
 from ZODB.POSException import ConflictError

@@ -6,7 +6,7 @@ from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 from ExtensionClass import Base
 from DateTime import DateTime
-from Globals import InitializeClass
+from App.class_init import InitializeClass
 from OFS.Image import Image as OFSImage
 from OFS.Image import Pdata
 

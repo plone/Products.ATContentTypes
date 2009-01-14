@@ -21,11 +21,11 @@ else:
 
 from AccessControl import ClassSecurityInfo, Permissions
 from ComputedAttribute import ComputedAttribute
-from Globals import InitializeClass
+from App.class_init import InitializeClass
 from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from Globals import REPLACEABLE
+from OFS.ObjectManager import REPLACEABLE
 from webdav.Lockable import ResourceLockedError
 from webdav.NullResource import NullResource
 from zExceptions import MethodNotAllowed

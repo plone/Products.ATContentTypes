@@ -1,5 +1,6 @@
 from AccessControl import ClassSecurityInfo
-from Globals import InitializeClass, package_home
+from App.class_init import InitializeClass
+from App.Common import package_home
 from UserDict import UserDict
 import ExtensionClass
 from Acquisition import Implicit

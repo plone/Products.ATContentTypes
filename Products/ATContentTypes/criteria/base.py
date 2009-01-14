@@ -4,7 +4,7 @@ from Products.Archetypes.atapi import BaseContentMixin
 
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
-from Globals import InitializeClass
+from App.class_init import InitializeClass
 
 from Products.Archetypes.ClassGen import generateClass
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema

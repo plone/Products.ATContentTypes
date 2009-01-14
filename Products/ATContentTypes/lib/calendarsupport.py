@@ -2,7 +2,7 @@ from cStringIO import StringIO
 from zope.interface import implements
 
 from DateTime import DateTime
-from Globals import InitializeClass
+from App.class_init import InitializeClass
 
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo

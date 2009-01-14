@@ -1,6 +1,6 @@
 from zope.interface import implements
 
-from Globals import InitializeClass
+from App.class_init import InitializeClass
 from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.criteria import _criterionRegistry
 from AccessControl import ClassSecurityInfo
