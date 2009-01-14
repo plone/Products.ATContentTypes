@@ -1,9 +1,14 @@
 2.0 unreleased
 ==============
 
+- Merged change r24257 from 3.2 branch of the event.pt view to use the new
+  time_only prop so it gets correct localization of the times.  Closes
+  http://dev.plone.org/plone/ticket/8607
+  [jnelson, calvinhp]
+
 - Changed parameter name at script getXMLSelectVocab.py from 'method' to 
   'vocab_method' to avoid getting overridden from ZPublisher.HTTPRequest.
-  This closes https://dev.plone.org/plone/ticket/6960.
+  This closes http://dev.plone.org/plone/ticket/6960.
   [igbun]
 
 - Adjusted subtopics listing to use the is_expired method from the context
