@@ -1,8 +1,11 @@
 from unittest import defaultTestLoader
+from zope.interface import classImplements
 from zope.component import getMultiAdapter
 from zope.publisher.browser import TestRequest
+from zope.annotation.interfaces import IAttributeAnnotatable
 
 from Products.ATContentTypes.tests.atcttestcase import ATCTSiteTestCase
+from Products.ATContentTypes.browser.calendar import cachekey
 
 
 def makeResponse(request):
@@ -30,6 +33,7 @@ class EventCalendarTests(ATCTSiteTestCase):
             id='ploneconf2008', title='Plone Conf 2008',
             startDate='2008/10/08', endDate='2008/10/10', location='DC',
             eventUrl='http://plone.org/events/conferences/2008-washington-dc')]
+        classImplements(TestRequest, IAttributeAnnotatable)
 
     def testCalendarView(self):
         view = getMultiAdapter((self.folder, TestRequest()), name='calendar.ics')
@@ -63,6 +67,37 @@ class EventCalendarTests(ATCTSiteTestCase):
             'LOCATION:DC',
             'END:VEVENT',
             'END:VCALENDAR')
+
+    def testCacheKey(self):
+        headers, output, request = makeResponse(TestRequest())
+        view = getMultiAdapter((self.folder, request), name='calendar.ics')
+        # calculate original key for caching...
+        view.update()
+        key1 = cachekey(None, view)
+        # a second invocation should return the same key...
+        view.update()
+        key2 = cachekey(None, view)
+        self.assertEqual(key1, key2)
+        # even with a new view...
+        headers, output, request = makeResponse(TestRequest())
+        view = getMultiAdapter((self.folder, request), name='calendar.ics')
+        view.update()
+        key3 = cachekey(None, view)
+        self.assertEqual(key1, key3)
+        # however, if one of the object gets changed, the key should as well
+        self.folder.ploneconf2007.processForm(values={'location': 'Naples, Italy'})
+        view.update()
+        key4 = cachekey(None, view)
+        self.assertNotEqual(key1, key4)
+        # the same goes if another one is added
+        self.folder[self.folder.invokeFactory('Event',
+            id='ploneconf2009', title='Plone Conf 2009',
+            startDate='2008/10/28', endDate='2008/10/30', location='Budapest',
+            eventUrl='http://plone.org/events/conferences/2009')]
+        view.update()
+        key5 = cachekey(None, view)
+        self.assertNotEqual(key1, key5)
+        self.assertNotEqual(key4, key5)
 
 
 def test_suite():
