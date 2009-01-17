@@ -7,7 +7,7 @@ from Products.ATContentTypes.tests.atcttestcase import ATCTSiteTestCase
 
 class EventCalendarTests(ATCTSiteTestCase):
 
-    def testCalendarView(self):
+    def afterSetUp(self):
         folder = self.folder
         event1 = folder[folder.invokeFactory('Event',
             id='ploneconf2007', title='Plone Conf 2007',
@@ -15,7 +15,9 @@ class EventCalendarTests(ATCTSiteTestCase):
         event2 = folder[folder.invokeFactory('Event',
             id='ploneconf2008', title='Plone Conf 2008',
             startDate='2008/10/08', endDate='2008/10/10',)]
-        view = getMultiAdapter((folder, TestRequest()), name='calendar.ics')
+
+    def testCalendarView(self):
+        view = getMultiAdapter((self.folder, TestRequest()), name='calendar.ics')
         view.update()
         self.assertEqual(len(view.events), 2)
         self.assertEqual(sorted([ e.Title for e in view.events ]),
