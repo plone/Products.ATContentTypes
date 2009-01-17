@@ -22,11 +22,14 @@ class CalendarView(BrowserView):
         name = '%s.ics' % context.getId()
         request.RESPONSE.setHeader('Content-Type', 'text/calendar')
         request.RESPONSE.setHeader('Content-Disposition', 'attachment; filename="%s"' % name)
-        write = request.RESPONSE.write
-        write(cs.ICS_HEADER % dict(prodid=cs.PRODID))
+        request.RESPONSE.write(self.feeddata())
+
+    def feeddata(self):
+        data = cs.ICS_HEADER % dict(prodid=cs.PRODID)
         for brain in self.events:
-            write(brain.getObject().getICal())
-        write(cs.ICS_FOOTER)
+            data += brain.getObject().getICal()
+        data += cs.ICS_FOOTER
+        return data
 
     __call__ = render
 
