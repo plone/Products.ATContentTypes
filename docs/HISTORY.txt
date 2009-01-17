@@ -1,6 +1,10 @@
 1.2.7-devel
 ==================
 
+* Add view for rendering events as an iCal feed.
+  See http://plone.org/products/plone/roadmap/246
+  [witsch]
+
 * Made Flash files display inline since Flash 10 requires this.  Fixes
   http://dev.plone.org/plone/ticket/8624
   [alecm]
