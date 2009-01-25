@@ -12,7 +12,6 @@ from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.interface import IATCTTopicsTool
 from Products.Archetypes.atapi import DisplayList
 from Products.CMFCore.permissions import ManagePortal
-from Products.CMFPlone.CatalogTool import CatalogTool
 
 class TopicIndex(SimpleItem, Persistent):
 
@@ -49,7 +48,7 @@ class ATTopicsTool(Base):
 
     def getCriteriaForIndex(self, index, as_dict=False):
         """ Returns the valid criteria for a given index """
-        catalog_tool = getToolByName(self, CatalogTool.id)
+        catalog_tool = getToolByName(self, 'portal_catalog')
         try:
             indexObj = catalog_tool.Indexes[index]
         except KeyError:
@@ -163,7 +162,7 @@ class ATTopicsTool(Base):
     security.declarePrivate('listCatalogFields')
     def listCatalogFields(self):
         """ Return a list of fields from portal_catalog. """
-        pcatalog = getToolByName( self,  CatalogTool.id )
+        pcatalog = getToolByName( self, 'portal_catalog')
         available = pcatalog.indexes()
         val = [ field for field in available ]
         val.sort()
@@ -172,7 +171,7 @@ class ATTopicsTool(Base):
     security.declarePrivate('listCatalogMetadata')
     def listCatalogMetadata(self):
         """ Return a list of columns from portal_catalog. """
-        pcatalog = getToolByName( self,  CatalogTool.id )
+        pcatalog = getToolByName( self, 'portal_catalog')
         available = pcatalog.schema()
         val = [ field for field in available ]
         val.sort()

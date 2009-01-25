@@ -9,8 +9,7 @@ from Products.ATContentTypes.tests.utils import dcEdit
 
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATBTreeFolder
-from OFS.interfaces import IOrderedContainer as OFSIOrderedContainer
-from Products.CMFPlone.interfaces.OrderedContainer import IOrderedContainer
+from OFS.interfaces import IOrderedContainer as IOrderedContainer
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
 
@@ -42,9 +41,7 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
     icon = 'folder_icon.png'
 
     def test_implementsOrderInterface(self):
-        self.failUnless(OFSIOrderedContainer.providedBy(self._ATCT))
         self.failUnless(IOrderedContainer.providedBy(self._ATCT))
-        self.failUnless(verifyObject(OFSIOrderedContainer, self._ATCT))
         self.failUnless(verifyObject(IOrderedContainer, self._ATCT))
 
     def test_implementsATFolder(self):
@@ -89,8 +86,7 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_isNotOrdered(self):
-        iface = OFSIOrderedContainer
-        self.failIf(iface.providedBy(self._ATCT))
+        self.failIf(IOrderedContainer.providedBy(self._ATCT))
 
     def test_edit(self):
         new = self._ATCT

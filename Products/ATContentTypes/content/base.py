@@ -19,7 +19,7 @@ else:
     from Products.Archetypes.atapi import BaseBTreeFolder
     from Products.Archetypes.atapi import registerType
 
-from AccessControl import ClassSecurityInfo, Permissions
+from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
 from App.class_init import InitializeClass
 from Acquisition import aq_base
@@ -34,15 +34,11 @@ from ZODB.POSException import ConflictError
 
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.permissions import ManageProperties
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
-from Products.CMFPlone.PloneFolder import ReplaceableWrapper
 
-from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.config import MIME_ALIAS
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixin
-from Products.ATContentTypes.interfaces import IATContentType as z2IATContentType
 from Products.ATContentTypes.interface import IATContentType
 from Products.ATContentTypes.interface import ISelectableConstrainTypes
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
@@ -78,6 +74,17 @@ def translateMimetypeAlias(alias):
         mime = MIME_ALIAS.get(alias, None)
     assert(mime) # shouldn't be empty
     return mime
+
+
+class ReplaceableWrapper:
+    """A wrapper around an object to make it replaceable."""
+    def __init__(self, ob):
+        self.__ob = ob
+
+    def __getattr__(self, name):
+        if name == '__replaceable__':
+            return REPLACEABLE
+        return getattr(self.__ob, name)
 
 
 class ATCTMixin(BrowserDefaultMixin):

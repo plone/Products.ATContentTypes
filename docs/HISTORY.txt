@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Removed various dependencies on CMFPlone.
+  [hannosch]
+
 - Cleaned up tests some more. No longer rely on the testfixture extension
   profile but adapt the tests to default Plone instead.
   [hannosch]

@@ -9,7 +9,6 @@ from Products.ZCatalog.Lazy import LazyCat
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.CatalogTool import CatalogTool
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from Acquisition import aq_parent
@@ -174,7 +173,7 @@ class ATTopic(ATCTFolder):
 
     security.declareProtected(ChangeTopics, 'criteriaByIndexId')
     def criteriaByIndexId(self, indexId):
-        catalog_tool = getToolByName(self, CatalogTool.id)
+        catalog_tool = getToolByName(self, 'portal_catalog')
         indexObj = catalog_tool.Indexes[indexId]
         results = _criterionRegistry.criteriaByIndex(indexObj.meta_type)
         return results
