@@ -140,7 +140,7 @@ class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
     def test_dynamic_view_without_view(self):
         # dynamic view mixin should work
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
-        self.assertStatusEqual(response.getStatus(), 200) #
+        self.failUnlessEqual(response.getStatus(), 200) #
         
     def test_selectViewTemplate(self):
         # create an object using the createObject script
@@ -165,7 +165,7 @@ class TestATBTreeFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
     def test_templatemixin_view_without_view(self):
         # template mixin magic should work
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
-        self.assertStatusEqual(response.getStatus(), 200) #
+        self.failUnlessEqual(response.getStatus(), 200) #
 
 tests.append(TestATBTreeFolderFunctional)
 

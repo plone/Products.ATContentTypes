@@ -6,33 +6,36 @@ from Products.PloneTestCase.setup import default_password
 from Products.PloneTestCase.setup import portal_name
 from Products.PloneTestCase.setup import portal_owner
 ZopeTestCase.installProduct('SiteAccess')
-PloneTestCase.setupPloneSite(extension_profiles=['Products.CMFPlone:testfixture'])
+PloneTestCase.setupPloneSite()
 
 import os
-import transaction
 
 from zope.interface.verify import verifyObject
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
+
 from Products.CMFCore.interfaces import IDublinCore
 from Products.CMFCore.interfaces import IMutableDublinCore
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.utils import getToolByName
+from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
+from Products.Archetypes.atapi import AttributeStorage
+from Products.Archetypes.atapi import DisplayList
+from Products.Archetypes.atapi import IdWidget
+from Products.Archetypes.atapi import RFC822Marshaller
+from Products.Archetypes.atapi import MetadataStorage
+from Products.Archetypes.atapi import TextAreaWidget
 from Products.Archetypes.interfaces.base import IBaseContent
-from Products.Archetypes.atapi import *
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
-from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 from Products.Archetypes.tests.test_baseschema import BaseSchemaTest
+from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
+
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
-from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.tests.utils import idValidator
-from Products.ATContentTypes.tests.utils import FakeRequestSession
-from Products.ATContentTypes.tests.utils import DummySessionDataManager
-from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
-from Products.CMFCore.utils import getToolByName
 
 test_home = os.path.dirname(__file__)
 
@@ -163,7 +166,7 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
         asdf2 = self._createType(self.folder, self.portal_type, 'asdf2')
         self.setRoles(['Member'])
 
-        request = FakeRequestSession()
+        request = self.app.REQUEST
 
         # invalid ids
         ids = ['asdf2', '???', '/asdf2', ' asdf2', 'portal_workflow',

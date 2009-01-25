@@ -14,19 +14,18 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
         self.wf = self.portal.portal_workflow
 
     def test_wfmapping(self):
-        default = ('plone_workflow',)
-        folder = ('folder_workflow',)
+        default = ('simple_publication_workflow',)
 
         mapping = {
             'Document' : default,
             'Event' : default,
             'File' : (),
-            'Folder' : folder,
-            'Large Plone Folder' : folder,
+            'Folder' : default,
+            'Large Plone Folder' : default,
             'Image' : (),
             'Link' : default,
             'News Item' : default,
-            'Topic' : folder,
+            'Topic' : default,
             }
 
         for pt, wf in mapping.items():

@@ -542,7 +542,7 @@ class TestATTopicFunctional(atctftestcase.ATCTIntegrationTestCase):
     def test_dynamic_view_without_view(self):
         # dynamic view magic should work
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
-        self.assertStatusEqual(response.getStatus(), 200) #
+        self.failUnlessEqual(response.getStatus(), 200) #
 
     portal_type = 'Topic'
     views = ('atct_topic_view', 'criterion_edit_form', 'atct_topic_subtopics')

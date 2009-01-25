@@ -1,6 +1,10 @@
 2.0 unreleased
 ==============
 
+- Cleaned up tests some more. No longer rely on the testfixture extension
+  profile but adapt the tests to default Plone instead.
+  [hannosch]
+
 - Declare package dependencies and fixed deprecation warnings for use
   of Globals.
   [hannosch]
