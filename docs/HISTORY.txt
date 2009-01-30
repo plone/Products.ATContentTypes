@@ -1,6 +1,9 @@
 1.2.7-devel
 ==================
 
+* Don't assume regular (non-btree) folders for next/previous support.
+  [witsch]
+
 * Made Flash files display inline since Flash 10 requires this.  Fixes
   http://dev.plone.org/plone/ticket/8624
   [alecm]
