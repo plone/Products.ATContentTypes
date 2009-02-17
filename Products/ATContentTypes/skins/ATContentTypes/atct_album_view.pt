@@ -13,31 +13,29 @@
                  otherContents result/others;
                  Batch python:modules['Products.CMFPlone'].Batch;
                  b_start python:request.get('b_start', 0);
-                 kssClassesView context/@@kss_field_decorator_view;
-                 getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
                  templateId template/getId;
                  batch python:Batch(images, 12, int(b_start), orphan=1)">
 
     <div tal:replace="structure provider:plone.abovecontenttitle" />
 
-    <h1 tal:content="here/pretty_title_or_id" class="documentFirstHeading">Title or id</h1>
+    <h1 tal:content="context/pretty_title_or_id" class="documentFirstHeading">
+        Title or id
+    </h1>
 
     <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-    <p metal:use-macro="here/kss_generic_macros/macros/generic_description_view">
+    <p tal:content="context/Description">
         Description
     </p>
-        
+
     <div tal:replace="structure provider:plone.abovecontentbody" />
 
     <div metal:define-macro="text-field-view"
          id="parent-fieldname-text" class="stx"
-         tal:define="kss_class python:getKssClasses('text',
-                     templateId=templateId, macro='text-field-view');
-                     text here/aq_explicit/getText|nothing"
+         tal:define="text here/aq_explicit/getText|nothing"
          tal:condition="text"
          tal:attributes="class python:test(here.Format() in ('text/structured',
-                                               'text/x-rst', ), 'stx' + kss_class, 'plain' + kss_class)">
+                                               'text/x-rst', ), 'stx', 'plain')">
         <div metal:define-slot="inside" tal:replace="structure text">The body</div>
     </div>
 

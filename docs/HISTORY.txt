@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Removed inline-editing markup from default view templates.
+  [hannosch]
+
 - Don't assume regular (non-btree) folders for next/previous support.
   [witsch]
 
