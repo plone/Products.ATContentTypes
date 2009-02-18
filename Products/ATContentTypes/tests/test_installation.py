@@ -42,11 +42,6 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
             tinfo = ttool[id]
             self.failUnless(tinfo.product == 'ATContentTypes', tinfo.product)
 
-    def test_not_quickinstalled(self):
-        qi = getattr(self.portal, 'portal_quickinstaller')
-        products = [prod['id'] for prod in qi.listInstalledProducts()]
-        self.failIf('ATContentTypes' in products)
-
     def test_release_settings(self):
         self.failUnlessEqual(SWALLOW_IMAGE_RESIZE_EXCEPTIONS, True)
 
