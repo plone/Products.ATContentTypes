@@ -93,9 +93,6 @@
           </div>
 
           <table class="listing" border="0" cellpadding="0" cellspacing="0" style=""
-                 tal:define="bgcolor string:background-color:${here/base_properties/evenRowBackgroundColor};
-                             border_color here/base_properties/globalBorderColor"
-                 tal:attributes="style string:border:1px solid ${border_color}"
                  summary="Metadata configuration" i18n:attributes="summary summary_metadata_configuration;">
             <thead>
                 <tr>
