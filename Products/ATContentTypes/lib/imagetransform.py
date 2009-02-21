@@ -55,16 +55,6 @@ class ATCTImageTransform(Base):
     * image rotation
     """
 
-    actions = (
-        {
-        'id'          : 'transform',
-        'name'        : 'Transform',
-        'action'      : 'string:${object_url}/atct_image_transform',
-        'permissions' : (ModifyPortalContent,),
-        'condition'   : 'object/hasPIL',
-         },
-        )
-
     security = ClassSecurityInfo()
 
     security.declarePrivate('getImageAsFile')
