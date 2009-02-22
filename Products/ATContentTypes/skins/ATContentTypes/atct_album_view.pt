@@ -11,7 +11,7 @@
                  images result/images;
                  albums result/folders;
                  otherContents result/others;
-                 Batch python:modules['Products.CMFPlone'].Batch;
+                 Batch python:modules['plone.sequencebatch'].Batch;
                  b_start python:request.get('b_start', 0);
                  templateId template/getId;
                  batch python:Batch(images, 12, int(b_start), orphan=1)">

@@ -1,22 +1,22 @@
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
-from Products.ATContentTypes.tests.utils import dcEdit
 
-import transaction
-from Products.CMFCore.permissions import View
-from Products.Archetypes.interfaces.layer import ILayerContainer
+from plone.sequencebatch import Batch
+from zope.interface.verify import verifyObject
+
+from OFS.interfaces import IOrderedContainer
+
 from Products.Archetypes.atapi import *
-
+from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.Field import BooleanField
+from Products.CMFCore.permissions import View
+
 from Products.ATContentTypes.content.topic import ATTopic
 from Products.ATContentTypes.content.topic import ChangeTopics
 from Products.ATContentTypes.content.folder import ATFolder
+from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.interfaces import IATTopic
-from zope.interface.verify import verifyObject
-from OFS.interfaces import IOrderedContainer
-
-from Products.CMFPlone.PloneBatch import Batch
 
 
 ACQUIRE  = True
@@ -230,13 +230,13 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
     def test_queryCatalogBatching(self):
         # Ensure that has we return a proper batch if requested
         topic = self._ATCT
-        self.failUnless(isinstance(topic.queryCatalog(batch=True),Batch))
-        self.failIf(isinstance(topic.queryCatalog(),Batch))
+        self.failUnless(isinstance(topic.queryCatalog(batch=True), Batch))
+        self.failIf(isinstance(topic.queryCatalog(), Batch))
         # try it with some content now
         crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
         crit.setValue('Folder')
-        self.failUnless(isinstance(topic.queryCatalog(batch=True),Batch))
-        self.failIf(isinstance(topic.queryCatalog(),Batch))
+        self.failUnless(isinstance(topic.queryCatalog(batch=True), Batch))
+        self.failIf(isinstance(topic.queryCatalog(), Batch))
 
     def test_queryCatalogBatchingWithLimit(self):
         # Ensure that the number of results is the same with or without a
@@ -277,7 +277,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         # Add a bunch of folders.
         for i in range(1, 20):
             self.folder.invokeFactory('Folder', str(i))
-        self.failUnless(isinstance(topic.queryCatalog(batch=True),Batch))
+        self.failUnless(isinstance(topic.queryCatalog(batch=True), Batch))
         # Check the batch length
         self.assertEqual(len(topic.queryCatalog(batch=True)), 10)
 
@@ -289,7 +289,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         # Add a bunch of folders.
         for i in range(1, 20):
             self.folder.invokeFactory('Folder', str(i))
-        self.failUnless(isinstance(topic.queryCatalog(batch=True, b_size=5),Batch))
+        self.failUnless(isinstance(topic.queryCatalog(batch=True, b_size=5), Batch))
         # Check the batch length
         self.assertEqual(len(topic.queryCatalog(batch=True, b_size=5)), 5)
 

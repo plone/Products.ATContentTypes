@@ -2,6 +2,7 @@ from types import ListType
 from types import TupleType
 from types import StringType
 
+from plone.sequencebatch import Batch
 from zope.interface import implements
 
 from ZPublisher.HTTPRequest import HTTPRequest
@@ -44,7 +45,6 @@ from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 from Products.ATContentTypes.config import TOOLNAME
 
 from Products.ATContentTypes import ATCTMessageFactory as _
-from Products.CMFPlone.PloneBatch import Batch
 
 # A couple of fields just don't make sense to sort (for a user),
 # some are just doubles.

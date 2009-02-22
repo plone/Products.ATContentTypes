@@ -1,6 +1,10 @@
 2.0 unreleased
 ==============
 
+- Use Batch from its new location plone.sequencebatch. We don't have a direct
+  CMFPlone dependency anymore.
+  [hannosch]
+
 - Use the INextPreviousProvider interface from plone.navigation.
   [hannosch]
 
