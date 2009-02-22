@@ -5,7 +5,9 @@ from AccessControl import Unauthorized
 from AccessControl.SecurityManagement import newSecurityManager
 
 from Products.ATContentTypes.lib import constraintypes
-from Products.CMFPlone.interfaces import ISelectableConstrainTypes
+
+from plone.navigation.interfaces import ISelectableConstrainTypes
+
 
 tests = []
 

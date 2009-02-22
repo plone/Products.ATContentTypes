@@ -40,9 +40,9 @@ from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.ATContentTypes.config import MIME_ALIAS
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixin
 from Products.ATContentTypes.interface import IATContentType
-from Products.ATContentTypes.interface import ISelectableConstrainTypes
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
+from plone.navigation.interfaces import ISelectableConstrainTypes
 from plone.i18n.normalizer.interfaces import IUserPreferredFileNameNormalizer
 
 DEBUG = True

@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Import ISelectableConstrainTypes interface from plone.navigation.
+  [hannosch]
+
 - Removed inline-editing markup from default view templates.
   [hannosch]
 

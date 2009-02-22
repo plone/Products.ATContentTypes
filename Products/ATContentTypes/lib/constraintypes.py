@@ -1,3 +1,4 @@
+from plone.navigation.interfaces import ISelectableConstrainTypes
 from zope.interface import implements
 
 from AccessControl import ClassSecurityInfo
@@ -22,8 +23,6 @@ from Products.Archetypes.atapi import DisplayList
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes import permission as ATCTPermissions
-
-from Products.ATContentTypes.interface import ISelectableConstrainTypes
 
 # constants for enableConstrainMixin
 ACQUIRE = -1 # acquire locallyAllowedTypes from parent (default)

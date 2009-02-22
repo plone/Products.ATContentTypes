@@ -13,10 +13,9 @@ from OFS.interfaces import IOrderedContainer as IOrderedContainer
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
 
+from plone.navigation.interfaces import ISelectableConstrainTypes
 from zope.interface.verify import verifyClass
-
 from zope.interface.verify import verifyObject
-from Products.ATContentTypes.interface import ISelectableConstrainTypes
 
 def editATCT(obj):
     dcEdit(obj)
