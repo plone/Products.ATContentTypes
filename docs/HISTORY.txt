@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Use the INextPreviousProvider interface from plone.navigation.
+  [hannosch]
+
 - Import ISelectableConstrainTypes interface from plone.navigation.
   [hannosch]
 

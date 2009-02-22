@@ -1,10 +1,10 @@
 from zope.interface import implements
 from zope.component import adapts
 
-from plone.app.layout.nextprevious.interfaces import INextPreviousProvider
 from Products.ATContentTypes.interface.folder import IATFolder
 
 from plone.memoize.instance import memoize
+from plone.navigation.interfaces import INextPreviousProvider
 
 from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
