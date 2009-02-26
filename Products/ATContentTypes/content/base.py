@@ -374,7 +374,7 @@ class ATCTFileContent(ATCTContent):
         else:
             # If check_id is not available just look for conflicting ids
             parent = aq_parent(aq_inner(self))
-            check_id = used_id in parent.objectIds() and \
+            check_id = used_id in parent and \
                        'Id %s conflicts with an existing item'% used_id or False
         if check_id and used_id == id:
             errors['id'] = check_id

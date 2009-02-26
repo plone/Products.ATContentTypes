@@ -96,8 +96,8 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         id = 'file.2005-11-18.4066860573'
         self.folder.invokeFactory(self.portal_type, id)
         self.folder[id].setFile(fakefile)
-        self.failIf(id in self.folder.objectIds())
-        self.failUnless(fakefile.filename in self.folder.objectIds())
+        self.failIf(id in self.folder)
+        self.failUnless(fakefile.filename in self.folder)
 
     def testUpperCaseFilenameWithFunnyCharacters(self):
         class fakefile(StringIO.StringIO):
@@ -107,8 +107,8 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         id = 'file.2005-11-18.4066860574'
         self.folder.invokeFactory(self.portal_type, id)
         self.folder[id].setFile(fakefile)
-        self.failIf(id in self.folder.objectIds())
-        self.failUnless('Zope-Plo-ne .txt' in self.folder.objectIds())
+        self.failIf(id in self.folder)
+        self.failUnless('Zope-Plo-ne .txt' in self.folder)
 
     def testWindowsUploadFilename(self):
         class fakefile(StringIO.StringIO):
@@ -118,9 +118,9 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         id = 'file.2005-11-18.4066860574'
         self.folder.invokeFactory(self.portal_type, id)
         self.folder[id].setFile(fakefile)
-        self.failIf(id in self.folder.objectIds())
-        self.failIf(fakefile.filename in self.folder.objectIds())
-        self.failUnless('file.txt' in self.folder.objectIds())
+        self.failIf(id in self.folder)
+        self.failIf(fakefile.filename in self.folder)
+        self.failUnless('file.txt' in self.folder)
 
     def testWindowsDuplicateFiles(self):
         class fakefile(StringIO.StringIO):

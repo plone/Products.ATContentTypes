@@ -126,8 +126,8 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
             self.failUnlessEqual(response.getStatus(), 200) # OK
 
             translated_id = "%s-de" % self.obj_id
-            self.failUnless(translated_id in self.folder.objectIds(),
-                            self.folder.objectIds())
+            self.failUnless(translated_id in self.folder,
+                            self.folder)
 
     def test_additional_view(self):
         # additional views:

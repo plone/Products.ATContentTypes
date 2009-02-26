@@ -231,9 +231,6 @@ class ATTopic(ATCTFolder):
         """Return a list of our criteria objects.
         """
         val = self.objectValues(self.listCriteriaMetaTypes())
-        # XXX Sorting results in inconsistent order. Leave them in the order
-        # they were added.
-        #val.sort()
         return val
 
     security.declareProtected(View, 'listSearchCriteria')

@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Changed objectIds and objectValues calls to use the IContainer API.
+  [hannosch]
+
 - Use Batch from its new location plone.sequencebatch. We don't have a direct
   CMFPlone dependency anymore.
   [hannosch]
@@ -1388,9 +1391,9 @@ Snapshot 2005 07 05
   Fixes issue [ 1176355 ].
   [alecm]
 
-- Changed processForm to check for id confilicts using check_ids if available,
-  otherwise just parent.objectIds().  Also commit sub-transaction to make
-  rename work after portal_factory.
+- Changed processForm to check for id conflicts using check_ids if available,
+  otherwise just `id in parent`. Also commit sub-transaction to make rename
+  work after portal_factory.
   [alecm]
 
 - Added version migration system mostly copied from plone. Works automatically

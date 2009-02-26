@@ -632,7 +632,7 @@ Now for the real thing, doing a PUT request, back to Member role:
   HTTP/1.1 201 Created
   ...
 
-  >>> 'Foto-do-Parana.jpg' in self.folder.objectIds()
+  >>> 'Foto-do-Parana.jpg' in self.folder
   True
 
   >>> image = self.folder['Foto-do-Parana.jpg']
@@ -660,7 +660,7 @@ Need manager roles here:
   HTTP/1.1 201 Created
   ...
 
-  >>> 'fotos-de-jurere' in self.folder.objectIds()
+  >>> 'fotos-de-jurere' in self.folder
   True
 
   >>> print self.folder['fotos-de-jurere'].Title()

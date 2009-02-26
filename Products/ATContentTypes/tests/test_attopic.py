@@ -164,8 +164,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         topic = self._ATCT
 
         topic.addCriterion( 'foo', 'ATSimpleStringCriterion' )
-        self.failUnless('crit__foo_ATSimpleStringCriterion' in
-            topic.objectIds(), topic.objectIds())
+        self.failUnless('crit__foo_ATSimpleStringCriterion' in topic)
         topic.getCriterion( 'foo_ATSimpleStringCriterion' ).setValue( 'bar' )
 
         query = topic.buildQuery()
@@ -184,8 +183,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         topic = self._ATCT
 
         topic.addCriterion( 'foo', 'ATSimpleStringCriterion' )
-        self.failUnless('crit__foo_ATSimpleStringCriterion' in
-            topic.objectIds(), topic.objectIds())
+        self.failUnless('crit__foo_ATSimpleStringCriterion' in topic)
         topic.getCriterion( 'foo_ATSimpleStringCriterion' ).setValue( 'bar' )
 
         self.setRoles(['Manager', 'Member'])
@@ -199,8 +197,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.failUnlessEqual(subtopic.buildQuery(), topic.buildQuery())
 
         subtopic.addCriterion( 'baz', 'ATSimpleStringCriterion' )
-        self.failUnless('crit__baz_ATSimpleStringCriterion' in
-            subtopic.objectIds(), subtopic.objectIds())
+        self.failUnless('crit__baz_ATSimpleStringCriterion' in subtopic)
         subtopic.getCriterion( 'baz_ATSimpleStringCriterion' ).setValue( 'bam' )
 
         query = subtopic.buildQuery()

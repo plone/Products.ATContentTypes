@@ -60,7 +60,7 @@ class ATFolderNextPrevious(object):
         if counter is not None:
             count = counter()
         else:
-            count = len(folder.objectIds())
+            count = len(folder)
 
         if (position + 1) < count:
             next_brain = catalog(self.buildNextPreviousQuery(position   = position + 1,

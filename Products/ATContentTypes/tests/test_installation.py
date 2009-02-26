@@ -26,8 +26,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
     def test_skin_installed(self):
         stool = getattr(self.portal.aq_explicit, 'portal_skins')
-        ids = stool.objectIds()
-        self.failUnless('ATContentTypes' in ids, ids)
+        self.failUnless('ATContentTypes' in stool)
 
     def test_installedAllTypes(self):
         # test that all types are installed well
@@ -36,8 +35,8 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
             'Folder', 'Image', 'Large Plone Folder', 'Link',
             'News Item', 'Topic', 'Event')
 
-        tids = ttool.objectIds()
-        for id in ids:
+        tids = ttool.keys()
+        for id in ttool:
             self.failUnless(id in tids, (id, tids))
             tinfo = ttool[id]
             self.failUnless(tinfo.product == 'ATContentTypes', tinfo.product)
@@ -47,8 +46,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
     def test_reindex_doesnt_add_tools(self):
         cat = self.cat
-        ids = [id for id in self.portal.objectIds()
-               if id.startswith('portal_') ]
+        ids = [i for i in self.portal if i.startswith('portal_')]
         # a rought guess
         self.failIf(len(ids) < 5)
         for id in ids:
