@@ -14,7 +14,7 @@
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
-        <h1 tal:content="context/pretty_title_or_id" class="documentFirstHeading">
+        <h1 tal:content="context/Title|context/getId" class="documentFirstHeading">
             Title or id
         </h1>
 
@@ -52,7 +52,7 @@
                 <div class="tileItem visualIEFloatFix vevent" 
                      tal:define="item_url item/getURL|item/absolute_url;
                                        item_id item/getId|item/id;
-                                       item_title_or_id item/pretty_title_or_id;
+                                       item_title_or_id item/Title|item_id;
                                        item_description item/Description;
                                        item_type item/portal_type;
                                        item_type_title item/Type;

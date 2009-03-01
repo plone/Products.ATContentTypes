@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Reverted the use of the pretty_title_or_id Python script.
+  [hannosch]
+
 - Changed objectIds and objectValues calls to use the IContainer API.
   [hannosch]
 

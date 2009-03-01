@@ -85,7 +85,7 @@
                                                 icon python:portal_url+'/'+ obj_typeinfo.getIcon();
                                                 obj_wf_state obj/review_state|python: wtool.getInfoFor(obj, 'review_state', '');
                                                 obj_wf_state_class python:'state-' + normalizeString(obj_wf_state);
-                                                title_or_id obj/pretty_title_or_id">
+                                                title_or_id obj/Title|obj/getId">
                             <tal:block define="value python: getattr(obj, field, None)">
                                 <td tal:condition="python: field != 'Title'"
                                     tal:content="python:here.formatCatalogMetadata(value)"

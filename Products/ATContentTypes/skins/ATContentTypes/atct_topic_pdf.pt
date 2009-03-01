@@ -15,7 +15,7 @@
   <content>
     <para style="PortalTitle" tal:content="structure portal/Title"/>
     <para style="Text"/>
-    <para style="TopicTitle" tal:content="structure here/pretty_title_or_id"/>
+    <para style="TopicTitle" tal:content="structure here/Title"/>
     <para style="Text"/>
     <para style="Text" tal:content="structure here/Description"/>
     <para style="Text"/>
@@ -30,7 +30,7 @@
                 <tal:block metal:define-macro="list-item"
                            tal:define="item_url item/getURL|item/absolute_url;
                                        item_id item/getId|item/id;
-                                       item_title_or_id item/pretty_title_or_id;
+                                       item_title_or_id item/Title|item_id;
                                        item_description item/Description;
                                        item_type item/portal_type;
                                        item_type_title item/Type;
@@ -107,7 +107,7 @@
                         <tal:fields repeat="field here/getCustomViewFields"
                                     define="url obj/getURL;
                                             icon python:portal_url+'/'+'/'.join([x for x in obj.getIcon.split('/') if x]);
-                                            title_or_id obj/pretty_title_or_id">
+                                            title_or_id obj/Title|obj/getId">
                         <tal:block define="value python: getattr(obj, field, None);
                         dictish nocall:value/items|nothing;
                         listish python:same_type(value,[]) or same_type(value,())">

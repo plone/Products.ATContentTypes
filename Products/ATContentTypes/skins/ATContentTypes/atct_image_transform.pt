@@ -8,7 +8,7 @@
 <div metal:fill-slot="main" tal:define="image nocall:here;
                                         size python:here.getObjSize(here)">
 
-    <h1 tal:content="context/pretty_title_or_id">
+    <h1 tal:content="context/Title|context/getId">
         Title or id
     </h1>
 
