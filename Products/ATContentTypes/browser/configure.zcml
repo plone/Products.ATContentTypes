@@ -1,6 +1,7 @@
 <configure
   xmlns="http://namespaces.zope.org/zope"
-  xmlns:browser="http://namespaces.zope.org/browser">
+  xmlns:browser="http://namespaces.zope.org/browser"
+  i18n_domain="atcontenttypes">
 
   <adapter factory=".nextprevious.ATFolderNextPrevious" />
 
@@ -24,6 +25,20 @@
       name="file_view"
       template="file.pt"
       permission="zope2.View" />
+
+  <browser:page
+      for="zope.container.interfaces.IContainer"
+      class=".folder.FolderListingView"
+      name="folder_listing"
+      template="folder_listing.pt"
+      permission="zope2.View" />
+
+  <browser:menuItem
+      for="zope.container.interfaces.IContainer"
+      menu="plone_displayviews"
+      title="Standard View"
+      action="folder_listing"
+      />
 
   <browser:page
       for="Products.ATContentTypes.interfaces.IATImage"

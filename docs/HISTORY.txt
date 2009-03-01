@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Turned the folder_listing template into a proper browser page.
+  [hannosch]
+
 - Turned the document_relateditems template into a proper browser page.
   [hannosch]
 
