@@ -1,0 +1,44 @@
+<div class="relatedItems"
+    i18n:domain="plone"
+    tal:define="tools context/@@plone_tools;
+                getInfoFor python:tools.workflow().getInfoFor;">
+    <tal:allowed condition="context/@@plone_context_state/is_view_template">
+        <tal:relatedItems tal:define="related view/computeRelatedItems;">
+            <tal:block tal:condition="python:related">
+                <div class="visualClear" id="clear-space-before-relatedItemBox"><!-- --></div>
+                <fieldset id="relatedItemBox"
+                          tal:define="site_properties context/portal_properties/site_properties;
+                                      use_view_action site_properties/typesUseViewActionInListings|python:();
+                                      plone_view nocall:context/@@plone;
+                                      normalizeString nocall:plone_view/normalizeString;">
+                    <legend i18n:translate="label_related_items">Related content</legend>
+                    <ul class="visualNoMarker">
+                    <tal:related tal:repeat="item related">
+                        <li tal:define="
+                                desc                item/Description;
+                                item_type           item/portal_type;
+                                item_icon           python:plone_view.getIcon(item);
+                                item_type           item/portal_type;
+                                item_type_class     python:'contenttype-' + normalizeString(item_type);
+                                item_wf_state       item/review_state|python: getInfoFor(item, 'review_state', '');
+                                item_wf_state_class python: 'state-' + normalizeString(item_wf_state);
+                                item_url            item/absolute_url;
+                                item_url            python:item_type in use_view_action and item_url+'/view' or item_url">
+                            <span tal:attributes="class item_type_class">
+                                <img tal:replace="structure item_icon/html_tag" />
+                                <a href="" class=""
+                                   tal:attributes="href  item_url;
+                                                   title item/Description;
+                                                   class string:$item_wf_state_class"
+                                   tal:content="item/Title|item/getId">
+                                    Related Item
+                                </a>
+                            </span>
+                        </li>
+                    </tal:related>
+                    </ul>
+                </fieldset>
+            </tal:block>
+        </tal:relatedItems>
+    </tal:allowed>
+</div>

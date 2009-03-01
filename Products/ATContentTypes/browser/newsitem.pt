@@ -62,7 +62,7 @@
             <div metal:define-slot="inside" tal:replace="structure text">The body</div>
         </div>
         
-        <div metal:use-macro="context/document_relateditems/macros/relatedItems">
+        <div tal:replace="structure context/document_relateditems">
             Show related items if they exist
         </div>
         

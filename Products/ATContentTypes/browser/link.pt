@@ -35,7 +35,7 @@
                         tal:content="context/remote_url">remote url</a>
         </p>
 
-        <div metal:use-macro="context/document_relateditems/macros/relatedItems">
+        <div tal:replace="structure context/document_relateditems">
             show related items if they exist
         </div>
     

@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Turned the document_relateditems template into a proper browser page.
+  [hannosch]
+
 - Reverted the use of the pretty_title_or_id Python script.
   [hannosch]
 

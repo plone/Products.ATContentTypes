@@ -46,4 +46,11 @@
       template="newsitem.pt"
       permission="zope2.View" />
 
+  <browser:page
+      for="Products.ATContentTypes.interfaces.IATContentType"
+      class=".related.RelatedItemsView"
+      name="document_relateditems"
+      template="related.pt"
+      permission="zope2.View" />
+
 </configure>
