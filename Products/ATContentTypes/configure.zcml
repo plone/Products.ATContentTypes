@@ -2,6 +2,8 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five">
 
+  <include package="plone.app.contentmenu" />
+
   <include package=".browser" />
   <include package=".exportimport" />
   <include package="plone.i18n.normalizer" />
