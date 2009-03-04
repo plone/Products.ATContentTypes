@@ -26,6 +26,8 @@ __docformat__ = 'restructuredtext'
 
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 
 from Products.Archetypes.public import Schema, DisplayList
 from Products.Archetypes.public import BooleanField, StringField
@@ -83,26 +85,28 @@ class ATRelativePathCriterion(ATBaseCriterion):
         result = []
         depth = (not self.Recurse() and 1) or -1
         relPath = self.getRelativePath()
-        
+
+        context = aq_inner(self)
+
         # sanitize a bit: you never know, with all those windoze users out there
         relPath = relPath.replace("\\","/") 
 
         # get the path to the portal object 
-        portalPath = list(getToolByName(self, 'portal_url').getPortalObject().getPhysicalPath())
-    
+        portalPath = list(getToolByName(context, 'portal_url').getPortalObject().getPhysicalPath())
+
         if relPath[0]=='/':
             # someone didn't enter a relative path.
             # simply use that one, relative to the portal
             path = '/'.join(portalPath) + relPath
         elif relPath=='..' or relPath=='../':
             # do a shortcut
-            path = '/'.join(self.aq_parent.aq_parent.getPhysicalPath())
+            path = '/'.join(aq_parent(aq_parent(context)).getPhysicalPath())
         else:
             folders = relPath.split('/')
 
             # set the path to the collections path
-            path = list(self.aq_parent.getPhysicalPath()) 
-            
+            path = list(aq_parent(context).getPhysicalPath())
+
             # now construct an aboslute path based on the relative custom path
             # eat away from 'path' whenever we encounter a '..' in the relative path
             # apend all other elements other than ..

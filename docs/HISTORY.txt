@@ -1,5 +1,12 @@
+1.2.8 unreleased
+================
+
+* Made the relative path criterion less prone for funky Acquisition chains.
+  This refs http://dev.plone.org/plone/ticket/7686.
+  [hannosch]
+
 1.2.7 2009-01-30
-==================
+================
 
 * Don't assume regular (non-btree) folders for next/previous support.
   [witsch]
