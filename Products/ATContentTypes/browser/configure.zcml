@@ -55,6 +55,12 @@
       permission="zope2.View" />
 
   <browser:page
+      for="Products.ATContentTypes.interfaces.IATLink"
+      class=".link.LinkRedirectView"
+      name="link_redirect_view"
+      permission="zope2.View" />
+
+  <browser:page
       for="Products.ATContentTypes.interfaces.IATNewsItem"
       class=".content.NewsItemView"
       name="newsitem_view"

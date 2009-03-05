@@ -73,27 +73,13 @@
                         tal:attributes="class python:item_type == 'Event' and 'vevent' or ''">
 
                         <span class="summary"
-                              tal:attributes="class string:$item_type_class summary"
-                              tal:condition="python:item_type != 'Link'">
+                              tal:attributes="class string:$item_type_class summary">
                             <img tal:replace="structure item_icon/html_tag" />
                             <a href="#"
                                tal:attributes="href python:item_type in use_view_action and item_url+'/view' or item_url;
                                                class string:${item_wf_state_class} url"
                                tal:content="item_title_or_id">
                                 Item Title
-                            </a>
-                        </span>
-
-                        <span class=""
-                              tal:attributes="class string:$item_type_class"
-                              tal:condition="python:item_type == 'Link'">
-                            <img tal:replace="structure item_icon/html_tag" />
-                            <a href="#"
-                               class="link-plain"
-                               tal:content="item_title_or_id"
-                               tal:attributes="href item/getRemoteUrl;
-                                               class string:${item_wf_state_class} link-plain">
-                                External Link
                             </a>
                         </span>
 
