@@ -155,16 +155,6 @@
   <!-- lib -->
 
     <implements
-        class=".lib.autosort.AutoSortSupport"
-        interface=".interface.IAutoSortSupport"
-        />
-
-    <implements
-        class=".lib.autosort.AutoOrderSupport"
-        interface=".interface.IAutoOrderSupport"
-        />
-
-    <implements
         class=".lib.calendarsupport.CalendarSupportMixin"
         interface=".interface.ICalendarSupport"
         />

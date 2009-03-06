@@ -42,15 +42,11 @@ from Products.ATContentTypes.interfaces import IATBTreeFolder
 
 from zope.interface.verify import verifyClass
 
-from Products.ATContentTypes.interfaces import IAutoSortSupport
-from Products.ATContentTypes.interfaces import IAutoOrderSupport
 from Interface.Verify import verifyObject
 
 from Products.CMFPlone.interfaces.ConstrainTypes import ISelectableConstrainTypes
 
 # z3 imports
-from Products.ATContentTypes.interface import IAutoSortSupport as Z3IAutoSortSupport
-from Products.ATContentTypes.interface import IAutoOrderSupport as Z3IAutoOrderSupport
 from Products.ATContentTypes.interface import IATFolder as Z3IATFolder
 from Products.ATContentTypes.interface import IATBTreeFolder as Z3IATBTreeFolder
 from zope.interface.verify import verifyObject as Z3verifyObject
@@ -68,13 +64,6 @@ class FolderTestMixin:
         self.failUnless(ISelectableConstrainTypes.isImplementedBy(self._ATCT))
         self.failUnless(verifyObject(ISelectableConstrainTypes, self._ATCT))
 
-    def test_implements_autosort(self):
-        self.failUnless(IAutoSortSupport.isImplementedBy(self._ATCT))
-        self.failUnless(verifyObject(IAutoSortSupport, self._ATCT))
-
-    def test_implementsZ3_autosort(self):
-        iface = Z3IAutoSortSupport
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
 
 class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
@@ -108,16 +97,6 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
     def test_edit(self):
         new = self._ATCT
         editATCT(new)
-
-    def test_implements_autoorder(self):
-        self.failUnless(IAutoOrderSupport.isImplementedBy(self._ATCT))
-        self.failUnless(verifyObject(IAutoOrderSupport, self._ATCT))
-
-    def test_Z3implements_autoorder(self):
-        pass
-        #iface = Z3IAutoOrderSupport
-        #self.failUnless(Z3verifyObject(iface, self._ATCT))
-        # XXX Archetypes not ready for Zope3 OrderedContainer (see zope.app.container.interfaces)
 
     def test_get_size(self):
         atct = self._ATCT
@@ -193,7 +172,7 @@ class TestATBTreeFolderFields(TestATFolderFields):
 
 tests.append(TestATBTreeFolderFields)
 
-class TestAutoSortSupport(atcttestcase.ATCTSiteTestCase):
+class TestUnallowedIds(atcttestcase.ATCTSiteTestCase):
 
     def afterSetUp(self):
         atcttestcase.ATCTSiteTestCase.afterSetUp(self)
@@ -208,23 +187,6 @@ class TestAutoSortSupport(atcttestcase.ATCTSiteTestCase):
                     )
         for pt, id, title in self.objs:
             self.fobj.invokeFactory(pt, id, title=title)
-
-    def test_autoordering(self):
-        f = self.fobj
-        self.failUnlessEqual(f.getDefaultSorting(), ('Title', False))
-        self.failUnlessEqual(f.getSortFolderishFirst(), True)
-        self.failUnlessEqual(f.getSortReverse(), False)
-        self.failUnlessEqual(f.getSortAuto(), True)
-
-        f.setDefaultSorting('getId', reverse=True)
-        f.setSortFolderishFirst(False)
-        f.setSortReverse(True)
-        f.setSortAuto(False)
-
-        self.failUnlessEqual(f.getDefaultSorting(), ('getId', True))
-        self.failUnlessEqual(f.getSortFolderishFirst(), False)
-        self.failUnlessEqual(f.getSortReverse(), True)
-        self.failUnlessEqual(f.getSortAuto(), False)
 
     def test_strangeUnallowedIds(self):
         """ Certain IDs used to give an error and are unusable
@@ -241,7 +203,7 @@ class TestAutoSortSupport(atcttestcase.ATCTSiteTestCase):
 
     # TODO: more tests
 
-tests.append(TestAutoSortSupport)
+tests.append(TestUnallowedIds)
 
 class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
     
