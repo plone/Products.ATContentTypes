@@ -1,4 +1,4 @@
-1.2.8 unreleased
+1.3.0 unreleased
 ================
 
 * Remove all code related to auto-sorting / auto-ordering folder as proposed
