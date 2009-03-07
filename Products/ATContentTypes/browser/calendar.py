@@ -41,7 +41,10 @@ class CalendarView(BrowserView):
 
     @ram.cache(cachekey)
     def feeddata(self):
+        context = aq_inner(self.context)
         data = cs.ICS_HEADER % dict(prodid=cs.PRODID)
+        data += 'X-WR-CALNAME:%s\n' % context.Title()
+        data += 'X-WR-CALDESC:%s\n' % context.Description()
         for brain in self.events:
             data += brain.getObject().getICal()
         data += cs.ICS_FOOTER

@@ -106,6 +106,19 @@ class EventCalendarTests(ATCTSiteTestCase):
             'END:VEVENT',
             'END:VCALENDAR')
 
+    def testCalendarInfo(self):
+        self.folder.processForm(values={'title': 'Foo', 'description': 'Bar'})
+        headers, output, request = makeResponse(TestRequest())
+        view = getMultiAdapter((self.folder, request), name='calendar.ics')
+        view.render()
+        self.checkOrder(''.join(output),
+            'BEGIN:VCALENDAR',
+            'X-WR-CALNAME:Foo',
+            'X-WR-CALDESC:Bar',
+            'BEGIN:VEVENT',
+            'BEGIN:VEVENT',
+            'END:VCALENDAR')
+
     def testRenderingForTopic(self):
         self.setRoles(('Manager',))
         folder = self.folder
