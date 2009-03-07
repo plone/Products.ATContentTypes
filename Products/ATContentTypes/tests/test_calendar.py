@@ -118,6 +118,16 @@ class EventCalendarTests(ATCTSiteTestCase):
             'BEGIN:VEVENT',
             'BEGIN:VEVENT',
             'END:VCALENDAR')
+        headers, output, request = makeResponse(TestRequest())
+        view = getMultiAdapter((self.portal, request), name='ics_view')
+        view.render()
+        self.checkOrder(''.join(output),
+            'BEGIN:VCALENDAR',
+            'X-WR-CALNAME:Plone site',
+            'X-WR-CALDESC:',
+            'BEGIN:VEVENT',
+            'BEGIN:VEVENT',
+            'END:VCALENDAR')
 
     def testRenderingForTopic(self):
         self.setRoles(('Manager',))
