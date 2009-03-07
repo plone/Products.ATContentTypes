@@ -5,6 +5,7 @@ from zope.publisher.browser import TestRequest
 from zope.annotation.interfaces import IAttributeAnnotatable
 
 from Products.ATContentTypes.tests.atcttestcase import ATCTSiteTestCase
+from Products.ATContentTypes.interface.interfaces import ICalendarSupport
 from Products.ATContentTypes.browser.calendar import cachekey
 
 
@@ -60,6 +61,24 @@ class EventCalendarTests(ATCTSiteTestCase):
         self.assertEqual(len(view.events), 2)
         self.assertEqual(sorted([ e.Title for e in view.events ]),
             ['Inauguration Day 2009', 'Plone Conf 2008'])
+
+    def testDuplicateQueryParameters(self):
+        self.setRoles(('Manager',))
+        folder = self.folder
+        topic = self.folder[self.folder.invokeFactory('Topic', id='dc')]
+        crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
+        crit.setValue('Event')
+        crit = topic.addCriterion('object_provides', 'ATSimpleStringCriterion')
+        crit.setValue(ICalendarSupport.__identifier__)
+        query = topic.buildQuery()
+        self.assertEqual(len(query), 2)
+        self.assertEqual(query['portal_type'], 'Event')
+        self.assertEqual(query['object_provides'], ICalendarSupport.__identifier__)
+        view = getMultiAdapter((topic, TestRequest()), name='calendar.ics')
+        view.update()
+        self.assertEqual(len(view.events), 2)
+        self.assertEqual(sorted([ e.Title for e in view.events ]),
+            ['Plone Conf 2007', 'Plone Conf 2008'])
 
     def checkOrder(self, text, *order):
         for item in order:
