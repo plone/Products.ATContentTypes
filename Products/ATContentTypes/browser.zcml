@@ -15,28 +15,28 @@
 
     <browser:page
         for=".interface.folder.IATFolder"
-        name="calendar.ics"
+        name="ics_view"
         class=".browser.calendar.CalendarView"
         permission="zope2.View"
         />
 
     <browser:page
         for=".interface.folder.IATBTreeFolder"
-        name="calendar.ics"
+        name="ics_view"
         class=".browser.calendar.CalendarView"
         permission="zope2.View"
         />
 
     <browser:page
         for=".interface.topic.IATTopic"
-        name="calendar.ics"
+        name="ics_view"
         class=".browser.calendar.TopicCalendarView"
         permission="zope2.View"
         />
 
     <browser:page
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        name="calendar.ics"
+        name="ics_view"
         class=".browser.calendar.CalendarView"
         permission="zope2.View"
         />

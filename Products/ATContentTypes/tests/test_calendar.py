@@ -37,7 +37,7 @@ class EventCalendarTests(ATCTSiteTestCase):
         classImplements(TestRequest, IAttributeAnnotatable)
 
     def testCalendarView(self):
-        view = getMultiAdapter((self.folder, TestRequest()), name='calendar.ics')
+        view = getMultiAdapter((self.folder, TestRequest()), name='ics_view')
         view.update()
         self.assertEqual(len(view.events), 2)
         self.assertEqual(sorted([ e.Title for e in view.events ]),
@@ -49,7 +49,7 @@ class EventCalendarTests(ATCTSiteTestCase):
         topic = self.folder[self.folder.invokeFactory('Topic', id='dc')]
         crit = topic.addCriterion('SearchableText', 'ATSimpleStringCriterion')
         crit.setValue('DC')
-        view = getMultiAdapter((topic, TestRequest()), name='calendar.ics')
+        view = getMultiAdapter((topic, TestRequest()), name='ics_view')
         view.update()
         self.assertEqual(len(view.events), 1)
         self.assertEqual(sorted([ e.Title for e in view.events ]),
@@ -74,7 +74,7 @@ class EventCalendarTests(ATCTSiteTestCase):
         self.assertEqual(len(query), 2)
         self.assertEqual(query['portal_type'], 'Event')
         self.assertEqual(query['object_provides'], ICalendarSupport.__identifier__)
-        view = getMultiAdapter((topic, TestRequest()), name='calendar.ics')
+        view = getMultiAdapter((topic, TestRequest()), name='ics_view')
         view.update()
         self.assertEqual(len(view.events), 2)
         self.assertEqual(sorted([ e.Title for e in view.events ]),
@@ -89,7 +89,7 @@ class EventCalendarTests(ATCTSiteTestCase):
 
     def testRendering(self):
         headers, output, request = makeResponse(TestRequest())
-        view = getMultiAdapter((self.folder, request), name='calendar.ics')
+        view = getMultiAdapter((self.folder, request), name='ics_view')
         view.render()
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
@@ -109,7 +109,7 @@ class EventCalendarTests(ATCTSiteTestCase):
     def testCalendarInfo(self):
         self.folder.processForm(values={'title': 'Foo', 'description': 'Bar'})
         headers, output, request = makeResponse(TestRequest())
-        view = getMultiAdapter((self.folder, request), name='calendar.ics')
+        view = getMultiAdapter((self.folder, request), name='ics_view')
         view.render()
         self.checkOrder(''.join(output),
             'BEGIN:VCALENDAR',
@@ -126,7 +126,7 @@ class EventCalendarTests(ATCTSiteTestCase):
         crit = topic.addCriterion('SearchableText', 'ATSimpleStringCriterion')
         crit.setValue('DC')
         headers, output, request = makeResponse(TestRequest())
-        view = getMultiAdapter((topic, request), name='calendar.ics')
+        view = getMultiAdapter((topic, request), name='ics_view')
         view.render()
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
@@ -143,7 +143,7 @@ class EventCalendarTests(ATCTSiteTestCase):
 
     def testCacheKey(self):
         headers, output, request = makeResponse(TestRequest())
-        view = getMultiAdapter((self.folder, request), name='calendar.ics')
+        view = getMultiAdapter((self.folder, request), name='ics_view')
         # calculate original key for caching...
         view.update()
         key1 = cachekey(None, view)
@@ -153,7 +153,7 @@ class EventCalendarTests(ATCTSiteTestCase):
         self.assertEqual(key1, key2)
         # even with a new view...
         headers, output, request = makeResponse(TestRequest())
-        view = getMultiAdapter((self.folder, request), name='calendar.ics')
+        view = getMultiAdapter((self.folder, request), name='ics_view')
         view.update()
         key3 = cachekey(None, view)
         self.assertEqual(key1, key3)
