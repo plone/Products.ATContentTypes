@@ -42,6 +42,25 @@ class EventCalendarTests(ATCTSiteTestCase):
         self.assertEqual(sorted([ e.Title for e in view.events ]),
             ['Plone Conf 2007', 'Plone Conf 2008'])
 
+    def testCalendarViewForTopic(self):
+        self.setRoles(('Manager',))
+        folder = self.folder
+        topic = self.folder[self.folder.invokeFactory('Topic', id='dc')]
+        crit = topic.addCriterion('SearchableText', 'ATSimpleStringCriterion')
+        crit.setValue('DC')
+        view = getMultiAdapter((topic, TestRequest()), name='calendar.ics')
+        view.update()
+        self.assertEqual(len(view.events), 1)
+        self.assertEqual(sorted([ e.Title for e in view.events ]),
+            ['Plone Conf 2008'])
+        folder[folder.invokeFactory('Event',
+            id='inaug09', title='Inauguration Day 2009',
+            startDate='2009/01/20', endDate='2009/01/20', location='DC')]
+        view.update()
+        self.assertEqual(len(view.events), 2)
+        self.assertEqual(sorted([ e.Title for e in view.events ]),
+            ['Inauguration Day 2009', 'Plone Conf 2008'])
+
     def checkOrder(self, text, *order):
         for item in order:
             position = text.find(item)

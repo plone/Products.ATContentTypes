@@ -49,3 +49,17 @@ class CalendarView(BrowserView):
 
     __call__ = render
 
+
+class TopicCalendarView(BrowserView):
+    """ view (on "topic" content) for aggregating event data into
+        an `.ics` feed """
+
+    def update(self):
+        context = aq_inner(self.context)
+        catalog = getToolByName(context, 'portal_catalog')
+        if 'object_provides' in catalog.indexes():
+            query = {'object_provides': ICalendarSupport.__identifier__}
+        else:
+            query = {'portal_type': 'Event'}
+        self.events = context.queryCatalog(**query)
+
