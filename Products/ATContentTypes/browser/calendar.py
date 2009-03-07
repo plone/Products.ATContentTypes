@@ -13,11 +13,12 @@ def cachekey(fun, self):
         the returned key is suitable for usage with `memoize.ram.cache` """
     context = aq_inner(self.context)
     def add(brain):
-        path = brain.getPath().decode('ascii', 'replace')
+        path = brain.getPath().decode('ascii', 'replace').encode('utf-8')
         return '%s\n%s\n\n' % (path, brain.modified)
     url = context.absolute_url()
+    title = context.Title()
     fingerprint = ''.join(map(add, self.events))
-    return ''.join((url, fingerprint))
+    return ''.join((url, title, fingerprint))
 
 
 class CalendarView(BrowserView):
