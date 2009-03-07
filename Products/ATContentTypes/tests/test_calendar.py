@@ -106,6 +106,28 @@ class EventCalendarTests(ATCTSiteTestCase):
             'END:VEVENT',
             'END:VCALENDAR')
 
+    def testRenderingForTopic(self):
+        self.setRoles(('Manager',))
+        folder = self.folder
+        topic = self.folder[self.folder.invokeFactory('Topic', id='dc')]
+        crit = topic.addCriterion('SearchableText', 'ATSimpleStringCriterion')
+        crit.setValue('DC')
+        headers, output, request = makeResponse(TestRequest())
+        view = getMultiAdapter((topic, request), name='calendar.ics')
+        view.render()
+        self.assertEqual(len(headers), 2)
+        self.assertEqual(headers['Content-Type'], 'text/calendar')
+        self.checkOrder(''.join(output),
+            'BEGIN:VCALENDAR',
+            'BEGIN:VEVENT',
+            'SUMMARY:Plone Conf 2008',
+            'LOCATION:DC',
+            'URL:http://plone.org/events/conferences/2008-washington-dc',
+            'END:VEVENT',
+            'END:VCALENDAR')
+        lines = ''.join(output).splitlines()
+        self.assertEqual(len([ l for l in lines if l == 'BEGIN:VEVENT']), 1)
+
     def testCacheKey(self):
         headers, output, request = makeResponse(TestRequest())
         view = getMultiAdapter((self.folder, request), name='calendar.ics')

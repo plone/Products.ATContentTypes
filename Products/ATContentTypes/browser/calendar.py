@@ -50,7 +50,7 @@ class CalendarView(BrowserView):
     __call__ = render
 
 
-class TopicCalendarView(BrowserView):
+class TopicCalendarView(CalendarView):
     """ view (on "topic" content) for aggregating event data into
         an `.ics` feed """
 
