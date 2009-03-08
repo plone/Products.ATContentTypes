@@ -23,6 +23,7 @@ from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
 from App.class_init import InitializeClass
 from Acquisition import aq_base
+from Acquisition import aq_get
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from OFS.ObjectManager import REPLACEABLE
@@ -209,7 +210,7 @@ class ATCTContent(ATCTMixin, BaseContent):
             # Use the last-segment from the url as the id, as the
             # object might have been renamed somehow (eg: by id
             # mangling).
-            request = REQUEST or getattr(self, 'REQUEST', None)
+            request = REQUEST or aq_get(self, 'REQUEST', None)
             if request is not None:
                 path_info = request.get('PATH_INFO')
                 if path_info:
@@ -399,7 +400,7 @@ class ATCTFileContent(ATCTContent):
                 # Use the last-segment from the url as the id, as the
                 # object might have been renamed somehow (eg: by id
                 # mangling).
-                request = REQUEST or getattr(self, 'REQUEST', None)
+                request = REQUEST or aq_get(self, 'REQUEST', None)
                 if request is not None:
                     path_info = request.get('PATH_INFO')
                     if path_info:
@@ -457,7 +458,7 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
             # Use the last-segment from the url as the id, as the
             # object might have been renamed somehow (eg: by id
             # mangling).
-            request = REQUEST or getattr(self, 'REQUEST', None)
+            request = REQUEST or aq_get(self, 'REQUEST', None)
             if request is not None:
                 path_info = request.get('PATH_INFO')
                 if path_info:
@@ -472,7 +473,7 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
         Method not allowed if the default view has no HEAD method.
         """
         view_id = self.getDefaultPage() or self.getLayout()
-        view_method = getattr(self, view_id, None)
+        view_method = self.restrictedTraverse(view_id, None)
         if view_method is None:
             # view method couldn't be acquired
             raise NotFound, "View method %s for requested resource is not " \
@@ -496,7 +497,7 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
         """Special case index_html"""
         request = REQUEST
         if request is None:
-            request = getattr(self, 'REQUEST', None)
+            request = aq_get(self, 'REQUEST', None)
         if request and request.has_key('REQUEST_METHOD'):
             if request.maybe_webdav_client:
                 method = request['REQUEST_METHOD']

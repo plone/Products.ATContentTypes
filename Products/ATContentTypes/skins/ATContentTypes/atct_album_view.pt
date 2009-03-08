@@ -100,8 +100,6 @@
 
     </tal:listing>
 
-    <metal:subtopics use-macro="here/atct_topic_view/macros/folderlisting_macro" />
-
     <div tal:replace="structure provider:plone.belowcontentbody" />
 
 </metal:main_macro>

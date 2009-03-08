@@ -75,7 +75,7 @@ For the test we have to remove the object 'index_html' if it is in the
 folder.
 
   >>> if 'index_html' in folder:
-  ...     folder.manage_delObjects('index_html')
+  ...     del folder['index_html']
 
   ATFfolder's HEAD method is using defaultView to acquire a view method. Check
   the viewMethod first.
@@ -83,11 +83,9 @@ folder.
   >>> view_id = folder.defaultView()
   >>> view_id
   'folder_listing'
-  >>> view_method = getattr(folder, view_id)
+  >>> view_method = folder.restrictedTraverse(view_id)
   >>> view_method
-  <FSPageTemplate at ...>
-  >>> view_method.HEAD
-  <bound method FSPageTemplate.HEAD of ...>
+  <Products.Five.metaclass.SimpleViewClass from ...>
 
   Check HEAD w/o an index_html object
 
@@ -95,7 +93,7 @@ folder.
   ... HEAD /%s HTTP/1.1
   ... Authorization: Basic %s:%s
   ... """ % (fpath, user_name, user_password))
-  HTTP/1.1 200 OK
+  HTTP/1.1 405 Method Not Allowed
   ...
 
   HEAD works with an object named index_html, too. The browserdefault code

@@ -77,10 +77,11 @@ We select Page and save our selection.
 View collection
 ----------------------
 
-We add a document to test whether the collection works. We test the portal type Document specifically
-because its portal_type ('Document') is different from its catalog Type ('Page'). We take care to
-exclude the document from navigation, to make it easier to inspect the browser contents and
-detect whether it shows up in searches.
+We add a document to test whether the collection works. We test the portal type
+Document specifically because its portal_type ('Document') is different from
+its catalog Type ('Page'). We take care to exclude the document from
+navigation, to make it easier to inspect the browser contents and detect
+whether it shows up in searches.
 
     >>> self.loginAsPortalOwner()
     >>> self.portal.invokeFactory('Document', 'doc1')

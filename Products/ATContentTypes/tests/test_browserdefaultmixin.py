@@ -100,21 +100,6 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(len(cat(getId='ad',is_default_page=True)), 0)
         self.af.setDefaultPage(None)
         self.assertEqual(len(cat(getId=['ad','other'],is_default_page=True)), 0)
-        
-
-    def test_setLayoutUnsetsDefaultPage(self):
-        layout = 'atct_album_view'
-        self.af.invokeFactory('Document', 'ad')
-        self.af.setDefaultPage('ad')
-        self.assertEqual(self.af.getDefaultPage(), 'ad')
-        self.assertEqual(self.af.defaultView(), 'ad')
-        self.af.setLayout(layout)
-        self.assertEqual(self.af.getDefaultPage(), None)
-        self.assertEqual(self.af.defaultView(), layout)
-        resolved = self.af.unrestrictedTraverse(layout)()
-        browserDefault = self.af.__browser_default__(None)[1][0]
-        browserDefaultResolved = self.af.unrestrictedTraverse(browserDefault)()
-        self.assertEqual(resolved, browserDefaultResolved)
 
     def test_inherit_parent_layout(self):
         # Check to see if subobjects of the same type inherit the layout set

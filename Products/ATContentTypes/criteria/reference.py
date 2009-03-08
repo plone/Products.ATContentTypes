@@ -32,7 +32,7 @@ class ATReferenceCriterion(ATSelectionCriterion):
         display = []
         for b in brains:
             title_or_id = b.Title or b.id
-            display.append(title_or_id.lower(), b.UID, title_or_id)
+            display.append((title_or_id.lower(), b.UID, title_or_id))
         display.sort()
         display_list = DisplayList([(d[1], d[2]) for d in display])
 

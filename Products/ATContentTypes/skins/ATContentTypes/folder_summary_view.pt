@@ -168,8 +168,6 @@
         </tal:foldercontents>
         </metal:listingmacro>
 
-        <metal:subtopics use-macro="context/atct_topic_view/macros/folderlisting_macro" />
-
         <div tal:replace="structure provider:plone.belowcontentbody" />
 
     </metal:main-macro>

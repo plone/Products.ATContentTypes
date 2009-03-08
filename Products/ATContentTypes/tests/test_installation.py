@@ -30,16 +30,12 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
     def test_installedAllTypes(self):
         # test that all types are installed well
-        ttool = self.ttool
         ids = ('Document', 'File',
             'Folder', 'Image', 'Large Plone Folder', 'Link',
             'News Item', 'Topic', 'Event')
 
-        tids = ttool.keys()
-        for id in ttool:
-            self.failUnless(id in tids, (id, tids))
-            tinfo = ttool[id]
-            self.failUnless(tinfo.product == 'ATContentTypes', tinfo.product)
+        for i in ids:
+            self.failUnless(i in self.ttool)
 
     def test_release_settings(self):
         self.failUnlessEqual(SWALLOW_IMAGE_RESIZE_EXCEPTIONS, True)
