@@ -12,7 +12,6 @@ from Products.ATContentTypes.content.document import ATDocument
 from Products.ATContentTypes.lib.validators import TidyHtmlWithCleanupValidator
 from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
 from Products.ATContentTypes.tests.utils import input_file_path
-from Products.ATContentTypes.interfaces import IHistoryAware
 from Products.ATContentTypes.interfaces import ITextContent
 from Products.ATContentTypes.interfaces import IATDocument
 from zope.interface.verify import verifyObject
@@ -53,11 +52,6 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
     title = 'Page'
     meta_type = 'ATDocument'
     icon = 'document_icon.png'
-
-    def test_doesImplementHistoryAware(self):
-        iface = IHistoryAware
-        self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
 
     def test_implementsTextContent(self):
         iface = ITextContent

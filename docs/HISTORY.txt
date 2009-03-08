@@ -1,6 +1,10 @@
 2.0 unreleased
 ==============
 
+- Removed `poor-mans-versioning` aka. athistoryaware. We have a versioning
+  story called CMFEditions now.
+  [hannosch]
+
 - Turned the folder_listing template into a proper browser page.
   [hannosch]
 

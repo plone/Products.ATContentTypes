@@ -3,7 +3,6 @@ from zope.interface import Attribute
 
 from Products.Archetypes.interfaces import IBaseContent
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
-from Products.Archetypes.interfaces import IATHistoryAware
 
 
 class IATContentType(ISelectableBrowserDefault, IBaseContent):
@@ -29,25 +28,6 @@ class IATContentType(ISelectableBrowserDefault, IBaseContent):
     called.
     ''')
 
-class IHistoryAware(IATHistoryAware):
-    """History awareness marker interface
-    """
-
-    def getHistorySource():
-        """get source for HistoryAwareMixin
-
-        Must return a (raw) string
-        """
-
-    def getLastEditor():
-        """Returns the user name of the last editor.
-
-        Returns None if no last editor is known.
-        """
-
-    def getDocumentComparisons(max=10, filterComment=0):
-        """Get history as unified diff
-        """
 
 class ICalendarSupport(Interface):
     """Calendar import/export

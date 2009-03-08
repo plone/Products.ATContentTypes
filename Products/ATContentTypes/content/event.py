@@ -28,7 +28,6 @@ from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interface import IATEvent
 from Products.ATContentTypes.lib.calendarsupport import CalendarSupportMixin
-from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.permission import ChangeEvents
 from Products.ATContentTypes.utils import DT2dt
 
@@ -153,7 +152,7 @@ finalizeATCTSchema(ATEventSchema)
 ATEventSchema.changeSchemataForField('location', 'default')
 ATEventSchema.moveField('location', before='startDate')
 
-class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
+class ATEvent(ATCTContent, CalendarSupportMixin):
     """Information about an upcoming event, which can be displayed in the calendar."""
 
     schema         =  ATEventSchema

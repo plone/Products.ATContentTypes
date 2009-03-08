@@ -29,7 +29,6 @@ from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument as z2IATDocument
 from Products.ATContentTypes.interface import IATDocument
 
@@ -73,7 +72,7 @@ finalizeATCTSchema(ATDocumentSchema)
 # is preserved
 ATDocumentSchema.changeSchemataForField('tableContents', 'settings')
 
-class ATDocumentBase(ATCTContent, HistoryAwareMixin):
+class ATDocumentBase(ATCTContent):
     """A page in the site. Can contain rich text."""
 
     security       = ClassSecurityInfo()
