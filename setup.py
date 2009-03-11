@@ -1,7 +1,7 @@
 import os
 from setuptools import setup, find_packages
 
-version = '1.3.0dev'
+version = '1.3.1dev'
 
 setup(name='Products.ATContentTypes',
       version=version,
