@@ -1,12 +1,65 @@
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.sequencebatch import Batch
+from zope.component import adapts
+from zope.component import queryAdapter
 from zope.component import queryUtility
+from zope.container.interfaces import IContainer
+from zope.interface import implements
+from zope.interface import Interface
 from zope.publisher.browser import BrowserView
 
 from Acquisition import aq_base
+from Products.CMFCore.permissions import AccessInactivePortalContent
+from Products.CMFCore.utils import _checkPermission
 from Products.CMFCore.utils import getToolByName
 
 
+class IFolderContents(Interface):
+    """An interface marking a callable adapter, which returns the contents of
+    a folder.
+    """
+
+
+class FolderContents(object):
+
+    adapts(IContainer)
+    implements(IFolderContents)
+
+    def __init__(self, context):
+        self.context = context
+        self.__parent__ = context
+
+    def __call__(self, batch=False, b_size=100, b_start=0, full_objects=False):
+        context = self.context
+        cur_path = '/'.join(context.getPhysicalPath())
+        query = dict(
+            sort_on='getObjPositionInParent',
+            path=dict(query=cur_path, depth=1),
+            )
+
+        catalog = getToolByName(context, 'portal_catalog')
+        show_inactive = _checkPermission(AccessInactivePortalContent, context)
+        contents = catalog.queryCatalog(query, show_all=True,
+                                        show_inactive=show_inactive)
+        if len(contents) == 0:
+            return ()
+
+        if full_objects:
+            contents = [b.getObject() for b in contents]
+
+        if batch:
+            return Batch(contents, b_size, b_start, orphan=0)
+
+        return contents
+
+
 class FolderListingView(BrowserView):
+
+    def folderContents(self):
+        b_start = int(self.request.get('b_start', 0))
+        b_size = int(self.request.get('limit_display', 100))
+        contents = queryAdapter(self.context, IFolderContents)
+        return contents(batch=True, b_size=b_size, b_start=b_start)
 
     def getInfoFor(self, item):
         wftool = getToolByName(self.context, 'portal_workflow')
@@ -15,9 +68,6 @@ class FolderListingView(BrowserView):
     def getMemberInfo(self, creator):
         membership = getToolByName(self.context, 'portal_membership')
         return membership.getMemberInfo(creator)
-
-    def is_a_topic(self):
-        return self.context.portal_type == 'Topic'
 
     def normalizeString(self, text):
         return queryUtility(IIDNormalizer).normalize(text)

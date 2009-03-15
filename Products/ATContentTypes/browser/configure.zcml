@@ -26,9 +26,19 @@
       template="file.pt"
       permission="zope2.View" />
 
+  <adapter
+      factory=".folder.FolderContents" />
+
   <browser:page
       for="zope.container.interfaces.IContainer"
       class=".folder.FolderListingView"
+      name="folder_listing"
+      template="folder_listing.pt"
+      permission="zope2.View" />
+
+  <browser:page
+      for="Products.ATContentTypes.interfaces.IATTopic"
+      class=".topic.TopicListingView"
       name="folder_listing"
       template="folder_listing.pt"
       permission="zope2.View" />

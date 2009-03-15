@@ -179,10 +179,10 @@
                     tal:define="types context/listSearchCriteriaTypes;"
                     i18n:domain="plone">
 
-                    <option value="" tal:repeat="type types"
-                                     tal:attributes="value type/name"
+                    <option value="" tal:repeat="t types"
+                                     tal:attributes="value t/name"
                                      i18n:translate=""
-                                     tal:content="type/description">Type</option>
+                                     tal:content="t/description">Type</option>
 
                 </select>
 

@@ -1,6 +1,11 @@
 2.0 unreleased
 ==============
 
+- Next step in folder_listing refactoring. We have a FolderContents adapter
+  instead of the getFolderContents script now. Special behavior for
+  Collections is achieved via a sub-classed view specific to IATTopic.
+  [hannosch]
+
 - Removed `poor-mans-versioning` aka. athistoryaware. We have a versioning
   story called CMFEditions now.
   [hannosch]
