@@ -49,10 +49,6 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
     _properties = PropertyManager._properties + (
         {'id' : 'image_types', 'type' : 'multiple selection',
          'mode' : 'w', 'select_variable' : 'listContentTypes'},
-        {'id' : 'folder_types', 'type' : 'multiple selection',
-         'mode' : 'w', 'select_variable' : 'listContentTypes'},
-        {'id' : 'album_batch_size', 'type' : 'int', 'mode' : 'w'},
-        {'id' : 'album_image_scale', 'type' : 'string', 'mode' : 'w'},
         {'id' : 'single_image_scale', 'type' : 'string', 'mode' : 'w'},
         )
 
@@ -110,7 +106,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
 
     security.declareProtected(ManagePortal, 'listContentTypes')
     def listContentTypes(self):
-        """List all content types. Used for image/folder_types property.
+        """List all content types. Used for image/image_types property.
         """
         ttool = getToolByName(self, 'portal_types')
         return ttool.listContentTypes()

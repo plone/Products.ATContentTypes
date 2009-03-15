@@ -9,3 +9,9 @@ class TopicListingView(FolderListingView):
         if len(contents) > limit_display:
             contents = contents[:limit_display]
         return contents
+
+class TopicSummaryView(TopicListingView):
+    pass
+
+class TopicTabularView(TopicListingView):
+    pass

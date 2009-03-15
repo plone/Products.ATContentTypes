@@ -12,8 +12,6 @@
   <dl>
     <dt>Image scales</dt>
     <dd>to recreate image scales</dd>
-    <dt>Properties</dt>
-    <dd>to set certain properties for album view and more</dd>
   </dl>
   
   <h3>Properties</h3>
@@ -26,14 +24,6 @@
         <code>getImage()</code>, <code>setImage()</code> and
         <code>tag(scale=None)</code>.
     </dd>
-    <dt><code>folder_types</code></dt>
-    <dd>A list of portal types to be treated as subalbums in the photo
-        album view.
-    </dd>
-    <dt><code>album_batch_size</code></dt>
-    <dd>The default batch size for the photo album view.</dd>
-    <dt><code>album_image_scale</code></dt>
-    <dd>The default image scale name for the photo ablum view.</dd>
     <dt><code>single_image_scale</code></dt>
     <dd>The default image scale name used when showing a single image.</dd>
   </dl>

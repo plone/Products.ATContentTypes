@@ -1,0 +1,150 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
+
+<body>
+
+    <div metal:fill-slot="main">
+    <metal:main-macro define-macro="main">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 tal:content="context/Title|context/getId" class="documentFirstHeading">
+            Title or id
+        </h1>
+
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+        <p tal:content="context/Description">
+            Description
+        </p>
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+        <div id="parent-fieldname-text" class="stx"
+             tal:define="text view/text"
+             tal:condition="text"
+             tal:attributes="class view/stx_format"
+             tal:content="structure text">
+            The body
+        </div>
+
+        <tal:foldercontents define="folderContents view/folderContents;">
+            <tal:block tal:define="
+                getInfoFor nocall:view/getInfoFor;
+                normalizeString nocall:view/normalizeString;
+                show_about view/show_about;
+                toLocalizedTime nocall:view/toLocalizedTime;
+                use_view_action view/use_view_action;
+                plone_view nocall:context/@@plone;">
+
+                <table class="listing"
+                       summary="Content listing"
+                       i18n:attributes="summary summary_content_listing;"
+                       condition="folderContents">
+                    <thead>
+                        <tr>
+                            <th class="nosort">&nbsp;<tal:title i18n:translate="listingheader_title"
+                              >Title</tal:title>&nbsp;</th>
+                            <th class="nosort"
+                                tal:condition="show_about">&nbsp;<tal:title i18n:translate="listingheader_author"
+                              >Author</tal:title>&nbsp;</th>
+                            <th class="nosort">&nbsp;<tal:title i18n:translate="listingheader_type"
+                              >Type</tal:title>&nbsp;</th>
+                            <th class="nosort"
+                                tal:condition="show_about">&nbsp;<tal:modified i18n:translate="listingheader_modified"
+                              >Modified</tal:modified>&nbsp;</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tal:items repeat="item folderContents">
+                        <tr tal:define="oddrow repeat/item/odd;"
+                            tal:attributes="class python:oddrow and 'even' or 'odd'">
+
+                            <tal:defs define="
+                                item_url item/getURL|item/absolute_url;
+                                item_id item/getId|item/id;
+                                item_title_or_id item/Title|item_id;
+                                item_description item/Description;
+                                item_type item/portal_type;
+                                item_type_title item/Type;
+                                item_type_class python:'contenttype-' + normalizeString(item_type);
+                                item_modified item/ModificationDate;
+                                item_created item/CreationDate;
+                                item_icon python:plone_view.getIcon(item);
+                                item_wf_state item/review_state|python: view.getInfoFor(item);
+                                item_wf_state_class python:'state-' + normalizeString(item_wf_state);
+                                item_creator item/Creator;
+                                item_start item/start/ISO|item/StartDate|nothing;
+                                item_end item/end/ISO|item/EndDate|nothing;">
+                                <td>
+                                    <span class=""
+                                          tal:attributes="class item_type_class">
+                                        <img width="16" height="16"
+                                             src="" alt=""
+                                             tal:condition="item_icon/url"
+                                             tal:attributes="src item_icon/url;
+                                                             alt item_icon/description;
+                                                             title item_icon/title;
+                                                             width item_icon/width;
+                                                             height item_icon/height;" />
+                                        <a href="#"
+                                           tal:attributes="href python:item_type in use_view_action and item_url+'/view' or item_url;
+                                                           class string:${item_wf_state_class};
+                                                           title item_description;"
+                                           tal:content="item_title_or_id">
+                                            Item Title
+                                        </a>
+                                    </span>
+
+                                </td>
+
+                                <td tal:condition="show_about">
+                                    <tal:name tal:condition="item_creator"
+                                      tal:define="author python:context.portal_membership.getMemberInfo(item_creator)">
+                                    <a href="#"
+                                       tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/author/${item_creator}"
+                                       tal:content="python:author and author['fullname'] or item_creator"
+                                       tal:omit-tag="not:author">
+                                      Bob Dobalina
+                                    </a>
+                                    </tal:name>
+                                </td>
+
+                                <td tal:content="item_type_title"
+                                    i18n:translate="">
+                                    Page
+                                </td>
+
+                            <td tal:condition="show_about"
+                                tal:content="python:toLocalizedTime(item_modified, long_format=1)">
+                              August 16, 2001 at 23:35:59
+                            </td>
+
+                            </tal:defs>
+                        </tr>
+                        </tal:items>
+                    </tbody>
+                </table>
+
+                <p class="discreet"
+                   tal:condition="not: folderContents"
+                   i18n:translate="description_no_items_in_folder">
+                    There are currently no items in this folder.
+                </p>
+
+            </tal:block>
+        </tal:foldercontents>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+
+    </metal:main-macro>
+    </div>
+
+</body>
+</html>

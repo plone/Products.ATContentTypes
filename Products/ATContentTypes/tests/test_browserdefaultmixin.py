@@ -38,7 +38,7 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(self.af.getDefaultLayout(), 'folder_listing')
         layoutKeys = [v[0] for v in self.af.getAvailableLayouts()]
         self.failUnless('folder_listing' in layoutKeys)
-        self.failUnless('atct_album_view' in layoutKeys)
+        self.failUnless('folder_summary_view' in layoutKeys)
 
         resolved = self.af.unrestrictedTraverse('folder_listing')()
         browserDefault = self.af.__browser_default__(None)[1][0]
@@ -52,16 +52,16 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.failIf(self.af.canSetLayout()) # Not permitted
 
     def test_setLayout(self):
-        self.af.setLayout('atct_album_view')
-        self.assertEqual(self.af.getLayout(), 'atct_album_view')
+        self.af.setLayout('folder_summary_view')
+        self.assertEqual(self.af.getLayout(), 'folder_summary_view')
         self.assertEqual(self.af.getDefaultPage(), None)
-        self.assertEqual(self.af.defaultView(), 'atct_album_view')
+        self.assertEqual(self.af.defaultView(), 'folder_summary_view')
         self.assertEqual(self.af.getDefaultLayout(), 'folder_listing')
         layoutKeys = [v[0] for v in self.af.getAvailableLayouts()]
         self.failUnless('folder_listing' in layoutKeys)
-        self.failUnless('atct_album_view' in layoutKeys)
+        self.failUnless('folder_summary_view' in layoutKeys)
 
-        resolved = self.af.unrestrictedTraverse('atct_album_view')()
+        resolved = self.af.unrestrictedTraverse('folder_summary_view')()
         browserDefault = self.af.__browser_default__(None)[1][0]
         browserDefaultResolved = self.af.unrestrictedTraverse(browserDefault)()
         self.assertEqual(resolved, browserDefaultResolved)
@@ -85,7 +85,6 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(self.af.getDefaultLayout(), 'folder_listing')
         layoutKeys = [v[0] for v in self.af.getAvailableLayouts()]
         self.failUnless('folder_listing' in layoutKeys)
-        self.failUnless('atct_album_view' in layoutKeys)
 
     def test_setDefaultPageUpdatesCatalog(self):
         # Ensure that Default page changes update the catalog

@@ -130,26 +130,26 @@ tests.append(TestATBTreeFolderFields)
 class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
     
     portal_type = 'Folder'
-    views = ('folder_listing', 'atct_album_view', )
+    views = ('folder_listing', 'folder_summary_view', 'folder_tabular_view', )
 
     def test_dynamic_view_without_view(self):
         # dynamic view mixin should work
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
         self.failUnlessEqual(response.getStatus(), 200) #
-        
+
     def test_selectViewTemplate(self):
         # create an object using the createObject script
         response = self.publish(self.obj_path +
-                                '/selectViewTemplate?templateId=atct_album_view',
+                                '/selectViewTemplate?templateId=folder_summary_view',
                                 self.owner_auth)
-        self.failUnlessEqual(self.obj.getLayout(), 'atct_album_view')
+        self.failUnlessEqual(self.obj.getLayout(), 'folder_summary_view')
 
 tests.append(TestATFolderFunctional)
 
 class TestATBTreeFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
 
     portal_type = 'Large Plone Folder'
-    views = ('folder_listing', 'atct_album_view', )
+    views = ('folder_listing', 'folder_summary_view', 'folder_tabular_view', )
 
     def afterSetUp(self):
         # enable global allow for BTree Folder

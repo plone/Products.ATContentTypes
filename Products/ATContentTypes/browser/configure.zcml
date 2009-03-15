@@ -3,6 +3,9 @@
   xmlns:browser="http://namespaces.zope.org/browser"
   i18n_domain="atcontenttypes">
 
+  <include file="folder.zcml"/>
+  <include file="topic.zcml"/>
+
   <adapter factory=".nextprevious.ATFolderNextPrevious" />
 
   <browser:page
@@ -26,35 +29,18 @@
       template="templates/file.pt"
       permission="zope2.View" />
 
-  <adapter
-      factory=".folder.FolderContents" />
-
-  <browser:page
-      for="zope.container.interfaces.IContainer"
-      class=".folder.FolderListingView"
-      name="folder_listing"
-      template="templates/folder_listing.pt"
-      permission="zope2.View" />
-
-  <browser:page
-      for="Products.ATContentTypes.interfaces.IATTopic"
-      class=".topic.TopicListingView"
-      name="folder_listing"
-      template="templates/folder_listing.pt"
-      permission="zope2.View" />
-
-  <browser:menuItem
-      for="zope.container.interfaces.IContainer"
-      menu="plone_displayviews"
-      title="Standard View"
-      action="folder_listing"
-      />
-
   <browser:page
       for="Products.ATContentTypes.interfaces.IATImage"
       class=".content.ImageView"
       name="image_view"
       template="templates/image.pt"
+      permission="zope2.View" />
+
+  <browser:page
+      for="Products.ATContentTypes.interfaces.IATImage"
+      class=".content.ImageFullScreenView"
+      name="image_view_fullscreen"
+      template="templates/image_view_fullscreen.pt"
       permission="zope2.View" />
 
   <browser:page

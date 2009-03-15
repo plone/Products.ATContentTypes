@@ -1,0 +1,48 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  i18n_domain="atcontenttypes">
+
+  <browser:page
+      for="Products.ATContentTypes.interfaces.IATTopic"
+      class=".topic.TopicListingView"
+      name="atct_topic_view"
+      template="templates/folder_listing.pt"
+      permission="zope2.View" />
+
+  <browser:menuItem
+      for="zope.container.interfaces.IContainer"
+      menu="plone_displayviews"
+      title="Collection View"
+      action="atct_topic_view"
+      />
+
+  <browser:page
+      for="Products.ATContentTypes.interfaces.IATTopic"
+      class=".topic.TopicListingView"
+      name="folder_listing"
+      template="templates/folder_listing.pt"
+      permission="zope2.View" />
+
+  <browser:page
+      for="Products.ATContentTypes.interfaces.IATTopic"
+      class=".topic.TopicSummaryView"
+      name="folder_summary_view"
+      template="templates/folder_summary_view.pt"
+      permission="zope2.View" />
+
+  <browser:page
+      for="Products.ATContentTypes.interfaces.IATTopic"
+      class=".topic.TopicTabularView"
+      name="folder_tabular_view"
+      template="templates/folder_tabular_view.pt"
+      permission="zope2.View" />
+
+  <browser:page
+      for="Products.ATContentTypes.interfaces.IATTopic"
+      class=".topic.TopicListingView"
+      name="atct_topic_subtopics"
+      template="templates/folder_listing.pt"
+      permission="zope2.View" />
+
+</configure>

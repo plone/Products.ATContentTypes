@@ -21,10 +21,8 @@ from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import TextField
 from Products.Archetypes.atapi import BooleanField
 from Products.Archetypes.atapi import IntegerField
-from Products.Archetypes.atapi import LinesField
 from Products.Archetypes.atapi import BooleanWidget
 from Products.Archetypes.atapi import IntegerWidget
-from Products.Archetypes.atapi import InAndOutWidget
 from Products.Archetypes.atapi import RichWidget
 from Products.Archetypes.atapi import DisplayList
 from Products.Archetypes.atapi import AnnotationStorage
@@ -101,32 +99,6 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 widget=IntegerWidget(
                         label=_(u'label_item_count', default=u'Number of Items'),
                         description=''
-                        ),
-                 ),
-    BooleanField('customView',
-                required=False,
-                mode="rw",
-                default=False,
-                write_permission = ChangeTopics,
-                widget=BooleanWidget(
-                        label=_(u'label_custom_view', default=u'Display as Table'),
-                        description=_(u'help_custom_view',
-                                      default=u"Columns in the table are controlled "
-                                               "by 'Table Columns' below.")
-                        ),
-                 ),
-    LinesField('customViewFields',
-                required=False,
-                mode="rw",
-                default=('Title',),
-                vocabulary='listMetaDataFields',
-                enforceVocabulary=True,
-                write_permission = ChangeTopics,
-                widget=InAndOutWidget(
-                        label=_(u'label_custom_view_fields', default=u'Table Columns'),
-                        description=_(u'help_custom_view_fields',
-                                      default=u"Select which fields to display when "
-                                               "'Display as Table' is checked.")
                         ),
                  ),
     ))
@@ -324,13 +296,6 @@ class ATTopic(ATCTFolder):
         """
         val = self.objectIds(self.meta_type)
         return not not val
-
-    security.declareProtected(View, 'listMetaDataFields')
-    def listMetaDataFields(self, exclude=True):
-        """Return a list of metadata fields from portal_catalog.
-        """
-        tool = getToolByName(self, TOOLNAME)
-        return tool.getMetadataDisplay(exclude)
 
     security.declareProtected(View, 'allowedCriteriaForField')
     def allowedCriteriaForField(self, field, display_list=False):

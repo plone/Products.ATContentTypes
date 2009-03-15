@@ -59,8 +59,6 @@ def editATCT(obj):
     obj.setAcquireCriteria(ACQUIRE)
     obj.setLimitNumber(LIMIT)
     obj.setItemCount(COUNT)
-    #obj.setCustomView(CUSTOM)
-    #obj.setCustomViewFields(FIELDS)
     for meta in CRITERIA_SETUP.keys():
         AT_META = CRIT_MAP[meta]
         CRIT_FIELD = CRITERIA_SETUP[meta][0]
@@ -446,86 +444,6 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
-
-    def test_customViewField(self):
-        # XXX not in the current version
-        return
-        dummy = self._dummy
-        field = dummy.getField('customView')
-
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.required == 0, 'Value is %s' % field.required)
-        self.failUnless(field.default == False, 'Value is %s' % str(field.default))
-        self.failUnless(field.searchable == 0, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == (),
-                        'Value is %s' % str(field.vocabulary))
-        self.failUnless(field.enforceVocabulary == 0,
-                        'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 0,
-                        'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'getCustomView',
-                        'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setCustomView',
-                        'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
-                        'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission == ChangeTopics,
-                        'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'veVc',
-                        'Value is %s' % field.generateMode)
-        self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'boolean', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
-                        'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(field.validators == EmptyValidator,
-                        'Value is %s' % str(field.validators))
-        self.failUnless(isinstance(field.widget, BooleanWidget),
-                        'Value is %s' % id(field.widget))
-        vocab = field.Vocabulary(dummy)
-        self.failUnless(isinstance(vocab, DisplayList),
-                        'Value is %s' % type(vocab))
-        self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
-
-    def test_customViewFieldsField(self):
-        # XXX not in the current version
-        return
-        dummy = self._dummy
-        field = dummy.getField('customViewFields')
-
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.required == 0, 'Value is %s' % field.required)
-        self.failUnless(field.default == ('Title',), 'Value is %s' % str(field.default))
-        self.failUnless(field.searchable == 0, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == 'listMetaDataFields',
-                        'Value is %s' % str(field.vocabulary))
-        self.failUnless(field.enforceVocabulary == True,
-                        'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 0,
-                        'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'getCustomViewFields',
-                        'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setCustomViewFields',
-                        'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
-                        'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission == ChangeTopics,
-                        'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'veVc',
-                        'Value is %s' % field.generateMode)
-        self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'lines', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
-                        'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(field.validators == EmptyValidator,
-                        'Value is %s' % str(field.validators))
-        self.failUnless(isinstance(field.widget, InAndOutWidget),
-                        'Value is %s' % id(field.widget))
 
 tests.append(TestATTopicFields)
 

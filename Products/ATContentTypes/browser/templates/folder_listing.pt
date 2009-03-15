@@ -25,12 +25,12 @@
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
-        <div metal:define-macro="text-field-view"
-             id="parent-fieldname-text" class="stx"
+        <div id="parent-fieldname-text" class="stx"
              tal:define="text view/text"
              tal:condition="text"
-             tal:attributes="class view/stx_format">
-            <div metal:define-slot="inside" tal:replace="structure text">The body</div>
+             tal:attributes="class view/stx_format"
+             tal:content="structure text">
+            The body
         </div>
 
         <tal:foldercontents define="folderContents view/folderContents;">
@@ -44,106 +44,105 @@
                 use_view_action view/use_view_action;
                 plone_view nocall:context/@@plone;">
                 <tal:entry tal:repeat="item folderContents">
-                <tal:block tal:define="
-                    item_url item/getURL|item/absolute_url;
-                    item_id item/getId|item/id;
-                    item_title_or_id item/Title|item_id;
-                    item_description item/Description;
-                    item_type item/portal_type;
-                    item_type_title item/Type;
-                    item_modified item/ModificationDate;
-                    item_created item/CreationDate;
-                    item_icon python:plone_view.getIcon(item);
-                    item_type_class python:'contenttype-' + normalizeString(item_type);
-                    item_wf_state item/review_state|python: view.getInfoFor(item);
-                    item_wf_state_class python:'state-' + normalizeString(item_wf_state);
-                    item_creator item/Creator;
-                    item_start item/start/ISO|item/StartDate|nothing;
-                    item_end item/end/ISO|item/EndDate|nothing;">
+                    <tal:block tal:define="
+                        item_url item/getURL|item/absolute_url;
+                        item_id item/getId|item/id;
+                        item_title_or_id item/Title|item_id;
+                        item_description item/Description;
+                        item_type item/portal_type;
+                        item_type_title item/Type;
+                        item_type_class python:'contenttype-' + normalizeString(item_type);
+                        item_modified item/ModificationDate;
+                        item_created item/CreationDate;
+                        item_icon python:plone_view.getIcon(item);
+                        item_wf_state item/review_state|python: view.getInfoFor(item);
+                        item_wf_state_class python:'state-' + normalizeString(item_wf_state);
+                        item_creator item/Creator;
+                        item_start item/start/ISO|item/StartDate|nothing;
+                        item_end item/end/ISO|item/EndDate|nothing;">
 
-                    <dt metal:define-macro="listitem"
-                        tal:attributes="class python:item_type == 'Event' and 'vevent' or ''">
+                        <dt tal:attributes="class python:item_type == 'Event' and 'vevent' or ''">
 
-                        <span class="summary"
-                              tal:attributes="class string:$item_type_class summary">
-                            <img tal:replace="structure item_icon/html_tag" />
-                            <a href="#"
-                               tal:attributes="href python:item_type in use_view_action and item_url+'/view' or item_url;
-                                               class string:${item_wf_state_class} url"
-                               tal:content="item_title_or_id">
-                                Item Title
-                            </a>
-                        </span>
-
-                        <span class="documentByLine">
-
-                            <span tal:condition="python: item_type == 'Event'"
-                                  i18n:translate="label_event_byline">
-                                (<span tal:content="string:${item/location}"
-                                       class="location"
-                                       i18n:name="location">Oslo</span><tal:comma
-                                       tal:replace="string:, "
-                                       tal:condition="item/location" />from
-                                 <abbr class="dtstart"
-                                       tal:attributes="title python:item_start"
-                                       tal:content="python:toLocalizedTime(item_start,long_format=1)"
-                                       i18n:name="start">from date</abbr> to
-                                 <abbr class="dtend"
-                                       tal:attributes="title python:item_end"
-                                       tal:content="python:toLocalizedTime(item_end,long_format=1)"
-                                       i18n:name="end">to date</abbr>)
+                            <span class="summary"
+                                  tal:attributes="class string:$item_type_class summary">
+                                <img tal:replace="structure item_icon/html_tag" />
+                                <a href="#"
+                                   tal:attributes="href python:item_type in use_view_action and item_url+'/view' or item_url;
+                                                   class string:${item_wf_state_class} url"
+                                   tal:content="item_title_or_id">
+                                    Item Title
+                                </a>
                             </span>
 
-                            <tal:byline condition="show_about">
-                                &mdash;
+                            <span class="documentByLine">
 
-                                <tal:name tal:condition="item_creator"
-                                    tal:define="author python:view.getMemberInfo(item_creator)">
-                                  <span i18n:translate="label_by_author">
-                                    by
-                                  <a href="#"
-                                     tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/author/${item_creator}"
-                                     tal:content="python:author and author['fullname'] or item_creator"
-                                     tal:omit-tag="not:author"
-                                     i18n:name="author">
-                                    Bob Dobalina
-                                  </a>
-                                  </span>
+                                <span tal:condition="python: item_type == 'Event'"
+                                      i18n:translate="label_event_byline">
+                                    (<span tal:content="string:${item/location}"
+                                           class="location"
+                                           i18n:name="location">Oslo</span><tal:comma
+                                           tal:replace="string:, "
+                                           tal:condition="item/location" />from
+                                     <abbr class="dtstart"
+                                           tal:attributes="title python:item_start"
+                                           tal:content="python:toLocalizedTime(item_start,long_format=1)"
+                                           i18n:name="start">from date</abbr> to
+                                     <abbr class="dtend"
+                                           tal:attributes="title python:item_end"
+                                           tal:content="python:toLocalizedTime(item_end,long_format=1)"
+                                           i18n:name="end">to date</abbr>)
+                                </span>
 
-                                </tal:name>
-
-                                <tal:modified condition="python: item_type != 'Event'">
+                                <tal:byline condition="show_about">
                                     &mdash;
-                                    <tal:mod i18n:translate="box_last_modified">
-                                      last modified
-                                    </tal:mod>
-                                    <span tal:replace="python:toLocalizedTime(item_modified,long_format=1)">
-                                      August 16, 2001 at 23:35:59
-                                    </span>
-                                </tal:modified>
 
-                                <metal:description define-slot="description_slot">
-                                    <tal:comment replace="nothing"> 
-                                        Place custom listing info for custom types here
-                                    </tal:comment>
-                                </metal:description>
-                            </tal:byline>
-                        </span>
+                                    <tal:name tal:condition="item_creator"
+                                        tal:define="author python:view.getMemberInfo(item_creator)">
+                                      <span i18n:translate="label_by_author">
+                                        by
+                                      <a href="#"
+                                         tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/author/${item_creator}"
+                                         tal:content="python:author and author['fullname'] or item_creator"
+                                         tal:omit-tag="not:author"
+                                         i18n:name="author">
+                                        Bob Dobalina
+                                      </a>
+                                      </span>
 
-                    </dt>
+                                    </tal:name>
 
-                    <dd>
-                        <span tal:omit-tag=""
-                              tal:condition="not:item_description"> 
-                            &nbsp; 
-                        </span> 
-                        <span class="description"
-                               tal:condition="not:item_description"
-                               tal:content="item_description">
-                            description 
-                        </span> 
-                    </dd>
-                </tal:block>
+                                    <tal:modified condition="python: item_type != 'Event'">
+                                        &mdash;
+                                        <tal:mod i18n:translate="box_last_modified">
+                                          last modified
+                                        </tal:mod>
+                                        <span tal:replace="python:toLocalizedTime(item_modified,long_format=1)">
+                                          August 16, 2001 at 23:35:59
+                                        </span>
+                                    </tal:modified>
+
+                                    <metal:description define-slot="description_slot">
+                                        <tal:comment replace="nothing"> 
+                                            Place custom listing info for custom types here
+                                        </tal:comment>
+                                    </metal:description>
+                                </tal:byline>
+                            </span>
+
+                        </dt>
+
+                        <dd>
+                            <span tal:omit-tag=""
+                                  tal:condition="not:item_description"> 
+                                &nbsp; 
+                            </span> 
+                            <span class="description"
+                                   tal:condition="not:item_description"
+                                   tal:content="item_description">
+                                description 
+                            </span> 
+                        </dd>
+                    </tal:block>
                 </tal:entry>
             </dl>
 

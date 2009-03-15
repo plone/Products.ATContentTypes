@@ -98,3 +98,10 @@ class FolderListingView(BrowserView):
 
     def use_view_action(self):
         return self.site_properties().get('typesUseViewActionInListings', ())
+
+
+class FolderSummaryView(FolderListingView):
+    pass
+
+class FolderTabularView(FolderListingView):
+    pass

@@ -12,6 +12,9 @@ class FileView(BrowserView):
 class ImageView(BrowserView):
     pass
 
+class ImageFullScreenView(BrowserView):
+    pass
+
 class LinkView(BrowserView):
     pass
 

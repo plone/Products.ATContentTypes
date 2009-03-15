@@ -73,7 +73,7 @@ finalizeATCTSchema(ATImageSchema)
 
 
 class ATImage(ATCTFileContent, ATCTImageTransform):
-    """An image, which can be referenced in documents or displayed in an album."""
+    """An image, which can be referenced in documents."""
 
     schema         =  ATImageSchema
 

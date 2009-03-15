@@ -9,8 +9,7 @@
 
 <div metal:fill-slot="main">
     <tal:main-macro metal:define-macro="main" 
-         tal:define="templateId template/getId;
-                     toLocalizedTime nocall:context/@@plone/toLocalizedTime;">
+         tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
@@ -50,24 +49,20 @@
                     <th i18n:translate="event_when">When</th>
                     <td>
                         <tal:differentday tal:condition="python:not context.start().Date() == context.end().Date()">
-                            <abbr metal:define-macro="startdate-field-view"
-                                  id="parent-fieldname-startDate"
+                            <abbr id="parent-fieldname-startDate"
                                   tal:attributes="class string:dtstart;
                                                   title python:context.start().ISO8601()">
-                                  <span metal:define-slot="inside" 
-                                        class="explain"
+                                  <span class="explain"
                                         tal:content="python:toLocalizedTime(context.start(),
                                         long_format=1)">Start Date Time</span>
                             </abbr>
                             <span i18n:translate="event_to">to</span> <br />
-                            <abbr metal:define-macro="enddate-field-view"
-                                  id="parent-fieldname-endDate"
+                            <abbr id="parent-fieldname-endDate"
                                   tal:attributes="class string:dtend;
                                                   title python:context.end().ISO8601()">
-                                  <span metal:define-slot="inside" 
-                                          class="explain"
-                                          tal:content="python:toLocalizedTime(context.end(),
-                                          long_format=1)">End Date Time</span>
+                                  <span class="explain"
+                                        tal:content="python:toLocalizedTime(context.end(),
+                                        long_format=1)">End Date Time</span>
                             </abbr>
                         </tal:differentday>
 
@@ -76,21 +71,17 @@
                             <span tal:replace="python:toLocalizedTime(context.start())">
                                 Start Date Time</span> <br />
                             <span i18n:translate="event_from">from</span>  
-                            <abbr metal:define-macro="startdatesame-field-view"
-                                  id="parent-fieldname-startDate"
+                            <abbr id="parent-fieldname-startDate"
                                   tal:attributes="class string:dtstart;
                                                   title python:context.start().ISO8601()">
-                                  <span metal:define-slot="inside" 
-                                        class="explain"
+                                  <span class="explain"
                                         tal:content="python:here.toLocalizedTime(here.start(), time_only=1)">Start Time</span>
                             </abbr>
                             <span i18n:translate="event_to">to</span>
-                            <abbr metal:define-macro="enddatesame-field-view"
-                                  id="parent-fieldname-endDate"
+                            <abbr id="parent-fieldname-endDate"
                                   tal:attributes="class string:dtend;
                                                   title python:context.end().ISO8601()">
-                                  <span metal:define-slot="inside" 
-                                        class="explain"
+                                  <span class="explain"
                                         tal:content="python:here.toLocalizedTime(here.end(), time_only=1)">End Time</span>
                             </abbr>
 

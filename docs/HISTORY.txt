@@ -1,6 +1,11 @@
 2.0 unreleased
 ==============
 
+- Turned the remaining useful listing views into browser resources. The album
+  view is gone, since there are many add-ons available solving this use-case
+  in a much better way now.
+  [hannosch]
+
 - Next round of cleanup, removing unused templates and migration code. Renamed
   the interface folder to interfaces to have a consistent naming.
   [hannosch]

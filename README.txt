@@ -40,9 +40,8 @@ and the new ATContentTypes types.
     
   * Dynamic Views: All types are using the new dynamic view FTI that allows you
     to choose the view template per instance. You can configure the templates in
-    the portal_types tool. This features is used to turn an ordinary folder into
-    a photo album by simple switching to a different view.
-    
+    the portal_types tool.
+
   * Permissions per type and feature: Every type has its own add permission and
     all features like template mixin have their own modify permission, too.
 
