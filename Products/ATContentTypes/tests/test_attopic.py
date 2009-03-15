@@ -460,7 +460,7 @@ class TestATTopicFunctional(atctftestcase.ATCTIntegrationTestCase):
         self.failUnlessEqual(response.getStatus(), 200) #
 
     portal_type = 'Topic'
-    views = ('atct_topic_view', 'criterion_edit_form', 'atct_topic_subtopics')
+    views = ('folder_listing', 'criterion_edit_form', 'atct_topic_subtopics')
 
 tests.append(TestATTopicFunctional)
 
