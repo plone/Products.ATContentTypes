@@ -9,8 +9,6 @@ from zope.interface import Interface
 from zope.publisher.browser import BrowserView
 
 from Acquisition import aq_base
-from Products.CMFCore.permissions import AccessInactivePortalContent
-from Products.CMFCore.utils import _checkPermission
 from Products.CMFCore.utils import getToolByName
 
 
@@ -38,9 +36,7 @@ class FolderContents(object):
             )
 
         catalog = getToolByName(context, 'portal_catalog')
-        show_inactive = _checkPermission(AccessInactivePortalContent, context)
-        contents = catalog.queryCatalog(query, show_all=True,
-                                        show_inactive=show_inactive)
+        contents = catalog.searchResults(query)
         if len(contents) == 0:
             return ()
 
