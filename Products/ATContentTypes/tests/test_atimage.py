@@ -1,11 +1,8 @@
 import os
-import transaction
+from cStringIO import StringIO
 
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
-
-from cStringIO import StringIO
-from OFS.Image import Image as OFSImage
 
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
@@ -77,14 +74,6 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
     def test_exifOrientation(self):
         # NOTE: not a real test
         r, m = self._ATCT.getEXIFOrientation()
-
-    def test_transform(self):
-        # NOTE: not a real test
-        self._ATCT.transformImage(2)
-
-    def test_autotransform(self):
-        # NOTE: not a real test
-        self._ATCT.autoTransformImage()
 
     def test_broken_pil(self):
         # PIL has a nasty bug when the image ratio is too extrem like 300x15:
@@ -226,7 +215,7 @@ tests.append(TestATImageFields)
 class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
     
     portal_type = 'Image'
-    views = ('image_view', 'download', 'atct_image_transform')
+    views = ('image_view', 'download')
 
     def afterSetUp(self):
         atctftestcase.ATCTIntegrationTestCase.afterSetUp(self)

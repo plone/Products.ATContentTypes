@@ -1,4 +1,4 @@
-from Products.ATContentTypes.interface.interfaces import IATContentType
+from Products.ATContentTypes.interfaces.interfaces import IATContentType
 from zope.interface import Interface
 from zope.interface import Attribute
 

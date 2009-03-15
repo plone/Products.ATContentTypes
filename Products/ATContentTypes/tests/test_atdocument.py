@@ -288,12 +288,12 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
         new_obj_path = '/%s' % new_obj.absolute_url(1)
         self.failUnlessEqual(new_obj.checkCreationFlag(), True) # object is not yet edited
 
-        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank' % (new_obj_path, obj_title,), self.basic_auth) # Edit object
+        response = self.publish('%s/base_edit?form.submitted=1&title=%s&text=Blank' % (new_obj_path, obj_title,), self.basic_auth) # Edit object
         self.failUnlessEqual(response.getStatus(), 302) # OK
         self.failUnlessEqual(new_obj.getId(), new_id) # does id match
         self.failUnlessEqual(new_obj.checkCreationFlag(), False) # object is fully created
         new_title = "Second Title"
-        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank' % ('/%s' % new_obj.absolute_url(1), new_title,), self.basic_auth) # Edit object
+        response = self.publish('%s/base_edit?form.submitted=1&title=%s&text=Blank' % ('/%s' % new_obj.absolute_url(1), new_title,), self.basic_auth) # Edit object
         self.failUnlessEqual(response.getStatus(), 302) # OK
         self.failUnlessEqual(new_obj.getId(), new_id) # id shouldn't have changed
 

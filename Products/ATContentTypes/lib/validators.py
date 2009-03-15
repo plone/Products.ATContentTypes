@@ -262,17 +262,6 @@ def unwrapValueFromHTML(value):
         body = result.group(1)
     else:
         raise ValueError('%s is not a html string' % value)
-
-##    # remove 2 spaces from the beginning of each line
-##    nlines = []
-##    for line in body.split('\n'):
-##        print line
-##        if line[:2] == '  ':
-##            nlines.append(line[2:])
-##        else:
-##            nlines.append(line)
-##
-##    return '\n'.join(nlines)
     return body
 
 def correctEncoding(value):

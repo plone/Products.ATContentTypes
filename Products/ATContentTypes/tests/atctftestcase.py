@@ -64,7 +64,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         body = response.getBody()
 
         self.failUnless(body.startswith(self.folder_url), body)
-        # The url may end with /edit or /atct_edit depending on method aliases
+        # The url may end with /edit or /base_edit depending on method aliases
         self.failUnless(body.endswith('edit'), body)
 
         # Perform the redirect
@@ -83,7 +83,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
     def test_edit_view(self):
         # edit should work
-        response = self.publish('%s/atct_edit' % self.obj_path, self.basic_auth)
+        response = self.publish('%s/base_edit' % self.obj_path, self.basic_auth)
         self.failUnlessEqual(response.getStatus(), 200) # OK
 
     def test_base_view(self):
@@ -160,27 +160,4 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         reply = self.obj.talkback.getReply(discussionId)
         self.assertEquals(reply.title, 'test')
         self.assertEquals(reply.text, 'testbody')
-
-    def test_dynamicViewContext(self):
-        # register and add a testing template (it's a script)
-        self.setRoles(['Manager', 'Member'])
-
-        ttool = self.portal.portal_types
-        fti = getattr(ttool, self.portal_type)
-        view_methods = fti.getAvailableViewMethods(self.obj) + ('unittestGetTitleOf',)
-        fti.manage_changeProperties(view_methods=view_methods)
-
-        self.obj.setLayout('unittestGetTitleOf')
-        self.folder.setTitle('the folder')
-        self.obj.setTitle('the obj')
-
-        self.setRoles(['Member'])
-
-        response = self.publish('%s/view' % self.obj_path, self.basic_auth)
-        self.failUnlessEqual(response.getStatus(), 200) # OK
-
-        output = response.getBody().split(',')
-        self.failUnlessEqual(len(output), 4, output)
-
-        self.failUnlessEqual(output, ['the obj', 'the folder', 'the obj', 'the folder'])
 

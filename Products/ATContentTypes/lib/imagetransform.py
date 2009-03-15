@@ -2,7 +2,6 @@ import logging
 from cStringIO import StringIO
 
 from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 from ExtensionClass import Base
 from DateTime import DateTime
@@ -10,49 +9,14 @@ from App.class_init import InitializeClass
 from OFS.Image import Image as OFSImage
 from OFS.Image import Pdata
 
-from Products.ATContentTypes.config import HAS_PIL
-from Products.ATContentTypes.config import PIL_CONFIG_QUALITY
-from Products.ATContentTypes import ATCTMessageFactory as _
-
 # third party extension
 import exif
 
-# the following code is based on the rotation code of Photo
-if HAS_PIL:
-    import PIL.Image
-
 LOG = logging.getLogger('ATCT.image')
-
-# transpose constants, taken from PIL.Image to maintain compatibilty
-FLIP_LEFT_RIGHT = 0
-FLIP_TOP_BOTTOM = 1
-ROTATE_90 = 2
-ROTATE_180 = 3
-ROTATE_270 = 4
-
-
-TRANSPOSE_MAP = {
-    FLIP_LEFT_RIGHT : _(u'Flip around vertical axis'),
-    FLIP_TOP_BOTTOM : _(u'Flip around horizontal axis'),
-    ROTATE_270      : _(u'Rotate 90 clockwise'),
-    ROTATE_180      : _(u'Rotate 180'),
-    ROTATE_90       : _(u'Rotate 90 counterclockwise'),
-   }
-
-AUTO_ROTATE_MAP = {
-    0   : None,
-    90  : ROTATE_270,
-    180 : ROTATE_180,
-    270 : ROTATE_90,
-    }
-
 
 
 class ATCTImageTransform(Base):
-    """Base class for images containing transformation and exif functions
-
-    * exif information
-    * image rotation
+    """Base class for images containing exif functions.
     """
 
     security = ClassSecurityInfo()
@@ -171,77 +135,5 @@ class ATCTImageTransform(Base):
             except:
                 LOG.error('Failed to parse exif date %s' % raw_date, exc_info=True)
         return None
-
-    security.declareProtected(ModifyPortalContent, 'transformImage')
-    def transformImage(self, method, REQUEST=None):
-        """
-        Transform an Image:
-            FLIP_LEFT_RIGHT
-            FLIP_TOP_BOTTOM
-            ROTATE_90 (rotate counterclockwise)
-            ROTATE_180
-            ROTATE_270 (rotate clockwise)
-        """
-        method = int(method)
-        if method not in TRANSPOSE_MAP:
-            raise RuntimeError, "Unknown method %s" % method
-
-        target = self.absolute_url() + '/atct_image_transform'
-
-        if not HAS_PIL:
-            if REQUEST:
-                REQUEST.RESPONSE.redirect(target)
-
-        image = self.getImageAsFile()
-        image2 = StringIO()
-
-        if image is not None:
-            img = PIL.Image.open(image)
-            del image
-            fmt = img.format
-            img = img.transpose(method)
-            img.save(image2, fmt, quality=PIL_CONFIG_QUALITY)
-
-            field = self.getField('image')
-            mimetype = field.getContentType(self)
-            filename = field.getFilename(self)
-
-            # because AT tries to get mimetype and filename from a file like
-            # object by attribute access I'm passing a string along
-            self.setImage(image2.getvalue(), mimetype=mimetype,
-                          filename=filename, refresh_exif=False)
-
-        if REQUEST:
-            REQUEST.RESPONSE.redirect(target)
-
-    security.declareProtected(ModifyPortalContent, 'autoTransformImage')
-    def autoTransformImage(self, REQUEST=None):
-        """Auto transform image according to EXIF data
-
-        Note: isn't using mirror
-        """
-        target = self.absolute_url() + '/atct_image_transform'
-        mirror, rotation = self.getEXIFOrientation()
-        transform = None
-        if rotation:
-            transform = AUTO_ROTATE_MAP.get(rotation, None)
-            if transform is not None:
-                self.transformImage(transform)
-        if REQUEST:
-            REQUEST.RESPONSE.redirect(target)
-        else:
-            return mirror, rotation, transform
-
-    security.declareProtected(View, 'getTransformMap')
-    def getTransformMap(self):
-        """Get map for tranforming the image
-        """
-        return [{'name' : n, 'value' : v} for v, n in TRANSPOSE_MAP.items()]
-
-    security.declareProtected(View, 'hasPIL')
-    def hasPIL(self):
-        """Is PIL installed?
-        """
-        return HAS_PIL
 
 InitializeClass(ATCTImageTransform)

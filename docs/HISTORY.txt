@@ -1,6 +1,10 @@
 2.0 unreleased
 ==============
 
+- Next round of cleanup, removing unused templates and migration code. Renamed
+  the interface folder to interfaces to have a consistent naming.
+  [hannosch]
+
 - Next step in folder_listing refactoring. We have a FolderContents adapter
   instead of the getFolderContents script now. Special behavior for
   Collections is achieved via a sub-classed view specific to IATTopic.

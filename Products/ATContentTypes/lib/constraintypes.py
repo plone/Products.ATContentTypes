@@ -224,9 +224,6 @@ class ConstrainTypesMixin:
 
         # Short circuit if we are disabled or acquiring from non-compatible
         # parent
-
-        #if mode == DISABLED or \
-        #        (parent and parent.portal_types != self.portal_types):
         if mode == DISABLED or \
 	         (mode == ACQUIRE and not parentPortalTypeEqual(self) ):
             return PortalFolder.allowedContentTypes(self)
@@ -247,9 +244,6 @@ class ConstrainTypesMixin:
 
         # Short circuit if we are disabled or acquiring from non-compatible
         # parent
-
-        #if mode == DISABLED or \
-        #        (parent and parent.portal_types != self.portal_types):
         if mode == DISABLED or \
 	          (mode == ACQUIRE and not parentPortalTypeEqual(self) ):
             return PortalFolder.invokeFactory(self, type_name, id,

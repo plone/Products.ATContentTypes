@@ -1,7 +1,7 @@
 from zope.interface import implements
 from zope.component import adapts
 
-from Products.ATContentTypes.interface.folder import IATFolder
+from Products.ATContentTypes.interfaces import IATFolder
 
 from plone.memoize.instance import memoize
 from plone.navigation.interfaces import INextPreviousProvider

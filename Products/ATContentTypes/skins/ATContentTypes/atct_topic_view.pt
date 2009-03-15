@@ -33,16 +33,6 @@
         <tal:topiccontents define="topicContents python:here.queryCatalog(batch=True);
                                    batch topicContents;">
 
-        <tal:listing condition="topicContents">
-            <a style='text-align: right' href="#"
-               tal:condition="nocall: here/asPDF|nothing"
-               tal:attributes="href string:${here_url}/asPDF/atct_topic_pdf_template/atct_topic_pdf"
-               i18n:translate="label_download_as_pdf"
-               i18n:domain="atcontenttypes">
-                Download PDF
-            </a>
-        </tal:listing>
-    
         <div metal:define-macro="text-field-view"
              id="parent-fieldname-text" class="stx"
              tal:define="text here/getText|nothing"

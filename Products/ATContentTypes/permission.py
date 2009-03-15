@@ -25,12 +25,6 @@ setDefaultRoles(ModifyConstrainTypes, ('Manager', 'Owner'))
 ModifyViewTemplate = "Modify view template"
 setDefaultRoles(ModifyViewTemplate, ('Manager', 'Owner'))
 
-ViewHistory = "ATContentTypes: View history"
-setDefaultRoles(ViewHistory, ('Manager', ))
-
-UploadViaURL = "ATContentTypes: Upload via url"
-setDefaultRoles(UploadViaURL, ('Manager', ))
-
 permissions = {}
 def wireAddPermissions():
     """Creates a list of add permissions for all types in this project

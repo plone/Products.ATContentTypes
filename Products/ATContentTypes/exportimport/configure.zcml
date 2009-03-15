@@ -6,7 +6,7 @@
   <adapter
       factory=".atcttool.ATCTToolXMLAdapter"
       provides="Products.GenericSetup.interfaces.IBody"
-      for="Products.ATContentTypes.interface.IATCTTool
+      for="Products.ATContentTypes.interfaces.IATCTTool
            Products.GenericSetup.interfaces.ISetupEnviron"
       />
 </configure>
