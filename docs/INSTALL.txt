@@ -24,21 +24,3 @@ Python Imaging Library (PIL) 1.1.5+
 In order to enable the auto resizing feature of ATImage (Archetypes ImageField)
 you have to install PIL also known as python-imaging or Python Imaging Library.
 It's available under http://www.pythonware.com/products/pil/
-
-=======================
-Reconfiguration of Zope
-=======================
-
-You need to reconfigure Zope to make it play nice with Plone and AT Content
-Types.
-
-At first you need to set reST header level to 2. For Zope 2.8 change the 
-etc/zope.conf and adjust the environment section in the config file:
-
-<environment>
-    STX_DEFAULT_LEVEL 2
-</environment>
-
-For Zope 2.7 you also must set the rest-input-encoding and rest-out-encoding
-to the same encoding you are using as site-encoding for Plone. I suggest using
-utf-8 everywhere.

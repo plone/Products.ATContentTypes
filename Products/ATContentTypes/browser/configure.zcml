@@ -9,21 +9,21 @@
       for="Products.ATContentTypes.interfaces.IATDocument"
       class=".content.DocumentView"
       name="document_view"
-      template="document.pt"
+      template="templates/document.pt"
       permission="zope2.View" />
 
   <browser:page
       for="Products.ATContentTypes.interfaces.IATEvent"
       class=".content.EventView"
       name="event_view"
-      template="event.pt"
+      template="templates/event.pt"
       permission="zope2.View" />
 
   <browser:page
       for="Products.ATContentTypes.interfaces.IATFile"
       class=".content.FileView"
       name="file_view"
-      template="file.pt"
+      template="templates/file.pt"
       permission="zope2.View" />
 
   <adapter
@@ -33,14 +33,14 @@
       for="zope.container.interfaces.IContainer"
       class=".folder.FolderListingView"
       name="folder_listing"
-      template="folder_listing.pt"
+      template="templates/folder_listing.pt"
       permission="zope2.View" />
 
   <browser:page
       for="Products.ATContentTypes.interfaces.IATTopic"
       class=".topic.TopicListingView"
       name="folder_listing"
-      template="folder_listing.pt"
+      template="templates/folder_listing.pt"
       permission="zope2.View" />
 
   <browser:menuItem
@@ -54,14 +54,14 @@
       for="Products.ATContentTypes.interfaces.IATImage"
       class=".content.ImageView"
       name="image_view"
-      template="image.pt"
+      template="templates/image.pt"
       permission="zope2.View" />
 
   <browser:page
       for="Products.ATContentTypes.interfaces.IATLink"
       class=".content.LinkView"
       name="link_view"
-      template="link.pt"
+      template="templates/link.pt"
       permission="zope2.View" />
 
   <browser:page
@@ -74,14 +74,14 @@
       for="Products.ATContentTypes.interfaces.IATNewsItem"
       class=".content.NewsItemView"
       name="newsitem_view"
-      template="newsitem.pt"
+      template="templates/newsitem.pt"
       permission="zope2.View" />
 
   <browser:page
       for="Products.ATContentTypes.interfaces.IATContentType"
       class=".related.RelatedItemsView"
       name="document_relateditems"
-      template="related.pt"
+      template="templates/related.pt"
       permission="zope2.View" />
 
 </configure>
