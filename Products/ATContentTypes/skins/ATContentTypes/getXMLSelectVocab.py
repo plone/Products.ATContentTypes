@@ -7,6 +7,9 @@
 ##parameters=vocab_method,param,value
 ##title=Get a DisplayList and format for XML request
 
+# BBB: This python script has been deprecated and been replaced with
+# Products.ATContentTypes.browser.criteria
+
 params = {param:value, 'display_list': True}
 
 vocab = getattr(context, vocab_method)(**params)
