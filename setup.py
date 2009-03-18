@@ -30,6 +30,7 @@ setup(name='Products.ATContentTypes',
           'zope.tal',
           'zope.app.container',
           'zope.component',
+          'simplejson',
           'plone.memoize',
       ],
       )

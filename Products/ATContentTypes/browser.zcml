@@ -9,6 +9,13 @@
         attribute="getZipFile"
         permission="zope2.View"
         />
+    
+    <browser:view
+        for=".interface.IATTopic"
+        name="jsoncriteria"
+        class=".browser.criteria.JSONCriteriaForField"
+        permission="zope2.View"
+        />
         
     <!-- Enable next/previous links for folders -->
     <adapter factory=".browser.nextprevious.ATFolderNextPrevious" />
