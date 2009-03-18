@@ -5,6 +5,10 @@
   This refs http://dev.plone.org/plone/ticket/7686.
   [hannosch]
 
+* Replaced unmaintainable use of modifySelectList.js with a topic-specific
+  inline jQuery script and browser view to manage criteria.
+  [mj]
+
 1.2.7 2009-01-30
 ================
 

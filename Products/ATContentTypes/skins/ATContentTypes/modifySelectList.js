@@ -1,3 +1,7 @@
+// BBB: This javascript code is deprecated and has been replaced with
+// application specific code in criterion_edit_form.cpt
+// Note that most code here was never used in ATContentTypes
+
 var _registry = new Object();
 var _all_keys = new Array();
 var _master_elements = new Object();
