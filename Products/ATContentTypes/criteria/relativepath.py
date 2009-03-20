@@ -100,7 +100,8 @@ class ATRelativePathCriterion(ATBaseCriterion):
             path = '/'.join(portalPath) + relPath
         elif relPath=='..' or relPath=='../':
             # do a shortcut
-            path = '/'.join(aq_parent(aq_parent(context)).getPhysicalPath())
+            topic = aq_inner(aq_parent(context))
+            path = '/'.join(aq_parent(topic).getPhysicalPath())
         else:
             folders = relPath.split('/')
 

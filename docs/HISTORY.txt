@@ -3,7 +3,7 @@
 
 * Made the relative path criterion less prone for funky Acquisition chains.
   This refs http://dev.plone.org/plone/ticket/7686.
-  [hannosch]
+  [hannosch, maurits]
 
 * Replaced unmaintainable use of modifySelectList.js with a topic-specific
   inline jQuery script and browser view to manage criteria.
