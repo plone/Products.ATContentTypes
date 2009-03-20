@@ -655,6 +655,17 @@ class TestATRelativePathCriterion(CriteriaTest):
         self.path_crit.setRelativePath('.')   # should give the new_topic 
         self.failUnless(self.path_crit.getCriteriaItems() == (('path', {'query': '/plone/folderA/folderA1/new_topic', 'depth': 1}),))
         
+    def test_relative_path_query9(self):
+        # Acquisition can mess us up, for example when a BrowserView
+        # is in the acquisition chain, like in
+        # plone.app.content.browser.foldercontents
+        self.path_crit.setRelativePath('..')   # should give the parent==folderA1 
+        from Products.Five import BrowserView
+        view = BrowserView(self.topic, self.topic.REQUEST)
+        criterion = view.context.getCriterion('path_ATRelativePathCriterion')
+        self.failUnless(criterion.getCriteriaItems() == (('path', {'query': '/plone/folderA/folderA1', 'depth': 1}),))
+
+        
 tests.append(TestATRelativePathCriterion)
 
 class TestATPathCriterion(CriteriaTest):
