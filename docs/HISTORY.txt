@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Avoid acquiring `portal_properties` and call it via a proper API.
+  [hannosch]
+
 - Turned the remaining useful listing views into browser resources. The album
   view is gone, since there are many add-ons available solving this use-case
   in a much better way now.

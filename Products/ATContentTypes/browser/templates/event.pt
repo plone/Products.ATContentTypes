@@ -67,7 +67,8 @@
                         </tal:differentday>
 
                         <tal:sameday tal:condition="python:context.start().Date() == context.end().Date()"
-                                     tal:define="ampm python:context.portal_properties.site_properties.getProperty('localLongTimeFormat').find('%p') >= 0">
+                                     tal:define="portal_properties context/@@plone_tools/properties;
+                                                 ampm python:portal_properties.site_properties.getProperty('localLongTimeFormat').find('%p') >= 0">
                             <span tal:replace="python:toLocalizedTime(context.start())">
                                 Start Date Time</span> <br />
                             <span i18n:translate="event_from">from</span>  

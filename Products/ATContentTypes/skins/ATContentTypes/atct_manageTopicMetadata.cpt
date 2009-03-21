@@ -10,7 +10,7 @@
 
 <div metal:fill-slot="prefs_configlet_content"
      tal:define="errors python:request.get('errors', {});
-                 props python:here.portal_properties;">
+                 props context/@@plone_tools/properties;">
 
 <div class="documentEditable">
 
