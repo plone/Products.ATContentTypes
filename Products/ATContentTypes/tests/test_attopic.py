@@ -10,6 +10,7 @@ from Products.Archetypes.atapi import *
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.Field import BooleanField
 from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
 
 from Products.ATContentTypes.content.topic import ATTopic
 from Products.ATContentTypes.content.topic import ChangeTopics
@@ -293,7 +294,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.failUnlessEqual(atct.get_size(), 1)
 
     def test_syndication_enabled_by_default(self):
-        syn = self.portal.portal_syndication
+        syn = getToolByName(self.portal, 'portal_syndication')
         self.failUnless(syn.isSyndicationAllowed(self._ATCT))
 
     def test_schema_marshall(self):
