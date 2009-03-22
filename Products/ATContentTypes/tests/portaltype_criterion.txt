@@ -48,8 +48,6 @@ We edit the criteria:
     >>> browser.getLink('Criteria').click()
     >>> browser.url
     'http://nohost/plone/my-collection/criterion_edit_form'
-    >>> #'Criteria for My Collection' in browser.contents
-    >>> #There is a \n in the middle of the above phrase
     >>> 'Add New Search Criteria' in browser.contents
     True
 
