@@ -55,6 +55,5 @@ setup(name='Products.ATContentTypes',
           'transaction',
           'ZODB3',
           'Zope2',
-          'simplejson',
       ],
       )

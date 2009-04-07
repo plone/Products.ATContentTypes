@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Drop the dependency on simplejson. It's integrated into Python 2.6 as json.
+  [hannosch]
+
 - Avoid acquiring `portal_properties` and call it via a proper API.
   [hannosch]
 
