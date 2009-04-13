@@ -41,7 +41,7 @@
                     <th i18n:translate="event_what">What</th>
                     <td>
                         <metal:field use-macro="python:context.widget('subject', mode='view')">
-                        Categories
+                        Tags
                         </metal:field>
                     </td>
                 </tr>
