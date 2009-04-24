@@ -1,6 +1,9 @@
 1.3.1 unreleased
 ================
 
+* Made it possible to set an empty value to a topic text field.  This closes 
+  http://dev.plone.org/plone/ticket/7324. 
+  [dunlapm]
 
 1.3.0 2009-03-11
 ================
