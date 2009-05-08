@@ -32,6 +32,7 @@ from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFolder
 from Products.ATContentTypes.criteria import _criterionRegistry
+from Products.ATContentTypes.exportimport.content import IDisabledExport
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.permission import AddTopics
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
@@ -119,7 +120,7 @@ class ATTopic(ATCTFolder):
 
     use_folder_tabs = 0
 
-    implements(IATTopic)
+    implements(IATTopic, IDisabledExport)
 
     # Enable marshalling via WebDAV/FTP
     __dav_marshall__ = True

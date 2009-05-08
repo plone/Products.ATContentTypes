@@ -1,7 +1,5 @@
 from types import TupleType
 
-import time
-
 from zope.interface import implements
 
 from ZPublisher.HTTPRequest import HTTPRequest
@@ -12,6 +10,7 @@ from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
 
 from Products.CMFDefault.utils import SimpleHTMLParser
+from Products.GenericSetup.interfaces import IDAVAware
 
 from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import TextField
@@ -29,7 +28,6 @@ from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.interfaces import IATDocument as z2IATDocument
 from Products.ATContentTypes.interface import IATDocument
 
 from Products.ATContentTypes import ATCTMessageFactory as _
@@ -239,6 +237,6 @@ class ATDocument(ATDocumentBase):
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
     assocFileExt   = ('txt', 'stx', 'rst', 'rest', 'py',)
 
-    implements(IATDocument)
+    implements(IATDocument, IDAVAware)
 
 registerATCT(ATDocument, PROJECTNAME)

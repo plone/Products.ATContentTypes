@@ -1,6 +1,10 @@
 2.0 unreleased
 ==============
 
+- Moved content type specific GenericSetup related functionality from CMFPlone
+  into this package.
+  [hannosch]
+
 - "Categories" are now "Tags", in line with common usage and terminology. 
   [limi]
 
