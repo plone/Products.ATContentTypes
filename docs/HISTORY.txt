@@ -1,6 +1,10 @@
 1.2.8 unreleased
 ================
 
+* Subtopics shouldn't always acquire the 'start' query. Fixes 
+  https://dev.plone.org/plone/ticket/8827 
+  [pelle]
+
 * Made the relative path criterion less prone for funky Acquisition chains.
   This refs http://dev.plone.org/plone/ticket/7686.
   [hannosch, maurits]
