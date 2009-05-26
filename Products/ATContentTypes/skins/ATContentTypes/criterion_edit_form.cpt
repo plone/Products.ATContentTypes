@@ -43,8 +43,8 @@ function selectField() {
 function updateCriterionType(data) {
   $('#criterion_type').empty().html(
       $.map(data, function(entry) {
-          return '<' + 'option value="' + entry.value + '">' + entry.label + '<' +
-                 '/option>';
+          return '&lt;' + 'option value="' + entry.value + '"&gt;' + entry.label + '&lt;' +
+                 '/option&gt;';
       }).join('')
   ).change();
 };
