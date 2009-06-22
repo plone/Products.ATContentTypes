@@ -1,6 +1,11 @@
 1.3.3 unreleased
 ================
 
+* Modified lib/constraintypes.py:getDefaultAddableTypes method to check
+  isConstructionAllowed only for allowed types, not for all content types
+  in portal_types. isConstructionAllowed was called twice for each types.
+  [vincentfretin]
+
 * Fix XHTML error in criterion_edit_form.cpt
   [davisagli]
 
