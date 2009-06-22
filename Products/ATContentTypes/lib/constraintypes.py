@@ -299,7 +299,7 @@ class ConstrainTypesMixin:
 
         portal_types = getToolByName(self, 'portal_types')
         myType = portal_types.getTypeInfo(self)
-            result = portal_types.listTypeInfo()
+        result = portal_types.listTypeInfo()
         # Don't give parameter context to portal_types.listTypeInfo(). If we do that,
         # listTypeInfo will execute t.isConstructionAllowed(context) for each content type
         # in portal_types.
