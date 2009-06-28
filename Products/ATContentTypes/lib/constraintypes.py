@@ -300,14 +300,16 @@ class ConstrainTypesMixin:
         portal_types = getToolByName(self, 'portal_types')
         myType = portal_types.getTypeInfo(self)
         result = portal_types.listTypeInfo()
-        # Don't give parameter context to portal_types.listTypeInfo(). If we do that,
-        # listTypeInfo will execute t.isConstructionAllowed(context) for each content type
+        # Don't give parameter context to portal_types.listTypeInfo().
+        # If we do that, listTypeInfo will execute
+        # t.isConstructionAllowed(context) for each content type
         # in portal_types.
         # The isConstructionAllowed should be done only on allowed types.
         if myType is not None:
-            return [t for t in result if myType.allowType(t.getId()) and t.isConstructionAllowed(context)]
+            return [t for t in result if myType.allowType(t.getId()) and
+                    t.isConstructionAllowed(context)]
 
-        return [ t for t in result if t.isConstructionAllowed(context) ]
+        return [t for t in result if t.isConstructionAllowed(context)]
 
 
     security.declarePublic('canSetConstrainTypes')
