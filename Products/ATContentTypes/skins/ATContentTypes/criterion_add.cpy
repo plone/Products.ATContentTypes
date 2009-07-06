@@ -9,7 +9,7 @@
 ##title=Criterion Add
 
 from Products.ATContentTypes import ATCTMessageFactory as _
-from Products.CMFPlone.utils import transaction_note
+from Products.Archetypes.utils import transaction_note
 
 context.addCriterion(field, criterion_type)
 

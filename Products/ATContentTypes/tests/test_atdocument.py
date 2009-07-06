@@ -275,7 +275,7 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
                                 '/createObject?type_name=%s' % self.portal_type,
                                 self.basic_auth)
 
-        self.assertStatusEqual(response.getStatus(), 302) # Redirect to edit
+        self.failUnlessEqual(response.getStatus(), 302) # Redirect to edit
 
         location = response.getHeader('Location')
         self.failUnless(location.startswith(self.folder_url), location)
@@ -284,7 +284,7 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
         # Perform the redirect
         edit_form_path = location[len(self.app.REQUEST.SERVER_URL):]
         response = self.publish(edit_form_path, self.basic_auth)
-        self.assertStatusEqual(response.getStatus(), 200) # OK
+        self.failUnlessEqual(response.getStatus(), 200) # OK
 
         #Change the title
         temp_id = location.split('/')[-2]
@@ -295,12 +295,12 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
         self.failUnlessEqual(new_obj.checkCreationFlag(), True) # object is not yet edited
 
         response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank' % (new_obj_path, obj_title,), self.basic_auth) # Edit object
-        self.assertStatusEqual(response.getStatus(), 302) # OK
+        self.failUnlessEqual(response.getStatus(), 302) # OK
         self.failUnlessEqual(new_obj.getId(), new_id) # does id match
         self.failUnlessEqual(new_obj.checkCreationFlag(), False) # object is fully created
         new_title = "Second Title"
         response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank' % ('/%s' % new_obj.absolute_url(1), new_title,), self.basic_auth) # Edit object
-        self.assertStatusEqual(response.getStatus(), 302) # OK
+        self.failUnlessEqual(response.getStatus(), 302) # OK
         self.failUnlessEqual(new_obj.getId(), new_id) # id shouldn't have changed
 
 tests.append(TestATDocumentFunctional)

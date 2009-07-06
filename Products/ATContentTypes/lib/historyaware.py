@@ -3,7 +3,7 @@ import difflib
 from zope.interface import implements
 
 from DocumentTemplate.DT_Util import html_quote
-from Globals import InitializeClass
+from App.class_init import InitializeClass
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import View

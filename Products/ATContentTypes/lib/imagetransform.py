@@ -6,7 +6,7 @@ from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 from ExtensionClass import Base
 from DateTime import DateTime
-from Globals import InitializeClass
+from App.class_init import InitializeClass
 from OFS.Image import Image as OFSImage
 from OFS.Image import Pdata
 
@@ -54,16 +54,6 @@ class ATCTImageTransform(Base):
     * exif information
     * image rotation
     """
-
-    actions = (
-        {
-        'id'          : 'transform',
-        'name'        : 'Transform',
-        'action'      : 'string:${object_url}/atct_image_transform',
-        'permissions' : (ModifyPortalContent,),
-        'condition'   : 'object/hasPIL',
-         },
-        )
 
     security = ClassSecurityInfo()
 

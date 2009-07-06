@@ -56,7 +56,13 @@ class ATFolderNextPrevious(object):
 
 
         # Get the next item
-        if (position + 1) < len(folder._objects):
+        counter = getattr(aq_base(folder), 'objectCount', None)
+        if counter is not None:
+            count = counter()
+        else:
+            count = len(folder)
+
+        if (position + 1) < count:
             next_brain = catalog(self.buildNextPreviousQuery(position   = position + 1,
                                                              range      = 'min'))
             

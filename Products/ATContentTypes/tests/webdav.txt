@@ -74,13 +74,13 @@ Document
   text/html
 
   >>> print document.Subject()
-  (u'test keyword 1', u'test keyword 2')
+  ('test keyword 1', 'test keyword 2')
 
   >>> print document.Contributors()
-  (u'John Dow', u'Example User')
+  ('John Dow', 'Example User')
 
   >>> print document.Creators()
-  (u'test_user_1_',)
+  ('test_user_1_',)
 
   >>> print document.EffectiveDate(zone='UTC')
   2005-01-01 00:00:00
@@ -545,7 +545,7 @@ Folder
   ...
 
   >>> self.folder['test-folder-name'].Title()
-  u'test-folder-name'
+  'test-folder-name'
 
 BTreeFolder
 -----------
@@ -567,7 +567,7 @@ Need to make a BTreeFolder manually, and then do a MKCOL inside it:
   ...
 
   >>> self.folder['test-btree']['test-btreefolder-name'].Title()
-  u'test-btreefolder-name'
+  'test-btreefolder-name'
 
   >>> lpf.global_allow = lpf_allow
 
@@ -632,7 +632,7 @@ Now for the real thing, doing a PUT request, back to Member role:
   HTTP/1.1 201 Created
   ...
 
-  >>> 'Foto-do-Parana.jpg' in self.folder.objectIds()
+  >>> 'Foto-do-Parana.jpg' in self.folder
   True
 
   >>> image = self.folder['Foto-do-Parana.jpg']
@@ -660,7 +660,7 @@ Need manager roles here:
   HTTP/1.1 201 Created
   ...
 
-  >>> 'fotos-de-jurere' in self.folder.objectIds()
+  >>> 'fotos-de-jurere' in self.folder
   True
 
   >>> print self.folder['fotos-de-jurere'].Title()

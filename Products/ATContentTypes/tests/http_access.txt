@@ -74,7 +74,7 @@ ATFolder
 For the test we have to remove the object 'index_html' if it is in the
 folder.
 
-  >>> if 'index_html' in folder.objectIds():
+  >>> if 'index_html' in folder:
   ...     folder.manage_delObjects('index_html')
 
   ATFfolder's HEAD method is using defaultView to acquire a view method. Check
@@ -217,7 +217,7 @@ Test HEAD for the portal root object
   For the test we have to remove the object 'index_html' if it is in the
   folder.
 
-  >>> if 'index_html' in portal.objectIds():
+  >>> if 'index_html' in portal:
   ...     self.setRoles(['Manager'])
   ...     portal.manage_delObjects(('index_html',))
   ...     self.setRoles(['Member'])

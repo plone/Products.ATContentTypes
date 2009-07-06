@@ -235,22 +235,23 @@ class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
 
     def test_url_returns_image(self):
         response = self.publish(self.obj_path, self.basic_auth)
-        self.assertStatusEqual(response.getStatus(), 200) # OK
-        
+        self.failUnlessEqual(response.getStatus(), 200) # OK
+
     def test_bobo_hook_security(self):
         # Make sure that users with 'View' permission can use the
         # bobo_traversed image scales, even if denied to anonymous
         response1 = self.publish(self.obj_path+'/image', self.basic_auth)
-        self.assertStatusEqual(response1.getStatus(), 200) # OK
+        self.failUnlessEqual(response1.getStatus(), 200) # OK
         # deny access to anonymous
         self.obj.manage_permission('View', ['Manager','Member'],0)
         response2 = self.publish(self.obj_path+'/image', self.basic_auth)
         # Should be allowed for member
-        self.assertStatusEqual(response2.getStatus(), 200) # OK
+        self.failUnlessEqual(response2.getStatus(), 200) # OK
         # Should fail for anonymous
-        self.error_log._ignored_exceptions = ('Unauthorized', )
         response3 = self.publish(self.obj_path+'/image')
-        self.assertStatusEqual(response3.getStatus(), 401)
+        self.failUnlessEqual(response3.getStatus(), 302)
+        self.failUnlessEqual(response3.getHeader('bobo-exception-type'),
+            'Unauthorized')
 
 tests.append(TestATImageFunctional)
 

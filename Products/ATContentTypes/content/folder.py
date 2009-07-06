@@ -15,8 +15,6 @@ from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import NextPreviousAwareSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
-from Products.ATContentTypes.lib.autosort import AutoSortSupport
-from Products.ATContentTypes.lib.autosort import AutoOrderSupport
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 
@@ -29,7 +27,7 @@ finalizeATCTSchema(ATFolderSchema, folderish=True, moveDiscussion=False)
 finalizeATCTSchema(ATBTreeFolderSchema, folderish=True, moveDiscussion=False)
 
 
-class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
+class ATFolder(ATCTOrderedFolder):
     """A folder which can contain other items."""
 
     schema         =  ATFolderSchema
@@ -60,13 +58,10 @@ class ATFolder(AutoOrderSupport, ATCTOrderedFolder):
         else:
             return False
 
-    def manage_afterAdd(self, item, container):
-        ATCTOrderedFolder.manage_afterAdd(self, item, container)
-        AutoOrderSupport.manage_afterAdd(self, item, container)
 
 registerATCT(ATFolder, PROJECTNAME)
 
-class ATBTreeFolder(AutoSortSupport, ATCTBTreeFolder):
+class ATBTreeFolder(ATCTBTreeFolder):
     """A folder suitable for holding a very large number of items"""
     schema         =  ATBTreeFolderSchema
 

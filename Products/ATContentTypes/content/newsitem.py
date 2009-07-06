@@ -79,7 +79,12 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
         ),
     ), marshall=RFC822Marshaller()
     )
+
+ATNewsItemSchema['description'].widget.label = \
+    _(u'label_summary', default=u'Summary')
+
 finalizeATCTSchema(ATNewsItemSchema)
+
 
 class ATNewsItem(ATDocumentBase, ATCTImageTransform):
     """An announcement that will show up on the news portlet and in the news listing."""

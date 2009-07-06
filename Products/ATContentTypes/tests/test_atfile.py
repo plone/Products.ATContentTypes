@@ -96,8 +96,8 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         id = 'file.2005-11-18.4066860573'
         self.folder.invokeFactory(self.portal_type, id)
         self.folder[id].setFile(fakefile)
-        self.failIf(id in self.folder.objectIds())
-        self.failUnless(fakefile.filename in self.folder.objectIds())
+        self.failIf(id in self.folder)
+        self.failUnless(fakefile.filename in self.folder)
 
     def testUpperCaseFilenameWithFunnyCharacters(self):
         class fakefile(StringIO.StringIO):
@@ -107,8 +107,8 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         id = 'file.2005-11-18.4066860574'
         self.folder.invokeFactory(self.portal_type, id)
         self.folder[id].setFile(fakefile)
-        self.failIf(id in self.folder.objectIds())
-        self.failUnless('Zope-Plo-ne .txt' in self.folder.objectIds())
+        self.failIf(id in self.folder)
+        self.failUnless('Zope-Plo-ne .txt' in self.folder)
 
     def testWindowsUploadFilename(self):
         class fakefile(StringIO.StringIO):
@@ -118,9 +118,9 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         id = 'file.2005-11-18.4066860574'
         self.folder.invokeFactory(self.portal_type, id)
         self.folder[id].setFile(fakefile)
-        self.failIf(id in self.folder.objectIds())
-        self.failIf(fakefile.filename in self.folder.objectIds())
-        self.failUnless('file.txt' in self.folder.objectIds())
+        self.failIf(id in self.folder)
+        self.failIf(fakefile.filename in self.folder)
+        self.failUnless('file.txt' in self.folder)
 
     def testWindowsDuplicateFiles(self):
         class fakefile(StringIO.StringIO):
@@ -208,36 +208,36 @@ class TestCleanupFilename(atcttestcase.ATCTSiteTestCase):
 tests.append(TestCleanupFilename)
 
 class TestATFileFunctional(atctftestcase.ATCTIntegrationTestCase):
-    
+
     portal_type = 'File'
     views = ('file_view', 'download', )
 
     def test_inlineMimetypes_Office(self):
         # Only PDF and Office docs are shown inline
         self.obj.setFormat('application/msword')
-        response = self.publish(self.obj_path)
+        response = self.publish(self.obj_path, self.basic_auth)
         self.assertEqual(response.getStatus(), 200)
         self.assertEqual(response.getHeader('Content-Disposition'), None)
 
         self.obj.setFormat('application/x-msexcel')
-        response = self.publish(self.obj_path)
+        response = self.publish(self.obj_path, self.basic_auth)
         self.assertEqual(response.getStatus(), 200)
         self.assertEqual(response.getHeader('Content-Disposition'), None)
 
         self.obj.setFormat('application/vnd.ms-excel')
-        response = self.publish(self.obj_path)
+        response = self.publish(self.obj_path, self.basic_auth)
         self.assertEqual(response.getStatus(), 200)
         self.assertEqual(response.getHeader('Content-Disposition'), None)
 
         self.obj.setFormat('application/vnd.ms-powerpoint')
-        response = self.publish(self.obj_path)
+        response = self.publish(self.obj_path, self.basic_auth)
         self.assertEqual(response.getStatus(), 200)
         self.assertEqual(response.getHeader('Content-Disposition'), None)
 
     def test_inlineMimetypes_PDF(self):
         # Only PDF and Office docs are shown inline
         self.obj.setFormat('application/pdf')
-        response = self.publish(self.obj_path)
+        response = self.publish(self.obj_path, self.basic_auth)
         self.assertEqual(response.getStatus(), 200)
         self.assertEqual(response.getHeader('Content-Disposition'), None)
 
@@ -245,7 +245,7 @@ class TestATFileFunctional(atctftestcase.ATCTIntegrationTestCase):
         # Only PDF and Office docs are shown inline
         self.obj.setFilename('foo.txt')
         self.obj.setFormat('text/plain')
-        response = self.publish(self.obj_path)
+        response = self.publish(self.obj_path, self.basic_auth)
         self.assertEqual(response.getStatus(), 200)
         self.assertEqual(response.getHeader('Content-Disposition'), 'attachment; filename="foo.txt"')
 
@@ -253,7 +253,7 @@ class TestATFileFunctional(atctftestcase.ATCTIntegrationTestCase):
         # Only PDF and Office docs are shown inline
         self.obj.setFilename('foo.exe')
         self.obj.setFormat('application/octet-stream')
-        response = self.publish(self.obj_path)
+        response = self.publish(self.obj_path, self.basic_auth)
         self.assertEqual(response.getStatus(), 200)
         self.assertEqual(response.getHeader('Content-Disposition'), 'attachment; filename="foo.exe"')
 

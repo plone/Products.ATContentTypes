@@ -3,7 +3,7 @@ Adding an ATTopic criterion for Type
 
     >>> from Products.Five.testbrowser import Browser
     >>> browser = Browser()
-    >>> browser.open('http://nohost/plone/')
+    >>> browser.open('http://nohost/plone/login')
 
 First, we need to log in.
 
@@ -23,10 +23,7 @@ What we do next is we
   - ...save the page,
   - ...and along the way we check that everything works as expected.
 
-Note that this is slightly different to how the testrecorder result
-looks like because we're navigating the page with a JavaScript- less
-browser.
-
+    >>> browser.open('http://nohost/plone')
     >>> browser.getLink('Add new').click()
     >>> 'Add new item' in browser.contents
     True
@@ -51,8 +48,6 @@ We edit the criteria:
     >>> browser.getLink('Criteria').click()
     >>> browser.url
     'http://nohost/plone/my-collection/criterion_edit_form'
-    >>> #'Criteria for My Collection' in browser.contents
-    >>> #There is a \n in the middle of the above phrase
     >>> 'Add New Search Criteria' in browser.contents
     True
 
@@ -60,6 +55,7 @@ We add a criterion for Type:
 
     >>> browser.getControl(name='field', index=0).value = ['Type']
     >>> browser.getControl(name='criterion_type', index=0).value = ['ATPortalTypeCriterion']
+    >>> browser.handleErrors = False
     >>> browser.getControl(name='form.button.AddCriterion').click()
     >>> 'Added criterion ATPortalTypeCriterion for field Type.' in browser.contents
     True

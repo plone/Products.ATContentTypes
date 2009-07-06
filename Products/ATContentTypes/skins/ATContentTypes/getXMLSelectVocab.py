@@ -4,12 +4,15 @@
 ##bind namespace=
 ##bind script=script
 ##bind subpath=traverse_subpath
-##parameters=method,param,value
+##parameters=vocab_method,param,value
 ##title=Get a DisplayList and format for XML request
+
+# BBB: This python script has been deprecated and been replaced with
+# Products.ATContentTypes.browser.criteria
 
 params = {param:value, 'display_list': True}
 
-vocab = getattr(context, method)(**params)
+vocab = getattr(context, vocab_method)(**params)
 site_encoding = context.plone_utils.getSiteEncoding()
 
 RESPONSE = context.REQUEST.RESPONSE

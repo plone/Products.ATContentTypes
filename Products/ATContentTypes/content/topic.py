@@ -9,7 +9,6 @@ from Products.ZCatalog.Lazy import LazyCat
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.CatalogTool import CatalogTool
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from Acquisition import aq_parent
@@ -34,6 +33,7 @@ from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFolder
 from Products.ATContentTypes.criteria import _criterionRegistry
+from Products.ATContentTypes.exportimport.content import IDisabledExport
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.permission import AddTopics
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
@@ -148,7 +148,7 @@ class ATTopic(ATCTFolder):
 
     use_folder_tabs = 0
 
-    implements(IATTopic)
+    implements(IATTopic, IDisabledExport)
 
     # Enable marshalling via WebDAV/FTP
     __dav_marshall__ = True
@@ -174,7 +174,7 @@ class ATTopic(ATCTFolder):
 
     security.declareProtected(ChangeTopics, 'criteriaByIndexId')
     def criteriaByIndexId(self, indexId):
-        catalog_tool = getToolByName(self, CatalogTool.id)
+        catalog_tool = getToolByName(self, 'portal_catalog')
         indexObj = catalog_tool.Indexes[indexId]
         results = _criterionRegistry.criteriaByIndex(indexObj.meta_type)
         return results
@@ -232,9 +232,6 @@ class ATTopic(ATCTFolder):
         """Return a list of our criteria objects.
         """
         val = self.objectValues(self.listCriteriaMetaTypes())
-        # XXX Sorting results in inconsistent order. Leave them in the order
-        # they were added.
-        #val.sort()
         return val
 
     security.declareProtected(View, 'listSearchCriteria')
@@ -411,10 +408,6 @@ class ATTopic(ATCTFolder):
         else:
             # Allow parameters to further limit existing criterias
             for k,v in q.items():
-                if isinstance(k, unicode):
-                    k = k.encode('utf-8')
-                if isinstance(v, unicode):
-                    v = v.encode('utf-8')
                 if kw.has_key(k):
                     arg = kw.get(k)
                     if isinstance(arg, (list, tuple)) and isinstance(v, (list, tuple)):

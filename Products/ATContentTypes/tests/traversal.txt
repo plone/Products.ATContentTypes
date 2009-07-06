@@ -81,7 +81,7 @@ be allowed to acquire content from higher-level hierarchies:
   HTTP/1.0 200 OK
   ...Root Document...
 
-  >>> 'test_document' in self.portal.simple_folder.objectIds()
+  >>> 'test_document' in self.portal.simple_folder
   False
 
   >>> print http(r"""
@@ -100,7 +100,7 @@ be allowed to acquire content from higher-level hierarchies:
   HTTP/1.0 200 OK
   ...Root Document...
 
-  >>> 'test_document' in self.portal.simple_btree_folder.objectIds()
+  >>> 'test_document' in self.portal.simple_btree_folder
   False
 
   >>> print http(r"""
@@ -148,7 +148,7 @@ method instead.
   HTTP/1.0 200 OK
   ...Root Document...
 
-  >>> 'test_document' in self.portal.simple_folder.objectIds()
+  >>> 'test_document' in self.portal.simple_folder
   False
 
   >>> print http(r"""
@@ -158,7 +158,7 @@ method instead.
   HTTP/1.0 200 OK
   ...Root Document...
 
-  >>> 'test_document' in self.portal.simple_btree_folder.objectIds()
+  >>> 'test_document' in self.portal.simple_btree_folder
   False
 
   >>> print http(r"""
@@ -301,7 +301,7 @@ Make sure it's possible to create an item named ``index_html`` into a
 AT-based folder.
 
   >>> folder = self.portal.simple_folder
-  >>> 'index_html' in folder.objectIds()
+  >>> 'index_html' in folder
   False
 
   >>> print folder.index_html
@@ -328,7 +328,7 @@ AT-based folder.
 Now for a BTreeFolder:
 
   >>> folder = self.portal.simple_btree_folder
-  >>> 'index_html' in folder.objectIds()
+  >>> 'index_html' in folder
   False
 
   >>> print folder.index_html
@@ -345,7 +345,7 @@ Now for a BTreeFolder:
   HTTP/1.1 204 No Content
   ...
 
-  >>> 'index_html' in folder.objectIds()
+  >>> 'index_html' in folder
   False
 
   >>> print folder.index_html.title_or_id()

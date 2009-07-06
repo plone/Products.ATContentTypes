@@ -19,13 +19,13 @@ else:
     from Products.Archetypes.atapi import BaseBTreeFolder
     from Products.Archetypes.atapi import registerType
 
-from AccessControl import ClassSecurityInfo, Permissions
+from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
-from Globals import InitializeClass
+from App.class_init import InitializeClass
 from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from Globals import REPLACEABLE
+from OFS.ObjectManager import REPLACEABLE
 from webdav.Lockable import ResourceLockedError
 from webdav.NullResource import NullResource
 from zExceptions import MethodNotAllowed
@@ -34,15 +34,11 @@ from ZODB.POSException import ConflictError
 
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.permissions import ManageProperties
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
-from Products.CMFPlone.PloneFolder import ReplaceableWrapper
 
-from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.config import MIME_ALIAS
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixin
-from Products.ATContentTypes.interfaces import IATContentType as z2IATContentType
 from Products.ATContentTypes.interface import IATContentType
 from Products.ATContentTypes.interface import ISelectableConstrainTypes
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
@@ -78,6 +74,17 @@ def translateMimetypeAlias(alias):
         mime = MIME_ALIAS.get(alias, None)
     assert(mime) # shouldn't be empty
     return mime
+
+
+class ReplaceableWrapper:
+    """A wrapper around an object to make it replaceable."""
+    def __init__(self, ob):
+        self.__ob = ob
+
+    def __getattr__(self, name):
+        if name == '__replaceable__':
+            return REPLACEABLE
+        return getattr(self.__ob, name)
 
 
 class ATCTMixin(BrowserDefaultMixin):
@@ -367,7 +374,7 @@ class ATCTFileContent(ATCTContent):
         else:
             # If check_id is not available just look for conflicting ids
             parent = aq_parent(aq_inner(self))
-            check_id = used_id in parent.objectIds() and \
+            check_id = used_id in parent and \
                        'Id %s conflicts with an existing item'% used_id or False
         if check_id and used_id == id:
             errors['id'] = check_id
@@ -506,6 +513,16 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
         return ReplaceableWrapper(aq_base(_target).__of__(self))
 
     index_html = ComputedAttribute(index_html, 1)
+
+    def manage_renameObject(self, id, new_id, REQUEST=None):
+        """Rename a particular sub-object without changing its position.
+        """
+        old_position = self.getObjectPosition(id)
+        result = OrderedBaseFolder.manage_renameObject(self, id, new_id, REQUEST)
+        self.moveObjectToPosition(new_id, old_position)
+        putils = getToolByName(self, 'plone_utils')
+        putils.reindexOnReorder(self)
+        return result
 
 InitializeClass(ATCTOrderedFolder)
 

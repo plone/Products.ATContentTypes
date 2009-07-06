@@ -9,7 +9,7 @@
 ##title=Criterion Remove
 
 from Products.ATContentTypes import ATCTMessageFactory as _
-from Products.CMFPlone.utils import transaction_note
+from Products.Archetypes.utils import transaction_note
 
 remove=[]
 

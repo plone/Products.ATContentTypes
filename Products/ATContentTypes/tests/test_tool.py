@@ -39,7 +39,7 @@ class TestATCTToolFunctional(atctftestcase.IntegrationTestCase):
     def test_zmi_tabs(self):
         for view in self.zmi_tabs:
             response = self.publish('%s/%s' % (self.obj_path, view), self.owner_auth)
-            self.assertStatusEqual(response.getStatus(), 200, 
+            self.failUnlessEqual(response.getStatus(), 200, 
                 "%s: %s" % (view, response.getStatus())) # OK
 
 tests.append(TestATCTToolFunctional)

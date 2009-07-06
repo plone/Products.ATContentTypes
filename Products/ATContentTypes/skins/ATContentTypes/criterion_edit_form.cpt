@@ -26,23 +26,35 @@
       </script>
     </tal:js>
 
-    <script type="text/javascript"
-            tal:attributes="src string:$portal_url/modifySelectList.js">
-    </script>
-
     <script type="text/javascript">
-        registerDynamicSelect('criteria_select','field','criterion_type', 'vocabulary','allowedCriteriaForField','field');
-        function showHelp(selectedItem, helpElementId){
-             helpElement = document.getElementById(helpElementId);
-             elementTooltip = selectedItem.title;
-             if (elementTooltip!='')
-                {
-                    helpText = elementTooltip
-                } else {
-                    helpText = '&nbsp;'
-                }
-             if (helpElement) {helpElement.innerHTML = helpText;}
-            }
+(function($) {
+function showHelp() {
+    $(this).siblings('.formHelp').text($(this).find('option:selected').attr('title') || '\u00A0');
+};
+var cache = {}
+function selectField() {
+    var field = $(this).val()
+    if (cache[field] == undefined)
+        $.getJSON('@@jsoncriteria', { field: field }, 
+            function(data) { 
+                cache[field] = data; 
+                updateCriterionType(data) 
+            });
+    else updateCriterionType(cache[field]);
+};
+function updateCriterionType(data) {
+  $('#criterion_type').empty().html(
+      $.map(data, function(entry) {
+          return '&lt;option value="' + entry.value + '"&gt;' + entry.label + '&lt;' +
+                 '/option&gt;';
+      }).join('')
+  ).change();
+};
+$(function() {
+    $('#field, #sortfield').change(showHelp);
+    $('#field').change(selectField).change();
+})
+})(jQuery);
     </script>
 </tal:defines>
 </metal:head>
@@ -147,8 +159,6 @@
 
                 <select name="field"
                         id="field"
-                        onchange=""
-                        tal:attributes="onchange string:javascript:showHelp(this.options[this.selectedIndex], 'fieldHelp');"
                         i18n:domain="plone">
                 <tal:options tal:repeat="field fields">
                     <option value=""
@@ -224,9 +234,8 @@
                 </div>
 
                 <select name="field"
-                        id="field"
-                        tal:define="fields context/listSortFields"
-                        tal:attributes="onchange string:javascript:showHelp(this.options[this.selectedIndex], 'fieldHelpSort');">
+                        id="sortfield"
+                        tal:define="fields context/listSortFields">
 
                      <option value="no_sort"
                              tal:attributes="selected python:not context.hasSortCriterion();"

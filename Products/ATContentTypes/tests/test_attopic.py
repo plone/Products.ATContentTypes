@@ -8,6 +8,8 @@ from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.atapi import *
 
 from Products.Archetypes.Field import BooleanField
+from Products.CMFCore.utils import getToolByName
+
 from Products.ATContentTypes.content.topic import ATTopic
 from Products.ATContentTypes.content.topic import ChangeTopics
 from Products.ATContentTypes.content.folder import ATFolder
@@ -164,8 +166,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         topic = self._ATCT
 
         topic.addCriterion( 'foo', 'ATSimpleStringCriterion' )
-        self.failUnless('crit__foo_ATSimpleStringCriterion' in
-            topic.objectIds(), topic.objectIds())
+        self.failUnless('crit__foo_ATSimpleStringCriterion' in topic)
         topic.getCriterion( 'foo_ATSimpleStringCriterion' ).setValue( 'bar' )
 
         query = topic.buildQuery()
@@ -184,8 +185,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         topic = self._ATCT
 
         topic.addCriterion( 'foo', 'ATSimpleStringCriterion' )
-        self.failUnless('crit__foo_ATSimpleStringCriterion' in
-            topic.objectIds(), topic.objectIds())
+        self.failUnless('crit__foo_ATSimpleStringCriterion' in topic)
         topic.getCriterion( 'foo_ATSimpleStringCriterion' ).setValue( 'bar' )
 
         self.setRoles(['Manager', 'Member'])
@@ -199,8 +199,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.failUnlessEqual(subtopic.buildQuery(), topic.buildQuery())
 
         subtopic.addCriterion( 'baz', 'ATSimpleStringCriterion' )
-        self.failUnless('crit__baz_ATSimpleStringCriterion' in
-            subtopic.objectIds(), subtopic.objectIds())
+        self.failUnless('crit__baz_ATSimpleStringCriterion' in subtopic)
         subtopic.getCriterion( 'baz_ATSimpleStringCriterion' ).setValue( 'bam' )
 
         query = subtopic.buildQuery()
@@ -298,7 +297,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.failUnlessEqual(atct.get_size(), 1)
 
     def test_syndication_enabled_by_default(self):
-        syn = self.portal.portal_syndication
+        syn = getToolByName(self.portal, 'portal_syndication')
         self.failUnless(syn.isSyndicationAllowed(self._ATCT))
 
     def test_schema_marshall(self):
@@ -542,7 +541,7 @@ class TestATTopicFunctional(atctftestcase.ATCTIntegrationTestCase):
     def test_dynamic_view_without_view(self):
         # dynamic view magic should work
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
-        self.assertStatusEqual(response.getStatus(), 200) #
+        self.failUnlessEqual(response.getStatus(), 200) #
 
     portal_type = 'Topic'
     views = ('atct_topic_view', 'criterion_edit_form', 'atct_topic_subtopics')

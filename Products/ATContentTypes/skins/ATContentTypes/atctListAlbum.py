@@ -7,8 +7,6 @@
 ##bind subpath=traverse_subpath
 ##parameters=images=0, folders=0, subimages=0, others=0
 
-from Products.CMFPlone.utils import base_hasattr
-
 result = {}
 
 if context.portal_type == 'Topic':
@@ -22,8 +20,8 @@ if folders:
     # We don't need the full objects for the folders
     result['folders'] = queryMethod({'portal_type':('Folder',)})
 if subimages:
-    #Handle brains or objects
-    if base_hasattr(context, 'getPath'):
+    # Handle brains or objects
+    if getattr(context.aq_base, 'getPath', None) is not None:
         path = context.getPath()
     else:
         path = '/'.join(context.getPhysicalPath())

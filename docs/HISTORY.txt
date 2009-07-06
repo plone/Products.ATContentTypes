@@ -1,6 +1,59 @@
 2.0 unreleased
 ==============
 
+- Removed test only PluggableAuthService dependency.
+  [hannosch]
+
+- Moved content type specific GenericSetup related functionality from CMFPlone
+  into this package.
+  [hannosch]
+
+- Drop the dependency on simplejson. It's integrated into Python 2.6 as json.
+  [hannosch]
+
+- Avoid acquiring `portal_properties` and call it via a proper API.
+  [hannosch]
+
+- Changed objectIds and objectValues calls to use the IContainer API.
+  [hannosch]
+
+- Don't assume regular (non-btree) folders for next/previous support.
+  [witsch]
+
+- Removed various dependencies on CMFPlone.
+  [hannosch]
+
+- Cleaned up tests some more. No longer rely on the testfixture extension
+  profile but adapt the tests to default Plone instead.
+  [hannosch]
+
+- Declare package dependencies and fixed deprecation warnings for use
+  of Globals.
+  [hannosch]
+
+- Changed parameter name at script getXMLSelectVocab.py from 'method' to 
+  'vocab_method' to avoid getting overridden from ZPublisher.HTTPRequest.
+  This closes https://dev.plone.org/plone/ticket/6960.
+  [igbun]
+
+- Changed description label to summary for page and news item. This closes
+  http://dev.plone.org/plone/ticket/8700.
+  [hannosch]
+
+- Adjusted functional tests to not rely on login portlet.
+  [hannosch]
+
+- Moved a manage_renameObject method from the autosort code into the ordered
+  base class. It wasn't quite obvious, but the code was actually used.
+  [hannosch]
+
+- Removed icalendar package from the thirdparty folder. We don't use it
+  ourselves and it's easy installable nowadays for anyone who wants it.
+  [hannosch]
+
+- Removed never fully implemented autosort and urlupload modules.
+  [hannosch]
+
 - Removed the weird Zope2 Interface to zope.interface bridging code.
   [hannosch]
 
@@ -107,9 +160,6 @@
 - Moved interface declarations from ZCML to the classes themselves.
   [hannosch]
 
-- Adjusted tests to new Archetypes policy on return values.
-  [hannosch]
-
 - Ported editing.txt, events.txt, reindex_sanity.txt and traversal.txt tests
   from Archetypes and adjusted them for the ATContentTypes specific behavior.
   [hannosch]
@@ -129,6 +179,17 @@
   redirected to 'http://nohost/plone/localhost'
   [sirgarr]
    
+1.3.3 unreleased
+================
+
+- Modified lib/constraintypes.py:getDefaultAddableTypes method to check
+  isConstructionAllowed only for allowed types, not for all content types
+  in portal_types. isConstructionAllowed was called twice for each types.
+  [vincentfretin]
+
+- Fix XHTML error in criterion_edit_form.cpt
+  [davisagli]
+
 1.2.6
 ==================
 
@@ -1320,9 +1381,9 @@ Snapshot 2005 07 05
   Fixes issue [ 1176355 ].
   [alecm]
 
-- Changed processForm to check for id confilicts using check_ids if available,
-  otherwise just parent.objectIds().  Also commit sub-transaction to make
-  rename work after portal_factory.
+- Changed processForm to check for id conflicts using check_ids if available,
+  otherwise just `id in parent`. Also commit sub-transaction to make rename
+  work after portal_factory.
   [alecm]
 
 - Added version migration system mostly copied from plone. Works automatically

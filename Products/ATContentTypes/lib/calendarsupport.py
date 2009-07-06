@@ -2,7 +2,7 @@ from cStringIO import StringIO
 from zope.interface import implements
 
 from DateTime import DateTime
-from Globals import InitializeClass
+from App.class_init import InitializeClass
 
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
@@ -225,8 +225,6 @@ class CalendarSupportMixin:
 InitializeClass(CalendarSupportMixin)
 
 def vformat(s):
-    if isinstance(s, unicode):
-        s = s.encode('utf-8')
     # return string with escaped commas, colons and semicolons
     return s.strip().replace(',','\,').replace(':','\:').replace(';','\;')
 

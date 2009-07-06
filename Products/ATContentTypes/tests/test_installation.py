@@ -1,12 +1,10 @@
 from Testing import ZopeTestCase # side effect import. leave it here.
 
-import transaction
 from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.tool.atct import ATCTTool
 from Products.CMFCore.utils import getToolByName
-from StringIO import StringIO
 
 tests = []
 
@@ -26,21 +24,15 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
     def test_skin_installed(self):
         stool = getattr(self.portal.aq_explicit, 'portal_skins')
-        ids = stool.objectIds()
-        self.failUnless('ATContentTypes' in ids, ids)
+        self.failUnless('ATContentTypes' in stool)
 
     def test_installedAllTypes(self):
         # test that all types are installed well
-        ttool = self.ttool
         ids = ('Document', 'File',
             'Folder', 'Image', 'Large Plone Folder', 'Link',
             'News Item', 'Topic', 'Event')
-
-        tids = ttool.objectIds()
-        for id in ids:
-            self.failUnless(id in tids, (id, tids))
-            tinfo = ttool[id]
-            self.failUnless(tinfo.product == 'ATContentTypes', tinfo.product)
+        for i in ids:
+            self.failUnless(i in self.ttool)
 
     def test_not_quickinstalled(self):
         qi = getattr(self.portal, 'portal_quickinstaller')
@@ -52,8 +44,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
     def test_reindex_doesnt_add_tools(self):
         cat = self.cat
-        ids = [id for id in self.portal.objectIds()
-               if id.startswith('portal_') ]
+        ids = [i for i in self.portal if i.startswith('portal_')]
         # a rought guess
         self.failIf(len(ids) < 5)
         for id in ids:
