@@ -1,6 +1,9 @@
 2.0 unreleased
 ==============
 
+- Use correct location for IObjectEvent.
+  [hannosch]
+
 - Removed test only PluggableAuthService dependency.
   [hannosch]
 
