@@ -12,7 +12,8 @@
       tal:define="batch python:context.getFolderContents(batch=True, b_size=100);
                   here_url context/@@plone_context_state/object_url;">
 
-    <h1 i18n:translate="">
+    <h1 i18n:translate="heading_contained_collections"
+        i18n:domain="atcontenttypes">
         Also in this section
     </h1>
 
