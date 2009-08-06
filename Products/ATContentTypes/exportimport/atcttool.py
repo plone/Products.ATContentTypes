@@ -147,9 +147,10 @@ def importATCTTool(context):
     """Import ATCT Tool configuration.
     """
     site = context.getSite()
-    tool = getToolByName(site, 'portal_atct')
+    tool = getToolByName(site, 'portal_atct', None)
 
-    importObjects(tool, '', context)
+    if tool is not None:
+        importObjects(tool, '', context)
 
 def exportATCTTool(context):
     """Export ATCT Tool configuration.
