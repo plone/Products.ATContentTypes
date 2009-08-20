@@ -381,6 +381,7 @@ class ATTopic(ATCTFolder):
         """Construct a catalog query using our criterion objects.
         """
         result = {}
+        clear_start = False
         criteria = self.listCriteria()
         acquire = self.getAcquireCriteria()
         if not criteria and not acquire:
@@ -391,6 +392,7 @@ class ATTopic(ATCTFolder):
             try:
                 # Tracker 290 asks to allow combinations, like this:
                 # parent = aq_parent(self)
+                clear_start = True
                 parent = aq_parent(aq_inner(self))
                 result.update(parent.buildQuery())
             except (AttributeError, Unauthorized): # oh well, can't find parent, or it isn't a Topic.
@@ -398,6 +400,18 @@ class ATTopic(ATCTFolder):
 
         for criterion in criteria:
             for key, value in criterion.getCriteriaItems():
+                # Ticket: https://dev.plone.org/plone/ticket/8827
+                # If a sub topic is set to acquire then the 'start' key have to 
+                # be deleted to get ATFriendlyDateCriteria to work properly (the 'end' key) -
+                # so the 'start' key should be deleted.
+                # But only when:
+                # - a subtopic with acquire enabled
+                # - its a ATFriendlyDateCriteria
+                # - the date criteria is set to 'now' (0)
+                # - the end key is set
+                if clear_start and criterion.meta_type in ['ATFriendlyDateCriteria'] \
+                and not criterion.value and key == 'end' and 'start' in result:
+                    del result['start']
                 result[key] = value
         return result
 

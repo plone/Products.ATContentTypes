@@ -1,5 +1,8 @@
 1.3.3 unreleased
 ================
+* Subtopics shouldn't always acquire the 'start' query. Fixes 
+  https://dev.plone.org/plone/ticket/8827 
+  [pelle]
 
 * Internationalized "Also in this section" in atct_topic_subtopics.pt.
   This closes http://dev.plone.org/plone/ticket/8383
