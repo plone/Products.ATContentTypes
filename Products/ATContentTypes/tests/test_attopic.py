@@ -212,6 +212,105 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.assertEquals( len( query ), 1 )
         self.assertEquals( query['baz'], 'bam' )
 
+    def test_nested_friendly_date_criteria( self ):
+        """
+        The queries before adding fix for https://dev.plone.org/plone/ticket/8827
+        where subtopics should inhert start / end keys
+        topic query: {
+        'start': {'query': DateTime('2009/01/30 21:54:27.370 GMT+1'), 'range': 'min'}
+        }
+        subtopic query: {
+        'start': {'query': DateTime('2009/01/30 21:54:27.444 GMT+1'), 'range': 'min'},
+        'end': {'query': DateTime('2009/01/30 21:54:27.445 GMT+1'), 'range': 'max'}
+        }
+        ^^ the 'start' key in the subtopic query is odd and results in combination
+        with the 'end' key in zero results even if there is old/past items.
+        """
+        # Add topic - future items
+        topic = self._ATCT
+        date_crit = topic.addCriterion('start', 'ATFriendlyDateCriteria')
+        date_crit.setValue(0)
+        date_crit.setDateRange('+') # This is irrelevant when the date is now
+        date_crit.setOperation('more')
+        # Add subtopic - past items
+        self.setRoles(['Manager', 'Member'])
+        topic.addSubtopic( 'qux' )
+        self.setRoles(['Member'])
+        subtopic = topic.qux
+        date_crit = subtopic.addCriterion('end','ATFriendlyDateCriteria')
+        date_crit.setValue(0)
+        date_crit.setDateRange('-') # This is irrelevant when the date is now
+        date_crit.setOperation('less')
+        subtopic.setAcquireCriteria(True)
+        # fetch the query
+        query = subtopic.buildQuery()
+        self.failUnless(query['end'])
+        # query shouldn't have a start key https://dev.plone.org/plone/ticket/8827
+        self.failIf('start' in query)
+    
+    def test_nested_friendly_date_criteria_reverse( self ):
+        """
+        Lets have a test for the reverse situation
+        when the main topic lists past items and
+        the subtopics lists furture items.
+        """
+        # Add topic - past items
+        topic = self._ATCT
+        date_crit = topic.addCriterion('end', 'ATFriendlyDateCriteria')
+        date_crit.setValue(0)
+        date_crit.setDateRange('+') # This is irrelevant when the date is now
+        date_crit.setOperation('less')
+        # Add subtopic - future items
+        self.setRoles(['Manager', 'Member'])
+        topic.addSubtopic( 'qux' )
+        self.setRoles(['Member'])
+        subtopic = topic.qux
+        date_crit = subtopic.addCriterion('start','ATFriendlyDateCriteria')
+        date_crit.setValue(0)
+        date_crit.setDateRange('-') # This is irrelevant when the date is now
+        date_crit.setOperation('more')
+        subtopic.setAcquireCriteria(True)
+        # fetch the query
+        query = subtopic.buildQuery()
+        # this one can have both start and end
+        self.failUnless(query['start'])
+        self.failUnless(query['end'])
+
+    def test_nested_friendly_date_criteria_with_a_start( self ):
+        """
+        Use case: A subtopic with past item but only certain days back
+        in time for example 1 month.
+        Lets ensure the 'start' isn't wiped out of the query 
+        in this use case
+        """
+        # Add topic - future items
+        topic = self._ATCT
+        date_crit = topic.addCriterion('start', 'ATFriendlyDateCriteria')
+        date_crit.setValue(0)
+        date_crit.setDateRange('+') # This is irrelevant when the date is now
+        date_crit.setOperation('more')
+        # Add subtopic - past items - but only 1 month back in time
+        self.setRoles(['Manager', 'Member'])
+        topic.addSubtopic( 'qux' )
+        self.setRoles(['Member'])
+        subtopic = topic.qux
+        date_crit = subtopic.addCriterion('end','ATFriendlyDateCriteria')
+        date_crit.setValue(0)
+        date_crit.setDateRange('-') # This is irrelevant when the date is now
+        date_crit.setOperation('less')
+        subtopic.setAcquireCriteria(True)
+        date_crit = subtopic.addCriterion('start','ATFriendlyDateCriteria')
+        date_crit.setValue(31) # 1 month
+        date_crit.setDateRange('-') # the opposite is marked '+'
+        date_crit.setOperation('less') # the opposite is marked 'more'
+        #not sur about this one
+        subtopic.setAcquireCriteria(True)
+        # fetch the query
+        query = subtopic.buildQuery()
+        self.failUnless(query['end'])
+        # query should have a start key
+        self.failUnless(query['start'])
+
     def test_edit(self):
         new = self._ATCT
         editATCT(new)
