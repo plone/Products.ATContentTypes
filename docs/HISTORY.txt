@@ -7,7 +7,7 @@
 ==================
 
 - Subtopics shouldn't always acquire the 'start' query. Fixes 
-  https://dev.plone.org/plone/ticket/8827 
+  http://dev.plone.org/plone/ticket/8827 
   [pelle]
 
 - Internationalized "Also in this section" in atct_topic_subtopics.pt.
@@ -70,7 +70,7 @@
 ==================
 
 * Fixed the tidy validation which errored out and rasied the wrong error.
-  This closes https://dev.plone.org/plone/ticket/8243.
+  This closes http://dev.plone.org/plone/ticket/8243.
   [jlagarde, garbas, calvinhp]
 
 * Avoid acquiring getText from parent objects in atct_album_view. This refs
@@ -91,7 +91,7 @@
 
 * Fixed invalid field condition that prevented you from being able to edit
   the "Inherit Criteria" value on a collection once it had been created.
-  This closes https://dev.plone.org/plone/ticket/6527.
+  This closes http://dev.plone.org/plone/ticket/6527.
   [hannosch]
 
 * Changed a msgid for the url field of events to have a distinct value.
