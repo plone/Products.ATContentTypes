@@ -1,20 +1,25 @@
+1.3.4 - unreleased
+==================
+
+- Nothing changed yet.
+
 1.3.3 - 2009-09-06
 ==================
 
-* Subtopics shouldn't always acquire the 'start' query. Fixes 
+- Subtopics shouldn't always acquire the 'start' query. Fixes 
   https://dev.plone.org/plone/ticket/8827 
   [pelle]
 
-* Internationalized "Also in this section" in atct_topic_subtopics.pt.
+- Internationalized "Also in this section" in atct_topic_subtopics.pt.
   This closes http://dev.plone.org/plone/ticket/8383
   [massimo]
 
-* Modified lib/constraintypes.py:getDefaultAddableTypes method to check
+- Modified lib/constraintypes.py:getDefaultAddableTypes method to check
   isConstructionAllowed only for allowed types, not for all content types
   in portal_types. isConstructionAllowed was called twice for each types.
   [vincentfretin]
 
-* Fix XHTML error in criterion_edit_form.cpt
+- Fix XHTML error in criterion_edit_form.cpt
   [davisagli]
 
 1.3.2 - 2009-05-20
