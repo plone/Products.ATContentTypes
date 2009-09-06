@@ -1,9 +1,5 @@
-2.0 unreleased
-==============
-
-- Subtopics shouldn't always acquire the 'start' query. Fixes  
-  https://dev.plone.org/plone/ticket/8827  
-  [pelle]
+2.0 - unreleased
+================
 
 - Use correct location for IObjectEvent.
   [hannosch]
@@ -186,8 +182,12 @@
   redirected to 'http://nohost/plone/localhost'
   [sirgarr]
    
-1.3.3 unreleased
-================
+1.3.3 - 2009-09-06
+==================
+
+- Subtopics shouldn't always acquire the 'start' query. Fixes 
+  https://dev.plone.org/plone/ticket/8827
+  [pelle]
 
 - Internationalized "Also in this section" in atct_topic_subtopics.pt.
   This closes http://dev.plone.org/plone/ticket/8383
@@ -201,7 +201,7 @@
 - Fix XHTML error in criterion_edit_form.cpt
   [davisagli]
 
-1.2.6
+1.2.6 - 2008-10-06
 ==================
 
 - Fixed the tidy validation which errored out and rasied the wrong error.
@@ -210,6 +210,7 @@
 
 - Avoid acquiring getText from parent objects in atct_album_view. This refs
   http://dev.plone.org/plone/ticket/8190.
+  [hannosch]
 
 - Removed parameters that has to be controlled through CSS from 
   atct_topic_view.pt. This closes http://dev.plone.org/plone/ticket/6803
@@ -232,7 +233,7 @@
   http://dev.plone.org/plone/ticket/8270.
   [dunlapm]
    
-1.2.5 2008-04-22
+1.2.5 - 2008-04-22
 ==================
 
 - Remove leading whitespace in hrefs.
@@ -242,7 +243,7 @@
   http://dev.plone.org/plone/ticket/7517.
   [hannosch]
 
-1.2.4 2008-01-03
+1.2.4 - 2008-01-03
 ==================
 
 - The edit tab in ZMI should not be displayed for ATImage/ATFIle objects.
@@ -257,7 +258,7 @@
   disabled because the test browser does not translate pages
   [sirgarr]
 
-1.2.3 2007-12-02
+1.2.3 - 2007-12-02
 ==================
 
 - Fixed http://dev.plone.org/plone/ticket/7102: uploading xhtml
@@ -284,7 +285,7 @@
   being initialized. This fixes http://dev.plone.org/plone/ticket/7221
   [deo]
 
-1.2.2 2007-10-05
+1.2.2 - 2007-10-05
 ==================
 
 - Fix ATLink XSS issue.
@@ -299,8 +300,8 @@
   http://dev.plone.org/plone/ticket/6051, which is a common source of user
   frustration when uploading files/images.
 
-1.2.1 2007-09-12
-================
+1.2.1 - 2007-09-12
+==================
 
 - Make subject field read-only and invisible for events.  This fixes
   http://dev.plone.org/plone/ticket/6967
@@ -309,8 +310,8 @@
 - Use widget views for standard view templates to simpify inline editing.
   [limi]
 
-1.2.0-final 2007-08-16
-======================
+1.2.0-final - 2007-08-16
+========================
 
 - No longer enforce vocabularies on constraintypes fields, it's essentially
   pointless, and not enforcing them helps workaround a strange bug:
@@ -323,14 +324,14 @@
 - Only show related items once instead of twice.
   [wichert]
 
-1.2.0-rc2 2007-06-11
-====================
+1.2.0-rc2 - 2007-06-11
+======================
 
 - Add link validation to event field.
   [alecm]
 
-1.2.0-rc1 2007-06-08
-====================
+1.2.0-rc1 - 2007-06-08
+======================
 
 - Fix concatenation issues between related items and query results in Topics.
   [alecm]
@@ -364,8 +365,8 @@
   text_format which needs special handling.
   [hannosch]
 
-1.2.0-beta2 2007-04-29
-======================
+1.2.0-beta2 - 2007-04-29
+========================
 
 - Changed some status messages to type 'error'.
   [hannosch]
@@ -379,8 +380,8 @@
   ./bin/zopectl test --nowarn -s Products.ATContentTypes
   [stefan]
 
-1.2.0-beta1 2007-03-04
-======================
+1.2.0-beta1 - 2007-03-04
+========================
 
 - Adjusted tests to deal with the new default vocabulary for boolean fields.
   [wichert]
@@ -402,8 +403,8 @@
   is now based on plone.i18n.normalizer.
   [hannosch]
 
-1.2.0-alpha2 2007-02-08
-=======================
+1.2.0-alpha2 - 2007-02-08
+=========================
 
 - Removed various obsolete class attributes from content type classes. These
   are managed by GenericSetup profiles now.
@@ -437,8 +438,8 @@
 - Got rid of last remnants of zLOG. Grep is our friend!
   [stefan]
 
-1.2.0-alpha1 2006-10-02
-=======================
+1.2.0-alpha1 - 2006-10-02
+=========================
 
 - Fixed some minor i18n issues.
   [hannosch]
@@ -465,7 +466,7 @@
 
 - Removed ZConfig based configuration of the topic tool as it is now handled
   by the GenericSetup profile. Removed magical recreation of indexes and
-  metadata on get- calls.
+  metadata on get* calls.
   [hannosch]
 
 - Added an exportimport handler for the ATCT tool which is used by the Plone
@@ -484,8 +485,8 @@
 - Adjusted import locations of Archetypes.public to Archetypes.atapi for AT1.5.
   [hannosch]
 
-1.1.4-final 2006-12-18
-======================
+1.1.4-final - 2006-12-18
+========================
 
 - Reenabled editing the names and descriptions of the smart folder indices
   and metadata.
@@ -519,15 +520,15 @@
   like "../somefolder"
   [ender, elvix]
 
-1.1.3-final 2006-09-20
-======================
+1.1.3-final - 2006-09-20
+========================
 
 - Disabled translation of AJAX-ified smart folder info to temporarily remedy
   http://dev.plone.org/plone/ticket/5806
   [jensens]
 
-1.1.2-final 2006-09-11
-======================
+1.1.2-final - 2006-09-11
+========================
 
 - Changed integration tests to test Unicode titles instead of plain ascii.
   [hannosch]
@@ -539,14 +540,14 @@
 - Don't setup a 'ATCT Setup' control panel category anymore, it's not used.
   [hannosch]
 
-1.1.1-final 2006-06-08
-======================
+1.1.1-final - 2006-06-08
+========================
 
 - Changed two logging.PROBLEM to logging.WARNING. PROBLEM level was zLOG only.
   [hannosch]
 
-1.1.0-final 2006-06-03
-======================
+1.1.0-final - 2006-06-03
+========================
 
 - Added TextIndexNG3 to list of indexes.
   [ajung]
@@ -631,8 +632,8 @@
 - Body of news items and event types can be empty now.
   [fschulze]
 
-1.1.0-alpha2 2006-02-22
-=======================
+1.1.0-alpha2 - 2006-02-22
+=========================
 
 - Reorganized z3 interfaces into the interface package, created a complete
   set of z3 interfaces, as well as tests for those interfaces.
@@ -642,15 +643,15 @@
   other types, given additional configuration) as zip files.
   [jfroche, russf]
 
-1.1.0-alpha1 2006-01-26
-=======================
+1.1.0-alpha1 - 2006-01-26
+=========================
 
 - make trunk compatible with cmf > 1.5, by changing references to
   cmfcore.permissions and removing use of format_stx
   [k_vertigo, hannosch]
 
-1.0.6-final unreleased
-======================
+1.0.6-final - unreleased
+========================
 
 - Disabled the possibility to change index and metadata names and descriptions
   on the smart folder configuration screens. Saving these with a browser locale
@@ -668,8 +669,8 @@
   from the configuration screens.
   [hannosch]
 
-1.0.5-final 2006-06-03
-======================
+1.0.5-final - 2006-06-03
+========================
 
 - Made ATTopic queryCatalog properly support b_size, thanks to patch from
   Bader.  Fixes http://dev.plone.org/plone/ticket/5526
@@ -678,8 +679,8 @@
 - Added TextIndexNG3 to list of indexes.
   [ajung]
 
-1.0.4-final 2006-05-17
-======================
+1.0.4-final - 2006-05-17
+========================
 
 - Folded ftests into unit tests. The distinction was arbitrary anyway.
   [stefan]
@@ -731,15 +732,15 @@
   http://dev.plone.org/plone/ticket/5255
   [wichert]
 
-1.0.3-final 2006-01-20
-======================
+1.0.3-final - 2006-01-20
+========================
 
 - Fixed non-clickable thumbnails in thumbnail view for IE.
   http://dev.plone.org/plone/ticket/5119
   [hannosch]
 
-1.0.2-final 2006-01-03
-======================
+1.0.2-final - 2006-01-03
+========================
 
 - Fixed #5028: constraintypes.py doesn't work properly with PortalFactory when
   acquiring types.
@@ -835,8 +836,8 @@
 - Added missing alternate views for folderish types.
   [alecm]
 
-1.0.1-final 2005-10-13
-======================
+1.0.1-final - 2005-10-13
+========================
 
 - Fixes for http://plone.org/collector/4709 __bobo_traverse__ doesn't
   need or want a RESPONSE argument.
@@ -851,8 +852,8 @@
 - Fix two small i18n default text inconsistencies
   [hannosch]
 
-1.0.0-final 2005-09-05
-======================
+1.0.0-final - 2005-09-05
+========================
 
 - Packaged 1.0.0 final with a tip of the hat to Christian Heimes who has
   disappeared from our radar. We miss you, dude.
@@ -875,8 +876,8 @@
   description.
   [alecm]
 
-1.0.0-rc5 2005-08-18
-====================
+1.0.0-rc5 - 2005-08-18
+======================
 
 - Fixed http://plone.org/collector/4429 by updating the modifySelectList.js
   to deal with IE deficiencies.
@@ -890,8 +891,8 @@
   criteria edit form were not translated
   [hannosch]
 
-1.0.0-rc4 2005-08-09
-====================
+1.0.0-rc4 - 2005-08-09
+======================
 
 - Implemented the custom PUT_factory in both ATCTOrderedFolder and
   ATCTBTreeFolder, as inheriting it from ATCTFolderMixin breaks when
@@ -915,8 +916,8 @@
 - Fixed bug in subtopic listing.
   [alecm]
 
-1.0.0-rc3 2005-08-01
-====================
+1.0.0-rc3 - 2005-08-01
+======================
 
 - Change manage_copyObjects' permission to Copy or move, just copy from
   Plone's PortalFolder.
@@ -947,8 +948,8 @@
   tool class was getting too long.
   [tiran]
 
-1.0.0-rc2 2005-07-28
-====================
+1.0.0-rc2 - 2005-07-28
+======================
 
 - Updated requirements to CMFDynamicViewFTI 1.0.0 and ATRefBrowserWidget
   1.1.
@@ -1000,8 +1001,8 @@
   running as Manager only when really needed.
   [tiran]
 
-1.0.0-rc1 2005-07-23
-====================
+1.0.0-rc1 - 2005-07-23
+======================
 
 - Fixed error in version parsing which somehow made portal_types disappear.
   [alecm]
@@ -1038,13 +1039,13 @@
   [tiran]
 
 - Optimized getRawRelatedItems index addition. There is no need to reindex
-  the *whole- catalog when adding a *single- index.
+  the *whole* catalog when adding a *single* index.
   [tiran]
 
 - Made the 'view' method aliases point to '(selected layout)' instead of
   '(default view)'. This assures consistency with previous behaviour,
   so that /view at the end of a URL always gets the item itself, ignoring
-  any default-page that may be set. Note that the 'view' *action- still
+  any default-page that may be set. Note that the 'view' *action* still
   points to 'string:${object_url}', so that the 'view' tab, as well as
   the '(Default)' target, still get '(dynamic view)' (and thus default
   pages) for types other than File and Image.
@@ -1238,7 +1239,7 @@
 - Added some additional i18n markup.
   [hannosch]
 
-Snapshot 2005 07 05
+Snapshot 2005-07-05
 ===================
 
 - Don't run version migration when installing the first time. People should run it
@@ -1331,7 +1332,7 @@ Snapshot 2005 07 05
   [alecm]
 
 1.0-alpha2
-=====================
+==========
 
 - Disabled history tab.
   [tiran]
@@ -1468,6 +1469,7 @@ Snapshot 2005 07 05
   [tiran]
 
 - Refactored ConstrainTypesMixin to support PLIP 78:
+
    - DISABLED means use standard allowed types from portal_types
    - ENABLED means use restrictions set
    - ACQUIRE means use types from parent if parent is of same portal type,
@@ -1570,10 +1572,10 @@ Snapshot 2005 07 05
 
 - Replaced the config vars for permissions with new permissions:
 
-   o ModifyConstrainTypes for constrain types mixin
-   o ModifyViewTemplate for template mixin
-   o ViewHistory for history mixin
-   o UploadViaURL for the new upload via url feature
+   - ModifyConstrainTypes for constrain types mixin
+   - ModifyViewTemplate for template mixin
+   - ViewHistory for history mixin
+   - UploadViaURL for the new upload via url feature
 
   By default the permissions are restricted to manager only.
   [tiran]
@@ -1598,7 +1600,7 @@ Snapshot 2005 07 05
   [tiran]
 
 1.0-alpha1
-=====================
+==========
 
 - Refactored huge parts of the migration suite. More later.
   [tiran]
@@ -1614,7 +1616,7 @@ Snapshot 2005 07 05
 - Updated requirements to CMFQuickinstaller 1.5/cvs,
   [tiran]
 
-- Starting to remove the switch- and migrate- external methods.
+- Starting to remove the switch* and migrate* external methods.
   [tiran]
 
 - Fixed default view of ATFolder. Pointing to view again makes a loop and
@@ -2197,7 +2199,7 @@ Snapshot 2005 07 05
   [tiran]
 
 0.2-beta5
-======================
+=========
 
 - Fixed multiple small bugs and added features requested in the bug
   tracker on sf.net.
@@ -2223,7 +2225,7 @@ Snapshot 2005 07 05
   [gotcha]
 
 0.2-beta4
-======================
+=========
 
 - Added AT Dyn Document. It's a CMFDynamicDocument like type that supports
   rendering of TAL inside the body text.
