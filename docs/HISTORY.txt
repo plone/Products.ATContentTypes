@@ -1,6 +1,14 @@
 2.0 - unreleased
 ================
 
+- Updated the ATCT tool upgrade to register the new tool with the portal
+  site manager.
+  [davisagli]
+
+- Subtopics shouldn't always acquire the 'start' query. Fixes  
+  https://dev.plone.org/plone/ticket/8827  
+  [pelle]
+
 - Use correct location for IObjectEvent.
   [hannosch]
 

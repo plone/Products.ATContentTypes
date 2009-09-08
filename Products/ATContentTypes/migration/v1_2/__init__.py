@@ -1,16 +1,22 @@
 """Migration functions for ATContentTypes 1.2. These are called during the
    usual CMFPlone migration.
 """
+import logging
 import transaction
 
 from Acquisition import aq_base
+from zope.component import getSiteManager
 
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.tool.atct import ATCTTool
+from Products.ATContentTypes.interfaces import IATCTTool
 from Products.CMFCore.utils import getToolByName
 
-def upgradeATCTTool(portal, out):
+logger = logging.getLogger('plone.app.upgrade')
+
+def upgradeATCTTool(portal):
     tool = getToolByName(portal, TOOLNAME, None)
+    sm = getSiteManager(context=portal)
     if not hasattr(aq_base(tool), '_version'):
         # the tool already has been upgraded
         return
@@ -29,11 +35,13 @@ def upgradeATCTTool(portal, out):
     # Remove the old tool completely
     del(tool)
     portal._delObject(TOOLNAME)
+    sm.unregisterUtility(provided=IATCTTool)
     transaction.savepoint(optimistic=True)
     
     # Create new tool
     portal._setObject(TOOLNAME, ATCTTool())
     tool = portal.get(TOOLNAME)
+    sm.registerUtility(aq_base(tool), IATCTTool)
     # And apply the configuration again
     tool._setPropValue('album_batch_size', old_conf['album_batch_size'])
     tool._setPropValue('album_image_scale', old_conf['album_image_scale'])
@@ -48,4 +56,4 @@ def upgradeATCTTool(portal, out):
 
     transaction.savepoint(optimistic=True)
     
-    out.append('Upgraded the ATContentTypes tool.')
+    logger.info('Upgraded the ATContentTypes tool.')
