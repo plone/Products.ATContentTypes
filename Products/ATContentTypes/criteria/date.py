@@ -15,8 +15,6 @@ from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import DATE_INDICES
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion as \
-    z2IATTopicSearchCriterion
 from Products.ATContentTypes.interface import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 
