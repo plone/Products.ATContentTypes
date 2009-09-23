@@ -181,6 +181,14 @@
   redirected to 'http://nohost/plone/localhost'
   [sirgarr]
    
+
+1.3.4 - unreleased
+==================
+
+- Fix my previous Chameleon fix in criterion_edit_form.cpt, which broke
+  creation of new criteria. This closes http://dev.plone.org/ticket/9522
+  [davisagli]
+
 1.3.3 - 2009-09-06
 ==================
 
