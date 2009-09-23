@@ -1,4 +1,4 @@
-1.3.4 - unreleased
+1.3.4 - 2009-09-22
 ==================
 
 - Fix my previous Chameleon fix in criterion_edit_form.cpt, which broke
