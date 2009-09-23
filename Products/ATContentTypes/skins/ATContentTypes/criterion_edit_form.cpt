@@ -27,7 +27,7 @@
     </tal:js>
 
     <script type="text/javascript">
-<![CDATA[
+// <![CDATA[
 (function($) {
 function showHelp() {
     $(this).siblings('.formHelp').text($(this).find('option:selected').attr('title') || '\u00A0');
@@ -56,7 +56,7 @@ $(function() {
     $('#field').change(selectField).change();
 })
 })(jQuery);
-]]>
+// ]]>
     </script>
 </tal:defines>
 </metal:head>
