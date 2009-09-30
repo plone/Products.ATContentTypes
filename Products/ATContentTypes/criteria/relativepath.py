@@ -2,6 +2,7 @@ from zope.interface import implements
 
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
+from Acquisition import aq_parent
 
 from Products.Archetypes.public import Schema, DisplayList
 from Products.Archetypes.public import BooleanField, StringField
@@ -76,8 +77,8 @@ class ATRelativePathCriterion(ATBaseCriterion):
             folders = relPath.split('/')
 
             # set the path to the collections path
-            path = list(self.aq_parent.getPhysicalPath()) 
-            
+            path = list(aq_parent(self.getPhysicalPath()))
+
             # now construct an aboslute path based on the relative custom path
             # eat away from 'path' whenever we encounter a '..' in the relative path
             # apend all other elements other than ..
