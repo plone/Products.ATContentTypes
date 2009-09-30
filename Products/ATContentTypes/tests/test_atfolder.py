@@ -16,7 +16,7 @@ from Products.ATContentTypes.interfaces import IATBTreeFolder
 from zope.interface.verify import verifyClass
 
 from zope.interface.verify import verifyObject
-from Products.ATContentTypes.interface import ISelectableConstrainTypes
+from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
 
 def editATCT(obj):
     dcEdit(obj)

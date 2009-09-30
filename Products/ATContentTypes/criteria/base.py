@@ -8,7 +8,7 @@ from App.class_init import InitializeClass
 
 from Products.Archetypes.ClassGen import generateClass
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
-from Products.ATContentTypes.interface import IATTopicCriterion
+from Products.ATContentTypes.interfaces import IATTopicCriterion
 
 from Products.CMFCore.PortalContent import PortalContent
 from Products.Archetypes.interfaces.base import IBaseContent

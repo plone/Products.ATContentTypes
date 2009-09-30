@@ -19,7 +19,7 @@ from Products.ATContentTypes.content.base import ATCTFileContent
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATImage as z2IATImage
-from Products.ATContentTypes.interface import IATImage
+from Products.ATContentTypes.interfaces import IATImage
 
 from Products.ATContentTypes.lib.imagetransform import ATCTImageTransform
 

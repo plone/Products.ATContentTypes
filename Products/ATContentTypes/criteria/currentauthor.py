@@ -8,7 +8,7 @@ from Products.ATContentTypes.criteria import registerCriterion, \
                                              LIST_INDICES
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
-from Products.ATContentTypes.interface import IATTopicSearchCriterion
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 
 ATCurrentAuthorSchema = ATBaseCriterionSchema
 

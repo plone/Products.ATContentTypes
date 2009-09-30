@@ -9,7 +9,7 @@ from Products.Archetypes.atapi import DisplayList
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import FIELD_INDICES
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
-from Products.ATContentTypes.interface import IATTopicSearchCriterion
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 

@@ -6,7 +6,7 @@ from AccessControl import ClassSecurityInfo
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import REFERENCE_INDICES
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
-from Products.ATContentTypes.interface import IATTopicSearchCriterion
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.Archetypes.atapi import DisplayList
 
 ATReferenceCriterionSchema = ATSelectionCriterion.schema

@@ -9,7 +9,7 @@ from Products.Archetypes.atapi import StringWidget
 
 from Products.ATContentTypes.criteria import registerCriterion, \
     STRING_INDICES
-from Products.ATContentTypes.interface import IATTopicSearchCriterion
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion

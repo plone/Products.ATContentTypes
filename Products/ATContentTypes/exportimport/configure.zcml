@@ -23,7 +23,7 @@
   <adapter
       factory=".atcttool.ATCTToolXMLAdapter"
       provides="Products.GenericSetup.interfaces.IBody"
-      for="Products.ATContentTypes.interface.IATCTTool
+      for="Products.ATContentTypes.interfaces.IATCTTool
            Products.GenericSetup.interfaces.ISetupEnviron"
       />
 
@@ -36,7 +36,7 @@
   <adapter
      factory="Products.CMFCore.exportimport.content.StructureFolderWalkingAdapter"
      provides="Products.GenericSetup.interfaces.IFilesystemImporter"
-     for="Products.ATContentTypes.interface.IATContentType"
+     for="Products.ATContentTypes.interfaces.IATContentType"
      />
 
 </configure>

@@ -7,7 +7,7 @@ from App.class_init import InitializeClass
 from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 
-from Products.ATContentTypes.interface import ICalendarSupport
+from Products.ATContentTypes.interfaces import ICalendarSupport
 
 PRODID = "-//AT Content Types//AT Event//EN"
 

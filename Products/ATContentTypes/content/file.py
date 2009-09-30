@@ -24,7 +24,7 @@ from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.interface import IATFile
+from Products.ATContentTypes.interfaces import IATFile
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 

@@ -20,7 +20,7 @@ from Products.ATContentTypes.content.document import ATDocumentBase
 from Products.ATContentTypes.content.image import ATCTImageTransform
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.interface import IATNewsItem
+from Products.ATContentTypes.interfaces import IATNewsItem
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 

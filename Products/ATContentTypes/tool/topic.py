@@ -9,7 +9,7 @@ from OFS.SimpleItem import SimpleItem
 from ExtensionClass import Base
 
 from Products.ATContentTypes.config import TOOLNAME
-from Products.ATContentTypes.interface import IATCTTopicsTool
+from Products.ATContentTypes.interfaces import IATCTTopicsTool
 from Products.Archetypes.atapi import DisplayList
 from Products.CMFCore.permissions import ManagePortal
 

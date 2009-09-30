@@ -1,4 +1,4 @@
-from Products.ATContentTypes.interface import IATCTTool
+from Products.ATContentTypes.interfaces import IATCTTool
 from Products.GenericSetup.utils import PropertyManagerHelpers
 from Products.GenericSetup.utils import XMLAdapterBase
 from Products.GenericSetup.utils import exportObjects

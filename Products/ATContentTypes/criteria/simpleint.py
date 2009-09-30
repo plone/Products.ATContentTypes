@@ -12,7 +12,7 @@ from Products.Archetypes.atapi import DisplayList
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import LIST_INDICES
-from Products.ATContentTypes.interface import IATTopicSearchCriterion
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema

@@ -11,7 +11,7 @@ from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.atapi import ATHistoryAwareMixin
 from Products.ATContentTypes import permission as ATCTPermissions
-from Products.ATContentTypes.interface import IHistoryAware
+from Products.ATContentTypes.interfaces import IHistoryAware
 
 class HistoryAwareMixin(ATHistoryAwareMixin):
     """History aware mixin class

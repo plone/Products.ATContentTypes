@@ -23,7 +23,7 @@ from Products.Archetypes.atapi import DisplayList
 from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes import permission as ATCTPermissions
 
-from Products.ATContentTypes.interface import ISelectableConstrainTypes
+from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
 
 # constants for enableConstrainMixin
 ACQUIRE = -1 # acquire locallyAllowedTypes from parent (default)

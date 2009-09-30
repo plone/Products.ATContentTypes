@@ -28,7 +28,7 @@ from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
-from Products.ATContentTypes.interface import IATDocument
+from Products.ATContentTypes.interfaces import IATDocument
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 

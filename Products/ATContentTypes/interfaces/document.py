@@ -1,4 +1,4 @@
-from Products.ATContentTypes.interface.interfaces import ITextContent
+from Products.ATContentTypes.interfaces.interfaces import ITextContent
 
 class IATDocument(ITextContent):
     """AT Document marker interface

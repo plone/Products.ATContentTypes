@@ -9,8 +9,8 @@ from Products.ATContentTypes.content.base import ATCTOrderedFolder
 from Products.ATContentTypes.content.base import ATCTBTreeFolder
 from Products.ATContentTypes.interfaces import IATFolder as z2IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder as z2IATBTreeFolder
-from Products.ATContentTypes.interface import IATFolder
-from Products.ATContentTypes.interface import IATBTreeFolder
+from Products.ATContentTypes.interfaces import IATFolder
+from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import NextPreviousAwareSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema

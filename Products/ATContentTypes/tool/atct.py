@@ -17,7 +17,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import ManagePortal
 
 from Products.ATContentTypes.interfaces import IImageContent
-from Products.ATContentTypes.interface import IATCTTool
+from Products.ATContentTypes.interfaces import IATCTTool
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import WWW_DIR
 from Products.ATContentTypes.tool.topic import ATTopicsTool

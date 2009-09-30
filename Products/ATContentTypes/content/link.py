@@ -16,7 +16,7 @@ from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.interface import IATLink
+from Products.ATContentTypes.interfaces import IATLink
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 
