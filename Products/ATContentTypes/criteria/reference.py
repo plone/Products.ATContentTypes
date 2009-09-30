@@ -21,14 +21,20 @@ class ATReferenceCriterion(ATSelectionCriterion):
     archetype_name = 'Reference Criterion'
     shortDesc      = 'Select referenced content'
 
-
     def getCurrentValues(self):
         catalog = getToolByName(self, 'portal_catalog')
         uid_cat = getToolByName(self, 'uid_catalog')
         putils = getToolByName(self, 'plone_utils')
         options = catalog.uniqueValuesFor(self.Field())
 
-        brains = uid_cat(UID=options, sort_on='Title')
+        # If the uid catalog has a Language index restrict the query by it.
+        # We should only shows references to items in the same or the neutral
+        # language.
+        query = dict(UID=options, sort_on='Title')
+        if 'Language' in uid_cat.indexes():
+            query['Language'] = [self.Language(), '']
+
+        brains = uid_cat(**query)
         display = [((putils.pretty_title_or_id(b)).lower(), b.UID, b.Title or b.id) for b in brains]
         display.sort()
         display_list = DisplayList([(d[1], d[2]) for d in display])
