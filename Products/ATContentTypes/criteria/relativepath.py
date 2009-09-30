@@ -77,7 +77,7 @@ class ATRelativePathCriterion(ATBaseCriterion):
             folders = relPath.split('/')
 
             # set the path to the collections path
-            path = list(aq_parent(self.getPhysicalPath()))
+            path = list(aq_parent(self).getPhysicalPath())
 
             # now construct an aboslute path based on the relative custom path
             # eat away from 'path' whenever we encounter a '..' in the relative path
