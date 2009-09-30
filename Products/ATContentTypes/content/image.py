@@ -84,9 +84,6 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
 
     security       = ClassSecurityInfo()
 
-    def __init__(self, *args, **kwargs):
-        raise 'WeDidntWannaUseThisThingAnymoreException!'
-
     def exportImage(self, format, width, height):
         return '',''
 

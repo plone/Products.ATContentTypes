@@ -81,9 +81,6 @@ class ATFile(ATCTFileContent):
 
     security       = ClassSecurityInfo()
 
-    def __init__(self, *args, **kwargs):
-        raise 'WeDidntWannaUseThisThingAnymoreException!'
-
     security.declareProtected(View, 'index_html')
     def index_html(self, REQUEST=None, RESPONSE=None):
         """Download the file
