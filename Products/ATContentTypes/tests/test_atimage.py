@@ -13,6 +13,7 @@ from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.atapi import *
 from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
 
+from plone.app.blob.content import ATBlob
 from Products.ATContentTypes.content.image import ATImage
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage
@@ -49,7 +50,7 @@ tests = []
 
 class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
 
-    klass = ATImage
+    klass = ATBlob
     portal_type = 'Image'
     title = 'Image'
     meta_type = 'ATImage'
@@ -177,7 +178,7 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
 
     def afterSetUp(self):
         atcttestcase.ATCTFieldTestCase.afterSetUp(self)
-        self._dummy = self.createDummy(klass=ATImage)
+        self._dummy = self.createDummy(klass=ATBlob, subtype='Image')
 
     def test_imageField(self):
         dummy = self._dummy
@@ -205,7 +206,7 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'image', 'Value is %s' % field.type)
+        self.failUnless(field.type == 'blob', 'Value is %s' % field.type)
         self.failUnless(isinstance(field.storage, AnnotationStorage),
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),

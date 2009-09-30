@@ -12,6 +12,7 @@ from Products.Archetypes.atapi import *
 from Products.ATContentTypes.tests.utils import dcEdit
 import StringIO
 
+from plone.app.blob.content import ATBlob
 from Products.ATContentTypes.content.file import ATFile
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.interfaces import IFileContent
@@ -30,7 +31,7 @@ tests = []
 
 class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
 
-    klass = ATFile
+    klass = ATBlob
     portal_type = 'File'
     title = 'File'
     meta_type = 'ATFile'
@@ -150,7 +151,7 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
 
     def afterSetUp(self):
         atcttestcase.ATCTFieldTestCase.afterSetUp(self)
-        self._dummy = self.createDummy(klass=ATFile)
+        self._dummy = self.createDummy(klass=ATBlob, subtype='File')
 
     def test_fileField(self):
         dummy = self._dummy
@@ -178,7 +179,7 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'file', 'Value is %s' % field.type)
+        self.failUnless(field.type == 'blob', 'Value is %s' % field.type)
         self.failUnless(isinstance(field.storage, AnnotationStorage),
                         'Value is %s' % type(field.storage))
         self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
