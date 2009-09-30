@@ -40,9 +40,9 @@ def wireAddPermissions():
     global permissions
     atct_types = listTypes(PROJECTNAME)
     for atct in atct_types:
-        if IATTopic.providedBy(atct['klass']):
+        if IATTopic.implementedBy(atct['klass']):
             permission = AddTopics 
-        elif IATTopicCriterion.providedBy(atct['klass']):
+        elif IATTopicCriterion.implementedBy(atct['klass']):
             permission = "%s Topic: Add %s" % (PROJECTNAME, atct['portal_type'])
             setDefaultRoles(permission, CRITERION_ROLES)
         else:
