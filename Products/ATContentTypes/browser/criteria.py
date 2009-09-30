@@ -1,6 +1,6 @@
 import json
 from zope.i18n import translate
-from Products.Five.browser import BrowserView
+from zope.publisher.browser import BrowserView
 
 class JSONCriteriaForField(BrowserView):
     """Return the criteria vocabulary as a json result"""
