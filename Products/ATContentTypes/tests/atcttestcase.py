@@ -29,7 +29,8 @@ from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
 from Products.Archetypes.tests.test_baseschema import BaseSchemaTest
-from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
+
+from archetypes.referencebrowserwidget import ReferenceBrowserWidget
 
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.interfaces import IATContentType

@@ -15,7 +15,8 @@ from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
-from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
+
+from archetypes.referencebrowserwidget import ReferenceBrowserWidget
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 

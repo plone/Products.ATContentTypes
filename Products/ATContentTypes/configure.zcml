@@ -7,6 +7,8 @@
   <include package=".exportimport" />
   <include package="plone.i18n.normalizer" />
 
+  <include package="archetypes.referencebrowserwidget" />
+
   <five:deprecatedManageAddDelete
       class=".content.document.ATDocument" />
   <five:deprecatedManageAddDelete
