@@ -1,4 +1,4 @@
-1.2.8 unreleased
+1.2.8 2009-10-10
 ================
 
 * Subtopics shouldn't always acquire the 'start' query. Fixes 
