@@ -21,7 +21,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         t = self.tool
         self.failUnlessEqual(t.meta_type, 'ATCT Tool')
         self.failUnlessEqual(t.getId(), TOOLNAME)
-        self.failUnlessEqual(t.title, 'ATContentTypes Tool')
+        self.failUnlessEqual(t.title, 'Collection and image scales settings')
 
 tests.append(TestTool)
 

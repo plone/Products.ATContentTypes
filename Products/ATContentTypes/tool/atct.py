@@ -34,7 +34,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
 
     id = TOOLNAME
     meta_type= 'ATCT Tool'
-    title = 'ATContentTypes Tool'
+    title = 'Collection and image scales settings'
 
     implements(IATCTTool)
 
