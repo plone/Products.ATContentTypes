@@ -1,6 +1,10 @@
 2.0 - unreleased
 ================
 
+- Made ATImage compute its ID from its title if provided. Closes
+  http://dev.plone.org/old/plone/ticket/9186.
+  [erikrose]
+
 - Changed the canonical location of interfaces to be in a subpackage called
   interfaces in its standard plural form. Leave BBB imports behind in
   interface.py.

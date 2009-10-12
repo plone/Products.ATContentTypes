@@ -89,13 +89,17 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
 
     security.declareProtected(ModifyPortalContent, 'setImage')
     def setImage(self, value, refresh_exif=True, **kwargs):
-        """Set id to uploaded id
-        """
+        """Set ID to uploaded file name if Title is empty."""
         # set exif first because rotation might screw up the exif data
         # the exif methods can handle str, Pdata, OFSImage and file
         # like objects
         self.getEXIF(value, refresh=refresh_exif)
         self._setATCTFileContent(value, **kwargs)
+    
+    def _should_set_id_to_filename(self, filename, title):
+        """If title is blank, have the caller set my ID to the uploaded file's name."""
+        # When the title is blank, sometimes the filename is returned as the title.
+        return filename == title or not title
 
     security.declareProtected(View, 'tag')
     def tag(self, **kwargs):
