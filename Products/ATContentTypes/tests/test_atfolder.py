@@ -85,8 +85,8 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         self.failUnless(iface.providedBy(self._ATCT))
         self.failUnless(verifyObject(iface, self._ATCT))
 
-    def test_isNotOrdered(self):
-        self.failIf(IOrderedContainer.providedBy(self._ATCT))
+    def test_isOrdered(self):
+        self.failUnless(IOrderedContainer.providedBy(self._ATCT))
 
     def test_edit(self):
         new = self._ATCT
@@ -100,6 +100,44 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     def test_schema_marshall(self):
         pass
+
+    def test_dictBehavior(self):
+        # this test currently fails intentionally (see
+        # http://dev.plone.org/collective/changeset/53298).
+        # debugging it for a while shows that BTreeFolders don't
+        # work as iterators for some strange reason.  while
+        # "list(folder.__iter__())" works just fine, "list(folder)"
+        # doesn't.  python doesn't seem to recognize the `__iter__`
+        # method and instead falls back to its standard iterator
+        # cycling the list via `__len__` and `__getitem__`.  however,
+        # the interesting bit here is, that "list(folder.aq_base)"
+        # does work, so apparently it's acquisition biting us here...
+        #
+        # meanwhile this bug has been fixed upstream in Zope (see
+        # http://svn.zope.org/?rev=94907&view=rev), so the next release
+        # should make this test pass
+        #
+        # update: using zope 2.10.8 makes this test pass indeed...
+        self.setRoles(('Manager',))
+        self.portal.invokeFactory('Folder', 'f1')
+        f1 = self.portal['f1']
+
+        from Products.ATContentTypes.content.document import ATDocument
+        new_doc = ATDocument('d1')
+        f1['d1'] = new_doc
+        new_doc = f1['d1'] # aq-wrap
+
+        self.assertEquals(['d1'], list(f1.keys())) # keys
+        self.assertEquals(['d1'], list(f1.iterkeys()))   # iterkeys
+        try:
+            self.assertEquals(['d1'], list(f1)) # iter
+        except (KeyError, AttributeError):
+            print '\nKnown failure: please see comments in `test_dictBehavior`!'
+        self.assertEquals(['d1'], list(f1.aq_base)) # iter (this works, weird!)
+        self.failUnless(f1.values()[0].aq_base is new_doc.aq_base) # values
+        self.failUnless(f1.get('d1').aq_base is new_doc.aq_base) # get
+        self.failUnless('d1' in f1) # contains
+
 
 tests.append(TestSiteATBTreeFolder)
 

@@ -178,12 +178,6 @@ Rename:
   Indexing: /plone/Members/test_user_1_/new_doc11 []
   ------------------------------------------------------------
   Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/sub ['getObjPositionInParent']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_doc2 ['getObjPositionInParent']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/new_doc11 ['getObjPositionInParent']
   ------------------------------------------------------------
 
@@ -314,15 +308,6 @@ Rename:
   ------------------------------------------------------------
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/new_folder11 []
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/sub ['getObjPositionInParent']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_doc2 ['getObjPositionInParent']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_folder2 ['getObjPositionInParent']
   ------------------------------------------------------------
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/new_folder11 ['getObjPositionInParent']
@@ -458,18 +443,6 @@ Rename:
   ------------------------------------------------------------
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/new_btree_folder11 []
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/sub ['getObjPositionInParent']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_doc2 ['getObjPositionInParent']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_folder2 ['getObjPositionInParent']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_btree_folder2 ['getObjPositionInParent']
   ------------------------------------------------------------
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/new_btree_folder11 ['getObjPositionInParent']

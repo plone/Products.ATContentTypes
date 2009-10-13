@@ -20,14 +20,15 @@ from Products.ATContentTypes import ATCTMessageFactory as _
 
 from Products.CMFCore.permissions import View
 
-ATFolderSchema      = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema + NextPreviousAwareSchema
+from plone.app.folder.folder import ATFolder, ATFolderSchema
+
+ObsoleteATFolderSchema      = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema + NextPreviousAwareSchema
 ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 
 finalizeATCTSchema(ATFolderSchema, folderish=True, moveDiscussion=False)
 finalizeATCTSchema(ATBTreeFolderSchema, folderish=True, moveDiscussion=False)
 
-
-class ATFolder(ATCTOrderedFolder):
+class ObsoleteATFolder(ATCTOrderedFolder):
     """A folder which can contain other items."""
 
     schema         =  ATFolderSchema
