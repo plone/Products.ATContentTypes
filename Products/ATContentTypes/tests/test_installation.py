@@ -28,11 +28,17 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
     def test_installedAllTypes(self):
         # test that all types are installed well
-        ids = ('Document', 'File',
-            'Folder', 'Image', 'Large Plone Folder', 'Link',
+        ids = ('Document',
+            'Folder', 'Large Plone Folder', 'Link',
             'News Item', 'Topic', 'Event')
         for i in ids:
             self.failUnless(i in self.ttool)
+
+        tinfo = self.ttool['File']
+        self.failUnless(tinfo.product == 'plone.app.blob', tinfo.product)
+
+        tinfo = self.ttool['Image']
+        self.failUnless(tinfo.product == 'plone.app.blob', tinfo.product)
 
     def test_not_quickinstalled(self):
         qi = getattr(self.portal, 'portal_quickinstaller')
