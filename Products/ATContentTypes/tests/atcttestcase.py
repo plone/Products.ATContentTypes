@@ -32,7 +32,6 @@ from Products.Archetypes.tests.test_baseschema import BaseSchemaTest
 from archetypes.referencebrowserwidget import ReferenceBrowserWidget
 
 from plone.app.blob.markings import markAs
-from plone.app.blob.tests import bbb
 
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.interfaces import IATContentType
@@ -43,20 +42,16 @@ from Products.ATContentTypes.tests.utils import idValidator
 test_home = os.path.dirname(__file__)
 
 class ATCTSiteTestCase(PloneTestCase.PloneTestCase):
-
-    layer = bbb.plone
+    pass
 
 class ATCTFunctionalSiteTestCase(PloneTestCase.FunctionalTestCase):
-
-    layer = bbb.plone
+    pass
 
 class ATCTTypeTestCase(ATCTSiteTestCase):
     """AT Content Types test
 
     Tests some basics of a type
     """
-
-    layer = bbb.plone
 
     klass = None
     cmf_klass = None
