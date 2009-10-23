@@ -7,8 +7,6 @@ from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTOrderedFolder
 from Products.ATContentTypes.content.base import ATCTBTreeFolder
-from Products.ATContentTypes.interfaces import IATFolder as z2IATFolder
-from Products.ATContentTypes.interfaces import IATBTreeFolder as z2IATBTreeFolder
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
@@ -16,22 +14,27 @@ from Products.ATContentTypes.content.schemata import NextPreviousAwareSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
 
-from Products.ATContentTypes import ATCTMessageFactory as _
-
 from Products.CMFCore.permissions import View
 
-from plone.app.folder.folder import ATFolder, ATFolderSchema
+from plone.app.folder import folder
 
-ObsoleteATFolderSchema      = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema + NextPreviousAwareSchema
+ObsoleteATFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema + NextPreviousAwareSchema
 ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 
-finalizeATCTSchema(ATFolderSchema, folderish=True, moveDiscussion=False)
+finalizeATCTSchema(folder.ATFolderSchema, folderish=True, moveDiscussion=False)
 finalizeATCTSchema(ATBTreeFolderSchema, folderish=True, moveDiscussion=False)
+
+HAS_LINGUAPLONE = True
+try:
+    from Products.LinguaPlone.I18NBaseBTreeFolder import I18NOnlyBaseBTreeFolder
+except ImportError:
+    HAS_LINGUAPLONE = False
+
 
 class ObsoleteATFolder(ATCTOrderedFolder):
     """A folder which can contain other items."""
 
-    schema         =  ATFolderSchema
+    schema         =  folder.ATFolderSchema
 
     portal_type    = 'Folder'
     archetype_name = 'Folder'
@@ -60,7 +63,19 @@ class ObsoleteATFolder(ATCTOrderedFolder):
             return False
 
 
+registerATCT(ObsoleteATFolder, PROJECTNAME)
+
+
+if HAS_LINGUAPLONE:
+    class ATFolder(I18NOnlyBaseBTreeFolder, folder.ATFolder):
+        """A folder which can contain other items."""
+
+else:
+    class ATFolder(folder.ATFolder):
+        """A folder which can contain other items."""
+
 registerATCT(ATFolder, PROJECTNAME)
+
 
 class ATBTreeFolder(ATCTBTreeFolder):
     """A folder suitable for holding a very large number of items"""
