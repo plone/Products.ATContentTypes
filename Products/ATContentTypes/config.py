@@ -58,12 +58,11 @@ else:
 
 ## LinguaPlone addon?
 try:
-    from Products.LinguaPlone.public import registerType
+    import Products.LinguaPlone
 except ImportError:
     HAS_LINGUA_PLONE = False
 else:
     HAS_LINGUA_PLONE = True
-    del registerType
 
 try:
     from PIL import Image
