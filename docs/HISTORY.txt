@@ -8,7 +8,7 @@
 - Changed the canonical location of interfaces to be in a subpackage called
   interfaces in its standard plural form. Leave BBB imports behind in
   interface.py.
-  [hannosch]
+  [hannosch, davisagli, witsch]
 
 - Updated the ATCT tool upgrade to register the new tool with the portal
   site manager.
