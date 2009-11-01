@@ -1,6 +1,10 @@
 2.0 - unreleased
 ================
 
+- help_criteria_field_name msgid was used twice but with different default
+  messages. Fixed that.
+  [vincentfretin]
+
 - Made ATImage compute its ID from its title if provided. Closes
   http://dev.plone.org/old/plone/ticket/9186.
   [erikrose]
