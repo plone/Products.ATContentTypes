@@ -1,6 +1,9 @@
 1.3.5 - unreleased
 ==================
 
+- Image transforms now also work with `plone.app.image`. Fixes
+  http://dev.plone.org/plone/ticket/8506
+  [amleczko, witsch]
 
 1.3.4 - 2009-09-22
 ==================
