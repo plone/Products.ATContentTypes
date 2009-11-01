@@ -174,7 +174,7 @@ class ATCTImageTransform(Base):
         return None
 
     security.declareProtected(ModifyPortalContent, 'transformImage')
-    def transformImage(self, REQUEST=None):
+    def transformImage(self, method, REQUEST=None):
         """
         Transform an Image:
             FLIP_LEFT_RIGHT
@@ -183,7 +183,6 @@ class ATCTImageTransform(Base):
             ROTATE_180
             ROTATE_270 (rotate clockwise)
         """
-        method = REQUEST.form.get('method', None)
         method = int(method)
         if method not in TRANSPOSE_MAP:
             raise RuntimeError, "Unknown method %s" % method
