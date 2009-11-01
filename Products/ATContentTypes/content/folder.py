@@ -17,11 +17,12 @@ from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
 from Products.CMFCore.permissions import View
 
 from plone.app.folder import folder
+from plone.app.folder.folder import ATFolderSchema
 
 ObsoleteATFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema + NextPreviousAwareSchema
 ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 
-finalizeATCTSchema(folder.ATFolderSchema, folderish=True, moveDiscussion=False)
+finalizeATCTSchema(ATFolderSchema, folderish=True, moveDiscussion=False)
 finalizeATCTSchema(ATBTreeFolderSchema, folderish=True, moveDiscussion=False)
 
 HAS_LINGUAPLONE = True
@@ -34,7 +35,7 @@ except ImportError:
 class ObsoleteATFolder(ATCTOrderedFolder):
     """A folder which can contain other items."""
 
-    schema         =  folder.ATFolderSchema
+    schema         =  ATFolderSchema
 
     portal_type    = 'Folder'
     archetype_name = 'Folder'
