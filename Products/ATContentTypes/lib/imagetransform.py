@@ -76,7 +76,7 @@ class ATCTImageTransform(Base):
         elif isinstance(img, file) or (hasattr(img, 'read') and
           hasattr(img, 'seek')):
             img.seek(0)
-            return img        
+            return img
         if data:
             return StringIO(data)
         else:
@@ -183,7 +183,7 @@ class ATCTImageTransform(Base):
             ROTATE_180
             ROTATE_270 (rotate clockwise)
         """
-        method = REQUEST.form.get('method',None)
+        method = REQUEST.form.get('method', None)
         method = int(method)
         if method not in TRANSPOSE_MAP:
             raise RuntimeError, "Unknown method %s" % method

@@ -4,13 +4,13 @@
 - Replaced date criterion "ago/from now" by "in the past/in the future".
   [vincentfretin]
 
-- Image transform is now plone.app.image aware. Fixes
-  http://dev.plone.org/old/plone/ticket/8506
+- Image transforms now also work with `plone.app.image`. Fixes
+  http://dev.plone.org/plone/ticket/8506
   [amleczko]
-  
+
 - help_criteria_field_name msgid was used twice but with different default
   messages. Fixed that.
-  [vincentfretin]  
+  [vincentfretin]
 
 - Made ATImage compute its ID from its title if provided. Closes
   http://dev.plone.org/old/plone/ticket/9186.
