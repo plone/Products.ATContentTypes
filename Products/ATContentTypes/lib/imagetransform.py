@@ -14,6 +14,7 @@ from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import HAS_PIL
 from Products.ATContentTypes import ATCTMessageFactory as _
 
+from plone.app.blob.interfaces import IBlobImageField
 # third party extension
 import exif
 
@@ -66,7 +67,7 @@ class ATCTImageTransform(Base):
             img = f.getScale(self, scale)
         # img.data contains the image as string or Pdata chain
         data = None
-        if isinstance(img, OFSImage):
+        if isinstance(img, OFSImage) or IBlobImageField.providedBy(f):
             data = str(img.data)
         elif isinstance(img, Pdata):
             data = str(img)
@@ -75,7 +76,7 @@ class ATCTImageTransform(Base):
         elif isinstance(img, file) or (hasattr(img, 'read') and
           hasattr(img, 'seek')):
             img.seek(0)
-            return img
+            return img        
         if data:
             return StringIO(data)
         else:
@@ -173,7 +174,7 @@ class ATCTImageTransform(Base):
         return None
 
     security.declareProtected(ModifyPortalContent, 'transformImage')
-    def transformImage(self, method, REQUEST=None):
+    def transformImage(self, REQUEST=None):
         """
         Transform an Image:
             FLIP_LEFT_RIGHT
@@ -182,6 +183,7 @@ class ATCTImageTransform(Base):
             ROTATE_180
             ROTATE_270 (rotate clockwise)
         """
+        method = REQUEST.form.get('method',None)
         method = int(method)
         if method not in TRANSPOSE_MAP:
             raise RuntimeError, "Unknown method %s" % method
