@@ -62,8 +62,8 @@ class ATCTImageTransform(Base):
     def getImageAsFile(self, img=None, scale=None):
         """Get the img as file like object
         """
+        f = self.getField('image')
         if img is None:
-            f = self.getField('image')
             img = f.getScale(self, scale)
         # img.data contains the image as string or Pdata chain
         data = None
