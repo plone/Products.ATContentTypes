@@ -14,7 +14,6 @@ from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.config import HAS_PIL
 from Products.ATContentTypes import ATCTMessageFactory as _
 
-from plone.app.blob.interfaces import IBlobImageField
 # third party extension
 import exif
 
@@ -62,12 +61,12 @@ class ATCTImageTransform(Base):
     def getImageAsFile(self, img=None, scale=None):
         """Get the img as file like object
         """
-        f = self.getField('image')
         if img is None:
+            f = self.getField('image')
             img = f.getScale(self, scale)
         # img.data contains the image as string or Pdata chain
         data = None
-        if isinstance(img, OFSImage) or IBlobImageField.providedBy(f):
+        if isinstance(img, OFSImage):
             data = str(img.data)
         elif isinstance(img, Pdata):
             data = str(img)
