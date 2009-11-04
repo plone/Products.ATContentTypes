@@ -182,7 +182,10 @@ class ATCTImageTransform(Base):
             ROTATE_180
             ROTATE_270 (rotate clockwise)
         """
-        method = int(method)
+        try:
+            method = int(method)
+        except ValueError:
+            method = int(REQUEST.form.get('method'))
         if method not in TRANSPOSE_MAP:
             raise RuntimeError, "Unknown method %s" % method
 
