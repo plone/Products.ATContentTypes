@@ -49,6 +49,7 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
             rows = 25,
             allow_file_upload = zconf.ATDocument.allow_document_upload)
         ),
+
     ImageField('image',
         required = False,
         storage = AnnotationStorage(migrate=True),
@@ -69,6 +70,7 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
             label= _(u'label_news_image', default=u'Image'),
             show_content_type = False)
         ),
+
     StringField('imageCaption',
         required = False,
         searchable = True,

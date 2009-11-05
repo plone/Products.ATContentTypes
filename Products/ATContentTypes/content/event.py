@@ -42,6 +42,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                     description = '',
                     label = _(u'label_event_location', default=u'Event Location')
                     )),
+
     DateTimeField('startDate',
                   required=True,
                   searchable=False,
@@ -65,6 +66,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                         description = '',
                         label = _(u'label_event_end', default=u'Event Ends')
                         )),
+
     TextField('text',
               required=False,
               searchable=True,
@@ -131,6 +133,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                         description = '',
                         label = _(u'label_contact_email', default=u'Contact E-mail')
                         )),
+
     StringField('contactPhone',
                 required=False,
                 searchable=True,

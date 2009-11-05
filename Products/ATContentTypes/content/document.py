@@ -47,6 +47,7 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
                         rows = 25,
                         allow_file_upload = zconf.ATDocument.allow_document_upload),
     ),
+    
     BooleanField('presentation',
         required = False,
         languageIndependent = True,
@@ -59,6 +60,7 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
                 default=u'If selected, this will give users the ability to view the contents as presentation slides.')
             ),
     ),
+    
     BooleanField('tableContents',
         required = False,
         languageIndependent = True,
