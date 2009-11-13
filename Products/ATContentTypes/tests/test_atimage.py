@@ -133,6 +133,7 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         r, m = self._ATCT.getEXIFOrientation()
 
     def test_transform(self):
+        self._ATCT.update(image=TEST_GIF)
         # NOTE: not a real test
         self._ATCT.transformImage(2)
 
