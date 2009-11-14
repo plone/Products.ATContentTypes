@@ -13,7 +13,8 @@ FILES = [
 
 from zope.testing import doctest
 OPTIONFLAGS = (doctest.ELLIPSIS |
-               doctest.NORMALIZE_WHITESPACE)
+               doctest.NORMALIZE_WHITESPACE |
+               doctest.REPORT_NDIFF)
 
 def test_suite():
     import unittest
