@@ -70,10 +70,12 @@ registerATCT(ObsoleteATFolder, PROJECTNAME)
 if HAS_LINGUAPLONE:
     class ATFolder(I18NOnlyBaseBTreeFolder, folder.ATFolder):
         """A folder which can contain other items."""
+        portal_type    = 'Folder'
 
 else:
     class ATFolder(folder.ATFolder):
         """A folder which can contain other items."""
+        portal_type    = 'Folder'
 
 registerATCT(ATFolder, PROJECTNAME)
 
