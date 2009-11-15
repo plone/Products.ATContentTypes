@@ -58,6 +58,16 @@ Sidneys tests for Archetypes.
   >>> image = folder['test-image']
   >>> imgpath = '/'.join(image.getPhysicalPath())
 
+Functional testing patches for stream iterators.
+
+  >>> from Products.Five import zcml
+  >>> from Products.Five import fiveconfigure
+  >>> fiveconfigure.debug_mode = True
+  >>> from collective import testcaselayer
+  >>> zcml.load_config('testing.zcml', testcaselayer)
+  >>> fiveconfigure.debug_mode = False
+
+
 HTTP HEAD
 =========
 
