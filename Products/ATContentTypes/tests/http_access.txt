@@ -280,6 +280,7 @@ HTTP Range request
   ... """ % (imgpath, user_name, user_password))
   HTTP/1.1 206 Partial Content
   Accept-Ranges: bytes
+  Content-Disposition: inline; filename="test-image"
   Content-Length: 5
   Content-Range: bytes 0-4/905
   Content-Type: image/gif
@@ -299,6 +300,7 @@ HTTP Range request
   ... """ % (imgpath, user_name, user_password, rfc1123_date(past)))
   HTTP/1.1 200 OK
   Accept-Ranges: bytes
+  Content-Disposition: inline; filename="test-image"
   Content-Length: 905
   Content-Type: image/gif...
   ...
@@ -322,6 +324,7 @@ HTTP Range request
   ... """ % (imgpath, user_name, user_password, etag))
   HTTP/1.1 200 OK
   Accept-Ranges: bytes
+  Content-Disposition: inline; filename="test-image"
   Content-Length: 905
   Content-Type: image/gif...
   ...
@@ -359,6 +362,7 @@ HTTP If modified since
   ... """ % (imgpath, user_name, user_password, rfc1123_date(past)))
   HTTP/1.1 200 OK
   Accept-Ranges: bytes
+  Content-Disposition: inline; filename="test-image"
   Content-Length: 905
   Content-Type: image/gif...
   ...
