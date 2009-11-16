@@ -1,6 +1,11 @@
 2.0 - unreleased
 ================
 
+- Pass an _initializing_ flag when updating fields on object initialization,
+  to avoid indexing twice (since CMF indexes on the item's ObjectAddedEvent,
+  which now takes place after the call to initializeArchetype).
+  [davisagli]
+
 - Replaced date criterion "ago/from now" by "in the past/in the future".
   [vincentfretin]
 

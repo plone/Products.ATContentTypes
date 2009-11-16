@@ -119,6 +119,7 @@ class ATCTMixin(BrowserDefaultMixin):
             self.markCreationFlag()
             self.setDefaults()
             if kwargs:
+                kwargs['_initializing_'] = True
                 self.edit(**kwargs)
             self._signature = self.Schema().signature()
             if self.isPrincipiaFolderish:
@@ -151,6 +152,10 @@ class ATCTMixin(BrowserDefaultMixin):
         """Reimplementing edit() to have a compatibility method for the old
         cmf edit() method
         """
+        initializing = kwargs.get('_initializing_', False)
+        if initializing:
+            del kwargs['_initializing_']
+        
         if len(args) != 0:
             # use cmf edit method
             return self.cmf_edit(*args, **kwargs)
@@ -162,6 +167,8 @@ class ATCTMixin(BrowserDefaultMixin):
             if kwname in cmf_edit_kws:
                 return self.cmf_edit(**kwargs)
         # standard AT edit - redirect to update()
+        if initializing:
+            kwargs['_initializing_'] = True
         return self.update(**kwargs)
 
     security.declarePrivate('cmf_edit')
