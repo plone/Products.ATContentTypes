@@ -97,18 +97,6 @@ setting:
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/new_doc1 []
   ------------------------------------------------------------
-  Catalog:  uid_catalog
-  Indexing: Members/test_user_1_/new_doc1 []
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_doc1 ['review_state']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_doc1 ['allowedRolesAndUsers']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_doc1 []
-  ------------------------------------------------------------
 
   >>> self.folder['new_doc1'].Title()
   ''
@@ -127,24 +115,6 @@ More complex invokeFactory call, setting title and description:
   ------------------------------------------------------------
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/new_doc2 ['review_state']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_doc2 []
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_doc2 []
-  ------------------------------------------------------------
-  Catalog:  uid_catalog
-  Indexing: Members/test_user_1_/new_doc2 []
-  ------------------------------------------------------------
-  Catalog:  uid_catalog
-  Indexing: Members/test_user_1_/new_doc2 []
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_doc2 ['review_state']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_doc2 ['allowedRolesAndUsers']
   ------------------------------------------------------------
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/new_doc2 []
@@ -229,18 +199,6 @@ setting:
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/new_folder1 []
   ------------------------------------------------------------
-  Catalog:  uid_catalog
-  Indexing: Members/test_user_1_/new_folder1 []
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_folder1 ['review_state']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_folder1 ['allowedRolesAndUsers']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_folder1 []
-  ------------------------------------------------------------
 
   >>> self.folder['new_folder1'].Title()
   ''
@@ -259,24 +217,6 @@ More complex invokeFactory call, setting title and description:
   ------------------------------------------------------------
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/new_folder2 ['review_state']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_folder2 []
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_folder2 []
-  ------------------------------------------------------------
-  Catalog:  uid_catalog
-  Indexing: Members/test_user_1_/new_folder2 []
-  ------------------------------------------------------------
-  Catalog:  uid_catalog
-  Indexing: Members/test_user_1_/new_folder2 []
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_folder2 ['review_state']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_folder2 ['allowedRolesAndUsers']
   ------------------------------------------------------------
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/new_folder2 []
@@ -364,18 +304,6 @@ setting, but we need to allow the creation of the Large Folders first:
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/new_btree_folder1 []
   ------------------------------------------------------------
-  Catalog:  uid_catalog
-  Indexing: Members/test_user_1_/new_btree_folder1 []
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_btree_folder1 ['review_state']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_btree_folder1 ['allowedRolesAndUsers']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_btree_folder1 []
-  ------------------------------------------------------------
 
   >>> self.folder['new_btree_folder1'].Title()
   ''
@@ -394,24 +322,6 @@ More complex invokeFactory call, setting title and description:
   ------------------------------------------------------------
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/new_btree_folder2 ['review_state']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_btree_folder2 []
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_btree_folder2 []
-  ------------------------------------------------------------
-  Catalog:  uid_catalog
-  Indexing: Members/test_user_1_/new_btree_folder2 []
-  ------------------------------------------------------------
-  Catalog:  uid_catalog
-  Indexing: Members/test_user_1_/new_btree_folder2 []
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_btree_folder2 ['review_state']
-  ------------------------------------------------------------
-  Catalog:  portal_catalog
-  Indexing: /plone/Members/test_user_1_/new_btree_folder2 ['allowedRolesAndUsers']
   ------------------------------------------------------------
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/new_btree_folder2 []
