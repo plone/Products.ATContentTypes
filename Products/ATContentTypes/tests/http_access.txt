@@ -60,12 +60,10 @@ Sidneys tests for Archetypes.
 
 Functional testing patches for stream iterators.
 
-  >>> from Products.Five import zcml
-  >>> from Products.Five import fiveconfigure
-  >>> fiveconfigure.debug_mode = True
-  >>> from collective import testcaselayer
-  >>> zcml.load_config('testing.zcml', testcaselayer)
-  >>> fiveconfigure.debug_mode = False
+  >>> from ZPublisher.HTTPResponse import HTTPResponse
+  >>> from plone.app.blob.tests.patches import applyPatch
+  >>> from plone.app.blob.tests.patches import setBody
+  >>> applyPatch(HTTPResponse, 'setBody', setBody)
 
 
 HTTP HEAD
