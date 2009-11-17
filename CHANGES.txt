@@ -1,5 +1,8 @@
-2.0 - unreleased
-================
+Changelog
+#########
+
+2.0a1 - 2009-11-18
+==================
 
 - Pass an _initializing_ flag when updating fields on object initialization,
   to avoid indexing twice (since CMF indexes on the item's ObjectAddedEvent,

@@ -1,13 +1,12 @@
-import os
 from setuptools import setup, find_packages
 
-version = '2.0'
+version = '2.0a1'
 
 setup(name='Products.ATContentTypes',
       version=version,
       description="Default Content Types for Plone",
       long_description=open("README.txt").read() + "\n" + \
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
+                       open("CHANGES.txt").read(),
       classifiers=[
         "Framework :: Plone",
         ],

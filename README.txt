@@ -1,5 +1,5 @@
 AT Content Types
-================
+################
 
 Installation
 ------------
