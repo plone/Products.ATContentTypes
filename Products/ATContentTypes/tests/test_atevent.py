@@ -37,7 +37,7 @@ TEXT = "lorem ipsum"
 def editATCT(obj):
     dcEdit(obj)
     obj.setLocation(LOCATION)
-    obj.setEventType(EV_TYPE)
+    obj.setSubject(EV_TYPE)
     obj.setEventUrl(EV_URL)
     obj.setStartDate(S_DATE)
     obj.setEndDate(E_DATE)
@@ -182,34 +182,34 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % type(vocab))
         self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
-    def test_eventTypeField(self):
+    def test_subjectField(self):
         dummy = self._dummy
-        field = dummy.getField('eventType')
+        field = dummy.getField('subject')
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 0, 'Value is %s' % field.required)
         self.failUnless(field.default == (), 'Value is %s' % str(str(field.default)))
         self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
         self.failUnless(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 0,
+        self.failUnless(field.multiValued == 1,
                         'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'getEventType',
+        self.failUnless(field.isMetadata == 1, 'Value is %s' % field.isMetadata)
+        self.failUnless(field.accessor == 'Subject',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setEventType',
+        self.failUnless(field.mutator == 'setSubject',
                         'Value is %s' % field.mutator)
         self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
                         ChangeEvents,
                         'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'veVc',
+        self.failUnless(field.generateMode == 'mVc',
                         'Value is %s' % field.generateMode)
         self.failUnless(field.force == '', 'Value is %s' % field.force)
         self.failUnless(field.type == 'lines', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AttributeStorage),
+        self.failUnless(isinstance(field.storage, MetadataStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage(),
+        self.failUnless(field.getLayerImpl('storage') == MetadataStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.validators == EmptyValidator,
