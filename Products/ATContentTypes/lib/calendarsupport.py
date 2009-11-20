@@ -143,9 +143,9 @@ class CalendarSupportMixin:
         if location:
             out.write('LOCATION:%s\n' % vformat(location))
 
-        eventType = self.getEventType()
-        if eventType:
-            out.write('CATEGORIES:%s\n' % ','.join(eventType))
+        subject = self.Subject()
+        if subject:
+            out.write('CATEGORIES:%s\n' % ','.join(subject))
 
         # TODO  -- NO! see the RFC; ORGANIZER field is not to be used for non-group-scheduled entities
         #ORGANIZER;CN=%(name):MAILTO=%(email)

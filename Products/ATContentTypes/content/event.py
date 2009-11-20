@@ -89,17 +89,6 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                       label=_(u'label_event_attendees', default=u'Attendees')
                       )),
 
-    LinesField('eventType',
-               required=False,
-               searchable=True,
-               write_permission = ChangeEvents,
-               languageIndependent=True,
-               widget = KeywordWidget(
-                        size = 6,
-                        description='',
-                        label = _(u'label_event_type', default=u'Event Type(s)')
-                        )),
-
     StringField('eventUrl',
                 required=False,
                 searchable=True,
@@ -147,10 +136,13 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
     ), marshall = RFC822Marshaller()
     )
 
-# Remove the subject field because the eventType field is a proxy for this
-ATEventSchema['subject'].widget.visible = {'edit': 'invisible'}
-ATEventSchema['subject'].mode = 'r'
-ATEventSchema['subject'].mutator = 'setSubject'
+# Repurpose the subject field for the event type
+ATEventSchema.moveField('subject', before='eventUrl')
+ATEventSchema['subject'].write_permission = ChangeEvents
+ATEventSchema['subject'].widget.label = _(
+    u'label_event_type', default=u'Event Type(s)')
+ATEventSchema['subject'].widget.size = 6
+ATEventSchema.changeSchemataForField('subject', 'default')
 
 finalizeATCTSchema(ATEventSchema)
 # finalizeATCTSchema moves 'location' into 'categories', we move it back:
@@ -177,42 +169,15 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
 
     security       = ClassSecurityInfo()
 
-    security.declareProtected(ChangeEvents, 'setEventType')
-    def setEventType(self, value, alreadySet=False, **kw):
-        """Set the event type.
-        """
-        if type(value) is StringType:
-            value = (value,)
-        elif not value:
-            # mostly harmless?
-            value = ()
-        f = self.getField('eventType')
-        f.set(self, value, **kw) # set is ok
-
-    security.declareProtected(ModifyPortalContent, 'setSubject')
-    def setSubject(self, value, alreadySet=False, **kw):
-        """Set the subject.
-        """
-        f = self.getField('subject')
-        f.set(self, value, **kw) # set is ok
-
-    security.declareProtected(View, 'getEventTypes')
-    def getEventTypes(self):
-        """fetch a list of the available event types from the vocabulary
-        """
-        f = self.getField('eventType')
-        result = self.collectKeywords('eventType', f.accessor)
-        return tuple(result)
-
     security.declarePrivate('cmf_edit')
-    def cmf_edit(self, title=None, description=None, eventType=None,
-             effectiveDay=None, effectiveMo=None, effectiveYear=None,
-             expirationDay=None, expirationMo=None, expirationYear=None,
-             start_date=None, start_time=None, startAMPM=None,
-             end_date=None, stop_time=None, stopAMPM=None,
-             location=None,
-             contact_name=None, contact_email=None, contact_phone=None,
-             event_url=None):
+    def cmf_edit(
+        self, title=None, description=None, effectiveDay=None,
+        effectiveMo=None, effectiveYear=None, expirationDay=None,
+        expirationMo=None, expirationYear=None, start_date=None,
+        start_time=None, startAMPM=None, end_date=None,
+        stop_time=None, stopAMPM=None, location=None,
+        contact_name=None, contact_email=None, contact_phone=None,
+        event_url=None):
 
         if effectiveDay and effectiveMo and effectiveYear and start_time:
             sdate = '%s-%s-%s %s %s' % (effectiveDay, effectiveMo, effectiveYear,
@@ -240,10 +205,10 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
             self.setStartDate(sdate)
             self.setEndDate(edate)
 
-        self.update(title=title, description=description, eventType=eventType,
-                    location=location, contactName=contact_name,
-                    contactEmail=contact_email, contactPhone=contact_phone,
-                    eventUrl=event_url)
+        self.update(
+            title=title, description=description, location=location,
+            contactName=contact_name, contactEmail=contact_email,
+            contactPhone=contact_phone, eventUrl=event_url)
 
     security.declareProtected(View, 'post_validate')
     def post_validate(self, REQUEST=None, errors=None):
