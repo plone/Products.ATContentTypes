@@ -1,12 +1,12 @@
 ## Script (Python) "atctListAlbum"
-##title=Helper method for photo album view
 ##bind container=container
 ##bind context=context
 ##bind namespace=
 ##bind script=script
 ##bind subpath=traverse_subpath
 ##parameters=images=0, folders=0, subimages=0, others=0
-
+##title=Helper method for photo album view
+##
 result = {}
 
 if context.portal_type == 'Topic':
@@ -21,7 +21,11 @@ if folders:
     result['folders'] = queryMethod({'portal_type':('Folder',)})
 if subimages:
     # Handle brains or objects
-    if getattr(context.aq_base, 'getPath', None) is not None:
+    try:
+        context = context.aq_base
+    except:
+        pass # Unwrap object if possible
+    if getattr(context, 'getPath', None) is not None:
         path = context.getPath()
     else:
         path = '/'.join(context.getPhysicalPath())
