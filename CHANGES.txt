@@ -1,9 +1,20 @@
 Changelog
 #########
 
-2.0a2 - Unreleased
+2.0a2 - 2009-12-02
 ==================
 
+- Attempt to Acquisition unwrap the context but allow the (potentially)
+  wrapped object through if unwrapping fails. This closes
+  http://dev.plone.org/old/plone/ticket/9796.
+  [matthewwilkes]
+
+- Adjust the reindex tests for the change I just made in Archetypes.
+  [davisagli]
+
+- Remove the eventType field and merge it into the subject field.
+  Closes http://dev.plone.org/old/plone/ticket/5058.
+  [rossp]
 
 2.0a1 - 2009-11-18
 ==================
