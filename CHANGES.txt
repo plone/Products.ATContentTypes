@@ -4,6 +4,10 @@ Changelog
 2.0a3 - Unreleased
 ==================
 
+- Replace the custom __bobo_traverse__ for handling image scales on ATNewsItem
+  and ATImage, because it's still needed for path traversal to scales to work.
+  This fixes http://dev.plone.org/plone/ticket/9706.
+  [davisagli]
 
 2.0a2 - 2009-12-02
 ==================

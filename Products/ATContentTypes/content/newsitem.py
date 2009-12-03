@@ -119,5 +119,22 @@ class ATNewsItem(ATDocumentBase, ATCTImageTransform):
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
 
+    def __bobo_traverse__(self, REQUEST, name):
+        """Transparent access to image scales
+        """
+        if name.startswith('image'):
+            field = self.getField('image')
+            image = None
+            if name == 'image':
+                image = field.getScale(self)
+            else:
+                scalename = name[len('image_'):]
+                if scalename in field.getAvailableSizes(self):
+                    image = field.getScale(self, scale=scalename)
+            if image is not None and not isinstance(image, basestring):
+                # image might be None or '' for empty images
+                return image
+
+        return ATDocumentBase.__bobo_traverse__(self, REQUEST, name)
 
 registerATCT(ATNewsItem, PROJECTNAME)
