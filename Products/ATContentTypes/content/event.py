@@ -29,7 +29,6 @@ from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.lib.calendarsupport import CalendarSupportMixin
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
-from Products.ATContentTypes.permission import ChangeEvents
 from Products.ATContentTypes.utils import DT2dt
 
 from Products.ATContentTypes import ATCTMessageFactory as _
@@ -37,7 +36,7 @@ from Products.ATContentTypes import ATCTMessageFactory as _
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
     StringField('location',
                 searchable=True,
-                write_permission = ChangeEvents,
+                write_permission = ModifyPortalContent,
                 widget = StringWidget(
                     description = '',
                     label = _(u'label_event_location', default=u'Event Location')
@@ -47,7 +46,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   required=True,
                   searchable=False,
                   accessor='start',
-                  write_permission = ChangeEvents,
+                  write_permission = ModifyPortalContent,
                   default_method=DateTime,
                   languageIndependent=True,
                   widget = CalendarWidget(
@@ -59,7 +58,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   required=True,
                   searchable=False,
                   accessor='end',
-                  write_permission = ChangeEvents,
+                  write_permission = ModifyPortalContent,
                   default_method=DateTime,
                   languageIndependent=True,
                   widget = CalendarWidget(
@@ -83,7 +82,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
     LinesField('attendees',
                languageIndependent=True,
                searchable=True,
-               write_permission=ChangeEvents,
+               write_permission=ModifyPortalContent,
                widget=LinesWidget(
                       description='',
                       label=_(u'label_event_attendees', default=u'Attendees')
@@ -93,7 +92,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 required=False,
                 searchable=True,
                 accessor='event_url',
-                write_permission = ChangeEvents,
+                write_permission = ModifyPortalContent,
                 validators=('isURL',),
                 widget = StringWidget(
                         description = _(u'help_event_url',
@@ -106,7 +105,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 required=False,
                 searchable=True,
                 accessor='contact_name',
-                write_permission = ChangeEvents,
+                write_permission = ModifyPortalContent,
                 widget = StringWidget(
                         description = '',
                         label = _(u'label_contact_name', default=u'Contact Name')
@@ -116,7 +115,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 required=False,
                 searchable=True,
                 accessor='contact_email',
-                write_permission = ChangeEvents,
+                write_permission = ModifyPortalContent,
                 validators = ('isEmail',),
                 widget = StringWidget(
                         description = '',
@@ -127,7 +126,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 required=False,
                 searchable=True,
                 accessor='contact_phone',
-                write_permission = ChangeEvents,
+                write_permission = ModifyPortalContent,
                 validators= (),
                 widget = StringWidget(
                         description = '',
@@ -138,7 +137,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
 
 # Repurpose the subject field for the event type
 ATEventSchema.moveField('subject', before='eventUrl')
-ATEventSchema['subject'].write_permission = ChangeEvents
+ATEventSchema['subject'].write_permission = ModifyPortalContent
 ATEventSchema['subject'].widget.label = _(
     u'label_event_type', default=u'Event Type(s)')
 ATEventSchema['subject'].widget.size = 6

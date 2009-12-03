@@ -8,10 +8,10 @@ from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.atapi import *
 
 from Products.Archetypes.Field import BooleanField
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 
 from Products.ATContentTypes.content.topic import ATTopic
-from Products.ATContentTypes.content.topic import ChangeTopics
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.interfaces import IATTopic
@@ -446,7 +446,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.mutator)
         self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission == ChangeTopics,
+        self.failUnless(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
@@ -488,7 +488,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.mutator)
         self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission == ChangeTopics,
+        self.failUnless(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
@@ -529,7 +529,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.mutator)
         self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission == ChangeTopics,
+        self.failUnless(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
@@ -571,7 +571,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.mutator)
         self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission == ChangeTopics,
+        self.failUnless(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
@@ -613,7 +613,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.mutator)
         self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission == ChangeTopics,
+        self.failUnless(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)

@@ -8,6 +8,7 @@ from ZPublisher.HTTPRequest import HTTPRequest
 from Products.ZCatalog.Lazy import LazyCat
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import AddPortalContent
 from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
@@ -34,8 +35,6 @@ from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFolder
 from Products.ATContentTypes.criteria import _criterionRegistry
 from Products.ATContentTypes.exportimport.content import IDisabledExport
-from Products.ATContentTypes.permission import ChangeTopics
-from Products.ATContentTypes.permission import AddTopics
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATTopic
@@ -73,7 +72,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 required=False,
                 mode="rw",
                 default=False,
-                write_permission = ChangeTopics,
+                write_permission = ModifyPortalContent,
                 widget=BooleanWidget(
                         label=_(u'label_inherit_criteria', default=u'Inherit Criteria'),
                         description=_(u'help_inherit_collection_criteria',
@@ -86,7 +85,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 required=False,
                 mode="rw",
                 default=False,
-                write_permission = ChangeTopics,
+                write_permission = ModifyPortalContent,
                 widget=BooleanWidget(
                         label=_(u'label_limit_number', default=u'Limit Search Results'),
                         description=_(u'help_limit_number',
@@ -98,7 +97,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 required=False,
                 mode="rw",
                 default=0,
-                write_permission = ChangeTopics,
+                write_permission = ModifyPortalContent,
                 widget=IntegerWidget(
                         label=_(u'label_item_count', default=u'Number of Items'),
                         description=''
@@ -108,7 +107,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 required=False,
                 mode="rw",
                 default=False,
-                write_permission = ChangeTopics,
+                write_permission = ModifyPortalContent,
                 widget=BooleanWidget(
                         label=_(u'label_custom_view', default=u'Display as Table'),
                         description=_(u'help_custom_view',
@@ -122,7 +121,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 default=('Title',),
                 vocabulary='listMetaDataFields',
                 enforceVocabulary=True,
-                write_permission = ChangeTopics,
+                write_permission = ModifyPortalContent,
                 widget=InAndOutWidget(
                         label=_(u'label_custom_view_fields', default=u'Table Columns'),
                         description=_(u'help_custom_view_fields',
@@ -166,20 +165,20 @@ class ATTopic(ATCTFolder):
                 syn_tool.enableSyndication(self)
         return ret_val
 
-    security.declareProtected(ChangeTopics, 'validateAddCriterion')
+    security.declareProtected(ModifyPortalContent, 'validateAddCriterion')
     def validateAddCriterion(self, indexId, criteriaType):
         """Is criteriaType acceptable criteria for indexId
         """
         return criteriaType in self.criteriaByIndexId(indexId)
 
-    security.declareProtected(ChangeTopics, 'criteriaByIndexId')
+    security.declareProtected(ModifyPortalContent, 'criteriaByIndexId')
     def criteriaByIndexId(self, indexId):
         catalog_tool = getToolByName(self, 'portal_catalog')
         indexObj = catalog_tool.Indexes[indexId]
         results = _criterionRegistry.criteriaByIndex(indexObj.meta_type)
         return results
 
-    security.declareProtected(ChangeTopics, 'listCriteriaTypes')
+    security.declareProtected(ModifyPortalContent, 'listCriteriaTypes')
     def listCriteriaTypes(self):
         """List available criteria types as dict
         """
@@ -187,7 +186,7 @@ class ATTopic(ATCTFolder):
                   'description':_criterionRegistry[ctype].shortDesc}
                  for ctype in self.listCriteriaMetaTypes() ]
 
-    security.declareProtected(ChangeTopics, 'listCriteriaMetaTypes')
+    security.declareProtected(ModifyPortalContent, 'listCriteriaMetaTypes')
     def listCriteriaMetaTypes(self):
         """List available criteria
         """
@@ -195,7 +194,7 @@ class ATTopic(ATCTFolder):
         val.sort()
         return val
 
-    security.declareProtected(ChangeTopics, 'listSearchCriteriaTypes')
+    security.declareProtected(ModifyPortalContent, 'listSearchCriteriaTypes')
     def listSearchCriteriaTypes(self):
         """List available search criteria types as dict
         """
@@ -203,7 +202,7 @@ class ATTopic(ATCTFolder):
                   'description':_criterionRegistry[ctype].shortDesc}
                  for ctype in self.listSearchCriteriaMetaTypes() ]
 
-    security.declareProtected(ChangeTopics, 'listSearchCriteriaMetaTypes')
+    security.declareProtected(ModifyPortalContent, 'listSearchCriteriaMetaTypes')
     def listSearchCriteriaMetaTypes(self):
         """List available search criteria
         """
@@ -211,7 +210,7 @@ class ATTopic(ATCTFolder):
         val.sort()
         return val
 
-    security.declareProtected(ChangeTopics, 'listSortCriteriaTypes')
+    security.declareProtected(ModifyPortalContent, 'listSortCriteriaTypes')
     def listSortCriteriaTypes(self):
         """List available sort criteria types as dict
         """
@@ -219,7 +218,7 @@ class ATTopic(ATCTFolder):
                   'description':_criterionRegistry[ctype].shortDesc}
                  for ctype in self.listSortCriteriaMetaTypes() ]
 
-    security.declareProtected(ChangeTopics, 'listSortCriteriaMetaTypes')
+    security.declareProtected(ModifyPortalContent, 'listSortCriteriaMetaTypes')
     def listSortCriteriaMetaTypes(self):
         """List available sort criteria
         """
@@ -241,13 +240,13 @@ class ATTopic(ATCTFolder):
         return [val for val in self.listCriteria() if
              IATTopicSearchCriterion.providedBy(val)]
 
-    security.declareProtected(ChangeTopics, 'hasSortCriterion')
+    security.declareProtected(ModifyPortalContent, 'hasSortCriterion')
     def hasSortCriterion(self):
         """Tells if a sort criterai is already setup.
         """
         return not self.getSortCriterion() is None
 
-    security.declareProtected(ChangeTopics, 'getSortCriterion')
+    security.declareProtected(ModifyPortalContent, 'getSortCriterion')
     def getSortCriterion(self):
         """Return the Sort criterion if setup.
         """
@@ -256,14 +255,14 @@ class ATTopic(ATCTFolder):
                 return criterion
         return None
 
-    security.declareProtected(ChangeTopics, 'removeSortCriterion')
+    security.declareProtected(ModifyPortalContent, 'removeSortCriterion')
     def removeSortCriterion( self):
         """remove the Sort criterion.
         """
         if self.hasSortCriterion():
             self.deleteCriterion(self.getSortCriterion().getId())
 
-    security.declareProtected(ChangeTopics, 'setSortCriterion')
+    security.declareProtected(ModifyPortalContent, 'setSortCriterion')
     def setSortCriterion( self, field, reversed):
         """Set the Sort criterion.
         """
@@ -271,20 +270,20 @@ class ATTopic(ATCTFolder):
         self.addCriterion(field, 'ATSortCriterion')
         self.getSortCriterion().setReversed(reversed)
 
-    security.declareProtected(ChangeTopics, 'listIndicesByCriterion')
+    security.declareProtected(ModifyPortalContent, 'listIndicesByCriterion')
     def listIndicesByCriterion(self, criterion):
         """
         """
         return _criterionRegistry.indicesByCriterion(criterion)
 
-    security.declareProtected(ChangeTopics, 'listFields')
+    security.declareProtected(ModifyPortalContent, 'listFields')
     def listFields(self):
         """Return a list of fields from portal_catalog.
         """
         tool = getToolByName(self, TOOLNAME)
         return tool.getEnabledFields()
 
-    security.declareProtected(ChangeTopics, 'listSortFields')
+    security.declareProtected(ModifyPortalContent, 'listSortFields')
     def listSortFields(self):
         """Return a list of available fields for sorting."""
         fields = [ field
@@ -292,7 +291,7 @@ class ATTopic(ATCTFolder):
                     if self.validateAddCriterion(field[0], 'ATSortCriterion') ]
         return fields
 
-    security.declareProtected(ChangeTopics, 'listAvailableFields')
+    security.declareProtected(ModifyPortalContent, 'listAvailableFields')
     def listAvailableFields(self):
         """Return a list of available fields for new criteria.
         """
@@ -456,7 +455,7 @@ class ATTopic(ATCTFolder):
             return batch
         return results
 
-    security.declareProtected(ChangeTopics, 'addCriterion')
+    security.declareProtected(ModifyPortalContent, 'addCriterion')
     def addCriterion(self, field, criterion_type):
         """Add a new search criterion. Return the resulting object.
         """
@@ -467,7 +466,7 @@ class ATTopic(ATCTFolder):
         self._setObject( newid, crit )
         return self._getOb( newid )
 
-    security.declareProtected(ChangeTopics, 'deleteCriterion')
+    security.declareProtected(ModifyPortalContent, 'deleteCriterion')
     def deleteCriterion(self, criterion_id):
         """Delete selected criterion.
         """
@@ -486,7 +485,7 @@ class ATTopic(ATCTFolder):
         except AttributeError:
             return self._getOb(criterion_id)
 
-    security.declareProtected(AddTopics, 'addSubtopic')
+    security.declareProtected(AddPortalContent, 'addSubtopic')
     def addSubtopic(self, id):
         """Add a new subtopic.
         """

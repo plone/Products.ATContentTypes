@@ -13,7 +13,6 @@ from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.tests.utils import EmailValidator
 from Products.ATContentTypes.tests.utils import URLValidator
 from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
-from Products.ATContentTypes.permission import ChangeEvents
 from Products.ATContentTypes.utils import DT2dt
 from DateTime import DateTime
 from Products.ATContentTypes.interfaces import ICalendarSupport
@@ -162,7 +161,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.mutator)
         self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission == ChangeEvents,
+        self.failUnless(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
@@ -201,7 +200,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
-                        ChangeEvents,
+                        ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'mVc',
                         'Value is %s' % field.generateMode)
@@ -240,7 +239,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
-                        ChangeEvents,
+                        ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
@@ -282,7 +281,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
-                        ChangeEvents,
+                        ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
@@ -326,7 +325,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
-                        ChangeEvents,
+                        ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
@@ -368,7 +367,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
-                        ChangeEvents,
+                        ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
@@ -410,7 +409,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
-                        ChangeEvents,
+                        ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
@@ -452,7 +451,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
-                        ChangeEvents,
+                        ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
@@ -493,7 +492,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.failUnless(field.read_permission == View,
                         'Value is %s' % field.read_permission)
         self.failUnless(field.write_permission ==
-                        ChangeEvents,
+                        ModifyPortalContent,
                         'Value is %s' % field.write_permission)
         self.failUnless(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
