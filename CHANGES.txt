@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0a4 - Unreleased
+2.0a4 - 2009-12-03
 ------------------
 
 - Use "Modify portal content" and "Add portal content" for topic and event 
