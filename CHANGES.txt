@@ -4,6 +4,9 @@ Changelog
 2.0a4 - Unreleased
 ------------------
 
+- Apply patch from mr_savage. Fixes a broken call to normalizeString in 
+  atct_topic_view. http://dev.plone.org/plone/ticket/9897
+  [esteele]
 
 2.0a4 - 2009-12-03
 ------------------

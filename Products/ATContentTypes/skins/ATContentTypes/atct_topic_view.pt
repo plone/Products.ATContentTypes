@@ -83,7 +83,8 @@
                         <tr tal:define="oddrow repeat/obj/odd;"
                             tal:attributes="class python:test(oddrow, 'even', 'odd')">
                             <tal:fields repeat="field here/getCustomViewFields"
-                                        define="url obj/getURL;
+                                        define="normalizeString nocall:context/@@plone/normalizeString;
+                                                url obj/getURL;
                                                 obj_type obj/portal_type;
                                                 obj_typeinfo python: here.portal_types.getTypeInfo(obj_type);
                                                 icon python:portal_url+'/'+ obj_typeinfo.getIcon();
