@@ -424,6 +424,26 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         # Check the batch length
         self.assertEqual(len(topic.queryCatalog(batch=True, b_size=5)), 5)
 
+    def test_queryCatalogAddCriteria(self):
+        #Ensure that we can add params
+        topic = self._ATCT
+        crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
+        crit.setValue('Folder')
+        # Add a bunch of folders.
+        for i in range(1, 20):
+            self.folder.invokeFactory('Folder', str(i))
+        self.assertEqual(len(topic.queryCatalog(sort_on='Date',sort_limit=5)),5)
+
+    def test_queryCatalogOverrideCriteria(self):
+        #Ensure that we can override params
+        topic = self._ATCT
+        crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
+        crit.setValue('Document')
+        # Add a bunch of folders.
+        for i in range(1, 20):
+            self.folder.invokeFactory('Folder', str(i))
+        self.assertEqual(len(topic.queryCatalog(portal_type='Folder')), 20)
+
     def test_get_size(self):
         atct = self._ATCT
         self.failUnlessEqual(atct.get_size(), 1)
