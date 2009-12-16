@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0a5  - Unreleased
+2.0a5 - 2009-12-16
 ------------------
 
 - Apply patch from mr_savage. Fixes a broken call to normalizeString in 
