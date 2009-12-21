@@ -65,7 +65,7 @@ $(function() {
 
 <div metal:fill-slot="main">
 
-    <h1 i18n:domain="atcontenttypes"
+    <h1 i18n:domain="atcontenttypes" class="documentFirstHeading"
         i18n:translate="heading_criteria_for">
         Criteria for
         <span i18n:name="title" tal:content="context/pretty_title_or_id" tal:omit-tag="" />
