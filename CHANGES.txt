@@ -4,6 +4,8 @@ Changelog
 2.0a6 - Unreleased
 ------------------
 
+- Corrected package dependencies.
+  [hannosch]
 
 2.0a5 - 2009-12-16
 ------------------
