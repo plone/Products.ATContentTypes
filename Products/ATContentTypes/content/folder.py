@@ -67,15 +67,25 @@ class ObsoleteATFolder(ATCTOrderedFolder):
 registerATCT(ObsoleteATFolder, PROJECTNAME)
 
 
+FOLDER_MANAGE_OPTIONS = (
+ {'action': 'manage_main', 'label': 'Contents'},
+ {'action': '', 'label': 'View'},
+ {'action': 'manage_interfaces', 'label': 'Interfaces'},
+)
+
+
 if HAS_LINGUAPLONE:
     class ATFolder(I18NOnlyBaseBTreeFolder, folder.ATFolder):
         """A folder which can contain other items."""
         portal_type    = 'Folder'
+        manage_options = FOLDER_MANAGE_OPTIONS
 
 else:
     class ATFolder(folder.ATFolder):
         """A folder which can contain other items."""
         portal_type    = 'Folder'
+        manage_options = FOLDER_MANAGE_OPTIONS
+
 
 registerATCT(ATFolder, PROJECTNAME)
 
@@ -83,7 +93,6 @@ registerATCT(ATFolder, PROJECTNAME)
 class ATBTreeFolder(ATCTBTreeFolder):
     """A folder suitable for holding a very large number of items"""
     schema         =  ATBTreeFolderSchema
-
 
     portal_type    = 'Large Plone Folder'
     archetype_name = 'Large Folder'
