@@ -133,7 +133,6 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
     portal_type = 'Topic'
     title = 'Collection'
     meta_type = 'ATTopic'
-    icon = 'topic_icon.png'
 
     def afterSetUp(self):
         self.setRoles(['Manager', 'Member'])

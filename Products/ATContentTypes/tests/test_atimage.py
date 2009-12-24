@@ -107,7 +107,6 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
     portal_type = 'Image'
     title = 'Image'
     meta_type = 'ATImage'
-    icon = 'image_icon.png'
 
     def test_implementsImageContent(self):
         iface = IImageContent

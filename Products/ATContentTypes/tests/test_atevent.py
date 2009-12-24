@@ -55,7 +55,6 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
     portal_type = 'Event'
     title = 'Event'
     meta_type = 'ATEvent'
-    icon = 'event_icon.png'
 
     def test_doesImplementCalendarSupport(self):
         self.failUnless(ICalendarSupport.providedBy(self._ATCT))

@@ -59,7 +59,6 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
     cmf_portal_type = ''
     title = ''
     meta_type = ''
-    icon = ''
 
     def afterSetUp(self):
         #self.setRoles(['Manager', 'Member'])
@@ -86,7 +85,6 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
         self.failUnless(self.portal_type)
         self.failUnless(self.title)
         self.failUnless(self.meta_type)
-        self.failUnless(self.icon)
         if self.cmf_klass:
             self.failUnless(self.cmf_klass)
             self.failUnless(self.cmf_portal_type)
@@ -115,9 +113,6 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
         ti = self._ATCT.getTypeInfo()
         self.failUnlessEqual(ti.getId(), self.portal_type)
         self.failUnlessEqual(ti.Title(), self.title)
-        self.failUnlessEqual(ti.getIcon(), self.icon)
-        # the following yields 'ATFile' vs 'ATBlob', but that's okay...
-        # self.failUnlessEqual(ti.Metatype(), self.meta_type)
 
     def test_doesImplementDC(self):
         self.failUnless(verifyObject(IDublinCore, self._ATCT))

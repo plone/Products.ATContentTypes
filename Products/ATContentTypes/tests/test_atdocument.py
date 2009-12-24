@@ -52,7 +52,6 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
     portal_type = 'Document'
     title = 'Page'
     meta_type = 'ATDocument'
-    icon = 'document_icon.png'
 
     def test_doesImplementHistoryAware(self):
         iface = IHistoryAware

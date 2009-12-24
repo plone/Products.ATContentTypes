@@ -38,7 +38,6 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
     portal_type = 'Folder'
     title = 'Folder'
     meta_type = 'ATFolder'
-    icon = 'folder_icon.png'
 
     def test_implementsOrderInterface(self):
         self.failUnless(IOrderedContainer.providedBy(self._ATCT))
@@ -73,7 +72,6 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
     portal_type = 'Large Plone Folder'
     title = 'Large Folder'
     meta_type = 'ATBTreeFolder'
-    icon = 'folder_icon.png'
 
     def test_implementsATBTreeFolder(self):
         iface = IATBTreeFolder
