@@ -571,52 +571,6 @@ Need to make a BTreeFolder manually, and then do a MKCOL inside it:
 
   >>> lpf.global_allow = lpf_allow
 
-
-WebDAV Name Mangling
-====================
-
-A experiment with WebDAV Name Mangling, by tweaking
-TraversalRequestNameStack with a before traverse hook. We want the
-title to end up with the original file/folder name even if the
-destination filename ends up mangled.
-
-  >>> body = """
-  ... from Products.CMFCore.utils import getToolByName
-  ...
-  ... # Only act on PUT, MKCOL
-  ... method = request.get('REQUEST_METHOD', 'GET').upper()
-  ... if method not in ('PUT', 'MKCOL'):
-  ...    return
-  ...
-  ... # See if we can find the plone tool and the method that is
-  ... # supposed to normalize strings.
-  ... pt = getToolByName(parent, 'plone_utils', None)
-  ... if pt is None:
-  ...     return
-  ... normalize = getattr(pt, 'normalizeString', None)
-  ... if normalize is None:
-  ...     return
-  ... # Alright, it's a method we want to handle.
-  ... if method in ('PUT', 'MKCOL'):
-  ...     # If it's a PUT or MKCOL we want to normalize the URL, so
-  ...     # tweak TraversalRequestNameStack.
-  ...     stack = request['TraversalRequestNameStack']
-  ...     if not stack:
-  ...         # Should this ever happen?
-  ...         return
-  ...     name = stack[0]
-  ...     stack[0] = name = normalize(name)
-  ... """
-
-  >>> factory = self.portal.manage_addProduct['PythonScripts']
-  >>> _ = factory.manage_addPythonScript('webdav_mangle')
-  >>> ps = self.portal['webdav_mangle']
-  >>> ps.ZPythonScript_edit('parent, request', body)
-
-  >>> factory = self.portal.manage_addProduct['SiteAccess']
-  >>> factory.manage_addAccessRule('webdav_mangle')
-
-
 PUT Mangling
 ------------
 
@@ -632,10 +586,10 @@ Now for the real thing, doing a PUT request, back to Member role:
   HTTP/1.1 201 Created
   ...
 
-  >>> 'Foto-do-Parana.jpg' in self.folder
+  >>> 'Foto do Parana.jpg' in self.folder
   True
 
-  >>> image = self.folder['Foto-do-Parana.jpg']
+  >>> image = self.folder['Foto do Parana.jpg']
 
   >>> print image.getPortalTypeName()
   Image
@@ -648,10 +602,6 @@ Now for the real thing, doing a PUT request, back to Member role:
 MKCOL Mangling
 --------------
 
-Need manager roles here:
-
-  >>> self.setRoles(['Manager'])
-
   >>> print http(r"""
   ... MKCOL /%s/Fotos%%20de%%20Jurere HTTP/1.1
   ... Authorization: Basic %s:%s
@@ -660,13 +610,8 @@ Need manager roles here:
   HTTP/1.1 201 Created
   ...
 
-  >>> 'fotos-de-jurere' in self.folder
+  >>> 'Fotos de Jurere' in self.folder
   True
 
-  >>> print self.folder['fotos-de-jurere'].Title()
+  >>> print self.folder['Fotos de Jurere'].Title()
   Fotos de Jurere
-
-Then disable again the Access Rule:
-
-  >>> factory = self.portal.manage_addProduct['SiteAccess']
-  >>> factory.manage_addAccessRule(None)

@@ -4,6 +4,9 @@ Changelog
 2.0a6 - Unreleased
 ------------------
 
+- Removed overly creative code using access rules in webdav tests.
+  [hannosch]
+
 - Added manage_options restriction for new folderish types.
   [hannosch]
 
