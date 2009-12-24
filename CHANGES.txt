@@ -4,6 +4,9 @@ Changelog
 2.0a6 - Unreleased
 ------------------
 
+- Removed no longer required ATCTContent.manage_options restriction.
+  [hannosch]
+
 - Corrected package dependencies.
   [hannosch]
 
