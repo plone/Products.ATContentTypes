@@ -4,6 +4,9 @@ Changelog
 2.0a6 - Unreleased
 ------------------
 
+- Removed cmf_klass leftovers from tests.
+  [hannosch]
+
 - Removed useless manual tests of the icon names of all types.
   [hannosch]
 
