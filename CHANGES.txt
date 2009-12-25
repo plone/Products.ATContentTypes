@@ -4,6 +4,10 @@ Changelog
 2.0a6 - Unreleased
 ------------------
 
+- Respect "show content type icons" setting for collection table view.
+  This fixes http://dev.plone.org/plone/ticket/9630.
+  [dukebody]
+
 - Removed cmf_klass leftovers from tests.
   [hannosch]
 
