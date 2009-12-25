@@ -1,6 +1,9 @@
 1.3.5 - unreleased
 ==================
 
+- Respect "show content type icons" setting for collection table view.
+  This fixes http://dev.plone.org/plone/ticket/9630.
+  [dukebody]
 
 1.3.4 - 2009-09-22
 ==================

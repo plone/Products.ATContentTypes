@@ -86,7 +86,7 @@
                                         define="url obj/getURL;
                                                 obj_type obj/portal_type;
                                                 obj_typeinfo python: here.portal_types.getTypeInfo(obj_type);
-                                                icon python:portal_url+'/'+ obj_typeinfo.getIcon();
+                                                icon python:plone_view.getIcon(obj);
                                                 obj_wf_state obj/review_state|python: wtool.getInfoFor(obj, 'review_state', '');
                                                 obj_wf_state_class python:'state-' + normalizeString(obj_wf_state);
                                                 title_or_id obj/pretty_title_or_id">
@@ -99,7 +99,8 @@
                                         <img src="#"
                                              height="16"
                                              width="16"
-                                             tal:attributes="src icon;
+                                             tal:condition="icon/url"
+                                             tal:attributes="src icon/url;
                                                              alt obj/Type|obj_type"/>
                                     </a>
 
