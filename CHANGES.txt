@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0a6 - Unreleased
+2.0a6 - 2009-12-27
 ------------------
 
 - Respect "show content type icons" setting for collection table view.
