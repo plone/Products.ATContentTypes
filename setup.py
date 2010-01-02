@@ -41,7 +41,6 @@ setup(name='Products.ATContentTypes',
           'zope.interface',
           'zope.publisher',
           'zope.tal',
-          'PIL',
           'Plone',
           'Products.Archetypes',
           'Products.ATReferenceBrowserWidget', # BBB

@@ -4,6 +4,9 @@ Changelog
 2.0b1 - unreleased
 ------------------
 
+- Don't specify PIL as a direct dependencies. It is not installed as an egg on
+  all platforms.
+  [hannosch]
 
 2.0a6 - 2009-12-27
 ------------------
