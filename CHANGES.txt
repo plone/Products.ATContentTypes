@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0b1 - unreleased
+2.0b1 - 2010-01-02
 ------------------
 
 - Don't specify PIL as a direct dependencies. It is not installed as an egg on
