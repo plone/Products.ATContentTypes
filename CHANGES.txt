@@ -4,6 +4,10 @@ Changelog
 2.0b2 - unreleased
 ------------------
 
+- Removed a displayContentsTab related hack from topic.py. Whatever this was
+  supposed to do, has long changed.
+  [hannosch]
+
 - Ported fix for http://dev.plone.org/plone/ticket/7324 - it was not possible
   to empty Collection's 'text' field. Again fixes #7324
   [naro]
