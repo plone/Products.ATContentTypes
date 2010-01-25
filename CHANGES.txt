@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0b2 - unreleased
+2.0b2 - 2010-01-25
 ------------------
 
 - Removed a displayContentsTab related hack from topic.py. Whatever this was
