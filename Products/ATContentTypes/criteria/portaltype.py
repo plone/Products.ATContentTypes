@@ -1,10 +1,12 @@
+from zope.component import queryUtility
+from zope.i18n import translate
 from zope.interface import implements
+from zope.schema.interfaces import IVocabularyFactory
 
-from Products.CMFCore.permissions import View
-from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
-
+from Acquisition import aq_get
 from Products.Archetypes.atapi import DisplayList
+from Products.CMFCore.permissions import View
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import FIELD_INDICES
@@ -20,7 +22,7 @@ val_widget.description=_(u'help_portal_type_criteria_value',
                          default=u'One of the available content types.')
 ATPortalTypeCriterionSchema['value'].widget = val_widget
 
-    
+
 class ATPortalTypeCriterion(ATSelectionCriterion):
     """A portal_types criterion"""
 
@@ -34,29 +36,25 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
 
     security.declareProtected(View, 'getCurrentValues')
     def getCurrentValues(self):
-         """Return enabled portal types"""
-         plone_tool = getToolByName(self, 'plone_utils')
-         portal_types = plone_tool.getUserFriendlyTypes()
-         getSortTuple = lambda x: ((x.Title() or x).lower(),
-           unicode(x.Title() or x), x.Title() or x)
-
-         if self.Field() == 'Type':
-            types_tool = getToolByName(self, 'portal_types')
-            get_type = types_tool.getTypeInfo
-            # first item in tuple is sortkey, second is untranslated Title
-            # and third is Title as a translatable Message object
-            portal_types = [getSortTuple(get_type(t)) for t in portal_types]
-         else:
-            portal_types = [(t.lower(), t, t) for t in portal_types]
-
-         portal_types.sort()
-         portal_types = [(p[1], p[2]) for p in portal_types]
-         return DisplayList(portal_types)
+        """Return enabled portal types"""
+        name = u'plone.app.vocabularies.ReallyUserFriendlyTypes'
+        types = queryUtility(IVocabularyFactory, name=name)(self)
+        request = aq_get(self, 'REQUEST', None)
+        result = []
+        type_field = self.Field() == 'Type'
+        for term in types.by_value.values():
+            value = term.value
+            if type_field:
+                value = unicode(term.title)
+            result.append((value, translate(term.title, context=request)))
+        def _key(v):
+            return v[1]
+        result.sort(key=_key)
+        return DisplayList(result)
 
     security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
-
         if self.Value() is not '':
             result.append((self.Field(), self.Value()))
 
