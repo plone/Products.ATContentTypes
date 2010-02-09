@@ -5,8 +5,8 @@
 
 <body>
 
-<div metal:fill-slot="main">
-<metal:main_macro define-macro="main"
+<metal:content-core fill-slot="content-core">
+<metal:main_macro define-macro="content-core"
      tal:define="result python:here.atctListAlbum(images=1, folders=1, subimages=0, others=1);
                  images result/images;
                  albums result/folders;
@@ -17,19 +17,7 @@
                  getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
                  templateId template/getId;
                  batch python:Batch(images, 12, int(b_start), orphan=1)">
-
-    <div tal:replace="structure provider:plone.abovecontenttitle" />
-
-    <h1 tal:content="here/pretty_title_or_id" class="documentFirstHeading">Title or id</h1>
-
-    <div tal:replace="structure provider:plone.belowcontenttitle" />
-
-    <p metal:use-macro="here/kss_generic_macros/macros/generic_description_view">
-        Description
-    </p>
-        
-    <div tal:replace="structure provider:plone.abovecontentbody" />
-
+    
     <div metal:define-macro="text-field-view"
          id="parent-fieldname-text" class="stx"
          tal:define="kss_class python:getKssClasses('text',
@@ -104,10 +92,8 @@
 
     <metal:subtopics use-macro="here/atct_topic_view/macros/folderlisting_macro" />
 
-    <div tal:replace="structure provider:plone.belowcontentbody" />
-
 </metal:main_macro>
-</div>
+</metal:content-core>
 
 </body>
 

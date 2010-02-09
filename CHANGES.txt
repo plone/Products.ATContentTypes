@@ -4,6 +4,10 @@ Changelog
 2.0b3 - unreleased
 ------------------
 
+- Updated templates to follow recent markup conventions.
+  References http://dev.plone.org/plone/ticket/9981
+  [spliter]
+
 - Fixed the portal type criterion to use the really user friendly types
   vocabulary, which makes it independent of the types selection allowed for
   searching. We also provide the proper translated title of all types and sort

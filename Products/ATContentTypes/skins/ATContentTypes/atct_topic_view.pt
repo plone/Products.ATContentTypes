@@ -4,33 +4,13 @@
       i18n:domain="plone">
 
 <body>
-
-<div metal:fill-slot="main">
-<metal:main_macro define-macro="main">
+    
+<metal:content-core fill-slot="content-core">
     <metal:body define-macro="body_macro"
                 tal:define="kssClassesView context/@@kss_field_decorator_view;
                             getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
                             templateId template/getId">
-
-
-        <div tal:replace="structure provider:plone.abovecontenttitle" />
-
-        <h1 class="documentFirstHeading"> 
-            <metal:field use-macro="python:here.widget('title', mode='view')">
-            Title
-            </metal:field>
-        </h1>
-
-        <div tal:replace="structure provider:plone.belowcontenttitle" />
-
-        <p class="documentDescription">
-            <metal:field use-macro="python:here.widget('description', mode='view')">
-            Description
-            </metal:field>
-        </p>
-
-        <div tal:replace="structure provider:plone.abovecontentbody" />
-
+    
         <metal:listingmacro define-macro="listing">
         <tal:topiccontents define="topicContents python:here.queryCatalog(batch=True);
                                    batch topicContents;">
@@ -44,7 +24,7 @@
                 Download PDF
             </a>
         </tal:listing>
-    
+
         <div metal:define-macro="text-field-view"
              id="parent-fieldname-text" class="stx"
              tal:define="kss_class python:getKssClasses('text',
@@ -164,12 +144,7 @@
             <metal:list metal:use-macro="here/base/macros/folderlisting"/>
         </tal:subtopics>
     </metal:body>
-
-    <div tal:replace="structure provider:plone.belowcontentbody" />
-
-</metal:main_macro>
-
-</div>
+</metal:content-core>
 
 </body>
 </html>

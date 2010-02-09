@@ -63,7 +63,7 @@ $(function() {
 
 <body>
 
-<div metal:fill-slot="main">
+<metal:main fill-slot="main">
 
     <h1 i18n:domain="atcontenttypes" class="documentFirstHeading"
         i18n:translate="heading_criteria_for">
@@ -71,226 +71,228 @@ $(function() {
         <span i18n:name="title" tal:content="context/pretty_title_or_id" tal:omit-tag="" />
     </h1>
 
-    <p class="discreet"
+    <div class="documentDescription discreet"
        tal:condition="not: context/listCriteria"
        i18n:domain="atcontenttypes"
        i18n:translate="description_no_criteria_in_criteria_form">
         No criteria defined yet. The search will not show any results.
         Please add criteria below.
-    </p>
+    </div>
 
-    <form action=""
-          method="post"
-          tal:attributes="action template/getId"
-          tal:define="criteria context/listSearchCriteria;
-                      errors options/state/getErrors|nothing"
-          tal:condition="criteria">
+    <div id="content-core">
+        <form action=""
+              method="post"
+              tal:attributes="action template/getId"
+              tal:define="criteria context/listSearchCriteria;
+                          errors options/state/getErrors|nothing"
+              tal:condition="criteria">
 
-        <table class="listing" style="font-size: 100%"
-               summary="Criteria configuration"
-               i18n:attributes="summary summary_criteria_configuration;"
-               i18n:domain="atcontenttypes">
+            <table class="listing" style="font-size: 100%"
+                   summary="Criteria configuration"
+                   i18n:attributes="summary summary_criteria_configuration;"
+                   i18n:domain="atcontenttypes">
 
-            <thead>
-                <tr>
-                   <th>&nbsp;</th>
-                   <th i18n:translate="table_criteria_field">Field</th>
-                   <th i18n:translate="table_criterion_details">Criterion Details</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tal:criteria repeat="criterion criteria">
-                    <tr tal:define="oddrow repeat/criterion/odd;"
-                        tal:attributes="class python:test(oddrow, 'even', 'odd')"
-                        style="vertical-align: top;">
-                      <td metal:use-macro="context/atct_macros/macros/criterion_edit" />
+                <thead>
+                    <tr>
+                       <th>&nbsp;</th>
+                       <th i18n:translate="table_criteria_field">Field</th>
+                       <th i18n:translate="table_criterion_details">Criterion Details</th>
                     </tr>
-                </tal:criteria>
-            </tbody>
+                </thead>
 
-        </table>
+                <tbody>
+                    <tal:criteria repeat="criterion criteria">
+                        <tr tal:define="oddrow repeat/criterion/odd;"
+                            tal:attributes="class python:test(oddrow, 'even', 'odd')"
+                            style="vertical-align: top;">
+                          <td metal:use-macro="context/atct_macros/macros/criterion_edit" />
+                        </tr>
+                    </tal:criteria>
+                </tbody>
 
-        <input type="hidden" name="form.submitted" value="1" />
-
-        <div class="formControls">
-
-          <input class="context"
-                 type="submit"
-                 value="Save"
-                 name="form.button.Save"
-                 i18n:attributes="value label_save;"
-                 />
-          <input class="context"
-                 type="submit"
-                 value="Remove"
-                 name="form.button.Remove"
-                 i18n:attributes="value label_remove;"
-                 />
-          <input class="standalone"
-                 type="submit"
-                 value="Cancel"
-                 name="form.button.Cancel"
-                 i18n:attributes="value label_cancel;"
-                 />
-        </div>
-
-    </form>
-
-    <form action=""
-          i18n:domain="atcontenttypes"
-          name="criteria_select"
-          method="post"
-          tal:attributes="action template/getId"
-          tal:define="errors options/state/getErrors|nothing;
-                      fields context/listAvailableFields">
-
-        <fieldset>
-
-            <legend i18n:translate="legend_add_new_search_criteria">Add New Search Criteria</legend>
-
-            <div class="field" style="float:left">
-
-                <label for="field" i18n:translate="label_criteria_field_name">Field name</label>
-
-                <div class="formHelp"
-                     id="fieldHelp"
-                     i18n:translate="help_criteria_field_name">
-                    List Available Fields
-                </div>
-
-                <select name="field"
-                        id="field"
-                        i18n:domain="plone">
-                <tal:options tal:repeat="field fields">
-                    <option value=""
-                            tal:define="explanation python:field[2]"
-                            tal:attributes="value python:field[0];
-                                            title python:explanation"
-                            tal:content="python:field[1]"
-                            tal:condition="python:context.allowedCriteriaForField(field[0])"
-                            i18n:attributes="title"
-                            i18n:translate="">
-                            Field
-                    </option>
-                </tal:options>
-                </select>
-
-            </div>
-
-            <div class="field">
-
-                <label for="criterion_type" i18n:translate="label_criteria_type">Criteria type</label>
-
-                <div class="formHelp" i18n:translate="help_criteria_type">
-                    Criteria does match
-                </div>
-
-                <select name="criterion_type"
-                    id="criterion_type"
-                    tal:define="types context/listSearchCriteriaTypes;"
-                    i18n:domain="plone">
-
-                    <option value="" tal:repeat="type types"
-                                     tal:attributes="value type/name"
-                                     i18n:translate=""
-                                     tal:content="type/description">Type</option>
-
-                </select>
-
-            </div>
+            </table>
 
             <input type="hidden" name="form.submitted" value="1" />
 
             <div class="formControls">
-                <input class="context"
-                       type="submit"
-                       value="Add criteria"
-                       name="form.button.AddCriterion"
-                       i18n:attributes="value label_add_criteria;"
-                       />
+
+              <input class="context"
+                     type="submit"
+                     value="Save"
+                     name="form.button.Save"
+                     i18n:attributes="value label_save;"
+                     />
+              <input class="context"
+                     type="submit"
+                     value="Remove"
+                     name="form.button.Remove"
+                     i18n:attributes="value label_remove;"
+                     />
+              <input class="standalone"
+                     type="submit"
+                     value="Cancel"
+                     name="form.button.Cancel"
+                     i18n:attributes="value label_cancel;"
+                     />
             </div>
 
-        </fieldset>
+        </form>
 
-    </form>
+        <form action=""
+              i18n:domain="atcontenttypes"
+              name="criteria_select"
+              method="post"
+              tal:attributes="action template/getId"
+              tal:define="errors options/state/getErrors|nothing;
+                          fields context/listAvailableFields">
 
-    <form action=""
-          method="post"
-          i18n:domain="atcontenttypes"
-          tal:attributes="action template/getId"
-          tal:define="errors options/state/getErrors|nothing">
+            <fieldset>
 
-        <fieldset>
+                <legend i18n:translate="legend_add_new_search_criteria">Add New Search Criteria</legend>
 
-            <legend i18n:translate="legend_set_sort_order">Set Sort Order</legend>
+                <div class="field" style="float:left">
 
-            <div class="field" style="float:left">
+                    <label for="field" i18n:translate="label_criteria_field_name">Field name</label>
 
-                <label for="field" i18n:translate="label_criteria_field_name">Field name</label>
+                    <div class="formHelp"
+                         id="fieldHelp"
+                         i18n:translate="help_criteria_field_name">
+                        List Available Fields
+                    </div>
 
-                <div class="formHelp"
-                     id="fieldHelpSort"
-                     i18n:translate="help_criteria_field_name">
-                    List Available Fields
+                    <select name="field"
+                            id="field"
+                            i18n:domain="plone">
+                    <tal:options tal:repeat="field fields">
+                        <option value=""
+                                tal:define="explanation python:field[2]"
+                                tal:attributes="value python:field[0];
+                                                title python:explanation"
+                                tal:content="python:field[1]"
+                                tal:condition="python:context.allowedCriteriaForField(field[0])"
+                                i18n:attributes="title"
+                                i18n:translate="">
+                                Field
+                        </option>
+                    </tal:options>
+                    </select>
+
                 </div>
 
-                <select name="field"
-                        id="sortfield"
-                        tal:define="fields context/listSortFields">
+                <div class="field">
 
-                     <option value="no_sort"
-                             tal:attributes="selected python:not context.hasSortCriterion();"
-                             i18n:translate="no_sort_order">No sort order</option>
+                    <label for="criterion_type" i18n:translate="label_criteria_type">Criteria type</label>
 
-                     <tal:block tal:repeat="field fields"
-                                i18n:domain="plone">
-                         <option value=""
-                                 tal:define="explanation python:field[2]"
-                                 tal:attributes="value python:field[0];
-                                                 selected python:context.hasSortCriterion() and context.getSortCriterion().field==field[0];
-                                                 title explanation"
-                                 tal:content="python:field[1]"
-                                 i18n:attributes="title"
-                                 i18n:translate="">Field</option>
-                     </tal:block>
-                </select>
+                    <div class="formHelp" i18n:translate="help_criteria_type">
+                        Criteria does match
+                    </div>
 
-            </div>
+                    <select name="criterion_type"
+                        id="criterion_type"
+                        tal:define="types context/listSearchCriteriaTypes;"
+                        i18n:domain="plone">
+
+                        <option value="" tal:repeat="type types"
+                                         tal:attributes="value type/name"
+                                         i18n:translate=""
+                                         tal:content="type/description">Type</option>
+
+                    </select>
+
+                </div>
+
+                <input type="hidden" name="form.submitted" value="1" />
+
+                <div class="formControls">
+                    <input class="context"
+                           type="submit"
+                           value="Add criteria"
+                           name="form.button.AddCriterion"
+                           i18n:attributes="value label_add_criteria;"
+                           />
+                </div>
+
+            </fieldset>
+
+        </form>
+
+        <form action=""
+              method="post"
+              i18n:domain="atcontenttypes"
+              tal:attributes="action template/getId"
+              tal:define="errors options/state/getErrors|nothing">
+
+            <fieldset>
+
+                <legend i18n:translate="legend_set_sort_order">Set Sort Order</legend>
+
+                <div class="field" style="float:left">
+
+                    <label for="field" i18n:translate="label_criteria_field_name">Field name</label>
+
+                    <div class="formHelp"
+                         id="fieldHelpSort"
+                         i18n:translate="help_criteria_field_name">
+                        List Available Fields
+                    </div>
+
+                    <select name="field"
+                            id="sortfield"
+                            tal:define="fields context/listSortFields">
+
+                         <option value="no_sort"
+                                 tal:attributes="selected python:not context.hasSortCriterion();"
+                                 i18n:translate="no_sort_order">No sort order</option>
+
+                         <tal:block tal:repeat="field fields"
+                                    i18n:domain="plone">
+                             <option value=""
+                                     tal:define="explanation python:field[2]"
+                                     tal:attributes="value python:field[0];
+                                                     selected python:context.hasSortCriterion() and context.getSortCriterion().field==field[0];
+                                                     title explanation"
+                                     tal:content="python:field[1]"
+                                     i18n:attributes="title"
+                                     i18n:translate="">Field</option>
+                         </tal:block>
+                    </select>
+
+                </div>
 
 
-            <div class="field">
-                <label for="reversed" i18n:translate="label_sort_reverse">Reverse</label>
-                <div class="formHelp"
-                     i18n:translate="help_sort_reverse">Reverse display order</div>
+                <div class="field">
+                    <label for="reversed" i18n:translate="label_sort_reverse">Reverse</label>
+                    <div class="formHelp"
+                         i18n:translate="help_sort_reverse">Reverse display order</div>
 
-                <input class="noborder"
-                       type="checkbox"
-                       value="on"
-                       name="reversed"
-                       id="reversed"
-                       tal:attributes="checked python:context.hasSortCriterion() and context.getSortCriterion().getReversed()"
-                       />
-            </div>
+                    <input class="noborder"
+                           type="checkbox"
+                           value="on"
+                           name="reversed"
+                           id="reversed"
+                           tal:attributes="checked python:context.hasSortCriterion() and context.getSortCriterion().getReversed()"
+                           />
+                </div>
 
 
-            <input type="hidden" name="form.submitted" value="1" />
-            <input type="hidden" name="criterion_type" value="ATSortCriterion" />
+                <input type="hidden" name="form.submitted" value="1" />
+                <input type="hidden" name="criterion_type" value="ATSortCriterion" />
 
-            <div class="formControls" style="clear:both">
-                <input class="context"
-                       type="submit"
-                       value="Save"
-                       name="form.button.SetSortCriterion"
-                       i18n:attributes="value label_save;"
-                       i18n:domain="plone"
-                       />
-            </div>
+                <div class="formControls" style="clear:both">
+                    <input class="context"
+                           type="submit"
+                           value="Save"
+                           name="form.button.SetSortCriterion"
+                           i18n:attributes="value label_save;"
+                           i18n:domain="plone"
+                           />
+                </div>
 
-        </fieldset>
+            </fieldset>
 
-    </form>
+        </form>
+    </div>
 
-</div>
+</metal:main>
 </body>
 </html>
