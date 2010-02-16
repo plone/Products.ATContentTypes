@@ -35,7 +35,7 @@
 
     <!-- End of tabs -->
 
-    <div class="documentContent">
+    <div id="content">
 
     <h1 class="documentFirstHeading"
         i18n:domain="atcontenttypes"
