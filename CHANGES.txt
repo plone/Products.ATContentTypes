@@ -4,7 +4,7 @@ Changelog
 2.0b3 - unreleased
 ------------------
 
-- Removing redundant .documentContent markup. 
+- Removing redundant .documentContent markup.
   This refs http://dev.plone.org/plone/ticket/10231.
   [limi]
 
@@ -64,14 +64,14 @@ Changelog
 2.0a5 - 2009-12-16
 ------------------
 
-- Apply patch from mr_savage. Fixes a broken call to normalizeString in 
+- Apply patch from mr_savage. Fixes a broken call to normalizeString in
   atct_topic_view. http://dev.plone.org/plone/ticket/9897
   [esteele]
 
 2.0a4 - 2009-12-03
 ------------------
 
-- Use "Modify portal content" and "Add portal content" for topic and event 
+- Use "Modify portal content" and "Add portal content" for topic and event
   instead of the type-specific permissions previously used.
   [esteele]
 
@@ -126,8 +126,8 @@ Changelog
   site manager.
   [davisagli]
 
-- Subtopics shouldn't always acquire the 'start' query. Fixes  
-  https://dev.plone.org/plone/ticket/8827  
+- Subtopics shouldn't always acquire the 'start' query. Fixes
+  https://dev.plone.org/plone/ticket/8827
   [pelle]
 
 - Use correct location for IObjectEvent.
@@ -163,7 +163,7 @@ Changelog
   of Globals.
   [hannosch]
 
-- Changed parameter name at script getXMLSelectVocab.py from 'method' to 
+- Changed parameter name at script getXMLSelectVocab.py from 'method' to
   'vocab_method' to avoid getting overridden from ZPublisher.HTTPRequest.
   This closes http://dev.plone.org/plone/ticket/6960.
   [igbun]
@@ -301,7 +301,7 @@ Changelog
   of 'http://nohost/plone/login_form', because the latter incorrectly
   redirected to 'http://nohost/plone/localhost'
   [sirgarr]
-   
+
 
 1.3.4 - unreleased
 ------------------
@@ -313,7 +313,7 @@ Changelog
 1.3.3 - 2009-09-06
 ------------------
 
-- Subtopics shouldn't always acquire the 'start' query. Fixes 
+- Subtopics shouldn't always acquire the 'start' query. Fixes
   http://dev.plone.org/plone/ticket/8827
   [pelle]
 
@@ -388,7 +388,7 @@ Changelog
   on edit. This closes http://dev.plone.org/plone/ticket/8336.
   [witsch]
 
-- Removed parameters that has to be controlled through CSS from 
+- Removed parameters that has to be controlled through CSS from
   atct_topic_view.pt. This closes http://dev.plone.org/plone/ticket/6803
   [spliter]
 
@@ -471,7 +471,7 @@ Changelog
 
 - Fix ATLink XSS issue.
   [alecm, reinout]
-  
+
 - Update catalogue indexes and metadata list in collection control panel when
   'All fields' requested.
   [ldr]
