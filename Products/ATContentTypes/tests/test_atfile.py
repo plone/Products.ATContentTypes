@@ -27,6 +27,10 @@ def editATCT(obj):
     dcEdit(obj)
     obj.edit(file=file_text)
 
+class Fakefile(StringIO.StringIO):
+    pass
+
+
 tests = []
 
 class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
@@ -79,9 +83,7 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
 
     def testInvokeFactoryWithFileContents(self):
         # test for Plone tracker #4939
-        class fakefile(StringIO.StringIO):
-            pass
-        fakefile = fakefile()
+        fakefile = Fakefile()
         fakefile.filename = 'some-filename'
         id = self.folder.invokeFactory(self.portal_type,
                                        'image.2005-11-18.4066860572',
@@ -89,9 +91,7 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         self.assertEquals(id, fakefile.filename)
 
     def testUpperCaseFilename(self):
-        class fakefile(StringIO.StringIO):
-            pass
-        fakefile = fakefile()
+        fakefile = Fakefile()
         fakefile.filename = 'Some-filename-With-Uppercase.txt'
         id = 'file.2005-11-18.4066860573'
         self.folder.invokeFactory(self.portal_type, id)
@@ -100,9 +100,7 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         self.failUnless(fakefile.filename in self.folder)
 
     def testUpperCaseFilenameWithFunnyCharacters(self):
-        class fakefile(StringIO.StringIO):
-            pass
-        fakefile = fakefile()
+        fakefile = Fakefile()
         fakefile.filename = 'Zope&Plo?ne .txt'
         id = 'file.2005-11-18.4066860574'
         self.folder.invokeFactory(self.portal_type, id)
@@ -111,9 +109,7 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         self.failUnless('Zope-Plo-ne .txt' in self.folder)
 
     def testWindowsUploadFilename(self):
-        class fakefile(StringIO.StringIO):
-            pass
-        fakefile = fakefile()
+        fakefile = Fakefile()
         fakefile.filename = 'c:\\Windows\\Is\\Worthless\\file.txt'
         id = 'file.2005-11-18.4066860574'
         self.folder.invokeFactory(self.portal_type, id)
@@ -123,9 +119,7 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         self.failUnless('file.txt' in self.folder)
 
     def testWindowsDuplicateFiles(self):
-        class fakefile(StringIO.StringIO):
-            pass
-        fakefile = fakefile()
+        fakefile = Fakefile()
         fakefile.filename = 'c:\\Windows\\Is\\Worthless\\file.txt'
         id = 'file.2005-11-18.4066860574'
         self.folder.invokeFactory(self.portal_type, id)
