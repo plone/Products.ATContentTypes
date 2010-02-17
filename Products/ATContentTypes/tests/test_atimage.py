@@ -81,22 +81,21 @@ class TestIDFromTitle(FunctionalTestCase):
         self.browser.getControl('Save').click()
 
     def test_image_id_from_filename_and_title(self):
-        """Assert image ID is computed from title when provided, from filename when not."""
         # Get ID from filename:
         self._make_image('')
         self.failUnless('canoneye.jpg' in self.browser.url)
-        
+
         # Get ID from title.
         # As a side effect, make sure the ID validator doesn't overzealously
         # deny our upload of something else called canoneye.jpg, even though
         # we're not going to compute its ID from its filename.
         self._make_image('Wonderful Image')
-        self.failUnless('/wonderful-image' in self.browser.url, msg="The expected URL snippet was not in " + self.browser.url)
+        self.failUnless('/wonderful-image' in self.browser.url)
 
     def test_image_id_from_unicode_title(self):
-        """Make sure a unicode filename doesn't throw off the should-I-take-my-ID-from-the-filename logic."""
         self._make_image('', filename=u'Pictüre 1.png'.encode('utf-8'))
-        self.failUnless('Picture%201.png' in self.browser.url, msg="The expected URL snippet was not in " + self.browser.url)
+        normalized = 'picture-1.png'
+        self.failUnless(normalized in self.browser.url)
 
 tests.append(TestIDFromTitle)
 
@@ -239,7 +238,7 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
 
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 1, 'Value is %s' % field.required)
-        self.failUnless(field.default == '', 'Value is %s' % str(field.default))
+        self.failUnless(field.default == None, 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == 0, 'Value is %s' % field.searchable)
         self.failUnless(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
