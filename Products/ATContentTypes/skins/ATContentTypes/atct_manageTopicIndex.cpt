@@ -16,7 +16,8 @@
 
     <!-- simulating views on the topics pages until we have real objects. -->
     <div id="edit-bar">
-        <ul class="contentViews"
+        <h5 class="hiddenStructure">Views</h5>
+        <ul id="content-views" class="contentViews"
             i18n:domain="atcontenttypes">
             <li class="selected">
               <a href=""

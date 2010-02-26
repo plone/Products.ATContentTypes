@@ -4,6 +4,10 @@ Changelog
 2.0b4 - unreleased
 ------------------
 
+- Polished markup for "tabs simulation" on collection management screens to
+  play nice in Sunburst.
+  [spliter]
+
 - Fixed validation for atct_manageTopicMetadata.cpt and
   atct_manageTopicIndex.cpt
   [spliter]
