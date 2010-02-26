@@ -4,6 +4,15 @@ Changelog
 2.0b4 - unreleased
 ------------------
 
+- Fixed validation for atct_manageTopicMetadata.cpt and
+  atct_manageTopicIndex.cpt
+  [spliter]
+
+- Updating atct_manageTopicMetadata.cpt and atct_manageTopicIndex.cpt to
+  recent markup conventions. References
+  http://dev.plone.org/plone/ticket/9981.
+  [spliter]
+
 
 2.0b3 - 2010-02-17
 ------------------
