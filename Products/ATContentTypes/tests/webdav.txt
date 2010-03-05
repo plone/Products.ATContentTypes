@@ -83,10 +83,10 @@ Document
   ('test_user_1_',)
 
   >>> print document.EffectiveDate(zone='UTC')
-  2005-01-01 00:00:00
+  2005-01-01...00:00:00...
 
   >>> print document.ExpirationDate(zone='UTC')
-  2005-02-01 00:00:00
+  2005-02-01...00:00:00...
 
   >>> print document.Language()
   de

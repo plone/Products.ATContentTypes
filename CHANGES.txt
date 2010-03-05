@@ -4,6 +4,11 @@ Changelog
 2.0b4 - unreleased
 ------------------
 
+- Fix issues with sliding modification/publishing dates by using `DateTime`'s
+  `ISO8601` method instead of `ISO`, which doesn't include time zones.
+  Refs http://dev.plone.org/plone/ticket/10140, 10141 & 10171.
+  [davisagli, witsch]
+
 - Polished markup for "tabs simulation" on collection management screens to
   play nice in Sunburst.
   [spliter]
