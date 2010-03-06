@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0b5 - unreleased
+2.0b5 - 2010-03-07
 ------------------
 
 - Adjust the tests regarding content id generation to expect the re-instated,
