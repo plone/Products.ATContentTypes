@@ -94,7 +94,7 @@ class TestIDFromTitle(FunctionalTestCase):
 
     def test_image_id_from_unicode_title(self):
         self._make_image('', filename=u'Pictüre 1.png'.encode('utf-8'))
-        normalized = 'picture-1.png'
+        normalized = 'Picture%201.png'
         self.failUnless(normalized in self.browser.url)
 
 tests.append(TestIDFromTitle)

@@ -93,26 +93,20 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
     def testUpperCaseFilename(self):
         fakefile = Fakefile()
         fakefile.filename = 'Some-filename-With-Uppercase.txt'
-        normalized = 'some-filename-with-uppercase.txt'
         id = 'file.2005-11-18.4066860573'
         self.folder.invokeFactory(self.portal_type, id)
         self.folder[id].setFile(fakefile)
         self.failIf(id in self.folder)
-        self.failUnless(normalized in self.folder)
-        obj = self.folder[normalized]
-        self.assertEquals(fakefile.filename, obj.getFilename())
+        self.failUnless(fakefile.filename in self.folder)
 
     def testUpperCaseFilenameWithFunnyCharacters(self):
         fakefile = Fakefile()
         fakefile.filename = 'Zope&Plo?ne .txt'
-        normalized = 'zope-plo-ne.txt'
         id = 'file.2005-11-18.4066860574'
         self.folder.invokeFactory(self.portal_type, id)
         self.folder[id].setFile(fakefile)
         self.failIf(id in self.folder)
-        self.failUnless(normalized in self.folder)
-        obj = self.folder[normalized]
-        self.assertEquals(fakefile.filename, obj.getFilename())
+        self.failUnless('Zope-Plo-ne .txt' in self.folder)
 
     def testWindowsUploadFilename(self):
         fakefile = Fakefile()
@@ -158,7 +152,7 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
 
         self.failUnless(ILayerContainer.providedBy(field))
         self.failUnless(field.required == 1, 'Value is %s' % field.required)
-        self.failUnless(field.default == None, 'Value is %s' % str(field.default))
+        self.failIf(field.default, 'Value is %s' % str(field.default))
         self.failUnless(field.searchable == True, 'Value is %s' % field.searchable)
         self.failUnless(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
