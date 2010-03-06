@@ -4,6 +4,10 @@ Changelog
 2.0b5 - unreleased
 ------------------
 
+- Adjust the tests regarding content id generation to expect the re-instated,
+  previous behavior.  Refs http://dev.plone.org/plone/ticket/8591
+  [witsch]
+
 
 2.0b4 - 2010-03-05
 ------------------
