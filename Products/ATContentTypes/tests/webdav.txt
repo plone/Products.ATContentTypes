@@ -82,10 +82,10 @@ Document
   >>> print document.Creators()
   ('test_user_1_',)
 
-  >>> print document.EffectiveDate(zone='UTC')
+  >>> print document.EffectiveDate()
   2005-01-01...00:00:00...
 
-  >>> print document.ExpirationDate(zone='UTC')
+  >>> print document.ExpirationDate()
   2005-02-01...00:00:00...
 
   >>> print document.Language()

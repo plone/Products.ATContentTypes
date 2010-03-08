@@ -4,6 +4,10 @@ Changelog
 2.0b6 - unreleased
 ------------------
 
+- Adjust the tests now that `DateTime` objects are stored with a time zone.
+  Refs http://dev.plone.org/plone/ticket/10141
+  [witsch]                                       
+
 
 2.0b5 - 2010-03-07
 ------------------
