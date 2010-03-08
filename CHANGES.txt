@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0b6 - unreleased
+2.0b6 - 2010-03-08
 ------------------
 
 - Adjust the tests now that `DateTime` objects are stored with a time zone.
