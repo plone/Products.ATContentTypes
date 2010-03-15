@@ -38,26 +38,6 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
         d = getattr(self.folder, 'document')
         d.setTitle("HTML end tags start with </ and end with >")
         self.assertEqual(d.Title(), "HTML end tags start with </ and end with >")
-    
-    def test_dt2DT2dtTZbug(self):
-        # Tests problems with conversion between datetime and DateTime becoming naive of timezones
-        import DateTime
-        import datetime
-        from Products.ATContentTypes.utils import DT2dt,dt2DT
-        PartyBST = DateTime.DateTime("2007-07-19 20:00 GMT+0100")
-        PartyUTC = DateTime.DateTime("2007-07-19 19:00 GMT+0000")
-        PartyEDT = DateTime.DateTime("2007-07-19 15:00 GMT-0400")
-        self.assertEqual(PartyUTC, PartyBST)
-        self.assertEqual(PartyUTC, PartyEDT)
-        partyUTC = DT2dt(PartyUTC)
-        self.assertEqual(str(dt2DT(partyUTC)), str(PartyUTC))
-        partyEDT = DT2dt(PartyEDT)
-        self.assertEqual(str(dt2DT(partyEDT)), str(PartyEDT))
-        partyBST = DT2dt(PartyBST)
-        self.assertEqual(str(dt2DT(partyBST)), str(PartyBST))
-        self.assertNotEqual(str(dt2DT(partyEDT)), str(PartyBST))
-        self.assertNotEqual(str(dt2DT(partyUTC)), str(PartyBST))
-        self.assertNotEqual(str(dt2DT(partyEDT)), str(PartyUTC))
 
     def test_validation_layer_from_id_field_from_base_schema_was_initialized(self):
         field = ATContentTypeSchema['id']
