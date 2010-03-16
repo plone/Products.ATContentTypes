@@ -7,8 +7,6 @@ from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 from Products.Archetypes.interfaces import IATHistoryAware
 from Products.CMFPlone.interfaces import ISelectableConstrainTypes
 
-
-
 class IATContentType(ISelectableBrowserDefault, IBaseContent):
     """Marker interface for AT Content Types
     """
@@ -52,10 +50,6 @@ class IHistoryAware(IATHistoryAware):
         """Get history as unified diff
         """
 
-class ICalendarSupport(Interface):
-    """Calendar import/export
-    """
-
 class ITextContent(Interface):
     """Interface for types containing text
     """
@@ -79,4 +73,3 @@ class ITextContent(Interface):
 class IATCTTool(Interface):
     """
     """
-
