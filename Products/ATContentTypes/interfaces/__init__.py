@@ -7,8 +7,7 @@ from Products.ATContentTypes.interfaces.interfaces import IATCTTool
 
 from Products.ATContentTypes.interfaces.document import IATDocument
 
-# BBB
-from plone.app.event import IATEvent
+from Products.ATContentTypes.interfaces.event import IATEvent
 
 from Products.ATContentTypes.interfaces.file import IFileContent
 from Products.ATContentTypes.interfaces.file import IATFile
