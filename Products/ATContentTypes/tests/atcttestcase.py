@@ -1,12 +1,9 @@
 from Testing import ZopeTestCase
 from Products.PloneTestCase import PloneTestCase
-from Products.PloneTestCase.layer import PloneSiteLayer
 from Products.PloneTestCase.setup import default_user
 from Products.PloneTestCase.setup import default_password
 from Products.PloneTestCase.setup import portal_name
 from Products.PloneTestCase.setup import portal_owner
-ZopeTestCase.installProduct('SiteAccess')
-PloneTestCase.setupPloneSite()
 
 import os
 
@@ -181,8 +178,6 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
 
 class ATCTFieldTestCase(ATCTSiteTestCase, BaseSchemaTest):
     """ ATContentTypes test including AT schema tests """
-
-    layer = PloneSiteLayer
 
     def afterSetUp(self):
         # initalize the portal but not the base schema test
