@@ -35,7 +35,7 @@ def wireAddPermissions():
     Must be called **after** all types are registered!
     """
     global permissions
-    atct_types = listTypes(PROJECTNAME)
+    atct_types = listTypes(PROJECTNAME) + listTypes('plone.app.event')
     for atct in atct_types:
         if IATTopic.implementedBy(atct['klass']):
             permission = AddTopics
