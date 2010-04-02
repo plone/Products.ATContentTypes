@@ -13,6 +13,7 @@
     
         <metal:listingmacro define-macro="listing">
         <tal:topiccontents define="topicContents python:here.queryCatalog(batch=True);
+                                   use_view_action site_properties/typesUseViewActionInListings|python:();
                                    batch topicContents;">
 
         <tal:listing condition="topicContents">
@@ -66,41 +67,37 @@
                                         define="normalizeString nocall:context/@@plone/normalizeString;
                                                 url obj/getURL;
                                                 obj_type obj/portal_type;
+                                                obj_description obj/Description;
                                                 obj_typeinfo python: here.portal_types.getTypeInfo(obj_type);
-                                                icon python:plone_view.getIcon(obj);
+                                                obj_icon python:plone_view.getIcon(obj);
                                                 obj_wf_state obj/review_state|python: wtool.getInfoFor(obj, 'review_state', '');
                                                 obj_wf_state_class python:'state-' + normalizeString(obj_wf_state);
+                                                obj_url python:test(obj_type in use_view_action, url+'/view', url);
                                                 title_or_id obj/pretty_title_or_id">
                             <tal:block define="value python: getattr(obj, field, None)">
                                 <td tal:condition="python: field != 'Title'"
                                     tal:content="python:here.formatCatalogMetadata(value)"
                                     i18n:translate=""/>
                                 <td tal:condition="python: field == 'Title'">
-                                    <a href="#" tal:attributes="href url">
+                                    <a href="#" tal:attributes="href obj_url;
+                                                                title obj_description;">
                                         <img src="#"
                                              height="16"
                                              width="16"
-                                             tal:condition="icon/url"
-                                             tal:attributes="src icon/url;
-                                                             alt obj/Type|obj_type"/>
+                                             tal:condition="obj_icon/url"
+                                             tal:attributes="src obj_icon/url;
+                                                             alt obj_icon/description;
+                                                             title obj_icon/title;
+                                                             width obj_icon/width;
+                                                             height obj_icon/height;"/>
                                     </a>
-
-                                    <a href="#" tal:condition="python: obj.portal_type not in ['Link', 'Image']"
-                                                tal:attributes="href url;
-                                                                class obj_wf_state_class"
-                                                tal:content="title_or_id" />
-
-                                    <a href="#" tal:condition="python: obj.portal_type == 'Image'"
-                                                tal:attributes="href string:${url}/view;
-                                                                class obj_wf_state_class"
-                                                tal:content="title_or_id" />
-
                                     <a href="#"
-                                       tal:condition="python: obj.portal_type == 'Link'"
-                                       tal:attributes="href obj/getRemoteUrl;
-                                                       class string:${obj_wf_state_class} link-plain"
-                                       class="link-plain"
-                                       tal:content="title_or_id" />
+                                       tal:attributes="href obj_url;
+                                                       class string:${obj_wf_state_class};
+                                                       title obj_description;"
+                                       tal:content="title_or_id">
+                                        Item Title
+                                    </a>
                                 </td>
                             </tal:block>
                             </tal:fields>
