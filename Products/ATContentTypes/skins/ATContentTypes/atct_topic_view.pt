@@ -92,13 +92,23 @@
                                                              height obj_icon/height;"/>
                                     </a>
                                     <a href="#"
+                                       tal:condition="python: obj.portal_type != 'Link'"
                                        tal:attributes="href obj_url;
                                                        class string:${obj_wf_state_class};
                                                        title obj_description;"
                                        tal:content="title_or_id">
                                         Item Title
                                     </a>
-                                </td>
+
+                                    <a href="#"
+                                       tal:condition="python: obj.portal_type == 'Link'"
+                                       tal:attributes="href obj/getRemoteUrl;
+                                                       class string:${obj_wf_state_class} link-plain; 
+                                                       title obj_description;"
+                                       class="link-plain"
+                                       tal:content="title_or_id" />
+
+                   </td>
                             </tal:block>
                             </tal:fields>
                         </tr>

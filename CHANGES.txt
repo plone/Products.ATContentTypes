@@ -3,6 +3,11 @@ Changelog
 
 2.0b7 - Unreleased
 ------------------
+- Fixed displaying the links and icons when 'display as table' is checked. Links 
+  are shown using 'typesUseViewActionInListings', icons are shown using 
+  plone_view.getIcon.
+  [kcleong]
+
 
 2.0b6 - 2010-03-08
 ------------------
