@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.0b8 - unreleased
+------------------
+
+- Fixed Collection control panel to show the prefs portlet again.
+  [davisagli]
+
 2.0b7 - Unreleased
 ------------------
 - Fixed displaying the links and icons when 'display as table' is checked. Links 
