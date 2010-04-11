@@ -143,7 +143,7 @@
 
     <metal:body define-macro="folderlisting_macro">
         <tal:subtopics condition="here/hasSubtopics|nothing"
-                       define="folderContents here/getFolderContents">
+                       define="folderContents here/listSubtopics|nothing">
             <h2 i18n:domain="atcontenttypes"
                 i18n:translate="heading_contained_collections">
                 Also in this section
