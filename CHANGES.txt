@@ -4,6 +4,9 @@ Changelog
 2.0b9 - Unreleased
 ------------------
 
+- Values in dropdown "criterion_type" in criterion_edit_form template are now
+  properly translated. This closes http://dev.plone.org/plone/ticket/9715
+  [vincentfretin]
 
 2.0b8 - 2010-05-01
 ------------------

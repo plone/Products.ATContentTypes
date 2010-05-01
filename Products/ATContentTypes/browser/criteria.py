@@ -14,6 +14,6 @@ class JSONCriteriaForField(BrowserView):
         return json.dumps([
             dict(
                 value=item, 
-                label=translate(vocab.getValue(item), self.request)
+                label=translate(vocab.getValue(item), domain="plone", context=self.request)
             ) for item in vocab
         ])
