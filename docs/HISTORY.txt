@@ -1,6 +1,11 @@
 1.3.5 - unreleased
 ==================
 
+- Values in dropdown "criterion_type" in criterion_edit_form template are now
+  properly translated. This closes http://dev.plone.org/plone/ticket/9715
+  Backported from trunk, fixed in 2.0b9.
+  [vincentfretin]
+
 - Respect "show content type icons" setting for collection table view.
   This fixes http://dev.plone.org/plone/ticket/9630.
   [dukebody]
