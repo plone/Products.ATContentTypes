@@ -1,5 +1,5 @@
-1.3.5 - unreleased
-==================
+1.3.5 -2010-05-01
+=================
 
 - Values in dropdown "criterion_type" in criterion_edit_form template are now
   properly translated. This closes http://dev.plone.org/plone/ticket/9715
