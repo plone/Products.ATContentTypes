@@ -1,12 +1,13 @@
 Changelog
 =========
 
-2.0b9 - Unreleased
+2.0b9 (2010-05-01)
 ------------------
 
 - Values in dropdown "criterion_type" in criterion_edit_form template are now
   properly translated. This closes http://dev.plone.org/plone/ticket/9715
   [vincentfretin]
+
 
 2.0b8 - 2010-05-01
 ------------------
@@ -14,7 +15,8 @@ Changelog
 - Check the ISO of the stored date, not the ISO8601 (with timezone) that is
   now returned by the accessors
   [davisagli]
-  
+ 
+ 
 2.0b7 - 2010-04-12
 ------------------
 
