@@ -455,7 +455,7 @@ class ATTopic(ATCTFolder):
                     elif isinstance(arg, StringType) and isinstance(v, (ListType,TupleType)) and arg in v:
                         kw[k] = [arg]
                     else:
-                        kw[k]=v
+                        kw[k]=arg
                 else:
                     kw[k]=v
             #kw.update(q)
