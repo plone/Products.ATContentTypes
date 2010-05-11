@@ -1,7 +1,9 @@
 1.3.6 - unreleased
 ==================
 
-- Nothing changed yet.
+- Topic.queryCatalog kwargs limit existing criterias for real. This is a merge
+  of collective.dancing topic monkey patch with a test.
+  [toutpt] [vincentfretin]
 
 1.3.5 - 2010-05-01
 ==================

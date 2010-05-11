@@ -447,25 +447,15 @@ class ATTopic(ATCTFolder):
             results=LazyCat([[]])
         else:
             # Allow parameters to further limit existing criterias
-            for k,v in q.items():
-                if kw.has_key(k):
-                    arg = kw.get(k)
-                    if isinstance(arg, (ListType,TupleType)) and isinstance(v, (ListType,TupleType)):
-                        kw[k] = [x for x in arg if x in v]
-                    elif isinstance(arg, StringType) and isinstance(v, (ListType,TupleType)) and arg in v:
-                        kw[k] = [arg]
-                    else:
-                        kw[k]=arg
-                else:
-                    kw[k]=v
-            #kw.update(q)
+            q.update(kw)
+    
             if not batch and limit and max_items and self.hasSortCriterion():
                 # Sort limit helps Zope 2.6.1+ to do a faster query
                 # sorting when sort is involved
                 # See: http://zope.org/Members/Caseman/ZCatalog_for_2.6.1
-                kw.setdefault('sort_limit', max_items)
-            __traceback_info__ = (self, kw,)
-            results = pcatalog.searchResults(REQUEST, **kw)
+                q.setdefault('sort_limit', max_items)
+            __traceback_info__ = (self, q)
+            results = pcatalog.searchResults(REQUEST, **q)
 
 
         if limit and not batch:
