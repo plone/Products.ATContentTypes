@@ -1,4 +1,4 @@
-1.3.6 - unreleased
+1.3.6 - 2010-05-12
 ==================
 
 - Topic.queryCatalog kwargs limit existing criterias for real. This is a merge
