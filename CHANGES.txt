@@ -4,6 +4,13 @@ Changelog
 2.0b10 (unreleased)
 -------------------
 
+- Products.ATContentTypes.content.folder.ATBTreeFolder is now deprecated.
+  Normal ATFolders (as implemented in plone.app.folder) are now suitable for
+  storing large numbers of items in most cases.  If you need a folder that
+  doesn't track order at all, use a normal ATFolder (from plone.app.folder)
+  with the ordering attribute set to u'unordered'.
+  [davisagli]
+
 - Merge fix of test_queryCatalogOverrideCriteria from 1.3.6 branch
   [toutpt]
 

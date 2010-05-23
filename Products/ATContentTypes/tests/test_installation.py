@@ -28,8 +28,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
     def test_installedAllTypes(self):
         # test that all types are installed well
-        ids = ('Document', 'File',
-            'Folder', 'Image', 'Large Plone Folder', 'Link',
+        ids = ('Document', 'File', 'Folder', 'Image', 'Link',
             'News Item', 'Topic', 'Event')
         for i in ids:
             self.failUnless(i in self.ttool)

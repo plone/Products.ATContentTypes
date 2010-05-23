@@ -13,6 +13,8 @@ class IntegrationTestCase(atcttestcase.ATCTFunctionalSiteTestCase):
     views = ()
 
     def afterSetUp(self):
+        super(IntegrationTestCase, self).afterSetUp()
+        
         # basic data
         self.folder_url = self.folder.absolute_url()
         self.folder_path = '/%s' % self.folder.absolute_url(1)

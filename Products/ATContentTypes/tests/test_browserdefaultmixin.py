@@ -130,12 +130,10 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         # type
         af = self.af
         af.setLayout('folder_tabular_view')
-        # Create a subobject of a different type (need to enable LPF globally)
-        lpf_fti = self.portal.portal_types['Large Plone Folder']
-        lpf_fti.global_allow = 1
-        af.invokeFactory('Large Plone Folder', 'subfolder', title='folder 2')
-        subfolder = af.subfolder
-        self.failIf(subfolder.getLayout() == 'folder_tabular_view')
+        # Create a subobject of a different type
+        af.invokeFactory('Document', 'page', title='page')
+        page = af.page
+        self.failIf(page.getLayout() == 'folder_tabular_view')
 
 tests.append(TestBrowserDefaultMixin)
 

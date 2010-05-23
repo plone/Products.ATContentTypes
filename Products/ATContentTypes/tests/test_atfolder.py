@@ -1,9 +1,6 @@
 from Testing import ZopeTestCase # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
-import transaction
-from Acquisition import aq_base
-
 from Products.Archetypes.atapi import *
 from Products.ATContentTypes.tests.utils import dcEdit
 
@@ -12,8 +9,6 @@ from Products.ATContentTypes.content.folder import ATBTreeFolder
 from OFS.interfaces import IOrderedContainer as IOrderedContainer
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
-
-from zope.interface.verify import verifyClass
 
 from zope.interface.verify import verifyObject
 from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
@@ -176,9 +171,9 @@ class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
         
     def test_selectViewTemplate(self):
         # create an object using the createObject script
-        response = self.publish(self.obj_path +
-                                '/selectViewTemplate?templateId=atct_album_view',
-                                self.owner_auth)
+        self.publish(self.obj_path +
+                     '/selectViewTemplate?templateId=atct_album_view',
+                     self.owner_auth)
         self.failUnlessEqual(self.obj.getLayout(), 'atct_album_view')
 
 tests.append(TestATFolderFunctional)
@@ -187,12 +182,6 @@ class TestATBTreeFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
 
     portal_type = 'Large Plone Folder'
     views = ('folder_listing', 'atct_album_view', )
-
-    def afterSetUp(self):
-        # enable global allow for BTree Folder
-        fti = getattr(self.portal.portal_types, self.portal_type)
-        fti.manage_changeProperties(global_allow=1)
-        atctftestcase.ATCTIntegrationTestCase.afterSetUp(self)
 
     def test_templatemixin_view_without_view(self):
         # template mixin magic should work

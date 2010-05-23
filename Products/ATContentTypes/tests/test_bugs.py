@@ -21,7 +21,6 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
             'Event' : default,
             'File' : (),
             'Folder' : default,
-            'Large Plone Folder' : default,
             'Image' : (),
             'Link' : default,
             'News Item' : default,
@@ -42,7 +41,6 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
     def test_dt2DT2dtTZbug(self):
         # Tests problems with conversion between datetime and DateTime becoming naive of timezones
         import DateTime
-        import datetime
         from Products.ATContentTypes.utils import DT2dt,dt2DT
         PartyBST = DateTime.DateTime("2007-07-19 20:00 GMT+0100")
         PartyUTC = DateTime.DateTime("2007-07-19 19:00 GMT+0000")
