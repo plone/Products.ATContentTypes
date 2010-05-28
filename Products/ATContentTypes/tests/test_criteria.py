@@ -506,20 +506,6 @@ class TestATPortalTypeCriterion(CriteriaTest):
         type_names = self.dummy.getCurrentValues().values()
         self.failUnless(type_names.index('Page') > type_names.index('Event'))
 
-    def test_types_v_portaltypes(self):
-        # Using the Types index as field should cause the vocabulary to use the
-        # type Title rather than the type name
-        self.dummy.Schema()['field'].set(self.dummy,'portal_type')
-        type_ids = self.dummy.getCurrentValues().keys()
-        self.failUnless('Large Plone Folder' in type_ids)
-        self.failUnless('Large Folder' not in type_ids)
-        self.dummy.Schema()['field'].set(self.dummy,'Type')
-        type_ids = self.dummy.getCurrentValues().keys()
-        self.failUnless('Large Plone Folder' not in type_ids)
-        self.failUnless('Large Folder' in type_ids)
-        # ensure that blacklisted types aren't here either
-        self.failUnless('Simple String Criterion' not in type_ids)
-
     def test_type_ids_names(self):
         self.dummy.Schema()['field'].set(self.dummy, 'Type')
         type_ids = self.dummy.getCurrentValues().keys()
@@ -536,6 +522,8 @@ class TestATPortalTypeCriterion(CriteriaTest):
         self.failUnless('Page' in type_names)
         self.failIf('Page' in type_ids)
         self.failIf('Document' in type_names)
+        # ensure that blacklisted types aren't included
+        self.failIf('Simple String Criterion' in type_ids)
 
 
 tests.append(TestATPortalTypeCriterion)

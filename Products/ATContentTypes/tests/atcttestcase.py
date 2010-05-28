@@ -42,9 +42,25 @@ from Products.ATContentTypes.tests.utils import idValidator
 test_home = os.path.dirname(__file__)
 
 class ATCTSiteTestCase(PloneTestCase.PloneTestCase):
-    pass
+    
+    def afterSetUp(self):
+        # BBB - make sure we can regression test the deprecated ATBTreeFolder class
+        user = self.portal.acl_users.getUserById(default_user)
+        orig_roles = self.portal.acl_users.portal_role_manager.getRolesForPrincipal(user)
+        self.setRoles(['Manager'])
+        ttool = self.portal.portal_types
+        cb_copy_data = ttool.manage_copyObjects(['Folder'])
+        paste_data = ttool.manage_pasteObjects(cb_copy_data)
+        temp_id = paste_data[0]['new_id']
+        ttool.manage_renameObject(temp_id, 'Large Plone Folder')
+        lpf = ttool['Large Plone Folder']
+        lpf.title = 'Large Folder'
+        lpf.product = 'ATContentTypes'
+        lpf.content_meta_type = 'ATBTreeFolder'
+        lpf.factory = 'addATBTreeFolder'
+        self.setRoles(orig_roles)
 
-class ATCTFunctionalSiteTestCase(PloneTestCase.FunctionalTestCase):
+class ATCTFunctionalSiteTestCase(PloneTestCase.FunctionalTestCase, ATCTSiteTestCase):
     pass
 
 class ATCTTypeTestCase(ATCTSiteTestCase):
@@ -60,7 +76,7 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
     meta_type = ''
 
     def afterSetUp(self):
-        #self.setRoles(['Manager', 'Member'])
+        super(ATCTTypeTestCase, self).afterSetUp()
         self._ATCT = self._createType(self.folder, self.portal_type, 'ATCT')
 
     def _createType(self, context, portal_type, id, **kwargs):
@@ -146,7 +162,7 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
     def test_idValidation(self):
         self.setRoles(['Manager', 'Member']) # for ATTopic
         asdf = self._createType(self.folder, self.portal_type, 'asdf')
-        asdf2 = self._createType(self.folder, self.portal_type, 'asdf2')
+        self._createType(self.folder, self.portal_type, 'asdf2')
         self.setRoles(['Member'])
 
         request = self.app.REQUEST

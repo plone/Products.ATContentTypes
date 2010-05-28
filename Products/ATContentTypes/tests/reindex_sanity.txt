@@ -300,10 +300,7 @@ Tests for ATBTreeFolder
 -----------------------
 
 Simple invokeFactory call, without renaming or fancy extra field
-setting, but we need to allow the creation of the Large Folders first:
-
-  >>> tt = getToolByName(self.portal, 'portal_types')
-  >>> tt['Large Plone Folder'].global_allow = True
+setting:
 
   >>> _ = self.folder.invokeFactory(type_name='Large Plone Folder',
   ...                               id='new_btree_folder1')

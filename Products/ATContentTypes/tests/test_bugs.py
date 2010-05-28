@@ -21,7 +21,6 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
             'Event' : default,
             'File' : (),
             'Folder' : default,
-            'Large Plone Folder' : default,
             'Image' : (),
             'Link' : default,
             'News Item' : default,

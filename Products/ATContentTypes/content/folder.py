@@ -91,7 +91,14 @@ registerATCT(ATFolder, PROJECTNAME)
 
 
 class ATBTreeFolder(ATCTBTreeFolder):
-    """A folder suitable for holding a very large number of items"""
+    """A folder suitable for holding a very large number of items.
+    
+    Note -- DEPRECATED.  Will be removed in Plone 5.
+    Normal folders (as implemented in plone.app.folder) are now suitable for
+    storing large numbers of items in most cases.  If you need a folder that
+    doesn't track order at all, use a normal folder (from plone.app.folder)
+    with the ordering attribute set to u'unordered'.
+    """
     schema         =  ATBTreeFolderSchema
 
     portal_type    = 'Large Plone Folder'

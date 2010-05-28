@@ -82,10 +82,10 @@ Document
   >>> print document.Creators()
   ('test_user_1_',)
 
-  >>> print document.EffectiveDate()
+  >>> print document.effective_date.ISO()
   2005-01-01...00:00:00...
 
-  >>> print document.ExpirationDate()
+  >>> print document.expiration_date.ISO()
   2005-02-01...00:00:00...
 
   >>> print document.Language()
@@ -524,10 +524,6 @@ BTreeFolder
 
 Need to make a BTreeFolder manually, and then do a MKCOL inside it:
 
-  >>> lpf = self.portal.portal_types['Large Plone Folder']
-  >>> lpf_allow = lpf.global_allow
-  >>> lpf.global_allow = True
-
   >>> _ = self.folder.invokeFactory('Large Plone Folder', 'test-btree')
 
   >>> print http(r"""
@@ -540,8 +536,6 @@ Need to make a BTreeFolder manually, and then do a MKCOL inside it:
 
   >>> self.folder['test-btree']['test-btreefolder-name'].Title()
   'test-btreefolder-name'
-
-  >>> lpf.global_allow = lpf_allow
 
 PUT Mangling
 ------------

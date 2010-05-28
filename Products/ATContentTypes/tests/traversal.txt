@@ -30,9 +30,6 @@ is acquired or not acquired at the right times.
   >>> self.portal.invokeFactory('Folder', 'simple_folder')
   'simple_folder'
 
-  >>> tt = getToolByName(self.portal, 'portal_types')
-  >>> tt['Large Plone Folder'].global_allow = True
-
   >>> self.portal.invokeFactory('Large Plone Folder', 'simple_btree_folder')
   'simple_btree_folder'
 

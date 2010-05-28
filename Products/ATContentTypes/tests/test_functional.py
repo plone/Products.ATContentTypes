@@ -11,7 +11,7 @@ FILES = [
     'traversal.txt',
 ]
 
-from zope.testing import doctest
+import doctest
 OPTIONFLAGS = (doctest.ELLIPSIS |
                doctest.NORMALIZE_WHITESPACE |
                doctest.REPORT_NDIFF)
