@@ -4,6 +4,10 @@ Changelog
 2.0b10 (unreleased)
 -------------------
 
+- Ensure text is shown for the various Collection views. 
+  Related to http://dev.plone.org/plone/changeset/36850
+  Which fixed http://dev.plone.org/plone/ticket/10226
+
 - Products.ATContentTypes.content.folder.ATBTreeFolder is now deprecated.
   Normal ATFolders (as implemented in plone.app.folder) are now suitable for
   storing large numbers of items in most cases.  If you need a folder that
