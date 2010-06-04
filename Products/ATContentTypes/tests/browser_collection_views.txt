@@ -70,10 +70,3 @@ Lets ensure text is shown when Collection is default view of a folder
     True
     >>> collection_text in browser.contents
     True
-
-
-Print it out:
-
-    >>> open('/tmp/test-output.html', 'w').write(browser.contents)
-    
-    
