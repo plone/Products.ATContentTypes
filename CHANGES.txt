@@ -4,6 +4,9 @@ Changelog
 2.0b11 (Unreleased)
 -------------------
 
+- Avoid testing dependency on zope.app.testing.
+  [hannosch]
+
 2.0b10 (2010-06-03)
 -------------------
 

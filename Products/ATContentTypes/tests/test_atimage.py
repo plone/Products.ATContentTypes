@@ -303,8 +303,8 @@ class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
         # Should fail for anonymous
         response3 = self.publish(self.obj_path+'/image')
         self.failUnlessEqual(response3.getStatus(), 302)
-        self.failUnlessEqual(response3.getHeader('bobo-exception-type'),
-            'Unauthorized')
+        bobo_exception = response3.getHeader('bobo-exception-type')
+        self.failUnless('Unauthorized' in bobo_exception)
 
 tests.append(TestATImageFunctional)
 

@@ -23,7 +23,6 @@ setup(name='Products.ATContentTypes',
         test=[
             'plone.app.blob',
             'zope.annotation',
-            'zope.app.testing',
             'zope.testing',
             'Products.PloneTestCase',
         ]
