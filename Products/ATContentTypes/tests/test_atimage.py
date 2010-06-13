@@ -15,10 +15,15 @@ from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
-from Products.Five.testbrowser import Browser
 from Products.PloneTestCase.PloneTestCase import FunctionalTestCase, setupPloneSite
 from Testing import ZopeTestCase # side effect import. leave it here.
 from zope.interface.verify import verifyObject
+
+# BBB Zope 2.12
+try:
+    from Testing.testbrowser import Browser
+except ImportError:
+    from Products.Five.testbrowser import Browser
 
 # third party extension
 import exif

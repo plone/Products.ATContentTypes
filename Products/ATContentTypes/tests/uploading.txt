@@ -4,12 +4,18 @@ Uploading the contents of a document
 Test setup.
 
     >>> import cStringIO
-    >>> from Products.Five.testbrowser import Browser
+
+    # BBB Zope 2.12
+    >>> try:
+    ...     from Testing.testbrowser import Browser
+    ... except ImportError:
+    ...     from Products.Five.testbrowser import Browser
+
     >>> browser = Browser()
     >>> browser.open('http://nohost/plone/login')
-    
+
 Log in.
-    
+
     >>> from Products.PloneTestCase.setup import portal_owner, default_password
     >>> browser.getControl('Login Name').value = portal_owner
     >>> browser.getControl('Password').value = default_password
