@@ -91,7 +91,7 @@
                       </a>
                   </div>
 
-                  <table class="listing" 
+                  <table class="listing nosort" 
                           summary="Indices configuration" i18n:attributes="summary summary_indices_configuration;">
                     <thead>
                         <tr>

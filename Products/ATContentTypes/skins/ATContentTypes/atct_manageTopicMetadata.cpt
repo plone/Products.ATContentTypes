@@ -89,11 +89,11 @@
                       </a>
                   </div>
 
-                  <table class="listing"
+                  <table class="listing nosort"
                          summary="Metadata configuration" i18n:attributes="summary summary_metadata_configuration;">
                     <thead>
                         <tr>
-                            <th i18n:translate="listingheader_enabled">Enabled?</th>
+                            <th class="listingCheckbox" i18n:translate="listingheader_enabled">Enabled?</th>
                             <th i18n:translate="listingheader_catalog_metadata">Catalog metadata</th>
                             <th i18n:translate="listingheader_friendly_name">Friendly name</th>
                             <th i18n:translate="listingheader_explanation">Explanation</th>
