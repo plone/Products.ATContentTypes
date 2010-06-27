@@ -97,7 +97,7 @@
                         <tr>
                             <th class="listingCheckbox" i18n:translate="listingheader_enabled">Enabled?</th>
                             <th i18n:translate="listingheader_catalog_index">Catalog index</th>
-                            <th i18n:translate="listingheader_friendly_name">Friendly&nbsp;name</th>
+                            <th i18n:translate="listingheader_friendly_name">Friendly name</th>
                             <th i18n:translate="listingheader_explanation">Explanation</th>
                         </tr>
                     </thead>
