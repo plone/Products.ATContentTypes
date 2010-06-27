@@ -91,16 +91,13 @@
                       </a>
                   </div>
 
-                  <table class="listing" border="0" cellpadding="0" cellspacing="0" style=""
-                          tal:define="bgcolor string:background-color:${here/base_properties/evenRowBackgroundColor};
-                                      border_color here/base_properties/globalBorderColor"
-                          tal:attributes="style string:border:1px solid ${border_color}"
+                  <table class="listing" 
                           summary="Indices configuration" i18n:attributes="summary summary_indices_configuration;">
                     <thead>
                         <tr>
+                            <th class="listingCheckbox" i18n:translate="listingheader_enabled">Enabled?</th>
                             <th i18n:translate="listingheader_catalog_index">Catalog index</th>
-                            <th i18n:translate="listingheader_enable">Enable</th>
-                            <th i18n:translate="listingheader_friendly_name">Friendly name</th>
+                            <th i18n:translate="listingheader_friendly_name">Friendly&nbsp;name</th>
                             <th i18n:translate="listingheader_explanation">Explanation</th>
                         </tr>
                     </thead>
@@ -110,6 +107,16 @@
                                                 oddrow repeat/index/odd;">
 
                         <tr class="" tal:attributes="class python:test(oddrow, 'even', 'odd')">
+                            <td class="listingCheckbox">
+                                <input type="checkbox"
+                                       value=""
+                                       name=""
+                                       id=""
+                                       tal:attributes="name string:index.enabled:records;
+                                                       value python:test(indexObj.enabled, '1', '0');
+                                                       id string:${indexObj/index}_enabled;
+                                                       checked python:test(indexObj.enabled, 'checked', None)"/>
+                            </td>
                             <td>
                                 <span tal:content="indexObj/index"/>
                                 <input type="hidden"
@@ -119,16 +126,6 @@
                                        tal:attributes="id indexObj/index;
                                                        name string:index.index:records;
                                                        value indexObj/index"/>
-                            </td>
-                            <td>
-                                <input type="checkbox"
-                                       value=""
-                                       name=""
-                                       id=""
-                                       tal:attributes="name string:index.enabled:records;
-                                                       value python:test(indexObj.enabled, '1', '0');
-                                                       id string:${indexObj/index}_enabled;
-                                                       checked python:test(indexObj.enabled, 'checked', None)"/>
                             </td>
                             <td>
                                 <input type="text"

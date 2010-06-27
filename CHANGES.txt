@@ -3,7 +3,8 @@ Changelog
 
 2.0b12 (unreleased)
 -------------------
-
+- Removed some ancient hardcoded HTML in the Collection Settings control panel.
+  [limi]
 
 2.0b11 (2010-06-13)
 -------------------
