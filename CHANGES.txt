@@ -3,8 +3,15 @@ Changelog
 
 2.0b12 (unreleased)
 -------------------
+
 - Removed some ancient hardcoded HTML in the Collection Settings control panel.
   [limi]
+
+- deleting objects referred by path criterions resulted in the collection
+  being neither view- nor editable.
+  (this fixes https://dev.plone.org/plone/ticket/10708)
+  [fRiSi]
+
 
 2.0b11 (2010-06-13)
 -------------------
@@ -18,7 +25,7 @@ Changelog
 2.0b10 (2010-06-03)
 -------------------
 
-- Ensure text is shown for the various Collection views. 
+- Ensure text is shown for the various Collection views.
   Related to http://dev.plone.org/plone/changeset/36850
   Which fixed http://dev.plone.org/plone/ticket/10226
 
@@ -47,8 +54,8 @@ Changelog
 - Check the ISO of the stored date, not the ISO8601 (with timezone) that is
   now returned by the accessors
   [davisagli]
- 
- 
+
+
 2.0b7 - 2010-04-12
 ------------------
 
