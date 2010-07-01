@@ -1,6 +1,10 @@
 Changelog
 =========
 
+2.0.1 (unreleased)
+------------------
+
+
 2.0 (2010-07-01)
 ----------------
 
@@ -11,7 +15,6 @@ Changelog
   being neither view- nor editable. This fixes
   http://dev.plone.org/plone/ticket/10708.
   [fRiSi]
-
 
 2.0b11 (2010-06-13)
 -------------------
@@ -38,7 +41,6 @@ Changelog
 
 - Merge fix of test_queryCatalogOverrideCriteria from 1.3.6 branch
   [toutpt]
-
 
 2.0b9 (2010-05-01)
 ------------------
