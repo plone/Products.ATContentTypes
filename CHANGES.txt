@@ -1,15 +1,15 @@
 Changelog
 =========
 
-2.0b12 (unreleased)
--------------------
+2.0 (2010-07-01)
+----------------
 
 - Removed some ancient hardcoded HTML in the Collection Settings control panel.
   [limi]
 
-- deleting objects referred by path criterions resulted in the collection
-  being neither view- nor editable.
-  (this fixes https://dev.plone.org/plone/ticket/10708)
+- Deleting objects referred by path criterions resulted in the collection
+  being neither view- nor editable. This fixes
+  http://dev.plone.org/plone/ticket/10708.
   [fRiSi]
 
 
