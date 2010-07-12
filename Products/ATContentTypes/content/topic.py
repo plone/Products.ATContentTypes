@@ -428,7 +428,7 @@ class ATTopic(ATCTFolder):
                 # See: http://zope.org/Members/Caseman/ZCatalog_for_2.6.1
                 q.setdefault('sort_limit', max_items)
             __traceback_info__ = (self, q)
-            results = pcatalog.searchResults(REQUEST, **q)
+            results = pcatalog.searchResults(**q)
 
         if limit and not batch:
             if full_objects:

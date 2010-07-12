@@ -4,6 +4,11 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
+- Removed REQUEST parameter from searchResults call in queryCatalog() of
+  the Topic class. searchResults should not be called with regular
+  parameters AND REQUEST
+  [do3cc]
+
 
 2.0 (2010-07-01)
 ----------------
