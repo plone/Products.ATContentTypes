@@ -4,6 +4,13 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
+- Make sure the atct_album_view calls getText with a full acquisition
+  chain to avoid an AttributeError: kupu_captioned_image, but avoid
+  getting the text field from an acquisition parent.  
+  See http://dev.plone.org/plone/ticket/8463
+  and http://dev.plone.org/plone/ticket/8190
+  [maurits]
+
 - Removed REQUEST parameter from searchResults call in queryCatalog() of
   the Topic class. searchResults should not be called with regular
   parameters AND REQUEST
