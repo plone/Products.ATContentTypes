@@ -4,6 +4,11 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
+- Removed try/except in atctListAlbum.py that had no effect because
+  calling aq_base in a skin script always throws an Unauthorized
+  error.  Refs http://dev.plone.org/plone/ticket/9796
+  [maurits]
+
 - Make sure the atct_album_view calls getText with a full acquisition
   chain to avoid an AttributeError: kupu_captioned_image, but avoid
   getting the text field from an acquisition parent.  

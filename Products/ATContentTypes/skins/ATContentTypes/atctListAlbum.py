@@ -21,10 +21,6 @@ if folders:
     result['folders'] = queryMethod({'portal_type':('Folder',)})
 if subimages:
     # Handle brains or objects
-    try:
-        context = context.aq_base
-    except:
-        pass # Unwrap object if possible
     if getattr(context, 'getPath', None) is not None:
         path = context.getPath()
     else:
