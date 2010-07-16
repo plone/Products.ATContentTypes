@@ -134,9 +134,6 @@
                 Please add them using the 'criteria' tab.
             </p>
 
-            <!-- Navigation -->
-            <div metal:use-macro="here/batch_macros/macros/navigation" />
-
         </tal:topiccontents>
         </metal:listingmacro>
     </metal:body>
