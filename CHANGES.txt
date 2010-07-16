@@ -3,6 +3,9 @@ Changelog
 
 2.0.1 (unreleased)
 ------------------
+- Remove duplicate batching navigation in atct_topic_view.
+  Refs http://dev.plone.org/plone/ticket/10754
+  [esteele]
 
 - Removed try/except in atctListAlbum.py that had no effect because
   calling aq_base in a skin script always throws an Unauthorized
