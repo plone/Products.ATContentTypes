@@ -4,6 +4,10 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Corrected timezone name generation in the DateTime -> datetime conversion
+  code.
+  [mj]
+
 
 2.0.1 (2010-07-18)
 ------------------

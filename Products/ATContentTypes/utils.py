@@ -14,15 +14,13 @@ class TimeZone(datetime.tzinfo):
         return datetime.timedelta(0)
     
     def tzname(self):
-        aheadUTC = self.minutes > 0
-        if aheadUTC: 
-            sign = '+'
-            mins = self.minutes * -1
-        else:
+        sign = '+'
+        mins = self.minutes
+        if mins < 0:
             sign = '-'
-            mins = self.minutes
-        wholehours = int(self.minutes / 60.)
-        minutesleft = self.minutes % 60
+            mins = mins * -1
+        wholehours = mins / 60
+        minutesleft = mins % 60
         return """%s%0.2d%0.2d""" % (sign, wholehours, minutesleft)
 
 def dt2DT(date):
