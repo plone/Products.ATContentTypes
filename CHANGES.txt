@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.2 (unreleased)
+2.0.2 (2010-07-29)
 ------------------
 
 - Fixed missing manage_beforeDelete declaration on the LinguaPlone folder class
