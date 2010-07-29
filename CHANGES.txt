@@ -4,10 +4,13 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Fixed missing manage_beforeDelete declaration on the LinguaPlone folder class
+  variation. This closes http://plone.org/products/linguaplone/issues/241.
+  [hannosch]
+
 - Corrected timezone name generation in the DateTime -> datetime conversion
   code.
   [mj]
-
 
 2.0.1 (2010-07-18)
 ------------------
