@@ -4,6 +4,8 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Fixed a test failure.
+  [davisagli]
 
 2.0.2 (2010-07-29)
 ------------------
