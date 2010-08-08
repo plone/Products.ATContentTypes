@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.4 (unreleased)
+2.0.4 (2010-08-08)
 ------------------
 
 - Adjusted tests to reflect new sub-collections default policy.
