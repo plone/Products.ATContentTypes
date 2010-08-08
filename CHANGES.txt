@@ -4,6 +4,8 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Adjusted tests to reflect new sub-collections default policy.
+  [hannosch]
 
 2.0.3 (2010-08-04)
 ------------------

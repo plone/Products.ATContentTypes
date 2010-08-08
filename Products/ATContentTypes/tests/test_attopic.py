@@ -158,8 +158,8 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
     def test_canContainSubtopics(self):
         ttool = self.portal.portal_types
         fti = ttool.getTypeInfo(self.portal_type)
-        self.failUnless(self.portal_type in fti.allowed_content_types,
-                        'Topics should be allowed to contain topics')
+        self.failUnless(self.portal_type not in fti.allowed_content_types,
+                        'Topics should not be allowed to contain topics')
 
     def test_Simple( self ):
         topic = self._ATCT
@@ -313,16 +313,6 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
     def test_edit(self):
         new = self._ATCT
         editATCT(new)
-
-    def test_hasSubTopics(self):
-        #Ensure that has subtopics returns True if there are subtopics,
-        #    false otherwise
-        topic = self._ATCT
-        self.failUnlessEqual(topic.hasSubtopics(), False)
-        self.setRoles(['Manager', 'Member'])
-        topic.invokeFactory('Topic', 'subtopic')
-        self.setRoles(['Member'])
-        self.failUnlessEqual(topic.hasSubtopics(), True)
 
     def test_queryCatalogBatching(self):
         # Ensure that has we return a proper batch if requested
