@@ -1,9 +1,9 @@
 # -*- coding: UTF-8 -*-
 
-from Products.ATContentTypes.tests.atcttestcase import ATCTFunctionalSiteTestCase 
+from Products.ATContentTypes.tests.atcttestcase import ATCTFunctionalSiteTestCase
 
 FILES = [
-    'portaltype_criterion.txt', 'webdav.txt', 'http_access.txt',
+    'topictool.txt', 'portaltype_criterion.txt', 'webdav.txt', 'http_access.txt',
     'reindex_sanity.txt', 'uploading.txt', 'browser_collection_views.txt',
     # traversal.txt registers the browser page "document_view", and this registration
     # stays active in different doctests, so we make sure to include it last.
