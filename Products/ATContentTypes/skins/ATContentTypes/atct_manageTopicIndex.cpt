@@ -46,7 +46,7 @@
             Configure which indices will be displayed while creating criteria
             for Collections, and how they will be displayed.
         </div>
-    
+
         <div id="content-core">
             <a href=""
                class="link-parent"
@@ -91,7 +91,7 @@
                       </a>
                   </div>
 
-                  <table class="listing nosort" 
+                  <table class="listing nosort"
                           summary="Indices configuration" i18n:attributes="summary summary_indices_configuration;">
                     <thead>
                         <tr>
@@ -108,6 +108,13 @@
 
                         <tr class="" tal:attributes="class python:test(oddrow, 'even', 'odd')">
                             <td class="listingCheckbox">
+                                <input type="hidden"
+                                       value=""
+                                       name=""
+                                       id=""
+                                       tal:attributes="id indexObj/index;
+                                                       name string:index.index:records;
+                                                       value indexObj/index"/>
                                 <input type="checkbox"
                                        value=""
                                        name=""
@@ -119,13 +126,6 @@
                             </td>
                             <td>
                                 <span tal:content="indexObj/index"/>
-                                <input type="hidden"
-                                       value=""
-                                       name=""
-                                       id=""
-                                       tal:attributes="id indexObj/index;
-                                                       name string:index.index:records;
-                                                       value indexObj/index"/>
                             </td>
                             <td>
                                 <input type="text"
@@ -182,7 +182,7 @@
         </div>
     </div>
   </div>
-  
+
 </metal:main>
 </body>
 </html>
