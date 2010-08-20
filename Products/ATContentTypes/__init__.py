@@ -14,13 +14,6 @@ from Products.ATContentTypes.config import SKINS_DIR
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import GLOBALS
 
-if HAS_LINGUA_PLONE:
-    from Products.LinguaPlone.public import process_types
-    from Products.LinguaPlone.public import listTypes
-else:
-    from Products.Archetypes.atapi import process_types
-    from Products.Archetypes.atapi import listTypes
-
 from Products.CMFCore.utils import ContentInit
 from Products.CMFCore.utils import ToolInit
 from Products.CMFCore.DirectoryView import registerDirectory
@@ -50,6 +43,12 @@ registerDirectory(SKINS_DIR,GLOBALS)
 
 def initialize(context):
     # process our custom types
+    if HAS_LINGUA_PLONE:
+        from Products.LinguaPlone.public import process_types
+        from Products.LinguaPlone.public import listTypes
+    else:
+        from Products.Archetypes.atapi import process_types
+        from Products.Archetypes.atapi import listTypes
 
     ToolInit(
         'ATContentTypes tool',

@@ -7,6 +7,7 @@ Use ZConfig to configure ATCT
 __docformat__ = 'restructuredtext'
 
 import string
+import pkg_resources
 import os
 from Products.ATContentTypes.configuration import zconf
 
@@ -32,15 +33,12 @@ SWALLOW_IMAGE_RESIZE_EXCEPTIONS = zconf.swallowImageResizeExceptions.enable
 
 ## mxTidy available?
 try:
+    # I am not sure, which pkg should contain mx.Tidy
     from mx import Tidy
 except ImportError:
     HAS_MX_TIDY = False
 else:
     HAS_MX_TIDY = True
-    try:
-        del Tidy
-    except AttributeError:
-        pass
 
 ## tidy only these document types
 MX_TIDY_MIMETYPES = (
@@ -49,22 +47,22 @@ MX_TIDY_MIMETYPES = (
 
 ## ExternalStorage available?
 try:
-    from Products.ExternalStorage.ExternalStorage import ExternalStorage
-except ImportError:
+    pkg_resources.get_distribution('Products.ExternalStorage')
+except pkg_resources.DistributionNotFound:
     HAS_EXT_STORAGE = False
 else:
     HAS_EXT_STORAGE = True
-    del ExternalStorage
 
 ## LinguaPlone addon?
 try:
-    import Products.LinguaPlone
-except ImportError:
+    pkg_resources.get_distribution('Products.LinguaPlone')
+except pkg_resources.DistributionNotFound:
     HAS_LINGUA_PLONE = False
 else:
     HAS_LINGUA_PLONE = True
 
 try:
+    # Won't use pkg_resources because of the packaging issue
     from PIL import Image
 except ImportError:
     HAS_PIL = False
