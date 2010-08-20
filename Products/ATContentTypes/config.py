@@ -39,6 +39,10 @@ except ImportError:
     HAS_MX_TIDY = False
 else:
     HAS_MX_TIDY = True
+try:
+    del Tidy
+except AttributeError:
+    pass
 
 ## tidy only these document types
 MX_TIDY_MIMETYPES = (
