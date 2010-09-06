@@ -76,7 +76,7 @@ class ATPathCriterion(ATBaseCriterion):
     def getCriteriaItems(self):
         result = []
         depth = (not self.Recurse() and 1) or -1
-        paths = ['/'.join(o.getPhysicalPath()) for o in self.Value()]
+        paths = ['/'.join(o.getPhysicalPath()) for o in self.Value() if o is not None]
 
         if paths is not '':
             result.append((self.Field(), {'query': paths, 'depth': depth}))

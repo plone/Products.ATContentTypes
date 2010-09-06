@@ -4,13 +4,13 @@
       i18n:domain="plone">
 
 <body>
-    
+
 <metal:content-core fill-slot="content-core">
     <metal:body define-macro="body_macro"
                 tal:define="kssClassesView context/@@kss_field_decorator_view;
                             getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
                             templateId template/getId">
-    
+
         <metal:listingmacro define-macro="listing">
         <tal:topiccontents define="topicContents python:here.queryCatalog(batch=True);
                                    use_view_action site_properties/typesUseViewActionInListings|python:();
@@ -103,18 +103,19 @@
                                     <a href="#"
                                        tal:condition="python: obj.portal_type == 'Link'"
                                        tal:attributes="href obj/getRemoteUrl;
-                                                       class string:${obj_wf_state_class} link-plain; 
+                                                       class string:${obj_wf_state_class} link-plain;
                                                        title obj_description;"
                                        class="link-plain"
                                        tal:content="title_or_id" />
 
-                   </td>
+                                </td>
                             </tal:block>
                             </tal:fields>
                         </tr>
                         </tal:brain>
                      </tbody>
                 </table>
+                <div metal:use-macro="context/batch_macros/macros/navigation" />
             </tal:custom>
 
             </tal:listing>
@@ -133,9 +134,6 @@
                 There are currently no criteria on which to search.
                 Please add them using the 'criteria' tab.
             </p>
-
-            <!-- Navigation -->
-            <div metal:use-macro="here/batch_macros/macros/navigation" />
 
         </tal:topiccontents>
         </metal:listingmacro>

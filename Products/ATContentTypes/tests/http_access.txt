@@ -187,36 +187,6 @@ Collections
   HTTP/1.1 200 OK
   ...
 
-  Test subtopic w/o acquire
-  >>> self.setRoles(['Manager'])
-  >>> topic.invokeFactory('Topic', id='subtopic')
-  'subtopic'
-  >>> self.setRoles(['Member'])
-  >>> subtopic = topic.subtopic
-  >>> subtopic.portal_type
-  'Topic'
-  >>> subtopic.getAcquireCriteria()
-  False
-  >>> stpath = '/'.join(subtopic.getPhysicalPath())
-
-  >>> print http(r"""
-  ... HEAD /%s HTTP/1.1
-  ... Authorization: Basic %s:%s
-  ... """ % (stpath, user_name, user_password))
-  HTTP/1.1 404 Not Found
-  ...
-
-  >>> self.setRoles(['Manager'])
-  >>> subtopic.setAcquireCriteria(True)
-  >>> self.setRoles(['Member'])
-
-  >>> print http(r"""
-  ... HEAD /%s HTTP/1.1
-  ... Authorization: Basic %s:%s
-  ... """ % (stpath, user_name, user_password))
-  HTTP/1.1 200 OK
-  ...
-
 Portal root
 -----------
 

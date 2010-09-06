@@ -1,8 +1,94 @@
 Changelog
 =========
 
-2.0b10 (unreleased)
+2.0.5 (unreleased)
+------------------
+
+- Changed order of input fields in atct_manageTopicIndex.cpt and
+  atct_manageTopicMetadata.cpt: checkbox field *must not* be the first one
+  because http request :records gets messed up otherwise. this fixes
+  https://dev.plone.org/plone/ticket/10896
+  [petschki]
+- Added browser tests for Topic management templates
+  [petschki]
+
+2.0.4 (2010-08-08)
+------------------
+
+- Adjusted tests to reflect new sub-collections default policy.
+  [hannosch]
+
+2.0.3 (2010-08-04)
+------------------
+
+- Fixed a test failure.
+  [davisagli]
+
+2.0.2 (2010-07-29)
+------------------
+
+- Fixed missing manage_beforeDelete declaration on the LinguaPlone folder class
+  variation. This closes http://plone.org/products/linguaplone/issues/241.
+  [hannosch]
+
+- Corrected timezone name generation in the DateTime -> datetime conversion
+  code.
+  [mj]
+
+2.0.1 (2010-07-18)
+------------------
+
+- Provide some minimal backwards compatibility for the ancient favorite type.
+  This closes http://dev.plone.org/plone/ticket/10677.
+  [hannosch]
+
+- Remove duplicate batching navigation in atct_topic_view.
+  Refs http://dev.plone.org/plone/ticket/10754.
+  [esteele]
+
+- Removed try/except in atctListAlbum.py that had no effect because
+  calling aq_base in a skin script always throws an Unauthorized
+  error.  Refs http://dev.plone.org/plone/ticket/9796.
+  [maurits]
+
+- Make sure the atct_album_view calls getText with a full acquisition
+  chain to avoid an AttributeError: kupu_captioned_image, but avoid
+  getting the text field from an acquisition parent.
+  See http://dev.plone.org/plone/ticket/8463
+  and http://dev.plone.org/plone/ticket/8190.
+  [maurits]
+
+- Removed REQUEST parameter from searchResults call in queryCatalog() of
+  the Topic class. searchResults should not be called with regular
+  parameters AND REQUEST.
+  [do3cc]
+
+2.0 (2010-07-01)
+----------------
+
+- Removed some ancient hardcoded HTML in the Collection Settings control panel.
+  [limi]
+
+- Deleting objects referred by path criterions resulted in the collection
+  being neither view- nor editable. This fixes
+  http://dev.plone.org/plone/ticket/10708.
+  [fRiSi]
+
+2.0b11 (2010-06-13)
 -------------------
+
+- Avoid deprecation warnings under Zope 2.13.
+  [hannosch]
+
+- Avoid testing dependency on zope.app.testing.
+  [hannosch]
+
+2.0b10 (2010-06-03)
+-------------------
+
+- Ensure text is shown for the various Collection views.
+  Related to http://dev.plone.org/plone/changeset/36850
+  Which fixed http://dev.plone.org/plone/ticket/10226
 
 - Products.ATContentTypes.content.folder.ATBTreeFolder is now deprecated.
   Normal ATFolders (as implemented in plone.app.folder) are now suitable for
@@ -13,7 +99,6 @@ Changelog
 
 - Merge fix of test_queryCatalogOverrideCriteria from 1.3.6 branch
   [toutpt]
-
 
 2.0b9 (2010-05-01)
 ------------------
@@ -29,8 +114,8 @@ Changelog
 - Check the ISO of the stored date, not the ISO8601 (with timezone) that is
   now returned by the accessors
   [davisagli]
- 
- 
+
+
 2.0b7 - 2010-04-12
 ------------------
 

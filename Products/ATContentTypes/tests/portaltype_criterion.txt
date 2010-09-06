@@ -1,7 +1,12 @@
 Adding an ATTopic criterion for Type
 ====================================
 
-    >>> from Products.Five.testbrowser import Browser
+    # BBB Zope 2.12
+    >>> try:
+    ...     from Testing.testbrowser import Browser
+    ... except ImportError:
+    ...     from Products.Five.testbrowser import Browser
+
     >>> browser = Browser()
     >>> browser.open('http://nohost/plone/login')
 

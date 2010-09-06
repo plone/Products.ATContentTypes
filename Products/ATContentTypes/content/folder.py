@@ -79,6 +79,12 @@ if HAS_LINGUAPLONE:
         """A folder which can contain other items."""
         portal_type    = 'Folder'
         manage_options = FOLDER_MANAGE_OPTIONS
+        security = ClassSecurityInfo()
+
+        security.declarePrivate('manage_beforeDelete')
+        def manage_beforeDelete(self, item, container):
+            I18NOnlyBaseBTreeFolder.manage_beforeDelete(self, item, container)
+            folder.ATFolder.manage_beforeDelete(self, item, container)
 
 else:
     class ATFolder(folder.ATFolder):
