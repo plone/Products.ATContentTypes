@@ -9,6 +9,7 @@ Changelog
   because http request :records gets messed up otherwise. this fixes
   https://dev.plone.org/plone/ticket/10896
   [petschki]
+
 - Added browser tests for Topic management templates
   [petschki]
 
