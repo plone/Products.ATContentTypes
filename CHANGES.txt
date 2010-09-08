@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.5 (unreleased)
+2.0.5 (2010-09-08)
 ------------------
 
 - Changed order of input fields in ``atct_manageTopicIndex.cpt`` and
