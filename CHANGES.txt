@@ -4,13 +4,13 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
-- Changed order of input fields in atct_manageTopicIndex.cpt and
-  atct_manageTopicMetadata.cpt: checkbox field *must not* be the first one
-  because http request :records gets messed up otherwise. this fixes
-  https://dev.plone.org/plone/ticket/10896
+- Changed order of input fields in ``atct_manageTopicIndex.cpt`` and
+  ``atct_manageTopicMetadata.cpt``. Checkbox field *must not* be the first one
+  because http request ``:records`` gets messed up otherwise. This fixes
+  http://dev.plone.org/plone/ticket/10896.
   [petschki]
 
-- Added browser tests for Topic management templates
+- Added browser tests for collection management templates.
   [petschki]
 
 2.0.4 (2010-08-08)
