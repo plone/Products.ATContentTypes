@@ -12,7 +12,7 @@
             Also in this section
         </h1>
 
-        <div class="documentDescription" class="discreet"
+        <div class="documentDescription discreet"
            tal:condition="not: batch"
            i18n:translate="description_no_visible_items_add_paste">
            This folder has no visible items. To add content, press the
