@@ -1,4 +1,4 @@
-This file is closed! Please use HISTORY.txt
+This file is closed! Please use CHANGES.txt
 
 2005-03-07 21:07  tiran
 
