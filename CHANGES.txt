@@ -4,6 +4,10 @@ Changelog
 2.0.6 (unreleased)
 ------------------
 
+- Fixed: album view of a collection of Image items
+  displayed images on three sections (images, folders, others)
+  due to atctListAlbum script bad use of topic API.
+  [thomasdesvenain]
 
 2.0.5 (2010-09-08)
 ------------------
