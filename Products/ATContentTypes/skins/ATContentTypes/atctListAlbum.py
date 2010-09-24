@@ -36,7 +36,7 @@ if subimages:
         result['subimages'] = context.queryCatalog(portal_type=('Image',),
                                                    path=path)
     else:
-        result['subimages'] = getFolderContents({'portal_type': ('Image',),
+        result['subimages'] = context.getFolderContents({'portal_type': ('Image',),
                                                  'path': path})
 
 if others:
@@ -48,7 +48,7 @@ if others:
         if is_topic:
             result['others'] = context.queryCatalog(portal_type=filtered)
         else:
-            result['others'] = getFolderContents({'portal_type': filtered})
+            result['others'] = context.getFolderContents({'portal_type': filtered})
     else:
         result['others'] = ()
 
