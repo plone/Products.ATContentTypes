@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.6 (unreleased)
+2.0.6 (2010-09-28)
 ------------------
 
 - Fixed: album view of a collection of Image items
