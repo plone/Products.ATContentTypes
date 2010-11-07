@@ -374,7 +374,7 @@ class ATTopic(ATCTFolder):
         for criterion in criteria:
             for key, value in criterion.getCriteriaItems():
                 # Ticket: https://dev.plone.org/plone/ticket/8827
-                # If a sub topic is set to acquire then the 'start' key have to 
+                # If a sub topic is set to acquire then the 'start' key have to
                 # be deleted to get ATFriendlyDateCriteria to work properly (the 'end' key) -
                 # so the 'start' key should be deleted.
                 # But only when:
@@ -403,7 +403,7 @@ class ATTopic(ATCTFolder):
         related = [ i for i in self.getRelatedItems() \
                         if mt.checkPermission(View, i) ]
         if not full_objects:
-            related = [ pcatalog(path='/'.join(r.getPhysicalPath()))[0] 
+            related = [ pcatalog(path='/'.join(r.getPhysicalPath()))[0]
                         for r in related]
         related=LazyCat([related])
 
@@ -421,7 +421,6 @@ class ATTopic(ATCTFolder):
         else:
             # Allow parameters to further limit existing criterias
             q.update(kw)
-
             if not batch and limit and max_items and self.hasSortCriterion():
                 # Sort limit helps Zope 2.6.1+ to do a faster query
                 # sorting when sort is involved
@@ -546,12 +545,12 @@ class ATTopic(ATCTFolder):
     security.declareProtected(ModifyPortalContent, 'setText')
     def setText(self, value, **kwargs):
         """Body text mutator
-        
+
         * hook into mxTidy an replace the value with the tidied value
         """
         field = self.getField('text')
-        
-        # When an object is initialized the first time we have to 
+
+        # When an object is initialized the first time we have to
         # set the filename and mimetype.
         if not value and not field.getRaw(self):
             if 'mimetype' in kwargs and kwargs['mimetype']:

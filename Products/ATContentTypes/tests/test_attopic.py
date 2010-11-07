@@ -246,7 +246,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.failUnless(query['end'])
         # query shouldn't have a start key https://dev.plone.org/plone/ticket/8827
         self.failIf('start' in query)
-    
+
     def test_nested_friendly_date_criteria_reverse( self ):
         """
         Lets have a test for the reverse situation
@@ -279,7 +279,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         """
         Use case: A subtopic with past item but only certain days back
         in time for example 1 month.
-        Lets ensure the 'start' isn't wiped out of the query 
+        Lets ensure the 'start' isn't wiped out of the query
         in this use case
         """
         # Add topic - future items
@@ -424,6 +424,22 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.failIf([i for i in topic.listAvailableFields()
                      if i[0] == 'created'])
 
+    def test_album_images_collection(self):
+        # album view of a collection of Image objects display images in 'images' section
+        portal = self.portal
+        self.loginAsPortalOwner()
+        portal.invokeFactory('Image', 'image1')
+        portal.invokeFactory('Image', 'image2')
+        portal.invokeFactory('Image', 'image3')
+
+        topic = self._ATCT
+
+        crit = topic.addCriterion('Type', 'ATSimpleStringCriterion')
+        crit.setValue('Image')
+        album = topic.atctListAlbum(images=1, folders=1, others=1)
+        self.assertEqual(len(album['folders']), 0)
+        self.assertEqual(len(album['images']), 3)
+        self.assertEqual(len(album['others']), 0)
 
 tests.append(TestSiteATTopic)
 
