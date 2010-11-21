@@ -4,6 +4,9 @@ Changelog
 2.0.7 (Unreleased)
 ------------------
 
+- Avoid some deprecation warnings under Zope 2.13.
+  [hannosch]
+
 - Add missing content-core macro definition to atct_topic_view template.
   [davisagli]
 

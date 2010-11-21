@@ -403,8 +403,9 @@ class ATTopic(ATCTFolder):
         related = [ i for i in self.getRelatedItems() \
                         if mt.checkPermission(View, i) ]
         if not full_objects:
-            related = [ pcatalog(path='/'.join(r.getPhysicalPath()))[0]
-                        for r in related]
+            uids = [r.UID() for r in related]
+            query = dict(UID=uids)
+            related = pcatalog(query)
         related=LazyCat([related])
 
         limit = self.getLimitNumber()
@@ -422,12 +423,9 @@ class ATTopic(ATCTFolder):
             # Allow parameters to further limit existing criterias
             q.update(kw)
             if not batch and limit and max_items and self.hasSortCriterion():
-                # Sort limit helps Zope 2.6.1+ to do a faster query
-                # sorting when sort is involved
-                # See: http://zope.org/Members/Caseman/ZCatalog_for_2.6.1
                 q.setdefault('sort_limit', max_items)
             __traceback_info__ = (self, q)
-            results = pcatalog.searchResults(**q)
+            results = pcatalog.searchResults(q)
 
         if limit and not batch:
             if full_objects:

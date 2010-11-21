@@ -2,7 +2,6 @@ import logging
 from cStringIO import StringIO
 from zope.interface import implements
 
-import AccessControl.Owned
 from AccessControl import ClassSecurityInfo
 from App.class_init import InitializeClass
 from OFS.SimpleItem import SimpleItem
@@ -41,8 +40,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
     manage_options =  (
             {'label' : 'Overview', 'action' : 'manage_overview'},
             {'label' : 'Image scales', 'action' : 'manage_imageScales'}
-        ) + PropertyManager.manage_options + \
-            AccessControl.Owned.Owned.manage_options
+        ) + PropertyManager.manage_options
 
     # properties
 
@@ -81,8 +79,8 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
         out = StringIO()
         print >> out, "Updating AT Image scales"
         catalog = getToolByName(self, 'portal_catalog')
-        brains = catalog(portal_type = portal_type,
-                         portal_type_operator = 'or')
+        query = dict(portal_type=portal_type)
+        brains = catalog(query)
         for brain in brains:
             obj = brain.getObject()
             if obj is None:
@@ -91,9 +89,9 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
                 continue
             try:
                 state = obj._p_changed
-            except (ConflictError, KeyboardInterrupt):
+            except ConflictError:
                 raise
-            except:
+            except Exception:
                 state = 0
 
             field = obj.getField('image')

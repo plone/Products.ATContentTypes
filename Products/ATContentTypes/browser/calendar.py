@@ -30,7 +30,7 @@ class CalendarView(BrowserView):
         catalog = getToolByName(context, 'portal_catalog')
         path = '/'.join(context.getPhysicalPath())
         provides = ICalendarSupport.__identifier__
-        self.events = catalog(path=path, object_provides=provides)
+        self.events = catalog(dict(path=path, object_provides=provides))
 
     def render(self):
         self.update()       # collect events
