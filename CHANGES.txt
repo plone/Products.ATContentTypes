@@ -4,6 +4,10 @@ Changelog
 2.0.7 (Unreleased)
 ------------------
 
+- Add Site Administrator role to various permissions, for forward compatibility
+  with Plone 4.1.
+  [davisagli]
+
 - Avoid some deprecation warnings under Zope 2.13.
   [hannosch]
 
