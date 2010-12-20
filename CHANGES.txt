@@ -1,8 +1,11 @@
 Changelog
 =========
 
-2.0.7 (Unreleased)
-------------------
+2.1.0 (Unreleased)
+----------------
+
+- Make sure topic criteria get a valid UUID using plone.uuid.
+  [toutpt, davisagli]
 
 - Add Site Administrator role to various permissions, for forward compatibility
   with Plone 4.1.

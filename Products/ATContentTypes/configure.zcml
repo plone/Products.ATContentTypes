@@ -30,4 +30,10 @@
   <five:deprecatedManageAddDelete
       class=".criteria.base.ATBaseCriterion" />
 
+  <adapter
+    factory="Products.Archetypes.uuid.referenceableUUID"
+    provides="plone.uuid.interfaces.IUUID"
+    for=".criteria.path.ATPathCriterion"
+    />
+
 </configure>

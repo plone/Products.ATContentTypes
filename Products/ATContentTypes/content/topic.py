@@ -45,6 +45,9 @@ from Products.ATContentTypes.config import TOOLNAME
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.CMFPlone.PloneBatch import Batch
+from zope.event import notify
+from zope.lifecycleevent.interfaces import IObjectCreatedEvent
+from zope.lifecycleevent import ObjectCreatedEvent
 
 # A couple of fields just don't make sense to sort (for a user),
 # some are just doubles.
@@ -448,6 +451,7 @@ class ATTopic(ATCTFolder):
         newid = 'crit__%s_%s' % (field, criterion_type)
         ct    = _criterionRegistry[criterion_type]
         crit  = ct(newid, field)
+        notify(ObjectCreatedEvent(crit)) #needed for plone.uuid
 
         self._setObject( newid, crit )
         return self._getOb( newid )
