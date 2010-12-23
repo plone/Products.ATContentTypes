@@ -4,6 +4,9 @@ Changelog
 2.1.0 (Unreleased)
 ----------------
 
+- Added CSS id to subtopics-header in atct_topic_view.pt to allow styling.
+  [tom_gross]
+
 - Make sure topic criteria get a valid UUID using plone.uuid.
   [toutpt, davisagli]
 
