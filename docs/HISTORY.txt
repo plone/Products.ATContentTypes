@@ -1,6 +1,10 @@
 1.3.8 - Unreleased
 ==================
 
+- Respect timezone by using full ISO8601 date in collection tables
+  (backported from Plone 4.0)
+  [tom_gross]
+
 1.3.7 - 2010-07-28
 ==================
 

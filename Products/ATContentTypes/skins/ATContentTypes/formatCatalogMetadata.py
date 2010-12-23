@@ -8,14 +8,13 @@
 ##title=Determine whether the input is a DateTime or ISO date and localize it if so, also convert lists and dicts into reasonable strings.
 from DateTime import DateTime
 from ZODB.POSException import ConflictError
-from Products.CMFPlone.utils import safe_callable
 from AccessControl import Unauthorized
 
 if value is None:
     return ''
 
 if same_type(value, DateTime()):
-    return context.toLocalizedTime(value.ISO(), long_format = long_format)
+    return context.toLocalizedTime(value.ISO8601(), long_format = long_format)
 
 # Ugly but fast check for ISO format (ensure we have '-' and positions 4 and 7,
 #  ' ' at positiion 10 and ':' and 13 and 16), then convert just in case.
@@ -38,7 +37,7 @@ try:
 except Unauthorized:
     items = None
 
-if items is not None and safe_callable(items):
+if items is not None and callable(items):
     # For dictionaries return a string of the form 'key1: value1, key2: value2' 
     value = ', '.join(['%s: %s'%(a,b) for a,b in items()])
 if same_type(value,[]) or same_type(value,()):
