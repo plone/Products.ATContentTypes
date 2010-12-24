@@ -4,6 +4,9 @@ Changelog
 2.1.0 (Unreleased)
 ----------------
 
+- Depend on ``Products.CMFPlone`` instead of ``Plone``.
+  [elro]
+
 - Added CSS id to subtopics-header in atct_topic_view.pt to allow styling.
   [tom_gross]
 
