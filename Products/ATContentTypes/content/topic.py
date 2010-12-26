@@ -410,7 +410,7 @@ class ATTopic(ATCTFolder):
 
         limit = self.getLimitNumber()
         max_items = self.getItemCount()
-        # Batch based on limit size if b_szie is unspecified
+        # Batch based on limit size if b_size is unspecified
         if max_items and b_size is None:
             b_size = int(max_items)
         else:
@@ -424,6 +424,9 @@ class ATTopic(ATCTFolder):
             q.update(kw)
             if not batch and limit and max_items and self.hasSortCriterion():
                 q.setdefault('sort_limit', max_items)
+            if batch:
+                q['b_start'] = b_start
+                q['b_size'] = b_size
             __traceback_info__ = (self, q)
             results = pcatalog.searchResults(q)
 

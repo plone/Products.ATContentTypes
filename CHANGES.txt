@@ -4,6 +4,10 @@ Changelog
 2.0.7 (Unreleased)
 ------------------
 
+- Pass on batching arguments into the catalog query call inside the collections
+  `queryCatalog` method.
+  [hannosch]
+
 - Add Site Administrator role to various permissions, for forward compatibility
   with Plone 4.1.
   [davisagli]
