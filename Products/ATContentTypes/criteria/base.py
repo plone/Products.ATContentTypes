@@ -13,11 +13,12 @@ from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.CMFCore.PortalContent import PortalContent
 from Products.Archetypes.interfaces.base import IBaseContent
 from Products.Archetypes.interfaces.referenceable import IReferenceable
+from plone.uuid.interfaces import IAttributeUUID
 
 class NonRefCatalogContent(BaseContentMixin):
     """Base class for content that is neither referenceable nor in the catalog
     """
-
+    implements(IAttributeUUID)
     isReferenceable = None
 
     # reference register / unregister methods
@@ -33,7 +34,9 @@ class NonRefCatalogContent(BaseContentMixin):
     def unindexObject(self, *args, **kwargs): pass
     def reindexObject(self, *args, **kwargs): pass
 
-classImplementsOnly(NonRefCatalogContent, *(iface for iface in implementedBy(BaseContentMixin) if iface is not IReferenceable))
+classImplementsOnly(NonRefCatalogContent,
+                    *(iface for iface in implementedBy(NonRefCatalogContent)\
+                    if iface is not IReferenceable))
 
 class ATBaseCriterion(NonRefCatalogContent):
     """A basic criterion"""

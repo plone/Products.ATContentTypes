@@ -6,6 +6,7 @@
 <body>
 
 <metal:content-core fill-slot="content-core">
+  <metal:block define-macro="content-core">
     <metal:body define-macro="body_macro"
                 tal:define="kssClassesView context/@@kss_field_decorator_view;
                             getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
@@ -143,12 +144,14 @@
         <tal:subtopics condition="here/hasSubtopics|nothing"
                        define="folderContents here/listSubtopics|nothing">
             <h2 i18n:domain="atcontenttypes"
-                i18n:translate="heading_contained_collections">
+                i18n:translate="heading_contained_collections"
+                id="atct_subtopics_header">
                 Also in this section
             </h2>
             <metal:list metal:use-macro="here/base/macros/folderlisting"/>
         </tal:subtopics>
     </metal:body>
+  </metal:block>
 </metal:content-core>
 
 </body>

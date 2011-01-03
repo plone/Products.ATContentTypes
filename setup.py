@@ -40,7 +40,7 @@ setup(name='Products.ATContentTypes',
           'zope.interface',
           'zope.publisher',
           'zope.tal',
-          'Plone',
+          'Products.CMFPlone',
           'Products.Archetypes',
           'Products.ATReferenceBrowserWidget', # BBB
           'Products.CMFCore',

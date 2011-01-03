@@ -1,8 +1,34 @@
 Changelog
 =========
 
-2.0.7 (Unreleased)
+2.1.0 (Unreleased)
+----------------
+
+- Depend on ``Products.CMFPlone`` instead of ``Plone``.
+  [elro]
+
+- Added CSS id to subtopics-header in atct_topic_view.pt to allow styling.
+  [tom_gross]
+
+- Make sure topic criteria get a valid UUID using plone.uuid.
+  [toutpt, davisagli]
+
+2.0.7 (unreleased)
 ------------------
+
+- Pass on batching arguments into the catalog query call inside the collections
+  `queryCatalog` method.
+  [hannosch]
+
+- Add Site Administrator role to various permissions, for forward compatibility
+  with Plone 4.1.
+  [davisagli]
+
+- Avoid some deprecation warnings under Zope 2.13.
+  [hannosch]
+
+- Add missing content-core macro definition to atct_topic_view template.
+  [davisagli]
 
 2.0.6 (2010-09-28)
 ------------------
