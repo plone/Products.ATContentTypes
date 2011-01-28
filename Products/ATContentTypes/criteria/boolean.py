@@ -54,4 +54,4 @@ class ATBooleanCriterion(ATBaseCriterion):
 
         return tuple( result )
 
-registerCriterion(ATBooleanCriterion, FIELD_INDICES)
+registerCriterion(ATBooleanCriterion, FIELD_INDICES + ('BooleanIndex', ))

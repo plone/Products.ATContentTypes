@@ -4,6 +4,9 @@ Changelog
 2.1.1 (Unreleased)
 ------------------
 
+- Added support for the new BooleanIndex and UUIDIndex for collections.
+  [hannosch]
+
 - Remove superfluous and/or operator for "Item type" criterion.
   This fixes https://dev.plone.org/plone/ticket/10882
   [msmith64]

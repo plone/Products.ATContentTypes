@@ -53,4 +53,4 @@ class ATSimpleStringCriterion(ATBaseCriterion):
 
         return tuple( result )
 
-registerCriterion(ATSimpleStringCriterion, STRING_INDICES)
+registerCriterion(ATSimpleStringCriterion, STRING_INDICES + ('UUIDIndex', ))
