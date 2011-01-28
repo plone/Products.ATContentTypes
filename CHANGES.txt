@@ -4,6 +4,10 @@ Changelog
 2.1.1 (Unreleased)
 ------------------
 
+- Remove superfluous and/or operator for "Item type" criterion.
+  This fixes https://dev.plone.org/plone/ticket/10882
+  [msmith64]
+
 2.1.0 (2011-01-03)
 ------------------
 
