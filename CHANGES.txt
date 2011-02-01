@@ -1,8 +1,21 @@
 Changelog
 =========
 
-2.1.0 (Unreleased)
-----------------
+2.1.1 (Unreleased)
+------------------
+
+- Moved event related code into plone.app.event.
+  [thet + p.a.event crew]
+
+- Added support for the new BooleanIndex and UUIDIndex for collections.
+  [hannosch]
+
+- Remove superfluous and/or operator for "Item type" criterion.
+  This fixes https://dev.plone.org/plone/ticket/10882
+  [msmith64]
+
+2.1.0 (2011-01-03)
+------------------
 
 - Depend on ``Products.CMFPlone`` instead of ``Plone``.
   [elro]
@@ -13,7 +26,7 @@ Changelog
 - Make sure topic criteria get a valid UUID using plone.uuid.
   [toutpt, davisagli]
 
-2.0.7 (unreleased)
+2.0.7 (2011-01-03)
 ------------------
 
 - Pass on batching arguments into the catalog query call inside the collections

@@ -16,6 +16,7 @@ from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes import ATCTMessageFactory as _
 
 ATPortalTypeCriterionSchema = ATSelectionCriterion.schema.copy()
+ATPortalTypeCriterionSchema.delField("operator") # https://dev.plone.org/plone/ticket/10882
 
 val_widget = ATPortalTypeCriterionSchema['value'].widget
 val_widget.description=_(u'help_portal_type_criteria_value',

@@ -10,13 +10,13 @@ from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 
 ALL_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex', 'KeywordIndex',
                'PathIndex', 'TextIndex', 'TextIndexNG2', 'TextIndexNG3',
-               'TopicIndex', 'ZCTextIndex', 'NavtreeIndexNG', 
-               'ExtendedPathIndex')
+               'TopicIndex', 'ZCTextIndex', 'NavtreeIndexNG',
+               'ExtendedPathIndex', 'BooleanIndex', 'UUIDIndex')
 
-SORT_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex', 'KeywordIndex')
-# TextIndex, PathIndex, TopicIndex, ZCTextIndex, TextIndexNG2, NavtreeIndexNG
-# are not usable to sort
-# as they do not have 'keyForDocument' attribute
+SORT_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex', 'KeywordIndex',
+                'PathIndex')
+# TextIndex, TopicIndex, ZCTextIndex, TextIndexNG2, NavtreeIndexNG
+# are not usable to sort as they do not have 'keyForDocument' attribute
 
 DATE_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex')
 
