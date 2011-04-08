@@ -7,6 +7,7 @@ from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 from Products.Archetypes.interfaces import IATHistoryAware
 from Products.CMFPlone.interfaces import ISelectableConstrainTypes
 
+
 class IATContentType(ISelectableBrowserDefault, IBaseContent):
     """Marker interface for AT Content Types
     """
@@ -25,7 +26,7 @@ class IATContentType(ISelectableBrowserDefault, IBaseContent):
                              ''')
 
     cmf_edit_kws = Attribute('''List of keyword names.
-
+    
     If one of this kw names is used with edit() then the cmf_edit method is
     called.
     ''')
@@ -61,7 +62,7 @@ class ITextContent(Interface):
     def setText(value, **kwargs):
         """
         """
-
+        
     def CookedBody(stx_level='ignored'):
         """
         """
@@ -73,3 +74,4 @@ class ITextContent(Interface):
 class IATCTTool(Interface):
     """
     """
+ 

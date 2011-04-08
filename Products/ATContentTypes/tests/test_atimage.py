@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 
 from cStringIO import StringIO
 import os
@@ -15,7 +15,7 @@ from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
-from Products.PloneTestCase.PloneTestCase import FunctionalTestCase
+from Products.PloneTestCase.PloneTestCase import FunctionalTestCase, setupPloneSite
 from Testing import ZopeTestCase # side effect import. leave it here.
 from zope.interface.verify import verifyObject
 
@@ -52,6 +52,9 @@ def editATCT(obj):
     dcEdit(obj)
 
 tests = []
+
+
+setupPloneSite()
 
 class TestIDFromTitle(FunctionalTestCase):
     """Browsertests to make sure ATImages derive their default IDs from their titles"""
