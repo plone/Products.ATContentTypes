@@ -34,20 +34,20 @@ setDefaultRoles(UploadViaURL, ('Manager', 'Site Administrator'))
 permissions = {}
 def wireAddPermissions():
     """Creates a list of add permissions for all types in this project
-    
+
     Must be called **after** all types are registered!
     """
     global permissions
     atct_types = listTypes(PROJECTNAME)
     for atct in atct_types:
         if IATTopic.implementedBy(atct['klass']):
-            permission = AddTopics 
+            permission = AddTopics
         elif IATTopicCriterion.implementedBy(atct['klass']):
             permission = "%s Topic: Add %s" % (PROJECTNAME, atct['portal_type'])
             setDefaultRoles(permission, CRITERION_ROLES)
         else:
             permission = "%s: Add %s" % (PROJECTNAME, atct['portal_type'])
             setDefaultRoles(permission, TYPE_ROLES)
-        
+
         permissions[atct['portal_type']] = permission
     return permissions
