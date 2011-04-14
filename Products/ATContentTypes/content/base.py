@@ -31,6 +31,7 @@ from webdav.NullResource import NullResource
 from zExceptions import MethodNotAllowed
 from zExceptions import NotFound
 from ZODB.POSException import ConflictError
+from webdav.Resource import Resource as WebdavResoure
 
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
@@ -484,22 +485,8 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
 
     security.declareProtected(View, 'HEAD')
     def HEAD(self, REQUEST, RESPONSE):
-        """Overwrite HEAD method for HTTP HEAD requests
-
-        Returns 404 Not Found if the default view can't be acquired or 405
-        Method not allowed if the default view has no HEAD method.
-        """
-        view_id = self.getDefaultPage() or self.getLayout()
-        view_method = getattr(self, view_id, None)
-        if view_method is None:
-            # view method couldn't be acquired
-            raise NotFound, "View method %s for requested resource is not " \
-                             "available." % view_id
-        if getattr(aq_base(view_method), 'HEAD', None) is not None:
-            # view method has a HEAD method
-            return view_method.__of__(self).HEAD(REQUEST, RESPONSE)
-        else:
-            raise MethodNotAllowed, 'Method not supported for this resource.'
+        """HTTP HEAD handler"""
+        return WebdavResoure.HEAD(self, REQUEST, RESPONSE)
 
 InitializeClass(ATCTFolderMixin)
 

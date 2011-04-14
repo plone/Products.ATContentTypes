@@ -521,30 +521,9 @@ class ATTopic(ATCTFolder):
                         if item not in order]
         return order
 
+    security.declareProtected(View, 'HEAD')
     def HEAD(self, REQUEST, RESPONSE):
-        """Retrieve resource information without a response body.
-
-        An empty Topic returns 404 NotFound while a topic w/ a
-        criterion returns 200 OK.
-        """
-        self.dav__init(REQUEST, RESPONSE)
-        criteria = self.listCriteria()
-        acquire = self.getAcquireCriteria()
-        if not criteria:
-            if not acquire:
-                # no criteria found
-                raise NotFound, 'The requested resource is empty.'
-            else:
-                # try to acquire a query
-                parent = aq_parent(aq_inner(self))
-                try:
-                    query = parent.buildQuery()
-                except (AttributeError, KeyError):
-                    raise NotFound, 'The requested resource is empty.'
-                else:
-                    if not query:
-                        raise NotFound, 'The requested resource is empty.'
-
+        """HTTP HEAD handler"""
         return WebdavResoure.HEAD(self, REQUEST, RESPONSE)
 
     security.declareProtected(ModifyPortalContent, 'setText')

@@ -105,6 +105,8 @@ folder.
   ... """ % (fpath, user_name, user_password))
   HTTP/1.1 200 OK
   ...
+  Content-Length: 1
+  ...
 
   HEAD works with an object named index_html, too. The browserdefault code
   returns the index_html object and its HEAD method is caleld
@@ -120,20 +122,19 @@ folder.
   ... """ % (fpath, user_name, user_password))
   HTTP/1.1 200 OK
   ...
+  Content-Length: 1
+  ...
 
   Remove index_html for the following tests since index_html overrules every
   view in set with browser default
   >>> folder.manage_delObjects('index_html')
 
-  For the following tests we have to add two view methods to the FTI. The FTI
-  doesn't return view methods unless they are registered.
+  HEAD returns OK even if the view method does not exist. To show this
+  behavior the layout is set to a non existing template.
 
   >>> pt_tool = self.portal.portal_types
   >>> ti = pt_tool[folder.portal_type]
   >>> ti.view_methods += ('non_existing_layout',)
-
-  HEAD returns NotFound if the view method can't be acquired. To show the
-  behavior the layout is set to a non existing template.
 
   >>> folder.setLayout('non_existing_layout')
   >>> folder.defaultView()
@@ -147,9 +148,10 @@ folder.
   ... HEAD /%s HTTP/1.1
   ... Authorization: Basic %s:%s
   ... """ % (fpath, user_name, user_password))
-  HTTP/1.1 404 Not Found
+  HTTP/1.1 200 OK
   ...
-
+  Content-Length: 1
+  ...
 
 Collections
 -------------
@@ -163,13 +165,15 @@ Collections
   'Topic'
   >>> tpath = '/'.join(topic.getPhysicalPath())
 
-  A topic w/o a criterion return 404.
+  A topic w/o a criterion returns OK.
 
   >>> print http(r"""
   ... HEAD /%s HTTP/1.1
   ... Authorization: Basic %s:%s
   ... """ % (tpath, user_name, user_password))
-  HTTP/1.1 404 Not Found
+  HTTP/1.1 200 OK
+  ...
+  Content-Length: 1
   ...
 
   Add a criterion with a value. Without a value criterion.getCriteriaItems()
@@ -185,6 +189,8 @@ Collections
   ... Authorization: Basic %s:%s
   ... """ % (tpath, user_name, user_password))
   HTTP/1.1 200 OK
+  ...
+  Content-Length: 1
   ...
 
 Portal root
