@@ -5,6 +5,13 @@
   (backported from Plone 4.0)
   [tom_gross]
 
+- Allow Collections to be restricted to the Navigation Root when it is not the
+  same as the Plone site root. Users are presented with a checkbox to toggle
+  this restriction if the Collection is located where the Navigation Root and
+  the Plone site root are different and there is no "Location" criteria defined.
+  This fixes http://dev.plone.org/plone/ticket/10596
+  [dunlapm]
+
 1.3.7 - 2010-07-28
 ==================
 

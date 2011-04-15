@@ -70,6 +70,8 @@ from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.CMFPlone.PloneBatch import Batch
 
+from plone.app.layout.navigation.root import getNavigationRoot
+
 # A couple of fields just don't make sense to sort (for a user),
 # some are just doubles.
 IGNORED_FIELDS = ['Date', 'allowedRolesAndUsers', 'getId', 'in_reply_to',
@@ -153,6 +155,20 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                                                "'Display as Table' is checked.")
                         ),
                  ),
+    BooleanField('restrictedToNavRoot',
+                 required=False,
+                 mode="rw",
+                 default=True,
+                 write_permission = ChangeTopics,
+                 widget=BooleanWidget(
+                    label=_(u'label_restrict_to_nav_root',
+                            default=u'Restrict to Navigation Root'),
+                    description=_(u'help_restrict_to_nav_root',
+                                  default=u"If selected, only items within the "
+                                  "current navigation root will be shown."),
+                    condition = "object/allowRestrictedToNavRoot"
+                    ),
+                ), 
     ))
 finalizeATCTSchema(ATTopicSchema, folderish=False, moveDiscussion=False)
 
@@ -413,6 +429,12 @@ class ATTopic(ATCTFolder):
                 and not criterion.value and key == 'end' and 'start' in result:
                     del result['start']
                 result[key] = value
+        
+        if self.allowRestrictedToNavRoot() and self.getRestrictedToNavRoot() \
+            and not 'path' in result:
+            nav_root = getNavigationRoot(self)
+            result['path'] = {'query': nav_root, 'depth': -1}
+        
         return result
 
     security.declareProtected(View, 'queryCatalog')
@@ -616,5 +638,20 @@ class ATTopic(ATCTFolder):
         if request is not None and isinstance(request, HTTPRequest):
             tidyAttribute = '%s_tidier_data' % field.getName()
             return request.get(tidyAttribute, None)
+    
+    security.declareProtected(View, 'portalAndNavRootEqual')
+    def portalAndNavRootEqual(self):
+        portal_url = getToolByName(self, 'portal_url')
+        return portal_url.getPortalPath() == getNavigationRoot(self)
+        
+    security.declareProtected(View, 'allowRestrictedToNavRoot')
+    def allowRestrictedToNavRoot(self):
+        if not self.portalAndNavRootEqual():
+            #don't bother with the rest if the portal root and nav root are the same
+            for criterion in self.listCriteria():
+                if criterion.meta_type in  ('ATPathCriterion', 'ATRelativePathCriterion'):
+                    return not criterion.getCriteriaItems()
+            return True
+        return False
 
 registerATCT(ATTopic, PROJECTNAME)
