@@ -4,6 +4,9 @@ Changelog
 2.1.2 (Unreleased)
 ------------------
 
+- Optimize images and icon file sizes.
+  [hannosch]
+
 - The implementations of HEAD for folderish objects were severely outdated
   and never made much sense to begin with. Replace with basic
   WebdavResource.HEAD.
