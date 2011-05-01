@@ -486,15 +486,13 @@ class ATTopic(ATCTFolder):
         ti.constructInstance(self, id)
         return self._getOb( id )
 
-    security.declarePrivate('synContentValues')
+    security.declareProtected(View, 'synContentValues')
     def synContentValues(self):
         """Getter for syndacation support
         """
         syn_tool = getToolByName(self, 'portal_syndication')
         limit = int(syn_tool.getMaxItems(self))
-        brains = self.queryCatalog(sort_limit=limit)[:limit]
-        objs = [brain.getObject() for brain in brains]
-        return [obj for obj in objs if obj is not None]
+        return self.queryCatalog(sort_limit=limit)[:limit]
 
     security.declarePublic('canSetDefaultPage')
     def canSetDefaultPage(self):
