@@ -237,7 +237,7 @@ ATImage
   HTTP/1.1 200 OK
   Accept-Ranges: none
   Connection: close
-  Content-Length: 905
+  Content-Length: 105
   Content-Type: image/gif
   Date: ...
   Etag: ts...
@@ -266,11 +266,11 @@ HTTP Range request
   Accept-Ranges: bytes
   Content-Disposition: inline; filename="test-image"
   Content-Length: 5
-  Content-Range: bytes 0-4/905
+  Content-Range: bytes 0-4/105
   Content-Type: image/gif
   Last-Modified: ...
   <BLANKLINE>
-  GIF89
+  GIF87
 
   If-Range is used to check if the object was changed. You really don't want
   to resume a download when the file was changed. If-Range can contain a
@@ -285,11 +285,11 @@ HTTP Range request
   HTTP/1.1 200 OK
   Accept-Ranges: bytes
   Content-Disposition: inline; filename="test-image"
-  Content-Length: 905
+  Content-Length: 105
   Content-Type: image/gif...
   ...
   <BLANKLINE>
-  GIF89...
+  GIF87...
 
   It can also contain an etag. Etags are starting with ts. In order to change
   the etag I'm altering the title. update() calls reindexObject() which calls
@@ -309,11 +309,11 @@ HTTP Range request
   HTTP/1.1 200 OK
   Accept-Ranges: bytes
   Content-Disposition: inline; filename="test-image"
-  Content-Length: 905
+  Content-Length: 105
   Content-Type: image/gif...
   ...
   <BLANKLINE>
-  GIF89...
+  GIF87...
 
 
 HTTP If modified since
@@ -347,8 +347,8 @@ HTTP If modified since
   HTTP/1.1 200 OK
   Accept-Ranges: bytes
   Content-Disposition: inline; filename="test-image"
-  Content-Length: 905
+  Content-Length: 105
   Content-Type: image/gif...
   ...
   <BLANKLINE>
-  GIF89...
+  GIF87...
