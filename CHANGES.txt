@@ -4,6 +4,9 @@ Changelog
 2.1.2 (Unreleased)
 ------------------
 
+- Fixed `atdocument` tests to be compatible with Archetypes 1.7.5.
+  [hannosch]
+
 - Optimize images and icon file sizes.
   [hannosch]
 

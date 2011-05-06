@@ -159,7 +159,7 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('text')
         mutator = field.getMutator(dummy)
-        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getFilename(dummy), None)
         self.assertEquals(field.getContentType(dummy), 'text/html')
         mutator('', filename='foo.txt')
         self.assertEquals(field.getFilename(dummy), 'foo.txt')
@@ -169,30 +169,30 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('text')
         mutator = field.getMutator(dummy)
-        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getFilename(dummy), None)
         self.assertEquals(field.getContentType(dummy), 'text/html')
         mutator('', mimetype='text/plain')
-        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getFilename(dummy), None)
         self.assertEquals(field.getContentType(dummy), 'text/plain')
 
     def test_text_field_mutator_none_mime(self):
         dummy = self._dummy
         field = dummy.getField('text')
         mutator = field.getMutator(dummy)
-        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getFilename(dummy), None)
         self.assertEquals(field.getContentType(dummy), 'text/html')
         mutator('', mimetype=None)
-        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getFilename(dummy), None)
         self.assertEquals(field.getContentType(dummy), 'text/plain')
 
     def test_text_field_mutator_none_filename(self):
         dummy = self._dummy
         field = dummy.getField('text')
         mutator = field.getMutator(dummy)
-        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getFilename(dummy), None)
         self.assertEquals(field.getContentType(dummy), 'text/html')
         mutator('', filename=None)
-        self.assertEquals(field.getFilename(dummy), '')
+        self.assertEquals(field.getFilename(dummy), None)
         self.assertEquals(field.getContentType(dummy), 'text/plain')
 
     def test_text_setEmptyText(self):
