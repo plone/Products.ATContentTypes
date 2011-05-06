@@ -13,7 +13,6 @@ from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.tests.utils import EmailValidator
 from Products.ATContentTypes.tests.utils import URLValidator
 from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
-from Products.ATContentTypes.utils import DT2dt
 from DateTime import DateTime
 from Products.ATContentTypes.interfaces import ICalendarSupport
 from Products.ATContentTypes.interfaces import IATEvent
@@ -68,10 +67,10 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
     def test_edit(self):
         new = self._ATCT
         editATCT(new)
-        self.assertEquals(new.start_date, DT2dt(new.start()))
-        self.assertEquals(new.end_date, DT2dt(new.end()))
-        self.assertEquals(new.start_date, DT2dt(S_DATE))
-        self.assertEquals(new.end_date, DT2dt(E_DATE))
+        self.assertEquals(new.start_date, new.start().asdatetime())
+        self.assertEquals(new.end_date, new.end().asdatetime())
+        self.assertEquals(new.start_date, S_DATE.asdatetime())
+        self.assertEquals(new.end_date, E_DATE.asdatetime())
         self.assertEquals(new.duration, new.end_date - new.start_date)
 
     def test_cmp(self):

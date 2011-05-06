@@ -29,7 +29,6 @@ from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.lib.calendarsupport import CalendarSupportMixin
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
-from Products.ATContentTypes.utils import DT2dt
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 
@@ -251,7 +250,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
         value = self['startDate']
         if value is None:
             value = self['creation_date']
-        return DT2dt(value)
+        return value.asdatetime()
 
     security.declareProtected(View, 'start_date')
     start_date = ComputedAttribute(_start_date)
@@ -260,7 +259,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
         value = self['endDate']
         if value is None:
             return self.start_date
-        return DT2dt(value)
+        return value.asdatetime()
 
     security.declareProtected(View, 'end_date')
     end_date = ComputedAttribute(_end_date)
