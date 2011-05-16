@@ -1,12 +1,29 @@
 Changelog
 =========
 
-2.1.2 (Unreleased)
-------------------
+2.2 (Unreleased)
+----------------
 
 - Moved event related code into plone.app.event.
   [thet + p.a.event crew]
 
+
+2.1.2 (2011-05-12)
+------------------
+
+- Use DateTime's built-in support to do `datetime.datetime` conversions.
+  [hannosch]
+
+- Fixed `atdocument` tests to be compatible with Archetypes 1.7.5.
+  [hannosch]
+
+- Optimize images and icon file sizes.
+  [hannosch]
+
+- The implementations of HEAD for folderish objects were severely outdated
+  and never made much sense to begin with. Replace with basic
+  WebdavResource.HEAD.
+  [stefan]
 
 2.1.1 (2011-02-04)
 ------------------

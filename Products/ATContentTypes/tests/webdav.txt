@@ -334,7 +334,7 @@ Image
 
   >>> input.seek(0)
   >>> len(str(image.getImage().data)), len(input.read())
-  (905, 905)
+  (105, 105)
   >>> input.seek(0)
   >>> image.getImage().data == input.read()
   True
