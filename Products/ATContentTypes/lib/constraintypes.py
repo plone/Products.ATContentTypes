@@ -1,7 +1,6 @@
 from zope.interface import implements
 
 from AccessControl import ClassSecurityInfo
-from AccessControl import Unauthorized
 from App.class_init import InitializeClass
 from Acquisition import aq_parent
 from Acquisition import aq_inner
@@ -105,7 +104,7 @@ ConstrainTypesMixinSchema = Schema((
 
 def parentPortalTypeEqual(obj):
     """Compares the portal type of obj to the portal type of its parent
-    
+
     Return values:
         None - no acquisition context / parent available
         False - unequal
@@ -229,7 +228,7 @@ class ConstrainTypesMixin:
         #if mode == DISABLED or \
         #        (parent and parent.portal_types != self.portal_types):
         if mode == DISABLED or \
-	         (mode == ACQUIRE and not parentPortalTypeEqual(self) ):
+             (mode == ACQUIRE and not parentPortalTypeEqual(self) ):
             return PortalFolder.allowedContentTypes(self)
 
         globalTypes = self.getDefaultAddableTypes(context)
@@ -252,12 +251,12 @@ class ConstrainTypesMixin:
         #if mode == DISABLED or \
         #        (parent and parent.portal_types != self.portal_types):
         if mode == DISABLED or \
-	          (mode == ACQUIRE and not parentPortalTypeEqual(self) ):
+              (mode == ACQUIRE and not parentPortalTypeEqual(self) ):
             return PortalFolder.invokeFactory(self, type_name, id,
                                                 RESPONSE=None, *args, **kw)
 
         if not type_name in [fti.getId() for fti in self.allowedContentTypes()]:
-            raise Unauthorized('Disallowed subobject type: %s' % type_name)
+            raise ValueError('Disallowed subobject type: %s' % type_name)
 
         pt = getToolByName( self, 'portal_types' )
         args = (type_name, self, id, RESPONSE) + args
