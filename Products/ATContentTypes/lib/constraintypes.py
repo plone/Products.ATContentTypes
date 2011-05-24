@@ -228,7 +228,7 @@ class ConstrainTypesMixin:
         #if mode == DISABLED or \
         #        (parent and parent.portal_types != self.portal_types):
         if mode == DISABLED or \
-	         (mode == ACQUIRE and not parentPortalTypeEqual(self) ):
+             (mode == ACQUIRE and not parentPortalTypeEqual(self) ):
             return PortalFolder.allowedContentTypes(self)
 
         globalTypes = self.getDefaultAddableTypes(context)
@@ -251,7 +251,7 @@ class ConstrainTypesMixin:
         #if mode == DISABLED or \
         #        (parent and parent.portal_types != self.portal_types):
         if mode == DISABLED or \
-	          (mode == ACQUIRE and not parentPortalTypeEqual(self) ):
+              (mode == ACQUIRE and not parentPortalTypeEqual(self) ):
             return PortalFolder.invokeFactory(self, type_name, id,
                                                 RESPONSE=None, *args, **kw)
 

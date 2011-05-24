@@ -1,11 +1,18 @@
 Changelog
 =========
 
-2.2 (Unreleased)
+2.2 (unreleased)
 ----------------
 
 - Moved event related code into plone.app.event.
   [thet + p.a.event crew]
+
+
+2.1.3 (unreleased)
+------------------
+
+- Fixed: adding a disallowed subobject raises ValueError instead of Unauthorized.
+  [thomasdesvenain]
 
 
 2.1.2 (2011-05-12)
