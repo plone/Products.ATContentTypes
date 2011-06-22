@@ -149,6 +149,37 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.failUnlessEqual(inner.getImmediatelyAddableTypes(),
                                 inner.getLocallyAllowedTypes())
 
+    def test_acquireFromCustomHetereogenousParent(self):
+        self.loginAsPortalOwner()
+        cp = self.portal.portal_types.manage_copyObjects(['Folder'])
+        self.portal.portal_types.manage_pasteObjects(cp)
+        self.portal.portal_types.manage_renameObject('copy_of_Folder', 'Folder2')
+
+        # Let folder use a restricted set of types
+        self.portal.portal_types.Folder.filter_content_types = 1
+        self.portal.portal_types.Folder.allowed_content_types = \
+            ('Document', 'Image', 'News Item', 'Topic', 'Folder', 'Folder2')
+
+        self.portal.portal_types.Folder2.filter_content_types = 1
+        self.portal.portal_types.Folder2.allowed_content_types = \
+            ('Document', 'Image', 'Topic', 'Folder')
+
+        # Set up outer folder with restrictions enabled
+        self.af.setConstrainTypesMode(constraintypes.ENABLED)
+        self.af.setLocallyAllowedTypes(['Folder2', 'Image', 'News Item'])
+        self.af.setImmediatelyAddableTypes(['Folder2', 'Image'])
+
+        # Create type to acquire
+        self.af.invokeFactory('Folder2', 'folder2', title='folder2')
+        folder2 = self.af.folder2
+        folder2.setConstrainTypesMode(constraintypes.ACQUIRE)
+
+        # News item is not in addable types because it is globally forbidden in Folder2 type
+        # and Folder is not in addable types because it is locally forbidden in folder2 parent
+        self.failUnlessEqual([fti.getId() for fti in folder2.allowedContentTypes()],
+                             ['Image'])
+        self.failUnlessEqual(folder2.getImmediatelyAddableTypes(), ['Image'])
+
 
 tests.append(TestConstrainTypes)
 
