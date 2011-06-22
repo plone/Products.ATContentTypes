@@ -102,6 +102,16 @@ ConstrainTypesMixinSchema = Schema((
         ),
     ))
 
+def getParent(obj):
+    portal_factory = getToolByName(obj, 'portal_factory', None)
+    if portal_factory is not None and portal_factory.isTemporary(obj):
+        # created by portal_factory
+        parent = aq_parent(aq_parent(aq_parent(aq_inner(obj))))
+    else:
+        parent = aq_parent(aq_inner(obj))
+
+    return parent
+
 def parentPortalTypeEqual(obj):
     """Compares the portal type of obj to the portal type of its parent
 
@@ -110,13 +120,7 @@ def parentPortalTypeEqual(obj):
         False - unequal
         True - equal
     """
-    portal_factory = getToolByName(obj, 'portal_factory', None)
-    if portal_factory is not None and portal_factory.isTemporary(obj):
-        # created by portal_factory
-        parent = aq_parent(aq_parent(aq_parent(aq_inner(obj))))
-    else:
-        parent = aq_parent(aq_inner(obj))
-
+    parent = getParent(obj)
     if parent is None:
         return None # no context
     parent_type = getattr(parent.aq_explicit, 'portal_type', None)
@@ -174,11 +178,19 @@ class ConstrainTypesMixin:
         elif mode == ENABLED:
             return self.getField('locallyAllowedTypes').get(self)
         elif mode == ACQUIRE:
-            #if not parent or parent.portal_type != self.portal_type:
-            if not parentPortalTypeEqual(self):
+            parent = getParent(self)
+            if not parent:
                 return [fti.getId() for fti in self.getDefaultAddableTypes(context)]
+            elif not parentPortalTypeEqual(self):
+                # if parent.portal_type != self.portal_type:
+                default_addable_types = [fti.getId() for fti in self.getDefaultAddableTypes(context)]
+                if ISelectableConstrainTypes.providedBy(parent):
+                    return [t for t in parent.getLocallyAllowedTypes(context)
+                                if t in default_addable_types]
+                else:
+                    return [t for t in parent.getLocallyAllowedTypes()
+                                if t in default_addable_types]
             else:
-                parent = aq_parent(aq_inner(self))
                 if ISelectableConstrainTypes.providedBy(parent):
                     return parent.getLocallyAllowedTypes(context)
                 else:
@@ -204,10 +216,15 @@ class ConstrainTypesMixin:
         elif mode == ENABLED:
             return self.getField('immediatelyAddableTypes').get(self)
         elif mode == ACQUIRE:
-            #if not parent or parent.portal_type != self.portal_type:
-            if not parentPortalTypeEqual(self):
+            parent = getParent(self)
+            if not parent:
                 return [fti.getId() for fti in \
                         PortalFolder.allowedContentTypes(self)]
+            elif not parentPortalTypeEqual(self):
+                default_allowed = [fti.getId() for fti in \
+                        PortalFolder.allowedContentTypes(self)]
+                return [t for t in parent.getImmediatelyAddableTypes(context) \
+                           if t in default_allowed]
             else:
                 parent = aq_parent(aq_inner(self))
                 return parent.getImmediatelyAddableTypes(context)
@@ -225,17 +242,18 @@ class ConstrainTypesMixin:
         # Short circuit if we are disabled or acquiring from non-compatible
         # parent
 
-        #if mode == DISABLED or \
-        #        (parent and parent.portal_types != self.portal_types):
-        if mode == DISABLED or \
-             (mode == ACQUIRE and not parentPortalTypeEqual(self) ):
+        parent = getParent(self)
+        if mode == DISABLED or (mode == ACQUIRE and not parent):
             return PortalFolder.allowedContentTypes(self)
-
-        globalTypes = self.getDefaultAddableTypes(context)
-        allowed = list(self.getLocallyAllowedTypes())
-        ftis = [ fti for fti in globalTypes if fti.getId() in allowed ]
-
-        return ftis
+        elif mode == ACQUIRE and not parentPortalTypeEqual(self):
+            globalTypes = self.getDefaultAddableTypes(context)
+            allowed = list(parent.getLocallyAllowedTypes())
+            return [fti for fti in globalTypes if fti.getId() in allowed]
+        else:
+            globalTypes = self.getDefaultAddableTypes(context)
+            allowed = list(self.getLocallyAllowedTypes())
+            ftis = [fti for fti in globalTypes if fti.getId() in allowed]
+            return ftis
 
 
     # overrides CMFCore's PortalFolder invokeFactory
