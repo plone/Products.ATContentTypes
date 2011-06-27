@@ -17,6 +17,9 @@ Changelog
 - Fixed: adding a disallowed subobject raises ValueError instead of Unauthorized.
   [thomasdesvenain]
 
+- Activate manual sorting on relatedItems field.
+  [toutpt]
+
 2.1.2 (2011-05-12)
 ------------------
 
