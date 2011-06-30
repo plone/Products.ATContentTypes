@@ -4,6 +4,10 @@ Changelog
 2.1.3 (unreleased)
 ------------------
 
+- NonRefCatalogContent-objects, e.g. criteria, should not obtain a UUID.
+  Fixes https://dev.plone.org/plone/ticket/11904
+  [WouterVH]
+
 - When a parent is not of the same type of a folder, if folder acquire constraint,
   the allowed types are the intersection of globally allowed types in folder
   and locally allowed types of its parent.
