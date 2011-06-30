@@ -7,7 +7,7 @@ from AccessControl import ClassSecurityInfo
 from Acquisition import aq_get
 from Products.Archetypes.atapi import DisplayList
 from Products.CMFCore.permissions import View
-
+from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import FIELD_INDICES
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
@@ -40,17 +40,21 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
         """Return enabled portal types"""
         name = u'plone.app.vocabularies.ReallyUserFriendlyTypes'
         types = queryUtility(IVocabularyFactory, name=name)(self)
+        portal_types = getToolByName(self, 'portal_types', None)
         request = aq_get(self, 'REQUEST', None)
         result = []
-        type_field = self.Field() == 'Type'
         for term in types.by_value.values():
-            value = term.value
-            if type_field:
-                value = unicode(term.title)
+            value = term.value  # portal_type
+            if self.Field() == 'Type':
+                # Switch the value from portal_type to archetype_name,
+                # since that is stored in the Type-index in portal_catalog
+                value = unicode(portal_types[value].title)
+
             result.append((value, translate(term.title, context=request)))
         def _key(v):
             return v[1]
         result.sort(key=_key)
+
         return DisplayList(result)
 
     security.declareProtected(View, 'getCriteriaItems')
