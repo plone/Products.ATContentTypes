@@ -51,10 +51,8 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
                 value = unicode(portal_types[value].title)
 
             result.append((value, translate(term.title, context=request)))
-        def _key(v):
-            return v[1]
-        result.sort(key=_key)
 
+        result.sort(key=lambda x: x[1])
         return DisplayList(result)
 
     security.declareProtected(View, 'getCriteriaItems')
