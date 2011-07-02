@@ -1,3 +1,5 @@
+from operator import itemgetter
+
 from zope.component import queryUtility
 from zope.i18n import translate
 from zope.interface import implements
@@ -52,7 +54,7 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
 
             result.append((value, translate(term.title, context=request)))
 
-        result.sort(key=lambda x: x[1])
+        result.sort(key=itemgetter(1))
         return DisplayList(result)
 
     security.declareProtected(View, 'getCriteriaItems')
