@@ -1,15 +1,15 @@
 Changelog
 =========
 
-2.1.3 (unreleased)
+2.1.3 (2011-07-12)
 ------------------
 
 - PortalType-criteria should use archetype_name as value when querying for the
-  Type-index. Fixes https://dev.plone.org/plone/ticket/11913
+  Type-index. Fixes http://dev.plone.org/plone/ticket/11913
   [WouterVH]
 
 - NonRefCatalogContent-objects, e.g. criteria, should not obtain a UUID.
-  Fixes https://dev.plone.org/plone/ticket/11904
+  Fixes http://dev.plone.org/plone/ticket/11904
   [WouterVH]
 
 - When a parent is not of the same type of a folder, if folder acquire constraint,
@@ -19,7 +19,7 @@ Changelog
   [thomasdesvenain]
 
 - For collections displayed in table view, show localized date-format.
-  Fixes https://dev.plone.org/plone/ticket/11155
+  Fixes http://dev.plone.org/plone/ticket/11155
   [WouterVH]
 
 - Fixed: adding a disallowed subobject raises ValueError instead of Unauthorized.
@@ -52,7 +52,7 @@ Changelog
   [hannosch]
 
 - Remove superfluous and/or operator for "Item type" criterion.
-  This fixes https://dev.plone.org/plone/ticket/10882
+  This fixes http://dev.plone.org/plone/ticket/10882
   [msmith64]
 
 2.1.0 (2011-01-03)
@@ -387,7 +387,7 @@ Changelog
   [davisagli]
 
 - Subtopics shouldn't always acquire the 'start' query. Fixes
-  https://dev.plone.org/plone/ticket/8827
+  http://dev.plone.org/plone/ticket/8827
   [pelle]
 
 - Use correct location for IObjectEvent.
