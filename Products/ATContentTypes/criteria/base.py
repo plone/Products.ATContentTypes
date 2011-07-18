@@ -18,7 +18,6 @@ from plone.uuid.interfaces import IAttributeUUID
 class NonRefCatalogContent(BaseContentMixin):
     """Base class for content that is neither referenceable nor in the catalog
     """
-    implements(IAttributeUUID)
     isReferenceable = None
 
     # reference register / unregister methods

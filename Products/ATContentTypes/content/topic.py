@@ -454,7 +454,6 @@ class ATTopic(ATCTFolder):
         newid = 'crit__%s_%s' % (field, criterion_type)
         ct    = _criterionRegistry[criterion_type]
         crit  = ct(newid, field)
-        notify(ObjectCreatedEvent(crit)) #needed for plone.uuid
 
         self._setObject( newid, crit )
         return self._getOb( newid )
