@@ -15,7 +15,8 @@ Changelog
   Fixes http://dev.plone.org/plone/ticket/11904
   [WouterVH]
 
-- When a parent is not of the same type of a folder, if folder acquire constraint,
+- When a folder is not of the same type than its parent,
+  if this folder acquires constraint,
   the allowed types are the intersection of globally allowed types in folder
   and locally allowed types of its parent.
   This fixes http://dev.plone.org/plone/ticket/11950.
@@ -25,7 +26,8 @@ Changelog
   Fixes http://dev.plone.org/plone/ticket/11155
   [WouterVH]
 
-- Fixed: adding a disallowed subobject raises ValueError instead of Unauthorized.
+- Fixed: adding a disallowed subobject raises ValueError instead of Unauthorized
+  if disallow is related to content types restriction.
   [thomasdesvenain]
 
 - Activate manual sorting on relatedItems field.
