@@ -316,7 +316,7 @@ class ATTopic(ATCTFolder):
                 tops.append((top.Title().lower(),top))
         tops.sort()
         tops = [t[1] for t in tops]
-        return val
+        return tops
 
     security.declareProtected(View, 'hasSubtopics')
     def hasSubtopics(self):
