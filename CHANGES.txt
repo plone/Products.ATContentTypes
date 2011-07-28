@@ -9,6 +9,10 @@ Changelog
   Refs http://dev.plone.org/plone/ticket/11950#comment:3
   [yulka, thomasdesvenain]
 
+- Fixed a bug in listSubtopics that caused unauthorized exceptions when
+  subtopics were private
+  [afd]
+
 2.1.3 (2011-07-12)
 ------------------
 
