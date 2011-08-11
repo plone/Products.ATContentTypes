@@ -13,6 +13,9 @@ Changelog
   subtopics were private
   [afd]
 
+- Make relatedItems sortable. Fixes http://dev.plone.org/plone/ticket/12098
+  [fRiSi]
+
 2.1.3 (2011-07-12)
 ------------------
 
