@@ -179,7 +179,7 @@ class ConstrainTypesMixin:
             return self.getField('locallyAllowedTypes').get(self)
         elif mode == ACQUIRE:
             parent = getParent(self)
-            if not parent:
+            if not parent or parent.portal_type == 'Plone Site':
                 return [fti.getId() for fti in self.getDefaultAddableTypes(context)]
             elif not parentPortalTypeEqual(self):
                 # if parent.portal_type != self.portal_type:
@@ -217,7 +217,7 @@ class ConstrainTypesMixin:
             return self.getField('immediatelyAddableTypes').get(self)
         elif mode == ACQUIRE:
             parent = getParent(self)
-            if not parent:
+            if not parent or parent.portal_type == 'Plone Site':
                 return [fti.getId() for fti in \
                         PortalFolder.allowedContentTypes(self)]
             elif not parentPortalTypeEqual(self):
@@ -247,8 +247,11 @@ class ConstrainTypesMixin:
             return PortalFolder.allowedContentTypes(self)
         elif mode == ACQUIRE and not parentPortalTypeEqual(self):
             globalTypes = self.getDefaultAddableTypes(context)
-            allowed = list(parent.getLocallyAllowedTypes())
-            return [fti for fti in globalTypes if fti.getId() in allowed]
+            if parent.portal_type == 'Plone Site':
+                return globalTypes
+            else:
+                allowed = list(parent.getLocallyAllowedTypes())
+                return [fti for fti in globalTypes if fti.getId() in allowed]
         else:
             globalTypes = self.getDefaultAddableTypes(context)
             allowed = list(self.getLocallyAllowedTypes())

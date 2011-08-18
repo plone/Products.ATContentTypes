@@ -41,6 +41,7 @@ relatedItemsField = ReferenceField('relatedItems',
         isMetadata = True,
         languageIndependent = False,
         index = 'KeywordIndex',
+        referencesSortable = True,
         write_permission = ModifyPortalContent,
         widget = ReferenceBrowserWidget(
             allow_search = True,
@@ -118,11 +119,11 @@ def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
     if schema.has_key('effectiveDate'):
         schema.changeSchemataForField('effectiveDate', 'dates')
     if schema.has_key('expirationDate'):
-        schema.changeSchemataForField('expirationDate', 'dates')    
+        schema.changeSchemataForField('expirationDate', 'dates')
     if schema.has_key('creation_date'):
-        schema.changeSchemataForField('creation_date', 'dates')    
+        schema.changeSchemataForField('creation_date', 'dates')
     if schema.has_key('modification_date'):
-        schema.changeSchemataForField('modification_date', 'dates')    
+        schema.changeSchemataForField('modification_date', 'dates')
 
     # Ownership
     if schema.has_key('creators'):

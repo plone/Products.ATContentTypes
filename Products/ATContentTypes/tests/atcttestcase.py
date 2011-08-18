@@ -42,7 +42,7 @@ from Products.ATContentTypes.tests.utils import idValidator
 test_home = os.path.dirname(__file__)
 
 class ATCTSiteTestCase(PloneTestCase.PloneTestCase):
-    
+
     def afterSetUp(self):
         # BBB - make sure we can regression test the deprecated ATBTreeFolder class
         user = self.portal.acl_users.getUserById(default_user)
@@ -303,6 +303,9 @@ class ATCTFieldTestCase(ATCTSiteTestCase, BaseSchemaTest):
         self.failUnless(field.getLayerImpl('storage') == AttributeStorage())
         self.failUnlessEqual(field.validators, EmptyValidator)
         self.failUnless(isinstance(field.widget, ReferenceBrowserWidget))
+        self.failUnless(field.widget.allow_sorting, u'field and widget need to enable sorting')
+        self.failUnless(field.referencesSortable, u'field and widget need to enable sorting')
+
         vocab = field.Vocabulary(dummy)
         self.failUnless(isinstance(vocab, DisplayList))
 
