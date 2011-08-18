@@ -1,6 +1,6 @@
 # BBB
-from plone.app.event.event import ATEvent
-from plone.app.event.event import ATEventSchema
+from plone.app.event.at.content import ATEvent
+from plone.app.event.at.content import ATEventSchema
 
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import ATCTFileContent

@@ -27,7 +27,3 @@ from Products.ATContentTypes.interfaces.topic import IATTopicCriterion
 from Products.ATContentTypes.interfaces.topic import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces.topic import IATTopicSortCriterion
 from Products.ATContentTypes.interfaces.topic import IATCTTopicsTool
-
-import zope.deferredimport
-zope.deferredimport.deprecated("Import from plone.app.event.interfaces instead",
-    ICalendarSupport = 'plone.app.event.interfaces:ICalendarSupport')
