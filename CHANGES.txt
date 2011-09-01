@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.4 (Unreleased)
+2.1.4 (2011-08-31)
 ------------------
 
 - Avoid critical error if for any reason,
