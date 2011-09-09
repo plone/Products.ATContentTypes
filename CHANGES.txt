@@ -1,14 +1,13 @@
 Changelog
 =========
 
-2.2 (unreleased)
-----------------
+2.1.5 (unreleased)
+------------------
 
-- Moved event related code into plone.app.event.
-  [thet + p.a.event crew]
+- Nothing changed yet.
 
 
-2.1.4 (Unreleased)
+2.1.4 (2011-08-31)
 ------------------
 
 - Avoid critical error if for any reason,
