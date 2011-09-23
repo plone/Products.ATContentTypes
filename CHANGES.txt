@@ -4,7 +4,8 @@ Changelog
 2.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Enable sorting by the getObjPositionInParent index.
+  [davisagli]
 
 
 2.1.4 (2011-08-31)

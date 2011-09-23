@@ -70,6 +70,11 @@ Verify that Page is an option, with value Page as well.
     >>> browser.getControl('Page')
     <ItemControl ...optionValue='Page'...>
 
+Make sure that sorting by the getObjPositionInParent index is an option.
+
+    >>> browser.getControl('Order in folder') is not None
+    True
+
 We select Page and save our selection.
 
     >>> browser.getControl(name='crit__Type_ATPortalTypeCriterion_value:list').value = ['Page']

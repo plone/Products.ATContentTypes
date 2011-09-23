@@ -14,7 +14,7 @@ ALL_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex', 'KeywordIndex',
                'ExtendedPathIndex', 'BooleanIndex', 'UUIDIndex')
 
 SORT_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex', 'KeywordIndex',
-                'PathIndex')
+                'PathIndex', 'GopipIndex')
 # TextIndex, TopicIndex, ZCTextIndex, TextIndexNG2, NavtreeIndexNG
 # are not usable to sort as they do not have 'keyForDocument' attribute
 
