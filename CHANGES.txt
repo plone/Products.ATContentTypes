@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.5 (unreleased)
+2.1.5 (2011-10-06)
 ------------------
 
 - Enable sorting by the getObjPositionInParent index.
