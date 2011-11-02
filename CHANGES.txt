@@ -4,8 +4,8 @@ Changelog
 2.1.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Replace getParentNode() with __parent__ / aq_parent as appropriate.
+  [elro]
 
 2.1.5 (2011-10-06)
 ------------------
