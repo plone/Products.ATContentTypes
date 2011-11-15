@@ -17,8 +17,8 @@ if same_type(value, DateTime()):
     return context.toLocalizedTime(value.timeTime(), long_format = long_format)
 
 # Ugly but fast check for ISO format (ensure we have '-' and positions 4 and 7,
-#  ' ' at positiion 10 and ':' and 13 and 16), then convert just in case.
-if same_type(value, '') and value[4:-1:3] == '-- ::':
+#  ' ' at position 10 and ':' and 13 and 16), then convert just in case.
+if same_type(value, '') and (value[4:-1:3] == '-- ::' or value[4:-6:3] == '--T::'):
     try:
         DateTime(value)
     except ConflictError:
