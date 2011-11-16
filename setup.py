@@ -32,5 +32,6 @@ setup(name='Products.ATContentTypes',
           'zope.component',
           'simplejson',
           'plone.memoize',
+          'DateTime>=2.12.4',
       ],
       )
