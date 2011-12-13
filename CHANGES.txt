@@ -4,6 +4,10 @@ Changelog
 2.1.6 (unreleased)
 ------------------
 
+- Fix the change/modify permission used for changing or managing
+  Topic/Collection criteria.
+  [rossp]
+
 - Calculate the localized datetime string based on UTC time. Refs
   https://dev.plone.org/ticket/12197.
   [malthe, ajung]
