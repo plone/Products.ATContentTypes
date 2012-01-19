@@ -1,7 +1,8 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:zcml="http://namespaces.zope.org/zcml"
-    xmlns:five="http://namespaces.zope.org/five">
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
   <include zcml:condition="installed Products.LinguaPlone" 
            package="Products.LinguaPlone" />
@@ -11,6 +12,7 @@
   <include package=".exportimport" />
   <include package="plone.i18n.normalizer" />
 
+  <include package="archetypes.kss" />
   <include package="archetypes.referencebrowserwidget" />
 
   <five:deprecatedManageAddDelete
@@ -39,5 +41,13 @@
     provides="plone.uuid.interfaces.IUUID"
     for=".criteria.path.ATPathCriterion"
     />
+  
+  <genericsetup:registerProfile
+      name="default"
+      title="Archetypes Content Types for Plone"
+      directory="profiles/default"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
 </configure>

@@ -21,17 +21,18 @@ setup(name='Products.ATContentTypes',
       zip_safe=False,
       extras_require=dict(
         test=[
-            'plone.app.blob',
             'zope.annotation',
             'zope.testing',
             'Products.PloneTestCase',
         ]
       ),
       install_requires=[
+          'archetypes.kss',
           'archetypes.referencebrowserwidget',
           'setuptools',
           'plone.i18n',
           'plone.memoize',
+          'plone.app.blob',
           'plone.app.folder',
           'plone.app.layout',
           'zope.component',
