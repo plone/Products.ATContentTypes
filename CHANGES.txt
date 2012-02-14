@@ -1,10 +1,30 @@
 Changelog
 =========
 
-2.1.5 (unreleased)
-------------------
+2.1.7 (unreleased)
 
 - Nothing changed yet.
+
+
+2.1.6 (2012-01-26)
+------------------
+
+- Fix the change/modify permission used for changing or managing
+  Topic/Collection criteria.
+  [rossp]
+
+- Calculate the localized datetime string based on UTC time. Refs
+  https://dev.plone.org/ticket/12197.
+  [malthe, ajung]
+
+- Replace getParentNode() with __parent__ / aq_parent as appropriate.
+  [elro]
+
+2.1.5 (2011-10-06)
+------------------
+
+- Enable sorting by the getObjPositionInParent index.
+  [davisagli]
 
 
 2.1.4 (2011-08-31)
@@ -221,6 +241,12 @@ Changelog
 - Values in dropdown "criterion_type" in criterion_edit_form template are now
   properly translated. This closes http://dev.plone.org/plone/ticket/9715
   [vincentfretin]
+
+
+2.1.4 - Unreleased
+------------------
+
+- Nothing changed yet.
 
 
 2.0b8 - 2010-05-01

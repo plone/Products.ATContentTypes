@@ -57,7 +57,7 @@ class ObsoleteATFolder(ATCTOrderedFolder):
         navigation enabled, then let this folder have it enabled by
         default as well.
         """
-        parent = self.getParentNode()
+        parent = self.__parent__
         if IATFolder.providedBy(parent):
             return parent.getNextPreviousEnabled()
         else:
