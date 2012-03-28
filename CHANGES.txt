@@ -3,7 +3,8 @@ Changelog
 
 2.1.7 (unreleased)
 
-- Nothing changed yet.
+- Restored icon display in topic tabular view
+  [tom_gross]
 
 
 2.1.6 (2012-01-26)

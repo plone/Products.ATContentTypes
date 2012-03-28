@@ -73,6 +73,7 @@
                                                 obj_icon python:plone_view.getIcon(obj);
                                                 obj_wf_state obj/review_state|python: wtool.getInfoFor(obj, 'review_state', '');
                                                 obj_wf_state_class python:'state-' + normalizeString(obj_wf_state);
+                                                obj_ct_class python:'contenttype-' + normalizeString(obj_type);
                                                 obj_url python:test(obj_type in use_view_action, url+'/view', url);
                                                 title_or_id obj/pretty_title_or_id">
                             <tal:block define="value python: getattr(obj, field, None)">
@@ -82,20 +83,12 @@
                                 <td tal:condition="python: field == 'Title'">
                                     <a href="#" tal:attributes="href obj_url;
                                                                 title obj_description;">
-                                        <img src="#"
-                                             height="16"
-                                             width="16"
-                                             tal:condition="obj_icon/url"
-                                             tal:attributes="src obj_icon/url;
-                                                             alt obj_icon/description;
-                                                             title obj_icon/title;
-                                                             width obj_icon/width;
-                                                             height obj_icon/height;"/>
+                                        <img tal:replace="structure obj_icon/html_tag|nothing" />
                                     </a>
                                     <a href="#"
                                        tal:condition="python: obj.portal_type != 'Link'"
                                        tal:attributes="href obj_url;
-                                                       class string:${obj_wf_state_class};
+                                                       class string:${obj_wf_state_class} ${obj_ct_class};
                                                        title obj_description;"
                                        tal:content="title_or_id">
                                         Item Title
@@ -104,7 +97,7 @@
                                     <a href="#"
                                        tal:condition="python: obj.portal_type == 'Link'"
                                        tal:attributes="href obj/getRemoteUrl;
-                                                       class string:${obj_wf_state_class} link-plain;
+                                                       class string:${obj_wf_state_class} ${obj_ct_class} link-plain;
                                                        title obj_description;"
                                        class="link-plain"
                                        tal:content="title_or_id" />
