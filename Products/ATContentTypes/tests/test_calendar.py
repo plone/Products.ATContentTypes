@@ -27,6 +27,7 @@ def makeResponse(request):
 class EventCalendarTests(ATCTSiteTestCase):
 
     def afterSetUp(self):
+        super(EventCalendarTests, self).afterSetUp()
         folder = self.folder
         event1 = folder[folder.invokeFactory('Event',
             id='ploneconf2007', title='Plone Conf 2007',

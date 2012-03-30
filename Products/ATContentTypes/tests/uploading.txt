@@ -52,7 +52,7 @@ Let's create a new collection, ending up at its edit form.
     >>> browser.getLink('Add new').click()
     >>> 'Add new item' in browser.contents
     True
-    >>> browser.getControl('Collection').click()
+    >>> browser.getControl('Collection', index=-1).click()
     >>> browser.getControl('Add').click()
     >>> browser.url
     'http://nohost/plone/portal_factory/Topic/topic.../edit'
