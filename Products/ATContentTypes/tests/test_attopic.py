@@ -139,6 +139,11 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self._ATCT = self._createType(self.folder, self.portal_type, 'ATCT')
         self.setRoles(['Member'])
 
+    def test_typeInfo(self):
+        ti = self._ATCT.getTypeInfo()
+        self.failUnlessEqual(ti.getId(), self.portal_type)
+        self.assertTrue(ti.Title().startswith('Collection'))
+
     def test_implementsATTopic(self):
         iface = IATTopic
         self.failUnless(iface.providedBy(self._ATCT))

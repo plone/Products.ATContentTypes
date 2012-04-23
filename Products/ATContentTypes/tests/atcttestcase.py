@@ -44,7 +44,9 @@ test_home = os.path.dirname(__file__)
 class ATCTSiteTestCase(PloneTestCase.PloneTestCase):
 
     def afterSetUp(self):
-        # BBB - make sure we can regression test the deprecated ATBTreeFolder class
+        # BBB - make sure we can regression test the deprecated types:
+        #  - Large Plone Folder
+        #  - Topic
         user = self.portal.acl_users.getUserById(default_user)
         orig_roles = self.portal.acl_users.portal_role_manager.getRolesForPrincipal(user)
         self.setRoles(['Manager'])
@@ -58,7 +60,9 @@ class ATCTSiteTestCase(PloneTestCase.PloneTestCase):
         lpf.product = 'ATContentTypes'
         lpf.content_meta_type = 'ATBTreeFolder'
         lpf.factory = 'addATBTreeFolder'
+        ttool['Topic'].global_allow = True
         self.setRoles(orig_roles)
+
 
 class ATCTFunctionalSiteTestCase(PloneTestCase.FunctionalTestCase, ATCTSiteTestCase):
     pass
