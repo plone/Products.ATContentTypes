@@ -17,39 +17,39 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
     def test_tool_installed(self):
         t = getToolByName(self.portal, TOOLNAME, None)
-        self.failUnless(t, t)
-        self.failUnless(isinstance(t, ATCTTool), t.__class__)
-        self.failUnlessEqual(t.meta_type, 'ATCT Tool')
-        self.failUnlessEqual(t.getId(), TOOLNAME)
+        self.assertTrue(t, t)
+        self.assertTrue(isinstance(t, ATCTTool), t.__class__)
+        self.assertEqual(t.meta_type, 'ATCT Tool')
+        self.assertEqual(t.getId(), TOOLNAME)
 
     def test_skin_installed(self):
         stool = getattr(self.portal.aq_explicit, 'portal_skins')
-        self.failUnless('ATContentTypes' in stool)
+        self.assertTrue('ATContentTypes' in stool)
 
     def test_installedAllTypes(self):
         # test that all types are installed well
         ids = ('Document', 'File', 'Folder', 'Image', 'Link',
             'News Item', 'Topic', 'Event')
         for i in ids:
-            self.failUnless(i in self.ttool)
+            self.assertTrue(i in self.ttool)
 
     def test_not_quickinstalled(self):
         qi = getattr(self.portal, 'portal_quickinstaller')
         products = [prod['id'] for prod in qi.listInstalledProducts()]
-        self.failIf('ATContentTypes' in products)
+        self.assertFalse('ATContentTypes' in products)
 
     def test_release_settings_SAVE_TO_FAIL_FOR_DEVELOPMENT(self):
-        self.failUnlessEqual(SWALLOW_IMAGE_RESIZE_EXCEPTIONS, True)
+        self.assertEqual(SWALLOW_IMAGE_RESIZE_EXCEPTIONS, True)
 
     def test_reindex_doesnt_add_tools(self):
         cat = self.cat
         ids = [i for i in self.portal if i.startswith('portal_')]
         # a rought guess
-        self.failIf(len(ids) < 5)
+        self.assertFalse(len(ids) < 5)
         for id in ids:
                 result = cat(id=id)
                 l = len(result)
-                self.failUnlessEqual(l, 0, (id, l, result))
+                self.assertEqual(l, 0, (id, l, result))
 
     def test_adds_related_items_catalog_index(self):
         self.assertEqual(self.cat.Indexes['getRawRelatedItems'].__class__.__name__,

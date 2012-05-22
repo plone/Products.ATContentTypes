@@ -33,18 +33,18 @@ class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
 
     def test_implementsTextContent(self):
         iface = ITextContent
-        self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+        self.assertTrue(iface.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(iface, self._ATCT))
 
     def test_implementsImageContent(self):
         iface = IImageContent
-        self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+        self.assertTrue(iface.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(iface, self._ATCT))
 
     def test_implementsATNewsItem(self):
         iface = IATNewsItem
-        self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+        self.assertTrue(iface.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         new = self._ATCT
@@ -53,7 +53,7 @@ class TestSiteATNewsItem(atcttestcase.ATCTTypeTestCase):
     def test_get_size(self):
         atct = self._ATCT
         editATCT(atct)
-        self.failUnlessEqual(atct.get_size(), len(TEXT))
+        self.assertEqual(atct.get_size(), len(TEXT))
 
 tests.append(TestSiteATNewsItem)
 
@@ -67,49 +67,49 @@ class TestATNewsItemFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('text')
 
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.required == 0, 'Value is %s' % field.required)
-        self.failUnless(field.default == '', 'Value is %s' % str(field.default))
-        self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == (),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
-        self.failUnless(field.enforceVocabulary == 0,
+        self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 0,
+        self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'getText',
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'getText',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setText',
+        self.assertTrue(field.mutator == 'setText',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
+        self.assertTrue(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission == ModifyPortalContent,
+        self.assertTrue(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'veVc',
+        self.assertTrue(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
-        self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'text', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AnnotationStorage),
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'text', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
+        self.assertTrue(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.validators == NotRequiredTidyHTMLValidator,
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
-        self.failUnless(isinstance(field.widget, RichWidget),
+        self.assertTrue(isinstance(field.widget, RichWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.failUnless(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
-        self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
-        self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
-        self.failUnless(field.default_content_type is None,
+        self.assertTrue(field.primary == 1, 'Value is %s' % field.primary)
+        self.assertTrue(field.default_content_type is None,
                         'Value is %s' % field.default_content_type)
-        self.failUnless(field.default_output_type == 'text/x-html-safe',
+        self.assertTrue(field.default_output_type == 'text/x-html-safe',
                         'Value is %s' % field.default_output_type)
-        self.failUnless('text/html' in field.getAllowedContentTypes(dummy))
+        self.assertTrue('text/html' in field.getAllowedContentTypes(dummy))
 
 tests.append(TestATNewsItemFields)
 

@@ -29,7 +29,7 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
 
         for pt, wf in mapping.items():
             pwf = self.wf.getChainFor(pt)
-            self.failUnlessEqual(pwf, wf, (pt, pwf, wf))
+            self.assertEqual(pwf, wf, (pt, pwf, wf))
 
     def test_striphtmlbug(self):
         # Test for Plone tracker #4944
@@ -40,7 +40,7 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
 
     def test_validation_layer_from_id_field_from_base_schema_was_initialized(self):
         field = ATContentTypeSchema['id']
-        self.failUnless(IValidationChain.providedBy(field.validators))
+        self.assertTrue(IValidationChain.providedBy(field.validators))
 
 
 tests.append(TestBugs)

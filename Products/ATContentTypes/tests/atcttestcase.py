@@ -98,17 +98,17 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
     def test_000testsetup(self):
         # test if we really have the right test setup
         # vars
-        self.failUnless(self.klass)
-        self.failUnless(self.portal_type)
-        self.failUnless(self.title)
-        self.failUnless(self.meta_type)
+        self.assertTrue(self.klass)
+        self.assertTrue(self.portal_type)
+        self.assertTrue(self.title)
+        self.assertTrue(self.meta_type)
 
         # portal types
-        self.failUnlessEqual(self._ATCT.portal_type, self.portal_type)
+        self.assertEqual(self._ATCT.portal_type, self.portal_type)
 
         # classes
         atct_class = self._ATCT.__class__
-        self.failUnlessEqual(self.klass, atct_class)
+        self.assertEqual(self.klass, atct_class)
 
     def test_dcEdit(self):
         new = self._ATCT
@@ -116,22 +116,22 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
 
     def test_typeInfo(self):
         ti = self._ATCT.getTypeInfo()
-        self.failUnlessEqual(ti.getId(), self.portal_type)
-        self.failUnlessEqual(ti.Title(), self.title)
+        self.assertEqual(ti.getId(), self.portal_type)
+        self.assertEqual(ti.Title(), self.title)
 
     def test_doesImplementDC(self):
-        self.failUnless(verifyObject(IDublinCore, self._ATCT))
-        self.failUnless(verifyObject(IMutableDublinCore, self._ATCT))
+        self.assertTrue(verifyObject(IDublinCore, self._ATCT))
+        self.assertTrue(verifyObject(IMutableDublinCore, self._ATCT))
 
     def test_doesImplementATCT(self):
-        self.failUnless(IATContentType.providedBy(self._ATCT))
-        self.failUnless(verifyObject(IATContentType, self._ATCT))
+        self.assertTrue(IATContentType.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(IATContentType, self._ATCT))
 
     def test_doesImplementAT(self):
-        self.failUnless(IBaseContent.providedBy(self._ATCT))
-        self.failUnless(IReferenceable.providedBy(self._ATCT))
-        self.failUnless(verifyObject(IBaseContent, self._ATCT))
-        self.failUnless(verifyObject(IReferenceable, self._ATCT))
+        self.assertTrue(IBaseContent.providedBy(self._ATCT))
+        self.assertTrue(IReferenceable.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(IBaseContent, self._ATCT))
+        self.assertTrue(verifyObject(IReferenceable, self._ATCT))
 
     def test_implementsTranslateable(self):
         # lingua plone is adding the ITranslatable interface to all types
@@ -139,16 +139,16 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
             return
         else:
             from Products.LinguaPlone.interfaces import ITranslatable
-            self.failUnless(ITranslatable.providedBy(self._ATCT))
-            self.failUnless(verifyObject(ITranslatable, self._ATCT))
+            self.assertTrue(ITranslatable.providedBy(self._ATCT))
+            self.assertTrue(verifyObject(ITranslatable, self._ATCT))
 
     def test_not_implements_ITemplateMixin(self):
-        self.failIf(ITemplateMixin.providedBy(self._ATCT))
+        self.assertFalse(ITemplateMixin.providedBy(self._ATCT))
 
     def test_implements_ISelectableBrowserDefault(self):
         iface = ISelectableBrowserDefault
-        self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+        self.assertTrue(iface.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(iface, self._ATCT))
 
     def compareDC(self, first, second=None, **kwargs):
         """
@@ -160,8 +160,8 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
             title = kwargs.get('title')
             description = kwargs.get('description')
 
-        self.failUnlessEqual(first.Title(), title)
-        self.failUnlessEqual(first.Description(), description)
+        self.assertEqual(first.Title(), title)
+        self.assertEqual(first.Description(), description)
 
     def test_idValidation(self):
         self.setRoles(['Manager', 'Member']) # for ATTopic
@@ -182,7 +182,7 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
         ids = ['', 'abcd', 'blafasel']
         for id in ids:
             request.form = {'id':id}
-            self.assertEquals(asdf.validate(REQUEST=request), {})
+            self.assertEqual(asdf.validate(REQUEST=request), {})
 
     def test_schema_marshall(self):
         atct = self._ATCT
@@ -194,7 +194,7 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
             marshallers.append(ControlledMarshaller)
         except ImportError:
             pass
-        self.failUnless(isinstance(marshall, tuple(marshallers)), marshall)
+        self.assertTrue(isinstance(marshall, tuple(marshallers)), marshall)
 
     def beforeTearDown(self):
         self.logout()
@@ -224,92 +224,92 @@ class ATCTFieldTestCase(ATCTSiteTestCase, BaseSchemaTest):
         dummy = self._dummy
         field = dummy.getField('description')
 
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnlessEqual(field.required, False)
-        self.failUnlessEqual(field.default, '')
-        self.failUnlessEqual(field.searchable, True)
-        self.failUnlessEqual(field.primary, False)
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertEqual(field.required, False)
+        self.assertEqual(field.default, '')
+        self.assertEqual(field.searchable, True)
+        self.assertEqual(field.primary, False)
         vocab = field.vocabulary
-        self.failUnlessEqual(vocab, ())
-        self.failUnlessEqual(field.enforceVocabulary, False)
-        self.failUnlessEqual(field.multiValued, False)
-        self.failUnlessEqual(field.isMetadata, True)
-        self.failUnlessEqual(field.accessor, 'Description')
-        self.failUnlessEqual(field.mutator, 'setDescription')
-        self.failUnlessEqual(field.edit_accessor, 'getRawDescription')
-        self.failUnlessEqual(field.read_permission, View)
-        self.failUnlessEqual(field.write_permission, ModifyPortalContent)
-        self.failUnlessEqual(field.generateMode, 'mVc')
-        #self.failUnless(field.generateMode == 'veVc', field.generateMode)
-        self.failUnlessEqual(field.force, '')
-        self.failUnlessEqual(field.type, 'text')
-        self.failUnless(isinstance(field.storage, MetadataStorage))
-        self.failUnless(field.getLayerImpl('storage') == MetadataStorage())
-        self.failUnlessEqual(field.validators, EmptyValidator)
-        self.failUnless(isinstance(field.widget, TextAreaWidget))
+        self.assertEqual(vocab, ())
+        self.assertEqual(field.enforceVocabulary, False)
+        self.assertEqual(field.multiValued, False)
+        self.assertEqual(field.isMetadata, True)
+        self.assertEqual(field.accessor, 'Description')
+        self.assertEqual(field.mutator, 'setDescription')
+        self.assertEqual(field.edit_accessor, 'getRawDescription')
+        self.assertEqual(field.read_permission, View)
+        self.assertEqual(field.write_permission, ModifyPortalContent)
+        self.assertEqual(field.generateMode, 'mVc')
+        #self.assertTrue(field.generateMode == 'veVc', field.generateMode)
+        self.assertEqual(field.force, '')
+        self.assertEqual(field.type, 'text')
+        self.assertTrue(isinstance(field.storage, MetadataStorage))
+        self.assertTrue(field.getLayerImpl('storage') == MetadataStorage())
+        self.assertEqual(field.validators, EmptyValidator)
+        self.assertTrue(isinstance(field.widget, TextAreaWidget))
         vocab = field.Vocabulary(dummy)
-        self.failUnless(isinstance(vocab, DisplayList))
-        self.failUnlessEqual(tuple(vocab), ())
+        self.assertTrue(isinstance(vocab, DisplayList))
+        self.assertEqual(tuple(vocab), ())
 
     def test_id(self):
         dummy = self._dummy
         field = dummy.getField('id')
 
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnlessEqual(field.required, False)
-        self.failUnlessEqual(field.default, None)
-        self.failUnlessEqual(field.searchable, True)
-        self.failUnlessEqual(getattr(field, 'primary', None), None)
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertEqual(field.required, False)
+        self.assertEqual(field.default, None)
+        self.assertEqual(field.searchable, True)
+        self.assertEqual(getattr(field, 'primary', None), None)
         vocab = field.vocabulary
-        self.failUnlessEqual(vocab, ())
-        self.failUnlessEqual(field.enforceVocabulary, False)
-        self.failUnlessEqual(field.multiValued, False)
-        self.failUnlessEqual(field.isMetadata, False)
-        self.failUnlessEqual(field.accessor, 'getId')
-        self.failUnlessEqual(field.mutator, 'setId')
-        self.failUnlessEqual(field.edit_accessor, 'getRawId')
-        self.failUnlessEqual(field.read_permission, View)
-        self.failUnlessEqual(field.write_permission, ModifyPortalContent)
-        self.failUnlessEqual(field.generateMode, 'veVc')
-        self.failUnlessEqual(field.force, '')
-        self.failUnlessEqual(field.type, 'string')
-        self.failUnless(isinstance(field.storage, AttributeStorage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage())
-        self.failUnlessEqual(field.validators, idValidator)
-        self.failUnless(isinstance(field.widget, IdWidget))
+        self.assertEqual(vocab, ())
+        self.assertEqual(field.enforceVocabulary, False)
+        self.assertEqual(field.multiValued, False)
+        self.assertEqual(field.isMetadata, False)
+        self.assertEqual(field.accessor, 'getId')
+        self.assertEqual(field.mutator, 'setId')
+        self.assertEqual(field.edit_accessor, 'getRawId')
+        self.assertEqual(field.read_permission, View)
+        self.assertEqual(field.write_permission, ModifyPortalContent)
+        self.assertEqual(field.generateMode, 'veVc')
+        self.assertEqual(field.force, '')
+        self.assertEqual(field.type, 'string')
+        self.assertTrue(isinstance(field.storage, AttributeStorage))
+        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage())
+        self.assertEqual(field.validators, idValidator)
+        self.assertTrue(isinstance(field.widget, IdWidget))
         vocab = field.Vocabulary(dummy)
-        self.failUnless(isinstance(vocab, DisplayList))
-        self.failUnlessEqual(tuple(vocab), ())
+        self.assertTrue(isinstance(vocab, DisplayList))
+        self.assertEqual(tuple(vocab), ())
 
     def test_relateditems(self):
         dummy = self._dummy
         field = dummy.getField('relatedItems')
 
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnlessEqual(field.required, False)
-        self.failUnlessEqual(field.default, None)
-        self.failUnlessEqual(field.searchable, False)
-        self.failUnlessEqual(getattr(field, 'primary', None), None)
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertEqual(field.required, False)
+        self.assertEqual(field.default, None)
+        self.assertEqual(field.searchable, False)
+        self.assertEqual(getattr(field, 'primary', None), None)
         vocab = field.vocabulary
-        self.failUnlessEqual(vocab, ())
-        self.failUnlessEqual(field.enforceVocabulary, False)
-        self.failUnlessEqual(field.multiValued, True)
-        self.failUnlessEqual(field.isMetadata, True)
-        self.failUnlessEqual(field.accessor, 'getRelatedItems')
-        self.failUnlessEqual(field.mutator, 'setRelatedItems')
-        self.failUnlessEqual(field.edit_accessor, 'getRawRelatedItems')
-        self.failUnlessEqual(field.read_permission, View)
-        self.failUnlessEqual(field.write_permission, ModifyPortalContent)
-        self.failUnlessEqual(field.generateMode, 'veVc')
-        self.failUnlessEqual(field.force, '')
-        self.failUnlessEqual(field.type, 'reference')
-        self.failUnless(isinstance(field.storage, AttributeStorage))
-        self.failUnless(field.getLayerImpl('storage') == AttributeStorage())
-        self.failUnlessEqual(field.validators, EmptyValidator)
-        self.failUnless(isinstance(field.widget, ReferenceBrowserWidget))
-        self.failUnless(field.widget.allow_sorting, u'field and widget need to enable sorting')
-        self.failUnless(field.referencesSortable, u'field and widget need to enable sorting')
+        self.assertEqual(vocab, ())
+        self.assertEqual(field.enforceVocabulary, False)
+        self.assertEqual(field.multiValued, True)
+        self.assertEqual(field.isMetadata, True)
+        self.assertEqual(field.accessor, 'getRelatedItems')
+        self.assertEqual(field.mutator, 'setRelatedItems')
+        self.assertEqual(field.edit_accessor, 'getRawRelatedItems')
+        self.assertEqual(field.read_permission, View)
+        self.assertEqual(field.write_permission, ModifyPortalContent)
+        self.assertEqual(field.generateMode, 'veVc')
+        self.assertEqual(field.force, '')
+        self.assertEqual(field.type, 'reference')
+        self.assertTrue(isinstance(field.storage, AttributeStorage))
+        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage())
+        self.assertEqual(field.validators, EmptyValidator)
+        self.assertTrue(isinstance(field.widget, ReferenceBrowserWidget))
+        self.assertTrue(field.widget.allow_sorting, u'field and widget need to enable sorting')
+        self.assertTrue(field.referencesSortable, u'field and widget need to enable sorting')
 
         vocab = field.Vocabulary(dummy)
-        self.failUnless(isinstance(vocab, DisplayList))
+        self.assertTrue(isinstance(vocab, DisplayList))
 

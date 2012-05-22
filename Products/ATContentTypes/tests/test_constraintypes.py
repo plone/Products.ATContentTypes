@@ -24,10 +24,10 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.at = self.tt.getTypeInfo(self.af)
 
     def test_isMixedIn(self):
-        self.failUnless(isinstance(self.af,
+        self.assertTrue(isinstance(self.af,
                                    constraintypes.ConstrainTypesMixin),
                         "ConstrainTypesMixin was not mixed in to ATFolder")
-        self.failUnless(ISelectableConstrainTypes.providedBy(self.af),
+        self.assertTrue(ISelectableConstrainTypes.providedBy(self.af),
                         "ISelectableConstrainTypes not implemented by ATFolder instance")
 
     def test_enabled(self):
@@ -35,9 +35,9 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.af.setLocallyAllowedTypes(['Folder', 'Image'])
         self.af.setImmediatelyAddableTypes(['Folder'])
 
-        self.failUnlessEqual(self.af.getLocallyAllowedTypes(),
+        self.assertEqual(self.af.getLocallyAllowedTypes(),
                                 ('Folder', 'Image',))
-        self.failUnlessEqual(self.af.getImmediatelyAddableTypes(),
+        self.assertEqual(self.af.getImmediatelyAddableTypes(),
                                 ('Folder',))
 
         self.assertRaises(ValueError, self.af.invokeFactory, 'Document', 'a')
@@ -53,9 +53,9 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
 
         # We can still set and persist, even though it is disabled - must
         # remember!
-        self.failUnlessEqual(self.af.getRawLocallyAllowedTypes(),
+        self.assertEqual(self.af.getRawLocallyAllowedTypes(),
                                 ('Folder', 'Image',))
-        self.failUnlessEqual(self.af.getRawImmediatelyAddableTypes(),
+        self.assertEqual(self.af.getRawImmediatelyAddableTypes(),
                                 ('Folder',))
 
         try:
@@ -66,7 +66,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
 
         # Make sure immediately-addable are all types if we are disabled
         allowedIds = [ctype.getId() for ctype in self.af.allowedContentTypes()]
-        self.failUnlessEqual(allowedIds, self.af.getImmediatelyAddableTypes())
+        self.assertEqual(allowedIds, self.af.getImmediatelyAddableTypes())
 
     def test_acquireFromHomogenousParent(self):
         # Set up outer folder with restrictions enabled
@@ -84,9 +84,9 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         inner.setLocallyAllowedTypes(['Document', 'Event'])
         inner.setImmediatelyAddableTypes(['Document'])
 
-        self.failUnlessEqual(inner.getRawLocallyAllowedTypes(),
+        self.assertEqual(inner.getRawLocallyAllowedTypes(),
                                 ('Document', 'Event',))
-        self.failUnlessEqual(inner.getRawImmediatelyAddableTypes(),
+        self.assertEqual(inner.getRawImmediatelyAddableTypes(),
                                 ('Document',))
 
         self.assertRaises(ValueError, inner.invokeFactory, 'Event', 'a')
@@ -96,7 +96,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
             self.fail()
 
         # Make sure immediately-addable are inherited
-        self.failUnlessEqual(inner.getImmediatelyAddableTypes(),
+        self.assertEqual(inner.getImmediatelyAddableTypes(),
                                 self.af.getImmediatelyAddableTypes())
 
 
@@ -106,7 +106,7 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         # Login the new user
         user = self.portal.acl_users.getUserById('restricted')
         newSecurityManager(None, user)
-        self.failUnlessEqual(inner.getLocallyAllowedTypes(),
+        self.assertEqual(inner.getLocallyAllowedTypes(),
                         ('Folder', 'Image'))
 
 
@@ -135,18 +135,18 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         inner.setLocallyAllowedTypes(['Document', 'Event'])
         inner.setImmediatelyAddableTypes(['Document'])
 
-        self.failUnlessEqual(inner.getRawLocallyAllowedTypes(),
+        self.assertEqual(inner.getRawLocallyAllowedTypes(),
                                 ('Document', 'Event',))
-        self.failUnlessEqual(inner.getRawImmediatelyAddableTypes(),
+        self.assertEqual(inner.getRawImmediatelyAddableTypes(),
                                 ('Document',))
 
         # Fail - we didn't acquire this, really, since we can't acquire
         # from parent folder of different type
         self.assertRaises(ValueError, inner.invokeFactory, 'Topic', 'a')
-        self.failIf('News Item' in inner.getLocallyAllowedTypes())
+        self.assertFalse('News Item' in inner.getLocallyAllowedTypes())
 
         # Make sure immediately-addable are set to default
-        self.failUnlessEqual(inner.getImmediatelyAddableTypes(),
+        self.assertEqual(inner.getImmediatelyAddableTypes(),
                                 inner.getLocallyAllowedTypes())
 
     def test_acquireFromCustomHetereogenousParent(self):
@@ -176,9 +176,9 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
 
         # News item is not in addable types because it is globally forbidden in Folder2 type
         # and Folder is not in addable types because it is locally forbidden in folder2 parent
-        self.failUnlessEqual([fti.getId() for fti in folder2.allowedContentTypes()],
+        self.assertEqual([fti.getId() for fti in folder2.allowedContentTypes()],
                              ['Image'])
-        self.failUnlessEqual(folder2.getImmediatelyAddableTypes(), ['Image'])
+        self.assertEqual(folder2.getImmediatelyAddableTypes(), ['Image'])
 
 
 tests.append(TestConstrainTypes)

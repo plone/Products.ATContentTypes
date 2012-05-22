@@ -86,7 +86,7 @@ class EventCalendarTests(ATCTSiteTestCase):
     def checkOrder(self, text, *order):
         for item in order:
             position = text.find(item)
-            self.failUnless(position >= 0,
+            self.assertTrue(position >= 0,
                 'menu item "%s" missing or out of order' % item)
             text = text[position:]
 

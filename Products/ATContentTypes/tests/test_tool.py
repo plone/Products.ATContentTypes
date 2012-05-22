@@ -14,14 +14,14 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
 
     def test_interface(self):
         t = self.tool
-        self.failUnless(IATCTTool.providedBy(t))
-        self.failUnless(verifyObject(IATCTTool, t))
+        self.assertTrue(IATCTTool.providedBy(t))
+        self.assertTrue(verifyObject(IATCTTool, t))
 
     def test_names(self):
         t = self.tool
-        self.failUnlessEqual(t.meta_type, 'ATCT Tool')
-        self.failUnlessEqual(t.getId(), TOOLNAME)
-        self.failUnlessEqual(t.title, 'Collection and image scales settings')
+        self.assertEqual(t.meta_type, 'ATCT Tool')
+        self.assertEqual(t.getId(), TOOLNAME)
+        self.assertEqual(t.title, 'Collection and image scales settings')
 
 tests.append(TestTool)
 
@@ -39,7 +39,7 @@ class TestATCTToolFunctional(atctftestcase.IntegrationTestCase):
     def test_zmi_tabs(self):
         for view in self.zmi_tabs:
             response = self.publish('%s/%s' % (self.obj_path, view), self.owner_auth)
-            self.failUnlessEqual(response.getStatus(), 200, 
+            self.assertEqual(response.getStatus(), 200, 
                 "%s: %s" % (view, response.getStatus())) # OK
 
 tests.append(TestATCTToolFunctional)

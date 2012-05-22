@@ -88,19 +88,19 @@ class TestIDFromTitle(FunctionalTestCase):
     def test_image_id_from_filename_and_title(self):
         # Get ID from filename:
         self._make_image('')
-        self.failUnless('canoneye.jpg' in self.browser.url)
+        self.assertTrue('canoneye.jpg' in self.browser.url)
 
         # Get ID from title.
         # As a side effect, make sure the ID validator doesn't overzealously
         # deny our upload of something else called canoneye.jpg, even though
         # we're not going to compute its ID from its filename.
         self._make_image('Wonderful Image')
-        self.failUnless('/wonderful-image' in self.browser.url)
+        self.assertTrue('/wonderful-image' in self.browser.url)
 
     def test_image_id_from_unicode_title(self):
         self._make_image('', filename=u'Pictüre 1.png'.encode('utf-8'))
         normalized = 'Picture%201.png'
-        self.failUnless(normalized in self.browser.url)
+        self.assertTrue(normalized in self.browser.url)
 
 tests.append(TestIDFromTitle)
 
@@ -114,13 +114,13 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
 
     def test_implementsImageContent(self):
         iface = IImageContent
-        self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+        self.assertTrue(iface.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(iface, self._ATCT))
 
     def test_implementsATImage(self):
         iface = IATImage
-        self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+        self.assertTrue(iface.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         new = self._ATCT
@@ -129,7 +129,7 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
     def test_getEXIF(self):
         # NOTE: not a real test
         exif_data = self._ATCT.getEXIF()
-        self.failUnless(isinstance(exif_data, dict), type(exif_data))
+        self.assertTrue(isinstance(exif_data, dict), type(exif_data))
 
     def test_exifOrientation(self):
         # NOTE: not a real test
@@ -154,7 +154,7 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
 
         # test upload
         atct.setImage(TEST_GIF, mimetype='image/gif', filename='test.gif')
-        self.failUnlessEqual(atct.getImage().data, TEST_GIF)
+        self.assertEqual(atct.getImage().data, TEST_GIF)
 
     def test_division_by_0_pil(self):
         # pil generates a division by zero error on some images
@@ -163,13 +163,13 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         # test upload
         atct.setImage(TEST_DIV_ERROR, mimetype='image/jpeg',
                       filename='divisionerror.jpg')
-        self.failUnlessEqual(atct.getImage().data, TEST_DIV_ERROR)
+        self.assertEqual(atct.getImage().data, TEST_DIV_ERROR)
 
     def test_get_size(self):
         atct = self._ATCT
         editATCT(atct)
-        self.failUnlessEqual(len(TEST_GIF), TEST_GIF_LEN)
-        self.failUnlessEqual(atct.get_size(), TEST_GIF_LEN)
+        self.assertEqual(len(TEST_GIF), TEST_GIF_LEN)
+        self.assertEqual(atct.get_size(), TEST_GIF_LEN)
 
     def test_schema_marshall(self):
         atct = self._ATCT
@@ -181,7 +181,7 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
             marshallers.append(ControlledMarshaller)
         except ImportError:
             pass
-        self.failUnless(isinstance(marshall, tuple(marshallers)), marshall)
+        self.assertTrue(isinstance(marshall, tuple(marshallers)), marshall)
 
     def test_dcEdit(self):
         new = self._ATCT
@@ -202,25 +202,25 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
 
         # string upload
         atct.setImage(TEST_JPEG)
-        self.failUnless(len(atct.getEXIF()), atct.getEXIF())
+        self.assertTrue(len(atct.getEXIF()), atct.getEXIF())
         atct._image_exif = None
 
         # file upload
         atct.setImage(TEST_JPEG_FILE)
-        self.failUnless(len(atct.getEXIF()), atct.getEXIF())
+        self.assertTrue(len(atct.getEXIF()), atct.getEXIF())
         atct._image_exif = None
 
         # Pdata upload
         from OFS.Image import Pdata
         pd = Pdata(TEST_JPEG)
         atct.setImage(pd)
-        self.failUnless(len(atct.getEXIF()), atct.getEXIF())
+        self.assertTrue(len(atct.getEXIF()), atct.getEXIF())
         atct._image_exif = None
 
         # ofs image upload
         ofs = atct.getImage()
         atct.setImage(ofs)
-        self.failUnless(len(atct.getEXIF()), atct.getEXIF())
+        self.assertTrue(len(atct.getEXIF()), atct.getEXIF())
         atct._image_exif = None
 
 tests.append(TestSiteATImage)
@@ -241,43 +241,43 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('image')
 
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.required == 1, 'Value is %s' % field.required)
-        self.failUnless(field.default == None, 'Value is %s' % str(field.default))
-        self.failUnless(field.searchable == 0, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == (),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 1, 'Value is %s' % field.required)
+        self.assertTrue(field.default == None, 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 0, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
-        self.failUnless(field.enforceVocabulary == 0,
+        self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 0,
+        self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'getImage',
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'getImage',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setImage',
+        self.assertTrue(field.mutator == 'setImage',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
+        self.assertTrue(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission == ModifyPortalContent,
+        self.assertTrue(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'veVc',
+        self.assertTrue(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
-        self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'blob', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AnnotationStorage),
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'blob', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
+        self.assertTrue(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.validators == "(('isNonEmptyFile', V_REQUIRED), ('checkImageMaxSize', V_REQUIRED))",
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.validators == "(('isNonEmptyFile', V_REQUIRED), ('checkImageMaxSize', V_REQUIRED))",
                         'Value is %s' % str(field.validators))
-        self.failUnless(isinstance(field.widget, ImageWidget),
+        self.assertTrue(isinstance(field.widget, ImageWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.failUnless(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
-        self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
-        self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+        self.assertTrue(field.primary == 1, 'Value is %s' % field.primary)
 
 tests.append(TestATImageFields)
 
@@ -293,23 +293,23 @@ class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
 
     def test_url_returns_image(self):
         response = self.publish(self.obj_path, self.basic_auth)
-        self.failUnlessEqual(response.getStatus(), 200) # OK
+        self.assertEqual(response.getStatus(), 200) # OK
 
     def test_bobo_hook_security(self):
         # Make sure that users with 'View' permission can use the
         # bobo_traversed image scales, even if denied to anonymous
         response1 = self.publish(self.obj_path+'/image', self.basic_auth)
-        self.failUnlessEqual(response1.getStatus(), 200) # OK
+        self.assertEqual(response1.getStatus(), 200) # OK
         # deny access to anonymous
         self.obj.manage_permission('View', ['Manager','Member'],0)
         response2 = self.publish(self.obj_path+'/image', self.basic_auth)
         # Should be allowed for member
-        self.failUnlessEqual(response2.getStatus(), 200) # OK
+        self.assertEqual(response2.getStatus(), 200) # OK
         # Should fail for anonymous
         response3 = self.publish(self.obj_path+'/image')
-        self.failUnlessEqual(response3.getStatus(), 302)
+        self.assertEqual(response3.getStatus(), 302)
         bobo_exception = response3.getHeader('bobo-exception-type')
-        self.failUnless('Unauthorized' in bobo_exception)
+        self.assertTrue('Unauthorized' in bobo_exception)
 
 tests.append(TestATImageFunctional)
 

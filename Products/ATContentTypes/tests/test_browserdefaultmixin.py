@@ -24,11 +24,11 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.app.REQUEST.set('PARENTS', [self.app])
 
     def test_isMixedIn(self):
-        self.failUnless(isinstance(self.af, BrowserDefaultMixin),
+        self.assertTrue(isinstance(self.af, BrowserDefaultMixin),
                         "ISelectableBrowserDefault was not mixed in to ATFolder")
-        self.failUnless(ZopeTwoISelectableBrowserDefault.providedBy(self.af),
+        self.assertTrue(ZopeTwoISelectableBrowserDefault.providedBy(self.af),
                         "ISelectableBrowserDefault not implemented by ATFolder instance")
-        self.failUnless(ISelectableBrowserDefault.providedBy(self.af),
+        self.assertTrue(ISelectableBrowserDefault.providedBy(self.af),
                         "ISelectableBrowserDefault not implemented by ATFolder instance")
 
     def test_defaultFolderViews(self):
@@ -37,8 +37,8 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(self.af.defaultView(), 'folder_listing')
         self.assertEqual(self.af.getDefaultLayout(), 'folder_listing')
         layoutKeys = [v[0] for v in self.af.getAvailableLayouts()]
-        self.failUnless('folder_listing' in layoutKeys)
-        self.failUnless('atct_album_view' in layoutKeys)
+        self.assertTrue('folder_listing' in layoutKeys)
+        self.assertTrue('atct_album_view' in layoutKeys)
 
         resolved = self.af.unrestrictedTraverse('folder_listing')()
         browserDefault = self.af.__browser_default__(None)[1][0]
@@ -46,10 +46,10 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(resolved, browserDefaultResolved)
 
     def test_canSetLayout(self):
-        self.failUnless(self.af.canSetLayout())
+        self.assertTrue(self.af.canSetLayout())
         self.af.invokeFactory('Document', 'ad')
         self.portal.manage_permission(permission.ModifyViewTemplate, [], 0)
-        self.failIf(self.af.canSetLayout()) # Not permitted
+        self.assertFalse(self.af.canSetLayout()) # Not permitted
 
     def test_setLayout(self):
         self.af.setLayout('atct_album_view')
@@ -58,8 +58,8 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(self.af.defaultView(), 'atct_album_view')
         self.assertEqual(self.af.getDefaultLayout(), 'folder_listing')
         layoutKeys = [v[0] for v in self.af.getAvailableLayouts()]
-        self.failUnless('folder_listing' in layoutKeys)
-        self.failUnless('atct_album_view' in layoutKeys)
+        self.assertTrue('folder_listing' in layoutKeys)
+        self.assertTrue('atct_album_view' in layoutKeys)
 
         resolved = self.af.unrestrictedTraverse('atct_album_view')()
         browserDefault = self.af.__browser_default__(None)[1][0]
@@ -67,11 +67,11 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(resolved, browserDefaultResolved)
 
     def test_canSetDefaultPage(self):
-        self.failUnless(self.af.canSetDefaultPage())
+        self.assertTrue(self.af.canSetDefaultPage())
         self.af.invokeFactory('Document', 'ad')
-        self.failIf(self.af.ad.canSetDefaultPage()) # Not folderish
+        self.assertFalse(self.af.ad.canSetDefaultPage()) # Not folderish
         self.portal.manage_permission(permission.ModifyViewTemplate, [], 0)
-        self.failIf(self.af.canSetDefaultPage()) # Not permitted
+        self.assertFalse(self.af.canSetDefaultPage()) # Not permitted
 
     def test_setDefaultPage(self):
         self.af.invokeFactory('Document', 'ad')
@@ -84,8 +84,8 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(self.af.getLayout(), 'folder_listing')
         self.assertEqual(self.af.getDefaultLayout(), 'folder_listing')
         layoutKeys = [v[0] for v in self.af.getAvailableLayouts()]
-        self.failUnless('folder_listing' in layoutKeys)
-        self.failUnless('atct_album_view' in layoutKeys)
+        self.assertTrue('folder_listing' in layoutKeys)
+        self.assertTrue('atct_album_view' in layoutKeys)
 
     def test_setDefaultPageUpdatesCatalog(self):
         # Ensure that Default page changes update the catalog
@@ -133,7 +133,7 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         # Create a subobject of a different type
         af.invokeFactory('Document', 'page', title='page')
         page = af.page
-        self.failIf(page.getLayout() == 'folder_tabular_view')
+        self.assertFalse(page.getLayout() == 'folder_tabular_view')
 
 tests.append(TestBrowserDefaultMixin)
 

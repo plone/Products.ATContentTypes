@@ -55,18 +55,18 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
 
     def test_doesImplementHistoryAware(self):
         iface = IHistoryAware
-        self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+        self.assertTrue(iface.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(iface, self._ATCT))
 
     def test_implementsTextContent(self):
         iface = ITextContent
-        self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+        self.assertTrue(iface.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(iface, self._ATCT))
 
     def test_implementsATDocument(self):
         iface = IATDocument
-        self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+        self.assertTrue(iface.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         new = self._ATCT
@@ -78,7 +78,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
     def test_rename_keeps_contenttype(self):
         doc = self._ATCT
         doc.setText(example_rest, mimetype="text/x-rst")
-        self.failUnless(str(doc.getField('text').getContentType(doc)) == "text/x-rst")
+        self.assertTrue(str(doc.getField('text').getContentType(doc)) == "text/x-rst")
         #make sure we have _p_jar
         transaction.savepoint(optimistic=True)
 
@@ -87,7 +87,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         self.folder.manage_renameObject(cur_id, new_id)
         doc = getattr(self.folder, new_id)
         field = doc.getField('text')
-        self.failUnless(str(field.getContentType(doc)) == "text/x-rst")
+        self.assertTrue(str(field.getContentType(doc)) == "text/x-rst")
 
     def test_x_safe_html(self):
         doc = self._ATCT
@@ -111,12 +111,12 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
             text = "<p>test</p><script>I'm a nasty boy<p>nested</p></script>"
             doc.setText(text, mimetype=mimetype)
             txt = doc.getText()
-            self.failUnlessEqual(txt, expected, (txt, expected, mimetype))
+            self.assertEqual(txt, expected, (txt, expected, mimetype))
 
     def test_get_size(self):
         atct = self._ATCT
         editATCT(atct)
-        self.failUnlessEqual(atct.get_size(), len(example_stx))
+        self.assertEqual(atct.get_size(), len(example_stx))
 
     if atct_config.HAS_MX_TIDY:
         # this test is null and void if mx.Tidy isn't even installed
@@ -140,12 +140,12 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
             tcv = TidyHtmlWithCleanupValidator('tidy_validator_with_cleanup')
             result = tcv.__call__(f, field=field, REQUEST=request)
     
-            self.assertEquals(result, 1)
+            self.assertEqual(result, 1)
     
             expected_file = open(input_file_path('tidy1-out.html'))
             expected = expected_file.read()
             expected_file.close()
-            self.assertEquals(request['text_tidier_data'], expected)
+            self.assertEqual(request['text_tidier_data'], expected)
         
 tests.append(TestSiteATDocument)
 
@@ -159,41 +159,41 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
         dummy = self._dummy
         field = dummy.getField('text')
         mutator = field.getMutator(dummy)
-        self.assertEquals(field.getFilename(dummy), None)
-        self.assertEquals(field.getContentType(dummy), 'text/html')
+        self.assertEqual(field.getFilename(dummy), None)
+        self.assertEqual(field.getContentType(dummy), 'text/html')
         mutator('', filename='foo.txt')
-        self.assertEquals(field.getFilename(dummy), 'foo.txt')
-        self.assertEquals(field.getContentType(dummy), 'text/plain')
+        self.assertEqual(field.getFilename(dummy), 'foo.txt')
+        self.assertEqual(field.getContentType(dummy), 'text/plain')
 
     def test_text_field_mutator_mime(self):
         dummy = self._dummy
         field = dummy.getField('text')
         mutator = field.getMutator(dummy)
-        self.assertEquals(field.getFilename(dummy), None)
-        self.assertEquals(field.getContentType(dummy), 'text/html')
+        self.assertEqual(field.getFilename(dummy), None)
+        self.assertEqual(field.getContentType(dummy), 'text/html')
         mutator('', mimetype='text/plain')
-        self.assertEquals(field.getFilename(dummy), None)
-        self.assertEquals(field.getContentType(dummy), 'text/plain')
+        self.assertEqual(field.getFilename(dummy), None)
+        self.assertEqual(field.getContentType(dummy), 'text/plain')
 
     def test_text_field_mutator_none_mime(self):
         dummy = self._dummy
         field = dummy.getField('text')
         mutator = field.getMutator(dummy)
-        self.assertEquals(field.getFilename(dummy), None)
-        self.assertEquals(field.getContentType(dummy), 'text/html')
+        self.assertEqual(field.getFilename(dummy), None)
+        self.assertEqual(field.getContentType(dummy), 'text/html')
         mutator('', mimetype=None)
-        self.assertEquals(field.getFilename(dummy), None)
-        self.assertEquals(field.getContentType(dummy), 'text/plain')
+        self.assertEqual(field.getFilename(dummy), None)
+        self.assertEqual(field.getContentType(dummy), 'text/plain')
 
     def test_text_field_mutator_none_filename(self):
         dummy = self._dummy
         field = dummy.getField('text')
         mutator = field.getMutator(dummy)
-        self.assertEquals(field.getFilename(dummy), None)
-        self.assertEquals(field.getContentType(dummy), 'text/html')
+        self.assertEqual(field.getFilename(dummy), None)
+        self.assertEqual(field.getContentType(dummy), 'text/html')
         mutator('', filename=None)
-        self.assertEquals(field.getFilename(dummy), None)
-        self.assertEquals(field.getContentType(dummy), 'text/plain')
+        self.assertEqual(field.getFilename(dummy), None)
+        self.assertEqual(field.getContentType(dummy), 'text/plain')
 
     def test_text_setEmptyText(self):
         dummy = self._dummy
@@ -208,56 +208,56 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
 
         # verify that text is indeed empty
         accessor = field.getAccessor(dummy)
-        self.assertEquals(accessor(), '')
+        self.assertEqual(accessor(), '')
 
     def test_textField(self):
         dummy = self._dummy
         field = dummy.getField('text')
 
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.required == 0, 'Value is %s' % field.required)
-        self.failUnless(field.default == '', 'Value is %s' % str(field.default))
-        self.failUnless(field.searchable == 1, 'Value is %s' % field.searchable)
-        self.failUnless(field.vocabulary == (),
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.required == 0, 'Value is %s' % field.required)
+        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
-        self.failUnless(field.enforceVocabulary == 0,
+        self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
-        self.failUnless(field.multiValued == 0,
+        self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.failUnless(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
-        self.failUnless(field.accessor == 'getText',
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.accessor == 'getText',
                         'Value is %s' % field.accessor)
-        self.failUnless(field.mutator == 'setText',
+        self.assertTrue(field.mutator == 'setText',
                         'Value is %s' % field.mutator)
-        self.failUnless(field.read_permission == View,
+        self.assertTrue(field.read_permission == View,
                         'Value is %s' % field.read_permission)
-        self.failUnless(field.write_permission == ModifyPortalContent,
+        self.assertTrue(field.write_permission == ModifyPortalContent,
                         'Value is %s' % field.write_permission)
-        self.failUnless(field.generateMode == 'veVc',
+        self.assertTrue(field.generateMode == 'veVc',
                         'Value is %s' % field.generateMode)
-        self.failUnless(field.force == '', 'Value is %s' % field.force)
-        self.failUnless(field.type == 'text', 'Value is %s' % field.type)
-        self.failUnless(isinstance(field.storage, AnnotationStorage),
+        self.assertTrue(field.force == '', 'Value is %s' % field.force)
+        self.assertTrue(field.type == 'text', 'Value is %s' % field.type)
+        self.assertTrue(isinstance(field.storage, AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.failUnless(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
+        self.assertTrue(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
-        self.failUnless(ILayerContainer.providedBy(field))
-        self.failUnless(field.validators == NotRequiredTidyHTMLValidator,
+        self.assertTrue(ILayerContainer.providedBy(field))
+        self.assertTrue(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
-        self.failUnless(isinstance(field.widget, RichWidget),
+        self.assertTrue(isinstance(field.widget, RichWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.failUnless(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, DisplayList),
                         'Value is %s' % type(vocab))
-        self.failUnless(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
+        self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
-        self.failUnless(field.primary == 1, 'Value is %s' % field.primary)
-        self.failUnless(field.default_content_type is None,
+        self.assertTrue(field.primary == 1, 'Value is %s' % field.primary)
+        self.assertTrue(field.default_content_type is None,
                         'Value is %s' % field.default_content_type)
-        self.failUnless(field.default_output_type == 'text/x-html-safe',
+        self.assertTrue(field.default_output_type == 'text/x-html-safe',
                         'Value is %s' % field.default_output_type)
 
-        self.failUnless('text/html' in field.getAllowedContentTypes(dummy))
+        self.assertTrue('text/html' in field.getAllowedContentTypes(dummy))
 
 tests.append(TestATDocumentFields)
 
@@ -274,16 +274,16 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
                                 '/createObject?type_name=%s' % self.portal_type,
                                 self.basic_auth)
 
-        self.failUnlessEqual(response.getStatus(), 302) # Redirect to edit
+        self.assertEqual(response.getStatus(), 302) # Redirect to edit
 
         location = response.getHeader('Location')
-        self.failUnless(location.startswith(self.folder_url), location)
-        self.failUnless(location.endswith('edit'), location)
+        self.assertTrue(location.startswith(self.folder_url), location)
+        self.assertTrue(location.endswith('edit'), location)
 
         # Perform the redirect
         edit_form_path = location[len(self.app.REQUEST.SERVER_URL):]
         response = self.publish(edit_form_path, self.basic_auth)
-        self.failUnlessEqual(response.getStatus(), 200) # OK
+        self.assertEqual(response.getStatus(), 200) # OK
 
         #Change the title
         temp_id = location.split('/')[-2]
@@ -291,16 +291,16 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
         new_id = "new-title-for-object"
         new_obj = getattr(self.folder.aq_explicit, temp_id)
         new_obj_path = '/%s' % new_obj.absolute_url(1)
-        self.failUnlessEqual(new_obj.checkCreationFlag(), True) # object is not yet edited
+        self.assertEqual(new_obj.checkCreationFlag(), True) # object is not yet edited
 
         response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank' % (new_obj_path, obj_title,), self.basic_auth) # Edit object
-        self.failUnlessEqual(response.getStatus(), 302) # OK
-        self.failUnlessEqual(new_obj.getId(), new_id) # does id match
-        self.failUnlessEqual(new_obj.checkCreationFlag(), False) # object is fully created
+        self.assertEqual(response.getStatus(), 302) # OK
+        self.assertEqual(new_obj.getId(), new_id) # does id match
+        self.assertEqual(new_obj.checkCreationFlag(), False) # object is fully created
         new_title = "Second Title"
         response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank' % ('/%s' % new_obj.absolute_url(1), new_title,), self.basic_auth) # Edit object
-        self.failUnlessEqual(response.getStatus(), 302) # OK
-        self.failUnlessEqual(new_obj.getId(), new_id) # id shouldn't have changed
+        self.assertEqual(response.getStatus(), 302) # OK
+        self.assertEqual(new_obj.getId(), new_id) # id shouldn't have changed
 
 tests.append(TestATDocumentFunctional)
 
