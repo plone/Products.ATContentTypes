@@ -13,7 +13,6 @@ from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from Acquisition import aq_parent
 from Acquisition import aq_inner
-from zExceptions import NotFound
 from webdav.Resource import Resource as WebdavResoure
 
 from Products.Archetypes.atapi import Schema
@@ -58,34 +57,34 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
               required=False,
               searchable=True,
               primary=True,
-              storage = AnnotationStorage(migrate=True),
-              validators = ('isTidyHtmlWithCleanup',),
-              #validators = ('isTidyHtml',),
-              default_output_type = 'text/x-html-safe',
-              widget = RichWidget(
-                        description = '',
-                        label = _(u'label_body_text', default=u'Body Text'),
-                        rows = 25,
-                        allow_file_upload = zconf.ATDocument.allow_document_upload),
+              storage=AnnotationStorage(migrate=True),
+              validators=('isTidyHtmlWithCleanup',),
+              #validators=('isTidyHtml',),
+              default_output_type='text/x-html-safe',
+              widget=RichWidget(
+                    description='',
+                    label=_(u'label_body_text', default=u'Body Text'),
+                    rows=25,
+                    allow_file_upload=zconf.ATDocument.allow_document_upload),
     ),
     BooleanField('acquireCriteria',
                 required=False,
                 mode="rw",
                 default=False,
-                write_permission = ChangeTopics,
+                write_permission=ChangeTopics,
                 widget=BooleanWidget(
                         label=_(u'label_inherit_criteria', default=u'Inherit Criteria'),
                         description=_(u'help_inherit_collection_criteria',
                                       default=u"Narrow down the search results from the parent Collection(s) "
                                                "by using the criteria from this Collection."),
                         # Only show when the parent object is a Topic also,
-                        condition = "python:object.aq_parent.portal_type == 'Topic'"),
+                        condition="python:object.aq_parent.portal_type == 'Topic'"),
                 ),
     BooleanField('limitNumber',
                 required=False,
                 mode="rw",
                 default=False,
-                write_permission = ChangeTopics,
+                write_permission=ChangeTopics,
                 widget=BooleanWidget(
                         label=_(u'label_limit_number', default=u'Limit Search Results'),
                         description=_(u'help_limit_number',
@@ -97,7 +96,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 required=False,
                 mode="rw",
                 default=0,
-                write_permission = ChangeTopics,
+                write_permission=ChangeTopics,
                 widget=IntegerWidget(
                         label=_(u'label_item_count', default=u'Number of Items'),
                         description=''
@@ -107,7 +106,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 required=False,
                 mode="rw",
                 default=False,
-                write_permission = ChangeTopics,
+                write_permission=ChangeTopics,
                 widget=BooleanWidget(
                         label=_(u'label_custom_view', default=u'Display as Table'),
                         description=_(u'help_custom_view',
@@ -121,7 +120,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
                 default=('Title',),
                 vocabulary='listMetaDataFields',
                 enforceVocabulary=True,
-                write_permission = ChangeTopics,
+                write_permission=ChangeTopics,
                 widget=InAndOutWidget(
                         label=_(u'label_custom_view_fields', default=u'Table Columns'),
                         description=_(u'help_custom_view_fields',
@@ -136,14 +135,14 @@ finalizeATCTSchema(ATTopicSchema, folderish=False, moveDiscussion=False)
 class ATTopic(ATCTFolder):
     """An automatically updated stored search that can be used to display items matching criteria you specify."""
 
-    schema         =  ATTopicSchema
+    schema = ATTopicSchema
 
-    portal_type    = 'Topic'
+    portal_type = 'Topic'
     archetype_name = 'Collection'
-    _atct_newTypeFor = {'portal_type' : 'CMF Topic', 'meta_type' : 'Portal Topic'}
+    _atct_newTypeFor = {'portal_type': 'CMF Topic', 'meta_type': 'Portal Topic'}
     assocMimetypes = ()
-    assocFileExt   = ()
-    cmf_edit_kws   = ()
+    assocFileExt = ()
+    cmf_edit_kws = ()
 
     use_folder_tabs = 0
 
@@ -152,7 +151,7 @@ class ATTopic(ATCTFolder):
     # Enable marshalling via WebDAV/FTP
     __dav_marshall__ = True
 
-    security       = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
     # Override initializeArchetype to turn on syndication by default
     def initializeArchetype(self, **kwargs):
@@ -182,9 +181,9 @@ class ATTopic(ATCTFolder):
     def listCriteriaTypes(self):
         """List available criteria types as dict
         """
-        return [ {'name': ctype,
-                  'description':_criterionRegistry[ctype].shortDesc}
-                 for ctype in self.listCriteriaMetaTypes() ]
+        return [{'name': ctype,
+                 'description':_criterionRegistry[ctype].shortDesc}
+                for ctype in self.listCriteriaMetaTypes()]
 
     security.declareProtected(ChangeTopics, 'listCriteriaMetaTypes')
     def listCriteriaMetaTypes(self):
@@ -198,9 +197,9 @@ class ATTopic(ATCTFolder):
     def listSearchCriteriaTypes(self):
         """List available search criteria types as dict
         """
-        return [ {'name': ctype,
-                  'description':_criterionRegistry[ctype].shortDesc}
-                 for ctype in self.listSearchCriteriaMetaTypes() ]
+        return [{'name': ctype,
+                 'description':_criterionRegistry[ctype].shortDesc}
+                for ctype in self.listSearchCriteriaMetaTypes()]
 
     security.declareProtected(ChangeTopics, 'listSearchCriteriaMetaTypes')
     def listSearchCriteriaMetaTypes(self):
@@ -214,9 +213,9 @@ class ATTopic(ATCTFolder):
     def listSortCriteriaTypes(self):
         """List available sort criteria types as dict
         """
-        return [ {'name': ctype,
-                  'description':_criterionRegistry[ctype].shortDesc}
-                 for ctype in self.listSortCriteriaMetaTypes() ]
+        return [{'name': ctype,
+                 'description':_criterionRegistry[ctype].shortDesc}
+                for ctype in self.listSortCriteriaMetaTypes()]
 
     security.declareProtected(ChangeTopics, 'listSortCriteriaMetaTypes')
     def listSortCriteriaMetaTypes(self):
@@ -256,14 +255,14 @@ class ATTopic(ATCTFolder):
         return None
 
     security.declareProtected(ChangeTopics, 'removeSortCriterion')
-    def removeSortCriterion( self):
+    def removeSortCriterion(self):
         """remove the Sort criterion.
         """
         if self.hasSortCriterion():
             self.deleteCriterion(self.getSortCriterion().getId())
 
     security.declareProtected(ChangeTopics, 'setSortCriterion')
-    def setSortCriterion( self, field, reversed):
+    def setSortCriterion(self, field, reversed):
         """Set the Sort criterion.
         """
         self.removeSortCriterion()
@@ -286,22 +285,22 @@ class ATTopic(ATCTFolder):
     security.declareProtected(ChangeTopics, 'listSortFields')
     def listSortFields(self):
         """Return a list of available fields for sorting."""
-        fields = [ field
+        fields = [field
                     for field in self.listFields()
-                    if self.validateAddCriterion(field[0], 'ATSortCriterion') ]
+                    if self.validateAddCriterion(field[0], 'ATSortCriterion')]
         return fields
 
     security.declareProtected(ChangeTopics, 'listAvailableFields')
     def listAvailableFields(self):
         """Return a list of available fields for new criteria.
         """
-        current   = [ crit.Field() for crit in self.listCriteria()
+        current = [crit.Field() for crit in self.listCriteria()
                       if not IATTopicSortCriterion.providedBy(crit)]
         fields = self.listFields()
-        val = [ field
+        val = [field
                  for field in fields
                  if field[0] not in current
-               ]
+              ]
         return val
 
     security.declareProtected(View, 'listSubtopics')
@@ -313,7 +312,7 @@ class ATTopic(ATCTFolder):
         tops = []
         for top in val:
             if check_p('View', top):
-                tops.append((top.Title().lower(),top))
+                tops.append((top.Title().lower(), top))
         tops.sort()
         tops = [t[1] for t in tops]
         return tops
@@ -345,7 +344,7 @@ class ATTopic(ATCTFolder):
             flat = []
             for a in allowed:
                 desc = _criterionRegistry[a].shortDesc
-                flat.append((a,desc))
+                flat.append((a, desc))
             allowed = DisplayList(flat)
         return allowed
 
@@ -368,7 +367,7 @@ class ATTopic(ATCTFolder):
                 clear_start = True
                 parent = aq_parent(aq_inner(self))
                 result.update(parent.buildQuery())
-            except (AttributeError, Unauthorized): # oh well, can't find parent, or it isn't a Topic.
+            except (AttributeError, Unauthorized):  # oh well, can't find parent, or it isn't a Topic.
                 pass
 
         for criterion in criteria:
@@ -400,13 +399,13 @@ class ATTopic(ATCTFolder):
 
         pcatalog = getToolByName(self, 'portal_catalog')
         mt = getToolByName(self, 'portal_membership')
-        related = [ i for i in self.getRelatedItems() \
-                        if mt.checkPermission(View, i) ]
+        related = [i for i in self.getRelatedItems() \
+                        if mt.checkPermission(View, i)]
         if not full_objects:
             uids = [r.UID() for r in related]
             query = dict(UID=uids)
             related = pcatalog(query)
-        related=LazyCat([related])
+        related = LazyCat([related])
 
         limit = self.getLimitNumber()
         max_items = self.getItemCount()
@@ -418,7 +417,7 @@ class ATTopic(ATCTFolder):
 
         q = self.buildQuery()
         if q is None:
-            results=LazyCat([[]])
+            results = LazyCat([[]])
         else:
             # Allow parameters to further limit existing criterias
             q.update(kw)
@@ -433,8 +432,8 @@ class ATTopic(ATCTFolder):
         if limit and not batch:
             if full_objects:
                 return related[:max_items] + \
-                       [b.getObject() for b in results[:max_items-len(related)]]
-            return related[:max_items] + results[:max_items-len(related)]
+                       [b.getObject() for b in results[:max_items - len(related)]]
+            return related[:max_items] + results[:max_items - len(related)]
         elif full_objects:
             results = related + LazyCat([[b.getObject() for b in results]])
         else:
@@ -449,11 +448,11 @@ class ATTopic(ATCTFolder):
         """Add a new search criterion. Return the resulting object.
         """
         newid = 'crit__%s_%s' % (field, criterion_type)
-        ct    = _criterionRegistry[criterion_type]
-        crit  = ct(newid, field)
+        ct = _criterionRegistry[criterion_type]
+        crit = ct(newid, field)
 
-        self._setObject( newid, crit )
-        return self._getOb( newid )
+        self._setObject(newid, crit)
+        return self._getOb(newid)
 
     security.declareProtected(ChangeTopics, 'deleteCriterion')
     def deleteCriterion(self, criterion_id):
@@ -480,7 +479,7 @@ class ATTopic(ATCTFolder):
         """
         ti = self.getTypeInfo()
         ti.constructInstance(self, id)
-        return self._getOb( id )
+        return self._getOb(id)
 
     security.declareProtected(View, 'synContentValues')
     def synContentValues(self):
@@ -541,7 +540,7 @@ class ATTopic(ATCTFolder):
         if tidyOutput:
             value = tidyOutput
 
-        field.set(self, value, **kwargs) # set is ok
+        field.set(self, value, **kwargs)  # set is ok
 
     security.declarePrivate('getTidyOutput')
     def getTidyOutput(self, field):

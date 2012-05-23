@@ -1,4 +1,6 @@
-from Testing import ZopeTestCase # side effect import. leave it here.
+import unittest
+
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
@@ -7,6 +9,7 @@ from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault as Z
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 
 tests = []
+
 
 # XXX: This should probably move to the new CMFDynamicViewFTI
 class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
@@ -49,7 +52,7 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.assertTrue(self.af.canSetLayout())
         self.af.invokeFactory('Document', 'ad')
         self.portal.manage_permission(permission.ModifyViewTemplate, [], 0)
-        self.assertFalse(self.af.canSetLayout()) # Not permitted
+        self.assertFalse(self.af.canSetLayout())  # Not permitted
 
     def test_setLayout(self):
         self.af.setLayout('atct_album_view')
@@ -69,16 +72,16 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
     def test_canSetDefaultPage(self):
         self.assertTrue(self.af.canSetDefaultPage())
         self.af.invokeFactory('Document', 'ad')
-        self.assertFalse(self.af.ad.canSetDefaultPage()) # Not folderish
+        self.assertFalse(self.af.ad.canSetDefaultPage())  # Not folderish
         self.portal.manage_permission(permission.ModifyViewTemplate, [], 0)
-        self.assertFalse(self.af.canSetDefaultPage()) # Not permitted
+        self.assertFalse(self.af.canSetDefaultPage())  # Not permitted
 
     def test_setDefaultPage(self):
         self.af.invokeFactory('Document', 'ad')
         self.af.setDefaultPage('ad')
         self.assertEqual(self.af.getDefaultPage(), 'ad')
         self.assertEqual(self.af.defaultView(), 'ad')
-        self.assertEqual(self.af.__browser_default__(None), (self.af, ['ad',]))
+        self.assertEqual(self.af.__browser_default__(None), (self.af, ['ad']))
 
         # still have layout settings
         self.assertEqual(self.af.getLayout(), 'folder_listing')
@@ -92,15 +95,14 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         cat = self.portal.portal_catalog
         self.af.invokeFactory('Document', 'ad')
         self.af.invokeFactory('Document', 'other')
-        self.assertEqual(len(cat(getId=['ad','other'],is_default_page=True)), 0)
+        self.assertEqual(len(cat(getId=['ad', 'other'], is_default_page=True)), 0)
         self.af.setDefaultPage('ad')
-        self.assertEqual(len(cat(getId='ad',is_default_page=True)), 1)
+        self.assertEqual(len(cat(getId='ad', is_default_page=True)), 1)
         self.af.setDefaultPage('other')
-        self.assertEqual(len(cat(getId='other',is_default_page=True)), 1)
-        self.assertEqual(len(cat(getId='ad',is_default_page=True)), 0)
+        self.assertEqual(len(cat(getId='other', is_default_page=True)), 1)
+        self.assertEqual(len(cat(getId='ad', is_default_page=True)), 0)
         self.af.setDefaultPage(None)
-        self.assertEqual(len(cat(getId=['ad','other'],is_default_page=True)), 0)
-        
+        self.assertEqual(len(cat(getId=['ad', 'other'], is_default_page=True)), 0)
 
     def test_setLayoutUnsetsDefaultPage(self):
         layout = 'atct_album_view'
@@ -137,7 +139,7 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
 
 tests.append(TestBrowserDefaultMixin)
 
-import unittest
+
 def test_suite():
     suite = unittest.TestSuite()
     for test in tests:

@@ -32,7 +32,8 @@ STRING_INDICES = LIST_INDICES + TEXT_INDICES
 # Indices that may hold AT reference data
 REFERENCE_INDICES = ('FieldIndex', 'KeywordIndex')
 FIELD_INDICES = ('FieldIndex',)
-PATH_INDICES = ('PathIndex','ExtendedPathIndex')
+PATH_INDICES = ('PathIndex', 'ExtendedPathIndex')
+
 
 class _CriterionRegistry(UserDict):
     """Registry for criteria """
@@ -62,7 +63,6 @@ class _CriterionRegistry(UserDict):
         for index in indices:
             value = self.index2criterion.get(index, ())
             self.index2criterion[index] = value + (crit_id,)
-
 
     def unregister(self, criterion):
         crit_id = criterion.meta_type
@@ -96,7 +96,7 @@ class _CriterionRegistry(UserDict):
             return self.index2criterion[index]
         except KeyError:
             return ()
-    
+
     def getPortalTypes(self):
         return tuple(self.portaltypes.keys())
 

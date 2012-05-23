@@ -22,9 +22,11 @@ atctRegistry.register('pil-algo', datatype.pil_algo)
 
 # schema
 atctSchema = None
+
+
 def loadSchema(file, registry=atctRegistry, overwrite=False):
     """Loads a schema file
-    
+
     * file
       A path to a file
     * registry

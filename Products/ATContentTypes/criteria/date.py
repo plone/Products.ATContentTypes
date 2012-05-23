@@ -21,28 +21,28 @@ from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes import ATCTMessageFactory as _
 
 DateOptions = IntDisplayList((
-                    (     0, _(u'Now')      )
-                  , (     1, _(u'1 Day')    )
-                  , (     2, _(u'2 Days')   )
-                  , (     5, _(u'5 Days')   )
-                  , (     7, _(u'1 Week')   )
-                  , (    14, _(u'2 Weeks')  )
-                  , (    31, _(u'1 Month')  )
-                  , (  31*3, _(u'3 Months') )
-                  , (  31*6, _(u'6 Months') )
-                  , (   365, _(u'1 Year')   )
-                  , ( 365*2, _(u'2 Years')  )
+    (0, _(u'Now')),
+    (1, _(u'1 Day')),
+    (2, _(u'2 Days')),
+    (5, _(u'5 Days')),
+    (7, _(u'1 Week')),
+    (14, _(u'2 Weeks')),
+    (31, _(u'1 Month')),
+    (31 * 3, _(u'3 Months')),
+    (31 * 6, _(u'6 Months')),
+    (365, _(u'1 Year')),
+    (365 * 2, _(u'2 Years')),
     ))
 
 CompareOperations = DisplayList((
-                    ('more', _(u'More than'))
-                  , ('less', _(u'Less than'))
-                  , ('within_day', _(u'On the day'))
+    ('more', _(u'More than')),
+    ('less', _(u'Less than')),
+    ('within_day', _(u'On the day')),
     ))
 
 RangeOperations = DisplayList((
-                    ('-', _(u'in the past'))
-                  , ('+', _(u'in the future'))
+    ('-', _(u'in the past')),
+    ('+', _(u'in the future')),
     ))
 
 ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
@@ -89,16 +89,17 @@ ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
                 ),
     ))
 
+
 class ATDateCriteria(ATBaseCriterion):
     """A relative date criterion"""
 
     implements(IATTopicSearchCriterion)
 
-    security       = ClassSecurityInfo()
-    schema         = ATDateCriteriaSchema
-    meta_type      = 'ATFriendlyDateCriteria'
+    security = ClassSecurityInfo()
+    schema = ATDateCriteriaSchema
+    meta_type = 'ATFriendlyDateCriteria'
     archetype_name = 'Friendly Date Criteria'
-    shortDesc      = 'Relative date'
+    shortDesc = 'Relative date'
 
     security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
@@ -117,22 +118,22 @@ class ATDateCriteria(ATBaseCriterion):
 
             operation = self.getOperation()
             if operation == 'within_day':
-                date_range = ( date.earliestTime(), date.latestTime() )
-                return ( ( field, {'query': date_range, 'range': 'min:max'} ), )
+                date_range = (date.earliestTime(), date.latestTime())
+                return ((field, {'query': date_range, 'range': 'min:max'}),)
             elif operation == 'more':
                 if value != 0:
                     range_op = (self.getDateRange() == '-' and 'max') or 'min'
-                    return ( ( field, {'query': date.earliestTime(), 'range': range_op} ), )
+                    return ((field, {'query': date.earliestTime(), 'range': range_op}),)
                 else:
-                    return ( ( field, {'query': date, 'range': 'min'} ), )
+                    return ((field, {'query': date, 'range': 'min'}),)
             elif operation == 'less':
                 if value != 0:
                     date_range = (self.getDateRange() == '-' and
                                   (date.earliestTime(), current_date)
                                   ) or (current_date, date.latestTime())
-                    return ( ( field, {'query': date_range, 'range': 'min:max'} ), )
+                    return ((field, {'query': date_range, 'range': 'min:max'}),)
                 else:
-                    return ( ( field, {'query': date, 'range': 'max'} ), )
+                    return ((field, {'query': date, 'range': 'max'}),)
         else:
             return ()
 

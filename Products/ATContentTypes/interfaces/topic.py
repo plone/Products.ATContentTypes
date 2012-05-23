@@ -1,6 +1,6 @@
 from Products.ATContentTypes.interfaces.interfaces import IATContentType
 from zope.interface import Interface
-from zope.interface import Attribute
+
 
 class IATTopic(IATContentType):
     """AT Topic marker interface
@@ -115,16 +115,17 @@ class IATTopicCriterion(Interface):
         """Return a sequence of items to be used to build the catalog query.
         """
 
+
 class IATTopicSearchCriterion(IATTopicCriterion):
     """Interface for criteria used for searching
     """
+
 
 class IATTopicSortCriterion(IATTopicCriterion):
     """Interface for criteria used for sorting
     """
 
-   
+
 class IATCTTopicsTool(Interface):
     """Mixin class for providing features to customize the display of topics
     """
-

@@ -5,6 +5,7 @@ from Products.GenericSetup.utils import exportObjects
 from Products.GenericSetup.utils import importObjects
 from Products.CMFCore.utils import getToolByName
 
+
 def safeGetAttribute(node, attribute):
     """Get an attribute froma node, but return None if it does not exist.
     """
@@ -22,7 +23,7 @@ class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
     def _exportNode(self):
         """Export the object as a DOM node.
         """
-        node=self._doc.createElement('atcttool')
+        node = self._doc.createElement('atcttool')
         node.appendChild(self._extractSettings())
         node.appendChild(self._extractProperties())
 
@@ -52,10 +53,10 @@ class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
 
     def _initSettings(self, node):
         for child in node.childNodes:
-            if child.nodeName=='topic_indexes':
+            if child.nodeName == 'topic_indexes':
                 for indexNode in child.childNodes:
-                    if indexNode.nodeName=='index':
-                        name=indexNode.getAttribute('name')
+                    if indexNode.nodeName == 'index':
+                        name = indexNode.getAttribute('name')
                         if indexNode.hasAttribute("remove"):
                             self.context.removeIndex(name)
                             continue
@@ -65,11 +66,11 @@ class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
                         except AttributeError:
                             self.context.addIndex(name)
 
-                        description=safeGetAttribute(indexNode, 'description')
-                        enabled=safeGetAttribute(indexNode, 'enabled')
+                        description = safeGetAttribute(indexNode, 'description')
+                        enabled = safeGetAttribute(indexNode, 'enabled')
                         if enabled is not None:
-                            enabled=self._convertToBoolean(enabled)
-                        friendlyName=safeGetAttribute(indexNode, 'friendlyName')
+                            enabled = self._convertToBoolean(enabled)
+                        friendlyName = safeGetAttribute(indexNode, 'friendlyName')
 
                         criteria = None
                         for critNode in indexNode.childNodes:
@@ -81,17 +82,17 @@ class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
                                     if criteria is None:
                                         criteria = []
                                     criteria.append(str(textNode.nodeValue))
-                    
+
                         self.context.updateIndex(name,
                                               friendlyName=friendlyName,
                                               description=description,
                                               enabled=enabled,
                                               criteria=criteria)
-                    
-            if child.nodeName=='topic_metadata':
+
+            if child.nodeName == 'topic_metadata':
                 for metadataNode in child.childNodes:
-                    if metadataNode.nodeName=='metadata':
-                        name=metadataNode.getAttribute('name')
+                    if metadataNode.nodeName == 'metadata':
+                        name = metadataNode.getAttribute('name')
                         if metadataNode.hasAttribute("remove"):
                             self.context.removeMetadata(name)
                             continue
@@ -101,11 +102,11 @@ class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
                         except AttributeError:
                             self.context.addMetadata(name)
 
-                        description=safeGetAttribute(metadataNode, 'description')
-                        enabled=safeGetAttribute(metadataNode, 'enabled')
+                        description = safeGetAttribute(metadataNode, 'description')
+                        enabled = safeGetAttribute(metadataNode, 'enabled')
                         if enabled is not None:
-                            enabled=self._convertToBoolean(enabled)
-                        friendlyName=safeGetAttribute(metadataNode, 'friendlyName')
+                            enabled = self._convertToBoolean(enabled)
+                        friendlyName = safeGetAttribute(metadataNode, 'friendlyName')
                         self.context.updateMetadata(name,
                                                  friendlyName=friendlyName,
                                                  description=description,
@@ -114,10 +115,10 @@ class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
     def _extractSettings(self):
         fragment = self._doc.createDocumentFragment()
         # topic tool indexes
-        indexes=self._doc.createElement('topic_indexes')
+        indexes = self._doc.createElement('topic_indexes')
         for indexname in self.context.getIndexes():
             index = self.context.getIndex(indexname)
-            child=self._doc.createElement('index')
+            child = self._doc.createElement('index')
             child.setAttribute('name', str(indexname))
             child.setAttribute('friendlyName', str(index.friendlyName))
             child.setAttribute('description', str(index.description))
@@ -130,18 +131,19 @@ class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
             indexes.appendChild(child)
         fragment.appendChild(indexes)
         # topic tool metadata
-        metadata=self._doc.createElement('topic_metadata')
+        metadata = self._doc.createElement('topic_metadata')
         for metaname in self.context.getAllMetadata():
             meta = self.context.getMetadata(metaname)
-            child=self._doc.createElement('metadata')
+            child = self._doc.createElement('metadata')
             child.setAttribute('name', str(metaname))
             child.setAttribute('friendlyName', str(meta.friendlyName))
             child.setAttribute('description', str(meta.description))
             child.setAttribute('enabled', str(bool(meta.enabled)))
             metadata.appendChild(child)
         fragment.appendChild(metadata)
-        
+
         return fragment
+
 
 def importATCTTool(context):
     """Import ATCT Tool configuration.
@@ -151,6 +153,7 @@ def importATCTTool(context):
 
     if tool is not None:
         importObjects(tool, '', context)
+
 
 def exportATCTTool(context):
     """Export ATCT Tool configuration.

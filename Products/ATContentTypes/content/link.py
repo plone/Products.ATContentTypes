@@ -25,32 +25,33 @@ ATLinkSchema = ATContentTypeSchema.copy() + Schema((
         required=True,
         searchable=True,
         primary=True,
-        default = "http://",
+        default="http://",
         # either mailto, absolute url or relative url
-        validators = (),
-        widget = StringWidget(
-            description = '',
-            label = _(u'label_url', default=u'URL'),
-            maxlength = '511',
+        validators=(),
+        widget=StringWidget(
+            description='',
+            label=_(u'label_url', default=u'URL'),
+            maxlength='511',
             )),
     ))
 finalizeATCTSchema(ATLinkSchema)
 
+
 class ATLink(ATCTContent):
     """A link to an internal or external resource."""
 
-    schema         =  ATLinkSchema
+    schema = ATLinkSchema
 
-    portal_type    = 'Link'
+    portal_type = 'Link'
     archetype_name = 'Link'
-    _atct_newTypeFor = {'portal_type' : 'CMF Link', 'meta_type' : 'Link'}
+    _atct_newTypeFor = {'portal_type': 'CMF Link', 'meta_type': 'Link'}
     assocMimetypes = ()
-    assocFileExt   = ('link', 'url', )
-    cmf_edit_kws   = ('remote_url', )
+    assocFileExt = ('link', 'url', )
+    cmf_edit_kws = ('remote_url', )
 
     implements(IATLink)
 
-    security       = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
     security.declareProtected(ModifyPortalContent, 'setRemoteUrl')
     def setRemoteUrl(self, value, **kwargs):
@@ -73,14 +74,14 @@ class ATLink(ATCTContent):
     def cmf_edit(self, remote_url=None, **kwargs):
         if not remote_url:
             remote_url = kwargs.get('remote_url', None)
-        self.update(remoteUrl = remote_url, **kwargs)
+        self.update(remoteUrl=remote_url, **kwargs)
 
     security.declareProtected(View, 'getRemoteUrl')
     def getRemoteUrl(self):
         """Sanitize output
         """
         value = self.Schema()['remoteUrl'].get(self)
-        if not value: value = '' # ensure we have a string
+        if not value: value = ''  # ensure we have a string
         return quote(value, safe='?$#@/:=+;$,&%')
 
 registerATCT(ATLink, PROJECTNAME)

@@ -1,17 +1,19 @@
-from Testing import ZopeTestCase # side effect import. leave it here.
+import unittest
+
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
-import transaction
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes.atapi import *
+from Products.Archetypes import atapi
 
 from Products.ATContentTypes.content.link import ATLink
 from Products.ATContentTypes.interfaces import IATLink
 from zope.interface.verify import verifyObject
 
-URL='http://www.example.org/'
+URL = 'http://www.example.org/'
+
 
 def editATCT(obj):
     obj.setTitle('Test Title')
@@ -19,6 +21,7 @@ def editATCT(obj):
     obj.setRemoteUrl(URL)
 
 tests = []
+
 
 class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
 
@@ -74,6 +77,7 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
 
 tests.append(TestSiteATLink)
 
+
 class TestATLinkFields(atcttestcase.ATCTFieldTestCase):
 
     def afterSetUp(self):
@@ -107,31 +111,32 @@ class TestATLinkFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AttributeStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, StringWidget),
+        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
         self.assertTrue(field.primary == 1, 'Value is %s' % field.primary)
 
 tests.append(TestATLinkFields)
 
+
 class TestATLinkFunctional(atctftestcase.ATCTIntegrationTestCase):
-    
+
     portal_type = 'Link'
     views = ('link_view', )
 
 tests.append(TestATLinkFunctional)
 
-import unittest
+
 def test_suite():
     suite = unittest.TestSuite()
     for test in tests:

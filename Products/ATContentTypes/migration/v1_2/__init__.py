@@ -14,6 +14,7 @@ from Products.CMFCore.utils import getToolByName
 
 logger = logging.getLogger('plone.app.upgrade')
 
+
 def upgradeATCTTool(portal):
     tool = getToolByName(portal, TOOLNAME, None)
     sm = getSiteManager(context=portal)
@@ -31,13 +32,13 @@ def upgradeATCTTool(portal):
     old_conf['topic_indexes'] = tool.topic_indexes.copy()
     old_conf['topic_metadata'] = tool.topic_metadata.copy()
     old_conf['allowed_portal_types'] = tuple(tool.allowed_portal_types)
-    
+
     # Remove the old tool completely
     del(tool)
     portal._delObject(TOOLNAME)
     sm.unregisterUtility(provided=IATCTTool)
     transaction.savepoint(optimistic=True)
-    
+
     # Create new tool
     portal._setObject(TOOLNAME, ATCTTool())
     tool = portal.get(TOOLNAME)
@@ -55,5 +56,5 @@ def upgradeATCTTool(portal):
     tool._setPropValue('topic_metadata', old_conf['topic_metadata'])
 
     transaction.savepoint(optimistic=True)
-    
+
     logger.info('Upgraded the ATContentTypes tool.')

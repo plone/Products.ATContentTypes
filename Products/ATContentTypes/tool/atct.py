@@ -23,8 +23,10 @@ from Products.ATContentTypes.tool.topic import ATTopicsTool
 
 LOG = logging.getLogger('ATCT')
 
-def log(message,summary='',severity=logging.DEBUG):
+
+def log(message, summary='', severity=logging.DEBUG):
     LOG.log(severity, 'ATCT: %s \n%s', summary, message)
+
 
 class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
     """ATContentTypes tool
@@ -32,26 +34,26 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
     security = ClassSecurityInfo()
 
     id = TOOLNAME
-    meta_type= 'ATCT Tool'
+    meta_type = 'ATCT Tool'
     title = 'Collection and image scales settings'
 
     implements(IATCTTool)
 
-    manage_options =  (
-            {'label' : 'Overview', 'action' : 'manage_overview'},
-            {'label' : 'Image scales', 'action' : 'manage_imageScales'}
+    manage_options = (
+            {'label': 'Overview', 'action': 'manage_overview'},
+            {'label': 'Image scales', 'action': 'manage_imageScales'}
         ) + PropertyManager.manage_options
 
     # properties
 
     _properties = PropertyManager._properties + (
-        {'id' : 'image_types', 'type' : 'multiple selection',
-         'mode' : 'w', 'select_variable' : 'listContentTypes'},
-        {'id' : 'folder_types', 'type' : 'multiple selection',
-         'mode' : 'w', 'select_variable' : 'listContentTypes'},
-        {'id' : 'album_batch_size', 'type' : 'int', 'mode' : 'w'},
-        {'id' : 'album_image_scale', 'type' : 'string', 'mode' : 'w'},
-        {'id' : 'single_image_scale', 'type' : 'string', 'mode' : 'w'},
+        {'id': 'image_types', 'type': 'multiple selection',
+         'mode': 'w', 'select_variable': 'listContentTypes'},
+        {'id': 'folder_types', 'type': 'multiple selection',
+         'mode': 'w', 'select_variable': 'listContentTypes'},
+        {'id': 'album_batch_size', 'type': 'int', 'mode': 'w'},
+        {'id': 'album_image_scale', 'type': 'string', 'mode': 'w'},
+        {'id': 'single_image_scale', 'type': 'string', 'mode': 'w'},
         )
 
     # templates
@@ -63,9 +65,9 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
     manage_overview = PageTemplateFile('overview', WWW_DIR)
 
     def om_icons(self):
-        icons = ({'path':'misc_/ATContentTypes/tool.gif',
-                  'alt':self.meta_type,
-                  'title':self.meta_type},)
+        icons = ({'path': 'misc_/ATContentTypes/tool.gif',
+                  'alt': self.meta_type,
+                  'title': self.meta_type},)
         return icons
 
     # image scales

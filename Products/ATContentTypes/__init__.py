@@ -39,7 +39,8 @@ from Products.ATContentTypes.tool.atct import ATCTTool
 from Products.ATContentTypes.permission import wireAddPermissions
 wireAddPermissions()
 
-registerDirectory(SKINS_DIR,GLOBALS)
+registerDirectory(SKINS_DIR, GLOBALS)
+
 
 def initialize(context):
     # process our custom types
@@ -70,8 +71,7 @@ def initialize(context):
         kind = "%s: %s" % (PROJECTNAME, atype.archetype_name)
         ContentInit(
             kind,
-            content_types      = (atype,),
-            permission         = permissions[atype.portal_type],
-            extra_constructors = (constructor,),
+            content_types=(atype,),
+            permission=permissions[atype.portal_type],
+            extra_constructors=(constructor,),
             ).initialize(context)
-

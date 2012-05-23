@@ -1,11 +1,13 @@
-from Testing import ZopeTestCase # side effect import. leave it here.
+import unittest
+
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
-import time, transaction
+import transaction
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes.atapi import *
+from Products.Archetypes import atapi
 from Products.ATContentTypes.tests.utils import dcEdit
 
 from Products.ATContentTypes.content.document import ATDocument
@@ -39,12 +41,14 @@ Text, text, text
 * List
 """
 
+
 def editATCT(obj):
-    text_format='text/structured'
+    text_format = 'text/structured'
     dcEdit(obj)
-    obj.setText(example_stx, mimetype = text_format)
+    obj.setText(example_stx, mimetype=text_format)
 
 tests = []
+
 
 class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
 
@@ -121,33 +125,34 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
     if atct_config.HAS_MX_TIDY:
         # this test is null and void if mx.Tidy isn't even installed
 
-        def test_tidy_validator_with_upload_wrong_encoding(self): 
+        def test_tidy_validator_with_upload_wrong_encoding(self):
             doc = self._ATCT
-    
+
             field = doc.getField('text')
             request = self.app.REQUEST
             setattr(request, 'text_text_format', 'text/html')
             input_file_name = 'tidy1-in.html'
             in_file = open(input_file_path(input_file_name))
-            env = {'REQUEST_METHOD':'PUT'}
-            headers = {'content-type':'text/html',
+            env = {'REQUEST_METHOD': 'PUT'}
+            headers = {'content-type': 'text/html',
                        'content-length': len(in_file.read()),
-                       'content-disposition':'attachment; filename=%s' % input_file_name}
+                       'content-disposition': 'attachment; filename=%s' % input_file_name}
             in_file.seek(0)
             fs = FieldStorage(fp=in_file, environ=env, headers=headers)
             f = FileUpload(fs)
-    
+
             tcv = TidyHtmlWithCleanupValidator('tidy_validator_with_cleanup')
             result = tcv.__call__(f, field=field, REQUEST=request)
-    
+
             self.assertEqual(result, 1)
-    
+
             expected_file = open(input_file_path('tidy1-out.html'))
             expected = expected_file.read()
             expected_file.close()
             self.assertEqual(request['text_tidier_data'], expected)
-        
+
 tests.append(TestSiteATDocument)
+
 
 class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
 
@@ -237,17 +242,17 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'text', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AnnotationStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
-        self.assertTrue(isinstance(field.widget, RichWidget),
+        self.assertTrue(isinstance(field.widget, atapi.RichWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -261,8 +266,9 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
 
 tests.append(TestATDocumentFields)
 
+
 class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
-    
+
     portal_type = 'Document'
     views = ('document_view', )
 
@@ -274,7 +280,7 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
                                 '/createObject?type_name=%s' % self.portal_type,
                                 self.basic_auth)
 
-        self.assertEqual(response.getStatus(), 302) # Redirect to edit
+        self.assertEqual(response.getStatus(), 302)  # Redirect to edit
 
         location = response.getHeader('Location')
         self.assertTrue(location.startswith(self.folder_url), location)
@@ -283,7 +289,7 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
         # Perform the redirect
         edit_form_path = location[len(self.app.REQUEST.SERVER_URL):]
         response = self.publish(edit_form_path, self.basic_auth)
-        self.assertEqual(response.getStatus(), 200) # OK
+        self.assertEqual(response.getStatus(), 200)  # OK
 
         #Change the title
         temp_id = location.split('/')[-2]
@@ -291,20 +297,20 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
         new_id = "new-title-for-object"
         new_obj = getattr(self.folder.aq_explicit, temp_id)
         new_obj_path = '/%s' % new_obj.absolute_url(1)
-        self.assertEqual(new_obj.checkCreationFlag(), True) # object is not yet edited
+        self.assertEqual(new_obj.checkCreationFlag(), True)  # object is not yet edited
 
-        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank' % (new_obj_path, obj_title,), self.basic_auth) # Edit object
-        self.assertEqual(response.getStatus(), 302) # OK
-        self.assertEqual(new_obj.getId(), new_id) # does id match
-        self.assertEqual(new_obj.checkCreationFlag(), False) # object is fully created
+        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank' % (new_obj_path, obj_title,), self.basic_auth)  # Edit object
+        self.assertEqual(response.getStatus(), 302)  # OK
+        self.assertEqual(new_obj.getId(), new_id)  # does id match
+        self.assertEqual(new_obj.checkCreationFlag(), False)  # object is fully created
         new_title = "Second Title"
-        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank' % ('/%s' % new_obj.absolute_url(1), new_title,), self.basic_auth) # Edit object
-        self.assertEqual(response.getStatus(), 302) # OK
-        self.assertEqual(new_obj.getId(), new_id) # id shouldn't have changed
+        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank' % ('/%s' % new_obj.absolute_url(1), new_title,), self.basic_auth)  # Edit object
+        self.assertEqual(response.getStatus(), 302)  # OK
+        self.assertEqual(new_obj.getId(), new_id)  # id shouldn't have changed
 
 tests.append(TestATDocumentFunctional)
 
-import unittest
+
 def test_suite():
     suite = unittest.TestSuite()
     for test in tests:

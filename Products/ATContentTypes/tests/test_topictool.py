@@ -1,4 +1,6 @@
-from Testing import ZopeTestCase # side effect import. leave it here.
+import unittest
+
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
 from Products.CMFCore.utils import getToolByName
@@ -7,15 +9,16 @@ from Products.ATContentTypes.interfaces import IATCTTopicsTool
 from zope.interface.verify import verifyObject
 
 tests = []
-index_def = {'index'        : 'end',
-             'friendlyName' : 'End Date For Test',
-             'description'  : 'This is an end Date',
-             'criteria'     : ['ATDateCriteria','ATDateRangeCriteria']
+index_def = {'index': 'end',
+             'friendlyName': 'End Date For Test',
+             'description': 'This is an end Date',
+             'criteria': ['ATDateCriteria', 'ATDateRangeCriteria']
             }
-meta_def =  {'metadata'        : 'ModificationDate',
-             'friendlyName' : 'Modification Date For Test',
-             'description'  : ''
-            }
+meta_def = {'metadata': 'ModificationDate',
+            'friendlyName': 'Modification Date For Test',
+            'description': ''
+           }
+
 
 class TestTool(atcttestcase.ATCTSiteTestCase):
 
@@ -25,11 +28,11 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
     def test_interface(self):
         self.assertTrue(IATCTTopicsTool.providedBy(self.tool))
         self.assertTrue(verifyObject(IATCTTopicsTool, self.tool))
- 
+
     #Index tests
     def test_add_index(self):
         t = self.tool
-        t.addIndex(enabled = True, **index_def)
+        t.addIndex(enabled=True, **index_def)
         index = t.getIndex(index_def['index'])
         self.assertEqual(index.index, index_def['index'])
         self.assertEqual(index.friendlyName, index_def['friendlyName'])
@@ -43,10 +46,10 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.assertTrue(index_def['index'] in t.getIndexDisplay(True).keys())
         self.assertTrue(index_def['friendlyName'] in t.getIndexDisplay(True).values())
         self.assertTrue(index_def['index'] in t.getIndexes(1))
-        
+
     def test_disable_index(self):
         t = self.tool
-        t.addIndex(enabled = False, **index_def)
+        t.addIndex(enabled=False, **index_def)
         index = t.getIndex(index_def['index'])
         self.assertEqual(index.index, index_def['index'])
         self.assertEqual(index.friendlyName, index_def['friendlyName'])
@@ -68,22 +71,22 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
     def test_add_bogus_index(self):
         # You can add metadata that's not in the catalog
         t = self.tool
-        t.addIndex('bogosity', enabled = True)
+        t.addIndex('bogosity', enabled=True)
         self.assertTrue(t.getIndex('bogosity'))
-        
+
         #Add
-        t.addIndex('bogosity', enabled = True)
+        t.addIndex('bogosity', enabled=True)
         self.assertTrue('bogosity' in [a[0] for a in t.getEnabledFields()])
         #Add
-        t.addIndex('bogosity', enabled = True)
+        t.addIndex('bogosity', enabled=True)
         self.assertTrue('bogosity' in t.getIndexDisplay(True).keys())
         #Add
-        t.addIndex('bogosity', enabled = True)
+        t.addIndex('bogosity', enabled=True)
         self.assertTrue('bogosity' in t.getIndexes(1))
         #Add
-        t.addIndex('bogosity', enabled = True)
+        t.addIndex('bogosity', enabled=True)
         self.assertTrue('bogosity' in [i.index for i in t.getEnabledIndexes()])
-        
+
     def test_remove_index(self):
         t = self.tool
         t.addIndex(**index_def)
@@ -101,15 +104,15 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         except AttributeError:
             error = False
         self.assertFalse(error)
-        
+
     def test_update_index(self):
         # An index with no criteria set should set all available criteria,
         # also changes made using updateIndex should not reset already set
         # values
         t = self.tool
-        t.addIndex(enabled = True, **index_def)
-        t.updateIndex(index_def['index'], criteria = None,
-                      description = 'New Description')
+        t.addIndex(enabled=True, **index_def)
+        t.updateIndex(index_def['index'], criteria=None,
+                      description='New Description')
         index = t.getIndex(index_def['index'])
         self.assertTrue(index.criteria)
         self.assertTrue(index.criteria != index_def['criteria'])
@@ -150,7 +153,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
     #Metadata tests
     def test_add_metadata(self):
         t = self.tool
-        t.addMetadata(enabled = True, **meta_def)
+        t.addMetadata(enabled=True, **meta_def)
         meta = t.getMetadata(meta_def['metadata'])
         self.assertEqual(meta.index, meta_def['metadata'])
         self.assertEqual(meta.friendlyName, meta_def['friendlyName'])
@@ -162,10 +165,10 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.assertTrue(meta_def['metadata'] in t.getMetadataDisplay(True).keys())
         self.assertTrue(meta_def['friendlyName'] in t.getMetadataDisplay(True).values())
         self.assertTrue(meta_def['metadata'] in t.getAllMetadata(1))
-        
+
     def test_disable_metadata(self):
         t = self.tool
-        t.addMetadata(enabled = False, **meta_def)
+        t.addMetadata(enabled=False, **meta_def)
         meta = t.getMetadata(meta_def['metadata'])
         self.assertEqual(meta.index, meta_def['metadata'])
         self.assertEqual(meta.friendlyName, meta_def['friendlyName'])
@@ -185,17 +188,17 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
     def test_add_bogus_metadata(self):
         # You can add metdata that's not in the catalog
         t = self.tool
-        t.addMetadata('bogosity', enabled = True)
+        t.addMetadata('bogosity', enabled=True)
         self.assertTrue(t.getMetadata('bogosity'))
 
         #Add
-        t.addMetadata('bogosity', enabled = True)
+        t.addMetadata('bogosity', enabled=True)
         self.assertTrue('bogosity' in t.getMetadataDisplay(True).keys())
         #Add
-        t.addMetadata('bogosity', enabled = True)
+        t.addMetadata('bogosity', enabled=True)
         self.assertTrue('bogosity' in t.getAllMetadata(1))
         #Add
-        t.addMetadata('bogosity', enabled = True)
+        t.addMetadata('bogosity', enabled=True)
         self.assertTrue('bogosity' in [i.index for i in t.getEnabledMetadata()])
 
     def test_remove_metadata(self):
@@ -215,13 +218,13 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         except AttributeError:
             error = False
         self.assertFalse(error)
-        
+
     def test_update_metadata(self):
         # Changes made using updateMetadata should not reset already set
         # values
         t = self.tool
-        t.addMetadata(enabled = True, **meta_def)
-        t.updateMetadata(meta_def['metadata'], friendlyName = 'New Name')
+        t.addMetadata(enabled=True, **meta_def)
+        t.updateMetadata(meta_def['metadata'], friendlyName='New Name')
         meta = t.getMetadata(meta_def['metadata'])
         self.assertTrue(meta.friendlyName == 'New Name')
         self.assertTrue(meta.enabled)
@@ -258,7 +261,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
 
 tests.append(TestTool)
 
-import unittest
+
 def test_suite():
     suite = unittest.TestSuite()
     for test in tests:

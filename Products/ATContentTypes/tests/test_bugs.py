@@ -1,11 +1,12 @@
-from Testing import ZopeTestCase # side effect import. leave it here.
+import unittest
+
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 from Products.validation.interfaces.IValidator import IValidationChain
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
-from Products.Archetypes.atapi import *
-
 tests = []
+
 
 class TestBugs(atcttestcase.ATCTSiteTestCase):
 
@@ -17,14 +18,14 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
         default = ('simple_publication_workflow',)
 
         mapping = {
-            'Document' : default,
-            'Event' : default,
-            'File' : (),
-            'Folder' : default,
-            'Image' : (),
-            'Link' : default,
-            'News Item' : default,
-            'Topic' : default,
+            'Document': default,
+            'Event': default,
+            'File': (),
+            'Folder': default,
+            'Image': (),
+            'Link': default,
+            'News Item': default,
+            'Topic': default,
             }
 
         for pt, wf in mapping.items():
@@ -42,10 +43,9 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
         field = ATContentTypeSchema['id']
         self.assertTrue(IValidationChain.providedBy(field.validators))
 
-
 tests.append(TestBugs)
 
-import unittest
+
 def test_suite():
     suite = unittest.TestSuite()
     for test in tests:

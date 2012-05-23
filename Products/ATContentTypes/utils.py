@@ -21,6 +21,7 @@ def toTime(date):
         date = DateTime(date)
     return date.Time()
 
+
 def toSeconds(td):
     """Converts a timedelta to an integer representing the number of seconds
     """

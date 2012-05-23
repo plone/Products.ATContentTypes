@@ -21,7 +21,7 @@ ATBaseCriterionSchema = Schema((
                     description=_(u'help_shortname',
                                   default=u"Should not contain spaces, underscores or mixed case. "
                                            "Short Name is part of the item's web address."),
-                    visible={'view' : 'invisible'}
+                    visible={'view': 'invisible'}
                     ),
                 ),
     StringField('field',

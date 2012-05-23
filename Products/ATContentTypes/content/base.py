@@ -28,8 +28,6 @@ from Acquisition import aq_parent
 from OFS.ObjectManager import REPLACEABLE
 from webdav.Lockable import ResourceLockedError
 from webdav.NullResource import NullResource
-from zExceptions import MethodNotAllowed
-from zExceptions import NotFound
 from ZODB.POSException import ConflictError
 from webdav.Resource import Resource as WebdavResoure
 
@@ -49,6 +47,7 @@ from plone.i18n.normalizer.interfaces import IUserPreferredFileNameNormalizer
 DEBUG = True
 LOG = logging.getLogger('ATCT')
 
+
 def registerATCT(class_, project):
     """Registers an ATContentTypes based type
 
@@ -56,6 +55,7 @@ def registerATCT(class_, project):
     """
     assert IATContentType.implementedBy(class_)
     registerType(class_, project)
+
 
 def cleanupFilename(filename, request=None):
     """Removes bad chars from file names to make them a good id
@@ -66,6 +66,7 @@ def cleanupFilename(filename, request=None):
         return IUserPreferredFileNameNormalizer(request).normalize(filename)
     return None
 
+
 def translateMimetypeAlias(alias):
     """Maps old CMF content types to real mime types
     """
@@ -73,7 +74,7 @@ def translateMimetypeAlias(alias):
         mime = alias
     else:
         mime = MIME_ALIAS.get(alias, None)
-    assert(mime) # shouldn't be empty
+    assert(mime)  # shouldn't be empty
     return mime
 
 
@@ -91,21 +92,21 @@ class ReplaceableWrapper:
 class ATCTMixin(BrowserDefaultMixin):
     """Mixin class for AT Content Types"""
 
-    schema         =  ATContentTypeSchema
+    schema = ATContentTypeSchema
 
     archetype_name = 'AT Content Type'
-    _atct_newTypeFor = {'portal_type' : None, 'meta_type' : None}
+    _atct_newTypeFor = {'portal_type': None, 'meta_type': None}
     assocMimetypes = ()
-    assocFileExt   = ()
-    cmf_edit_kws   = ()
+    assocFileExt = ()
+    cmf_edit_kws = ()
 
     # flag to show that the object is a temporary object
     isDocTemp = False
-    _at_rename_after_creation = True # rename object according to the title?
+    _at_rename_after_creation = True  # rename object according to the title?
 
     implements(IATContentType)
 
-    security       = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
     security.declareProtected(ModifyPortalContent,
                               'initializeArchetype')
@@ -156,7 +157,7 @@ class ATCTMixin(BrowserDefaultMixin):
         initializing = kwargs.get('_initializing_', False)
         if initializing:
             del kwargs['_initializing_']
-        
+
         if len(args) != 0:
             # use cmf edit method
             return self.cmf_edit(*args, **kwargs)
@@ -199,10 +200,11 @@ class ATCTMixin(BrowserDefaultMixin):
 
 InitializeClass(ATCTMixin)
 
+
 class ATCTContent(ATCTMixin, BaseContent):
     """Base class for non folderish AT Content Types"""
 
-    security       = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
     security.declarePrivate('manage_afterPUT')
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
@@ -225,6 +227,7 @@ class ATCTContent(ATCTMixin, BaseContent):
             self.setTitle(id)
 
 InitializeClass(ATCTContent)
+
 
 class ATCTFileContent(ATCTContent):
     """Base class for content types containing a file like ATFile or ATImage
@@ -259,7 +262,7 @@ class ATCTFileContent(ATCTContent):
         if RESPONSE is None:
             RESPONSE = REQUEST.RESPONSE
         field = self.getPrimaryField()
-        data  = field.getAccessor(self)(REQUEST=REQUEST, RESPONSE=RESPONSE)
+        data = field.getAccessor(self)(REQUEST=REQUEST, RESPONSE=RESPONSE)
         if data:
             return data.index_html(REQUEST, RESPONSE)
         # XXX what should be returned if no data is present?
@@ -284,7 +287,7 @@ class ATCTFileContent(ATCTContent):
         """CMF compatibility method
         """
         f = self.getPrimaryField().getAccessor(self)()
-        return f and f.getContentType() or 'text/plain' #'application/octet-stream'
+        return f and f.getContentType() or 'text/plain'  # 'application/octet-stream'
 
     content_type = ComputedAttribute(get_content_type, 1)
 
@@ -309,8 +312,8 @@ class ATCTFileContent(ATCTContent):
         if filedata is not None:
             self.update_data(filedata, content_type, len(filedata))
         if REQUEST:
-            message="Saved changes."
-            return self.manage_main(self,REQUEST,manage_tabs_message=message)
+            message = "Saved changes."
+            return self.manage_main(self, REQUEST, manage_tabs_message=message)
 
     def _cleanupFilename(self, filename, request=None):
         """Cleans the filename from unwanted or evil chars
@@ -326,7 +329,7 @@ class ATCTFileContent(ATCTContent):
         """Set ID based on name of uploaded file, Title, or possibly other conditions."""
         field = self.getPrimaryField()
         # set first then get the filename
-        field.set(self, value, **kwargs) # set is ok
+        field.set(self, value, **kwargs)  # set is ok
         if self._isIDAutoGenerated(self.getId()):
             # My ID is a portal_factory-generated temporary one.
             filename = field.getFilename(self, fromBaseUnit=False)
@@ -343,7 +346,7 @@ class ATCTFileContent(ATCTContent):
                  self._should_set_id_to_filename(filename, self.Title()):
                 # If the user doesn't fill the Title field, Title() returns the
                 # uploaded file's name.
-                
+
                 # Apply subtransaction. Without a subtransaction, renaming
                 # fails when the type is created using portal_factory.
                 transaction.savepoint(optimistic=True)
@@ -356,7 +359,7 @@ class ATCTFileContent(ATCTContent):
     security.declarePrivate('_should_set_id_to_filename')
     def _should_set_id_to_filename(self, filename, title):
         """Given the name of the uploaded file and my title, return whether the filename should be used as my ID.
-        
+
         Default implementation: if the filename changed, say that we should set
         my ID to it.
         """
@@ -366,8 +369,8 @@ class ATCTFileContent(ATCTContent):
     def post_validate(self, REQUEST=None, errors=None):
         """Validates upload file and id
         """
-        id     = REQUEST.form.get('id')
-        field  = self.getPrimaryField()
+        id = REQUEST.form.get('id')
+        field = self.getPrimaryField()
         f_name = field.getName()
         upload = REQUEST.form.get('%s_file' % f_name, None)
         filename = getattr(upload, 'filename', None)
@@ -389,12 +392,12 @@ class ATCTFileContent(ATCTContent):
             return
 
         if getattr(self, 'check_id', None) is not None:
-            check_id = self.check_id(used_id,required=1)
+            check_id = self.check_id(used_id, required=1)
         else:
             # If check_id is not available just look for conflicting ids
             parent = aq_parent(aq_inner(self))
             check_id = used_id in parent and \
-                       'Id %s conflicts with an existing item'% used_id or False
+                       'Id %s conflicts with an existing item' % used_id or False
         if check_id and used_id == id:
             errors['id'] = check_id
             REQUEST.form['id'] = used_id
@@ -435,7 +438,7 @@ class ATCTFolder(ATCTMixin, BaseFolder):
     AT Topic. It doesn't support constrain types!
     """
 
-    security       = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
     security.declareProtected(View, 'get_size')
     def get_size(self):
@@ -450,7 +453,7 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
 
     implements(ISelectableConstrainTypes)
 
-    security       = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
     def __browser_default__(self, request):
         """ Set default so we can return whatever we want instead
@@ -494,7 +497,7 @@ InitializeClass(ATCTFolderMixin)
 class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
     """Base class for orderable folderish AT Content Types"""
 
-    security       = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
     security.declareProtected(View, 'index_html')
     def index_html(self, REQUEST=None, RESPONSE=None):
@@ -502,7 +505,7 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
         request = REQUEST
         if request is None:
             request = getattr(self, 'REQUEST', None)
-        if request and request.has_key('REQUEST_METHOD'):
+        if request and 'REQUEST_METHOD' in request:
             if request.maybe_webdav_client:
                 method = request['REQUEST_METHOD']
                 if method in ('PUT',):
@@ -535,7 +538,7 @@ InitializeClass(ATCTOrderedFolder)
 class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
     """Base class for folderish AT Content Types using a BTree"""
 
-    security       = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
     security.declareProtected(View, 'index_html')
     def index_html(self, REQUEST=None, RESPONSE=None):
@@ -557,6 +560,5 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
 
 InitializeClass(ATCTBTreeFolder)
 
-
 __all__ = ('ATCTContent', 'ATCTFolder', 'ATCTOrderedFolder',
-           'ATCTBTreeFolder' )
+           'ATCTBTreeFolder')

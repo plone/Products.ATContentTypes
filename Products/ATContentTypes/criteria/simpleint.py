@@ -20,10 +20,10 @@ from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes import ATCTMessageFactory as _
 
 DirectionOperations = DisplayList((
-                    ('', _(u'Equal to'))
-                  , ('min', _(u'Greater than'))
-                  , ('max', _(u'Less than'))
-                  , ('min:max', _(u'Between'))
+    ('', _(u'Equal to')),
+    ('min', _(u'Greater than')),
+    ('max', _(u'Less than')),
+    ('min:max', _(u'Between')),
     ))
 
 ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
@@ -68,16 +68,17 @@ ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
                 ),
     ))
 
+
 class ATSimpleIntCriterion(ATBaseCriterion):
     """A simple int criterion"""
 
     implements(IATTopicSearchCriterion)
 
-    security       = ClassSecurityInfo()
-    schema         = ATSimpleIntCriterionSchema
-    meta_type      = 'ATSimpleIntCriterion'
+    security = ClassSecurityInfo()
+    schema = ATSimpleIntCriterionSchema
+    meta_type = 'ATSimpleIntCriterion'
     archetype_name = 'Simple Int Criterion'
-    shortDesc      = 'Integer value or range'
+    shortDesc = 'Integer value or range'
 
     security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
@@ -90,7 +91,7 @@ class ATSimpleIntCriterion(ATBaseCriterion):
             else:
                 val = int(val)
             if direction:
-                result.append((self.Field(), {'query': val,  'range': direction}))
+                result.append((self.Field(), {'query': val, 'range': direction}))
             else:
                 result.append((self.Field(), {'query': val}))
 
@@ -102,8 +103,8 @@ class ATSimpleIntCriterion(ATBaseCriterion):
         direction = REQUEST.get('direction', self.getDirection())
         val2 = REQUEST.get('value2', self.Value2())
         if direction == 'min:max' and not val2 and not val2 == 0:
-            errors['value2']='You must enter a second value to do a "Between" search.'
-        errors['value2']='You must enter a second value to do a "Between" search.'
+            errors['value2'] = 'You must enter a second value to do a "Between" search.'
+        errors['value2'] = 'You must enter a second value to do a "Between" search.'
         return errors
 
 registerCriterion(ATSimpleIntCriterion, LIST_INDICES)

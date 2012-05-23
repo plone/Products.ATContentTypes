@@ -14,7 +14,6 @@ from Products.Archetypes.atapi import FileWidget
 from Products.Archetypes.atapi import PrimaryFieldMarshaller
 from Products.Archetypes.atapi import AnnotationStorage
 from Products.Archetypes.BaseContent import BaseContent
-from Products.PortalTransforms.utils import TransformException
 from Products.MimetypesRegistry.common import MimeTypeException
 
 from Products.ATContentTypes.config import PROJECTNAME
@@ -43,13 +42,13 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
               primary=True,
               searchable=True,
               languageIndependent=True,
-              storage = AnnotationStorage(migrate=True),
-              validators = (('isNonEmptyFile', V_REQUIRED),
-                             ('checkFileMaxSize', V_REQUIRED)),
-              widget = FileWidget(
-                        description = '',
+              storage=AnnotationStorage(migrate=True),
+              validators=(('isNonEmptyFile', V_REQUIRED),
+                          ('checkFileMaxSize', V_REQUIRED)),
+              widget=FileWidget(
+                        description='',
                         label=_(u'label_file', default=u'File'),
-                        show_content_type = False,)),
+                        show_content_type=False,)),
     ), marshall=PrimaryFieldMarshaller()
     )
 
@@ -59,27 +58,28 @@ ATFileSchema['title'].required = False
 
 finalizeATCTSchema(ATFileSchema)
 
+
 class ATFile(ATCTFileContent):
     """An external file uploaded to the site."""
 
-    schema         =  ATFileSchema
+    schema = ATFileSchema
 
-    portal_type    = 'File'
+    portal_type = 'File'
     archetype_name = 'File'
-    _atct_newTypeFor = {'portal_type' : 'CMF File', 'meta_type' : 'Portal File'}
+    _atct_newTypeFor = {'portal_type': 'CMF File', 'meta_type': 'Portal File'}
     assocMimetypes = ('application/*', 'audio/*', 'video/*', )
-    assocFileExt   = ()
-    cmf_edit_kws   = ()
-    inlineMimetypes= ('application/msword',
-                      'application/x-msexcel', # ?
-                      'application/vnd.ms-excel',
-                      'application/vnd.ms-powerpoint',
-                      'application/pdf',
-                      'application/x-shockwave-flash',)
+    assocFileExt = ()
+    cmf_edit_kws = ()
+    inlineMimetypes = ('application/msword',
+                       'application/x-msexcel',  # ?
+                       'application/vnd.ms-excel',
+                       'application/vnd.ms-powerpoint',
+                       'application/pdf',
+                       'application/x-shockwave-flash',)
 
     implements(IATFile)
 
-    security       = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
     security.declareProtected(View, 'index_html')
     def index_html(self, REQUEST=None, RESPONSE=None):
@@ -90,7 +90,7 @@ class ATFile(ATCTFileContent):
         if field.getContentType(self) in self.inlineMimetypes:
             # return the PDF and Office file formats inline
             return ATCTFileContent.index_html(self, REQUEST, RESPONSE)
-        # otherwise return the content as an attachment 
+        # otherwise return the content as an attachment
         # Please note that text/* cannot be returned inline as
         # this is a security risk (IE renders anything as HTML).
         return field.download(self)
@@ -115,15 +115,15 @@ class ATFile(ATCTFileContent):
             # field is empty
             return BaseContent.getIcon(self, relative_to_portal)
 
-        contenttype       = field.getContentType(self)
+        contenttype = field.getContentType(self)
         contenttype_major = contenttype and contenttype.split('/')[0] or ''
 
-        mtr   = getToolByName(self, 'mimetypes_registry', None)
-        utool = getToolByName( self, 'portal_url' )
+        mtr = getToolByName(self, 'mimetypes_registry', None)
+        utool = getToolByName(self, 'portal_url')
 
-        if ICONMAP.has_key(contenttype):
+        if contenttype in ICONMAP:
             icon = quote(ICONMAP[contenttype])
-        elif ICONMAP.has_key(contenttype_major):
+        elif contenttype_major in ICONMAP:
             icon = quote(ICONMAP[contenttype_major])
         else:
             mimetypeitem = None

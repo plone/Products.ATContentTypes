@@ -37,39 +37,39 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
               required=False,
               searchable=True,
               primary=True,
-              storage = AnnotationStorage(migrate=True),
-              validators = ('isTidyHtmlWithCleanup',),
-              #validators = ('isTidyHtml',),
-              default_output_type = 'text/x-html-safe',
-              widget = RichWidget(
-                        description = '',
-                        label = _(u'label_body_text', default=u'Body Text'),
-                        rows = 25,
-                        allow_file_upload = zconf.ATDocument.allow_document_upload),
+              storage=AnnotationStorage(migrate=True),
+              validators=('isTidyHtmlWithCleanup',),
+              #validators=('isTidyHtml',),
+              default_output_type='text/x-html-safe',
+              widget=RichWidget(
+                        description='',
+                        label=_(u'label_body_text', default=u'Body Text'),
+                        rows=25,
+                        allow_file_upload=zconf.ATDocument.allow_document_upload),
     ),
-    
+
     BooleanField('presentation',
-        required = False,
-        languageIndependent = True,
-        widget = BooleanWidget(
-            label= _(
-                u'help_enable_presentation', 
+        required=False,
+        languageIndependent=True,
+        widget=BooleanWidget(
+            label=_(
+                u'help_enable_presentation',
                 default=u'Presentation mode'),
-            description = _(
-                u'help_enable_presentation_description', 
+            description=_(
+                u'help_enable_presentation_description',
                 default=u'If selected, this will give users the ability to view the contents as presentation slides.')
             ),
     ),
-    
+
     BooleanField('tableContents',
-        required = False,
-        languageIndependent = True,
-        widget = BooleanWidget(
-            label= _(
-                u'help_enable_table_of_contents', 
+        required=False,
+        languageIndependent=True,
+        widget=BooleanWidget(
+            label=_(
+                u'help_enable_table_of_contents',
                 default=u'Table of contents'),
-            description = _(
-                u'help_enable_table_of_contents_description', 
+            description=_(
+                u'help_enable_table_of_contents_description',
                 default=u'If selected, this will show a table of contents at the top of the page.')
             ),
     )),
@@ -85,11 +85,12 @@ finalizeATCTSchema(ATDocumentSchema)
 ATDocumentSchema.changeSchemataForField('presentation', 'settings')
 ATDocumentSchema.changeSchemataForField('tableContents', 'settings')
 
+
 class ATDocumentBase(ATCTContent, HistoryAwareMixin):
     """A page in the site. Can contain rich text."""
 
-    security       = ClassSecurityInfo()
-    cmf_edit_kws   = ('text_format',)
+    security = ClassSecurityInfo()
+    cmf_edit_kws = ('text_format',)
 
     security.declareProtected(View, 'CookedBody')
     def CookedBody(self, stx_level='ignored'):
@@ -97,23 +98,21 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
         """
         return self.getText()
 
-
     security.declareProtected(ModifyPortalContent, 'EditableBody')
     def EditableBody(self):
         """CMF compatibility method
         """
         return self.getRawText()
 
-    security.declareProtected(ModifyPortalContent,
-                              'setFormat')
+    security.declareProtected(ModifyPortalContent, 'setFormat')
     def setFormat(self, value):
         """CMF compatibility method
-        
+
         The default mutator is overwritten to:
-        
+
           o add a conversion from stupid CMF content type (e.g. structured-text)
             to real mime types used by MTR.
-        
+
           o Set format to default format if value is empty
 
         """
@@ -126,12 +125,12 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
     security.declareProtected(ModifyPortalContent, 'setText')
     def setText(self, value, **kwargs):
         """Body text mutator
-        
+
         * hook into mxTidy an replace the value with the tidied value
         """
         field = self.getField('text')
-        
-        # When an object is initialized the first time we have to 
+
+        # When an object is initialized the first time we have to
         # set the filename and mimetype.
         if not value and not field.getRaw(self):
             if 'mimetype' in kwargs and kwargs['mimetype']:
@@ -144,7 +143,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
         if tidyOutput:
             value = tidyOutput
 
-        field.set(self, value, **kwargs) # set is ok
+        field.set(self, value, **kwargs)  # set is ok
 
     text_format = ComputedAttribute(ATCTContent.getContentType, 1)
 
@@ -152,10 +151,10 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
     def guessMimetypeOfText(self):
         """For ftp/webdav upload: get the mimetype from the id and data
         """
-        mtr  = getToolByName(self, 'mimetypes_registry')
-        id   = self.getId()
+        mtr = getToolByName(self, 'mimetypes_registry')
+        id = self.getId()
         data = self.getRawText()
-        ext  = id.split('.')[-1]
+        ext = id.split('.')[-1]
 
         if ext != id:
             mimetype = mtr.classify(data, filename=ext)
@@ -206,13 +205,13 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
             else:
                 mimetype = self.guessMimetypeOfText()
             if mimetype:
-                field.set(self, tidyOutput, mimetype=mimetype) # set is ok
+                field.set(self, tidyOutput, mimetype=mimetype)  # set is ok
             elif tidyOutput:
-                field.set(self, tidyOutput) # set is ok
+                field.set(self, tidyOutput)  # set is ok
 
     security.declarePrivate('cmf_edit')
     def cmf_edit(self, text_format, text, file='', safety_belt='', **kwargs):
-        assert file == '', 'file currently not supported' # XXX
+        assert file == '', 'file currently not supported'  # XXX
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
 
@@ -241,16 +240,17 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
                                     context, mimetype, filename, REQUEST,
                                     RESPONSE)
 
+
 class ATDocument(ATDocumentBase):
     """A page in the site. Can contain rich text."""
 
-    schema         =  ATDocumentSchema
+    schema = ATDocumentSchema
 
-    portal_type    = 'Document'
+    portal_type = 'Document'
     archetype_name = 'Page'
-    _atct_newTypeFor = {'portal_type' : 'CMF Document', 'meta_type' : 'Document'}
+    _atct_newTypeFor = {'portal_type': 'CMF Document', 'meta_type': 'Document'}
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
-    assocFileExt   = ('txt', 'stx', 'rst', 'rest', 'py',)
+    assocFileExt = ('txt', 'stx', 'rst', 'rest', 'py',)
 
     implements(IATDocument, IDAVAware)
 

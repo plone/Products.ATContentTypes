@@ -1,4 +1,6 @@
-from Testing import ZopeTestCase # side effect import. leave it here.
+import unittest
+
+from Testing import ZopeTestCase  # side effect import. leave it here.
 
 from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.config import TOOLNAME
@@ -7,6 +9,7 @@ from Products.ATContentTypes.tool.atct import ATCTTool
 from Products.CMFCore.utils import getToolByName
 
 tests = []
+
 
 class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
@@ -61,7 +64,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
 
 tests.append(TestInstallation)
 
-import unittest
+
 def test_suite():
     suite = unittest.TestSuite()
     for test in tests:

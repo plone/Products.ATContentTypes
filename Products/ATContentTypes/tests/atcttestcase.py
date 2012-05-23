@@ -41,6 +41,7 @@ from Products.ATContentTypes.tests.utils import idValidator
 
 test_home = os.path.dirname(__file__)
 
+
 class ATCTSiteTestCase(PloneTestCase.PloneTestCase):
 
     def afterSetUp(self):
@@ -66,6 +67,7 @@ class ATCTSiteTestCase(PloneTestCase.PloneTestCase):
 
 class ATCTFunctionalSiteTestCase(PloneTestCase.FunctionalTestCase, ATCTSiteTestCase):
     pass
+
 
 class ATCTTypeTestCase(ATCTSiteTestCase):
     """AT Content Types test
@@ -164,7 +166,7 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
         self.assertEqual(first.Description(), description)
 
     def test_idValidation(self):
-        self.setRoles(['Manager', 'Member']) # for ATTopic
+        self.setRoles(['Manager', 'Member'])  # for ATTopic
         asdf = self._createType(self.folder, self.portal_type, 'asdf')
         self._createType(self.folder, self.portal_type, 'asdf2')
         self.setRoles(['Member'])
@@ -175,13 +177,13 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
         ids = ['asdf2', '???', '/asdf2', ' asdf2', 'portal_workflow',
             'portal_url']
         for id in ids:
-            request.form = {'id':id, 'fieldset':'default'}
+            request.form = {'id': id, 'fieldset': 'default'}
             self.assertNotEquals(asdf.validate(REQUEST=request), {}, "Not catched id: %s" % id)
 
         # valid ids
         ids = ['', 'abcd', 'blafasel']
         for id in ids:
-            request.form = {'id':id}
+            request.form = {'id': id}
             self.assertEqual(asdf.validate(REQUEST=request), {})
 
     def test_schema_marshall(self):
@@ -199,6 +201,7 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
     def beforeTearDown(self):
         self.logout()
 
+
 class ATCTFieldTestCase(ATCTSiteTestCase, BaseSchemaTest):
     """ ATContentTypes test including AT schema tests """
 
@@ -208,7 +211,7 @@ class ATCTFieldTestCase(ATCTSiteTestCase, BaseSchemaTest):
         # initalize the portal but not the base schema test
         # because we want to overwrite the dummy and don't need it
         ATCTSiteTestCase.afterSetUp(self)
-        self.setRoles(['Manager',])
+        self.setRoles(['Manager'])
 
     def createDummy(self, klass, id='dummy', subtype=None):
         portal = self.portal
@@ -312,4 +315,3 @@ class ATCTFieldTestCase(ATCTSiteTestCase, BaseSchemaTest):
 
         vocab = field.Vocabulary(dummy)
         self.assertTrue(isinstance(vocab, DisplayList))
-

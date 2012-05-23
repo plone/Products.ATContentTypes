@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from Testing import ZopeTestCase # side effect import. leave it here.
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
-import time, transaction
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes.atapi import *
+from Products.Archetypes import atapi
 from Products.ATContentTypes.tests.utils import dcEdit
 import StringIO
 
 from plone.app.blob.content import ATBlob
-from Products.ATContentTypes.content.file import ATFile
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.interfaces import IFileContent
 from zope.interface.verify import verifyObject
@@ -23,15 +21,18 @@ file_text = """
 foooooo
 """
 
+
 def editATCT(obj):
     dcEdit(obj)
     obj.edit(file=file_text)
+
 
 class Fakefile(StringIO.StringIO):
     pass
 
 
 tests = []
+
 
 class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
 
@@ -73,7 +74,7 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         atct = self._ATCT
         schema = atct.Schema()
         marshall = schema.getLayerImpl('marshall')
-        marshallers = [PrimaryFieldMarshaller]
+        marshallers = [atapi.PrimaryFieldMarshaller]
         try:
             from Products.Marshall import ControlledMarshaller
             marshallers.append(ControlledMarshaller)
@@ -130,13 +131,14 @@ class TestSiteATFile(atcttestcase.ATCTTypeTestCase):
         request.form['file_file'] = fakefile
         errors = {}
         self.folder[id].post_validate(request, errors)
-        self.assertTrue(errors.has_key('file'))
+        self.assertTrue('file' in errors)
 
 tests.append(TestSiteATFile)
 
+
 class TestATFileFields(atcttestcase.ATCTFieldTestCase):
 
-    # Title is not a required field, since we don't require them 
+    # Title is not a required field, since we don't require them
     # on File/Image - they are taken from the filename if not present.
     # "Add the comment 'damn stupid fucking test'" -- optilude ;)
     def test_title(self):
@@ -173,22 +175,23 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'blob', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AnnotationStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == "(('isNonEmptyFile', V_REQUIRED), ('checkFileMaxSize', V_REQUIRED))",
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, FileWidget),
+        self.assertTrue(isinstance(field.widget, atapi.FileWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
         self.assertTrue(field.primary == 1, 'Value is %s' % field.primary)
 
 tests.append(TestATFileFields)
+
 
 class TestCleanupFilename(atcttestcase.ATCTSiteTestCase):
 
@@ -200,6 +203,7 @@ class TestCleanupFilename(atcttestcase.ATCTSiteTestCase):
                           'Nikos Tzanos')
 
 tests.append(TestCleanupFilename)
+
 
 class TestATFileFunctional(atctftestcase.ATCTIntegrationTestCase):
 
@@ -253,7 +257,7 @@ class TestATFileFunctional(atctftestcase.ATCTIntegrationTestCase):
 
 tests.append(TestATFileFunctional)
 
-import unittest
+
 def test_suite():
     suite = unittest.TestSuite()
     for test in tests:

@@ -15,11 +15,14 @@ def makeResponse(request):
     """ create a fake request and set up logging of output """
     headers = {}
     output = []
+
     class Response:
         def setHeader(self, header, value):
             headers[header] = value
+
         def write(self, msg):
             output.append(msg)
+
     request.RESPONSE = Response()
     return headers, output, request
 
@@ -43,7 +46,7 @@ class EventCalendarTests(ATCTSiteTestCase):
         view = getMultiAdapter((self.folder, TestRequest()), name='ics_view')
         view.update()
         self.assertEqual(len(view.events), 2)
-        self.assertEqual(sorted([ e.Title for e in view.events ]),
+        self.assertEqual(sorted([e.Title for e in view.events]),
             ['Plone Conf 2007', 'Plone Conf 2008'])
 
     def testCalendarViewForTopic(self):
@@ -55,14 +58,14 @@ class EventCalendarTests(ATCTSiteTestCase):
         view = getMultiAdapter((topic, TestRequest()), name='ics_view')
         view.update()
         self.assertEqual(len(view.events), 1)
-        self.assertEqual(sorted([ e.Title for e in view.events ]),
+        self.assertEqual(sorted([e.Title for e in view.events]),
             ['Plone Conf 2008'])
         folder[folder.invokeFactory('Event',
             id='inaug09', title='Inauguration Day 2009',
             startDate='2009/01/20', endDate='2009/01/20', location='DC')]
         view.update()
         self.assertEqual(len(view.events), 2)
-        self.assertEqual(sorted([ e.Title for e in view.events ]),
+        self.assertEqual(sorted([e.Title for e in view.events]),
             ['Inauguration Day 2009', 'Plone Conf 2008'])
 
     def testDuplicateQueryParameters(self):
@@ -80,7 +83,7 @@ class EventCalendarTests(ATCTSiteTestCase):
         view = getMultiAdapter((topic, TestRequest()), name='ics_view')
         view.update()
         self.assertEqual(len(view.events), 2)
-        self.assertEqual(sorted([ e.Title for e in view.events ]),
+        self.assertEqual(sorted([e.Title for e in view.events]),
             ['Plone Conf 2007', 'Plone Conf 2008'])
 
     def checkOrder(self, text, *order):
@@ -166,7 +169,7 @@ class EventCalendarTests(ATCTSiteTestCase):
             'END:VEVENT',
             'END:VCALENDAR')
         lines = ''.join(output).splitlines()
-        self.assertEqual(len([ l for l in lines if l == 'BEGIN:VEVENT']), 1)
+        self.assertEqual(len([l for l in lines if l == 'BEGIN:VEVENT']), 1)
 
     def testCacheKey(self):
         headers, output, request = makeResponse(TestRequest())

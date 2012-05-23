@@ -10,10 +10,8 @@ from Products.Archetypes.ClassGen import generateClass
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicCriterion
 
-from Products.CMFCore.PortalContent import PortalContent
-from Products.Archetypes.interfaces.base import IBaseContent
 from Products.Archetypes.interfaces.referenceable import IReferenceable
-from plone.uuid.interfaces import IAttributeUUID
+
 
 class NonRefCatalogContent(BaseContentMixin):
     """Base class for content that is neither referenceable nor in the catalog
@@ -36,6 +34,7 @@ class NonRefCatalogContent(BaseContentMixin):
 classImplementsOnly(NonRefCatalogContent,
                     *(iface for iface in implementedBy(NonRefCatalogContent)\
                     if iface is not IReferenceable))
+
 
 class ATBaseCriterion(NonRefCatalogContent):
     """A basic criterion"""
@@ -74,8 +73,8 @@ class ATBaseCriterion(NonRefCatalogContent):
 
     security.declareProtected(View, 'Description')
     def Description(self):
-        lines = [ line.strip() for line in self.__doc__.splitlines() ]
-        return ' '.join( [ line for line in lines if line ] )
+        lines = [line.strip() for line in self.__doc__.splitlines()]
+        return ' '.join([line for line in lines if line])
 
     security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):

@@ -1,4 +1,6 @@
-from Testing import ZopeTestCase # side effect import. leave it here.
+import unittest
+
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
 from AccessControl.SecurityManagement import newSecurityManager
@@ -7,6 +9,7 @@ from Products.ATContentTypes.lib import constraintypes
 from Products.CMFPlone.interfaces import ISelectableConstrainTypes
 
 tests = []
+
 
 class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
     folder_type = 'Folder'
@@ -99,7 +102,6 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(inner.getImmediatelyAddableTypes(),
                                 self.af.getImmediatelyAddableTypes())
 
-
         # Create a new unprivileged user who can only access the inner folder
         self.portal.acl_users._doAddUser('restricted', 'secret', ['Member'], [])
         inner.manage_addLocalRoles('restricted', ('Manager',))
@@ -108,7 +110,6 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         newSecurityManager(None, user)
         self.assertEqual(inner.getLocallyAllowedTypes(),
                         ('Folder', 'Image'))
-
 
     def test_acquireFromHetereogenousParent(self):
 
@@ -180,10 +181,9 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
                              ['Image'])
         self.assertEqual(folder2.getImmediatelyAddableTypes(), ['Image'])
 
-
 tests.append(TestConstrainTypes)
 
-import unittest
+
 def test_suite():
     suite = unittest.TestSuite()
     for test in tests:

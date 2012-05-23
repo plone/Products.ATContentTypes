@@ -35,17 +35,18 @@ ERROR_LINE = 'line %d column %d - Error: %s'
 # the following regex is safe because *? matches the minimal text in the body tag
 # and .* matches the maximum text between two body tags including other body tags
 # if they exists
-RE_BODY = re.compile('<body[^>]*?>(.*)</body>', re.DOTALL )
+RE_BODY = re.compile('<body[^>]*?>(.*)</body>', re.DOTALL)
 
-# get the encoding from an uploaded html-page 
-# e.g. <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
-# we get ISO-8859-1 into the second match, the rest into the first and third. 
-RE_GET_HTML_ENCODING = re.compile('(<meta.*?content-type.*?charset[\s]*=[\s]*)([^"]*?)("[^>]*?>)', re.S | re.I) 
+# get the encoding from an uploaded html-page
+# e.g. <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+# we get ISO-8859-1 into the second match, the rest into the first and third.
+RE_GET_HTML_ENCODING = re.compile('(<meta.*?content-type.*?charset[\s]*=[\s]*)([^"]*?)("[^>]*?>)', re.S | re.I)
 
 # subtract 11 line numbers from the warning/error
 SUBTRACT_LINES = 11
 
 validatorList = []
+
 
 class TALValidator:
     """Validates a text to be valid TAL code
@@ -90,7 +91,7 @@ class TidyHtmlValidator:
             return 1
 
         request = kw['REQUEST']
-        field   = kw['field']
+        field = kw['field']
 
         result = doTidy(value, field, request)
         if result is None:
@@ -121,14 +122,13 @@ class TidyHtmlWithCleanupValidator:
         self.title = title or name
         self.description = description
 
-
     def __call__(self, value, *args, **kw):
         if not (HAS_MX_TIDY and MX_TIDY_ENABLED):
             # no mxTidy installed
             return 1
 
         request = kw['REQUEST']
-        field   = kw['field']
+        field = kw['field']
 
         result = doTidy(value, field, request, cleanup=1)
         if result is None:
@@ -151,8 +151,8 @@ class TidyHtmlWithCleanupValidator:
         else:
             return 1
 
-
 validatorList.append(TidyHtmlWithCleanupValidator('isTidyHtmlWithCleanup', title='', description=''))
+
 
 class NonEmptyFileValidator:
     """Fails on empty non-existant files
@@ -167,12 +167,12 @@ class NonEmptyFileValidator:
 
     def __call__(self, value, *args, **kwargs):
         instance = kwargs.get('instance', None)
-        field    = kwargs.get('field', None)
+        field = kwargs.get('field', None)
 
         # calculate size
         if isinstance(value, FileUpload) or type(value) is FileType \
           or hasattr(aq_base(value), 'tell'):
-            value.seek(0, 2) # eof
+            value.seek(0, 2)  # eof
             size = value.tell()
             value.seek(0)
         else:
@@ -206,7 +206,7 @@ def doTidy(value, field, request, cleanup=0):
     """
     # we can't use the mimetype from the field because it's updated *after*
     # validation so we must get it from the request
-    tf_name     = '%s_text_format' % field.getName()
+    tf_name = '%s_text_format' % field.getName()
     text_format = getattr(request, tf_name, '')
 
     # MX_TIDY_MIMETYPES configuration option isn't empty
@@ -237,6 +237,7 @@ def doTidy(value, field, request, cleanup=0):
 
     return nerrors, nwarnings, outputdata, errordata
 
+
 def wrapValueInHTML(value):
     """Wrap the data in a valid html construct to remove the missing title error
     """
@@ -252,6 +253,7 @@ def wrapValueInHTML(value):
 </body>
 </html>
 """ % value
+
 
 def unwrapValueFromHTML(value):
     """Remove the html stuff around the body
@@ -275,15 +277,16 @@ def unwrapValueFromHTML(value):
 ##    return '\n'.join(nlines)
     return body
 
+
 def correctEncoding(value):
     """correct the encoding of a html-page if we know it an mxTidy
-       expects an other encoding 
+       expects an other encoding
     """
 
     # we have nothing to do if mxTidy has no
     # fixed char_encoding
-    if not MX_TIDY_OPTIONS.has_key('char_encoding')  \
-           or ( MX_TIDY_OPTIONS['char_encoding'] == 'raw'):
+    if 'char_encoding' not in MX_TIDY_OPTIONS  \
+           or (MX_TIDY_OPTIONS['char_encoding'] == 'raw'):
         return value
 
     match = RE_GET_HTML_ENCODING.search(value)
@@ -308,10 +311,11 @@ def correctEncoding(value):
                 logger.info("Error correcting encoding from %s to %s" % (html_encoding, char_encoding))
     return value
 
+
 def parseErrorData(data, removeWarnings=0):
     """Parse the error data to change some stuff
     """
-    lines  = data.split('\n')
+    lines = data.split('\n')
     nlines = []
     for line in lines:
         # substract 11 lines from line
@@ -319,16 +323,16 @@ def parseErrorData(data, removeWarnings=0):
         if error:
             # an error line
             lnum, cnum, text = error.groups()
-            lnum  = int(lnum) - SUBTRACT_LINES
-            cnum  = int(cnum)
+            lnum = int(lnum) - SUBTRACT_LINES
+            cnum = int(cnum)
             nlines.append(ERROR_LINE % (lnum, cnum, text))
         else:
             warning = RE_MATCH_WARNING.search(line)
             if warning and not removeWarnings:
                 # a warning line and add warnings to output
                 lnum, cnum, text = warning.groups()
-                lnum  = int(lnum) - SUBTRACT_LINES
-                cnum  = int(cnum)
+                lnum = int(lnum) - SUBTRACT_LINES
+                cnum = int(cnum)
                 nlines.append(WARNING_LINE % (lnum, cnum, text))
             else:
                 # something else

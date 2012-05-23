@@ -1,11 +1,12 @@
-from Testing import ZopeTestCase # side effect import. leave it here.
+import unittest
+
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 from Products.ATContentTypes.tests.utils import dcEdit
 
-import transaction
 from Products.CMFCore.permissions import View
 from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes.atapi import *
+from Products.Archetypes import atapi
 
 from Products.Archetypes.Field import BooleanField
 from Products.CMFCore.utils import getToolByName
@@ -21,31 +22,31 @@ from OFS.interfaces import IOrderedContainer
 from Products.CMFPlone.PloneBatch import Batch
 
 
-ACQUIRE  = True
-LIMIT    = False
-COUNT  = '150'
-CUSTOM   = True
-FIELDS   = ('start','end', 'Creator')
+ACQUIRE = True
+LIMIT = False
+COUNT = '150'
+CUSTOM = True
+FIELDS = ('start', 'end', 'Creator')
 
-CRITERIA_SETUP = {'Integer Criterion':      #Meta Type
-                        ('portal_type',     #Field
-                         '10 10',            #Value
-                         'min:max'),        #Direction
+CRITERIA_SETUP = {'Integer Criterion':  # Meta Type
+                        ('portal_type',  # Field
+                         '10 10',  # Value
+                         'min:max'),  # Direction
                   'String Criterion':
                         ('SearchableText',
                          'portal'),
                   'Friendly Date Criterion':
                         ('start',
                          '10',
-                         'within_day',       #Operation
-                         'ahead'),          #DateRange
+                         'within_day',  # Operation
+                         'ahead'),  # DateRange
                   'List Criterion':
                         ('Subject',
                          "value1\nportal\ntest",
-                         'OR'),             #Operator
+                         'OR'),  # Operator
                   'Sort Criterion':
                         ('getId',
-                         False),            #Reversed
+                         False),  # Reversed
                 }
 
 CRIT_MAP = {'Integer Criterion': 'ATSimpleIntCriterion',
@@ -54,7 +55,8 @@ CRIT_MAP = {'Integer Criterion': 'ATSimpleIntCriterion',
             'List Criterion': 'ATListCriterion',
             'Sort Criterion': 'ATSortCriterion'}
 
-REV_CRIT_MAP = dict([[v,k] for k,v in CRIT_MAP.items()])
+REV_CRIT_MAP = dict([[v, k] for k, v in CRIT_MAP.items()])
+
 
 def editATCT(obj):
     dcEdit(obj)
@@ -71,7 +73,7 @@ def editATCT(obj):
         CRIT_TYPE = crit.meta_type
         OLD_CRIT_TYPE = REV_CRIT_MAP[CRIT_TYPE]
         params = CRITERIA_SETUP[OLD_CRIT_TYPE][1:]
-        if CRIT_TYPE not in ['ATSortCriterion','ATSimpleIntCriterion']:
+        if CRIT_TYPE not in ['ATSortCriterion', 'ATSimpleIntCriterion']:
             crit.setValue(params[0])
         if CRIT_TYPE == 'ATFriendlyDateCriteria':
             crit.setOperation(params[1])
@@ -88,6 +90,7 @@ def editATCT(obj):
         if CRIT_TYPE == 'ATSortCriterion':
             crit.setReversed(params[0])
 
+
 def convert_old_catalog_usage(criteria_items):
     """Convert old style query parameters into records"""
     if len(criteria_items) > 1:
@@ -99,33 +102,35 @@ def convert_old_catalog_usage(criteria_items):
             extra_type = usage[0].strip()
             extra_param = ':'.join(usage[1:]).strip()
         else:
-            extra_type = criteria_items[1][0].replace('%s_'%field,'')
+            extra_type = criteria_items[1][0].replace('%s_' % field, '')
         criteria_items = [(field, {'query': query_val, extra_type: extra_param})]
     return tuple(criteria_items)
 
+
 def convert_old_catalog_query(query):
-    """Convert old style query to new record based query"""
-    for k,v in query.items():
+    """ Convert old style query to new record based query """
+    for k, v in query.items():
         q_field = q_type = q_param = None
         if '_usage' in k:
-            q_field = k.replace('_usage','')
+            q_field = k.replace('_usage', '')
             usage = v.split(':')
             q_type = usage[0].strip()
             q_param = ':'.join(usage[1:]).strip()
         elif '_operator' in k:
-            q_field = k.replace('_operator','')
+            q_field = k.replace('_operator', '')
             q_type = 'operator'
             q_param = v
         if q_field:
             new_val = query[q_field]
             if not isinstance(v, dict):
-                new_val = { 'query' : new_val }
+                new_val = {'query': new_val}
             new_val[q_type] = q_param
             query[q_field] = new_val
             del query[k]
     return query
 
 tests = []
+
 
 class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
 
@@ -154,11 +159,11 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.assertFalse(iface.providedBy(self._ATCT))
         self.assertFalse(iface.providedBy(self.klass))
 
-    def test_Empty( self ):
+    def test_Empty(self):
         topic = self._ATCT
 
         query = topic.buildQuery()
-        self.assertEqual( query, None )
+        self.assertEqual(query, None)
 
     def test_canContainSubtopics(self):
         ttool = self.portal.portal_types
@@ -166,34 +171,34 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.assertTrue(self.portal_type not in fti.allowed_content_types,
                         'Topics should not be allowed to contain topics')
 
-    def test_Simple( self ):
+    def test_Simple(self):
         topic = self._ATCT
 
-        topic.addCriterion( 'foo', 'ATSimpleStringCriterion' )
+        topic.addCriterion('foo', 'ATSimpleStringCriterion')
         self.assertTrue('crit__foo_ATSimpleStringCriterion' in topic)
-        topic.getCriterion( 'foo_ATSimpleStringCriterion' ).setValue( 'bar' )
+        topic.getCriterion('foo_ATSimpleStringCriterion').setValue('bar')
 
         query = topic.buildQuery()
-        self.assertEqual( len(query), 1 )
-        self.assertEqual( query['foo'], 'bar' )
+        self.assertEqual(len(query), 1)
+        self.assertEqual(query['foo'], 'bar')
 
-        topic.addCriterion( 'baz', 'ATSimpleIntCriterion' )
-        topic.getCriterion( 'baz_ATSimpleIntCriterion' ).setValue( '43' )
+        topic.addCriterion('baz', 'ATSimpleIntCriterion')
+        topic.getCriterion('baz_ATSimpleIntCriterion').setValue('43')
 
         query = topic.buildQuery()
-        self.assertEqual( len( query ), 2 )
-        self.assertEqual( query[ 'foo' ], 'bar' )
-        self.assertEqual( query[ 'baz' ], {'query': 43} )
+        self.assertEqual(len(query), 2)
+        self.assertEqual(query['foo'], 'bar')
+        self.assertEqual(query['baz'], {'query': 43})
 
-    def test_nested( self ):
+    def test_nested(self):
         topic = self._ATCT
 
-        topic.addCriterion( 'foo', 'ATSimpleStringCriterion' )
+        topic.addCriterion('foo', 'ATSimpleStringCriterion')
         self.assertTrue('crit__foo_ATSimpleStringCriterion' in topic)
-        topic.getCriterion( 'foo_ATSimpleStringCriterion' ).setValue( 'bar' )
+        topic.getCriterion('foo_ATSimpleStringCriterion').setValue('bar')
 
         self.setRoles(['Manager', 'Member'])
-        topic.addSubtopic( 'qux' )
+        topic.addSubtopic('qux')
         self.setRoles(['Member'])
         subtopic = topic.qux
 
@@ -202,21 +207,21 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         #Ensure an empty subtopic uses it's parents' queries
         self.assertEqual(subtopic.buildQuery(), topic.buildQuery())
 
-        subtopic.addCriterion( 'baz', 'ATSimpleStringCriterion' )
+        subtopic.addCriterion('baz', 'ATSimpleStringCriterion')
         self.assertTrue('crit__baz_ATSimpleStringCriterion' in subtopic)
-        subtopic.getCriterion( 'baz_ATSimpleStringCriterion' ).setValue( 'bam' )
+        subtopic.getCriterion('baz_ATSimpleStringCriterion').setValue('bam')
 
         query = subtopic.buildQuery()
-        self.assertEqual( len( query ), 2 )
-        self.assertEqual( query['foo'], 'bar' )
-        self.assertEqual( query['baz'], 'bam' )
+        self.assertEqual(len(query), 2)
+        self.assertEqual(query['foo'], 'bar')
+        self.assertEqual(query['baz'], 'bam')
 
         subtopic.setAcquireCriteria(False)
         query = subtopic.buildQuery()
-        self.assertEqual( len( query ), 1 )
-        self.assertEqual( query['baz'], 'bam' )
+        self.assertEqual(len(query), 1)
+        self.assertEqual(query['baz'], 'bam')
 
-    def test_nested_friendly_date_criteria( self ):
+    def test_nested_friendly_date_criteria(self):
         """
         The queries before adding fix for https://dev.plone.org/plone/ticket/8827
         where subtopics should inhert start / end keys
@@ -234,16 +239,16 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         topic = self._ATCT
         date_crit = topic.addCriterion('start', 'ATFriendlyDateCriteria')
         date_crit.setValue(0)
-        date_crit.setDateRange('+') # This is irrelevant when the date is now
+        date_crit.setDateRange('+')  # This is irrelevant when the date is now
         date_crit.setOperation('more')
         # Add subtopic - past items
         self.setRoles(['Manager', 'Member'])
-        topic.addSubtopic( 'qux' )
+        topic.addSubtopic('qux')
         self.setRoles(['Member'])
         subtopic = topic.qux
-        date_crit = subtopic.addCriterion('end','ATFriendlyDateCriteria')
+        date_crit = subtopic.addCriterion('end', 'ATFriendlyDateCriteria')
         date_crit.setValue(0)
-        date_crit.setDateRange('-') # This is irrelevant when the date is now
+        date_crit.setDateRange('-')  # This is irrelevant when the date is now
         date_crit.setOperation('less')
         subtopic.setAcquireCriteria(True)
         # fetch the query
@@ -252,7 +257,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         # query shouldn't have a start key https://dev.plone.org/plone/ticket/8827
         self.assertFalse('start' in query)
 
-    def test_nested_friendly_date_criteria_reverse( self ):
+    def test_nested_friendly_date_criteria_reverse(self):
         """
         Lets have a test for the reverse situation
         when the main topic lists past items and
@@ -262,16 +267,16 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         topic = self._ATCT
         date_crit = topic.addCriterion('end', 'ATFriendlyDateCriteria')
         date_crit.setValue(0)
-        date_crit.setDateRange('+') # This is irrelevant when the date is now
+        date_crit.setDateRange('+')  # This is irrelevant when the date is now
         date_crit.setOperation('less')
         # Add subtopic - future items
         self.setRoles(['Manager', 'Member'])
-        topic.addSubtopic( 'qux' )
+        topic.addSubtopic('qux')
         self.setRoles(['Member'])
         subtopic = topic.qux
-        date_crit = subtopic.addCriterion('start','ATFriendlyDateCriteria')
+        date_crit = subtopic.addCriterion('start', 'ATFriendlyDateCriteria')
         date_crit.setValue(0)
-        date_crit.setDateRange('-') # This is irrelevant when the date is now
+        date_crit.setDateRange('-')  # This is irrelevant when the date is now
         date_crit.setOperation('more')
         subtopic.setAcquireCriteria(True)
         # fetch the query
@@ -280,7 +285,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.assertTrue(query['start'])
         self.assertTrue(query['end'])
 
-    def test_nested_friendly_date_criteria_with_a_start( self ):
+    def test_nested_friendly_date_criteria_with_a_start(self):
         """
         Use case: A subtopic with past item but only certain days back
         in time for example 1 month.
@@ -291,22 +296,22 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         topic = self._ATCT
         date_crit = topic.addCriterion('start', 'ATFriendlyDateCriteria')
         date_crit.setValue(0)
-        date_crit.setDateRange('+') # This is irrelevant when the date is now
+        date_crit.setDateRange('+')  # This is irrelevant when the date is now
         date_crit.setOperation('more')
         # Add subtopic - past items - but only 1 month back in time
         self.setRoles(['Manager', 'Member'])
-        topic.addSubtopic( 'qux' )
+        topic.addSubtopic('qux')
         self.setRoles(['Member'])
         subtopic = topic.qux
-        date_crit = subtopic.addCriterion('end','ATFriendlyDateCriteria')
+        date_crit = subtopic.addCriterion('end', 'ATFriendlyDateCriteria')
         date_crit.setValue(0)
-        date_crit.setDateRange('-') # This is irrelevant when the date is now
+        date_crit.setDateRange('-')  # This is irrelevant when the date is now
         date_crit.setOperation('less')
         subtopic.setAcquireCriteria(True)
-        date_crit = subtopic.addCriterion('start','ATFriendlyDateCriteria')
-        date_crit.setValue(31) # 1 month
-        date_crit.setDateRange('-') # the opposite is marked '+'
-        date_crit.setOperation('less') # the opposite is marked 'more'
+        date_crit = subtopic.addCriterion('start', 'ATFriendlyDateCriteria')
+        date_crit.setValue(31)  # 1 month
+        date_crit.setDateRange('-')  # the opposite is marked '+'
+        date_crit.setOperation('less')  # the opposite is marked 'more'
         #not sur about this one
         subtopic.setAcquireCriteria(True)
         # fetch the query
@@ -322,13 +327,13 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
     def test_queryCatalogBatching(self):
         # Ensure that has we return a proper batch if requested
         topic = self._ATCT
-        self.assertTrue(isinstance(topic.queryCatalog(batch=True),Batch))
-        self.assertFalse(isinstance(topic.queryCatalog(),Batch))
+        self.assertTrue(isinstance(topic.queryCatalog(batch=True), Batch))
+        self.assertFalse(isinstance(topic.queryCatalog(), Batch))
         # try it with some content now
         crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
         crit.setValue('Folder')
-        self.assertTrue(isinstance(topic.queryCatalog(batch=True),Batch))
-        self.assertFalse(isinstance(topic.queryCatalog(),Batch))
+        self.assertTrue(isinstance(topic.queryCatalog(batch=True), Batch))
+        self.assertFalse(isinstance(topic.queryCatalog(), Batch))
 
     def test_queryCatalogBatchingWithLimit(self):
         # Ensure that the number of results is the same with or without a
@@ -340,8 +345,8 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         topic.setSortCriterion('created', False)
         # add a few folders
         for i in range(6):
-            self.folder.invokeFactory('Folder', 'folder_%s'%i)
-            getattr(self.folder, 'folder_%s'%i).reindexObject()
+            self.folder.invokeFactory('Folder', 'folder_%s' % i)
+            getattr(self.folder, 'folder_%s' % i).reindexObject()
         num_items = len(topic.queryCatalog())
         # We better have some folders
         self.assertTrue(num_items >= 6)
@@ -369,7 +374,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         # Add a bunch of folders.
         for i in range(1, 20):
             self.folder.invokeFactory('Folder', str(i))
-        self.assertTrue(isinstance(topic.queryCatalog(batch=True),Batch))
+        self.assertTrue(isinstance(topic.queryCatalog(batch=True), Batch))
         # Check the batch length
         self.assertEqual(len(topic.queryCatalog(batch=True)), 10)
 
@@ -381,7 +386,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         # Add a bunch of folders.
         for i in range(1, 20):
             self.folder.invokeFactory('Folder', str(i))
-        self.assertTrue(isinstance(topic.queryCatalog(batch=True, b_size=5),Batch))
+        self.assertTrue(isinstance(topic.queryCatalog(batch=True, b_size=5), Batch))
         # Check the batch length
         self.assertEqual(len(topic.queryCatalog(batch=True, b_size=5)), 5)
 
@@ -393,7 +398,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         # Add a bunch of folders.
         for i in range(1, 20):
             self.folder.invokeFactory('Folder', str(i))
-        self.assertEqual(len(topic.queryCatalog(sort_on='Date',sort_limit=5)),5)
+        self.assertEqual(len(topic.queryCatalog(sort_on='Date', sort_limit=5)), 5)
 
     def test_queryCatalogOverrideCriteria(self):
         #Ensure that we can override params
@@ -448,6 +453,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
 
 tests.append(TestSiteATTopic)
 
+
 class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
 
     def afterSetUp(self):
@@ -482,16 +488,16 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'boolean', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AttributeStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, BooleanWidget),
+        self.assertTrue(isinstance(field.widget, atapi.BooleanWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == tuple([x[0] for x in field_vocab]),
                         'Value is %s' % str(tuple(vocab)))
@@ -524,16 +530,16 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'boolean', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AttributeStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, BooleanWidget),
+        self.assertTrue(isinstance(field.widget, atapi.BooleanWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == tuple([x[0] for x in field_vocab]),
                         'Value is %s' % str(tuple(vocab)))
@@ -565,16 +571,16 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'integer', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AttributeStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, IntegerWidget),
+        self.assertTrue(isinstance(field.widget, atapi.IntegerWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -607,16 +613,16 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'boolean', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AttributeStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, BooleanWidget),
+        self.assertTrue(isinstance(field.widget, atapi.BooleanWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -649,35 +655,36 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'lines', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AttributeStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, InAndOutWidget),
+        self.assertTrue(isinstance(field.widget, atapi.InAndOutWidget),
                         'Value is %s' % id(field.widget))
 
 tests.append(TestATTopicFields)
+
 
 class TestATTopicFunctional(atctftestcase.ATCTIntegrationTestCase):
 
     def afterSetUp(self):
         # adding topics is restricted
-        self.setRoles(['Manager', 'Member',])
+        self.setRoles(['Manager', 'Member'])
         atctftestcase.ATCTIntegrationTestCase.afterSetUp(self)
 
     def test_dynamic_view_without_view(self):
         # dynamic view magic should work
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
-        self.assertEqual(response.getStatus(), 200) #
+        self.assertEqual(response.getStatus(), 200)
 
     portal_type = 'Topic'
     views = ('atct_topic_view', 'criterion_edit_form', 'atct_topic_subtopics')
 
 tests.append(TestATTopicFunctional)
 
-import unittest
+
 def test_suite():
     suite = unittest.TestSuite()
     for test in tests:

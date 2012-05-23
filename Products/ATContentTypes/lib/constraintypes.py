@@ -25,9 +25,9 @@ from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
 
 # constants for enableConstrainMixin
-ACQUIRE = -1 # acquire locallyAllowedTypes from parent (default)
-DISABLED = 0 # use default behavior of PortalFolder which uses the FTI information
-ENABLED  = 1 # allow types from locallyAllowedTypes only
+ACQUIRE = -1  # acquire locallyAllowedTypes from parent (default)
+DISABLED = 0  # use default behavior of PortalFolder which uses the FTI information
+ENABLED = 1  # allow types from locallyAllowedTypes only
 
 # Note: ACQUIRED means get allowable types from parent (regardless of
 #  whether it supports IConstrainTypes) but only if parent is the same
@@ -35,72 +35,73 @@ ENABLED  = 1 # allow types from locallyAllowedTypes only
 #  behaviour (same as DISABLED).
 
 enableDisplayList = IntDisplayList((
-    (ACQUIRE,  _(u'constraintypes_acquire_label', default=u'Use parent folder settings')),
+    (ACQUIRE, _(u'constraintypes_acquire_label', default=u'Use parent folder settings')),
     (DISABLED, _(u'constraintypes_disable_label', default=u'Use portal default')),
-    (ENABLED,  _(u'constraintypes_enable_label', default=u'Select manually')),
+    (ENABLED, _(u'constraintypes_enable_label', default=u'Select manually')),
     ))
 
 ConstrainTypesMixinSchema = Schema((
     IntegerField('constrainTypesMode',
-        required = False,
-        default_method = "_ct_defaultConstrainTypesMode",
-        vocabulary = enableDisplayList,
-        languageIndependent = True,
-        write_permission = ATCTPermissions.ModifyConstrainTypes,
-        widget = SelectionWidget(
-            label = _(u'label_contrain_types_mode',
-                      default=u'Constrain types mode'),
-            description = _(u'description_constrain_types_mode',
-                            default=u'Select the constraint type mode for this folder.'),
-            visible = {'view' : 'invisible',
-                       'edit' : 'invisible',
-                      },
+        required=False,
+        default_method="_ct_defaultConstrainTypesMode",
+        vocabulary=enableDisplayList,
+        languageIndependent=True,
+        write_permission=ATCTPermissions.ModifyConstrainTypes,
+        widget=SelectionWidget(
+            label=_(u'label_contrain_types_mode',
+                    default=u'Constrain types mode'),
+            description=_(u'description_constrain_types_mode',
+                          default=u'Select the constraint type mode for this folder.'),
+            visible={'view': 'invisible',
+                     'edit': 'invisible',
+                    },
             ),
         ),
 
     LinesField('locallyAllowedTypes',
-        vocabulary = '_ct_vocabularyPossibleTypes',
-        enforceVocabulary = False,
-        languageIndependent = True,
-        default_method = '_ct_defaultAddableTypeIds',
-        accessor = 'getLocallyAllowedTypes', # Respects ENABLE/DISABLE/ACQUIRE
-        write_permission = ATCTPermissions.ModifyConstrainTypes,
-        multiValued = True,
-        widget = MultiSelectionWidget(
-            size = 10,
-            label = _(u'label_constrain_allowed_types',
-                      default=u'Permitted types'),
-            description = _(u'description_constrain_allowed_types',
-                            default=u'Select the types which will be addable inside this folder.'
-                           ),
-            visible = {'view' : 'invisible',
-                       'edit' : 'invisible',
-                      },
+        vocabulary='_ct_vocabularyPossibleTypes',
+        enforceVocabulary=False,
+        languageIndependent=True,
+        default_method='_ct_defaultAddableTypeIds',
+        accessor='getLocallyAllowedTypes',  # Respects ENABLE/DISABLE/ACQUIRE
+        write_permission=ATCTPermissions.ModifyConstrainTypes,
+        multiValued=True,
+        widget=MultiSelectionWidget(
+            size=10,
+            label=_(u'label_constrain_allowed_types',
+                    default=u'Permitted types'),
+            description=_(u'description_constrain_allowed_types',
+                          default=u'Select the types which will be addable inside this folder.'
+                         ),
+            visible={'view': 'invisible',
+                     'edit': 'invisible',
+                    },
             ),
         ),
 
      LinesField('immediatelyAddableTypes',
-        vocabulary = '_ct_vocabularyPossibleTypes',
-        enforceVocabulary = False,
-        languageIndependent = True,
-        default_method = '_ct_defaultAddableTypeIds',
-        accessor = 'getImmediatelyAddableTypes', # Respects ENABLE/DISABLE/ACQUIRE
-        write_permission = ATCTPermissions.ModifyConstrainTypes,
+        vocabulary='_ct_vocabularyPossibleTypes',
+        enforceVocabulary=False,
+        languageIndependent=True,
+        default_method='_ct_defaultAddableTypeIds',
+        accessor='getImmediatelyAddableTypes',  # Respects ENABLE/DISABLE/ACQUIRE
+        write_permission=ATCTPermissions.ModifyConstrainTypes,
         multiValued=True,
-        widget = MultiSelectionWidget(
-            size = 10,
-            label = _(u'label_constrain_preferred_types', u'Preferred types'),
-            description = _(u'description_constrain_preferred_types',
-                            default=u'Select the types which will be addable '
-                                     'from the "Add new item" menu. Any '
-                                     'additional types set in the list above '
-                                     'will be addable from a separate form.'),
-            visible = {'view' : 'invisible',
-                       'edit' : 'invisible',
-                      },
+        widget=MultiSelectionWidget(
+            size=10,
+            label=_(u'label_constrain_preferred_types', u'Preferred types'),
+            description=_(u'description_constrain_preferred_types',
+                          default=u'Select the types which will be addable '
+                                   'from the "Add new item" menu. Any '
+                                   'additional types set in the list above '
+                                   'will be addable from a separate form.'),
+            visible={'view': 'invisible',
+                     'edit': 'invisible',
+                    },
             ),
         ),
     ))
+
 
 def getParent(obj):
     portal_factory = getToolByName(obj, 'portal_factory', None)
@@ -112,6 +113,7 @@ def getParent(obj):
 
     return parent
 
+
 def parentPortalTypeEqual(obj):
     """Compares the portal type of obj to the portal type of its parent
 
@@ -122,7 +124,7 @@ def parentPortalTypeEqual(obj):
     """
     parent = getParent(obj)
     if parent is None:
-        return None # no context
+        return None  # no context
     parent_type = getattr(parent.aq_explicit, 'portal_type', None)
     obj_type = getattr(obj.aq_explicit, 'portal_type')
     if obj_type and parent_type == obj_type:
@@ -170,7 +172,7 @@ class ConstrainTypesMixin:
         DISABLE: return the types allowable in the item.
         """
         if context is None:
-            context=self
+            context = self
         mode = self.getConstrainTypesMode()
 
         if mode == DISABLED:
@@ -198,7 +200,6 @@ class ConstrainTypesMixin:
         else:
             raise ValueError, "Invalid value for enableAddRestriction"
 
-
     security.declareProtected(View, 'getImmediatelyAddableTypes')
     def getImmediatelyAddableTypes(self, context=None):
         """Get the list of type ids which should be immediately addable.
@@ -207,7 +208,7 @@ class ConstrainTypesMixin:
         all type ids allowable on the item.
         """
         if context is None:
-            context=self
+            context = self
         mode = self.getConstrainTypesMode()
 
         if mode == DISABLED:
@@ -236,7 +237,7 @@ class ConstrainTypesMixin:
         """returns constrained allowed types as list of fti's
         """
         if context is None:
-            context=self
+            context = self
         mode = self.getConstrainTypesMode()
 
         # Short circuit if we are disabled or acquiring from non-compatible
@@ -258,7 +259,6 @@ class ConstrainTypesMixin:
             ftis = [fti for fti in globalTypes if fti.getId() in allowed]
             return ftis
 
-
     # overrides CMFCore's PortalFolder invokeFactory
     security.declareProtected(AddPortalContent, 'invokeFactory')
     def invokeFactory(self, type_name, id, RESPONSE=None, *args, **kw):
@@ -272,17 +272,16 @@ class ConstrainTypesMixin:
         #if mode == DISABLED or \
         #        (parent and parent.portal_types != self.portal_types):
         if mode == DISABLED or \
-              (mode == ACQUIRE and not parentPortalTypeEqual(self) ):
+              (mode == ACQUIRE and not parentPortalTypeEqual(self)):
             return PortalFolder.invokeFactory(self, type_name, id,
                                                 RESPONSE=None, *args, **kw)
 
         if not type_name in [fti.getId() for fti in self.allowedContentTypes()]:
             raise ValueError('Disallowed subobject type: %s' % type_name)
 
-        pt = getToolByName( self, 'portal_types' )
+        pt = getToolByName(self, 'portal_types')
         args = (type_name, self, id, RESPONSE) + args
         return pt.constructContent(*args, **kw)
-
 
     security.declareProtected(View, 'getDefaultAddableTypes')
     def getDefaultAddableTypes(self, context=None):
@@ -306,7 +305,6 @@ class ConstrainTypesMixin:
                     t.isConstructionAllowed(context)]
 
         return [t for t in result if t.isConstructionAllowed(context)]
-
 
     security.declarePublic('canSetConstrainTypes')
     def canSetConstrainTypes(self):
@@ -339,21 +337,21 @@ class ConstrainTypesMixin:
         return [fti.getId() for fti in self.getDefaultAddableTypes()]
 
     def _ct_defaultConstrainTypesMode(self):
-       """Configure constrainTypeMode depending on the parent
+        """Configure constrainTypeMode depending on the parent
 
-       ACQUIRE if parent support ISelectableConstrainTypes
-       DISABLE if not
-       """
-       portal_factory = getToolByName(self, 'portal_factory', None)
-       if portal_factory is not None and portal_factory.isTemporary(self):
-           # created by portal_factory
-           parent = aq_parent(aq_parent(aq_parent(aq_inner(self))))
-       else:
-           parent = aq_parent(aq_inner(self))
+        ACQUIRE if parent support ISelectableConstrainTypes
+        DISABLE if not
+        """
+        portal_factory = getToolByName(self, 'portal_factory', None)
+        if portal_factory is not None and portal_factory.isTemporary(self):
+            # created by portal_factory
+            parent = aq_parent(aq_parent(aq_parent(aq_inner(self))))
+        else:
+            parent = aq_parent(aq_inner(self))
 
-       if ISelectableConstrainTypes.providedBy(parent) and parentPortalTypeEqual(self):
-           return ACQUIRE
-       else:
-           return DISABLED
+        if ISelectableConstrainTypes.providedBy(parent) and parentPortalTypeEqual(self):
+            return ACQUIRE
+        else:
+            return DISABLED
 
 InitializeClass(ConstrainTypesMixin)

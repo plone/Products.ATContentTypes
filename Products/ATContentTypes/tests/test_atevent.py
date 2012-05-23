@@ -1,11 +1,12 @@
-from Testing import ZopeTestCase # side effect import. leave it here.
+import unittest
+
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
-import transaction
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes.atapi import *
+from Products.Archetypes import atapi
 from Products.ATContentTypes.tests.utils import dcEdit
 
 from Products.ATContentTypes.content.event import ATEvent
@@ -20,17 +21,18 @@ from zope.interface.verify import verifyObject
 
 
 LOCATION = 'my location'
-EV_TYPE  = 'Meeting'
-EV_URL   = 'http://example.org/'
-S_DATE   = DateTime()
-E_DATE   = DateTime()+1
-C_NAME   = 'John Doe'
-C_PHONE  = '+1212356789'
-C_EMAIL  = 'john@example.org'
+EV_TYPE = 'Meeting'
+EV_URL = 'http://example.org/'
+S_DATE = DateTime()
+E_DATE = DateTime() + 1
+C_NAME = 'John Doe'
+C_PHONE = '+1212356789'
+C_EMAIL = 'john@example.org'
 EV_ATTENDEES = ('john@doe.com',
                 'john@doe.org',
                 'john@example.org')
 TEXT = "lorem ipsum"
+
 
 def editATCT(obj):
     dcEdit(obj)
@@ -45,8 +47,8 @@ def editATCT(obj):
     obj.setAttendees(EV_ATTENDEES)
     obj.setText(TEXT)
 
-
 tests = []
+
 
 class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
 
@@ -80,23 +82,23 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         day30 = DateTime('2004-12-30 0:00:00')
         day31 = DateTime('2004-12-31 0:00:00')
 
-        e1.edit(startDate = day29, endDate=day30, title='event')
-        e2.edit(startDate = day29, endDate=day30, title='event')
+        e1.edit(startDate=day29, endDate=day30, title='event')
+        e2.edit(startDate=day29, endDate=day30, title='event')
         self.assertEqual(cmp(e1, e2), 0)
 
         # start date
-        e1.edit(startDate = day29, endDate=day30, title='event')
-        e2.edit(startDate = day30, endDate=day31, title='event')
-        self.assertEqual(cmp(e1, e2), -1) # e1 < e2
+        e1.edit(startDate=day29, endDate=day30, title='event')
+        e2.edit(startDate=day30, endDate=day31, title='event')
+        self.assertEqual(cmp(e1, e2), -1)  # e1 < e2
 
         # duration
-        e1.edit(startDate = day29, endDate=day30, title='event')
-        e2.edit(startDate = day29, endDate=day31, title='event')
+        e1.edit(startDate=day29, endDate=day30, title='event')
+        e2.edit(startDate=day29, endDate=day31, title='event')
         self.assertEqual(cmp(e1, e2), -1)  # e1 < e2
 
         # title
-        e1.edit(startDate = day29, endDate=day30, title='event')
-        e2.edit(startDate = day29, endDate=day30, title='evenz')
+        e1.edit(startDate=day29, endDate=day30, title='event')
+        e2.edit(startDate=day29, endDate=day30, title='evenz')
         self.assertEqual(cmp(e1, e2), -1)  # e1 < e2
 
     def test_ical(self):
@@ -107,7 +109,7 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         ical = event.getICal()
         lines = ical.split('\n')
         self.assertEqual(lines[0], "BEGIN:VEVENT")
-        self.assertEqual(lines[5], "SUMMARY:%s"%event.Title())
+        self.assertEqual(lines[5], "SUMMARY:%s" % event.Title())
         # times should be converted to UTC
         self.assertEqual(lines[6], "DTSTART:20010101T110000Z")
         self.assertEqual(lines[7], "DTEND:20010101T130000Z")
@@ -120,7 +122,7 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         vcal = event.getVCal()
         lines = vcal.split('\n')
         self.assertEqual(lines[0], "BEGIN:VEVENT")
-        self.assertEqual(lines[7], "SUMMARY:%s"%event.Title())
+        self.assertEqual(lines[7], "SUMMARY:%s" % event.Title())
         # times should be converted to UTC
         self.assertEqual(lines[1], "DTSTART:20010101T110000Z")
         self.assertEqual(lines[2], "DTEND:20010101T130000Z")
@@ -131,6 +133,7 @@ class TestSiteATEvent(atcttestcase.ATCTTypeTestCase):
         self.assertEqual(atct.get_size(), len(TEXT))
 
 tests.append(TestSiteATEvent)
+
 
 class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
@@ -165,17 +168,17 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AttributeStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, StringWidget),
+        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -204,16 +207,15 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'lines', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, MetadataStorage),
+        self.assertTrue(isinstance(field.storage, atapi.MetadataStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == MetadataStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.MetadataStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % repr(field.validators))
-        self.assertTrue(isinstance(field.widget, KeywordWidget),
+        self.assertTrue(isinstance(field.widget, atapi.KeywordWidget),
                         'Value is %s' % id(field.widget))
-
 
     def test_eventUrlField(self):
         dummy = self._dummy
@@ -243,16 +245,16 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AttributeStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertEqual(field.validators, URLValidator)
-        self.assertTrue(isinstance(field.widget, StringWidget),
+        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -262,8 +264,8 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
-        self.assertTrue(field.default == None , 'Value is %s' % str(field.default))
-        self.assertTrue(field.default_method == DateTime , 'Value is %s' % str(field.default_method))
+        self.assertTrue(field.default == None, 'Value is %s' % str(field.default))
+        self.assertTrue(field.default_method == DateTime, 'Value is %s' % str(field.default_method))
         self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
@@ -285,20 +287,19 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'datetime', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AttributeStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, CalendarWidget),
+        self.assertTrue(isinstance(field.widget, atapi.CalendarWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
-
 
     def test_endDateField(self):
         dummy = self._dummy
@@ -306,8 +307,8 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
-        self.assertTrue(field.default == None , 'Value is %s' % str(field.default))
-        self.assertTrue(field.default_method == DateTime , 'Value is %s' % str(field.default_method))
+        self.assertTrue(field.default == None, 'Value is %s' % str(field.default))
+        self.assertTrue(field.default_method == DateTime, 'Value is %s' % str(field.default_method))
         self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
@@ -329,17 +330,17 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'datetime', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AttributeStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, CalendarWidget),
+        self.assertTrue(isinstance(field.widget, atapi.CalendarWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -371,17 +372,17 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AttributeStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, StringWidget),
+        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -413,17 +414,17 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AttributeStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == EmailValidator,
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, StringWidget),
+        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -455,16 +456,16 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AttributeStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertEqual(field.validators, EmptyValidator)
-        self.assertTrue(isinstance(field.widget, StringWidget),
+        self.assertTrue(isinstance(field.widget, atapi.StringWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -496,15 +497,15 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'lines', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AttributeStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AttributeStorage(),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(isinstance(field.widget, LinesWidget),
+        self.assertTrue(isinstance(field.widget, atapi.LinesWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -536,17 +537,17 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'text', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AnnotationStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
-        self.assertTrue(isinstance(field.widget, RichWidget),
+        self.assertTrue(isinstance(field.widget, atapi.RichWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
 
@@ -563,6 +564,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
 tests.append(TestATEventFields)
 
+
 class TestATEventFunctional(atctftestcase.ATCTIntegrationTestCase):
 
     portal_type = 'Event'
@@ -570,7 +572,7 @@ class TestATEventFunctional(atctftestcase.ATCTIntegrationTestCase):
 
 tests.append(TestATEventFunctional)
 
-import unittest
+
 def test_suite():
     suite = unittest.TestSuite()
     for test in tests:

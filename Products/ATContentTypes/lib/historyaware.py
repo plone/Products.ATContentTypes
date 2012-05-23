@@ -13,6 +13,7 @@ from Products.Archetypes.atapi import ATHistoryAwareMixin
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.interfaces import IHistoryAware
 
+
 class HistoryAwareMixin(ATHistoryAwareMixin):
     """History aware mixin class
 
@@ -27,14 +28,14 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
 
     implements(IHistoryAware)
 
-    security       = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
     actions = ({
-        'id'          : 'history',
-        'name'        : 'History',
-        'action'      : 'string:${object_url}/atct_history',
-        'permissions' : (ATCTPermissions.ViewHistory, ),
-        'visible' : False,
+        'id': 'history',
+        'name': 'History',
+        'action': 'string:${object_url}/atct_history',
+        'permissions': (ATCTPermissions.ViewHistory, ),
+        'visible': False,
          },
     )
 
@@ -77,12 +78,12 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
         for revisivon in range(1, max):
 
             oldObj, oldTime, oldDesc, oldUser = histories[revisivon]
-            newObj, newTime, newDesc, newUser = histories[revisivon-1]
+            newObj, newTime, newDesc, newUser = histories[revisivon - 1]
 
-            oldText  = oldObj.getHistorySource().split("\n")
-            newText  = newObj.getHistorySource().split("\n")
+            oldText = oldObj.getHistorySource().split("\n")
+            newText = newObj.getHistorySource().split("\n")
             # newUser is a string 'user' or 'folders to acl_users user'
-            member   = mTool.getMemberById(newUser.split(' ')[-1])
+            member = mTool.getMemberById(newUser.split(' ')[-1])
 
             lines = [
                      html_quote(line)
@@ -102,12 +103,12 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
 
             if lines:
                 lst.append({
-                            'lines'       : lines,
-                            'oldTime'     : oldTime,
-                            'newTime'     : newTime,
-                            'description' : description,
-                            'user'        : newUser,
-                            'member'      : member
+                            'lines': lines,
+                            'oldTime': oldTime,
+                            'newTime': newTime,
+                            'description': description,
+                            'user': newUser,
+                            'member': member
                            })
         return lst
 

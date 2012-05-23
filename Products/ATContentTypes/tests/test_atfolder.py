@@ -1,9 +1,9 @@
-from Testing import ZopeTestCase # side effect import. leave it here.
+import unittest
+
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
-from Products.Archetypes.atapi import *
 from Products.ATContentTypes.tests.utils import dcEdit
-
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATBTreeFolder
 from OFS.interfaces import IOrderedContainer as IOrderedContainer
@@ -12,6 +12,7 @@ from Products.ATContentTypes.interfaces import IATBTreeFolder
 
 from zope.interface.verify import verifyObject
 from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
+
 
 def editATCT(obj):
     dcEdit(obj)
@@ -60,6 +61,7 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         pass
 
 tests.append(TestSiteATFolder)
+
 
 class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
@@ -118,21 +120,22 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         from Products.ATContentTypes.content.document import ATDocument
         new_doc = ATDocument('d1')
         f1['d1'] = new_doc
-        new_doc = f1['d1'] # aq-wrap
+        new_doc = f1['d1']  # aq-wrap
 
-        self.assertEqual(['d1'], list(f1.keys())) # keys
-        self.assertEqual(['d1'], list(f1.iterkeys()))   # iterkeys
+        self.assertEqual(['d1'], list(f1.keys()))  # keys
+        self.assertEqual(['d1'], list(f1.iterkeys()))  # iterkeys
         try:
-            self.assertEqual(['d1'], list(f1)) # iter
+            self.assertEqual(['d1'], list(f1))  # iter
         except (KeyError, AttributeError):
             print '\nKnown failure: please see comments in `test_dictBehavior`!'
-        self.assertEqual(['d1'], list(f1.aq_base)) # iter (this works, weird!)
-        self.assertTrue(f1.values()[0].aq_base is new_doc.aq_base) # values
-        self.assertTrue(f1.get('d1').aq_base is new_doc.aq_base) # get
-        self.assertTrue('d1' in f1) # contains
+        self.assertEqual(['d1'], list(f1.aq_base))  # iter (this works, weird!)
+        self.assertTrue(f1.values()[0].aq_base is new_doc.aq_base)  # values
+        self.assertTrue(f1.get('d1').aq_base is new_doc.aq_base)  # get
+        self.assertTrue('d1' in f1)  # contains
 
 
 tests.append(TestSiteATBTreeFolder)
+
 
 class TestATFolderFields(atcttestcase.ATCTFieldTestCase):
 
@@ -150,6 +153,7 @@ class TestATFolderFields(atcttestcase.ATCTFieldTestCase):
 
 tests.append(TestATFolderFields)
 
+
 class TestATBTreeFolderFields(TestATFolderFields):
 
     def afterSetUp(self):
@@ -160,15 +164,15 @@ tests.append(TestATBTreeFolderFields)
 
 
 class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
-    
+
     portal_type = 'Folder'
     views = ('folder_listing', 'atct_album_view', )
 
     def test_dynamic_view_without_view(self):
         # dynamic view mixin should work
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
-        self.assertEqual(response.getStatus(), 200) #
-        
+        self.assertEqual(response.getStatus(), 200)
+
     def test_selectViewTemplate(self):
         # create an object using the createObject script
         self.publish(self.obj_path +
@@ -178,6 +182,7 @@ class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
 
 tests.append(TestATFolderFunctional)
 
+
 class TestATBTreeFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
 
     portal_type = 'Large Plone Folder'
@@ -186,11 +191,11 @@ class TestATBTreeFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
     def test_templatemixin_view_without_view(self):
         # template mixin magic should work
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
-        self.assertEqual(response.getStatus(), 200) #
+        self.assertEqual(response.getStatus(), 200)
 
 tests.append(TestATBTreeFolderFunctional)
 
-import unittest
+
 def test_suite():
     suite = unittest.TestSuite()
     for test in tests:

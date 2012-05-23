@@ -1,22 +1,21 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
+import unittest
 
 from cStringIO import StringIO
 import os
-import transaction
 
-from OFS.Image import Image as OFSImage
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes.atapi import *
+from Products.Archetypes import atapi
 from plone.app.blob.content import ATBlob
-from Products.ATContentTypes.content.image import ATImage
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
 from Products.PloneTestCase.PloneTestCase import FunctionalTestCase, setupPloneSite
-from Testing import ZopeTestCase # side effect import. leave it here.
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from zope.interface.verify import verifyObject
 
 # BBB Zope 2.12
@@ -27,6 +26,7 @@ except ImportError:
 
 # third party extension
 import exif
+
 
 def loadImage(name, size=0):
     """Load image from testing directory
@@ -47,6 +47,7 @@ TEST_JPEG_FILE = open(os.path.join(PACKAGE_HOME, 'input', 'canoneye.jpg'), 'rb')
 TEST_JPEG = loadImage('canoneye.jpg')
 TEST_JPEG_LEN = len(TEST_JPEG)
 
+
 def editATCT(obj):
     obj.setImage(TEST_GIF, content_type="image/gif")
     dcEdit(obj)
@@ -56,10 +57,11 @@ tests = []
 
 setupPloneSite()
 
+
 class TestIDFromTitle(FunctionalTestCase):
     """Browsertests to make sure ATImages derive their default IDs from their titles"""
     # TODO: Merge into TestATImageFunctional, below.
-    
+
     def afterSetUp(self):
         self.userId = 'fred'
         self.password = 'secret'
@@ -175,7 +177,7 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         atct = self._ATCT
         schema = atct.Schema()
         marshall = schema.getLayerImpl('marshall')
-        marshallers = [PrimaryFieldMarshaller]
+        marshallers = [atapi.PrimaryFieldMarshaller]
         try:
             from Products.Marshall import ControlledMarshaller
             marshallers.append(ControlledMarshaller)
@@ -225,9 +227,10 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
 
 tests.append(TestSiteATImage)
 
+
 class TestATImageFields(atcttestcase.ATCTFieldTestCase):
 
-    # Title is not a required field, since we don't require them 
+    # Title is not a required field, since we don't require them
     # on File/Image - they are taken from the filename if not present.
     # "Add the comment 'damn stupid fucking test'" -- optilude ;)
     def test_title(self):
@@ -264,25 +267,26 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
                         'Value is %s' % field.generateMode)
         self.assertTrue(field.force == '', 'Value is %s' % field.force)
         self.assertTrue(field.type == 'blob', 'Value is %s' % field.type)
-        self.assertTrue(isinstance(field.storage, AnnotationStorage),
+        self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == AnnotationStorage(migrate=True),
+        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(migrate=True),
                         'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == "(('isNonEmptyFile', V_REQUIRED), ('checkImageMaxSize', V_REQUIRED))",
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, ImageWidget),
+        self.assertTrue(isinstance(field.widget, atapi.ImageWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
-        self.assertTrue(isinstance(vocab, DisplayList),
+        self.assertTrue(isinstance(vocab, atapi.DisplayList),
                         'Value is %s' % type(vocab))
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
         self.assertTrue(field.primary == 1, 'Value is %s' % field.primary)
 
 tests.append(TestATImageFields)
 
+
 class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
-    
+
     portal_type = 'Image'
     views = ('image_view', 'download', 'atct_image_transform')
 
@@ -293,27 +297,27 @@ class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
 
     def test_url_returns_image(self):
         response = self.publish(self.obj_path, self.basic_auth)
-        self.assertEqual(response.getStatus(), 200) # OK
+        self.assertEqual(response.getStatus(), 200)  # OK
 
     def test_bobo_hook_security(self):
         # Make sure that users with 'View' permission can use the
         # bobo_traversed image scales, even if denied to anonymous
-        response1 = self.publish(self.obj_path+'/image', self.basic_auth)
-        self.assertEqual(response1.getStatus(), 200) # OK
+        response1 = self.publish(self.obj_path + '/image', self.basic_auth)
+        self.assertEqual(response1.getStatus(), 200)  # OK
         # deny access to anonymous
-        self.obj.manage_permission('View', ['Manager','Member'],0)
-        response2 = self.publish(self.obj_path+'/image', self.basic_auth)
+        self.obj.manage_permission('View', ['Manager', 'Member'], 0)
+        response2 = self.publish(self.obj_path + '/image', self.basic_auth)
         # Should be allowed for member
-        self.assertEqual(response2.getStatus(), 200) # OK
+        self.assertEqual(response2.getStatus(), 200)  # OK
         # Should fail for anonymous
-        response3 = self.publish(self.obj_path+'/image')
+        response3 = self.publish(self.obj_path + '/image')
         self.assertEqual(response3.getStatus(), 302)
         bobo_exception = response3.getHeader('bobo-exception-type')
         self.assertTrue('Unauthorized' in bobo_exception)
 
 tests.append(TestATImageFunctional)
 
-import unittest
+
 def test_suite():
     suite = unittest.TestSuite()
     for test in tests:
