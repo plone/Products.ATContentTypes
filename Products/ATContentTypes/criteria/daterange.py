@@ -16,7 +16,7 @@ from Products.ATContentTypes.permission import ChangeTopics
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 
-RELEVANT_INDICES=list(DATE_INDICES)
+RELEVANT_INDICES = list(DATE_INDICES)
 RELEVANT_INDICES.remove('DateRangeIndex')
 RELEVANT_INDICES = tuple(RELEVANT_INDICES)
 
@@ -46,16 +46,17 @@ ATDateRangeCriterionSchema = ATBaseCriterionSchema + Schema((
                 ),
     ))
 
+
 class ATDateRangeCriterion(ATBaseCriterion):
     """A date range criterion"""
 
     implements(IATTopicSearchCriterion)
 
-    security       = ClassSecurityInfo()
-    schema         = ATDateRangeCriterionSchema
-    meta_type      = 'ATDateRangeCriterion'
+    security = ClassSecurityInfo()
+    schema = ATDateRangeCriterionSchema
+    meta_type = 'ATDateRangeCriterion'
     archetype_name = 'Date Range Criterion'
-    shortDesc      = 'Date range'
+    shortDesc = 'Date range'
 
     security.declareProtected(View, 'Value')
     def Value(self):
@@ -68,6 +69,6 @@ class ATDateRangeCriterion(ATBaseCriterion):
         field = self.Field()
         value = self.Value()
 
-        return ( ( field, {'query': value, 'range': 'min:max'} ), )
+        return ((field, {'query': value, 'range': 'min:max'}),)
 
 registerCriterion(ATDateRangeCriterion, RELEVANT_INDICES)

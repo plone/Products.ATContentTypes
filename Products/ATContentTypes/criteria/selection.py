@@ -21,8 +21,8 @@ from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes import ATCTMessageFactory as _
 
 CompareOperators = DisplayList((
-                    ('and', _(u'and'))
-                  , ('or', _(u'or'))
+    ('and', _(u'and')),
+    ('or', _(u'or')),
     ))
 
 ATSelectionCriterionSchema = ATBaseCriterionSchema + Schema((
@@ -53,16 +53,17 @@ ATSelectionCriterionSchema = ATBaseCriterionSchema + Schema((
                 ),
     ))
 
+
 class ATSelectionCriterion(ATBaseCriterion):
     """A selection criterion"""
 
     implements(IATTopicSearchCriterion)
 
-    security       = ClassSecurityInfo()
-    schema         = ATSelectionCriterionSchema
-    meta_type      = 'ATSelectionCriterion'
+    security = ClassSecurityInfo()
+    schema = ATSelectionCriterionSchema
+    meta_type = 'ATSelectionCriterion'
     archetype_name = 'Selection Criterion'
-    shortDesc      = 'Select values from list'
+    shortDesc = 'Select values from list'
 
     def getCurrentValues(self):
         catalog = getToolByName(self, 'portal_catalog')
@@ -71,7 +72,7 @@ class ATSelectionCriterion(ATBaseCriterion):
         # DisplayList keys though it is supposed to (it should
         # probably accept Booleans as well) so we only accept strings
         # for now
-        options = [(o.lower(),o) for o in options if isinstance(o, basestring)]
+        options = [(o.lower(), o) for o in options if isinstance(o, basestring)]
         options.sort()
         return [o[1] for o in options]
 
@@ -80,10 +81,10 @@ class ATSelectionCriterion(ATBaseCriterion):
         # filter out empty strings
         result = []
 
-        value = tuple([ value for value in self.Value() if value ])
+        value = tuple([value for value in self.Value() if value])
         if not value:
             return ()
-        result.append((self.Field(), { 'query': value, 'operator': self.getOperator()}),)
+        result.append((self.Field(), {'query': value, 'operator': self.getOperator()}),)
 
         return tuple(result)
 

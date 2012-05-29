@@ -26,15 +26,16 @@ ATSortCriterionSchema = ATBaseCriterionSchema + Schema((
 
     ))
 
+
 class ATSortCriterion(ATBaseCriterion):
     """A sort criterion"""
 
     implements(IATTopicSortCriterion)
-    security       = ClassSecurityInfo()
-    schema         = ATSortCriterionSchema
-    meta_type      = 'ATSortCriterion'
+    security = ClassSecurityInfo()
+    schema = ATSortCriterionSchema
+    meta_type = 'ATSortCriterion'
     archetype_name = 'Sort Criterion'
-    shortDesc      = 'Sort'
+    shortDesc = 'Sort'
 
     security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):

@@ -38,11 +38,11 @@ class ATSimpleStringCriterion(ATBaseCriterion):
 
     implements(IATTopicSearchCriterion)
 
-    security       = ClassSecurityInfo()
-    schema         = ATSimpleStringCriterionSchema
-    meta_type      = 'ATSimpleStringCriterion'
+    security = ClassSecurityInfo()
+    schema = ATSimpleStringCriterionSchema
+    meta_type = 'ATSimpleStringCriterion'
     archetype_name = 'Simple String Criterion'
-    shortDesc      = 'Text'
+    shortDesc = 'Text'
 
     security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
@@ -51,6 +51,6 @@ class ATSimpleStringCriterion(ATBaseCriterion):
         if self.Value() is not '':
             result.append((self.Field(), self.Value()))
 
-        return tuple( result )
+        return tuple(result)
 
 registerCriterion(ATSimpleStringCriterion, STRING_INDICES + ('UUIDIndex', ))

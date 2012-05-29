@@ -29,6 +29,8 @@ UploadViaURL = "ATContentTypes: Upload via url"
 setDefaultRoles(UploadViaURL, ('Manager', 'Site Administrator'))
 
 permissions = {}
+
+
 def wireAddPermissions():
     """Creates a list of add permissions for all types in this project
 

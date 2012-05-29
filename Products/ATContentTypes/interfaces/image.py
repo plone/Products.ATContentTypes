@@ -17,8 +17,7 @@ class IImageContent(Interface):
         """
         """
 
+
 class IATImage(IImageContent):
     """AT Image marker Interface
     """
-
-

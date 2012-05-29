@@ -14,7 +14,7 @@ if value is None:
     return ''
 
 if same_type(value, DateTime()):
-    return context.toLocalizedTime(value.timeTime(), long_format = long_format)
+    return context.toLocalizedTime(value.timeTime(), long_format=long_format)
 
 # Ugly but fast check for ISO format (ensure we have '-' and positions 4 and 7,
 #  ' ' at position 10 and ':' and 13 and 16), then convert just in case.
@@ -28,7 +28,7 @@ if same_type(value, '') and (value[4:-1:3] == '-- ::' or value[4:-6:3] == '--T::
         # errors for bad input (Syntax, Time, Date, Index, etc.), best to be
         # safe.
         return value
-    return context.toLocalizedTime(value, long_format = long_format)
+    return context.toLocalizedTime(value, long_format=long_format)
 
 try:
     # Missing.Value and others have items() but don't have security assertions
@@ -38,9 +38,9 @@ except Unauthorized:
     items = None
 
 if items is not None and callable(items):
-    # For dictionaries return a string of the form 'key1: value1, key2: value2' 
-    value = ', '.join(['%s: %s'%(a,b) for a,b in items()])
-if same_type(value,[]) or same_type(value,()):
+    # For dictionaries return a string of the form 'key1: value1, key2: value2'
+    value = ', '.join(['%s: %s' % (a, b) for a, b in items()])
+if same_type(value, []) or same_type(value, ()):
     # Return list as comma separated values
     alist = []
     for item in value:
@@ -57,12 +57,12 @@ pt = context.portal_properties
 site_props = getattr(pt, 'site_properties', None)
 if site_props is not None:
     max_length = site_props.getProperty(
-        'search_results_description_length', 160  )
-    ellipsis = site_props.getProperty('ellipsis', '...' )
+        'search_results_description_length', 160)
+    ellipsis = site_props.getProperty('ellipsis', '...')
 else:
     max_length = 160
     ellipsis = '...'
 if len(value) < max_length:
     return value
 else:
-    return '%s%s'%(value[:max_length],ellipsis)
+    return '%s%s' % (value[:max_length], ellipsis)

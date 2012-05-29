@@ -11,5 +11,5 @@ logger.log(logging.INFO, 'Warning: You have content instances of the '
 class ATFavorite(link.ATLink):
     """BBB: The old and long removed favorite content type."""
 
-    portal_type    = 'Favorite'
+    portal_type = 'Favorite'
     archetype_name = 'Favorite'

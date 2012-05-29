@@ -7,12 +7,12 @@ class IFilterFolder(Interface):
         """
         """
 
+
 class IATFolder(IATContentType):
     """AT Folder marker interface
     """
 
+
 class IATBTreeFolder(IATContentType):
     """AT BTree Folder marker interface
     """
-
-

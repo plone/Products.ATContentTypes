@@ -18,11 +18,11 @@ class ATCurrentAuthorCriterion(ATBaseCriterion):
 
     implements(IATTopicSearchCriterion)
 
-    security       = ClassSecurityInfo()
-    schema         = ATCurrentAuthorSchema
-    meta_type      = 'ATCurrentAuthorCriterion'
+    security = ClassSecurityInfo()
+    schema = ATCurrentAuthorSchema
+    meta_type = 'ATCurrentAuthorCriterion'
     archetype_name = 'Current Author Criterion'
-    shortDesc      = 'Restrict to current user'
+    shortDesc = 'Restrict to current user'
 
     security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
@@ -33,6 +33,6 @@ class ATCurrentAuthorCriterion(ATBaseCriterion):
         if user is not '':
             result.append((self.Field(), user))
 
-        return tuple( result )
+        return tuple(result)
 
 registerCriterion(ATCurrentAuthorCriterion, LIST_INDICES)

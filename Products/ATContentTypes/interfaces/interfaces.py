@@ -26,10 +26,11 @@ class IATContentType(ISelectableBrowserDefault, IBaseContent):
                              ''')
 
     cmf_edit_kws = Attribute('''List of keyword names.
-    
+
     If one of this kw names is used with edit() then the cmf_edit method is
     called.
     ''')
+
 
 class IHistoryAware(IATHistoryAware):
     """History awareness marker interface
@@ -51,6 +52,7 @@ class IHistoryAware(IATHistoryAware):
         """Get history as unified diff
         """
 
+
 class ITextContent(Interface):
     """Interface for types containing text
     """
@@ -62,7 +64,7 @@ class ITextContent(Interface):
     def setText(value, **kwargs):
         """
         """
-        
+
     def CookedBody(stx_level='ignored'):
         """
         """
@@ -71,7 +73,7 @@ class ITextContent(Interface):
         """
         """
 
+
 class IATCTTool(Interface):
     """
     """
- 

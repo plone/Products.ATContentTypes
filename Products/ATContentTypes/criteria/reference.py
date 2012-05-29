@@ -11,15 +11,16 @@ from Products.Archetypes.atapi import DisplayList
 
 ATReferenceCriterionSchema = ATSelectionCriterion.schema
 
+
 class ATReferenceCriterion(ATSelectionCriterion):
     """A reference criterion"""
 
     implements(IATTopicSearchCriterion)
 
-    security       = ClassSecurityInfo()
-    meta_type      = 'ATReferenceCriterion'
+    security = ClassSecurityInfo()
+    meta_type = 'ATReferenceCriterion'
     archetype_name = 'Reference Criterion'
-    shortDesc      = 'Select referenced content'
+    shortDesc = 'Select referenced content'
 
     def getCurrentValues(self):
         catalog = getToolByName(self, 'portal_catalog')

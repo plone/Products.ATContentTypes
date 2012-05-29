@@ -32,26 +32,27 @@ ATBooleanCriterionSchema = ATBaseCriterionSchema + Schema((
                 ),
     ))
 
+
 class ATBooleanCriterion(ATBaseCriterion):
     """A boolean criterion"""
 
     implements(IATTopicSearchCriterion)
 
-    security       = ClassSecurityInfo()
-    schema         = ATBooleanCriterionSchema
-    meta_type      = 'ATBooleanCriterion'
+    security = ClassSecurityInfo()
+    schema = ATBooleanCriterionSchema
+    meta_type = 'ATBooleanCriterion'
     archetype_name = 'Boolean Criterion'
-    shortDesc      = 'Boolean (True/False)'
+    shortDesc = 'Boolean (True/False)'
 
     security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         result = []
         if self.getBool():
-            value = [1,True,'1','True']
+            value = [1, True, '1', 'True']
         else:
-            value = [0,'',False,'0','False', None, (), [], {}, MV]
+            value = [0, '', False, '0', 'False', None, (), [], {}, MV]
         result.append((self.Field(), value))
 
-        return tuple( result )
+        return tuple(result)
 
 registerCriterion(ATBooleanCriterion, FIELD_INDICES + ('BooleanIndex', ))

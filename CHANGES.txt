@@ -4,7 +4,11 @@ Changelog
 2.1.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- PEP 8 (ignoring W602, E301, E501 and E701).
+  [hvelarde]
+
+- Deprecated aliases were replaced on tests.
+  [hvelarde]
 
 
 2.1.7 (2012-04-09)

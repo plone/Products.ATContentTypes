@@ -1,9 +1,9 @@
-from Testing import ZopeTestCase # side effect import. leave it here.
+import unittest
+
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
-from Products.Archetypes.atapi import *
 from Products.ATContentTypes.tests.utils import dcEdit
-
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATBTreeFolder
 from OFS.interfaces import IOrderedContainer as IOrderedContainer
@@ -12,6 +12,7 @@ from Products.ATContentTypes.interfaces import IATBTreeFolder
 
 from zope.interface.verify import verifyObject
 from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
+
 
 def editATCT(obj):
     dcEdit(obj)
@@ -23,8 +24,8 @@ class FolderTestMixin:
     """Contains some general tests for both ATFolder and ATBTreeFolder
     """
     def test_implementsConstrainTypes(self):
-        self.failUnless(ISelectableConstrainTypes.providedBy(self._ATCT))
-        self.failUnless(verifyObject(ISelectableConstrainTypes, self._ATCT))
+        self.assertTrue(ISelectableConstrainTypes.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(ISelectableConstrainTypes, self._ATCT))
 
 
 class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
@@ -35,18 +36,18 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
     meta_type = 'ATFolder'
 
     def test_implementsOrderInterface(self):
-        self.failUnless(IOrderedContainer.providedBy(self._ATCT))
-        self.failUnless(verifyObject(IOrderedContainer, self._ATCT))
+        self.assertTrue(IOrderedContainer.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(IOrderedContainer, self._ATCT))
 
     def test_implementsATFolder(self):
         iface = IATFolder
-        self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+        self.assertTrue(iface.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(iface, self._ATCT))
 
     def test_implementsConstrainTypes(self):
         iface = ISelectableConstrainTypes
-        self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+        self.assertTrue(iface.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(iface, self._ATCT))
 
     def test_edit(self):
         new = self._ATCT
@@ -54,12 +55,13 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     def test_get_size(self):
         atct = self._ATCT
-        self.failUnlessEqual(atct.get_size(), 1)
+        self.assertEqual(atct.get_size(), 1)
 
     def test_schema_marshall(self):
         pass
 
 tests.append(TestSiteATFolder)
+
 
 class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
@@ -70,26 +72,26 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     def test_implementsATBTreeFolder(self):
         iface = IATBTreeFolder
-        self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+        self.assertTrue(iface.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(iface, self._ATCT))
 
     def test_implementsConstrainTypes(self):
         iface = ISelectableConstrainTypes
-        self.failUnless(iface.providedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+        self.assertTrue(iface.providedBy(self._ATCT))
+        self.assertTrue(verifyObject(iface, self._ATCT))
 
     def test_isOrdered(self):
-        self.failUnless(IOrderedContainer.providedBy(self._ATCT))
+        self.assertTrue(IOrderedContainer.providedBy(self._ATCT))
 
     def test_edit(self):
         new = self._ATCT
         editATCT(new)
-        self.failUnless('Test title' == new.Title())
-        self.failUnless('Test description' == new.Description())
+        self.assertTrue('Test title' == new.Title())
+        self.assertTrue('Test description' == new.Description())
 
     def test_get_size(self):
         atct = self._ATCT
-        self.failUnlessEqual(atct.get_size(), 1)
+        self.assertEqual(atct.get_size(), 1)
 
     def test_schema_marshall(self):
         pass
@@ -118,21 +120,22 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         from Products.ATContentTypes.content.document import ATDocument
         new_doc = ATDocument('d1')
         f1['d1'] = new_doc
-        new_doc = f1['d1'] # aq-wrap
+        new_doc = f1['d1']  # aq-wrap
 
-        self.assertEquals(['d1'], list(f1.keys())) # keys
-        self.assertEquals(['d1'], list(f1.iterkeys()))   # iterkeys
+        self.assertEqual(['d1'], list(f1.keys()))  # keys
+        self.assertEqual(['d1'], list(f1.iterkeys()))  # iterkeys
         try:
-            self.assertEquals(['d1'], list(f1)) # iter
+            self.assertEqual(['d1'], list(f1))  # iter
         except (KeyError, AttributeError):
             print '\nKnown failure: please see comments in `test_dictBehavior`!'
-        self.assertEquals(['d1'], list(f1.aq_base)) # iter (this works, weird!)
-        self.failUnless(f1.values()[0].aq_base is new_doc.aq_base) # values
-        self.failUnless(f1.get('d1').aq_base is new_doc.aq_base) # get
-        self.failUnless('d1' in f1) # contains
+        self.assertEqual(['d1'], list(f1.aq_base))  # iter (this works, weird!)
+        self.assertTrue(f1.values()[0].aq_base is new_doc.aq_base)  # values
+        self.assertTrue(f1.get('d1').aq_base is new_doc.aq_base)  # get
+        self.assertTrue('d1' in f1)  # contains
 
 
 tests.append(TestSiteATBTreeFolder)
+
 
 class TestATFolderFields(atcttestcase.ATCTFieldTestCase):
 
@@ -150,6 +153,7 @@ class TestATFolderFields(atcttestcase.ATCTFieldTestCase):
 
 tests.append(TestATFolderFields)
 
+
 class TestATBTreeFolderFields(TestATFolderFields):
 
     def afterSetUp(self):
@@ -160,23 +164,24 @@ tests.append(TestATBTreeFolderFields)
 
 
 class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
-    
+
     portal_type = 'Folder'
     views = ('folder_listing', 'atct_album_view', )
 
     def test_dynamic_view_without_view(self):
         # dynamic view mixin should work
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
-        self.failUnlessEqual(response.getStatus(), 200) #
-        
+        self.assertEqual(response.getStatus(), 200)
+
     def test_selectViewTemplate(self):
         # create an object using the createObject script
         self.publish(self.obj_path +
                      '/selectViewTemplate?templateId=atct_album_view',
                      self.owner_auth)
-        self.failUnlessEqual(self.obj.getLayout(), 'atct_album_view')
+        self.assertEqual(self.obj.getLayout(), 'atct_album_view')
 
 tests.append(TestATFolderFunctional)
+
 
 class TestATBTreeFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
 
@@ -186,11 +191,11 @@ class TestATBTreeFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
     def test_templatemixin_view_without_view(self):
         # template mixin magic should work
         response = self.publish('%s/' % self.obj_path, self.basic_auth)
-        self.failUnlessEqual(response.getStatus(), 200) #
+        self.assertEqual(response.getStatus(), 200)
 
 tests.append(TestATBTreeFolderFunctional)
 
-import unittest
+
 def test_suite():
     suite = unittest.TestSuite()
     for test in tests:

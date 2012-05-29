@@ -5,11 +5,13 @@ from ZConfig.datatypes import stock_datatypes
 
 _marker = object()
 
+
 def _getValueFromModule(module, key):
     var = getattr(module, key, _marker)
     if key is _marker:
         raise ValueError, "%s doesn't have an attribute %s" % (module, key)
     return var
+
 
 def _getValueFromDottedName(dotted_name):
     parts = dotted_name.split('.')
@@ -21,9 +23,10 @@ def _getValueFromDottedName(dotted_name):
         raise ValueError, str(msg)
     return _getValueFromModule(module, key)
 
+
 def permission_handler(value):
     """Parse a permission
-    
+
     Valid value are:
         cmf.NAME - Products.CMFCore.permissions
         zope.NAME - AccessControl.Permissions
@@ -40,10 +43,12 @@ def permission_handler(value):
             type(permission))
     return permission
 
+
 def identifier_none(value):
     if value == 'None':
         return None
     return IdentifierConversion()(value)
+
 
 def byte_size_in_mb(value):
     """Byte size handler for max size validator
@@ -52,13 +57,14 @@ def byte_size_in_mb(value):
         return 0.0
     byte_size = stock_datatypes["byte-size"]
     v = byte_size(value)
-    return float(v) / (1024.0**2)
+    return float(v) / (1024.0 ** 2)
+
 
 def image_dimension(value):
     """Image dimension data type
-    
+
     Splits a value of "200, 400" into two ints of (200, 400)
-    """    
+    """
     if value.count(',') != 1:
         raise ValueError, "Width and height must be seperated by a comma"
     w, h = value.split(',')
@@ -66,9 +72,10 @@ def image_dimension(value):
     h = int(h)
     return (w, h)
 
+
 def image_dimension_or_no(value):
     """Image dimension data type with support for no
-    
+
     Either "no" or (0, 0) results into None
     """
     if value.lower() == 'no':
@@ -77,7 +84,8 @@ def image_dimension_or_no(value):
     if (w, h) == (0, 0):
         return None
     return (w, h)
-    
+
+
 def pil_algo(value):
     """Get PIL image filter algo from PIL.Image
     """
@@ -85,7 +93,7 @@ def pil_algo(value):
         import PIL.Image
     except ImportError:
         return None
-    
+
     value = value.upper()
     available = ('NEAREST', 'BILINEAR', 'BICUBIC', 'ANTIALIAS')
     if value not in available:
@@ -93,35 +101,37 @@ def pil_algo(value):
     import PIL.Image
     return getattr(PIL.Image, value)
 
+
 class BaseFactory(object):
     """Basic factory
     """
-    
+
     def __init__(self, section):
         self.name = section.getSectionName()
         #self._parsed = False
         self._section = section
         self._names = {}
         self._parse()
-        
+
     #def __call__(self):
     #    if not self._parsed:
     #        self._parse()
     #    return self
-        
+
     def set(self, name, value):
         self._names[name] = 1
         setattr(self, name, value)
-        
+
     def _parse(self):
         raise NotImplementedError
-        
+
+
 class MxTidy(BaseFactory):
     """data handler for mx tidy settings
-    
+
     sets enable and options
     """
-    
+
     def _parse(self):
         sec = self._section
         self.set('enable', sec.enable)
@@ -130,33 +140,35 @@ class MxTidy(BaseFactory):
           'indent_spaces', 'input_xml', 'output_xhtml', 'quiet', 'show_warnings',
           'tab_size', 'word_2000', 'wrap'):
             cfg[id] = getattr(sec, id)
-        self.set('options' , cfg)
+        self.set('options', cfg)
+
 
 class Archetype(BaseFactory):
     """data handler for an archetype option
     """
-    
+
     def _parse(self):
         sec = self._section
         self.set('max_file_size', sec.max_file_size)
         self.set('max_image_dimension', sec.max_image_dimension)
         self.set('allow_document_upload', sec.allow_document_upload)
-        
+
         ct = sec.contenttypes
         if ct is not None:
             allowed = tuple(ct.allowed_content_types)
             default = ct.default_content_type
-        
+
             if default not in allowed:
                 raise ValueError, "Default %s is not in %s" % (default, ct)
-        
+
             self.set('default_content_type', default)
             self.set('allowed_content_types', allowed)
-        
+
+
 class Feature(BaseFactory):
     """data handler for a feature
     """
-    
+
     def _parse(self):
         sec = self._section
         self.set('enable', sec.enable)

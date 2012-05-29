@@ -4,10 +4,9 @@ from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_parent
 
-from Products.Archetypes.public import Schema, DisplayList
+from Products.Archetypes.public import Schema
 from Products.Archetypes.public import BooleanField, StringField
-from Products.Archetypes.public import BooleanWidget, SelectionWidget, StringWidget
-from Products.Archetypes.Referenceable import Referenceable
+from Products.Archetypes.public import BooleanWidget, StringWidget
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import PATH_INDICES
@@ -22,7 +21,7 @@ from Products.CMFCore.utils import getToolByName
 ATRelativePathCriterionSchema = ATBaseCriterionSchema + Schema((
     StringField('relativePath',
                 default='..',
-                widget=StringWidget(label='Relative path', 
+                widget=StringWidget(label='Relative path',
                                     label_msgid="label_relativepath_criteria_customrelativepath",
                                     description_msgid="help_relativepath_criteria_customrelativepath",
                                     i18n_domain="plone",
@@ -41,16 +40,17 @@ ATRelativePathCriterionSchema = ATBaseCriterionSchema + Schema((
                 ),
     ))
 
+
 class ATRelativePathCriterion(ATBaseCriterion):
     """A path criterion"""
 
     implements(IATTopicSearchCriterion)
 
-    security       = ClassSecurityInfo()
-    schema         = ATRelativePathCriterionSchema
-    meta_type      = 'ATRelativePathCriterion'
+    security = ClassSecurityInfo()
+    schema = ATRelativePathCriterionSchema
+    meta_type = 'ATRelativePathCriterion'
     archetype_name = 'Relative Path Criterion'
-    shortDesc      = 'Location in site relative to the current location'
+    shortDesc = 'Location in site relative to the current location'
 
     def getNavTypes(self):
         ptool = self.plone_utils
@@ -62,14 +62,14 @@ class ATRelativePathCriterion(ATBaseCriterion):
         result = []
         depth = (not self.Recurse() and 1) or -1
         relPath = self.getRelativePath()
-        
-        # sanitize a bit: you never know, with all those windoze users out there
-        relPath = relPath.replace("\\","/") 
 
-        # get the path to the portal object 
+        # sanitize a bit: you never know, with all those windoze users out there
+        relPath = relPath.replace("\\", "/")
+
+        # get the path to the portal object
         portalPath = list(getToolByName(self, 'portal_url').getPortalObject().getPhysicalPath())
-    
-        if relPath[0]=='/':
+
+        if relPath[0] == '/':
             # someone didn't enter a relative path.
             # simply use that one, relative to the portal
             path = '/'.join(portalPath) + relPath
@@ -91,10 +91,10 @@ class ATRelativePathCriterion(ATBaseCriterion):
                         break
                     else:
                         path = path[:-1]
-                elif folder == '.': 
+                elif folder == '.':
                     # don't really need this but for being complete
                     # strictly speaking some user may use a . aswell
-                    pass # do nothing
+                    pass  # do nothing
                 else:
                     path.append(folder)
             path = '/'.join(path)
