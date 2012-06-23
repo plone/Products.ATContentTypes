@@ -16,9 +16,6 @@ class TestFormatCatalogMetadata(atcttestcase.ATCTSiteTestCase):
 
     def testFormatDate(self):
         date = '2005-11-02 13:52:25'
-        format = '%m-%d-%Y %I:%M %p'
-        self.portal.portal_properties.site_properties.manage_changeProperties(
-                            localLongTimeFormat='%m-%d-%Y %I:%M %p')
         toLocalizedTime = self.portal.toLocalizedTime
         self.assertEqual(self.script(date),
                          toLocalizedTime(date, long_format=True))
