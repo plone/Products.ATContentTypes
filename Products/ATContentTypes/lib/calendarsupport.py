@@ -226,8 +226,11 @@ InitializeClass(CalendarSupportMixin)
 
 
 def vformat(s):
-    # return string with escaped commas, colons and semicolons
-    return s.strip().replace(', ', '\, ').replace(':', '\:').replace(';', '\;')
+    # return string with escaped commas and semicolons
+    # NOTE: RFC 2445 specifies "a COLON character in a 'TEXT' property value
+    # SHALL NOT be escaped with a BACKSLASH character." So watch out for
+    # non-TEXT values, should they be introduced later in this code!
+    return s.strip().replace(', ', '\, ').replace(';', '\;')
 
 
 def n2rn(s):
