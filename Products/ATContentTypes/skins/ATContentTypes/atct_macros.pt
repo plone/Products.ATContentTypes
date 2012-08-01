@@ -40,7 +40,7 @@
         <div id="" 
              i18n:translate=""
              class="formHelp" 
-             style="visibilitys:hidden"
+             style="visibility:hidden"
              tal:content="criterion/Description"
              tal:attributes="id string:${criterionid}_help;"
              >
