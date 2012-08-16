@@ -7,6 +7,7 @@ Changelog
 - Fixes album view - when scales generation failed, 
   file name appeared twice.
   Refs https://dev.plone.org/ticket/13082.
+  [thomasdesvenain]
 
 - PEP 8 (ignoring W602, E301, E501 and E701).
   [hvelarde]
