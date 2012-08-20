@@ -37,7 +37,7 @@
                            tal:attributes="href string:${image/absolute_url}/view;
                                            title image/Description">
                             <span class="photoAlbumEntryWrapper">
-                            <img src="" alt="" tal:replace="structure python:image.tag(scale='thumb', title=image.Description())" />
+                            <img src="" alt="" tal:replace="structure python:image.tag(scale='thumb', title=image.Description(), alt='')" />
                             </span>
                     <span class="photoAlbumEntryTitle" tal:content="image/pretty_title_or_id">
                        Title

@@ -1,8 +1,19 @@
 Changelog
 =========
 
-2.1.8 (unreleased)
+2.1.9 (unreleased)
 ------------------
+
+- Nothing changed yet.
+
+
+2.1.8 (2012-08-18)
+------------------
+
+- Fixes album view - when scales generation failed, 
+  file name appeared twice.
+  Refs https://dev.plone.org/ticket/13082.
+  [thomasdesvenain]
 
 - PEP 8 (ignoring W602, E301, E501 and E701).
   [hvelarde]
@@ -10,6 +21,12 @@ Changelog
 - Deprecated aliases were replaced on tests.
   [hvelarde]
 
+- iCal export: Don't escape COLON character in TEXT property.
+  Fixes http://dev.plone.org/ticket/11540.
+  [patch by jenskl, applied by kleist]
+
+- Changed deprecated getSiteEncoding to hardcoded `utf-8`
+  [tom_gross]
 
 2.1.7 (2012-04-09)
 ------------------
