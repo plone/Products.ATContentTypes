@@ -12,4 +12,12 @@
         permission="zope2.View"
         />
 
+
+    <browser:page
+        for="Products.ATContentTypes.interfaces.file.IFileContent"
+        name="download"
+        class=".browser.download.DownloadArchetypeFile"
+        permission="zope2.View"
+        />
+
 </configure>
