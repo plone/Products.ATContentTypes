@@ -1,8 +1,12 @@
 from Products.ATContentTypes.interfaces.interfaces import IATContentType
 from zope.interface import Interface
+try:
+    from Products.CMFPlone.interfaces.syndication import ISyndicatable
+except ImportError:
+    from zope.interface import Interface as ISyndicatable
 
 
-class IATTopic(IATContentType):
+class IATTopic(IATContentType, ISyndicatable):
     """AT Topic marker interface
     """
 
