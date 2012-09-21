@@ -1,5 +1,9 @@
 from zope.interface import Interface
 from Products.ATContentTypes.interfaces.interfaces import IATContentType
+try:
+    from Products.CMFPlone.interfaces.syndication import ISyndicatable
+except ImportError:
+    from zope.interface import Interface as ISyndicatable
 
 
 class IFilterFolder(Interface):
@@ -8,7 +12,7 @@ class IFilterFolder(Interface):
         """
 
 
-class IATFolder(IATContentType):
+class IATFolder(IATContentType, ISyndicatable):
     """AT Folder marker interface
     """
 

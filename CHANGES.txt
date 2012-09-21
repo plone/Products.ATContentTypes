@@ -7,6 +7,9 @@ Changelog
 - add @@download view for IFileContent
   [vangheem]
 
+- Implement ISyndicatable for folder and topic in 4.3
+  [vangheem]
+
 
 2.1.8 (2012-08-18)
 ------------------
