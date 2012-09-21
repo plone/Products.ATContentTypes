@@ -4,6 +4,12 @@ Changelog
 2.1.9 (unreleased)
 ------------------
 
+- Notify modified when an image is transformed
+  through transform image tab.
+  This updates modification date and refresh Etag.
+  Refs https://dev.plone.org/ticket/13169.
+  [thomasdesvenain]
+
 - add @@download view for IFileContent
   [vangheem]
 

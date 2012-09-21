@@ -212,6 +212,7 @@ class ATCTImageTransform(Base):
             # object by attribute access I'm passing a string along
             self.setImage(image2.getvalue(), mimetype=mimetype,
                           filename=filename, refresh_exif=False)
+            self.reindexObject()
 
         if REQUEST:
             REQUEST.RESPONSE.redirect(target)
