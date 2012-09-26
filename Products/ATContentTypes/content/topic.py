@@ -64,6 +64,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
               validators=('isTidyHtmlWithCleanup',),
               #validators=('isTidyHtml',),
               default_output_type='text/x-html-safe',
+              write_permission=ChangeTopics,
               widget=RichWidget(
                     description='',
                     label=_(u'label_body_text', default=u'Body Text'),
