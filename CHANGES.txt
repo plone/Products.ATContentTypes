@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.9 (unreleased)
+2.1.9 (2012-10-11)
 ------------------
 
 - Silence false security warning during startup complaining about
