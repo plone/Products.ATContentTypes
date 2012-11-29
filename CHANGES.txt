@@ -4,6 +4,10 @@ Changelog
 2.1.10 (unreleased)
 -------------------
 
+- change string ownership to creators as it makes more sense
+  refs https://dev.plone.org/ticket/8725
+  [maartenkling]
+
 - Make sure ATTopic.queryCatalog cannot be published. This fixes
   https://plone.org/products/plone/security/advisories/20121106/14
   [davisagli]
@@ -32,7 +36,7 @@ Changelog
 2.1.8 (2012-08-18)
 ------------------
 
-- Fixes album view - when scales generation failed, 
+- Fixes album view - when scales generation failed,
   file name appeared twice.
   Refs https://dev.plone.org/ticket/13082.
   [thomasdesvenain]
