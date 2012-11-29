@@ -394,9 +394,8 @@ class ATTopic(ATCTFolder):
     security.declareProtected(View, 'queryCatalog')
     def queryCatalog(self, REQUEST=None, batch=False, b_size=None,
                                                     full_objects=False, **kw):
-        """Invoke the catalog using our criteria to augment any passed
-            in query before calling the catalog.
-        """
+        # Invoke the catalog using our criteria to augment any passed
+        # in query before calling the catalog.
         if REQUEST is None:
             REQUEST = getattr(self, 'REQUEST', {})
         b_start = REQUEST.get('b_start', 0)
