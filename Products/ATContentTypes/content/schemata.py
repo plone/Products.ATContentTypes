@@ -127,13 +127,13 @@ def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
     if 'modification_date' in schema:
         schema.changeSchemataForField('modification_date', 'dates')
 
-    # Ownership
+    # Creators
     if 'creators' in schema:
-        schema.changeSchemataForField('creators', 'ownership')
+        schema.changeSchemataForField('creators', 'creators')
     if 'contributors' in schema:
-        schema.changeSchemataForField('contributors', 'ownership')
+        schema.changeSchemataForField('contributors', 'creators')
     if 'rights' in schema:
-        schema.changeSchemataForField('rights', 'ownership')
+        schema.changeSchemataForField('rights', 'creators')
 
     # Settings
     if 'allowDiscussion' in schema:
