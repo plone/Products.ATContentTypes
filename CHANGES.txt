@@ -4,6 +4,8 @@ Changelog
 2.1.11 (unreleased)
 -------------------
 
+- Fix deprecated import from Archetypes: use atapi instead of public
+[toutpt]
 
 2.1.10 (2012-12-09)
 -------------------
@@ -15,7 +17,6 @@ Changelog
 - Make sure ATTopic.queryCatalog cannot be published. This fixes
   https://plone.org/products/plone/security/advisories/20121106/14
   [davisagli]
-
 
 2.1.9 (2012-10-11)
 ------------------
