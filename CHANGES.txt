@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.11 (unreleased)
+2.1.11 (2013-01-13)
 -------------------
 
 - Fix deprecated import from Archetypes: use atapi instead of public
