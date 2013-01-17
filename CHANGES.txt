@@ -1,17 +1,28 @@
 Changelog
 =========
 
-2.1.10 (unreleased)
+2.1.12 (unreleased)
+-------------------
+
+- Nothing changed yet.
+
+
+2.1.11 (2013-01-13)
+-------------------
+
+- Fix deprecated import from Archetypes: use atapi instead of public
+  [toutpt]
+
+2.1.10 (2012-12-09)
 -------------------
 
 - change string ownership to creators as it makes more sense
-  refs https://dev.plone.org/ticket/8725
+  refs http://dev.plone.org/ticket/8725
   [maartenkling]
 
 - Make sure ATTopic.queryCatalog cannot be published. This fixes
-  https://plone.org/products/plone/security/advisories/20121106/14
+  http://plone.org/products/plone/security/advisories/20121106/14
   [davisagli]
-
 
 2.1.9 (2012-10-11)
 ------------------
@@ -23,7 +34,7 @@ Changelog
 - Notify modified when an image is transformed
   through transform image tab.
   This updates modification date and refresh Etag.
-  Refs https://dev.plone.org/ticket/13169.
+  Refs http://dev.plone.org/ticket/13169.
   [thomasdesvenain]
 
 - add @@download view for IFileContent
@@ -38,7 +49,7 @@ Changelog
 
 - Fixes album view - when scales generation failed,
   file name appeared twice.
-  Refs https://dev.plone.org/ticket/13082.
+  Refs http://dev.plone.org/ticket/13082.
   [thomasdesvenain]
 
 - PEP 8 (ignoring W602, E301, E501 and E701).

@@ -4,9 +4,9 @@ from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_parent
 
-from Products.Archetypes.public import Schema
-from Products.Archetypes.public import BooleanField, StringField
-from Products.Archetypes.public import BooleanWidget, StringWidget
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import BooleanField, StringField
+from Products.Archetypes.atapi import BooleanWidget, StringWidget
 
 from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria import PATH_INDICES
