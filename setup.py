@@ -27,7 +27,6 @@ setup(name='Products.ATContentTypes',
         ]
       ),
       install_requires=[
-          'archetypes.kss',
           'archetypes.referencebrowserwidget',
           'setuptools',
           'plone.i18n',

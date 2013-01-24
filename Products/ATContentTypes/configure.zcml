@@ -12,7 +12,6 @@
   <include package=".exportimport" />
   <include package="plone.i18n.normalizer" />
 
-  <include package="archetypes.kss" />
   <include package="archetypes.referencebrowserwidget" />
 
   <five:deprecatedManageAddDelete

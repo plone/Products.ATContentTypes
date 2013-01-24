@@ -6,10 +6,7 @@
     directory="archetypes.referencebrowserwidget:skins/referencebrowser"/>
  <object name="archetypes" meta_type="Filesystem Directory View"
     directory="Products.Archetypes:skins/archetypes"/>
- <object name="archetypes_kss" meta_type="Filesystem Directory View"
-    directory="Products.Archetypes:skins/archetypes_kss"/>
  <skin-path name="*">
-  <layer name="archetypes_kss" insert-after="custom"/>
   <layer name="ATContentTypes" insert-after="custom"/>
   <layer name="referencebrowser" insert-after="custom"/>
   <layer name="archetypes" insert-after="custom"/>
