@@ -19,8 +19,8 @@ ATPortalTypeCriterionSchema = ATSelectionCriterion.schema.copy()
 ATPortalTypeCriterionSchema.delField("operator")
 
 val_widget = ATPortalTypeCriterionSchema['value'].widget
-val_widget.description=_(u'help_portal_type_criteria_value',
-                         default=u'One of the available content types.')
+val_widget.description = _(u'help_portal_type_criteria_value',
+                           default=u'One of the available content types.')
 ATPortalTypeCriterionSchema['value'].widget = val_widget
 
 VOCAB_ID = u'plone.app.vocabularies.ReallyUserFriendlyTypes'
@@ -31,11 +31,11 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
 
     implements(IATTopicSearchCriterion)
 
-    security       = ClassSecurityInfo()
-    schema         = ATPortalTypeCriterionSchema
-    meta_type      = 'ATPortalTypeCriterion'
+    security = ClassSecurityInfo()
+    schema = ATPortalTypeCriterionSchema
+    meta_type = 'ATPortalTypeCriterion'
     archetype_name = 'Portal Types Criterion'
-    shortDesc      = 'Select content types'
+    shortDesc = 'Select content types'
 
     security.declareProtected(View, 'getCurrentValues')
     def getCurrentValues(self):
@@ -45,8 +45,8 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
         result = []
         # the vocabulary returns the values sorted by their translated title
         for term in vocab._terms:
-            value = term.value # portal_type
-            title = term.title # already translated title
+            value = term.value  # portal_type
+            title = term.title  # already translated title
             if self.Field() == 'Type':
                 # Switch the value from portal_type to the Title msgid
                 # since that is stored in the Type-index in portal_catalog

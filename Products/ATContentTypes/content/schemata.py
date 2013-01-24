@@ -12,14 +12,14 @@ from archetypes.referencebrowserwidget import ReferenceBrowserWidget
 # just like CMF
 ATContentTypeSchema = BaseSchema.copy() + MetadataSchema((
     BooleanField('excludeFromNav',
-        required = False,
-        languageIndependent = True,
-        schemata = 'metadata', # moved to 'default' for folders
-        widget = BooleanWidget(
+        required=False,
+        languageIndependent=True,
+        schemata='metadata',  # moved to 'default' for folders
+        widget=BooleanWidget(
             description=_(u'help_exclude_from_nav', default=u'If selected, this item will not appear in the navigation tree'),
-            label = _(u'label_exclude_from_nav', default=u'Exclude from navigation'),
-            visible={'view' : 'hidden',
-                     'edit' : 'visible'},
+            label=_(u'label_exclude_from_nav', default=u'Exclude from navigation'),
+            visible={'view': 'hidden',
+                     'edit': 'visible'},
             ),
         ),
     ),)
@@ -36,22 +36,22 @@ ATContentTypeSchema['description'].schemata = 'default'
 ATContentTypeBaseSchema = ATContentTypeSchema
 
 relatedItemsField = ReferenceField('relatedItems',
-        relationship = 'relatesTo',
-        multiValued = True,
-        isMetadata = True,
-        languageIndependent = False,
-        index = 'KeywordIndex',
-        referencesSortable = True,
-        write_permission = ModifyPortalContent,
-        widget = ReferenceBrowserWidget(
-            allow_search = True,
-            allow_browse = True,
-            allow_sorting = True,
-            show_indexes = False,
-            force_close_on_insert = True,
-            label = _(u'label_related_items', default=u'Related Items'),
-            description = '',
-            visible = {'edit' : 'visible', 'view' : 'invisible' }
+        relationship='relatesTo',
+        multiValued=True,
+        isMetadata=True,
+        languageIndependent=False,
+        index='KeywordIndex',
+        referencesSortable=True,
+        write_permission=ModifyPortalContent,
+        widget=ReferenceBrowserWidget(
+            allow_search=True,
+            allow_browse=True,
+            allow_sorting=True,
+            show_indexes=False,
+            force_close_on_insert=True,
+            label=_(u'label_related_items', default=u'Related Items'),
+            description='',
+            visible={'edit': 'visible', 'view': 'invisible'}
             )
         )
 ATContentTypeSchema.addField(relatedItemsField.copy())
@@ -60,18 +60,19 @@ ATContentTypeSchema.addField(relatedItemsField.copy())
 
 NextPreviousAwareSchema = MetadataSchema((
     BooleanField('nextPreviousEnabled',
-        #required = False,
-        languageIndependent = True,
-        schemata = 'metadata',
-        widget = BooleanWidget(
+        #required=False,
+        languageIndependent=True,
+        schemata='metadata',
+        widget=BooleanWidget(
             description=_(u'help_nextprevious', default=u'This enables next/previous widget on content items contained in this folder.'),
-            label = _(u'label_nextprevious', default=u'Enable next previous navigation'),
-            visible={'view' : 'hidden',
-                     'edit' : 'visible'},
+            label=_(u'label_nextprevious', default=u'Enable next previous navigation'),
+            visible={'view': 'hidden',
+                     'edit': 'visible'},
             ),
         default_method="getNextPreviousParentValue"
         ),
     ),)
+
 
 def marshall_register(schema):
     try:
@@ -95,6 +96,7 @@ def marshall_register(schema):
     marshaller = ControlledMarshaller(marshaller)
     schema.registerLayer('marshall', marshaller)
 
+
 def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
     """Finalizes an ATCT type schema to alter some fields
     """
@@ -106,39 +108,39 @@ def finalizeATCTSchema(schema, folderish=False, moveDiscussion=True):
         schema.moveField('allowDiscussion', after='relatedItems')
 
     # Categorization
-    if schema.has_key('subject'):
+    if 'subject' in schema:
         schema.changeSchemataForField('subject', 'categorization')
-    if schema.has_key('relatedItems'):
+    if 'relatedItems' in schema:
         schema.changeSchemataForField('relatedItems', 'categorization')
-    if schema.has_key('location'):
+    if 'location' in schema:
         schema.changeSchemataForField('location', 'categorization')
-    if schema.has_key('language'):
+    if 'language' in schema:
         schema.changeSchemataForField('language', 'categorization')
 
     # Dates
-    if schema.has_key('effectiveDate'):
+    if 'effectiveDate' in schema:
         schema.changeSchemataForField('effectiveDate', 'dates')
-    if schema.has_key('expirationDate'):
+    if 'expirationDate' in schema:
         schema.changeSchemataForField('expirationDate', 'dates')
-    if schema.has_key('creation_date'):
+    if 'creation_date' in schema:
         schema.changeSchemataForField('creation_date', 'dates')
-    if schema.has_key('modification_date'):
+    if 'modification_date' in schema:
         schema.changeSchemataForField('modification_date', 'dates')
 
-    # Ownership
-    if schema.has_key('creators'):
-        schema.changeSchemataForField('creators', 'ownership')
-    if schema.has_key('contributors'):
-        schema.changeSchemataForField('contributors', 'ownership')
-    if schema.has_key('rights'):
-        schema.changeSchemataForField('rights', 'ownership')
+    # Creators
+    if 'creators' in schema:
+        schema.changeSchemataForField('creators', 'creators')
+    if 'contributors' in schema:
+        schema.changeSchemataForField('contributors', 'creators')
+    if 'rights' in schema:
+        schema.changeSchemataForField('rights', 'creators')
 
     # Settings
-    if schema.has_key('allowDiscussion'):
+    if 'allowDiscussion' in schema:
         schema.changeSchemataForField('allowDiscussion', 'settings')
-    if schema.has_key('excludeFromNav'):
+    if 'excludeFromNav' in schema:
         schema.changeSchemataForField('excludeFromNav', 'settings')
-    if schema.has_key('nextPreviousEnabled'):
+    if 'nextPreviousEnabled' in schema:
         schema.changeSchemataForField('nextPreviousEnabled', 'settings')
 
     marshall_register(schema)

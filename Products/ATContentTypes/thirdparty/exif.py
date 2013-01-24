@@ -90,26 +90,29 @@
 # 04-DEC-05 JFROCHE Reduce number of objects created.
 #
 
+
 # XXX: These are here because removing them broke existing ZODB instances.
 # we should remove them completely and have migrations to fix them up instead.
-class Ratio: 
+class Ratio:
     pass
-class IFD_Tag: 
+
+
+class IFD_Tag:
     pass
 
 import logging
 LOG = logging.getLogger('exif')
 
 # field type descriptions as (length, abbreviation, full name) tuples
-FIELD_TYPES=(
-    (0, 'X',  'Proprietary'), # no such type
-    (1, 'B',  'Byte'),
-    (1, 'A',  'ASCII'),
-    (2, 'S',  'Short'),
-    (4, 'L',  'Long'),
-    (8, 'R',  'Ratio'),
+FIELD_TYPES = (
+    (0, 'X', 'Proprietary'),  # no such type
+    (1, 'B', 'Byte'),
+    (1, 'A', 'ASCII'),
+    (2, 'S', 'Short'),
+    (4, 'L', 'Long'),
+    (8, 'R', 'Ratio'),
     (1, 'SB', 'Signed Byte'),
-    (1, 'U',  'Undefined'),
+    (1, 'U', 'Undefined'),
     (2, 'SS', 'Signed Short'),
     (4, 'SL', 'Signed Long'),
     (8, 'SR', 'Signed Ratio')
@@ -118,7 +121,7 @@ FIELD_TYPES=(
 # dictionary of main EXIF tag names
 # first element of tuple is tag name, optional second element is
 # another dictionary giving names to values
-EXIF_TAGS={
+EXIF_TAGS = {
     0x0100: ('ImageWidth', ),
     0x0101: ('ImageLength', ),
     0x0102: ('BitsPerSample', ),
@@ -214,23 +217,23 @@ EXIF_TAGS={
               3: 'Spot',
               4: 'MultiSpot'}),
     0x9208: ('LightSource',
-             {0:   'Unknown',
-              1:   'Daylight',
-              2:   'Fluorescent',
-              3:   'Tungsten',
-              10:  'Flash',
-              17:  'Standard Light A',
-              18:  'Standard Light B',
-              19:  'Standard Light C',
-              20:  'D55',
-              21:  'D65',
-              22:  'D75',
+             {0: 'Unknown',
+              1: 'Daylight',
+              2: 'Fluorescent',
+              3: 'Tungsten',
+              10: 'Flash',
+              17: 'Standard Light A',
+              18: 'Standard Light B',
+              19: 'Standard Light C',
+              20: 'D55',
+              21: 'D65',
+              22: 'D75',
               255: 'Other'}),
-    0x9209: ('Flash', {0:  'No',
-                       1:  'Fired',
-                       5:  'Fired (?)', # no return sensed
-                       7:  'Fired (!)', # return sensed
-                       9:  'Fill Fired',
+    0x9209: ('Flash', {0: 'No',
+                       1: 'Fired',
+                       5: 'Fired (?)',  # no return sensed
+                       7: 'Fired (!)',  # return sensed
+                       9: 'Fill Fired',
                        13: 'Fill Fired (?)',
                        15: 'Fill Fired (!)',
                        16: 'Off',
@@ -268,7 +271,7 @@ EXIF_TAGS={
     }
 
 # interoperability tags
-INTR_TAGS={
+INTR_TAGS = {
     0x0001: ('InteroperabilityIndex', ),
     0x0002: ('InteroperabilityVersion', ),
     0x1000: ('RelatedImageFileFormat', ),
@@ -277,7 +280,7 @@ INTR_TAGS={
     }
 
 # GPS tags (not used yet, haven't seen camera with GPS)
-GPS_TAGS={
+GPS_TAGS = {
     0x0000: ('GPSVersionID', ),
     0x0001: ('GPSLatitudeRef', ),
     0x0002: ('GPSLatitude', ),
@@ -309,7 +312,7 @@ GPS_TAGS={
 
 # Nikon E99x MakerNote Tags
 # http://members.tripod.com/~tawba/990exif.htm
-MAKERNOTE_NIKON_NEWER_TAGS={
+MAKERNOTE_NIKON_NEWER_TAGS = {
     0x0002: ('ISOSetting', ),
     0x0003: ('ColorMode', ),
     0x0004: ('Quality', ),
@@ -357,9 +360,9 @@ MAKERNOTE_NIKON_NEWER_TAGS={
              {-3: 'B&W',
               -2: '-2',
               -1: '-1',
-              0:  '0',
-              1:  '1',
-              2:  '2'}),
+              0: '0',
+              1: '1',
+              2: '2'}),
     0x0095: ('NoiseReduction', ),
     0x00A7: ('TotalShutterReleases', ),
     0x00A9: ('ImageOptimization', ),
@@ -368,7 +371,7 @@ MAKERNOTE_NIKON_NEWER_TAGS={
     0x0010: ('DataDump', )
     }
 
-MAKERNOTE_NIKON_OLDER_TAGS={
+MAKERNOTE_NIKON_OLDER_TAGS = {
     0x0003: ('Quality',
              {1: 'VGA Basic',
               2: 'VGA Normal',
@@ -400,14 +403,15 @@ MAKERNOTE_NIKON_OLDER_TAGS={
               6: 'Speed Light'})
     }
 
+
 # decode Olympus SpecialMode tag in MakerNote
 def olympus_special_mode(v):
-    a={
+    a = {
         0: 'Normal',
         1: 'Unknown',
         2: 'Fast',
         3: 'Panorama'}
-    b={
+    b = {
         0: 'Non-panoramic',
         1: 'Left to right',
         2: 'Right to left',
@@ -415,7 +419,7 @@ def olympus_special_mode(v):
         4: 'Top to bottom'}
     return '%s - sequence %d - %s' % (a[v[0]], v[1], b[v[2]])
 
-MAKERNOTE_OLYMPUS_TAGS={
+MAKERNOTE_OLYMPUS_TAGS = {
     # ah HAH! those sneeeeeaky bastids! this is how they get past the fact
     # that a JPEG thumbnail is not allowed in an uncompressed TIFF file
     0x0100: ('JPEGThumbnail', ),
@@ -428,14 +432,14 @@ MAKERNOTE_OLYMPUS_TAGS={
              {0: 'Normal',
               1: 'Macro'}),
     0x0204: ('DigitalZoom', ),
-    0x0207: ('SoftwareRelease',  ),
-    0x0208: ('PictureInfo',  ),
+    0x0207: ('SoftwareRelease', ),
+    0x0208: ('PictureInfo', ),
     # print as string
     0x0209: ('CameraID', lambda x: ''.join(map(chr, x))),
-    0x0F00: ('DataDump',  )
+    0x0F00: ('DataDump', )
     }
 
-MAKERNOTE_CASIO_TAGS={
+MAKERNOTE_CASIO_TAGS = {
     0x0001: ('RecordingMode',
              {1: 'Single Shutter',
               2: 'Panorama',
@@ -462,11 +466,11 @@ MAKERNOTE_CASIO_TAGS={
               15: 'Strong'}),
     0x0006: ('Object Distance', ),
     0x0007: ('WhiteBalance',
-             {1:   'Auto',
-              2:   'Tungsten',
-              3:   'Daylight',
-              4:   'Fluorescent',
-              5:   'Shade',
+             {1: 'Auto',
+              2: 'Tungsten',
+              3: 'Daylight',
+              4: 'Fluorescent',
+              5: 'Shade',
               129: 'Manual'}),
     0x000B: ('Sharpness',
              {0: 'Normal',
@@ -481,15 +485,15 @@ MAKERNOTE_CASIO_TAGS={
               1: 'Low',
               2: 'High'}),
     0x0014: ('CCDSpeed',
-             {64:  'Normal',
-              80:  'Normal',
+             {64: 'Normal',
+              80: 'Normal',
               100: 'High',
               125: '+1.0',
               244: '+3.0',
-              250: '+2.0',})
+              250: '+2.0'})
     }
 
-MAKERNOTE_FUJIFILM_TAGS={
+MAKERNOTE_FUJIFILM_TAGS = {
     0x0000: ('NoteVersion', lambda x: ''.join(map(chr, x))),
     0x1000: ('Quality', ),
     0x1001: ('Sharpness',
@@ -499,20 +503,20 @@ MAKERNOTE_FUJIFILM_TAGS={
               4: 'Hard',
               5: 'Hard'}),
     0x1002: ('WhiteBalance',
-             {0:    'Auto',
-              256:  'Daylight',
-              512:  'Cloudy',
-              768:  'DaylightColor-Fluorescent',
-              769:  'DaywhiteColor-Fluorescent',
-              770:  'White-Fluorescent',
+             {0: 'Auto',
+              256: 'Daylight',
+              512: 'Cloudy',
+              768: 'DaylightColor-Fluorescent',
+              769: 'DaywhiteColor-Fluorescent',
+              770: 'White-Fluorescent',
               1024: 'Incandescent',
               3840: 'Custom'}),
     0x1003: ('Color',
-             {0:   'Normal',
+             {0: 'Normal',
               256: 'High',
               512: 'Low'}),
     0x1004: ('Tone',
-             {0:   'Normal',
+             {0: 'Normal',
               256: 'High',
               512: 'Low'}),
     0x1010: ('FlashMode',
@@ -531,12 +535,12 @@ MAKERNOTE_FUJIFILM_TAGS={
              {0: 'Off',
               1: 'On'}),
     0x1031: ('PictureMode',
-             {0:   'Auto',
-              1:   'Portrait',
-              2:   'Landscape',
-              4:   'Sports',
-              5:   'Night',
-              6:   'Program AE',
+             {0: 'Auto',
+              1: 'Portrait',
+              2: 'Landscape',
+              4: 'Sports',
+              5: 'Night',
+              6: 'Program AE',
               256: 'Aperture Priority AE',
               512: 'Shutter Priority AE',
               768: 'Manual Exposure'}),
@@ -554,7 +558,7 @@ MAKERNOTE_FUJIFILM_TAGS={
               1: 'On'})
     }
 
-MAKERNOTE_CANON_TAGS={
+MAKERNOTE_CANON_TAGS = {
     0x0006: ('ImageType', ),
     0x0007: ('FirmwareVersion', ),
     0x0008: ('ImageNumber', ),
@@ -563,7 +567,7 @@ MAKERNOTE_CANON_TAGS={
 
 # see http://www.burren.cx/david/canon.html by David Burren
 # this is in element offset, name, optional value dictionary format
-MAKERNOTE_CANON_TAG_0x001={
+MAKERNOTE_CANON_TAG_0x001 = {
     1: ('Macromode',
         {1: 'Macro',
          2: 'Normal'}),
@@ -671,7 +675,7 @@ MAKERNOTE_CANON_TAG_0x001={
           1: 'Continuous'})
     }
 
-MAKERNOTE_CANON_TAG_0x004={
+MAKERNOTE_CANON_TAG_0x004 = {
     7: ('WhiteBalance',
         {0: 'Auto',
          1: 'Sunny',
@@ -703,67 +707,71 @@ MAKERNOTE_CANON_TAG_0x004={
     19: ('SubjectDistance', )
     }
 
+
 # extract multibyte integer in Motorola format (little endian)
 def s2n_motorola(str):
-    x=0
+    x = 0
     for c in str:
-        x=(x << 8) | ord(c)
+        x = (x << 8) | ord(c)
     return x
+
 
 # extract multibyte integer in Intel format (big endian)
 def s2n_intel(str):
-    x=0
-    y=0L
+    x = 0
+    y = 0L
     for c in str:
-        x=x | (ord(c) << y)
-        y=y+8
+        x = x | (ord(c) << y)
+        y = y + 8
     return x
+
 
 # ratio object that eventually will be able to reduce itself to lowest
 # common denominator for printing
 def gcd(a, b):
-   if b == 0:
-      return a
-   else:
-      return gcd(b, a % b)
+    if b == 0:
+        return a
+    else:
+        return gcd(b, a % b)
+
 
 # class that handles an EXIF header
 class EXIF_header:
     def __init__(self, file, endian, offset, fake_exif, debug=0):
-        self.file=file
-        self.endian=endian
-        self.offset=offset
-        self.fake_exif=fake_exif
-        self.debug=debug
-        self.tags={}
+        self.file = file
+        self.endian = endian
+        self.offset = offset
+        self.fake_exif = fake_exif
+        self.debug = debug
+        self.tags = {}
 
     # convert slice to integer, based on sign and endian flags
     # usually this offset is assumed to be relative to the beginning of the
     # start of the EXIF information.  For some cameras that use relative tags,
     # this offset may be relative to some other starting point.
     def s2n(self, offset, length, signed=0):
-        self.file.seek(self.offset+offset)
-        slice=self.file.read(length)
+        self.file.seek(self.offset + offset)
+        slice = self.file.read(length)
         if self.endian == 'I':
-            val=s2n_intel(slice)
+            val = s2n_intel(slice)
         else:
-            val=s2n_motorola(slice)
+            val = s2n_motorola(slice)
         # Sign extension ?
         if signed:
-            msb=1L << (8*length-1)
+            msb = 1L << (8 * length - 1)
             if val & msb:
-                val=val-(msb << 1)
+                val = val - (msb << 1)
         return val
 
     # convert offset to string
     def n2s(self, offset, length):
-        s=''
+        s = ''
         for i in range(length):
             if self.endian == 'I':
-                s=s+chr(offset & 0xFF)
+                s = s + chr(offset & 0xFF)
             else:
-                s=chr(offset & 0xFF)+s
-            offset=offset >> 8
+                s = chr(offset & 0xFF) + s
+            offset = offset >> 8
         return s
 
     # return first IFD
@@ -772,41 +780,41 @@ class EXIF_header:
 
     # return pointer to next IFD
     def next_IFD(self, ifd):
-        entries=self.s2n(ifd, 2)
-        return self.s2n(ifd+2+12*entries, 4)
+        entries = self.s2n(ifd, 2)
+        return self.s2n(ifd + 2 + 12 * entries, 4)
 
     # return list of IFDs in header
     def list_IFDs(self):
-        i=self.first_IFD()
-        a=[]
+        i = self.first_IFD()
+        a = []
         while i:
             a.append(i)
-            i=self.next_IFD(i)
+            i = self.next_IFD(i)
         return a
 
     # return list of entries in this IFD
     def dump_IFD(self, ifd, ifd_name, dict=EXIF_TAGS, relative=0):
-        entries=self.s2n(ifd, 2)
+        entries = self.s2n(ifd, 2)
         for i in range(entries):
             # entry is index of start of this IFD in the file
-            entry=ifd+2+12*i
-            tag=self.s2n(entry, 2)
+            entry = ifd + 2 + 12 * i
+            tag = self.s2n(entry, 2)
             # get tag name.  We do it early to make debugging easier
-            tag_entry=dict.get(tag)
+            tag_entry = dict.get(tag)
             if tag_entry:
-                tag_name=tag_entry[0]
+                tag_name = tag_entry[0]
             else:
-                tag_name='Tag 0x%04X' % tag
-            field_type=self.s2n(entry+2, 2)
+                tag_name = 'Tag 0x%04X' % tag
+            field_type = self.s2n(entry + 2, 2)
             if not 0 < field_type < len(FIELD_TYPES):
                 # unknown field type
                 raise ValueError, \
                       'unknown type %d in tag 0x%04X' % (field_type, tag)
 
-            typelen=FIELD_TYPES[field_type][0]
-            count=self.s2n(entry+4, 4)
-            offset=entry+8
-            if count*typelen > 4:
+            typelen = FIELD_TYPES[field_type][0]
+            count = self.s2n(entry + 4, 4)
+            offset = entry + 8
+            if count * typelen > 4:
                 # offset is not the value; it's a pointer to the value
                 # if relative we set things up so s2n will seek to the right
                 # place when it adds self.offset.  Note that this 'relative'
@@ -814,64 +822,64 @@ class EXIF_header:
                 # other relative offsets, which would have to be computed here
                 # slightly differently.
                 if relative:
-                    tmp_offset=self.s2n(offset, 4)
-                    offset=tmp_offset+ifd-self.offset+4
+                    tmp_offset = self.s2n(offset, 4)
+                    offset = tmp_offset + ifd - self.offset + 4
                     if self.fake_exif:
-                        offset=offset+18
+                        offset = offset + 18
                 else:
-                    offset=self.s2n(offset, 4)
-            field_offset=offset
+                    offset = self.s2n(offset, 4)
+            field_offset = offset
             if field_type == 2:
                 # special case: null-terminated ASCII string
                 if count != 0:
-                    self.file.seek(self.offset+offset)
-                    values=self.file.read(count)
-                    values=values.strip().replace('\x00','')
+                    self.file.seek(self.offset + offset)
+                    values = self.file.read(count)
+                    values = values.strip().replace('\x00', '')
                 else:
-                    values=''
+                    values = ''
             else:
-                values=[]
-                signed=(field_type in [6, 8, 9, 10])
+                values = []
+                signed = (field_type in [6, 8, 9, 10])
                 for j in range(count):
                     if field_type in (5, 10):
                         # a ratio => reduce it if possible
-                        num = self.s2n(offset,   4, signed)
-                        den = self.s2n(offset+4, 4, signed)
-                        div=gcd(num, den)
+                        num = self.s2n(offset, 4, signed)
+                        den = self.s2n(offset + 4, 4, signed)
+                        div = gcd(num, den)
                         if div > 1:
-                          num=num/div
-                          den=den/div
-                        if(den==1):
-                          value_j = str(num)
+                            num = num / div
+                            den = den / div
+                        if(den == 1):
+                            value_j = str(num)
                         else:
-                          value_j = "%d/%d" % (num, den)
+                            value_j = "%d/%d" % (num, den)
                     else:
-                        value_j=self.s2n(offset, typelen, signed)
+                        value_j = self.s2n(offset, typelen, signed)
                     values.append(value_j)
-                    offset=offset+typelen
+                    offset = offset + typelen
             # now "values" is either a string or an array
             if count == 1 and field_type != 2:
-                printable=str(values[0])
+                printable = str(values[0])
             else:
-                printable=str(values)
+                printable = str(values)
             # compute printable version of values
             if tag_entry:
                 if len(tag_entry) != 1:
                     # optional 2nd tag element is present
                     if callable(tag_entry[1]):
                         # call mapping function
-                        printable=tag_entry[1](values)
+                        printable = tag_entry[1](values)
                     else:
-                        printable=''
+                        printable = ''
                         for i in values:
                             # use lookup table for this tag
-                            printable+=tag_entry[1].get(i, repr(i))
-            printable=printable.strip().replace('\x00','')
+                            printable += tag_entry[1].get(i, repr(i))
+            printable = printable.strip().replace('\x00', '')
             if(values):
-                self.tags[ifd_name+' '+tag_name] = (values[0],printable,field_offset)
+                self.tags[ifd_name + ' ' + tag_name] = (values[0], printable, field_offset)
             if self.debug:
                 print ' debug:   %s: %s' % (tag_name,
-                                            repr(self.tags[ifd_name+' '+tag_name]))
+                                            repr(self.tags[ifd_name + ' ' + tag_name]))
 
     # decode all the camera-specific MakerNote formats
 
@@ -893,9 +901,9 @@ class EXIF_header:
     # the offsets should be from the header at the start of all the EXIF info,
     # or from the header at the start of the makernote.)
     def decode_maker_note(self):
-        note=self.tags['EXIF MakerNote']
-        make=self.tags['Image Make'][1]
-        model=self.tags['Image Model'][1]
+        note = self.tags['EXIF MakerNote']
+        make = self.tags['Image Make'][1]
+        model = self.tags['Image Model'][1]
 
         # Nikon
         # The maker note usually starts with the word Nikon, followed by the
@@ -906,7 +914,7 @@ class EXIF_header:
             if note.values[0:7] == [78, 105, 107, 111, 110, 00, 01]:
                 if self.debug:
                     print "Looks like a type 1 Nikon MakerNote."
-                self.dump_IFD(note[2]+8, 'MakerNote',
+                self.dump_IFD(note[2] + 8, 'MakerNote',
                               dict=MAKERNOTE_NIKON_OLDER_TAGS)
             elif note.values[0:7] == [78, 105, 107, 111, 110, 00, 02]:
                 if self.debug:
@@ -914,7 +922,7 @@ class EXIF_header:
                 if note[0][12:14] != [0, 42] and note[0][12:14] != [42L, 0L]:
                     raise ValueError, "Missing marker tag '42' in MakerNote."
                 # skip the Makernote label and the TIFF header
-                self.dump_IFD(note[2]+10+8, 'MakerNote',
+                self.dump_IFD(note[2] + 10 + 8, 'MakerNote',
                               dict=MAKERNOTE_NIKON_NEWER_TAGS, relative=1)
             else:
                 # E99x or D1
@@ -926,7 +934,7 @@ class EXIF_header:
 
         # Olympus
         if make[:7] == 'OLYMPUS':
-            self.dump_IFD(note[2]+8, 'MakerNote',
+            self.dump_IFD(note[2] + 8, 'MakerNote',
                           dict=MAKERNOTE_OLYMPUS_TAGS)
             return
 
@@ -940,22 +948,22 @@ class EXIF_header:
         if make == 'FUJIFILM':
             # bug: everything else is "Motorola" endian, but the MakerNote
             # is "Intel" endian
-            endian=self.endian
-            self.endian='I'
+            endian = self.endian
+            self.endian = 'I'
             # bug: IFD offsets are from beginning of MakerNote, not
             # beginning of file header
-            offset=self.offset
-            self.offset+=note[2]
+            offset = self.offset
+            self.offset += note[2]
             # process note with bogus values (note is actually at offset 12)
             self.dump_IFD(12, 'MakerNote', dict=MAKERNOTE_FUJIFILM_TAGS)
             # reset to correct values
-            self.endian=endian
-            self.offset=offset
+            self.endian = endian
+            self.offset = offset
             return
 
         # Canon
         if make == 'Canon':
-            self.dump_IFD(note[2], 'MakerNote',dict=MAKERNOTE_CANON_TAGS)
+            self.dump_IFD(note[2], 'MakerNote', dict=MAKERNOTE_CANON_TAGS)
             for i in (('MakerNote Tag 0x0001', MAKERNOTE_CANON_TAG_0x001),
                       ('MakerNote Tag 0x0004', MAKERNOTE_CANON_TAG_0x004)):
                 self.canon_decode_tag(self.tags[i[0]][0], i[1])
@@ -965,44 +973,45 @@ class EXIF_header:
     # see http://www.burren.cx/david/canon.html by David Burren
     def canon_decode_tag(self, value, dict):
         for i in range(1, len(value)):
-            x=dict.get(i, ('Unknown', ))
+            x = dict.get(i, ('Unknown', ))
             if self.debug:
                 print i, x
-            name=x[0]
+            name = x[0]
             if len(x) > 1:
-                val=x[1].get(value[i], 'Unknown')
+                val = x[1].get(value[i], 'Unknown')
             else:
-                val=value[i]
+                val = value[i]
             # it's not a real IFD Tag but we fake one to make everybody
             # happy. this will have a "proprietary" type
-            self.tags['MakerNote '+name]=str(val)
+            self.tags['MakerNote ' + name] = str(val)
+
 
 # process an image file (expects an open file object)
 # this is the function that has to deal with all the arbitrary nasty bits
 # of the EXIF standard
 def process_file(file, debug=0):
-    data=file.read(12)
+    data = file.read(12)
     if data[0:4] in ['II*\x00', 'MM\x00*']:
         # it's a TIFF file
         file.seek(0)
-        endian=file.read(1)
+        endian = file.read(1)
         file.read(1)
-        offset=0
-        fake_exif=0
+        offset = 0
+        fake_exif = 0
     elif data[0:2] == '\xFF\xD8':
         # it's a JPEG file
         # skip JFIF style header(s)
-        fake_exif=0
+        fake_exif = 0
         while data[2] == '\xFF' and data[6:10] in ('JFIF', 'JFXX', 'OLYM'):
-            length=ord(data[4])*256+ord(data[5])
-            file.read(length-8)
+            length = ord(data[4]) * 256 + ord(data[5])
+            file.read(length - 8)
             # fake an EXIF beginning of file
-            data='\xFF\x00'+file.read(10)
-            fake_exif=1
+            data = '\xFF\x00' + file.read(10)
+            fake_exif = 1
         if data[2] == '\xFF' and data[6:10] == 'Exif':
             # detected EXIF header
-            offset=file.tell()
-            endian=file.read(1)
+            offset = file.tell()
+            endian = file.read(1)
         else:
             # no EXIF information
             return {}
@@ -1013,28 +1022,28 @@ def process_file(file, debug=0):
     # deal with the EXIF info we found
     if debug:
         print {'I': 'Intel', 'M': 'Motorola'}[endian], 'format'
-    hdr=EXIF_header(file, endian, offset, fake_exif, debug)
-    ifd_list=hdr.list_IFDs()
-    ctr=0
+    hdr = EXIF_header(file, endian, offset, fake_exif, debug)
+    ifd_list = hdr.list_IFDs()
+    ctr = 0
     for i in ifd_list:
         if ctr == 0:
-            IFD_name='Image'
+            IFD_name = 'Image'
         elif ctr == 1:
-            IFD_name='Thumbnail'
-            thumb_ifd=i
+            IFD_name = 'Thumbnail'
+            thumb_ifd = i
         else:
-            IFD_name='IFD %d' % ctr
+            IFD_name = 'IFD %d' % ctr
         if debug:
             print ' IFD %d (%s) at offset %d:' % (ctr, IFD_name, i)
         hdr.dump_IFD(i, IFD_name)
         # EXIF IFD
-        exif_off=hdr.tags.get(IFD_name+' ExifOffset')
+        exif_off = hdr.tags.get(IFD_name + ' ExifOffset')
         if exif_off:
             if debug:
                 print ' EXIF SubIFD at offset %d:' % exif_off.values[0]
             hdr.dump_IFD(exif_off[0], 'EXIF')
             # Interoperability IFD contained in EXIF IFD
-            intr_off=hdr.tags.get('EXIF SubIFD InteroperabilityOffset')
+            intr_off = hdr.tags.get('EXIF SubIFD InteroperabilityOffset')
             if intr_off:
                 if debug:
                     print ' EXIF Interoperability SubSubIFD at offset %d:' \
@@ -1042,14 +1051,14 @@ def process_file(file, debug=0):
                 hdr.dump_IFD(intr_off.values[0], 'EXIF Interoperability',
                              dict=INTR_TAGS)
         # GPS IFD
-        gps_off=hdr.tags.get(IFD_name+' GPSInfo')
+        gps_off = hdr.tags.get(IFD_name + ' GPSInfo')
         if gps_off:
             if debug:
                 print ' GPS SubIFD at offset %d:' % gps_off[0]
             hdr.dump_IFD(gps_off[0], 'GPS', dict=GPS_TAGS)
-        ctr+=1
+        ctr += 1
 
-    if hdr.tags.has_key('EXIF MakerNote'):
+    if 'EXIF MakerNote' in hdr.tags:
         try:
             hdr.decode_maker_note()
         except:
@@ -1078,29 +1087,28 @@ if __name__ == '__main__':
 
     for filename in sys.argv[1:]:
         try:
-            file=open(filename, 'rb')
+            file = open(filename, 'rb')
         except:
             print filename, 'unreadable'
             print
             continue
-        print filename+':'
+        print filename + ':'
         # data=process_file(file, 1) # with debug info
-        data=process_file(file)
+        data = process_file(file)
         if not data:
             print 'No EXIF information found'
             continue
 
-        x=data.keys()
+        x = data.keys()
         x.sort()
         for i in x:
-           print "   %s: %s" % (i, data[i])
+            print "   %s: %s" % (i, data[i])
     end_time = time.clock()
     duration = end_time - start_time
     end = len(gc.get_objects())
     print ""
     print "---------------------------------------------"
     print "%s object at the end" % end
-    print "so %s object have been created for one photo" % (end-start)
+    print "so %s object have been created for one photo" % (end - start)
     print "---------------------------------------------"
     print "Time needed : %s" % duration
-

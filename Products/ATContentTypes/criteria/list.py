@@ -20,8 +20,8 @@ from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes import ATCTMessageFactory as _
 
 CompareOperators = DisplayList((
-                    ('and', _(u'and'))
-                  , ('or', _(u'or'))
+    ('and', _(u'and')),
+    ('or', _(u'or')),
     ))
 
 ATListCriterionSchema = ATBaseCriterionSchema + Schema((
@@ -53,26 +53,27 @@ ATListCriterionSchema = ATBaseCriterionSchema + Schema((
                 ),
     ))
 
+
 class ATListCriterion(ATBaseCriterion):
     """A list criterion"""
 
     implements(IATTopicSearchCriterion)
 
-    security       = ClassSecurityInfo()
-    schema         = ATListCriterionSchema
-    meta_type      = 'ATListCriterion'
+    security = ClassSecurityInfo()
+    schema = ATListCriterionSchema
+    meta_type = 'ATListCriterion'
     archetype_name = 'List Criterion'
-    shortDesc      = 'List of values'
+    shortDesc = 'List of values'
 
     security.declareProtected(View, 'getCriteriaItems')
     def getCriteriaItems(self):
         # filter out empty strings
         result = []
 
-        value = tuple([ value for value in self.Value() if value ])
+        value = tuple([value for value in self.Value() if value])
         if not value:
             return ()
-        result.append((self.Field(), { 'query': value, 'operator': self.getOperator()}),)
+        result.append((self.Field(), {'query': value, 'operator': self.getOperator()}),)
 
         return tuple(result)
 

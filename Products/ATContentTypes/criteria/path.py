@@ -35,7 +35,7 @@ ATPathCriterionSchema = ATBaseCriterionSchema + Schema((
                     label=_(u'label_path_criteria_value', default=u'Folders'),
                     description=_(u'help_path_criteria_value',
                                   default=u'Folders to search in.'),
-                    base_query={'is_folderish':True},
+                    base_query={'is_folderish': True},
                     restrict_browse=True,
                     startup_directory='../')
                 ),
@@ -51,16 +51,17 @@ ATPathCriterionSchema = ATBaseCriterionSchema + Schema((
                 ),
     ))
 
+
 class ATPathCriterion(ATBaseCriterion):
     """A path criterion"""
 
     implements(IATTopicSearchCriterion)
 
-    security       = ClassSecurityInfo()
-    schema         = ATPathCriterionSchema
-    meta_type      = 'ATPathCriterion'
+    security = ClassSecurityInfo()
+    schema = ATPathCriterionSchema
+    meta_type = 'ATPathCriterion'
     archetype_name = 'Path Criterion'
-    shortDesc      = 'Location in site'
+    shortDesc = 'Location in site'
 
     def getNavTypes(self):
         ptool = self.plone_utils
@@ -81,7 +82,7 @@ class ATPathCriterion(ATBaseCriterion):
         if paths is not '':
             result.append((self.Field(), {'query': paths, 'depth': depth}))
 
-        return tuple( result )
+        return tuple(result)
 
     # We need references, so we need to be partly cataloged
     _catalogUID = Referenceable._catalogUID

@@ -14,7 +14,7 @@ ATCT_ETC = os.path.join(ATCT_HOME, 'etc')
 CONFIG_NAME = 'atcontenttypes.conf'
 INSTANCE_CONFIG = os.path.join(INSTANCE_ETC, CONFIG_NAME)
 ATCT_CONFIG = os.path.join(ATCT_ETC, CONFIG_NAME)
-ATCT_CONFIG_IN = os.path.join(ATCT_ETC, CONFIG_NAME+'.in')
+ATCT_CONFIG_IN = os.path.join(ATCT_ETC, CONFIG_NAME + '.in')
 
 # check files for existence
 if not os.path.isfile(INSTANCE_CONFIG):
@@ -22,15 +22,17 @@ if not os.path.isfile(INSTANCE_CONFIG):
 if not os.path.isfile(ATCT_CONFIG):
     ATCT_CONFIG = None
 if not os.path.isfile(ATCT_CONFIG_IN):
-    raise RuntimeError("Unable to find configuration file at %s" % 
+    raise RuntimeError("Unable to find configuration file at %s" %
                         ATCT_CONFIG_IN)
 FILES = (INSTANCE_CONFIG, ATCT_CONFIG, ATCT_CONFIG_IN,)
 
 # config
 zconf, handler, conf_file = None, None, None
+
+
 def loadConfig(files, schema=atctSchema, overwrite=False):
     """Config loader
-    
+
     The config loader tries to load the first existing file
     """
     global zconf, handler, conf_file

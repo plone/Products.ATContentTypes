@@ -14,7 +14,7 @@ class IntegrationTestCase(atcttestcase.ATCTFunctionalSiteTestCase):
 
     def afterSetUp(self):
         super(IntegrationTestCase, self).afterSetUp()
-        
+
         # basic data
         self.folder_url = self.folder.absolute_url()
         self.folder_path = '/%s' % self.folder.absolute_url(1)
@@ -55,82 +55,81 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
                                 '/createObject?type_name=%s' % self.portal_type,
                                 self.basic_auth)
 
-        self.failUnlessEqual(response.getStatus(), 302) # Redirect to edit
+        self.assertEqual(response.getStatus(), 302)  # Redirect to edit
 
         body = response.getBody()
 
-        self.failUnless(body.startswith(self.folder_url), body)
+        self.assertTrue(body.startswith(self.folder_url), body)
         # The url may end with /edit or /atct_edit depending on method aliases
-        self.failUnless(body.endswith('edit'), body)
+        self.assertTrue(body.endswith('edit'), body)
 
         # Perform the redirect
         edit_form_path = body[len(self.app.REQUEST.SERVER_URL):]
         response = self.publish(edit_form_path, self.basic_auth)
-        self.failUnlessEqual(response.getStatus(), 200) # OK
+        self.assertEqual(response.getStatus(), 200)  # OK
         temp_id = body.split('/')[-2]
 
         new_obj = getattr(self.folder.portal_factory, temp_id)
-        self.failUnlessEqual(self.obj.checkCreationFlag(), True) # object is not yet edited
-
+        self.assertEqual(self.obj.checkCreationFlag(), True)  # object is not yet edited
 
     def check_newly_created(self):
         """Objects created programmatically should not have the creation flag set"""
-        self.failUnlessEqual(self.obj.checkCreationFlag(), False) # object is fully created
+        self.assertEqual(self.obj.checkCreationFlag(), False)  # object is fully created
 
     def test_edit_view(self):
         # edit should work
         response = self.publish('%s/atct_edit' % self.obj_path, self.basic_auth)
-        self.failUnlessEqual(response.getStatus(), 200) # OK
+        self.assertEqual(response.getStatus(), 200)  # OK
 
     def test_base_view(self):
         # base view should work
         response = self.publish('%s/base_view' % self.obj_path, self.basic_auth)
-        self.failUnlessEqual(response.getStatus(), 200) # OK
+        self.assertEqual(response.getStatus(), 200)  # OK
 
     def test_dynamic_view(self):
         # dynamic view magic should work
         response = self.publish('%s/view' % self.obj_path, self.basic_auth)
-        self.failUnlessEqual(response.getStatus(), 200) # OK
+        self.assertEqual(response.getStatus(), 200)  # OK
 
     def test_local_sharing_view(self):
         # sharing tab should work
         response = self.publish('%s/sharing' % self.obj_path, self.basic_auth)
-        self.failUnlessEqual(response.getStatus(), 200) # OK
+        self.assertEqual(response.getStatus(), 200)  # OK
 
     # LinguaPlone specific tests
     if HAS_LINGUA_PLONE:
 
         def test_linguaplone_views(self):
             response = self.publish('%s/translate_item' % self.obj_path, self.basic_auth)
-            self.failUnlessEqual(response.getStatus(), 200) # OK
+            self.assertEqual(response.getStatus(), 200)  # OK
             response = self.publish('%s/manage_translations_form' % self.obj_path, self.basic_auth)
-            self.failUnlessEqual(response.getStatus(), 200) # OK
+            self.assertEqual(response.getStatus(), 200)  # OK
 
         def test_linguaplone_create_translation(self):
             # create translation creates a new object
             response = self.publish('%s/createTranslation?language=de&set_language=de'
                                      % self.obj_path, self.basic_auth)
-            self.failUnlessEqual(response.getStatus(), 302) # Redirect
+            self.assertEqual(response.getStatus(), 302)  # Redirect
 
             body = response.getBody()
-            self.failUnless(body.startswith(self.folder_url))
-            self.failUnless(body.endswith('/translate_item'))
+            self.assertTrue(body.startswith(self.folder_url))
+            self.assertTrue(body.endswith('/translate_item'))
 
             # Perform the redirect
             form_path = body[len(self.app.REQUEST.SERVER_URL):]
             response = self.publish(form_path, self.basic_auth)
-            self.failUnlessEqual(response.getStatus(), 200) # OK
+            self.assertEqual(response.getStatus(), 200)  # OK
 
             translated_id = "%s-de" % self.obj_id
-            self.failUnless(translated_id in self.folder,
+            self.assertTrue(translated_id in self.folder,
                             self.folder)
 
     def test_additional_view(self):
         # additional views:
         for view in self.views:
             response = self.publish('%s/%s' % (self.obj_path, view), self.basic_auth)
-            self.failUnlessEqual(response.getStatus(), 200,
-                "%s: %s" % (view, response.getStatus())) # OK
+            self.assertEqual(response.getStatus(), 200,
+                "%s: %s" % (view, response.getStatus()))  # OK
 
     def test_discussion(self):
         # enable discussion for the type
@@ -139,23 +138,23 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
         response = self.publish('%s/discussion_reply_form'
                                  % self.obj_path, self.basic_auth)
-        self.failUnlessEqual(response.getStatus(), 200) # ok
+        self.assertEqual(response.getStatus(), 200)  # ok
 
         response = self.publish('%s/discussion_reply?subject=test&body_text=testbody'
                                  % self.obj_path, self.basic_auth)
-        self.failUnlessEqual(response.getStatus(), 302) # Redirect
+        self.assertEqual(response.getStatus(), 302)  # Redirect
 
         body = response.getBody()
-        self.failUnless(body.startswith(self.folder_url))
+        self.assertTrue(body.startswith(self.folder_url))
 
-        self.failUnless(hasattr(self.obj.aq_explicit, 'talkback'))
+        self.assertTrue(hasattr(self.obj.aq_explicit, 'talkback'))
 
         form_path = body[len(self.app.REQUEST.SERVER_URL):]
         discussionId = form_path.split('#')[1]
 
         reply = self.obj.talkback.getReply(discussionId)
-        self.assertEquals(reply.title, 'test')
-        self.assertEquals(reply.text, 'testbody')
+        self.assertEqual(reply.title, 'test')
+        self.assertEqual(reply.text, 'testbody')
 
     def test_dynamicViewContext(self):
         # register and add a testing template (it's a script)
@@ -173,10 +172,9 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         self.setRoles(['Member'])
 
         response = self.publish('%s/view' % self.obj_path, self.basic_auth)
-        self.failUnlessEqual(response.getStatus(), 200) # OK
+        self.assertEqual(response.getStatus(), 200)  # OK
 
         output = response.getBody().split(',')
-        self.failUnlessEqual(len(output), 4, output)
+        self.assertEqual(len(output), 4, output)
 
-        self.failUnlessEqual(output, ['the obj', 'the folder', 'the obj', 'the folder'])
-
+        self.assertEqual(output, ['the obj', 'the folder', 'the obj', 'the folder'])

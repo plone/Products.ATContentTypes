@@ -35,21 +35,21 @@ except ImportError:
 class ObsoleteATFolder(ATCTOrderedFolder):
     """A folder which can contain other items."""
 
-    schema         =  folder.ATFolderSchema
+    schema = folder.ATFolderSchema
 
-    portal_type    = 'Folder'
+    portal_type = 'Folder'
     archetype_name = 'Folder'
-    _atct_newTypeFor = {'portal_type' : 'CMF Folder', 'meta_type' : 'Plone Folder'}
+    _atct_newTypeFor = {'portal_type': 'CMF Folder', 'meta_type': 'Plone Folder'}
     assocMimetypes = ()
-    assocFileExt   = ()
-    cmf_edit_kws   = ()
+    assocFileExt = ()
+    cmf_edit_kws = ()
 
     implements(IATFolder, IOrderedContainer)
 
     # Enable marshalling via WebDAV/FTP.
     __dav_marshall__ = True
 
-    security       = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
     security.declareProtected(View, 'getNextPreviousParentValue')
     def getNextPreviousParentValue(self):
@@ -77,7 +77,7 @@ FOLDER_MANAGE_OPTIONS = (
 if HAS_LINGUAPLONE:
     class ATFolder(I18NOnlyBaseBTreeFolder, folder.ATFolder):
         """A folder which can contain other items."""
-        portal_type    = 'Folder'
+        portal_type = 'Folder'
         manage_options = FOLDER_MANAGE_OPTIONS
         security = ClassSecurityInfo()
 
@@ -89,7 +89,7 @@ if HAS_LINGUAPLONE:
 else:
     class ATFolder(folder.ATFolder):
         """A folder which can contain other items."""
-        portal_type    = 'Folder'
+        portal_type = 'Folder'
         manage_options = FOLDER_MANAGE_OPTIONS
 
 
@@ -98,28 +98,28 @@ registerATCT(ATFolder, PROJECTNAME)
 
 class ATBTreeFolder(ATCTBTreeFolder):
     """A folder suitable for holding a very large number of items.
-    
+
     Note -- DEPRECATED.  Will be removed in Plone 5.
     Normal folders (as implemented in plone.app.folder) are now suitable for
     storing large numbers of items in most cases.  If you need a folder that
     doesn't track order at all, use a normal folder (from plone.app.folder)
     with the ordering attribute set to u'unordered'.
     """
-    schema         =  ATBTreeFolderSchema
+    schema = ATBTreeFolderSchema
 
-    portal_type    = 'Large Plone Folder'
+    portal_type = 'Large Plone Folder'
     archetype_name = 'Large Folder'
-    _atct_newTypeFor = {'portal_type' : 'CMF Large Plone Folder',
-                        'meta_type' : 'Large Plone Folder'}
+    _atct_newTypeFor = {'portal_type': 'CMF Large Plone Folder',
+                        'meta_type': 'Large Plone Folder'}
     assocMimetypes = ()
-    assocFileExt   = ()
-    cmf_edit_kws   = ()
+    assocFileExt = ()
+    cmf_edit_kws = ()
 
     implements(IATBTreeFolder)
 
     # Enable marshalling via WebDAV/FTP.
     __dav_marshall__ = True
 
-    security       = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
 registerATCT(ATBTreeFolder, PROJECTNAME)

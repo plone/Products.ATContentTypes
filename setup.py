@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '2.1.6dev'
+version = '2.1.12.dev0'
 
 setup(name='Products.ATContentTypes',
       version=version,
@@ -43,7 +43,7 @@ setup(name='Products.ATContentTypes',
           'zope.tal',
           'Products.CMFPlone',
           'Products.Archetypes',
-          'Products.ATReferenceBrowserWidget', # BBB
+          'Products.ATReferenceBrowserWidget',  # BBB
           'Products.CMFCore',
           'Products.CMFDynamicViewFTI',
           'Products.CMFDefault',

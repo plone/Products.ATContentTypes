@@ -6,8 +6,10 @@ from Products.GenericSetup.interfaces import IFilesystemExporter
 # TODO: This is a temporary hack to allow disabling exporting of some
 # content types until all of them support proper exporting
 
+
 class IDisabledExport(Interface):
     pass
+
 
 class NullExporterAdapter(object):
     """Dummy exporter that does nothing

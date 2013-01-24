@@ -1,10 +1,12 @@
-from Testing import ZopeTestCase # side effect import. leave it here.
+import unittest
+
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 from DateTime import DateTime
 import Missing
 
-
 tests = []
+
 
 class TestFormatCatalogMetadata(atcttestcase.ATCTSiteTestCase):
 
@@ -14,9 +16,6 @@ class TestFormatCatalogMetadata(atcttestcase.ATCTSiteTestCase):
 
     def testFormatDate(self):
         date = '2005-11-02 13:52:25'
-        format = '%m-%d-%Y %I:%M %p'
-        self.portal.portal_properties.site_properties.manage_changeProperties(
-                            localLongTimeFormat='%m-%d-%Y %I:%M %p')
         toLocalizedTime = self.portal.toLocalizedTime
         self.assertEqual(self.script(date),
                          toLocalizedTime(date, long_format=True))
@@ -24,14 +23,17 @@ class TestFormatCatalogMetadata(atcttestcase.ATCTSiteTestCase):
                          toLocalizedTime(date, long_format=True))
 
     def testFormatDict(self):
-        self.assertEqual(self.script({'a':1,'b':2}), 'a: 1, b: 2')
+        self.assertEqual(self.script({'a': 1, 'b': 2}), 'a: 1, b: 2')
 
     def testFormatList(self):
-        self.assertEqual(self.script(('a','b',1,2,3,4)), 'a, b, 1, 2, 3, 4')
-        self.assertEqual(self.script(['a','b',1,2,3,4]), 'a, b, 1, 2, 3, 4')
+        self.assertEqual(self.script(('a', 'b', 1, 2, 3, 4)),
+                         'a, b, 1, 2, 3, 4')
+        self.assertEqual(self.script(['a', 'b', 1, 2, 3, 4]),
+                         'a, b, 1, 2, 3, 4')
         # this also needs to be able to handle unicode that won't encode to ascii
         ustr = 'i\xc3\xadacute'.decode('utf8')
-        self.assertEqual(self.script(['a','b',ustr]), 'a, b, i\xc3\xadacute'.decode('utf8'))
+        self.assertEqual(self.script(['a', 'b', ustr]),
+                         'a, b, i\xc3\xadacute'.decode('utf8'))
 
     def testFormatString(self):
         self.assertEqual(self.script('fkj dsh ekjhsdf kjer'), 'fkj dsh ekjhsdf kjer')
@@ -47,13 +49,13 @@ class TestFormatCatalogMetadata(atcttestcase.ATCTSiteTestCase):
 
     def testUnicodeValue(self):
         """ Make sure non-ascii encodable unicode is acceptable """
-        
+
         ustr = 'i\xc3\xadacute'.decode('utf8')
         self.assertEqual(self.script(ustr), ustr)
 
 tests.append(TestFormatCatalogMetadata)
 
-import unittest
+
 def test_suite():
     suite = unittest.TestSuite()
     for test in tests:

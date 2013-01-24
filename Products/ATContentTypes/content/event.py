@@ -1,5 +1,3 @@
-from types import StringType
-
 from zope.interface import implements
 
 from Products.CMFCore.permissions import ModifyPortalContent, View
@@ -14,7 +12,6 @@ from Products.Archetypes.atapi import StringField
 from Products.Archetypes.atapi import TextField
 from Products.Archetypes.atapi import CalendarWidget
 from Products.Archetypes.atapi import LinesWidget
-from Products.Archetypes.atapi import KeywordWidget
 from Products.Archetypes.atapi import RichWidget
 from Products.Archetypes.atapi import StringWidget
 from Products.Archetypes.atapi import RFC822Marshaller
@@ -35,21 +32,21 @@ from Products.ATContentTypes import ATCTMessageFactory as _
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
     StringField('location',
                 searchable=True,
-                write_permission = ModifyPortalContent,
-                widget = StringWidget(
-                    description = '',
-                    label = _(u'label_event_location', default=u'Event Location')
+                write_permission=ModifyPortalContent,
+                widget=StringWidget(
+                    description='',
+                    label=_(u'label_event_location', default=u'Event Location')
                     )),
 
     DateTimeField('startDate',
                   required=True,
                   searchable=False,
                   accessor='start',
-                  write_permission = ModifyPortalContent,
+                  write_permission=ModifyPortalContent,
                   default_method=DateTime,
                   languageIndependent=True,
-                  widget = CalendarWidget(
-                        description= '',
+                  widget=CalendarWidget(
+                        description='',
                         label=_(u'label_event_start', default=u'Event Starts')
                         )),
 
@@ -57,26 +54,26 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   required=True,
                   searchable=False,
                   accessor='end',
-                  write_permission = ModifyPortalContent,
+                  write_permission=ModifyPortalContent,
                   default_method=DateTime,
                   languageIndependent=True,
-                  widget = CalendarWidget(
-                        description = '',
-                        label = _(u'label_event_end', default=u'Event Ends')
+                  widget=CalendarWidget(
+                        description='',
+                        label=_(u'label_event_end', default=u'Event Ends')
                         )),
 
     TextField('text',
               required=False,
               searchable=True,
               primary=True,
-              storage = AnnotationStorage(migrate=True),
-              validators = ('isTidyHtmlWithCleanup',),
-              default_output_type = 'text/x-html-safe',
-              widget = RichWidget(
-                        description = '',
-                        label = _(u'label_event_announcement', default=u'Event body text'),
-                        rows = 25,
-                        allow_file_upload = zconf.ATDocument.allow_document_upload)),
+              storage=AnnotationStorage(migrate=True),
+              validators=('isTidyHtmlWithCleanup',),
+              default_output_type='text/x-html-safe',
+              widget=RichWidget(
+                        description='',
+                        label=_(u'label_event_announcement', default=u'Event body text'),
+                        rows=25,
+                        allow_file_upload=zconf.ATDocument.allow_document_upload)),
 
     LinesField('attendees',
                languageIndependent=True,
@@ -91,47 +88,47 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 required=False,
                 searchable=True,
                 accessor='event_url',
-                write_permission = ModifyPortalContent,
+                write_permission=ModifyPortalContent,
                 validators=('isURL',),
-                widget = StringWidget(
-                        description = _(u'help_event_url',
-                                        default=u"Web address with more info about the event. "
-                                                 "Add http:// for external links."),
-                        label = _(u'label_event_url', default=u'Event URL')
+                widget=StringWidget(
+                        description=_(u'help_event_url',
+                                      default=u"Web address with more info about the event. "
+                                               "Add http:// for external links."),
+                        label=_(u'label_event_url', default=u'Event URL')
                         )),
 
     StringField('contactName',
                 required=False,
                 searchable=True,
                 accessor='contact_name',
-                write_permission = ModifyPortalContent,
-                widget = StringWidget(
-                        description = '',
-                        label = _(u'label_contact_name', default=u'Contact Name')
+                write_permission=ModifyPortalContent,
+                widget=StringWidget(
+                        description='',
+                        label=_(u'label_contact_name', default=u'Contact Name')
                         )),
 
     StringField('contactEmail',
                 required=False,
                 searchable=True,
                 accessor='contact_email',
-                write_permission = ModifyPortalContent,
-                validators = ('isEmail',),
-                widget = StringWidget(
-                        description = '',
-                        label = _(u'label_contact_email', default=u'Contact E-mail')
+                write_permission=ModifyPortalContent,
+                validators=('isEmail',),
+                widget=StringWidget(
+                        description='',
+                        label=_(u'label_contact_email', default=u'Contact E-mail')
                         )),
 
     StringField('contactPhone',
                 required=False,
                 searchable=True,
                 accessor='contact_phone',
-                write_permission = ModifyPortalContent,
-                validators= (),
-                widget = StringWidget(
-                        description = '',
-                        label = _(u'label_contact_phone', default=u'Contact Phone')
+                write_permission=ModifyPortalContent,
+                validators=(),
+                widget=StringWidget(
+                        description='',
+                        label=_(u'label_contact_phone', default=u'Contact Phone')
                         )),
-    ), marshall = RFC822Marshaller()
+    ), marshall=RFC822Marshaller()
     )
 
 # Repurpose the subject field for the event type
@@ -147,17 +144,18 @@ finalizeATCTSchema(ATEventSchema)
 ATEventSchema.changeSchemataForField('location', 'default')
 ATEventSchema.moveField('location', before='startDate')
 
+
 class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
     """Information about an upcoming event, which can be displayed in the calendar."""
 
-    schema         =  ATEventSchema
+    schema = ATEventSchema
 
-    portal_type    = 'Event'
+    portal_type = 'Event'
     archetype_name = 'Event'
-    _atct_newTypeFor = {'portal_type' : 'CMF Event', 'meta_type' : 'CMF Event'}
+    _atct_newTypeFor = {'portal_type': 'CMF Event', 'meta_type': 'CMF Event'}
     assocMimetypes = ()
-    assocFileExt   = ('event', )
-    cmf_edit_kws   = ('effectiveDay', 'effectiveMo', 'effectiveYear',
+    assocFileExt = ('event', )
+    cmf_edit_kws = ('effectiveDay', 'effectiveMo', 'effectiveYear',
                       'expirationDay', 'expirationMo', 'expirationYear',
                       'start_time', 'startAMPM', 'stop_time', 'stopAMPM',
                       'start_date', 'end_date', 'contact_name', 'contact_email',
@@ -165,7 +163,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
 
     implements(IATEvent)
 
-    security       = ClassSecurityInfo()
+    security = ClassSecurityInfo()
 
     security.declarePrivate('cmf_edit')
     def cmf_edit(
@@ -217,7 +215,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
         if 'startDate' in errors or 'endDate' in errors:
             # No point in validating bad input
             return
-        
+
         rstartDate = REQUEST.get('startDate', None)
         rendDate = REQUEST.get('endDate', None)
 
@@ -241,7 +239,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
         if 'startDate' in errors or 'endDate' in errors:
             # No point in validating bad input
             return
-        
+
         if start > end:
             errors['endDate'] = _(u'error_end_must_be_after_start_date',
                                   default=u'End date must be after start date.')

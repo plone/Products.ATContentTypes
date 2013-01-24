@@ -32,20 +32,19 @@ ROTATE_270 = 4
 
 
 TRANSPOSE_MAP = {
-    FLIP_LEFT_RIGHT : _(u'Flip around vertical axis'),
-    FLIP_TOP_BOTTOM : _(u'Flip around horizontal axis'),
-    ROTATE_270      : _(u'Rotate 90 clockwise'),
-    ROTATE_180      : _(u'Rotate 180'),
-    ROTATE_90       : _(u'Rotate 90 counterclockwise'),
+    FLIP_LEFT_RIGHT: _(u'Flip around vertical axis'),
+    FLIP_TOP_BOTTOM: _(u'Flip around horizontal axis'),
+    ROTATE_270: _(u'Rotate 90 clockwise'),
+    ROTATE_180: _(u'Rotate 180'),
+    ROTATE_90: _(u'Rotate 90 counterclockwise'),
    }
 
 AUTO_ROTATE_MAP = {
-    0   : None,
-    90  : ROTATE_270,
-    180 : ROTATE_180,
-    270 : ROTATE_90,
+    0: None,
+    90: ROTATE_270,
+    180: ROTATE_180,
+    270: ROTATE_90,
     }
-
 
 
 class ATCTImageTransform(Base):
@@ -213,6 +212,7 @@ class ATCTImageTransform(Base):
             # object by attribute access I'm passing a string along
             self.setImage(image2.getvalue(), mimetype=mimetype,
                           filename=filename, refresh_exif=False)
+            self.reindexObject()
 
         if REQUEST:
             REQUEST.RESPONSE.redirect(target)
@@ -239,7 +239,7 @@ class ATCTImageTransform(Base):
     def getTransformMap(self):
         """Get map for tranforming the image
         """
-        return [{'name' : n, 'value' : v} for v, n in TRANSPOSE_MAP.items()]
+        return [{'name': n, 'value': v} for v, n in TRANSPOSE_MAP.items()]
 
     security.declareProtected(View, 'hasPIL')
     def hasPIL(self):

@@ -1,4 +1,4 @@
-from Testing import ZopeTestCase # side effect import. leave it here.
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
 
 from Products.ATContentTypes.config import TOOLNAME
@@ -12,19 +12,19 @@ class TestMigrations_v1_2(atcttestcase.ATCTSiteTestCase):
         self.tool = getToolByName(self.portal, TOOLNAME)
 
     def testUpgradeATCTTool(self):
-        self.assertEquals(self.tool.getProperty('album_batch_size'), 30)
+        self.assertEqual(self.tool.getProperty('album_batch_size'), 30)
         self.tool._setPropValue('album_batch_size', 99)
         self.tool._setPropValue('_version', '1.1.x (svn/testing)')
         upgradeATCTTool(self.portal)
-        self.assertEquals(self.tool.getProperty('album_batch_size'), 99)
+        self.assertEqual(self.tool.getProperty('album_batch_size'), 99)
 
     def testUpgradeATCTToolTwice(self):
-        self.assertEquals(self.tool.getProperty('album_batch_size'), 30)
+        self.assertEqual(self.tool.getProperty('album_batch_size'), 30)
         self.tool._setPropValue('album_batch_size', 99)
         self.tool._setPropValue('_version', '1.1.x (svn/testing)')
         upgradeATCTTool(self.portal)
         upgradeATCTTool(self.portal)
-        self.assertEquals(self.tool.getProperty('album_batch_size'), 99)
+        self.assertEqual(self.tool.getProperty('album_batch_size'), 99)
 
 
 def test_suite():

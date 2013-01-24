@@ -6,7 +6,6 @@ Use ZConfig to configure ATCT
 """
 __docformat__ = 'restructuredtext'
 
-import string
 import pkg_resources
 import os
 from Products.ATContentTypes.configuration import zconf
@@ -14,7 +13,7 @@ from Products.ATContentTypes.configuration import zconf
 ## options for mx tidy
 ## read http://www.egenix.com/files/python/mxTidy.html for more informations
 MX_TIDY_ENABLED = zconf.mxtidy.enable
-MX_TIDY_OPTIONS= zconf.mxtidy.options
+MX_TIDY_OPTIONS = zconf.mxtidy.options
 
 ###############################################################################
 ## private options
@@ -75,22 +74,22 @@ else:
 
 
 ## workflow mapping for the installer
-WORKFLOW_DEFAULT  = '(Default)'
-WORKFLOW_FOLDER   = 'folder_workflow'
-WORKFLOW_TOPIC    = 'folder_workflow'
+WORKFLOW_DEFAULT = '(Default)'
+WORKFLOW_FOLDER = 'folder_workflow'
+WORKFLOW_TOPIC = 'folder_workflow'
 WORKFLOW_CRITERIA = ''
 
 ## icon map used for overwriting ATFile icons
-ICONMAP = {'application/pdf' : 'pdf_icon.gif',
-           'image'           : 'image_icon.gif'}
+ICONMAP = {'application/pdf': 'pdf_icon.gif',
+           'image': 'image_icon.gif'}
 
 MIME_ALIAS = {
-    'plain' : 'text/plain',
-    'stx'   : 'text/structured',
-    'html'  : 'text/html',
-    'rest'  : 'text/x-rst',
-    'text/stx' : 'text/structured',
-    'structured-text' : 'text/structured',
-    'restructuredtext' : 'text/x-rst',
-    'text/restructured' : 'text/x-rst',
+    'plain': 'text/plain',
+    'stx': 'text/structured',
+    'html': 'text/html',
+    'rest': 'text/x-rst',
+    'text/stx': 'text/structured',
+    'structured-text': 'text/structured',
+    'restructuredtext': 'text/x-rst',
+    'text/restructured': 'text/x-rst',
     }

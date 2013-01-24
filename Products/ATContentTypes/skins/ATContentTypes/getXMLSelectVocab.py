@@ -10,18 +10,17 @@
 # BBB: This python script has been deprecated and been replaced with
 # Products.ATContentTypes.browser.criteria
 
-params = {param:value, 'display_list': True}
+params = {param: value, 'display_list': True}
 
 vocab = getattr(context, vocab_method)(**params)
-site_encoding = context.plone_utils.getSiteEncoding()
 
 RESPONSE = context.REQUEST.RESPONSE
-RESPONSE.setHeader('Content-Type', 'text/xml;charset=%s' % site_encoding)
+RESPONSE.setHeader('Content-Type', 'text/xml;charset=utf-8')
 translate = context.translate
 
-results = [(translate(vocab.getValue(item)),item) for item in vocab]
+results = [(translate(vocab.getValue(item)), item) for item in vocab]
 
 item_strings = [u'^'.join(a) for a in results]
 result_string = u'|'.join(item_strings)
 
-return "<div>%s</div>" % result_string.encode(site_encoding)
+return "<div>%s</div>" % result_string.encode('utf-8')
