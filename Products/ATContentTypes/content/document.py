@@ -48,19 +48,6 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
                         allow_file_upload=zconf.ATDocument.allow_document_upload),
     ),
 
-    BooleanField('presentation',
-        required=False,
-        languageIndependent=True,
-        widget=BooleanWidget(
-            label=_(
-                u'help_enable_presentation',
-                default=u'Presentation mode'),
-            description=_(
-                u'help_enable_presentation_description',
-                default=u'If selected, this will give users the ability to view the contents as presentation slides.')
-            ),
-    ),
-
     BooleanField('tableContents',
         required=False,
         languageIndependent=True,
@@ -82,7 +69,6 @@ ATDocumentSchema['description'].widget.label = \
 finalizeATCTSchema(ATDocumentSchema)
 # moved schema setting after finalizeATCTSchema, so the order of the fieldsets
 # is preserved
-ATDocumentSchema.changeSchemataForField('presentation', 'settings')
 ATDocumentSchema.changeSchemataForField('tableContents', 'settings')
 
 
