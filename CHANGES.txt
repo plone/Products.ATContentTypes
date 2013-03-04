@@ -4,7 +4,10 @@ Changelog
 2.1.12 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix missing references on copy of (old-style) Collection path
+  criterion and relatedItems on stock content using the schema
+  flag keepReferencesOnCopy.  Refs: https://dev.plone.org/ticket/9919
+  [seanupton]
 
 
 2.1.11 (2013-01-13)
