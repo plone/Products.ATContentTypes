@@ -42,6 +42,7 @@ relatedItemsField = ReferenceField('relatedItems',
         languageIndependent=False,
         index='KeywordIndex',
         referencesSortable=True,
+        keepReferencesOnCopy=True,
         write_permission=ModifyPortalContent,
         widget=ReferenceBrowserWidget(
             allow_search=True,

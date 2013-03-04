@@ -29,6 +29,7 @@ ATPathCriterionSchema = ATBaseCriterionSchema + Schema((
                 mutator="setValue",
                 allowed_types_method="getNavTypes",
                 multiValued=True,
+                keepReferencesOnCopy=True,
                 relationship="paths",
                 widget=ReferenceBrowserWidget(
                     allow_search=1,
