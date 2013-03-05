@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.12 (unreleased)
+2.1.12 (2013-03-05)
 -------------------
 
 - Fix missing references on copy of (old-style) Collection path
