@@ -16,9 +16,6 @@ setDefaultRoles(AddTopics, TOPIC_ROLES)
 ChangeTopics = 'Change portal topics'
 setDefaultRoles(ChangeTopics, CHANGE_TOPIC_ROLES)
 
-ChangeEvents = 'Change portal events'
-setDefaultRoles(ChangeEvents, ('Manager', 'Site Administrator', 'Owner',))
-
 ModifyConstrainTypes = "Modify constrain types"
 setDefaultRoles(ModifyConstrainTypes, ('Manager', 'Site Administrator', 'Owner'))
 
@@ -40,7 +37,7 @@ def wireAddPermissions():
     Must be called **after** all types are registered!
     """
     global permissions
-    atct_types = listTypes(PROJECTNAME)
+    atct_types = listTypes(PROJECTNAME) + listTypes('plone.app.event')
     for atct in atct_types:
         if IATTopic.implementedBy(atct['klass']):
             permission = AddTopics
