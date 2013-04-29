@@ -4,6 +4,16 @@ Changelog
 2.2a1 (unreleased)
 ------------------
 
+- Depend on and install plone.app.event and remove all Event related code.
+  There is still the IATEvent interface and the ATEvent content type class, but
+  latter inherits from plone.app.event.at.content.ATEvent, making external code
+  forwards compatible with plone.app.event. (Merge of PLIP 10886)
+  [thet et al.]
+
+- Move content type profile definitions from Products.CMFPlone into here.
+  (Merge of PLIP 12344)
+  [davisagli et al.]
+
 - Remove the presentation mode setting from documents.
   If the feature is still desired, use the plone.app.s5slideshow
   addon.

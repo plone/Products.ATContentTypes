@@ -27,8 +27,6 @@
  <object name="Discussion Item" meta_type="Factory-based Type Information"/>
  <object name="Document"
     meta_type="Factory-based Type Information with dynamic views"/>
- <object name="Event"
-    meta_type="Factory-based Type Information with dynamic views"/>
  <object name="File"
     meta_type="Factory-based Type Information with dynamic views"/>
  <object name="Folder"

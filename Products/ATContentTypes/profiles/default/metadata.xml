@@ -5,5 +5,6 @@
     <dependency>profile-Products.Archetypes:Archetypes</dependency>
     <dependency>profile-archetypes.referencebrowserwidget:default</dependency>
     <dependency>profile-plone.app.imaging:default</dependency>
+    <dependency>profile-plone.app.event.at:default</dependency>
   </dependencies>
 </metadata>
