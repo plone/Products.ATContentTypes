@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<componentregistry>
+ <utilities>
+  <utility
+     interface="Products.ATContentTypes.interface.IATCTTool"
+     object="portal_atct"/>
+ </utilities>
+</componentregistry>

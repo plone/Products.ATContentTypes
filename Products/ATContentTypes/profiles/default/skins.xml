@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<object name="portal_skins" meta_type="Plone Skins Tool">
+ <object name="ATContentTypes" meta_type="Filesystem Directory View"
+    directory="Products.ATContentTypes:skins/ATContentTypes"/>
+ <object name="referencebrowser" meta_type="Filesystem Directory View"
+    directory="archetypes.referencebrowserwidget:skins/referencebrowser"/>
+ <object name="archetypes" meta_type="Filesystem Directory View"
+    directory="Products.Archetypes:skins/archetypes"/>
+ <skin-path name="*">
+  <layer name="ATContentTypes" insert-after="custom"/>
+  <layer name="referencebrowser" insert-after="custom"/>
+  <layer name="archetypes" insert-after="custom"/>
+ </skin-path>
+</object>
