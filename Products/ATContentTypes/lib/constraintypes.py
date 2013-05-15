@@ -251,7 +251,7 @@ class ConstrainTypesMixin:
             if parent.portal_type == 'Plone Site':
                 return globalTypes
             else:
-                allowed = list(parent.getLocallyAllowedTypes())
+                allowed = list(parent.getLocallyAllowedTypes(context))
                 return [fti for fti in globalTypes if fti.getId() in allowed]
         else:
             globalTypes = self.getDefaultAddableTypes(context)

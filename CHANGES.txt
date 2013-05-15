@@ -4,8 +4,10 @@ Changelog
 2.1.13 (unreleased)
 -------------------
 
-- Nothing changed yet.
-
+- Fixed : add menu doesn't appear for a user that can't add on folder's parent
+  if this folder have a different content type.
+  refs https://dev.plone.org/ticket/13582
+  [thomasdesvenain]
 
 2.1.12 (2013-03-05)
 -------------------
