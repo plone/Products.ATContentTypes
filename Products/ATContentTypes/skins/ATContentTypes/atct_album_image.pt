@@ -29,12 +29,12 @@
         <a tal:condition="image/size" tal:attributes="href string:${image/absolute_url}/view">
             <img src="#" alt="" tal:replace="structure python:image.tag(scale=photo_display)" />
         </a>
-        
+
         <div tal:define="b_start python:request.get('b_start', 0)">
           <a href="" tal:attributes="href string:${request/URL1}/view?b_start=$b_start">
             <img src="#" alt="Back to album"
                  title="Back to album"
-                 tal:attributes="src string:$portal_url/folder_icon.gif"
+                 tal:attributes="src string:$portal_url/folder_icon.png"
                  i18n:attributes="alt label_back_to_album; title title_back_to_album;" />
           </a>
         </div>
