@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.13 (unreleased)
+2.1.13 (2013-05-23)
 -------------------
 
 - Fixed : add menu doesn't appear for a user that can't add on folder's parent
