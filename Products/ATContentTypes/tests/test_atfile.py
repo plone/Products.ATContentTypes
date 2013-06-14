@@ -2,6 +2,7 @@
 
 import unittest
 from Testing import ZopeTestCase  # side effect import. leave it here.
+ZopeTestCase  # pyflakes
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
 from Products.CMFCore.permissions import View
@@ -200,7 +201,7 @@ class TestCleanupFilename(atcttestcase.ATCTSiteTestCase):
         from Products.ATContentTypes.content.base import cleanupFilename
         text = unicode('Νίκος Τζάνος', 'utf-8')
         self.assertEqual(cleanupFilename(text, request=self.app.REQUEST),
-                          'Nikos Tzanos')
+                         'Nikos Tzanos')
 
 tests.append(TestCleanupFilename)
 
