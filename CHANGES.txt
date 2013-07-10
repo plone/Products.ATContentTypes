@@ -4,6 +4,10 @@ Changelog
 2.2a1 (unreleased)
 ------------------
 
+- Move content type profile definitions from Products.CMFPlone into here.
+  (Merge of PLIP 12344)
+  [davisagli et al.]
+
 - Remove the presentation mode setting from documents.
   If the feature is still desired, use the plone.app.s5slideshow
   addon.
