@@ -70,6 +70,10 @@ Changelog
 - Deprecated aliases were replaced on tests.
   [hvelarde]
 
+- iCal export: Don't escape COLON character in TEXT property.
+  Fixes http://dev.plone.org/ticket/11540.
+  [patch by jenskl, applied by kleist]
+
 - Changed deprecated getSiteEncoding to hardcoded `utf-8`
   [tom_gross]
 

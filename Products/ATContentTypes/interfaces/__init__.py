@@ -1,5 +1,6 @@
 from Products.ATContentTypes.interfaces.interfaces import IATContentType
 from Products.ATContentTypes.interfaces.interfaces import IHistoryAware
+from Products.ATContentTypes.interfaces.interfaces import ICalendarSupport
 from Products.ATContentTypes.interfaces.interfaces import ITextContent
 from Products.ATContentTypes.interfaces.interfaces import ISelectableConstrainTypes
 from Products.ATContentTypes.interfaces.interfaces import IATCTTool

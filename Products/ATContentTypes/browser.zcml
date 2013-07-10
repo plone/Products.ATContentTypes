@@ -12,6 +12,34 @@
         permission="zope2.View"
         />
 
+    <browser:page
+        for=".interfaces.IATFolder"
+        name="ics_view"
+        class=".browser.calendar.CalendarView"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for=".interfaces.IATBTreeFolder"
+        name="ics_view"
+        class=".browser.calendar.CalendarView"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for=".interfaces.IATTopic"
+        name="ics_view"
+        class=".browser.calendar.TopicCalendarView"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for="Products.CMFCore.interfaces.ISiteRoot"
+        name="ics_view"
+        class=".browser.calendar.CalendarView"
+        permission="zope2.View"
+        />
+
 
     <browser:page
         for="Products.ATContentTypes.interfaces.file.IFileContent"

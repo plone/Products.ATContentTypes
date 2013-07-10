@@ -53,6 +53,11 @@ class IHistoryAware(IATHistoryAware):
         """
 
 
+class ICalendarSupport(Interface):
+    """Calendar import/export
+    """
+
+
 class ITextContent(Interface):
     """Interface for types containing text
     """

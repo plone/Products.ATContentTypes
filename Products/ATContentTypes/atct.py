@@ -1,7 +1,3 @@
-# BBB
-from plone.app.event.at.content import ATEvent
-from plone.app.event.at.content import ATEventSchema
-
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import ATCTFileContent
 from Products.ATContentTypes.content.base import ATCTFolder
@@ -11,6 +7,7 @@ from Products.ATContentTypes.content.base import ATCTBTreeFolder
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
 from Products.ATContentTypes.content.document import ATDocument
+from Products.ATContentTypes.content.event import ATEvent
 from Products.ATContentTypes.content.file import ATFile
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATBTreeFolder
@@ -20,6 +17,7 @@ from Products.ATContentTypes.content.newsitem import ATNewsItem
 from Products.ATContentTypes.content.topic import ATTopic
 
 from Products.ATContentTypes.content.document import ATDocumentSchema
+from Products.ATContentTypes.content.event import ATEventSchema
 from Products.ATContentTypes.content.file import ATFileSchema
 from Products.ATContentTypes.content.folder import ATFolderSchema
 from Products.ATContentTypes.content.folder import ATBTreeFolderSchema
