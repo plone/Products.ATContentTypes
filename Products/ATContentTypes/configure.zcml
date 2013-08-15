@@ -12,7 +12,9 @@
   <include package=".exportimport" />
   <include package="plone.i18n.normalizer" />
 
+  <include package="Products.Archetypes" />
   <include package="archetypes.referencebrowserwidget" />
+  <include package="plone.app.collection" />
 
   <five:deprecatedManageAddDelete
       class=".content.document.ATDocument" />
