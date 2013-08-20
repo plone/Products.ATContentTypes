@@ -4,6 +4,9 @@ Changelog
 2.2a1 (unreleased)
 ------------------
 
+- Update ICONMAP (.gif to .png).
+  [mathias.leimgruber]
+
 - Move content type profile definitions from Products.CMFPlone into here.
   (Merge of PLIP 12344)
   [davisagli et al.]

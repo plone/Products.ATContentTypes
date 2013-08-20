@@ -80,8 +80,8 @@ WORKFLOW_TOPIC = 'folder_workflow'
 WORKFLOW_CRITERIA = ''
 
 ## icon map used for overwriting ATFile icons
-ICONMAP = {'application/pdf': 'pdf_icon.gif',
-           'image': 'image_icon.gif'}
+ICONMAP = {'application/pdf': 'pdf_icon.png',
+           'image': 'image_icon.png'}
 
 MIME_ALIAS = {
     'plain': 'text/plain',
