@@ -4,7 +4,9 @@ Changelog
 2.1.14 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Update ICONMAP (.gif to .png).
+  [mathias.leimgruber]
+
 
 
 2.1.13 (2013-05-23)
