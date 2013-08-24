@@ -4,6 +4,11 @@ Changelog
 2.2a1 (unreleased)
 ------------------
 
+- Add 'content' profile which adds demo/test content.
+  This used to be in CMFPlone and is still used by PloneTestCase
+  in Plone 5.
+  [davisagli]
+
 - Update ICONMAP (.gif to .png).
   [mathias.leimgruber]
 

@@ -52,4 +52,18 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:registerProfile
+      name="content"
+      title="ATContentTypes-based default content for Plone"
+      directory="profiles/content"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:importStep
+      name="atct_content"
+      title="ATContentTypes default content"
+      description=""
+      handler=".setuphandlers.importContent" />
+
 </configure>
