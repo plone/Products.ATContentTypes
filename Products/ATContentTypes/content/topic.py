@@ -368,7 +368,7 @@ class ATTopic(ATCTFolder):
                 clear_start = True
                 parent = aq_parent(aq_inner(self))
                 result.update(parent.buildQuery())
-            except (AttributeError, Unauthorized):  # oh well, can't find parent, or it isn't a Topic.
+            except (TypeError, AttributeError, Unauthorized):  # oh well, can't find parent, or it isn't a Topic.
                 pass
 
         for criterion in criteria:
