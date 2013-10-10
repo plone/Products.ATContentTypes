@@ -4,6 +4,10 @@ Changelog
 2.2a1 (unreleased)
 ------------------
 
+- Remove test_discussion test which tests the old discussion (pre Plone 4.1)
+  tool.
+  [timo]
+
 - Add 'content' profile which adds demo/test content.
   This used to be in CMFPlone and is still used by PloneTestCase
   in Plone 5.

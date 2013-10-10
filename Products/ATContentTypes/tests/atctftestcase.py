@@ -131,31 +131,6 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
             self.assertEqual(response.getStatus(), 200,
                 "%s: %s" % (view, response.getStatus()))  # OK
 
-    def test_discussion(self):
-        # enable discussion for the type
-        ttool = getToolByName(self.portal, 'portal_types')
-        ttool[self.portal_type].allow_discussion = True
-
-        response = self.publish('%s/discussion_reply_form'
-                                 % self.obj_path, self.basic_auth)
-        self.assertEqual(response.getStatus(), 200)  # ok
-
-        response = self.publish('%s/discussion_reply?subject=test&body_text=testbody'
-                                 % self.obj_path, self.basic_auth)
-        self.assertEqual(response.getStatus(), 302)  # Redirect
-
-        body = response.getBody()
-        self.assertTrue(body.startswith(self.folder_url))
-
-        self.assertTrue(hasattr(self.obj.aq_explicit, 'talkback'))
-
-        form_path = body[len(self.app.REQUEST.SERVER_URL):]
-        discussionId = form_path.split('#')[1]
-
-        reply = self.obj.talkback.getReply(discussionId)
-        self.assertEqual(reply.title, 'test')
-        self.assertEqual(reply.text, 'testbody')
-
     def test_dynamicViewContext(self):
         # register and add a testing template (it's a script)
         self.setRoles(['Manager', 'Member'])
