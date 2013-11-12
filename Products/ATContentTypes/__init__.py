@@ -1,7 +1,6 @@
 import os.path
 import sys
 import logging
-
 logger = logging.getLogger('ATCT')
 
 ATCT_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -34,6 +33,8 @@ import Products.ATContentTypes.criteria
 
 # misc imports
 from Products.ATContentTypes.tool.atct import ATCTTool
+from Products.ATContentTypes.tool.factory import FactoryTool
+from Products.ATContentTypes.tool.metadata import MetadataTool
 
 # wire the add permission after all types are registered
 from Products.ATContentTypes.permission import wireAddPermissions
@@ -51,10 +52,9 @@ def initialize(context):
         from Products.Archetypes.atapi import process_types
         from Products.Archetypes.atapi import listTypes
 
-    ToolInit(
-        'ATContentTypes tool',
-        tools=(ATCTTool,),
-        icon='tool.gif', ).initialize(context)
+    ToolInit('ATContentTypes tool',
+             tools=(ATCTTool, FactoryTool, MetadataTool),
+             icon='tool.gif').initialize(context)
 
     listOfTypes = listTypes(PROJECTNAME)
 

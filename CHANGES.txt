@@ -4,8 +4,8 @@ Changelog
 2.2a1 (unreleased)
 ------------------
 
-- Move title assignment import step for archetypes tool
-  from Products.CMFPlone to Products.ATContentTypes (PLIP #13770)
+- Moved archetype tools stuff from Products.CMFPlone to Products.ATContentTypes
+  (PLIP #13770)
   [ale-rt]
 
 - Remove test_discussion test which tests the old discussion (pre Plone 4.1)

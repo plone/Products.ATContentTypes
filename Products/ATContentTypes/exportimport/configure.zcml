@@ -13,11 +13,27 @@
     <depends name="componentregistry"/>
   </genericsetup:importStep>
 
+  <genericsetup:importStep
+      name="factorytool"
+      handler="Products.ATContentTypes.exportimport.factorytool.importFactoryTool"
+      title="Portal Factory Tool"
+      description="Import type registration for the portal factory tool.">
+   <depends name="componentregistry" />
+   <depends name="typeinfo" />
+  </genericsetup:importStep>
+
   <genericsetup:exportStep
       name="atcttool"
       title="ATContentTypes Tool"
       description="Export ATContentTypes specific configuration."
       handler=".atcttool.exportATCTTool"
+      />
+
+  <genericsetup:exportStep
+      name="factorytool"
+      title="Portal Factory Tool"
+      description="Export type registration for the portal factory tool."
+      handler="Products.ATContentTypes.exportimport.factorytool.exportFactoryTool"
       />
 
   <adapter
@@ -26,6 +42,14 @@
       for="Products.ATContentTypes.interfaces.IATCTTool
            Products.GenericSetup.interfaces.ISetupEnviron"
       />
+
+
+  <adapter
+     factory=".factorytool.PortalFactoryXMLAdapter"
+     provides="Products.GenericSetup.interfaces.IBody"
+     for="Products.ATContentTypes.interfaces.IFactoryTool
+          Products.GenericSetup.interfaces.ISetupEnviron"
+     />
 
   <adapter
      factory=".content.NullExporterAdapter"
