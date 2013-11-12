@@ -1,25 +1,46 @@
-from AccessControl import ClassSecurityInfo
-from Acquisition import aq_parent, aq_base, aq_inner
-from App.Common import package_home
+import logging
+import os
+
+from zope.interface import implements
+from zope.structuredtext import stx2html
+
+from AccessControl import Owned, ClassSecurityInfo, getSecurityManager
+from Acquisition import aq_parent, aq_base, aq_inner, aq_get
 from App.class_init import InitializeClass
+from App.Common import package_home
 from OFS.SimpleItem import SimpleItem
+from zExceptions import NotFound
+from ZPublisher.Publish import call_object, missing_name, dont_publish_class
+from ZPublisher.mapply import mapply
 from Products.ATContentTypes.config import GLOBALS
-from Products.ATContentTypes.interfaces import IFactoryTool
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.utils import UniqueObject
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.PloneBaseTool import PloneBaseTool
-from Products.CMFPlone.TempFolder import TempFolder
+from Products.ATContentTypes.interfaces import IFactoryTool
 from Products.CMFPlone.interfaces import IHideFromBreadcrumbs
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from ZPublisher.Publish import call_object, missing_name, dont_publish_class
-from ZPublisher.mapply import mapply
-from zExceptions import NotFound
-from zope.interface import implements
-from zope.structuredtext import stx2html
-import os
+from Products.CMFPlone.PloneFolder import PloneFolder as TempFolderBase
+from Products.CMFPlone.PloneBaseTool import PloneBaseTool
+from Products.CMFPlone.utils import base_hasattr
+from Products.CMFPlone.utils import log_exc
+from ZODB.POSException import ConflictError
 
 FACTORY_INFO = '__factory__info__'
+
+
+class FauxArchetypeTool(object):
+    """A faux archetypes tool which prevents content from being indexed."""
+
+    __allow_access_to_unprotected_subobjects__ = 1
+
+    def __init__(self, tool):
+        self.tool = tool
+
+    def getCatalogsByType(self, type_name):
+        return []
+
+    def __getitem__(self, id):
+        return getattr(self.tool, id)
 
 
 def _createObjectByType(type_name, container, id, *args, **kw):
@@ -48,6 +69,170 @@ def _createObjectByType(type_name, container, id, *args, **kw):
     return fti._constructInstance(container, id, *args, **kw)
 
 
+# #############################################################################
+# A class used for generating the temporary folder that will
+# hold temporary objects.  We need a separate class so that
+# we can add all types to types_tool's allowed_content_types
+# for the class without having side effects in the rest of
+# the portal.
+class TempFolder(TempFolderBase):
+
+    portal_type = meta_type = 'TempFolder'
+    isPrincipiaFolderish = 0
+
+    implements(IHideFromBreadcrumbs)
+
+    # override getPhysicalPath so that temporary objects return a full path
+    # that includes the acquisition parent of portal_factory (otherwise we get
+    # portal_root/portal_factory/... no matter where the object will reside)
+    def getPhysicalPath(self):
+        '''Returns a path (an immutable sequence of strings)
+        that can be used to access this object again
+        later, for example in a copy/paste operation.  getPhysicalRoot()
+        and getPhysicalPath() are designed to operate together.
+        '''
+        portal_factory = aq_parent(aq_inner(self))
+        path = aq_parent(portal_factory).getPhysicalPath() + \
+            (portal_factory.getId(), self.getId(), )
+        return path
+
+    # override / delegate local roles methods
+    def __ac_local_roles__(self):
+        """__ac_local_roles__ needs to be handled carefully.
+        Zope's and GRUF's User.getRolesInContext both walk up the
+        acquisition hierarchy using aq_parent(aq_inner(obj)) when
+        they gather local roles, and this process will result in
+        their walking from TempFolder to portal_factory to the portal root."""
+        object = aq_parent(aq_parent(self))
+        local_roles = {}
+        while 1:
+            # Get local roles for this user
+            lr = getattr(object, '__ac_local_roles__', None)
+            if lr:
+                if callable(lr):
+                    lr = lr()
+                lr = lr or {}
+                for k, v in lr.items():
+                    if not k in local_roles:
+                        local_roles[k] = []
+                    for role in v:
+                        if not role in local_roles[k]:
+                            local_roles[k].append(role)
+
+            # Check if local role has to be acquired (PLIP 16)
+            if getattr(object, '__ac_local_roles_block__', None):
+                # Ok, we have to stop there, as lr. blocking is enabled
+                break
+
+            # Prepare next iteration
+            inner = getattr(object, 'aq_inner', object)
+            parent = getattr(inner, 'aq_parent', None)
+            if parent is not None:
+                object = parent
+                continue
+            if hasattr(object, 'im_self'):
+                object = object.im_self
+                object = getattr(object, 'aq_inner', object)
+                continue
+            break
+        return local_roles
+
+    def has_local_roles(self):
+        return len(self.__ac_local_roles__())
+
+    def get_local_roles_for_userid(self, userid):
+        return tuple(self.__ac_local_roles__().get(userid, []))
+
+    def get_valid_userids(self):
+        return aq_parent(aq_parent(self)).get_valid_userids()
+
+    def valid_roles(self):
+        return aq_parent(aq_parent(self)).valid_roles()
+
+    def validate_roles(self, roles):
+        return aq_parent(aq_parent(self)).validate_roles(roles)
+
+    def userdefined_roles(self):
+        return aq_parent(aq_parent(self)).userdefined_roles()
+
+    # delegate Owned methods
+    def owner_info(self):
+        return aq_parent(aq_parent(self)).owner_info()
+
+    def getOwner(self, info=0,
+                 aq_get=aq_get,
+                 UnownableOwner=Owned.UnownableOwner,
+                 getSecurityManager=getSecurityManager,
+                 ):
+        return aq_parent(
+                    aq_parent(self)).getOwner(
+                        info, aq_get, UnownableOwner, getSecurityManager)
+
+    def userCanTakeOwnership(self):
+        return aq_parent(aq_parent(self)).userCanTakeOwnership()
+
+    # delegate allowedContentTypes
+    def allowedContentTypes(self):
+        return aq_parent(aq_parent(self)).allowedContentTypes()
+
+    def __getitem__(self, id):
+        # Zope's inner acquisition chain for objects returned by __getitem__
+        # will be portal -> portal_factory -> temporary_folder -> object
+        # What we really want is for the inner acquisition chain to be
+        # intended_parent_folder -> portal_factory -> temporary_folder -> object
+        # So we need to rewrap...
+        portal_factory = aq_parent(aq_inner(self))
+        intended_parent = aq_parent(portal_factory)
+
+        # If the intended parent has an object with the given id, just do a
+        # passthrough
+        if hasattr(intended_parent, id):
+            return getattr(intended_parent, id)
+
+        # rewrap portal_factory
+        portal_factory = aq_base(portal_factory).__of__(intended_parent)
+        # rewrap self
+        temp_folder = aq_base(self).__of__(portal_factory)
+
+        if id in self:
+            return (aq_base(self._getOb(id)).__of__(temp_folder)) \
+                        .__of__(intended_parent)
+        else:
+            type_name = self.getId()
+            try:
+                # We fake an archetype tool which returns no catalogs for the
+                # object to be indexed in to avoid it showing up in the catalog
+                # in the first place.
+                self.archetype_tool = FauxArchetypeTool(
+                                        getToolByName(self, 'archetype_tool'))
+                _createObjectByType(type_name, self, id)
+            except ConflictError:
+                raise
+            except:
+                # some errors from invokeFactory (AttributeError, maybe others)
+                # get swallowed -- dump the exception to the log to make sure
+                # developers can see what's going on
+                log_exc(severity=logging.DEBUG)
+                raise
+            obj = self._getOb(id)
+
+            # keep obj out of the catalog
+            obj.unindexObject()
+
+            # additionally keep it out of Archetypes UID and refs catalogs
+            if base_hasattr(obj, '_uncatalogUID'):
+                obj._uncatalogUID(obj)
+            if base_hasattr(obj, '_uncatalogRefs'):
+                obj._uncatalogRefs(obj)
+
+            return (aq_base(obj).__of__(temp_folder)).__of__(intended_parent)
+
+    # ignore rename requests since they don't do anything
+    def manage_renameObject(self, id, new_id, REQUEST=None):
+        pass
+
+
+# #############################################################################
 class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
     """ """
     id = 'portal_factory'
@@ -68,17 +253,13 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
 
     security.declareProtected(ManagePortal, 'manage_overview')
     manage_overview = PageTemplateFile(
-        os.path.join(wwwpath, 'portal_factory_manage_overview'),
-        globals()
-    )
+        os.path.join(wwwpath, 'portal_factory_manage_overview'), globals())
     manage_overview.__name__ = 'manage_overview'
     manage_overview._need__name__ = 0
 
     security.declareProtected(ManagePortal, 'manage_portal_factory_types')
     manage_portal_factory_types = PageTemplateFile(
-        os.path.join(wwwpath, 'portal_factory_manage_types'),
-        globals()
-    )
+        os.path.join(wwwpath, 'portal_factory_manage_types'), globals())
     manage_portal_factory_types.__name__ = 'manage_portal_factory_types'
     manage_portal_factory_types._need__name__ = 0
 
@@ -86,16 +267,15 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
 
     security.declareProtected(ManagePortal, 'manage_docs')
     manage_docs = PageTemplateFile(
-        os.path.join(wwwpath, 'portal_factory_manage_docs'),
-        globals()
-    )
+        os.path.join(wwwpath, 'portal_factory_manage_docs'), globals())
     manage_docs.__name__ = 'manage_docs'
 
-    with open(os.path.join(wwwpath, 'portal_factory_docs.stx'), 'r') as f:
-        _docs = stx2html(f.read())
+    f = open(os.path.join(wwwpath, 'portal_factory_docs.stx'), 'r')
+    _docs = f.read()
+    f.close()
+    _docs = stx2html(_docs)
 
     security.declarePublic('docs')
-
     def docs(self):
         """Returns FactoryTool docs formatted as HTML"""
         return self._docs
@@ -106,7 +286,6 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         return self._factory_types
 
     security.declareProtected(ManagePortal, 'manage_setPortalFactoryTypes')
-
     def manage_setPortalFactoryTypes(self, REQUEST=None, listOfTypeIds=None):
         """Set the portal types that should use the factory."""
         if listOfTypeIds is not None:
@@ -183,8 +362,8 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
     def isTemporary(self, obj):
         """Check to see if an object is temporary"""
         ob = aq_base(aq_parent(aq_inner(obj)))
-        return (hasattr(ob, 'meta_type')
-                and ob.meta_type == TempFolder.meta_type)
+        return hasattr(ob, 'meta_type') \
+                and ob.meta_type == TempFolder.meta_type
 
     def __before_publishing_traverse__(self, other, REQUEST):
 
@@ -261,7 +440,6 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         return self._getTempFolder(str(name))
 
     security.declarePublic('__call__')
-
     def __call__(self, *args, **kwargs):
         """call method"""
         self._fixRequest()
@@ -272,8 +450,8 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
 
         # do a passthrough if parent contains the id
         if id in aq_parent(self):
-            return (aq_parent(self)
-                    .restrictedTraverse('/'.join(stack[1:]))(*args, **kwargs))
+            return aq_parent(self).restrictedTraverse(
+                        '/'.join(stack[1:]))(*args, **kwargs)
 
         tempFolder = self._getTempFolder(type_name)
         # Mysterious hack that fixes some problematic interactions with
@@ -296,8 +474,8 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         else:
             obj = temp_obj
         return mapply(obj, self.REQUEST.args, self.REQUEST,
-                      call_object, 1, missing_name,
-                      dont_publish_class, self.REQUEST, bind=1)
+                               call_object, 1, missing_name,
+                               dont_publish_class, self.REQUEST, bind=1)
 
     index_html = None  # call __call__, not index_html
 
