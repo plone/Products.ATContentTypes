@@ -1,15 +1,32 @@
-from plone.i18n.normalizer.interfaces import IURLNormalizer
-from plone.portlets.interfaces import ILocalPortletAssignmentManager
-from plone.portlets.interfaces import IPortletManager
+from Acquisition import aq_base
 from Products.ATContentTypes.lib import constraintypes
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDefault.utils import bodyfinder
 from Products.CMFPlone.Portal import member_indexhtml
 from Products.CMFPlone.utils import _createObjectByType
+from plone.i18n.normalizer.interfaces import IURLNormalizer
+from plone.portlets.interfaces import ILocalPortletAssignmentManager
+from plone.portlets.interfaces import IPortletManager
 from zope.component import queryMultiAdapter
 from zope.component import queryUtility
 from zope.i18n.interfaces import ITranslationDomain
 from zope.i18n.locales import locales
+
+
+def assignTitles(portal):
+    ''' Check for those objects inside portal.
+    If they are found we assign title to them.
+    '''
+    titles = {
+        'portal_atct': 'Collection and image scales settings',
+        'portal_factory': 'Responsible for the creation of content objects',
+        'portal_form_controller': 'Registration of form and validation chains',
+        'portal_metadata': 'Controls metadata like keywords, copyrights, etc',
+    }
+    for oid, obj in portal.items():
+        title = titles.get(oid, None)
+        if title:
+            setattr(aq_base(obj), 'title', title)
 
 
 def setupPortalContent(p):
@@ -279,3 +296,4 @@ def importContent(context):
         return
     site = context.getSite()
     setupPortalContent(site)
+    assignTitles(site)
