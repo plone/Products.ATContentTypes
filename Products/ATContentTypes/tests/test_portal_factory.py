@@ -96,9 +96,11 @@ class TestPortalFactory(PloneTestCase.PloneTestCase):
         # Evil monkey patch should not change all objects of a class
         self.createMemberarea('member')
         member = self.membership.getMemberById('member')
-
         # Make an unrelated non-temporary object for comparison
         self.login('manager')
+        # BBB: we you launch this test suite with the others you need to reset
+        # global_allow to True
+        self.portal.portal_types.Document.manage_changeProperties(global_allow=1)
         self.portal.invokeFactory('Document', id='nontmp_id')
         nontemp_object = getattr(self.portal, 'nontmp_id')
 
