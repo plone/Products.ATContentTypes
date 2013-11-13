@@ -36,10 +36,12 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         for i in ids:
             self.assertTrue(i in self.ttool)
 
-    def test_not_quickinstalled(self):
+    def test_is_quickinstalled(self):
+        # Test, if the Product is available in Quickinstaller and actually be
+        # installed.
         qi = getattr(self.portal, 'portal_quickinstaller')
         products = [prod['id'] for prod in qi.listInstalledProducts()]
-        self.assertFalse('ATContentTypes' in products)
+        self.assertTrue('ATContentTypes' in products)
 
     def test_release_settings_SAVE_TO_FAIL_FOR_DEVELOPMENT(self):
         self.assertEqual(SWALLOW_IMAGE_RESIZE_EXCEPTIONS, True)
