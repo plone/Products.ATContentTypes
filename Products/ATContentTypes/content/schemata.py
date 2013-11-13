@@ -45,11 +45,6 @@ relatedItemsField = ReferenceField('relatedItems',
         keepReferencesOnCopy=True,
         write_permission=ModifyPortalContent,
         widget=RelatedItemsWidget(
-            allow_search=True,
-            allow_browse=True,
-            allow_sorting=True,
-            show_indexes=False,
-            force_close_on_insert=True,
             label=_(u'label_related_items', default=u'Related Items'),
             description='',
             visible={'edit': 'visible', 'view': 'invisible'}

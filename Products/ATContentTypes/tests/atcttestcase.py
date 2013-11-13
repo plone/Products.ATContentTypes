@@ -29,7 +29,7 @@ from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
 from Products.Archetypes.tests.test_baseschema import BaseSchemaTest
-from archetypes.referencebrowserwidget import ReferenceBrowserWidget
+from plone.app.widgets.at import RelatedItemsWidget
 
 from plone.app.blob.markings import markAs
 
@@ -309,7 +309,7 @@ class ATCTFieldTestCase(ATCTSiteTestCase, BaseSchemaTest):
         self.assertTrue(isinstance(field.storage, AttributeStorage))
         self.assertTrue(field.getLayerImpl('storage') == AttributeStorage())
         self.assertEqual(field.validators, EmptyValidator)
-        self.assertTrue(isinstance(field.widget, ReferenceBrowserWidget))
+        self.assertTrue(isinstance(field.widget, RelatedItemsWidget))
         self.assertTrue(field.widget.allow_sorting, u'field and widget need to enable sorting')
         self.assertTrue(field.referencesSortable, u'field and widget need to enable sorting')
 
