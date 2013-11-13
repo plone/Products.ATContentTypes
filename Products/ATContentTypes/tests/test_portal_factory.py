@@ -196,7 +196,11 @@ class TestCreateObjectByURL(PloneTestCase.FunctionalTestCase):
         self.basic_auth = '%s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD)
         # We want 401 responses, not redirects to a login page
         plugins = self.portal.acl_users.plugins
-        plugins.deactivatePlugin(IChallengePlugin, 'credentials_cookie_auth')
+        try:
+            plugins.deactivatePlugin(IChallengePlugin,
+                                     'credentials_cookie_auth')
+        except KeyError:
+            pass
 
         # Enable portal_factory for Document type
         self.factory = self.portal.portal_factory
@@ -277,7 +281,11 @@ class TestPortalFactoryTraverseByURL(PloneTestCase.FunctionalTestCase):
         self.basic_auth = '%s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD)
         # We want 401 responses, not redirects to a login page
         plugins = self.portal.acl_users.plugins
-        plugins.deactivatePlugin(IChallengePlugin, 'credentials_cookie_auth')
+        try:
+            plugins.deactivatePlugin(IChallengePlugin,
+                                     'credentials_cookie_auth')
+        except KeyError:
+            pass
 
         # Enable portal_factory for Document type
         self.factory = self.portal.portal_factory
