@@ -25,6 +25,8 @@ Changelog
   addon.
   [davisagli]
 
+- Removed backwards compatibility stub Products.ATReferenceBrowserWidget
+  [tomgross]
 
 2.1.12 (2013-03-05)
 -------------------

@@ -43,7 +43,6 @@ setup(name='Products.ATContentTypes',
           'zope.tal',
           'Products.CMFPlone',
           'Products.Archetypes',
-          'Products.ATReferenceBrowserWidget',  # BBB
           'Products.CMFCore',
           'Products.CMFDynamicViewFTI',
           'Products.CMFDefault',
