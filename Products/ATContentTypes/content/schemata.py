@@ -6,7 +6,7 @@ from Products.Archetypes.atapi import BooleanWidget
 from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.CMFCore.permissions import ModifyPortalContent
 
-from archetypes.referencebrowserwidget import ReferenceBrowserWidget
+from plone.app.widgets.at import RelatedItemsWidget
 
 # for ATContentTypes we want to have the description in the edit view
 # just like CMF
@@ -44,7 +44,7 @@ relatedItemsField = ReferenceField('relatedItems',
         referencesSortable=True,
         keepReferencesOnCopy=True,
         write_permission=ModifyPortalContent,
-        widget=ReferenceBrowserWidget(
+        widget=RelatedItemsWidget(
             allow_search=True,
             allow_browse=True,
             allow_sorting=True,

@@ -3,8 +3,8 @@
   <version>1</version>
   <dependencies>
     <dependency>profile-Products.Archetypes:Archetypes</dependency>
-    <dependency>profile-archetypes.referencebrowserwidget:default</dependency>
     <dependency>profile-plone.app.collection:default</dependency>
     <dependency>profile-plone.app.imaging:default</dependency>
+    <dependency>profile-plone.app.widgets:default</dependency>
   </dependencies>
 </metadata>

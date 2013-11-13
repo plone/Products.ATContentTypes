@@ -14,7 +14,6 @@
   <include package="plone.i18n.normalizer" />
 
   <include package="Products.Archetypes" />
-  <include package="archetypes.referencebrowserwidget" />
   <include package="plone.app.blob" />
   <include package="plone.app.collection" />
 

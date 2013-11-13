@@ -16,7 +16,7 @@ from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 
-from archetypes.referencebrowserwidget import ReferenceBrowserWidget
+from plone.app.widgets.at import RelatedItemsWidget
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 
@@ -31,7 +31,7 @@ ATPathCriterionSchema = ATBaseCriterionSchema + Schema((
                 multiValued=True,
                 keepReferencesOnCopy=True,
                 relationship="paths",
-                widget=ReferenceBrowserWidget(
+                widget=RelatedItemsWidget(
                     allow_search=1,
                     label=_(u'label_path_criteria_value', default=u'Folders'),
                     description=_(u'help_path_criteria_value',
