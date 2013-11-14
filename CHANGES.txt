@@ -32,6 +32,9 @@ Changelog
   Redirect to the default view of context instead
   [tomgross]
 
+- Move ATContent types views in there instead of CMFPlone
+  [encolpe]
+
 2.1.12 (2013-03-05)
 -------------------
 
