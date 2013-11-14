@@ -15,7 +15,8 @@
         <metal:listingmacro define-macro="listing">
         <tal:topiccontents define="topicContents python:here.queryCatalog(batch=True);
                                    use_view_action site_properties/typesUseViewActionInListings|python:();
-                                   batch topicContents;">
+                                   batch topicContents;"
+                           on-error="python:request.RESPONSE.redirect(context.absolute_url())">
 
         <tal:listing condition="topicContents">
             <a style='text-align: right' href="#"
