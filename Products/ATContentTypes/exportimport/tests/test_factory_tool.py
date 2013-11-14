@@ -35,9 +35,9 @@ class PortalFactoryXMLAdapterTests(BodyAdapterTestCase):
         obj.manage_setPortalFactoryTypes(listOfTypeIds=('Folder', 'Document'))
 
     def setUp(self):
+        from Products.ATContentTypes.interfaces.factory import IFactoryTool
+        from Products.ATContentTypes.tool.factory import FactoryTool
         from Products.CMFCore.interfaces import ITypesTool
-        from Products.CMFPlone.FactoryTool import FactoryTool
-        from Products.CMFPlone.interfaces import IFactoryTool
         from Products.GenericSetup.interfaces import ISetupEnviron
         from Products.GenericSetup.interfaces import IBody
 

@@ -1,4 +1,4 @@
-from Products.CMFPlone.interfaces import IFactoryTool
+from Products.ATContentTypes.interfaces.factory import IFactoryTool
 from Products.GenericSetup.utils import XMLAdapterBase
 from Products.GenericSetup.utils import importObjects
 from Products.GenericSetup.utils import exportObjects
