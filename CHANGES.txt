@@ -8,8 +8,8 @@ Changelog
   from Products.CMFPlone to Products.ATContentTypes (PLIP #13770)
   [ale-rt]
 
-- Moved archetype tools stuff from Products.CMFPlone to Products.ATContentTypes
-  (PLIP #13770)
+- Moved portal_factory and portal_metadata from Products.CMFPlone
+  to Products.ATContentTypes. (PLIP #13770)
   [ale-rt]
 
 - Remove test_discussion test which tests the old discussion (pre Plone 4.1)
