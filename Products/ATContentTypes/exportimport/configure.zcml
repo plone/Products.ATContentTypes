@@ -11,6 +11,7 @@
       handler=".atcttool.importATCTTool">
     <depends name="catalog"/>
     <depends name="componentregistry"/>
+    <depends name="toolset" />
   </genericsetup:importStep>
 
   <genericsetup:importStep
@@ -20,6 +21,7 @@
       description="Import type registration for the portal factory tool.">
    <depends name="componentregistry" />
    <depends name="typeinfo" />
+   <depends name="toolset" />
   </genericsetup:importStep>
 
   <genericsetup:exportStep
