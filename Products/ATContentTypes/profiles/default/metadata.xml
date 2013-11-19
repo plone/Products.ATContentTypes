@@ -3,6 +3,7 @@
   <version>1</version>
   <dependencies>
     <dependency>profile-Products.Archetypes:Archetypes</dependency>
+    <dependency>profile-Products.CMFFormController:CMFFormController</dependency>
     <dependency>profile-plone.app.collection:default</dependency>
     <dependency>profile-plone.app.imaging:default</dependency>
     <dependency>profile-plone.app.widgets:default</dependency>

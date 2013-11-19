@@ -7,7 +7,10 @@ from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
 from Products.ATContentTypes.tool.atct import ATCTTool
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import getFSVersionTuple
 
+
+PLONE5 = getFSVersionTuple()[0] >= 5
 tests = []
 
 
@@ -36,10 +39,16 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         for i in ids:
             self.assertTrue(i in self.ttool)
 
-    def test_not_quickinstalled(self):
+    def test_quickinstallable(self):
+        # Test, if the Product is available in Quickinstaller.  For Plone < 5
+        # it shouldn't (since it's a core dependency), for Plone >= 5 it should
+        # (where plone.app.contenttypes is installed by default instead).
         qi = getattr(self.portal, 'portal_quickinstaller')
         products = [prod['id'] for prod in qi.listInstalledProducts()]
-        self.assertFalse('ATContentTypes' in products)
+        if PLONE5:
+            self.assertTrue('ATContentTypes' in products)
+        else:
+            self.assertTrue('ATContentTypes' not in products)
 
     def test_release_settings_SAVE_TO_FAIL_FOR_DEVELOPMENT(self):
         self.assertEqual(SWALLOW_IMAGE_RESIZE_EXCEPTIONS, True)
