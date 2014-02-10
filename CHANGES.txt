@@ -4,6 +4,10 @@ Changelog
 2.2a1 (unreleased)
 ------------------
 
+- Remove DL's from portalMessage templates.
+  https://github.com/plone/Products.CMFPlone/issues/153
+  [khink]
+
 - Moved Products.CMFFormController dependency
   from Products.CMFPlone to Products.ATContentTypes (PLIP #13770)
   [ale-rt]
