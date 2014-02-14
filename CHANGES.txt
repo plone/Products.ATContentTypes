@@ -4,6 +4,10 @@ Changelog
 2.2a1 (unreleased)
 ------------------
 
+- Remove DL's from portalMessage templates.
+  https://github.com/plone/Products.CMFPlone/issues/153
+  [khink]
+
 - Moved Products.CMFFormController dependency
   from Products.CMFPlone to Products.ATContentTypes (PLIP #13770)
   [ale-rt]
@@ -35,7 +39,7 @@ Changelog
 
 - Removed backwards compatibility stub Products.ATReferenceBrowserWidget
   [tomgross]
-  
+
 - Don't throw a traceback if atct_topic_view is called on a non topic.
   Redirect to the default view of context instead
   [tomgross]
