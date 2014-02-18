@@ -5,7 +5,7 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="atcontenttypes">
 
-  <include zcml:condition="installed Products.LinguaPlone" 
+  <include zcml:condition="installed Products.LinguaPlone"
            package="Products.LinguaPlone" />
 
   <include file="browser.zcml"/>
@@ -43,7 +43,7 @@
     provides="plone.uuid.interfaces.IUUID"
     for=".criteria.path.ATPathCriterion"
     />
-  
+
   <genericsetup:registerProfile
       name="default"
       title="Archetypes Content Types for Plone"
@@ -54,7 +54,7 @@
 
   <genericsetup:registerProfile
       name="content"
-      title="ATContentTypes-based default content for Plone"
+      title="Archetypes-based default content for Plone"
       directory="profiles/content"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       provides="Products.GenericSetup.interfaces.EXTENSION"
