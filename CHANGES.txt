@@ -4,6 +4,9 @@ Changelog
 2.2a1 (unreleased)
 ------------------
 
+- Use the new member search form as the layout for the Members folder.
+  [davisagli]
+
 - Moved Products.CMFFormController dependency
   from Products.CMFPlone to Products.ATContentTypes (PLIP #13770)
   [ale-rt]

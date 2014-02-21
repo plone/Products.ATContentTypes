@@ -2,7 +2,6 @@ from Acquisition import aq_base
 from Products.ATContentTypes.lib import constraintypes
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDefault.utils import bodyfinder
-from Products.CMFPlone.Portal import member_indexhtml
 from Products.CMFPlone.utils import _createObjectByType
 from plone.i18n.normalizer.interfaces import IURLNormalizer
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
@@ -254,14 +253,7 @@ def setupPortalContent(p):
         if wftool.getInfoFor(members, 'review_state') != 'published':
             wftool.doActionFor(members, 'publish')
 
-        # add index_html to Members area
-        if 'index_html' not in members.objectIds():
-            addPy = members.manage_addProduct['PythonScripts'] \
-                        .manage_addPythonScript
-            addPy('index_html')
-            index_html = getattr(members, 'index_html')
-            index_html.write(member_indexhtml)
-            index_html.ZPythonScript_setTitle('User Search')
+        members.layout = '@@member-search'
 
         # Block all right column portlets by default
         manager = queryUtility(IPortletManager, name='plone.rightcolumn')
