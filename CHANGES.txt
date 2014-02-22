@@ -4,6 +4,9 @@ Changelog
 2.2a1 (unreleased)
 ------------------
 
+- Don't use spamProtect script in event_view; it doesn't do much.
+  [davisagli]
+
 - Use the new member search form as the layout for the Members folder.
   [davisagli]
 
