@@ -75,7 +75,7 @@ Now try to empty value of the text field (#7324)
 
     >>> browser.getLink('Edit').click()
     >>> browser.url
-    'http://nohost/plone/test-collection/edit'
+    'http://nohost/plone/test-collection/edit?_auth...'
     >>> browser.getControl(name='text').value = ''
     >>> browser.getControl('Save').click()
     >>> 'file contents' in browser.contents

@@ -1,3 +1,6 @@
+from zope.component import getUtility
+from plone.keyring.interfaces import IKeyManager
+
 from Products.ATContentTypes.tests import atcttestcase
 
 from Products.CMFCore.utils import getToolByName
@@ -6,6 +9,12 @@ from Products.PloneTestCase.setup import default_password
 from Products.PloneTestCase.setup import portal_owner
 
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
+
+import hmac
+try:
+    from hashlib import sha1 as sha
+except ImportError:
+    import sha
 
 
 class IntegrationTestCase(atcttestcase.ATCTFunctionalSiteTestCase):
@@ -33,6 +42,16 @@ class IntegrationTestCase(atcttestcase.ATCTFunctionalSiteTestCase):
         self.obj_url = self.obj.absolute_url()
         self.obj_path = '/%s' % self.obj.absolute_url(1)
 
+    def getAuthToken(self, user=default_user):
+        manager = getUtility(IKeyManager)
+        try:
+            ring = manager[u"_forms"]
+        except KeyError:
+            ring = manager[u'_system']
+
+        secret = ring.random()
+        return hmac.new(secret, user, sha).hexdigest()
+
 
 class ATCTIntegrationTestCase(IntegrationTestCase):
     """Integration tests for view and edit templates
@@ -51,9 +70,11 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
     def test_createObject(self):
         # create an object using the createObject script
-        response = self.publish(self.folder_path +
-                                '/createObject?type_name=%s' % self.portal_type,
-                                self.basic_auth)
+        auth = self.getAuthToken()
+        response = self.publish(
+            '%s/createObject?type_name=%s&_authenticator=%s' % (
+                self.folder_path, self.portal_type, auth),
+            self.basic_auth)
 
         self.assertEqual(response.getStatus(), 302)  # Redirect to edit
 
@@ -61,7 +82,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
         self.assertTrue(body.startswith(self.folder_url), body)
         # The url may end with /edit or /atct_edit depending on method aliases
-        self.assertTrue(body.endswith('edit'), body)
+        self.assertTrue('edit' in body, body)
 
         # Perform the redirect
         edit_form_path = body[len(self.app.REQUEST.SERVER_URL):]
@@ -78,7 +99,10 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
     def test_edit_view(self):
         # edit should work
-        response = self.publish('%s/atct_edit' % self.obj_path, self.basic_auth)
+        response = self.publish(
+            '%s/atct_edit?_authenticator=%s' % (
+                self.obj_path, self.getAuthToken()),
+            self.basic_auth)
         self.assertEqual(response.getStatus(), 200)  # OK
 
     def test_base_view(self):
