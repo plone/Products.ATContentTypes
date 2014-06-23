@@ -170,6 +170,9 @@ Copy and paste:
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/sub/new_doc2 []
   ------------------------------------------------------------
+  Catalog:  portal_catalog
+  Indexing: /plone/Members/test_user_1_/sub/new_doc2 ['created']
+  ------------------------------------------------------------
 
 Cut and paste:
 
@@ -277,6 +280,9 @@ Copy and paste:
   ------------------------------------------------------------
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/sub/new_folder2 []
+  ------------------------------------------------------------
+  Catalog:  portal_catalog
+  Indexing: /plone/Members/test_user_1_/sub/new_folder2 ['created']
   ------------------------------------------------------------
 
 Cut and paste:
@@ -386,6 +392,10 @@ Copy and paste:
   Catalog:  portal_catalog
   Indexing: /plone/Members/test_user_1_/sub/new_btree_folder2 []
   ------------------------------------------------------------
+  Catalog:  portal_catalog
+  Indexing: /plone/Members/test_user_1_/sub/new_btree_folder2 ['created']
+  ------------------------------------------------------------
+
 
 Cut and paste:
 
