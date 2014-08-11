@@ -33,7 +33,7 @@
 
     <!-- End of tabs -->
 
-    <div id="content">
+    <article id="content">
         <h1 class="documentFirstHeading"
             i18n:domain="atcontenttypes"
             i18n:translate="heading_collection_settings">
@@ -154,7 +154,7 @@
 
             </form>
         </div>
-    </div>
+    </article>
   </div>
 </metal:main>
 </body>
