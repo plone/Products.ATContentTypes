@@ -246,7 +246,22 @@ class TestATFileFunctional(atctftestcase.ATCTIntegrationTestCase):
         self.obj.setFormat('text/plain')
         response = self.publish(self.obj_path, self.basic_auth)
         self.assertEqual(response.getStatus(), 200)
-        self.assertEqual(response.getHeader('Content-Disposition'), 'attachment; filename="foo.txt"')
+        self.assertEqual(
+            response.getHeader('Content-Disposition'),
+            'attachment; filename="foo.txt"'
+        )
+
+    def test_inlineMimetypes_Text_nonascii_filename(self):
+        # Only PDF and Office docs are shown inline
+        # the default normalizer replaces all non-ascii
+        self.obj.setFilename('üfoo.txt')
+        self.obj.setFormat('text/plain')
+        response = self.publish(self.obj_path, self.basic_auth)
+        self.assertEqual(response.getStatus(), 200)
+        self.assertEqual(
+            response.getHeader('Content-Disposition'),
+            'attachment; filename="ufoo.txt"'
+        )
 
     def test_inlineMimetypes_Binary(self):
         # Only PDF and Office docs are shown inline
@@ -254,7 +269,23 @@ class TestATFileFunctional(atctftestcase.ATCTIntegrationTestCase):
         self.obj.setFormat('application/octet-stream')
         response = self.publish(self.obj_path, self.basic_auth)
         self.assertEqual(response.getStatus(), 200)
-        self.assertEqual(response.getHeader('Content-Disposition'), 'attachment; filename="foo.exe"')
+        self.assertEqual(response.getHeader(
+            'Content-Disposition'),
+            'attachment; filename="foo.exe"'
+        )
+
+    def test_inlineMimetypes_Binary_nonascii_filename(self):
+
+        # Only PDF and Office docs are shown inline
+        # the default normalizer replaces all non-ascii
+        self.obj.setFilename('äfoo.exe')
+        self.obj.setFormat('application/octet-stream')
+        response = self.publish(self.obj_path, self.basic_auth)
+        self.assertEqual(response.getStatus(), 200)
+        self.assertEqual(response.getHeader(
+            'Content-Disposition'),
+            'attachment; filename="afoo.exe"'
+        )
 
 tests.append(TestATFileFunctional)
 
