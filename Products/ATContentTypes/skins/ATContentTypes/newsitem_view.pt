@@ -15,7 +15,7 @@
                       text python:context.CookedBody(stx_level=2);
                       len_text python:len(text.strip())">
 
-        <div class="newsImageContainer"
+        <figure class="newsImageContainer"
              tal:condition="context/getImage|nothing">
             <a href="#"
                tal:define="here_url context/@@plone_context_state/object_url;"
@@ -23,12 +23,12 @@
                id="parent-fieldname-image">
                <img tal:replace="structure python: context.tag(scale='mini', css_class='newsImage')" src="" alt="" />
             </a>
-            <p class="discreet" tal:condition="context/imageCaption|nothing">
+            <figcaption class="discreet" tal:condition="context/imageCaption|nothing">
               <metal:field use-macro="python:context.widget('imageCaption', mode='view')">
               Image Caption
               </metal:field>
-            </p>
-        </div>
+            </figcaption>
+        </figure>
 
         <p tal:define="is_editable context/@@plone_context_state/is_editable"
            tal:condition="python: not len_text and is_editable"
