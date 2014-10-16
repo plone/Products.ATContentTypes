@@ -17,7 +17,7 @@ from Products.CMFCore.interfaces import IMutableDublinCore
 from Products.CMFCore.permissions import View
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
-from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
+from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
 from Products.Archetypes.atapi import AttributeStorage
 from Products.Archetypes.atapi import DisplayList
 from Products.Archetypes.atapi import IdWidget
