@@ -9,6 +9,7 @@ setup(name='Products.ATContentTypes',
                        open("CHANGES.txt").read(),
       classifiers=[
         "Framework :: Plone",
+        "Framework :: Plone :: 5.0",
         ],
       keywords='Plone Content Types',
       author='AT Content Types development team',

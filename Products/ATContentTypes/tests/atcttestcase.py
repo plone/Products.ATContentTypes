@@ -1,12 +1,9 @@
 from Testing import ZopeTestCase
-from Products.PloneTestCase import PloneTestCase
-from Products.PloneTestCase.layer import PloneSiteLayer
-from Products.PloneTestCase.setup import default_user
-from Products.PloneTestCase.setup import default_password
-from Products.PloneTestCase.setup import portal_name
-from Products.PloneTestCase.setup import portal_owner
-ZopeTestCase.installProduct('SiteAccess')
-PloneTestCase.setupPloneSite()
+from plone.app.testing.bbb import PloneTestCase
+from plone.app.testing import TEST_USER_ID as default_user
+from plone.app.testing import TEST_USER_PASSWORD as default_password
+from plone.app.testing import PLONE_SITE_ID as portal_name
+from plone.app.testing import SITE_OWNER_NAME as portal_owner
 
 import os
 
@@ -42,7 +39,7 @@ from Products.ATContentTypes.tests.utils import idValidator
 test_home = os.path.dirname(__file__)
 
 
-class ATCTSiteTestCase(PloneTestCase.PloneTestCase):
+class ATCTSiteTestCase(PloneTestCase):
 
     def afterSetUp(self):
         # BBB - make sure we can regression test the deprecated types:
@@ -55,7 +52,8 @@ class ATCTSiteTestCase(PloneTestCase.PloneTestCase):
         cb_copy_data = ttool.manage_copyObjects(['Folder'])
         paste_data = ttool.manage_pasteObjects(cb_copy_data)
         temp_id = paste_data[0]['new_id']
-        ttool.manage_renameObject(temp_id, 'Large Plone Folder')
+        if 'Large Plone Folder' not in ttool:
+            ttool.manage_renameObject(temp_id, 'Large Plone Folder')
         lpf = ttool['Large Plone Folder']
         lpf.title = 'Large Folder'
         lpf.product = 'ATContentTypes'
@@ -65,8 +63,7 @@ class ATCTSiteTestCase(PloneTestCase.PloneTestCase):
         self.setRoles(orig_roles)
 
 
-class ATCTFunctionalSiteTestCase(PloneTestCase.FunctionalTestCase, ATCTSiteTestCase):
-    pass
+ATCTFunctionalSiteTestCase = ATCTSiteTestCase
 
 
 class ATCTTypeTestCase(ATCTSiteTestCase):
@@ -204,8 +201,6 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
 
 class ATCTFieldTestCase(ATCTSiteTestCase, BaseSchemaTest):
     """ ATContentTypes test including AT schema tests """
-
-    layer = PloneSiteLayer
 
     def afterSetUp(self):
         # initalize the portal but not the base schema test

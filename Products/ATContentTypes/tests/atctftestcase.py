@@ -4,17 +4,15 @@ from plone.keyring.interfaces import IKeyManager
 from Products.ATContentTypes.tests import atcttestcase
 
 from Products.CMFCore.utils import getToolByName
-from Products.PloneTestCase.setup import default_user
-from Products.PloneTestCase.setup import default_password
-from Products.PloneTestCase.setup import portal_owner
+from plone.app.testing import TEST_USER_ID as default_user
+from plone.app.testing import TEST_USER_PASSWORD as default_password
+from plone.app.testing import PLONE_SITE_ID as portal_name
+from plone.app.testing import SITE_OWNER_NAME as portal_owner
 
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 
 import hmac
-try:
-    from hashlib import sha1 as sha
-except ImportError:
-    import sha
+from hashlib import sha1 as sha
 
 
 class IntegrationTestCase(atcttestcase.ATCTFunctionalSiteTestCase):
@@ -37,10 +35,7 @@ class IntegrationTestCase(atcttestcase.ATCTFunctionalSiteTestCase):
         self.setupTestObject()
 
     def setupTestObject(self):
-        self.obj_id = 'test_object'
-        self.obj = None
-        self.obj_url = self.obj.absolute_url()
-        self.obj_path = '/%s' % self.obj.absolute_url(1)
+        raise NotImplementedError
 
     def getAuthToken(self, user=default_user):
         manager = getUtility(IKeyManager)
@@ -59,11 +54,15 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
     portal_type = None
 
+    def beforeTearDown(self):
+        del self.folder[self.obj_id]
+
     def setupTestObject(self):
         # create test object
         self.obj_id = 'test_object'
         self.title = u'test \xf6bject'
-        self.folder.invokeFactory(self.portal_type, self.obj_id, title=self.title)
+        if not self.obj_id in self.folder:
+            self.folder.invokeFactory(self.portal_type, self.obj_id, title=self.title)
         self.obj = getattr(self.folder.aq_explicit, self.obj_id)
         self.obj_url = self.obj.absolute_url()
         self.obj_path = '/%s' % self.obj.absolute_url(1)
