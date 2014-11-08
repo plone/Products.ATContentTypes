@@ -11,21 +11,18 @@ First, we are going to setup an environment so we can test that stuff
 is acquired or not acquired at the right times.
 
   >>> import os
-  >>> from Products.Archetypes.tests.attestcase import user_name
-  >>> from Products.Archetypes.tests.attestcase import user_password
-  >>> from Products.Archetypes.tests.atsitetestcase import portal_name
+  >>> plone.app.testing import TEST_USER_ID
+  >>> plone.app.testing import TEST_USER_NAME
+  >>> plone.app.testing import TEST_USER_PASSWORD
   >>> from Products.ATContentTypes.tests.atcttestcase import test_home
+  >>> portal = layer['portal']
+  >>> portal_name = portal.getId()
 
   Input directory with test files
   >>> input_dir = os.path.join(test_home, 'input')
 
-  CMF and Plone sites may have different default titles so we set one
-  >>> self.setRoles(['Manager'])
-  >>> self.portal.setTitle('Portal Title')
-  >>> self.setRoles(['Member'])
-
   Use the member's home folder as play ground for the tests
-  >>> folder = self.folder
+  >>> folder = portal.portal_membership.getHomeFolder(TEST_USER_ID)
   >>> fpath = '/'.join(folder.getPhysicalPath())
 
   Plone's default error message template is too verbose and far too long
@@ -44,13 +41,17 @@ Document
 
   Create object by content type
 
+  >>> from Testing.ZopeTestCase.zopedoctest.functional import http
+  >>> from Testing.ZopeTestCase.sandbox import AppZapper
+  >>> AppZapper().set(layer['app'])
+
   >>> input.seek(0)
   >>> print http(r"""
   ... PUT /%s/test-document HTTP/1.1
   ... Authorization: Basic %s:%s
   ... Content-Type: text/html; charset="utf-8"
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
@@ -105,7 +106,7 @@ Document
   ... PUT /%s/test-document2.txt HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, "a test"))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, "a test"))
   HTTP/1.1 201 Created
   ...
 
@@ -136,7 +137,7 @@ Event
   ... PUT /%s/test-event.event HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
@@ -164,7 +165,7 @@ File
   ... Authorization: Basic %s:%s
   ... Content-Type: application/zip
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
@@ -198,7 +199,7 @@ File, by Extension
   ... PUT /%s/test-file.zip HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
@@ -226,7 +227,7 @@ OpenOffice 1.0 Text Document, no Content-Type, Extension
   ... PUT /%s/test-file1.sxw HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
@@ -264,7 +265,7 @@ OpenOffice 1.0 Text Document, no Content-Type, No Extension
   ... PUT /%s/test-file2 HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
@@ -305,7 +306,7 @@ OpenOffice 1.0 Text Document, w/ Content-Type, No Extension
   ... Content-Type: application/vnd.sun.xml.writer
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
@@ -346,7 +347,7 @@ Image
   ... Authorization: Basic %s:%s
   ... Content-Type: image/gif
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
@@ -380,7 +381,7 @@ Image, by Extension
   ... PUT /%s/test-image.gif HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
@@ -404,7 +405,7 @@ Image, by Extension
   ... PUT /%s/test%%20my%%20image.gif HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
@@ -435,7 +436,7 @@ Link
   ... PUT /%s/test-link.link HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
@@ -462,7 +463,7 @@ News Item
   ... PUT /%s/test-newsitem.news HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
@@ -490,7 +491,7 @@ HTML Page - verify that title is extracted
   ... Authorization: Basic %s:%s
   ... Depth: 0
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
@@ -511,7 +512,7 @@ XHTML Page - verify that title and body are extracted
   ... Authorization: Basic %s:%s
   ... Depth: 0
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
@@ -531,7 +532,9 @@ WebDAV MKCOL
 
 Need manager roles here:
 
-  >>> self.setRoles(['Manager'])
+  >>> from plone.app.testing import setRoles
+  >>> from plone.app.testing import TEST_USER_ID
+  >>> setRoles(portal, TEST_USER_ID, ['Manager'])
 
 Folder
 ------
@@ -540,7 +543,7 @@ Folder
   ... MKCOL /%s/test-folder-name HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... """ % (fpath, user_name, user_password))
+  ... """ % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD))
   HTTP/1.1 201 Created
   ...
 
@@ -558,7 +561,7 @@ Need to make a BTreeFolder manually, and then do a MKCOL inside it:
   ... MKCOL /%s/test-btree/test-btreefolder-name HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... """ % (fpath, user_name, user_password))
+  ... """ % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD))
   HTTP/1.1 201 Created
   ...
 
@@ -570,13 +573,13 @@ PUT Mangling
 
 Now for the real thing, doing a PUT request, back to Member role:
 
-  >>> self.setRoles(['Member'])
+  >>> setRoles(portal, TEST_USER_ID, ['Member'])
 
   >>> print http(r"""
   ... PUT /%s/Foto%%20do%%20Parana.jpg HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... """ % (fpath, user_name, user_password))
+  ... """ % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD))
   HTTP/1.1 201 Created
   ...
 
@@ -591,7 +594,7 @@ Now for the real thing, doing a PUT request, back to Member role:
   >>> print image.Title()
   Foto do Parana.jpg
 
-  >>> self.setRoles(['Manager'])
+  >>> setRoles(portal, TEST_USER_ID, ['Manager'])
 
 MKCOL Mangling
 --------------
@@ -600,7 +603,7 @@ MKCOL Mangling
   ... MKCOL /%s/Fotos%%20de%%20Jurere HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... """ % (fpath, user_name, user_password))
+  ... """ % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD))
   HTTP/1.1 201 Created
   ...
 
@@ -609,3 +612,5 @@ MKCOL Mangling
 
   >>> print self.folder['Fotos de Jurere'].Title()
   Fotos de Jurere
+
+  >>> AppZapper().clear()

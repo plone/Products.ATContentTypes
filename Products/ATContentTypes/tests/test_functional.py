@@ -13,17 +13,20 @@ FILES = [
 import doctest
 OPTIONFLAGS = (doctest.ELLIPSIS |
                doctest.NORMALIZE_WHITESPACE |
-               doctest.REPORT_NDIFF)
+               doctest.REPORT_NDIFF |
+               doctest.REPORT_ONLY_FIRST_FAILURE)
 
+from plone.testing import layered
+from plone.app.testing.bbb import PTC_FIXTURE
 
 def test_suite():
     import unittest
     suite = unittest.TestSuite()
-    from Testing.ZopeTestCase import FunctionalDocFileSuite as FileSuite
     for testfile in FILES:
-        suite.addTest(FileSuite(testfile,
+        suite.addTest(layered(doctest.FileSuite(testfile,
                                 optionflags=OPTIONFLAGS,
                                 package="Products.ATContentTypes.tests",
-                                test_class=ATCTFunctionalSiteTestCase)
+                                test_class=ATCTFunctionalSiteTestCase),
+                      layer=PTC_FIXTURE)
                      )
     return suite
