@@ -10,9 +10,10 @@ atct_topic_view (Collection, the default view)
 
 First create a folder and a demo collection:
 
+    >>> portal = layer['portal']
     >>> self.setRoles(['Manager'])
-    >>> _ = self.portal.invokeFactory('Folder', 'folder')
-    >>> folder = self.portal.folder
+    >>> _ = portal.invokeFactory('Folder', 'folder')
+    >>> folder = portal.folder
     >>> folder.setTitle('Folder title')
     >>> folder.setDescription('Folder description')    
     >>> _ = folder.invokeFactory('Topic', 'collection')
@@ -27,13 +28,9 @@ First create a folder and a demo collection:
 
 Now let's login and visit the collection in the test browser:
 
-    # BBB Zope 2.12
-    >>> try:
-    ...     from Testing.testbrowser import Browser
-    ... except ImportError:
-    ...     from Products.Five.testbrowser import Browser
+    >>> from plone.testing.z2 import Browser
 
-    >>> browser = Browser()
+    >>> browser = Browser(layer['app'])
     >>> browser.open('http://nohost/plone/login_form')
     >>> browser.getControl('Login Name').value = 'test_user_1_'
     >>> browser.getControl('Password').value = 'secret'

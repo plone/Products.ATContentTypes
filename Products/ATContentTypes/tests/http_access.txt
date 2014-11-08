@@ -10,20 +10,22 @@ is acquired or not acquired at the right times. The code is based on
 Sidneys tests for Archetypes.
 
   >>> import os
-  >>> from plone.app.testing import TEST_USER_ID as user_name
-  >>> from plone.app.testing import TEST_USER_PASSWORD as user_password
+  >>> from plone.app.testing import TEST_USER_NAME as user_name
+  >>> from plone.app.testing import user_password as user_password
+  >>> from plone.app.testing import TEST_USER_ID
   >>> from Products.ATContentTypes.tests.atcttestcase import test_home
+  >>> portal = layer['portal']
+  >>> portal_name = portal.getId()
 
   Input directory with test files
   >>> input_dir = os.path.join(test_home, 'input')
 
   Use the member's home folder as play ground for the tests
-  >>> folder = self.folder
+  >>> folder = portal.portal_membership.getHomeFolder(TEST_USER_ID)
   >>> folder.setTitle('test folder')
   >>> fpath = '/'.join(folder.getPhysicalPath())
 
   We need the portal, too
-  >>> portal = self.portal
   >>> ppath = '/'.join(portal.getPhysicalPath())
 
   Dates use for If-* requests
@@ -38,6 +40,9 @@ Sidneys tests for Archetypes.
   >>> input = open(os.path.join(input_dir, 'test.gif'), 'rb')
   >>> input.seek(0)
 
+  >>> from Testing.ZopeTestCase.zopedoctest.functional import http
+  >>> from Testing.ZopeTestCase.sandbox import AppZapper
+  >>> AppZapper().set(layer['app'])
   >>> print http(r"""
   ... PUT /%s/test-image HTTP/1.1
   ... Authorization: Basic %s:%s
@@ -126,7 +131,7 @@ folder.
   HEAD returns OK even if the view method does not exist. To show this
   behavior the layout is set to a non existing template.
 
-  >>> pt_tool = self.portal.portal_types
+  >>> pt_tool = portal.portal_types
   >>> ti = pt_tool[folder.portal_type]
   >>> ti.view_methods += ('non_existing_layout',)
 
@@ -150,10 +155,11 @@ folder.
 Collections
 -------------
 
-  >>> self.setRoles(['Manager'])
+  >>> from plone.app.testing import setRoles
+  >>> setRoles(portal, user_name, ['Manager'])
   >>> folder.invokeFactory('Topic', id='topic')
   'topic'
-  >>> self.setRoles(['Member'])
+  >>> setRoles(portal, user_name, ['Member'])
   >>> topic = folder.topic
   >>> topic.portal_type
   'Topic'
@@ -173,10 +179,10 @@ Collections
   Add a criterion with a value. Without a value criterion.getCriteriaItems()
   returns a false value and the query is empty.
 
-  >>> self.setRoles(['Manager'])
+  >>> setRoles(portal, user_name, ['Manager'])
   >>> criterion = topic.addCriterion('getId', 'ATSimpleStringCriterion')
   >>> criterion.setValue('foo')
-  >>> self.setRoles(['Member'])
+  >>> setRoles(portal, user_name, ['Member'])
 
   >>> print http(r"""
   ... HEAD /%s HTTP/1.1
@@ -196,9 +202,9 @@ Test HEAD for the portal root object
   folder.
 
   >>> if 'index_html' in portal:
-  ...     self.setRoles(['Manager'])
+  ...     setRoles(portal, user_name, ['Manager'])
   ...     portal.manage_delObjects(('index_html',))
-  ...     self.setRoles(['Member'])
+  ...     setRoles(portal, user_name, ['Member'])
 
   >>> print http(r"""
   ... HEAD /%s HTTP/1.1
@@ -207,12 +213,12 @@ Test HEAD for the portal root object
   HTTP/1.1 200 OK
   ...
 
-  >>> self.setRoles(['Manager'])
+  >>> setRoles(portal, user_name, ['Manager'])
   >>> portal.invokeFactory('Document', id='index_html')
   'index_html'
   >>> portal.index_html.portal_type
   'Document'
-  >>> self.setRoles(['Member'])
+  >>> setRoles(portal, user_name, ['Member'])
 
   >>> print http(r"""
   ... HEAD /%s HTTP/1.1
@@ -346,3 +352,5 @@ HTTP If modified since
   ...
   <BLANKLINE>
   GIF87...
+
+  >>> AppZapper().clear()

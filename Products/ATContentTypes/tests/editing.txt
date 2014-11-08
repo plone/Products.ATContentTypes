@@ -5,15 +5,11 @@ Here we want to test the standard edit view for Archetypes objects.
 
 Let's set up a test browser:
 
-  # BBB Zope 2.12
-  >>> try:
-  ...     from Testing.testbrowser import Browser
-  ... except ImportError:
-  ...     from Products.Five.testbrowser import Browser
-
-  >>> browser = Browser()
+  >>> from plone.testing.z2 import Browser
+  >>> portal = layer['portal']
+  >>> browser = Browser(layer['app'])
   >>> browser.handleErrors = False
-  >>> browser.open('http://nohost/plone/login')
+  >>> browser.open('%s/login' % portal.absolute_url())
 
 First, we need to log in.
 
