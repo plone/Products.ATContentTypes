@@ -12,14 +12,11 @@ correctly across the many use cases that must co-exist.
 First, we are going to setup an environment so we can test that stuff
 is acquired or not acquired at the right times.
 
-  >>> from Products.ATContentTypes.tests.atcttestcase import default_user
-  >>> from Products.ATContentTypes.tests.atcttestcase import default_password
-  >>> from Products.ATContentTypes.tests.atcttestcase import portal_name
+  >>> from plone.app.testing import TEST_USER_ID as default_user
+  >>> from plone.app.testing import TEST_USER_PASSWORD as default_password
   >>> from Products.CMFCore.utils import getToolByName
   >>> self.setRoles(['Manager'])
 
-  >>> self.portal.setTitle('Portal Title')
-  
   >>> self.portal.invokeFactory('Document', 'test_document',
   ...             title='Root Document')
   'test_document'
@@ -54,7 +51,7 @@ be allowed to acquire content from higher-level hierarchies:
   ... </methodCall>
   ... """ % (portal_name, default_user, default_password))
   HTTP/1.0 200 OK
-  ...Portal Title...
+  ...Plone site...
 
   >>> print self.portal.test_document.getPortalTypeName()
   Document
@@ -123,14 +120,14 @@ For testing Browser access, we are going to just try using the ``GET``
 method instead.
 
   >>> print self.portal.title_or_id()
-  Portal Title
+  Plone site
 
   >>> print http(r"""
   ... GET /%s/title_or_id HTTP/1.0
   ... Authorization: Basic %s:%s
   ... """ % (portal_name, default_user, default_password))
   HTTP/1.0 200 OK
-  ...Portal Title...
+  ...Plone site...
 
   >>> print self.portal.test_document.getPortalTypeName()
   Document

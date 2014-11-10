@@ -10,18 +10,12 @@ is acquired or not acquired at the right times. The code is based on
 Sidneys tests for Archetypes.
 
   >>> import os
-  >>> from Products.Archetypes.tests.attestcase import user_name
-  >>> from Products.Archetypes.tests.attestcase import user_password
-  >>> from Products.Archetypes.tests.atsitetestcase import portal_name
+  >>> from plone.app.testing import TEST_USER_ID as user_name
+  >>> from plone.app.testing import TEST_USER_PASSWORD as user_password
   >>> from Products.ATContentTypes.tests.atcttestcase import test_home
 
   Input directory with test files
   >>> input_dir = os.path.join(test_home, 'input')
-
-  CMF and Plone sites may have different default titles so we set one
-  >>> self.setRoles(['Manager'])
-  >>> self.portal.setTitle('Portal Title')
-  >>> self.setRoles(['Member'])
 
   Use the member's home folder as play ground for the tests
   >>> folder = self.folder
