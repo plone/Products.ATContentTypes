@@ -24,7 +24,7 @@ setup(name='Products.ATContentTypes',
         test=[
             'zope.annotation',
             'zope.testing',
-            'Products.PloneTestCase',
+            'plone.app.testing',
         ]
       ),
       install_requires=[

@@ -1,5 +1,5 @@
 from Products.ATContentTypes import setuphandlers
-from Products.PloneTestCase.PloneTestCase import PloneTestCase
+from plone.app.testing.bbb import PloneTestCase
 
 
 class TestContentProfile(PloneTestCase):
