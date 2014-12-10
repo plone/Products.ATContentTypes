@@ -14,15 +14,11 @@ from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
-from Products.PloneTestCase.PloneTestCase import FunctionalTestCase, setupPloneSite
-from Testing import ZopeTestCase  # side effect import. leave it here.
+from plone.app.testing.bbb import PloneTestCase as FunctionalTestCase
 from zope.interface.verify import verifyObject
 
-# BBB Zope 2.12
-try:
-    from Testing.testbrowser import Browser
-except ImportError:
-    from Products.Five.testbrowser import Browser
+
+from plone.testing.z2 import Browser
 
 # third party extension
 import exif
@@ -51,11 +47,6 @@ TEST_JPEG_LEN = len(TEST_JPEG)
 def editATCT(obj):
     obj.setImage(TEST_GIF, content_type="image/gif")
     dcEdit(obj)
-
-tests = []
-
-
-setupPloneSite()
 
 
 class TestIDFromTitle(FunctionalTestCase):
@@ -103,8 +94,6 @@ class TestIDFromTitle(FunctionalTestCase):
         self._make_image('', filename=u'Pictüre 1.png'.encode('utf-8'))
         normalized = 'Picture%201.png'
         self.assertTrue(normalized in self.browser.url)
-
-tests.append(TestIDFromTitle)
 
 
 class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
@@ -225,8 +214,6 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         self.assertTrue(len(atct.getEXIF()), atct.getEXIF())
         atct._image_exif = None
 
-tests.append(TestSiteATImage)
-
 
 class TestATImageFields(atcttestcase.ATCTFieldTestCase):
 
@@ -282,8 +269,6 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(tuple(vocab) == (), 'Value is %s' % str(tuple(vocab)))
         self.assertTrue(field.primary == 1, 'Value is %s' % field.primary)
 
-tests.append(TestATImageFields)
-
 
 class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
 
@@ -314,12 +299,3 @@ class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
         self.assertEqual(response3.getStatus(), 302)
         bobo_exception = response3.getHeader('bobo-exception-type')
         self.assertTrue('Unauthorized' in bobo_exception)
-
-tests.append(TestATImageFunctional)
-
-
-def test_suite():
-    suite = unittest.TestSuite()
-    for test in tests:
-        suite.addTest(unittest.makeSuite(test))
-    return suite

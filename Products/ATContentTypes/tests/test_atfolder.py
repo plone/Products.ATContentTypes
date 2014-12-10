@@ -9,7 +9,7 @@ from Products.ATContentTypes.content.folder import ATBTreeFolder
 from OFS.interfaces import IOrderedContainer as IOrderedContainer
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
-from Products.PloneTestCase.setup import portal_owner
+from plone.app.testing import SITE_OWNER_NAME as portal_owner
 
 from zope.interface.verify import verifyObject
 from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
