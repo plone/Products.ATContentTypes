@@ -3,15 +3,9 @@ Uploading the contents of a document
 
 Test setup.
 
-    >>> import cStringIO
-
-    # BBB Zope 2.12
-    >>> try:
-    ...     from Testing.testbrowser import Browser
-    ... except ImportError:
-    ...     from Products.Five.testbrowser import Browser
-
-    >>> browser = Browser()
+    >>> from cStringIO import StringIO
+    >>> from plone.testing.z2 import Browser
+    >>> browser = Browser(layer['app'])
     >>> browser.open('http://nohost/plone/login')
 
 Log in.
@@ -35,17 +29,16 @@ Let's create a new document, ending up at its edit form.
 Now upload a file.  The uploaded file should take precedence over the
 contents of the text field, if any.
 
-# disable these test because the new widget does not allow uploads... yet...
-#    >>> browser.getControl(name='title').value = 'test document'
-#    >>> browser.getControl(name='text').value = 'This will be ignored.'
-#    >>> browser.getControl(name='text_file').add_file(cStringIO.StringIO('file contents'), 'text/plain', 'test.txt')
-#    >>> browser.getControl('Save').click()
-#    >>> browser.url
-#    'http://nohost/plone/test-document'
-#    >>> 'file contents' in browser.contents
-#    True
-#    >>> 'This will be ignored.' in browser.contents
-#    False
+    >>> browser.getControl(name='title').value = 'test document'
+    >>> browser.getControl(name='text').value = 'This will be ignored.'
+    >>> browser.getControl(name='text_file').add_file(StringIO('file contents'), 'text/plain', 'test.txt')
+    >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/test-document'
+    >>> 'file contents' in browser.contents
+    True
+    >>> 'This will be ignored.' in browser.contents
+    False
 
 Let's create a new collection, ending up at its edit form.
 
@@ -61,21 +54,16 @@ Let's create a new collection, ending up at its edit form.
 Now upload a file.  The uploaded file should take precedence over the
 contents of the text field, if any.
 
-# disable these test because the new widget does not allow uploads... yet...
-#    >>> browser.getControl(name='title').value = 'test collection'
-#    >>> browser.getControl(name='text').value = 'This will be ignored.'
-#    >>> browser.getControl(name='text_file').add_file(cStringIO.StringIO('file contents'), 'text/plain', 'test.txt')
-#    >>> browser.getControl('Save').click()
-#    >>> browser.url
-#    'http://nohost/plone/test-collection/'
-#    >>> 'file contents' in browser.contents
-#    True
-#    >>> 'This will be ignored.' in browser.contents
-#    False
-
     >>> browser.getControl(name='title').value = 'test collection'
     >>> browser.getControl(name='text').value = 'This will be ignored.'
+    >>> browser.getControl(name='text_file').add_file(StringIO('file contents'), 'text/plain', 'test.txt')
     >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/test-collection/'
+    >>> 'file contents' in browser.contents
+    True
+    >>> 'This will be ignored.' in browser.contents
+    False
 
 Now try to empty value of the text field (#7324)
 
