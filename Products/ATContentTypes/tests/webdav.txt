@@ -55,7 +55,7 @@ Document
   HTTP/1.1 201 Created
   ...
 
-  >>> document = self.folder['test-document']
+  >>> document = folder['test-document']
   >>> input.seek(0)
 
   >>> print document.getPortalTypeName()
@@ -110,7 +110,7 @@ Document
   HTTP/1.1 201 Created
   ...
 
-  >>> document = self.folder['test-document2.txt']
+  >>> document = folder['test-document2.txt']
   >>> input.seek(0)
 
   >>> print document.getPortalTypeName()
@@ -143,7 +143,7 @@ Event
 
   XXX: .event should be removed?
 
-  >>> event = self.folder['test-event.event']
+  >>> event = folder['test-event.event']
 
   >>> print event.getPortalTypeName()
   Event
@@ -169,7 +169,7 @@ File
   HTTP/1.1 201 Created
   ...
 
-  >>> file = self.folder['test-file']
+  >>> file = folder['test-file']
 
   >>> print file.getPortalTypeName()
   File
@@ -203,7 +203,7 @@ File, by Extension
   HTTP/1.1 201 Created
   ...
 
-  >>> file = self.folder['test-file.zip']
+  >>> file = folder['test-file.zip']
 
   >>> print file.getPortalTypeName()
   File
@@ -231,7 +231,7 @@ OpenOffice 1.0 Text Document, no Content-Type, Extension
   HTTP/1.1 201 Created
   ...
 
-  >>> file = self.folder['test-file1.sxw']
+  >>> file = folder['test-file1.sxw']
 
   >>> print file.getPortalTypeName()
   File
@@ -269,7 +269,7 @@ OpenOffice 1.0 Text Document, no Content-Type, No Extension
   HTTP/1.1 201 Created
   ...
 
-  >>> file = self.folder['test-file2']
+  >>> file = folder['test-file2']
 
   >>> print file.getPortalTypeName()
   File
@@ -310,7 +310,7 @@ OpenOffice 1.0 Text Document, w/ Content-Type, No Extension
   HTTP/1.1 201 Created
   ...
 
-  >>> file = self.folder['test-file3']
+  >>> file = folder['test-file3']
 
   >>> print file.getPortalTypeName()
   File
@@ -351,7 +351,7 @@ Image
   HTTP/1.1 201 Created
   ...
 
-  >>> image = self.folder['test-image']
+  >>> image = folder['test-image']
 
   >>> print image.getPortalTypeName()
   Image
@@ -385,7 +385,7 @@ Image, by Extension
   HTTP/1.1 201 Created
   ...
 
-  >>> image = self.folder['test-image.gif']
+  >>> image = folder['test-image.gif']
 
   >>> print image.getPortalTypeName()
   Image
@@ -412,7 +412,7 @@ Image, by Extension
   XXX: Note that name mangeling for WebDAV PUTs are not supported at the
   moment!
 
-  >>> image = self.folder['test my image.gif']
+  >>> image = folder['test my image.gif']
 
   >>> print image.getPortalTypeName()
   Image
@@ -442,7 +442,7 @@ Link
 
   XXX: .link should be removed?
 
-  >>> link = self.folder['test-link.link']
+  >>> link = folder['test-link.link']
 
   >>> print link.getPortalTypeName()
   Link
@@ -469,7 +469,7 @@ News Item
 
   XXX: .news should be removed?
 
-  >>> news = self.folder['test-newsitem.news']
+  >>> news = folder['test-newsitem.news']
 
   >>> print news.getPortalTypeName()
   News Item
@@ -495,7 +495,7 @@ HTML Page - verify that title is extracted
   HTTP/1.1 201 Created
   ...
 
-  >>> htdoc = self.folder['test-html-title.html']
+  >>> htdoc = folder['test-html-title.html']
   >>> print htdoc.Title()
   HTML Title
   >>> print htdoc.Format()
@@ -516,7 +516,7 @@ XHTML Page - verify that title and body are extracted
   HTTP/1.1 201 Created
   ...
 
-  >>> htdoc = self.folder['test-xhtml-title.html']
+  >>> htdoc = folder['test-xhtml-title.html']
   >>> print htdoc.Title()
   HTML Title
   >>> print htdoc.Format()
@@ -547,7 +547,7 @@ Folder
   HTTP/1.1 201 Created
   ...
 
-  >>> self.folder['test-folder-name'].Title()
+  >>> folder['test-folder-name'].Title()
   'test-folder-name'
 
 BTreeFolder
@@ -555,7 +555,7 @@ BTreeFolder
 
 Need to make a BTreeFolder manually, and then do a MKCOL inside it:
 
-  >>> _ = self.folder.invokeFactory('Large Plone Folder', 'test-btree')
+  >>> _ = folder.invokeFactory('Large Plone Folder', 'test-btree')
 
   >>> print http(r"""
   ... MKCOL /%s/test-btree/test-btreefolder-name HTTP/1.1
@@ -565,7 +565,7 @@ Need to make a BTreeFolder manually, and then do a MKCOL inside it:
   HTTP/1.1 201 Created
   ...
 
-  >>> self.folder['test-btree']['test-btreefolder-name'].Title()
+  >>> folder['test-btree']['test-btreefolder-name'].Title()
   'test-btreefolder-name'
 
 PUT Mangling
@@ -583,10 +583,10 @@ Now for the real thing, doing a PUT request, back to Member role:
   HTTP/1.1 201 Created
   ...
 
-  >>> 'Foto do Parana.jpg' in self.folder
+  >>> 'Foto do Parana.jpg' in folder
   True
 
-  >>> image = self.folder['Foto do Parana.jpg']
+  >>> image = folder['Foto do Parana.jpg']
 
   >>> print image.getPortalTypeName()
   Image
@@ -607,10 +607,10 @@ MKCOL Mangling
   HTTP/1.1 201 Created
   ...
 
-  >>> 'Fotos de Jurere' in self.folder
+  >>> 'Fotos de Jurere' in folder
   True
 
-  >>> print self.folder['Fotos de Jurere'].Title()
+  >>> print folder['Fotos de Jurere'].Title()
   Fotos de Jurere
 
   >>> AppZapper().clear()

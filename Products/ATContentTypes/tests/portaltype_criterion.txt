@@ -87,12 +87,12 @@ because its portal_type ('Document') is different from its catalog Type ('Page')
 exclude the document from navigation, to make it easier to inspect the browser contents and
 detect whether it shows up in searches.
 
-    >>> self.loginAsPortalOwner()
-    >>> portal.invokeFactory('Document', 'doc1')
-    'doc1'
-    >>> portal.doc1.setTitle('Test Document')
-    >>> portal.doc1.setExcludeFromNav(True)
-    >>> portal.doc1.content_status_modify(workflow_action='publish')
+    >>> from plone.app.testing import TEST_USER_ID, setRoles
+    >>> setRoles(layer['portal'], TEST_USER_ID, ['Manager'])
+    >>> doc1 = portal[portal.invokeFactory('Document', 'doc1')]
+    >>> doc1.setTitle('Test Document')
+    >>> doc1.setExcludeFromNav(True)
+    >>> doc1.content_status_modify(workflow_action='publish')
     'http://nohost/plone/doc1'
 
 We now view the collection.

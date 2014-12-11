@@ -11,13 +11,12 @@ atct_topic_view (Collection, the default view)
 First create a folder and a demo collection:
 
     >>> portal = layer['portal']
-    >>> self.setRoles(['Manager'])
-    >>> _ = portal.invokeFactory('Folder', 'folder')
-    >>> folder = portal.folder
+    >>> from plone.app.testing import TEST_USER_ID, setRoles
+    >>> setRoles(portal, TEST_USER_ID, ['Manager'])
+    >>> folder = portal[portal.invokeFactory('Folder', 'folder')]
     >>> folder.setTitle('Folder title')
     >>> folder.setDescription('Folder description')    
-    >>> _ = folder.invokeFactory('Topic', 'collection')
-    >>> collection = folder.collection
+    >>> collection = folder[folder.invokeFactory('Topic', 'collection')]
     >>> collection_title = 'Title. Lorem ipsum dolor sit amet'
     >>> collection.setTitle(collection_title)
     >>> collection_description = 'Description. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.'
