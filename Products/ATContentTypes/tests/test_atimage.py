@@ -17,7 +17,6 @@ from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
 from plone.app.testing.bbb import PloneTestCase as FunctionalTestCase
 from zope.interface.verify import verifyObject
 
-
 from plone.testing.z2 import Browser
 
 # third party extension
@@ -57,7 +56,7 @@ class TestIDFromTitle(FunctionalTestCase):
         self.userId = 'fred'
         self.password = 'secret'
         self.portal.acl_users.userFolderAddUser(self.userId, self.password, ['Manager'], [])
-        self.browser = Browser()
+        self.browser = Browser(self.layer['app'])
         self._log_in()
 
     def _log_in(self):
