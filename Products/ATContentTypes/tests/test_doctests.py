@@ -16,7 +16,7 @@ OPTIONFLAGS = (doctest.ELLIPSIS |
                doctest.REPORT_ONLY_FIRST_FAILURE)
 
 from plone.testing import layered
-from plone.app.testing.bbb import PTC_FIXTURE
+from plone.app.testing.bbb import PTC_FUNCTIONAL_TESTING
 
 def test_suite():
     import unittest
@@ -25,6 +25,6 @@ def test_suite():
         suite.addTest(layered(doctest.DocFileSuite(testfile,
                                 optionflags=OPTIONFLAGS,
                                 package="Products.ATContentTypes.tests",),
-                      layer=PTC_FIXTURE)
+                      layer=PTC_FUNCTIONAL_TESTING)
                      )
     return suite
