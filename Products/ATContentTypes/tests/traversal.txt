@@ -24,9 +24,6 @@ is acquired or not acquired at the right times.
   ...             title='Root Document')
   'test_document'
 
-  >>> portal.invokeFactory('Document', 'index_html', title='Root Index')
-  'index_html'
-
   >>> portal.invokeFactory('Folder', 'simple_folder')
   'simple_folder'
 

@@ -3,15 +3,8 @@ Topic Tool Management
 
 Test setup.
 
-    >>> import cStringIO
-
-    # BBB Zope 2.12
-    >>> try:
-    ...     from Testing.testbrowser import Browser
-    ... except ImportError:
-    ...     from Products.Five.testbrowser import Browser
-
-    >>> browser = Browser()
+    >>> from plone.testing.z2 import Browser
+    >>> browser = Browser(layer['app'])
     >>> browser.open('http://nohost/plone/login')
 
 Log in.

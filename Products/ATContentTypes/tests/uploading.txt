@@ -3,15 +3,9 @@ Uploading the contents of a document
 
 Test setup.
 
-    >>> import cStringIO
-
-    # BBB Zope 2.12
-    >>> try:
-    ...     from Testing.testbrowser import Browser
-    ... except ImportError:
-    ...     from Products.Five.testbrowser import Browser
-
-    >>> browser = Browser()
+    >>> from cStringIO import StringIO
+    >>> from plone.testing.z2 import Browser
+    >>> browser = Browser(layer['app'])
     >>> browser.open('http://nohost/plone/login')
 
 Log in.
@@ -37,7 +31,7 @@ contents of the text field, if any.
 
     >>> browser.getControl(name='title').value = 'test document'
     >>> browser.getControl(name='text').value = 'This will be ignored.'
-    >>> browser.getControl(name='text_file').add_file(cStringIO.StringIO('file contents'), 'text/plain', 'test.txt')
+    >>> browser.getControl(name='text_file').add_file(StringIO('file contents'), 'text/plain', 'test.txt')
     >>> browser.getControl('Save').click()
     >>> browser.url
     'http://nohost/plone/test-document'
@@ -62,7 +56,7 @@ contents of the text field, if any.
 
     >>> browser.getControl(name='title').value = 'test collection'
     >>> browser.getControl(name='text').value = 'This will be ignored.'
-    >>> browser.getControl(name='text_file').add_file(cStringIO.StringIO('file contents'), 'text/plain', 'test.txt')
+    >>> browser.getControl(name='text_file').add_file(StringIO('file contents'), 'text/plain', 'test.txt')
     >>> browser.getControl('Save').click()
     >>> browser.url
     'http://nohost/plone/test-collection/'
