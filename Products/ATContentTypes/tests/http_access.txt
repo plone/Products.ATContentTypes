@@ -11,7 +11,7 @@ Sidneys tests for Archetypes.
 
   >>> import os
   >>> from plone.app.testing import TEST_USER_NAME as user_name
-  >>> from plone.app.testing import user_password as user_password
+  >>> from plone.app.testing import TEST_USER_PASSWORD as user_password
   >>> from plone.app.testing import TEST_USER_ID
   >>> from Products.ATContentTypes.tests.atcttestcase import test_home
   >>> portal = layer['portal']
