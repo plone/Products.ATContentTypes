@@ -11,9 +11,9 @@ First, we are going to setup an environment so we can test that stuff
 is acquired or not acquired at the right times.
 
   >>> import os
-  >>> plone.app.testing import TEST_USER_ID
-  >>> plone.app.testing import TEST_USER_NAME
-  >>> plone.app.testing import TEST_USER_PASSWORD
+  >>> from plone.app.testing import TEST_USER_ID
+  >>> from plone.app.testing import TEST_USER_NAME
+  >>> from plone.app.testing import TEST_USER_PASSWORD
   >>> from Products.ATContentTypes.tests.atcttestcase import test_home
   >>> portal = layer['portal']
   >>> portal_name = portal.getId()
