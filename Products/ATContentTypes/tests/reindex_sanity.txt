@@ -14,8 +14,12 @@ Those tests make sure that the catalog is only called as necessary.
   >>> from Products.ATContentTypes.tests.atcttestcase import portal_owner
   >>> import transaction
 
-  >>> self.setRoles(['Manager'])
-  >>> _ = self.folder.invokeFactory(type_name='Folder', id='sub')
+  >>> from plone.app.testing import TEST_USER_ID, setRoles
+  >>> portal = layer['portal']
+  >>> setRoles(portal, TEST_USER_ID, ['Manager'])
+  >>> folder = portal.portal_membership.getHomeFolder(TEST_USER_ID)
+
+  >>> _ = folder.invokeFactory(type_name='Folder', id='sub')
 
   >>> def callers(n=1):
   ...     stack = []
@@ -76,7 +80,7 @@ Wrap ZCatalog methods to let us know about why and when they were called:
 
 Disable Portal Factory:
 
-  >>> pf = getToolByName(self.portal, 'portal_factory', None)
+  >>> pf = getToolByName(portal, 'portal_factory', None)
   >>> if pf is not None:
   ...    pf.manage_setPortalFactoryTypes(listOfTypeIds=[])
 
@@ -86,7 +90,7 @@ Tests for ATDocument
 Simple invokeFactory call, without renaming or fancy extra field
 setting:
 
-  >>> _ = self.folder.invokeFactory(type_name='Document',
+  >>> _ = folder.invokeFactory(type_name='Document',
   ...                               id='new_doc1')
   Catalog:  uid_catalog
   Indexing: Members/test_user_1_/new_doc1 []
@@ -101,15 +105,15 @@ setting:
   Indexing: /plone/Members/test_user_1_/new_doc1 []
   ------------------------------------------------------------
 
-  >>> self.folder['new_doc1'].Title()
+  >>> folder['new_doc1'].Title()
   ''
 
-  >>> self.folder['new_doc1'].Description()
+  >>> folder['new_doc1'].Description()
   ''
 
 More complex invokeFactory call, setting title and description:
 
-  >>> _ = self.folder.invokeFactory(type_name='Document',
+  >>> _ = folder.invokeFactory(type_name='Document',
   ...                               id='new_doc2',
   ...                               title='Title',
   ...                               description='Description')
@@ -126,10 +130,10 @@ More complex invokeFactory call, setting title and description:
   Indexing: /plone/Members/test_user_1_/new_doc2 []
   ------------------------------------------------------------
 
-  >>> self.folder['new_doc2'].Title()
+  >>> folder['new_doc2'].Title()
   'Title'
 
-  >>> self.folder['new_doc2'].Description()
+  >>> folder['new_doc2'].Description()
   'Description'
 
 Now hold your breath. We are going to rename,
@@ -139,7 +143,7 @@ copy-and-paste and cut-and-paste.
 
 Rename:
 
-  >>> self.folder.manage_renameObjects(ids=['new_doc1'],
+  >>> folder.manage_renameObjects(ids=['new_doc1'],
   ...                                  new_ids=['new_doc11'])
   Catalog:    uid_catalog
   UnIndexing: Members/test_user_1_/new_doc1
@@ -159,8 +163,8 @@ Rename:
 
 Copy and paste:
 
-  >>> cp = self.folder.manage_copyObjects(ids=['new_doc2'])
-  >>> _ = self.folder.sub.manage_pasteObjects(cp)
+  >>> cp = folder.manage_copyObjects(ids=['new_doc2'])
+  >>> _ = folder.sub.manage_pasteObjects(cp)
   Catalog:  uid_catalog
   Indexing: Members/test_user_1_/sub/new_doc2 []
   ------------------------------------------------------------
@@ -176,8 +180,8 @@ Copy and paste:
 
 Cut and paste:
 
-  >>> cp = self.folder.manage_cutObjects(ids=['new_doc11'])
-  >>> _ = self.folder.sub.manage_pasteObjects(cp)
+  >>> cp = folder.manage_cutObjects(ids=['new_doc11'])
+  >>> _ = folder.sub.manage_pasteObjects(cp)
   Catalog:    uid_catalog
   UnIndexing: Members/test_user_1_/new_doc11
   ------------------------------------------------------------
@@ -197,7 +201,7 @@ Tests for ATFolder
 Simple invokeFactory call, without renaming or fancy extra field
 setting:
 
-  >>> _ = self.folder.invokeFactory(type_name='Folder',
+  >>> _ = folder.invokeFactory(type_name='Folder',
   ...                               id='new_folder1')
   Catalog:  uid_catalog
   Indexing: Members/test_user_1_/new_folder1 []
@@ -212,15 +216,15 @@ setting:
   Indexing: /plone/Members/test_user_1_/new_folder1 []
   ------------------------------------------------------------
 
-  >>> self.folder['new_folder1'].Title()
+  >>> folder['new_folder1'].Title()
   ''
 
-  >>> self.folder['new_folder1'].Description()
+  >>> folder['new_folder1'].Description()
   ''
 
 More complex invokeFactory call, setting title and description:
 
-  >>> _ = self.folder.invokeFactory(type_name='Folder',
+  >>> _ = folder.invokeFactory(type_name='Folder',
   ...                               id='new_folder2',
   ...                               title='Title',
   ...                               description='Description')
@@ -237,10 +241,10 @@ More complex invokeFactory call, setting title and description:
   Indexing: /plone/Members/test_user_1_/new_folder2 []
   ------------------------------------------------------------
 
-  >>> self.folder['new_folder2'].Title()
+  >>> folder['new_folder2'].Title()
   'Title'
 
-  >>> self.folder['new_folder2'].Description()
+  >>> folder['new_folder2'].Description()
   'Description'
 
 Now hold your breath. We are going to rename,
@@ -250,7 +254,7 @@ copy-and-paste and cut-and-paste.
 
 Rename:
 
-  >>> self.folder.manage_renameObjects(ids=['new_folder1'],
+  >>> folder.manage_renameObjects(ids=['new_folder1'],
   ...                                  new_ids=['new_folder11'])
   Catalog:    uid_catalog
   UnIndexing: Members/test_user_1_/new_folder1
@@ -270,8 +274,8 @@ Rename:
 
 Copy and paste:
 
-  >>> cp = self.folder.manage_copyObjects(ids=['new_folder2'])
-  >>> _ = self.folder.sub.manage_pasteObjects(cp)
+  >>> cp = folder.manage_copyObjects(ids=['new_folder2'])
+  >>> _ = folder.sub.manage_pasteObjects(cp)
   Catalog:  uid_catalog
   Indexing: Members/test_user_1_/sub/new_folder2 []
   ------------------------------------------------------------
@@ -287,8 +291,8 @@ Copy and paste:
 
 Cut and paste:
 
-  >>> cp = self.folder.manage_cutObjects(ids=['new_folder11'])
-  >>> _ = self.folder.sub.manage_pasteObjects(cp)
+  >>> cp = folder.manage_cutObjects(ids=['new_folder11'])
+  >>> _ = folder.sub.manage_pasteObjects(cp)
   Catalog:    uid_catalog
   UnIndexing: Members/test_user_1_/new_folder11
   ------------------------------------------------------------
@@ -308,7 +312,7 @@ Tests for ATBTreeFolder
 Simple invokeFactory call, without renaming or fancy extra field
 setting:
 
-  >>> _ = self.folder.invokeFactory(type_name='Large Plone Folder',
+  >>> _ = folder.invokeFactory(type_name='Large Plone Folder',
   ...                               id='new_btree_folder1')
   Catalog:  uid_catalog
   Indexing: Members/test_user_1_/new_btree_folder1 []
@@ -323,15 +327,15 @@ setting:
   Indexing: /plone/Members/test_user_1_/new_btree_folder1 []
   ------------------------------------------------------------
 
-  >>> self.folder['new_btree_folder1'].Title()
+  >>> folder['new_btree_folder1'].Title()
   ''
 
-  >>> self.folder['new_btree_folder1'].Description()
+  >>> folder['new_btree_folder1'].Description()
   ''
 
 More complex invokeFactory call, setting title and description:
 
-  >>> _ = self.folder.invokeFactory(type_name='Large Plone Folder',
+  >>> _ = folder.invokeFactory(type_name='Large Plone Folder',
   ...                               id='new_btree_folder2',
   ...                               title='Title',
   ...                               description='Description')
@@ -348,10 +352,10 @@ More complex invokeFactory call, setting title and description:
   Indexing: /plone/Members/test_user_1_/new_btree_folder2 []
   ------------------------------------------------------------
 
-  >>> self.folder['new_btree_folder2'].Title()
+  >>> folder['new_btree_folder2'].Title()
   'Title'
 
-  >>> self.folder['new_btree_folder2'].Description()
+  >>> folder['new_btree_folder2'].Description()
   'Description'
 
 Now hold your breath. We are going to rename,
@@ -361,7 +365,7 @@ copy-and-paste and cut-and-paste.
 
 Rename:
 
-  >>> self.folder.manage_renameObjects(ids=['new_btree_folder1'],
+  >>> folder.manage_renameObjects(ids=['new_btree_folder1'],
   ...                                  new_ids=['new_btree_folder11'])
   Catalog:    uid_catalog
   UnIndexing: Members/test_user_1_/new_btree_folder1
@@ -381,8 +385,8 @@ Rename:
 
 Copy and paste:
 
-  >>> cp = self.folder.manage_copyObjects(ids=['new_btree_folder2'])
-  >>> _ = self.folder.sub.manage_pasteObjects(cp)
+  >>> cp = folder.manage_copyObjects(ids=['new_btree_folder2'])
+  >>> _ = folder.sub.manage_pasteObjects(cp)
   Catalog:  uid_catalog
   Indexing: Members/test_user_1_/sub/new_btree_folder2 []
   ------------------------------------------------------------
@@ -399,8 +403,8 @@ Copy and paste:
 
 Cut and paste:
 
-  >>> cp = self.folder.manage_cutObjects(ids=['new_btree_folder11'])
-  >>> _ = self.folder.sub.manage_pasteObjects(cp)
+  >>> cp = folder.manage_cutObjects(ids=['new_btree_folder11'])
+  >>> _ = folder.sub.manage_pasteObjects(cp)
   Catalog:    uid_catalog
   UnIndexing: Members/test_user_1_/new_btree_folder11
   ------------------------------------------------------------
