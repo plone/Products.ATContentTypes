@@ -3,16 +3,6 @@
  <property
     name="title">Controls the available content types in your portal</property>
 
- <!-- We remove existing DX-Types if they exist -->
- <object name="Collection" remove="True"/>
- <object name="Document" remove="True"/>
- <object name="Event" remove="True"/>
- <object name="File" remove="True"/>
- <object name="Folder" remove="True"/>
- <object name="Image" remove="True"/>
- <object name="Link" remove="True"/>
- <object name="News Item" remove="True"/>
-
  <object name="ATBooleanCriterion"
     meta_type="Factory-based Type Information"/>
  <object name="ATCurrentAuthorCriterion"
