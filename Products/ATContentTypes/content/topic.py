@@ -147,7 +147,7 @@ class ATTopic(ATCTFolder):
 
     use_folder_tabs = 0
 
-    implements(IATTopic, IDisabledExport)
+    implements(IATTopic)
 
     # Enable marshalling via WebDAV/FTP
     __dav_marshall__ = True
