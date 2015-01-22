@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<metadata>
+  <version>1</version>
+  <dependencies>
+    <dependency>profile-Products.Archetypes:Archetypes</dependency>
+    <dependency>profile-Products.CMFFormController:CMFFormController</dependency>
+  </dependencies>
+</metadata>
