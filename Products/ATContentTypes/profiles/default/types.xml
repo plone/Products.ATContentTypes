@@ -1,15 +1,5 @@
 <?xml version="1.0"?>
 <object name="portal_types" meta_type="Plone Types Tool">
- <!-- We remove existing FTIs since they could be Dexterity-based and would
- not be compatible in that case -->
- <object name="Document" remove="True"/>
- <object name="Event" remove="True"/>
- <object name="File" remove="True"/>
- <object name="Folder" remove="True"/>
- <object name="Image" remove="True"/>
- <object name="Link" remove="True"/>
- <object name="News Item" remove="True"/>
-
  <property
     name="title">Controls the available content types in your portal</property>
  <object name="ATBooleanCriterion"

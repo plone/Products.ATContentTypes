@@ -4,9 +4,7 @@ Changelog
 2.2.3 (unreleased)
 ------------------
 
-- Add profile 'base' to allow addons to depend on ATContentTypes in Plone 5
-  without uninstalling the dexterity default-types.
-  [pbauer]
+- Nothing changed yet.
 
 
 2.2.2 (2014-10-23)
