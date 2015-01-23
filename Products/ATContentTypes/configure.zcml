@@ -60,6 +60,14 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:registerProfile
+      name="base"
+      title="Archetypes-tools without content-types"
+      directory="profiles/base"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
   <genericsetup:importStep
       name="atct_content"
       title="ATContentTypes default content"
