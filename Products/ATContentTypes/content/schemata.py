@@ -5,8 +5,8 @@ from Products.Archetypes.atapi import BooleanField
 from Products.Archetypes.atapi import BooleanWidget
 from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.CMFCore.permissions import ModifyPortalContent
+from Products.Archetypes.Widget import RelatedItemsWidget
 
-from plone.app.widgets.at import RelatedItemsWidget
 
 # for ATContentTypes we want to have the description in the edit view
 # just like CMF

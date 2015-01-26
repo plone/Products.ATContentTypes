@@ -74,4 +74,7 @@
       description=""
       handler=".setuphandlers.importContent" />
 
+
+  <adapter factory=".permission.ATFieldPermissionChecker" />
+
 </configure>

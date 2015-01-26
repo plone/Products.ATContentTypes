@@ -15,7 +15,7 @@ from Products.GenericSetup.interfaces import IDAVAware
 from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import TextField
 from Products.Archetypes.atapi import BooleanField
-from Products.Archetypes.atapi import RichWidget
+from Products.Archetypes.atapi import TinyMCEWidget
 from Products.Archetypes.atapi import BooleanWidget
 from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import AnnotationStorage
@@ -41,7 +41,7 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
               validators=('isTidyHtmlWithCleanup',),
               #validators=('isTidyHtml',),
               default_output_type='text/x-html-safe',
-              widget=RichWidget(
+              widget=TinyMCEWidget(
                         description='',
                         label=_(u'label_body_text', default=u'Body Text'),
                         rows=25,
