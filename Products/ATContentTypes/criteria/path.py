@@ -16,7 +16,7 @@ from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 
-from plone.app.widgets.at import RelatedItemsWidget
+from Products.Archetypes.Widget import RelatedItemsWidget
 
 from Products.ATContentTypes import ATCTMessageFactory as _
 

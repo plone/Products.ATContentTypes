@@ -29,7 +29,7 @@ from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
 from Products.Archetypes.tests.test_baseschema import BaseSchemaTest
-from plone.app.widgets.at import RelatedItemsWidget
+from Products.Archetypes.Widget import RelatedItemsWidget
 
 from plone.app.blob.markings import markAs
 
