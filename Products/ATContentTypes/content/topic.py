@@ -23,7 +23,7 @@ from Products.Archetypes.atapi import LinesField
 from Products.Archetypes.atapi import BooleanWidget
 from Products.Archetypes.atapi import IntegerWidget
 from Products.Archetypes.atapi import InAndOutWidget
-from Products.Archetypes.atapi import RichWidget
+from Products.Archetypes.atapi import TinyMCEWidget
 from Products.Archetypes.atapi import DisplayList
 from Products.Archetypes.atapi import AnnotationStorage
 
@@ -62,7 +62,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
               #validators=('isTidyHtml',),
               default_output_type='text/x-html-safe',
               write_permission=ChangeTopics,
-              widget=RichWidget(
+              widget=TinyMCEWidget(
                     description='',
                     label=_(u'label_body_text', default=u'Body Text'),
                     rows=25,

@@ -21,3 +21,4 @@ from Products.ATContentTypes.interfaces.topic import IATTopic
 from Products.ATContentTypes.interfaces.topic import IATTopicCriterion
 from Products.ATContentTypes.interfaces.topic import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces.topic import IATTopicSortCriterion
+from Products.ATContentTypes.interfaces.factories import IATCTFileFactory

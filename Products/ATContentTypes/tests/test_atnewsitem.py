@@ -101,7 +101,7 @@ class TestATNewsItemFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
-        self.assertTrue(isinstance(field.widget, atapi.RichWidget),
+        self.assertTrue(isinstance(field.widget, atapi.TinyMCEWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
         self.assertTrue(isinstance(vocab, atapi.DisplayList),

@@ -214,7 +214,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % repr(field.validators))
-        self.assertTrue(isinstance(field.widget, atapi.KeywordWidget),
+        self.assertTrue(isinstance(field.widget, atapi.TagsWidget),
                         'Value is %s' % id(field.widget))
 
     def test_eventUrlField(self):
@@ -294,7 +294,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, atapi.CalendarWidget),
+        self.assertTrue(isinstance(field.widget, atapi.DatetimeWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
         self.assertTrue(isinstance(vocab, atapi.DisplayList),
@@ -337,7 +337,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))
-        self.assertTrue(isinstance(field.widget, atapi.CalendarWidget),
+        self.assertTrue(isinstance(field.widget, atapi.DatetimeWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
         self.assertTrue(isinstance(vocab, atapi.DisplayList),
@@ -544,7 +544,7 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
-        self.assertTrue(isinstance(field.widget, atapi.RichWidget),
+        self.assertTrue(isinstance(field.widget, atapi.TinyMCEWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)
         self.assertTrue(isinstance(vocab, atapi.DisplayList),

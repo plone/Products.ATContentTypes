@@ -10,9 +10,9 @@ from Products.Archetypes.atapi import DateTimeField
 from Products.Archetypes.atapi import LinesField
 from Products.Archetypes.atapi import StringField
 from Products.Archetypes.atapi import TextField
-from Products.Archetypes.atapi import CalendarWidget
+from Products.Archetypes.atapi import DatetimeWidget
 from Products.Archetypes.atapi import LinesWidget
-from Products.Archetypes.atapi import RichWidget
+from Products.Archetypes.atapi import TinyMCEWidget
 from Products.Archetypes.atapi import StringWidget
 from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import AnnotationStorage
@@ -45,7 +45,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   write_permission=ModifyPortalContent,
                   default_method=DateTime,
                   languageIndependent=True,
-                  widget=CalendarWidget(
+                  widget=DatetimeWidget(
                         description='',
                         label=_(u'label_event_start', default=u'Event Starts')
                         )),
@@ -57,7 +57,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   write_permission=ModifyPortalContent,
                   default_method=DateTime,
                   languageIndependent=True,
-                  widget=CalendarWidget(
+                  widget=DatetimeWidget(
                         description='',
                         label=_(u'label_event_end', default=u'Event Ends')
                         )),
@@ -69,7 +69,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
               storage=AnnotationStorage(migrate=True),
               validators=('isTidyHtmlWithCleanup',),
               default_output_type='text/x-html-safe',
-              widget=RichWidget(
+              widget=TinyMCEWidget(
                         description='',
                         label=_(u'label_event_announcement', default=u'Event body text'),
                         rows=25,

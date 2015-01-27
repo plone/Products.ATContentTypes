@@ -7,7 +7,7 @@ from Products.Archetypes.atapi import ImageField
 from Products.Archetypes.atapi import StringField
 from Products.Archetypes.atapi import TextField
 from Products.Archetypes.atapi import ImageWidget
-from Products.Archetypes.atapi import RichWidget
+from Products.Archetypes.atapi import TinyMCEWidget
 from Products.Archetypes.atapi import StringWidget
 from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import AnnotationStorage
@@ -43,7 +43,7 @@ ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
         validators=('isTidyHtmlWithCleanup',),
         #validators=('isTidyHtml',),
         default_output_type='text/x-html-safe',
-        widget=RichWidget(
+        widget=TinyMCEWidget(
             description='',
             label=_(u'label_body_text', u'Body Text'),
             rows=25,
