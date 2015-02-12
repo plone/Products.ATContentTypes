@@ -1,6 +1,7 @@
 from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import StringField
 from Products.Archetypes.atapi import IdWidget
+from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import StringWidget
 from Products.ATContentTypes.permission import ChangeTopics
 
@@ -37,4 +38,6 @@ ATBaseCriterionSchema = Schema((
                                            "Short Name is part of the item's web address.")
                     ),
                 ),
-    ))
+    ),
+    marshall=RFC822Marshaller()
+)

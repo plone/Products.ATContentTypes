@@ -40,4 +40,16 @@
     for=".criteria.path.ATPathCriterion"
     />
 
+  <adapter
+      factory="Products.GenericSetup.content.DAVAwareFileAdapter"
+      provides="Products.GenericSetup.interfaces.IFilesystemExporter"
+      for="Products.ATContentTypes.criteria.base.NonRefCatalogContent"
+      />
+
+  <adapter
+      factory="Products.GenericSetup.content.DAVAwareFileAdapter"
+      provides="Products.GenericSetup.interfaces.IFilesystemImporter"
+      for="Products.ATContentTypes.criteria.base.NonRefCatalogContent"
+      />
+
 </configure>
