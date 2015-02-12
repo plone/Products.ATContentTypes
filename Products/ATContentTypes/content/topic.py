@@ -32,7 +32,6 @@ from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFolder
 from Products.ATContentTypes.criteria import _criterionRegistry
-from Products.ATContentTypes.exportimport.content import IDisabledExport
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATTopic
