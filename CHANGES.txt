@@ -4,6 +4,9 @@ Changelog
 2.2.3 (unreleased)
 ------------------
 
+- Define ``default_page_types`` in the ``propertiestool.xml`` profile.
+  [thet]
+
 - Add profile 'base' to allow addons to depend on ATContentTypes in Plone 5
   without uninstalling the dexterity default-types.
   [pbauer]
