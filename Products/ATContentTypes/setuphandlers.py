@@ -10,6 +10,7 @@ from zope.component import queryMultiAdapter
 from zope.component import queryUtility
 from zope.i18n.interfaces import ITranslationDomain
 from zope.i18n.locales import locales
+from plone.registry.interfaces import IRegistry
 
 
 def assignTitles(portal):
@@ -35,7 +36,9 @@ def setupPortalContent(p):
     existing = p.keys()
     wftool = getToolByName(p, "portal_workflow")
 
-    language = p.Language()
+    reg = queryUtility(IRegistry, context=p)
+    language = reg['plone.default_language']
+
     parts = (language.split('-') + [None, None])[:3]
     locale = locales.getLocale(*parts)
     target_language = base_language = locale.id.language
