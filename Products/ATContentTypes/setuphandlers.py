@@ -35,8 +35,11 @@ def setupPortalContent(p):
     """
     existing = p.keys()
     wftool = getToolByName(p, "portal_workflow")
-    import pdb; pdb.set_trace()
-    language = p.Language()
+
+    reg = queryUtility(IRegistry, context=p)
+    language = reg['plone.default_language']
+
+    # language = p.Language()
     parts = (language.split('-') + [None, None])[:3]
     locale = locales.getLocale(*parts)
     target_language = base_language = locale.id.language
