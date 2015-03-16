@@ -35,30 +35,28 @@ def setupPortalContent(p):
     """
     existing = p.keys()
     wftool = getToolByName(p, "portal_workflow")
-
-    reg = queryUtility(IRegistry, context=p)
-    language = reg['plone.default_language']
-
+    import pdb; pdb.set_trace()
+    language = p.Language()
     parts = (language.split('-') + [None, None])[:3]
     locale = locales.getLocale(*parts)
     target_language = base_language = locale.id.language
 
     # If we get a territory, we enable the combined language codes
-    use_combined = False
+    # use_combined = False
     if locale.id.territory:
-        use_combined = True
+        # use_combined = True
         target_language += '_' + locale.id.territory
 
     # As we have a sensible language code set now, we disable the
     # start neutral functionality
-    tool = getToolByName(p, "portal_languages")
+    # tool = getToolByName(p, "portal_languages")
     pprop = getToolByName(p, "portal_properties")
     sheet = pprop.site_properties
 
-    tool.manage_setLanguageSettings(language,
-        [language],
-        setUseCombinedLanguageCodes=use_combined,
-        startNeutral=False)
+    # tool.manage_setLanguageSettings(language,
+    #     [language],
+    #     setUseCombinedLanguageCodes=use_combined,
+    #     startNeutral=False)
 
     # Enable visible_ids for non-latin scripts
 
