@@ -8,10 +8,6 @@
   <include zcml:condition="installed Products.LinguaPlone"
            package="Products.LinguaPlone" />
 
-  <include zcml:condition="installed archetypes.multilingual"
-           package="archetypes.multilingual" />
-
-
   <include file="browser.zcml"/>
 
   <include package=".exportimport" />
