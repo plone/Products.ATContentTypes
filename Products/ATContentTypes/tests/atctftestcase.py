@@ -4,10 +4,12 @@ from plone.keyring.interfaces import IKeyManager
 from Products.ATContentTypes.tests import atcttestcase
 
 from Products.CMFCore.utils import getToolByName
-from plone.app.testing import TEST_USER_ID as default_user
-from plone.app.testing import TEST_USER_PASSWORD as default_password
+from plone.app.testing import TEST_USER_NAME
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_PASSWORD
 from plone.app.testing import PLONE_SITE_ID as portal_name
-from plone.app.testing import SITE_OWNER_NAME as portal_owner
+from plone.app.testing import SITE_OWNER_NAME
+from plone.app.testing import SITE_OWNER_PASSWORD
 
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 
@@ -25,8 +27,8 @@ class IntegrationTestCase(atcttestcase.ATCTFunctionalSiteTestCase):
         # basic data
         self.folder_url = self.folder.absolute_url()
         self.folder_path = '/%s' % self.folder.absolute_url(1)
-        self.basic_auth = '%s:%s' % (default_user, default_password)
-        self.owner_auth = '%s:%s' % (portal_owner, default_password)
+        self.basic_auth = '%s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD)
+        self.owner_auth = '%s:%s' % (SITE_OWNER_NAME, SITE_OWNER_PASSWORD)
 
         # disable portal_factory as it's a nuisance here
         self.portal.portal_factory.manage_setPortalFactoryTypes(listOfTypeIds=[])
@@ -37,7 +39,7 @@ class IntegrationTestCase(atcttestcase.ATCTFunctionalSiteTestCase):
     def setupTestObject(self):
         raise NotImplementedError
 
-    def getAuthToken(self, user=default_user):
+    def getAuthToken(self, user=TEST_USER_ID):
         manager = getUtility(IKeyManager)
         try:
             ring = manager[u"_forms"]
@@ -84,7 +86,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         self.assertTrue('edit' in body, body)
 
         # Perform the redirect
-        edit_form_path = body[len(self.app.REQUEST.SERVER_URL):]
+        edit_form_path = body[len(self.layer['request'].SERVER_URL):]
         response = self.publish(edit_form_path, self.basic_auth)
         self.assertEqual(response.getStatus(), 200)  # OK
         temp_id = body.split('/')[-2]
