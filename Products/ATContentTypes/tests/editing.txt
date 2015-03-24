@@ -13,8 +13,10 @@ Let's set up a test browser:
 
 First, we need to log in.
 
-  >>> browser.getControl('Login Name').value = 'test_user_1_'
-  >>> browser.getControl('Password').value = 'secret'
+  >>> from plone.app.testing import TEST_USER_NAME
+  >>> from plone.app.testing import TEST_USER_PASSWORD
+  >>> browser.getControl('Login Name').value = TEST_USER_NAME
+  >>> browser.getControl('Password').value = TEST_USER_PASSWORD
   >>> browser.getControl('Log in').click()
 
 Field validation
@@ -23,6 +25,8 @@ Field validation
 Let's add a new document and verify that required fields are actually
 required -- across schemata.
 
+  >>> from plone.app.testing import TEST_USER_ID
+  >>> folder = portal.portal_membership.getHomeFolder(TEST_USER_ID)
   >>> id = folder.invokeFactory(id='document', type_name='Document')
   >>> document = folder[id]
   >>> document.setTitle('Test document')

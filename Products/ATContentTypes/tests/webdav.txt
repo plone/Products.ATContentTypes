@@ -550,24 +550,6 @@ Folder
   >>> folder['test-folder-name'].Title()
   'test-folder-name'
 
-BTreeFolder
------------
-
-Need to make a BTreeFolder manually, and then do a MKCOL inside it:
-
-  >>> _ = folder.invokeFactory('Large Plone Folder', 'test-btree')
-
-  >>> print http(r"""
-  ... MKCOL /%s/test-btree/test-btreefolder-name HTTP/1.1
-  ... Authorization: Basic %s:%s
-  ...
-  ... """ % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD))
-  HTTP/1.1 201 Created
-  ...
-
-  >>> folder['test-btree']['test-btreefolder-name'].Title()
-  'test-btreefolder-name'
-
 PUT Mangling
 ------------
 

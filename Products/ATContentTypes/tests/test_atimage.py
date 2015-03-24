@@ -18,6 +18,7 @@ from plone.app.testing.bbb import PloneTestCase as FunctionalTestCase
 from zope.interface.verify import verifyObject
 
 from plone.testing.z2 import Browser
+from transaction import commit
 
 # third party extension
 import exif
@@ -56,6 +57,7 @@ class TestIDFromTitle(FunctionalTestCase):
         self.userId = 'fred'
         self.password = 'secret'
         self.portal.acl_users.userFolderAddUser(self.userId, self.password, ['Manager'], [])
+        commit()
         self.browser = Browser(self.layer['app'])
         self._log_in()
 

@@ -312,7 +312,7 @@ Tests for ATBTreeFolder
 Simple invokeFactory call, without renaming or fancy extra field
 setting:
 
-  >>> _ = folder.invokeFactory(type_name='Large Plone Folder',
+  >>> _ = folder.invokeFactory(type_name='Folder',
   ...                               id='new_btree_folder1')
   Catalog:  uid_catalog
   Indexing: Members/test_user_1_/new_btree_folder1 []
@@ -335,7 +335,7 @@ setting:
 
 More complex invokeFactory call, setting title and description:
 
-  >>> _ = folder.invokeFactory(type_name='Large Plone Folder',
+  >>> _ = folder.invokeFactory(type_name='Folder',
   ...                               id='new_btree_folder2',
   ...                               title='Title',
   ...                               description='Description')

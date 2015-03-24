@@ -10,9 +10,10 @@ Test setup.
 
 Log in.
 
-    >>> from Products.PloneTestCase.setup import portal_owner, default_password
-    >>> browser.getControl('Login Name').value = portal_owner
-    >>> browser.getControl('Password').value = default_password
+    >>> from plone.app.testing import SITE_OWNER_NAME
+    >>> from plone.app.testing import SITE_OWNER_PASSWORD
+    >>> browser.getControl('Login Name').value = SITE_OWNER_NAME
+    >>> browser.getControl('Password').value = SITE_OWNER_PASSWORD
     >>> browser.getControl('Log in').click()
     
 Let's create a new document, ending up at its edit form.
