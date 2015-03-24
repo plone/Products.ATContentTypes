@@ -10,26 +10,22 @@ tests = []
 
 class TestBugs(atcttestcase.ATCTSiteTestCase):
 
-    def afterSetUp(self):
-        atcttestcase.ATCTSiteTestCase.afterSetUp(self)
-        self.wf = self.portal.portal_workflow
-
     def test_wfmapping(self):
-        default = ('simple_publication_workflow',)
+        default = ('plone_workflow',)
 
         mapping = {
             'Document': default,
             'Event': default,
             'File': (),
-            'Folder': default,
+            'Folder': ('folder_workflow',),
             'Image': (),
             'Link': default,
             'News Item': default,
-            'Topic': default,
+            'Collection': default,
             }
 
         for pt, wf in mapping.items():
-            pwf = self.wf.getChainFor(pt)
+            pwf = self.portal.portal_workflow.getChainFor(pt)
             self.assertEqual(pwf, wf, (pt, pwf, wf))
 
     def test_striphtmlbug(self):
@@ -42,12 +38,3 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
     def test_validation_layer_from_id_field_from_base_schema_was_initialized(self):
         field = ATContentTypeSchema['id']
         self.assertTrue(IValidationChain.providedBy(field.validators))
-
-tests.append(TestBugs)
-
-
-def test_suite():
-    suite = unittest.TestSuite()
-    for test in tests:
-        suite.addTest(unittest.makeSuite(test))
-    return suite
