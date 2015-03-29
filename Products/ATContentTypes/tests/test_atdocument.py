@@ -1,6 +1,5 @@
 import unittest
 
-from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
 import transaction
@@ -46,8 +45,6 @@ def editATCT(obj):
     text_format = 'text/structured'
     dcEdit(obj)
     obj.setText(example_stx, mimetype=text_format)
-
-tests = []
 
 
 class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
@@ -100,16 +97,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
             # MTR doens't know about text/stx, and transforming
             # doubles the tags. Yuck.
             ('text/structured', '<p><p>test</p></p>\n'),
-            # XXX
-            # ('text/x-rst', ("<p>&lt;p&gt;test&lt;/p&gt;&lt;script&gt;"
-            #                 "I'm a nasty boy&lt;p&gt;nested&lt;/p&gt;"
-            #                 "&lt;/script&gt;</p>\n")),
-            # ('text/python-source', '<p>test</p>'),
-            # XXX
-            # ('text/plain', ("<p>&lt;p&gt;test&lt;/p&gt;&lt;script&gt;"
-            #                 "I'm a nasty boy&lt;p&gt;nested&lt;/p&gt;"
-            #                 "&lt;/script&gt;</p>\n")),
-            )
+           )
         for mimetype, expected in mimetypes:
             # scrub html is removing unallowed tags
             text = "<p>test</p><script>I'm a nasty boy<p>nested</p></script>"
@@ -150,8 +138,6 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
             expected = expected_file.read()
             expected_file.close()
             self.assertEqual(request['text_tidier_data'], expected)
-
-tests.append(TestSiteATDocument)
 
 
 class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
@@ -264,8 +250,6 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue('text/html' in field.getAllowedContentTypes(dummy))
 
-tests.append(TestATDocumentFields)
-
 
 class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
 
@@ -296,7 +280,8 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
         temp_id = location.split('/')[-2]
         obj_title = "New Title for Object"
         new_id = "new-title-for-object"
-        new_obj = getattr(self.folder.aq_explicit, temp_id)
+        new_obj = self.folder.portal_factory._getTempFolder('Document')[new_id]
+        #new_obj = getattr(self.folder.aq_explicit, temp_id)
         new_obj_path = '/%s' % new_obj.absolute_url(1)
         self.assertEqual(new_obj.checkCreationFlag(), True)  # object is not yet edited
 
@@ -308,12 +293,3 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
         response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank&_authenticator=%s' % ('/%s' % new_obj.absolute_url(1), new_title, auth), self.basic_auth)  # Edit object
         self.assertEqual(response.getStatus(), 302)  # OK
         self.assertEqual(new_obj.getId(), new_id)  # id shouldn't have changed
-
-tests.append(TestATDocumentFunctional)
-
-
-def test_suite():
-    suite = unittest.TestSuite()
-    for test in tests:
-        suite.addTest(unittest.makeSuite(test))
-    return suite

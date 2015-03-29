@@ -147,6 +147,8 @@ ZCML registrations in function tests.
   >>> setSite(None)
   >>> from Zope2.App import zcml
 
+  >>> import Products.Five
+  >>> zcml.load_config('meta.zcml', Products.Five)
   >>> zcml.load_string('''<configure xmlns="http://namespaces.zope.org/browser">
   ... <page
   ...     name="document_view"
@@ -235,7 +237,7 @@ Create a CTR predicate to map any content to ``Document``:
   test_document
 
   >>> print folder.test_document.getText()
-  <p>BTree Folder Document Content</p>
+  <p>Simple Folder Document Content</p>
 
 Make sure it's possible to create an item named ``index_html`` into a
 AT-based folder.
@@ -244,7 +246,7 @@ AT-based folder.
   >>> 'index_html' in folder
   False
 
-  >>> print folder.index_html
+  >>> print folder.index_html()
   <ATDocument at index_html>
 
   >>> print http(r"""

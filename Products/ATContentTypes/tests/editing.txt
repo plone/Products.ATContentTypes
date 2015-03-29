@@ -32,6 +32,8 @@ required -- across schemata.
   >>> document.setTitle('Test document')
   
   >>> url = document.absolute_url()
+  >>> from transaction import commit
+  >>> commit()
 
 We'll try and set the title (a required field) to the empty string:
   
@@ -97,6 +99,7 @@ and change the schemata of one of its fields
 
   >>> document.Schema().getField('text').schemata
   'someschemata'
+  >>> commit()
   
   >>> browser.open(url)
   >>> browser.getLink('Edit').click()
@@ -111,7 +114,3 @@ and change the schemata of one of its fields
   >>> IMultiPageSchema.providedBy(document)
   False
   >>> schema['text'].schemata = previous_schemata
-  
-
-  
-TODO: Add more general editing testing!

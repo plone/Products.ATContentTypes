@@ -1,6 +1,5 @@
 import unittest
 
-from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 
 from Products.ATContentTypes.tests.utils import dcEdit
@@ -17,8 +16,6 @@ from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
 
 def editATCT(obj):
     dcEdit(obj)
-
-tests = []
 
 
 class FolderTestMixin:
@@ -60,8 +57,6 @@ class TestSiteATFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
 
     def test_schema_marshall(self):
         pass
-
-tests.append(TestSiteATFolder)
 
 
 class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
@@ -135,9 +130,6 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         self.assertTrue('d1' in f1)  # contains
 
 
-tests.append(TestSiteATBTreeFolder)
-
-
 class TestATFolderFields(atcttestcase.ATCTFieldTestCase):
 
     def afterSetUp(self):
@@ -146,22 +138,9 @@ class TestATFolderFields(atcttestcase.ATCTFieldTestCase):
 
     def test_field_enableConstrainMixin(self):
         pass
-        #self.fail('not implemented')
 
     def test_field_locallyAllowedTypes(self):
         pass
-        #self.fail('not implemented')
-
-tests.append(TestATFolderFields)
-
-
-class TestATBTreeFolderFields(TestATFolderFields):
-
-    def afterSetUp(self):
-        atcttestcase.ATCTFieldTestCase.afterSetUp(self)
-        self._dummy = self.createDummy(klass=ATBTreeFolder)
-
-tests.append(TestATBTreeFolderFields)
 
 
 class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
@@ -181,25 +160,3 @@ class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
                 self.obj_path, self.getAuthToken(portal_owner)),
             self.owner_auth)
         self.assertEqual(self.obj.getLayout(), 'atct_album_view')
-
-tests.append(TestATFolderFunctional)
-
-
-class TestATBTreeFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
-
-    portal_type = 'Large Plone Folder'
-    views = ('folder_listing', 'atct_album_view', )
-
-    def test_templatemixin_view_without_view(self):
-        # template mixin magic should work
-        response = self.publish('%s/' % self.obj_path, self.basic_auth)
-        self.assertEqual(response.getStatus(), 200)
-
-tests.append(TestATBTreeFolderFunctional)
-
-
-def test_suite():
-    suite = unittest.TestSuite()
-    for test in tests:
-        suite.addTest(unittest.makeSuite(test))
-    return suite
