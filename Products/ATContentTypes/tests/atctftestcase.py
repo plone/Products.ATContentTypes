@@ -30,9 +30,6 @@ class IntegrationTestCase(atcttestcase.ATCTFunctionalSiteTestCase):
         self.basic_auth = '%s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD)
         self.owner_auth = '%s:%s' % (SITE_OWNER_NAME, SITE_OWNER_PASSWORD)
 
-        # disable portal_factory as it's a nuisance here
-        self.portal.portal_factory.manage_setPortalFactoryTypes(listOfTypeIds=[])
-
         # object
         self.setupTestObject()
 
@@ -91,8 +88,8 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         self.assertEqual(response.getStatus(), 200)  # OK
         temp_id = body.split('/')[-2]
 
-        new_obj = getattr(self.folder.portal_factory, temp_id)
-        self.assertEqual(self.obj.checkCreationFlag(), True)  # object is not yet edited
+        new_obj = self.folder.portal_factory._getTempFolder(self.portal_type)[temp_id]
+        self.assertEqual(new_obj.checkCreationFlag(), True)  # object is not yet edited
 
     def check_newly_created(self):
         """Objects created programmatically should not have the creation flag set"""
@@ -104,7 +101,8 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
             '%s/atct_edit?_authenticator=%s' % (
                 self.obj_path, self.getAuthToken()),
             self.basic_auth)
-        self.assertEqual(response.getStatus(), 200)  # OK
+        self.assertTrue(response.getBody().startswith('<!DOCTYPE html'))
+        self.assertEqual(response.getStatus(), 302)  # OK
 
     def test_base_view(self):
         # base view should work

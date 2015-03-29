@@ -97,6 +97,8 @@ folder.
   <bound method FSPageTemplate.HEAD of ...>
 
   Check HEAD w/o an index_html object
+  >>> from transaction import commit
+  >>> commit()
 
   >>> print http(r"""
   ... HEAD /%s HTTP/1.1

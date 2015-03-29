@@ -95,6 +95,8 @@ detect whether it shows up in searches.
     >>> doc1.setExcludeFromNav(True)
     >>> doc1.content_status_modify(workflow_action='publish')
     'http://nohost/plone/doc1'
+    >>> from transaction import commit
+    >>> commit()
 
 We now view the collection.
 
