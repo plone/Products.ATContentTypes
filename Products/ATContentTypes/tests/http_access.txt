@@ -97,8 +97,11 @@ folder.
   <bound method FSPageTemplate.HEAD of ...>
 
   Check HEAD w/o an index_html object
-  >>> from transaction import commit
-  >>> commit()
+  REQUEST is acquired in PloneTool.browserDefault
+  This is a different request in the unittest scenario
+  We have to fool the acquisition for WebDAV requests here.
+  >>> req = {'REQUEST_METHOD': 'HEAD'}
+  >>> setattr(portal, 'REQUEST', req)
 
   >>> print http(r"""
   ... HEAD /%s HTTP/1.1
@@ -126,6 +129,9 @@ folder.
   Content-Length: 1
   ...
 
+  Remove acquisition hack
+  >>> delattr(portal, 'REQUEST')
+
   Remove index_html for the following tests since index_html overrules every
   view in set with browser default
   >>> folder.manage_delObjects('index_html')
@@ -145,6 +151,9 @@ folder.
   ...
   AttributeError: ...
 
+  >>> req = {'REQUEST_METHOD': 'HEAD'}
+  >>> setattr(layer['portal'], 'REQUEST', req)
+
   >>> print http(r"""
   ... HEAD /%s HTTP/1.1
   ... Authorization: Basic %s:%s
@@ -154,14 +163,16 @@ folder.
   Content-Length: 1
   ...
 
+  >>> delattr(portal, 'REQUEST')
+
 Collections
 -------------
 
   >>> from plone.app.testing import setRoles
-  >>> setRoles(portal, user_name, ['Manager'])
+  >>> setRoles(portal, TEST_USER_ID, ['Manager'])
   >>> folder.invokeFactory('Topic', id='topic')
   'topic'
-  >>> setRoles(portal, user_name, ['Member'])
+  >>> setRoles(portal, TEST_USER_ID, ['Member'])
   >>> topic = folder.topic
   >>> topic.portal_type
   'Topic'
@@ -181,10 +192,10 @@ Collections
   Add a criterion with a value. Without a value criterion.getCriteriaItems()
   returns a false value and the query is empty.
 
-  >>> setRoles(portal, user_name, ['Manager'])
+  >>> setRoles(portal, TEST_USER_ID, ['Manager'])
   >>> criterion = topic.addCriterion('getId', 'ATSimpleStringCriterion')
   >>> criterion.setValue('foo')
-  >>> setRoles(portal, user_name, ['Member'])
+  >>> setRoles(portal, TEST_USER_ID, ['Member'])
 
   >>> print http(r"""
   ... HEAD /%s HTTP/1.1
@@ -204,9 +215,9 @@ Test HEAD for the portal root object
   folder.
 
   >>> if 'index_html' in portal:
-  ...     setRoles(portal, user_name, ['Manager'])
+  ...     setRoles(portal, TEST_USER_ID, ['Manager'])
   ...     portal.manage_delObjects(('index_html',))
-  ...     setRoles(portal, user_name, ['Member'])
+  ...     setRoles(portal, TEST_USER_ID, ['Member'])
 
   >>> print http(r"""
   ... HEAD /%s HTTP/1.1
@@ -215,12 +226,12 @@ Test HEAD for the portal root object
   HTTP/1.1 200 OK
   ...
 
-  >>> setRoles(portal, user_name, ['Manager'])
+  >>> setRoles(portal, TEST_USER_ID, ['Manager'])
   >>> portal.invokeFactory('Document', id='index_html')
   'index_html'
   >>> portal.index_html.portal_type
   'Document'
-  >>> setRoles(portal, user_name, ['Member'])
+  >>> setRoles(portal, TEST_USER_ID, ['Member'])
 
   >>> print http(r"""
   ... HEAD /%s HTTP/1.1
