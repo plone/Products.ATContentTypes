@@ -285,11 +285,15 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
         new_obj_path = '/%s' % new_obj.absolute_url(1)
         self.assertEqual(new_obj.checkCreationFlag(), True)  # object is not yet edited
 
+        from plone.protect import auto
+        auto.CSRF_DISABLED = True
         response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank&_authenticator=%s' % (new_obj_path, obj_title, auth), self.basic_auth)  # Edit object
         self.assertEqual(response.getStatus(), 302)  # OK
+        new_obj = self.folder[new_id]
         self.assertEqual(new_obj.getId(), new_id)  # does id match
         self.assertEqual(new_obj.checkCreationFlag(), False)  # object is fully created
         new_title = "Second Title"
         response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank&_authenticator=%s' % ('/%s' % new_obj.absolute_url(1), new_title, auth), self.basic_auth)  # Edit object
         self.assertEqual(response.getStatus(), 302)  # OK
         self.assertEqual(new_obj.getId(), new_id)  # id shouldn't have changed
+        auto.CSRF_DISABLED = False

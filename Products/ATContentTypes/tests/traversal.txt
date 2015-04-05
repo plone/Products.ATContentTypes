@@ -246,8 +246,8 @@ AT-based folder.
   >>> 'index_html' in folder
   False
 
-  >>> print folder.index_html()
-  <ATDocument at index_html>
+  >>> print folder.index_html
+  <FSPageTemplate at index_html>
 
   >>> print http(r"""
   ... PUT /%s/simple_folder/index_html HTTP/1.1
