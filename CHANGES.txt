@@ -4,7 +4,8 @@ Changelog
 2.2.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Move tests from PloneTestCase to plone.app.testing.
+  [tomgross,timo]
 
 
 2.2.3 (2015-03-08)
