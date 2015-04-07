@@ -11,6 +11,7 @@ from zope.component import queryUtility
 from zope.i18n.interfaces import ITranslationDomain
 from zope.i18n.locales import locales
 from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 
 try:
     from Products.CMFPlone.interfaces import ILanguageSchema
@@ -51,20 +52,17 @@ def setupPortalContent(p):
     target_language = base_language = locale.id.language
 
     # If we get a territory, we enable the combined language codes
-    # use_combined = False
+    use_combined = False
     if locale.id.territory:
-        # use_combined = True
+        use_combined = True
         target_language += '_' + locale.id.territory
 
     # As we have a sensible language code set now, we disable the
     # start neutral functionality
-    # tool = getToolByName(p, "portal_languages")
     pprop = getToolByName(p, "portal_properties")
     sheet = pprop.site_properties
 
     if PLONE_5:
-        from zope.component import getUtility
-        from plone.registry.interfaces import IRegistry
         registry = getUtility(IRegistry)
         language_settings = registry.forInterface(
             ILanguageSchema,
@@ -74,6 +72,7 @@ def setupPortalContent(p):
         language_settings.default_language = language
         language_settings.available_languages = [language]
     else:
+        tool = getToolByName(p, "portal_languages")
         tool.manage_setLanguageSettings(
             language,
             [language],
