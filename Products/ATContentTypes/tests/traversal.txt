@@ -12,30 +12,32 @@ correctly across the many use cases that must co-exist.
 First, we are going to setup an environment so we can test that stuff
 is acquired or not acquired at the right times.
 
-  >>> from plone.app.testing import TEST_USER_ID as default_user
+  >>> from plone.app.testing import TEST_USER_ID, setRoles
+  >>> setRoles(layer['portal'], TEST_USER_ID, ['Manager'])
+  >>> from plone.app.testing import TEST_USER_NAME as default_user
   >>> from plone.app.testing import TEST_USER_PASSWORD as default_password
-  >>> from Products.CMFCore.utils import getToolByName
-  >>> self.setRoles(['Manager'])
+  >>> from Products.ATContentTypes.tests.atcttestcase import test_home
+  >>> portal = layer['portal']
+  >>> portal_name = portal.getId()
 
-  >>> self.portal.invokeFactory('Document', 'test_document',
+  >>> from Products.CMFCore.utils import getToolByName
+
+  >>> portal.invokeFactory('Document', 'test_document',
   ...             title='Root Document')
   'test_document'
 
-  >>> self.portal.invokeFactory('Document', 'index_html', title='Root Index')
-  'index_html'
-
-  >>> self.portal.invokeFactory('Folder', 'simple_folder')
+  >>> portal.invokeFactory('Folder', 'simple_folder')
   'simple_folder'
-
-  >>> self.portal.invokeFactory('Large Plone Folder', 'simple_btree_folder')
-  'simple_btree_folder'
-
 
 XML-RPC
 -------
 
 XML-RPC is basically a ``POST`` with content-type text/xml. It should
 be allowed to acquire content from higher-level hierarchies:
+
+  >>> from Testing.ZopeTestCase.zopedoctest.functional import http
+  >>> from Testing.ZopeTestCase.sandbox import AppZapper
+  >>> AppZapper().set(layer['app'])
 
   >>> print http(r"""
   ... POST /%s HTTP/1.0
@@ -53,10 +55,10 @@ be allowed to acquire content from higher-level hierarchies:
   HTTP/1.0 200 OK
   ...Plone site...
 
-  >>> print self.portal.test_document.getPortalTypeName()
+  >>> print portal.test_document.getPortalTypeName()
   Document
 
-  >>> print self.portal.test_document.title_or_id()
+  >>> print portal.test_document.title_or_id()
   Root Document
 
   >>> print http(r"""
@@ -75,7 +77,7 @@ be allowed to acquire content from higher-level hierarchies:
   HTTP/1.0 200 OK
   ...Root Document...
 
-  >>> 'test_document' in self.portal.simple_folder
+  >>> 'test_document' in portal.simple_folder
   False
 
   >>> print http(r"""
@@ -94,32 +96,13 @@ be allowed to acquire content from higher-level hierarchies:
   HTTP/1.0 200 OK
   ...Root Document...
 
-  >>> 'test_document' in self.portal.simple_btree_folder
-  False
-
-  >>> print http(r"""
-  ... POST /%s HTTP/1.0
-  ... Authorization: Basic %s:%s
-  ... Content-Type: text/xml
-  ...
-  ... <?xml version='1.0'?>
-  ... <methodCall>
-  ... <methodName>simple_btree_folder.test_document.title_or_id</methodName>
-  ... <params>
-  ... </params>
-  ...
-  ... </methodCall>
-  ... """ % (portal_name, default_user, default_password))
-  HTTP/1.0 200 OK
-  ...Root Document...
-
 Browser
 -------
 
 For testing Browser access, we are going to just try using the ``GET``
 method instead.
 
-  >>> print self.portal.title_or_id()
+  >>> print portal.title_or_id()
   Plone site
 
   >>> print http(r"""
@@ -129,10 +112,10 @@ method instead.
   HTTP/1.0 200 OK
   ...Plone site...
 
-  >>> print self.portal.test_document.getPortalTypeName()
+  >>> print portal.test_document.getPortalTypeName()
   Document
 
-  >>> print self.portal.test_document.title_or_id()
+  >>> print portal.test_document.title_or_id()
   Root Document
 
   >>> print http(r"""
@@ -142,21 +125,11 @@ method instead.
   HTTP/1.0 200 OK
   ...Root Document...
 
-  >>> 'test_document' in self.portal.simple_folder
+  >>> 'test_document' in portal.simple_folder
   False
 
   >>> print http(r"""
   ... GET /%s/simple_folder/test_document/title_or_id HTTP/1.0
-  ... Authorization: Basic %s:%s
-  ... """ % (portal_name, default_user, default_password))
-  HTTP/1.0 200 OK
-  ...Root Document...
-
-  >>> 'test_document' in self.portal.simple_btree_folder
-  False
-
-  >>> print http(r"""
-  ... GET /%s/simple_btree_folder/test_document/title_or_id HTTP/1.0
   ... Authorization: Basic %s:%s
   ... """ % (portal_name, default_user, default_password))
   HTTP/1.0 200 OK
@@ -172,11 +145,10 @@ ZCML registrations in function tests.
   >>> site = getSite()
 
   >>> setSite(None)
-  >>> try:
-  ...     from Zope2.App import zcml
-  ... except ImportError:
-  ...     from Products.Five import zcml
+  >>> from Zope2.App import zcml
 
+  >>> import Products.Five
+  >>> zcml.load_config('meta.zcml', Products.Five)
   >>> zcml.load_string('''<configure xmlns="http://namespaces.zope.org/browser">
   ... <page
   ...     name="document_view"
@@ -186,13 +158,6 @@ ZCML registrations in function tests.
   ...     />
   ... </configure>''')
   >>> setSite(site)
-
-  >>> print http(r"""
-  ... GET /%s/simple_btree_folder/test_document/document_view HTTP/1.0
-  ... Authorization: Basic %s:%s
-  ... """ % (portal_name, default_user, default_password))
-  HTTP/1.0 200 OK
-  ...SimpleView simple output...
 
 WebDAV
 ------
@@ -231,27 +196,12 @@ through WebDAV.
   HTTP/1.1 404 Not Found
   ...
 
-  >>> print http(r"""
-  ... PROPFIND /%s/simple_btree_folder/test_document HTTP/1.1
-  ... Authorization: Basic %s:%s
-  ... Content-Type: text/xml; charset="utf-8"
-  ... Depth: 0
-  ...
-  ... <?xml version="1.0" encoding="utf-8"?>
-  ...   <DAV:propfind xmlns:DAV="DAV:"
-  ...      xmlns:zope="http://www.zope.org/propsets/default">
-  ...      <DAV:prop><zope:title/></DAV:prop>
-  ...   </DAV:propfind>
-  ... """ % (portal_name, default_user, default_password))
-  HTTP/1.1 404 Not Found
-  ...
-
 Should be possible to create objects via PUT that would otherwise be
 acquired.
 
 Create a CTR predicate to map any content to ``Document``:
 
-  >>> ctr = getToolByName(self.portal, 'content_type_registry')
+  >>> ctr = getToolByName(portal, 'content_type_registry')
   >>> p_id = 'at_dav_test'
   >>> p_type = 'name_regex'
   >>> ctr.addPredicate(p_id, p_type)
@@ -272,7 +222,7 @@ Create a CTR predicate to map any content to ``Document``:
   HTTP/1.1 201 Created
   ...
 
-  >>> folder = self.portal.simple_folder
+  >>> folder = portal.simple_folder
   >>> print folder.test_document.getPortalTypeName()
   Document
 
@@ -283,36 +233,21 @@ Create a CTR predicate to map any content to ``Document``:
   <p>Simple Folder Document Content</p>
   <BLANKLINE>
 
-  >>> print http(r"""
-  ... PUT /%s/simple_btree_folder/test_document HTTP/1.1
-  ... Authorization: Basic %s:%s
-  ... Content-Type: text/plain; charset="utf-8"
-  ... Depth: 0
-  ...
-  ... BTree Folder Document Content
-  ... """ % (portal_name, default_user, default_password))
-  HTTP/1.1 201 Created
-  ...
-
-  >>> folder = self.portal.simple_btree_folder
-  >>> print folder.test_document.getPortalTypeName()
-  Document
-
   >>> print folder.test_document.title_or_id()
   test_document
 
   >>> print folder.test_document.getText()
-  <p>BTree Folder Document Content</p>
+  <p>Simple Folder Document Content</p>
 
 Make sure it's possible to create an item named ``index_html`` into a
 AT-based folder.
 
-  >>> folder = self.portal.simple_folder
+  >>> folder = portal.simple_folder
   >>> 'index_html' in folder
   False
 
   >>> print folder.index_html
-  <ATDocument at index_html>
+  <FSPageTemplate at index_html>
 
   >>> print http(r"""
   ... PUT /%s/simple_folder/index_html HTTP/1.1
@@ -346,6 +281,8 @@ should be of the same kind as the parent:
   HTTP/1.1 201 Created
   ...
 
-  >>> folder = self.portal.simple_folder.simple_folder
+  >>> folder = portal.simple_folder.simple_folder
   >>> print folder.getPortalTypeName()
   Folder
+
+  >>> AppZapper().clear()

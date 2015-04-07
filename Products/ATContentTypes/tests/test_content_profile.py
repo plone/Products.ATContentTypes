@@ -1,5 +1,5 @@
 from Products.ATContentTypes import setuphandlers
-from Products.PloneTestCase.PloneTestCase import PloneTestCase
+from plone.app.testing.bbb import PloneTestCase
 
 
 # No sense to check this in Plone 5, frontpage is DX

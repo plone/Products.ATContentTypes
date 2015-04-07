@@ -29,7 +29,10 @@ handler that listens for object events for `IBaseObject`:
 
 Creating an AT object will a couple of events:
 
-  >>> d = makeContent(self.folder, portal_type='Document', id='a')
+  >>> from plone.app.testing import TEST_USER_ID
+  >>> portal = layer['portal']
+  >>> folder = portal.portal_membership.getHomeFolder(TEST_USER_ID)
+  >>> d = makeContent(folder, portal_type='Document', id='a')
   >>> handler.print_and_flush() #doctest: +ELLIPSIS
   5 events:
   [(<ATDocument at /.../Members/test_user_1_/a>,

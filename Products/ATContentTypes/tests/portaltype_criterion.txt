@@ -1,20 +1,17 @@
 Adding an ATTopic criterion for Type
 ====================================
 
-    # BBB Zope 2.12
-    >>> try:
-    ...     from Testing.testbrowser import Browser
-    ... except ImportError:
-    ...     from Products.Five.testbrowser import Browser
-
-    >>> browser = Browser()
-    >>> browser.open('http://nohost/plone/login')
+    >>> from plone.testing.z2 import Browser
+    >>> portal = layer['portal']
+    >>> browser = Browser(layer['app'])
+    >>> browser.open('%s/login' % portal.absolute_url())
 
 First, we need to log in.
 
-    >>> from Products.PloneTestCase.setup import portal_owner, default_password
-    >>> browser.getControl('Login Name').value = portal_owner
-    >>> browser.getControl('Password').value = default_password
+    >>> from plone.app.testing import SITE_OWNER_NAME
+    >>> from plone.app.testing import SITE_OWNER_PASSWORD
+    >>> browser.getControl('Login Name').value = SITE_OWNER_NAME
+    >>> browser.getControl('Password').value = SITE_OWNER_PASSWORD
     >>> browser.getControl('Log in').click()
 
 
@@ -91,13 +88,15 @@ because its portal_type ('Document') is different from its catalog Type ('Page')
 exclude the document from navigation, to make it easier to inspect the browser contents and
 detect whether it shows up in searches.
 
-    >>> self.loginAsPortalOwner()
-    >>> self.portal.invokeFactory('Document', 'doc1')
-    'doc1'
-    >>> self.portal.doc1.setTitle('Test Document')
-    >>> self.portal.doc1.setExcludeFromNav(True)
-    >>> self.portal.doc1.content_status_modify(workflow_action='publish')
+    >>> from plone.app.testing import TEST_USER_ID, setRoles
+    >>> setRoles(layer['portal'], TEST_USER_ID, ['Manager'])
+    >>> doc1 = portal[portal.invokeFactory('Document', 'doc1')]
+    >>> doc1.setTitle('Test Document')
+    >>> doc1.setExcludeFromNav(True)
+    >>> doc1.content_status_modify(workflow_action='publish')
     'http://nohost/plone/doc1'
+    >>> from transaction import commit
+    >>> commit()
 
 We now view the collection.
 
