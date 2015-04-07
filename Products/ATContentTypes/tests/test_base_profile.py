@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-from Products.PloneTestCase.PloneTestCase import PloneTestCase
+from plone.app.testing.bbb import PloneTestCase
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDynamicViewFTI.interfaces import IDynamicViewTypeInformation
 

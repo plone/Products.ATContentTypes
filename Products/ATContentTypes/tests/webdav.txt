@@ -11,15 +11,18 @@ First, we are going to setup an environment so we can test that stuff
 is acquired or not acquired at the right times.
 
   >>> import os
-  >>> from plone.app.testing import TEST_USER_ID as user_name
-  >>> from plone.app.testing import TEST_USER_PASSWORD as user_password
+  >>> from plone.app.testing import TEST_USER_ID
+  >>> from plone.app.testing import TEST_USER_NAME
+  >>> from plone.app.testing import TEST_USER_PASSWORD
   >>> from Products.ATContentTypes.tests.atcttestcase import test_home
+  >>> portal = layer['portal']
+  >>> portal_name = portal.getId()
 
   Input directory with test files
   >>> input_dir = os.path.join(test_home, 'input')
 
   Use the member's home folder as play ground for the tests
-  >>> folder = self.folder
+  >>> folder = portal.portal_membership.getHomeFolder(TEST_USER_ID)
   >>> fpath = '/'.join(folder.getPhysicalPath())
 
   Plone's default error message template is too verbose and far too long
@@ -38,17 +41,21 @@ Document
 
   Create object by content type
 
+  >>> from Testing.ZopeTestCase.zopedoctest.functional import http
+  >>> from Testing.ZopeTestCase.sandbox import AppZapper
+  >>> AppZapper().set(layer['app'])
+
   >>> input.seek(0)
   >>> print http(r"""
   ... PUT /%s/test-document HTTP/1.1
   ... Authorization: Basic %s:%s
   ... Content-Type: text/html; charset="utf-8"
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
-  >>> document = self.folder['test-document']
+  >>> document = folder['test-document']
   >>> input.seek(0)
 
   >>> print document.getPortalTypeName()
@@ -99,11 +106,11 @@ Document
   ... PUT /%s/test-document2.txt HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, "a test"))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, "a test"))
   HTTP/1.1 201 Created
   ...
 
-  >>> document = self.folder['test-document2.txt']
+  >>> document = folder['test-document2.txt']
   >>> input.seek(0)
 
   >>> print document.getPortalTypeName()
@@ -130,13 +137,13 @@ Event
   ... PUT /%s/test-event.event HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
   XXX: .event should be removed?
 
-  >>> event = self.folder['test-event.event']
+  >>> event = folder['test-event.event']
 
   >>> print event.getPortalTypeName()
   Event
@@ -158,11 +165,11 @@ File
   ... Authorization: Basic %s:%s
   ... Content-Type: application/zip
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
-  >>> file = self.folder['test-file']
+  >>> file = folder['test-file']
 
   >>> print file.getPortalTypeName()
   File
@@ -192,11 +199,11 @@ File, by Extension
   ... PUT /%s/test-file.zip HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
-  >>> file = self.folder['test-file.zip']
+  >>> file = folder['test-file.zip']
 
   >>> print file.getPortalTypeName()
   File
@@ -220,11 +227,11 @@ OpenOffice 1.0 Text Document, no Content-Type, Extension
   ... PUT /%s/test-file1.sxw HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
-  >>> file = self.folder['test-file1.sxw']
+  >>> file = folder['test-file1.sxw']
 
   >>> print file.getPortalTypeName()
   File
@@ -258,11 +265,11 @@ OpenOffice 1.0 Text Document, no Content-Type, No Extension
   ... PUT /%s/test-file2 HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
-  >>> file = self.folder['test-file2']
+  >>> file = folder['test-file2']
 
   >>> print file.getPortalTypeName()
   File
@@ -299,11 +306,11 @@ OpenOffice 1.0 Text Document, w/ Content-Type, No Extension
   ... Content-Type: application/vnd.sun.xml.writer
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
-  >>> file = self.folder['test-file3']
+  >>> file = folder['test-file3']
 
   >>> print file.getPortalTypeName()
   File
@@ -340,11 +347,11 @@ Image
   ... Authorization: Basic %s:%s
   ... Content-Type: image/gif
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
-  >>> image = self.folder['test-image']
+  >>> image = folder['test-image']
 
   >>> print image.getPortalTypeName()
   Image
@@ -374,11 +381,11 @@ Image, by Extension
   ... PUT /%s/test-image.gif HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
-  >>> image = self.folder['test-image.gif']
+  >>> image = folder['test-image.gif']
 
   >>> print image.getPortalTypeName()
   Image
@@ -398,14 +405,14 @@ Image, by Extension
   ... PUT /%s/test%%20my%%20image.gif HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
   XXX: Note that name mangeling for WebDAV PUTs are not supported at the
   moment!
 
-  >>> image = self.folder['test my image.gif']
+  >>> image = folder['test my image.gif']
 
   >>> print image.getPortalTypeName()
   Image
@@ -429,13 +436,13 @@ Link
   ... PUT /%s/test-link.link HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
   XXX: .link should be removed?
 
-  >>> link = self.folder['test-link.link']
+  >>> link = folder['test-link.link']
 
   >>> print link.getPortalTypeName()
   Link
@@ -456,13 +463,13 @@ News Item
   ... PUT /%s/test-newsitem.news HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
   XXX: .news should be removed?
 
-  >>> news = self.folder['test-newsitem.news']
+  >>> news = folder['test-newsitem.news']
 
   >>> print news.getPortalTypeName()
   News Item
@@ -484,11 +491,11 @@ HTML Page - verify that title is extracted
   ... Authorization: Basic %s:%s
   ... Depth: 0
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
-  >>> htdoc = self.folder['test-html-title.html']
+  >>> htdoc = folder['test-html-title.html']
   >>> print htdoc.Title()
   HTML Title
   >>> print htdoc.Format()
@@ -505,11 +512,11 @@ XHTML Page - verify that title and body are extracted
   ... Authorization: Basic %s:%s
   ... Depth: 0
   ...
-  ... %s""" % (fpath, user_name, user_password, input.read()))
+  ... %s""" % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD, input.read()))
   HTTP/1.1 201 Created
   ...
 
-  >>> htdoc = self.folder['test-xhtml-title.html']
+  >>> htdoc = folder['test-xhtml-title.html']
   >>> print htdoc.Title()
   HTML Title
   >>> print htdoc.Format()
@@ -525,7 +532,9 @@ WebDAV MKCOL
 
 Need manager roles here:
 
-  >>> self.setRoles(['Manager'])
+  >>> from plone.app.testing import setRoles
+  >>> from plone.app.testing import TEST_USER_ID
+  >>> setRoles(portal, TEST_USER_ID, ['Manager'])
 
 Folder
 ------
@@ -534,50 +543,32 @@ Folder
   ... MKCOL /%s/test-folder-name HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... """ % (fpath, user_name, user_password))
+  ... """ % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD))
   HTTP/1.1 201 Created
   ...
 
-  >>> self.folder['test-folder-name'].Title()
+  >>> folder['test-folder-name'].Title()
   'test-folder-name'
-
-BTreeFolder
------------
-
-Need to make a BTreeFolder manually, and then do a MKCOL inside it:
-
-  >>> _ = self.folder.invokeFactory('Large Plone Folder', 'test-btree')
-
-  >>> print http(r"""
-  ... MKCOL /%s/test-btree/test-btreefolder-name HTTP/1.1
-  ... Authorization: Basic %s:%s
-  ...
-  ... """ % (fpath, user_name, user_password))
-  HTTP/1.1 201 Created
-  ...
-
-  >>> self.folder['test-btree']['test-btreefolder-name'].Title()
-  'test-btreefolder-name'
 
 PUT Mangling
 ------------
 
 Now for the real thing, doing a PUT request, back to Member role:
 
-  >>> self.setRoles(['Member'])
+  >>> setRoles(portal, TEST_USER_ID, ['Member'])
 
   >>> print http(r"""
   ... PUT /%s/Foto%%20do%%20Parana.jpg HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... """ % (fpath, user_name, user_password))
+  ... """ % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD))
   HTTP/1.1 201 Created
   ...
 
-  >>> 'Foto do Parana.jpg' in self.folder
+  >>> 'Foto do Parana.jpg' in folder
   True
 
-  >>> image = self.folder['Foto do Parana.jpg']
+  >>> image = folder['Foto do Parana.jpg']
 
   >>> print image.getPortalTypeName()
   Image
@@ -585,7 +576,7 @@ Now for the real thing, doing a PUT request, back to Member role:
   >>> print image.Title()
   Foto do Parana.jpg
 
-  >>> self.setRoles(['Manager'])
+  >>> setRoles(portal, TEST_USER_ID, ['Manager'])
 
 MKCOL Mangling
 --------------
@@ -594,12 +585,14 @@ MKCOL Mangling
   ... MKCOL /%s/Fotos%%20de%%20Jurere HTTP/1.1
   ... Authorization: Basic %s:%s
   ...
-  ... """ % (fpath, user_name, user_password))
+  ... """ % (fpath, TEST_USER_NAME, TEST_USER_PASSWORD))
   HTTP/1.1 201 Created
   ...
 
-  >>> 'Fotos de Jurere' in self.folder
+  >>> 'Fotos de Jurere' in folder
   True
 
-  >>> print self.folder['Fotos de Jurere'].Title()
+  >>> print folder['Fotos de Jurere'].Title()
   Fotos de Jurere
+
+  >>> AppZapper().clear()

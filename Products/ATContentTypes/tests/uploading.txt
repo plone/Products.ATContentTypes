@@ -3,22 +3,17 @@ Uploading the contents of a document
 
 Test setup.
 
-    >>> import cStringIO
-
-    # BBB Zope 2.12
-    >>> try:
-    ...     from Testing.testbrowser import Browser
-    ... except ImportError:
-    ...     from Products.Five.testbrowser import Browser
-
-    >>> browser = Browser()
+    >>> from cStringIO import StringIO
+    >>> from plone.testing.z2 import Browser
+    >>> browser = Browser(layer['app'])
     >>> browser.open('http://nohost/plone/login')
 
 Log in.
 
-    >>> from Products.PloneTestCase.setup import portal_owner, default_password
-    >>> browser.getControl('Login Name').value = portal_owner
-    >>> browser.getControl('Password').value = default_password
+    >>> from plone.app.testing import SITE_OWNER_NAME
+    >>> from plone.app.testing import SITE_OWNER_PASSWORD
+    >>> browser.getControl('Login Name').value = SITE_OWNER_NAME
+    >>> browser.getControl('Password').value = SITE_OWNER_PASSWORD
     >>> browser.getControl('Log in').click()
     
 Let's create a new document, ending up at its edit form.

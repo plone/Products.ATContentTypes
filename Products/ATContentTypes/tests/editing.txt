@@ -5,20 +5,18 @@ Here we want to test the standard edit view for Archetypes objects.
 
 Let's set up a test browser:
 
-  # BBB Zope 2.12
-  >>> try:
-  ...     from Testing.testbrowser import Browser
-  ... except ImportError:
-  ...     from Products.Five.testbrowser import Browser
-
-  >>> browser = Browser()
+  >>> from plone.testing.z2 import Browser
+  >>> portal = layer['portal']
+  >>> browser = Browser(layer['app'])
   >>> browser.handleErrors = False
-  >>> browser.open('http://nohost/plone/login')
+  >>> browser.open('%s/login' % portal.absolute_url())
 
 First, we need to log in.
 
-  >>> browser.getControl('Login Name').value = 'test_user_1_'
-  >>> browser.getControl('Password').value = 'secret'
+  >>> from plone.app.testing import TEST_USER_NAME
+  >>> from plone.app.testing import TEST_USER_PASSWORD
+  >>> browser.getControl('Login Name').value = TEST_USER_NAME
+  >>> browser.getControl('Password').value = TEST_USER_PASSWORD
   >>> browser.getControl('Log in').click()
 
 Field validation
@@ -27,11 +25,15 @@ Field validation
 Let's add a new document and verify that required fields are actually
 required -- across schemata.
 
+  >>> from plone.app.testing import TEST_USER_ID
+  >>> folder = portal.portal_membership.getHomeFolder(TEST_USER_ID)
   >>> id = folder.invokeFactory(id='document', type_name='Document')
   >>> document = folder[id]
   >>> document.setTitle('Test document')
   
   >>> url = document.absolute_url()
+  >>> from transaction import commit
+  >>> commit()
 
 We'll try and set the title (a required field) to the empty string:
   
@@ -97,6 +99,7 @@ and change the schemata of one of its fields
 
   >>> document.Schema().getField('text').schemata
   'someschemata'
+  >>> commit()
   
   >>> browser.open(url)
   >>> browser.getLink('Edit').click()
@@ -111,7 +114,3 @@ and change the schemata of one of its fields
   >>> IMultiPageSchema.providedBy(document)
   False
   >>> schema['text'].schemata = previous_schemata
-  
-
-  
-TODO: Add more general editing testing!
