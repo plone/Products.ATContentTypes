@@ -3,6 +3,5 @@
   <version>1</version>
   <dependencies>
     <dependency>profile-Products.Archetypes:Archetypes</dependency>
-    <dependency>profile-Products.CMFFormController:CMFFormController</dependency>
   </dependencies>
 </metadata>
