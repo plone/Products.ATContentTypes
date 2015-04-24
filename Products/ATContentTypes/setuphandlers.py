@@ -13,11 +13,7 @@ from zope.i18n.locales import locales
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 
-try:
-    from Products.CMFPlone.interfaces import ILanguageSchema
-    PLONE_5 = True
-except:
-    PLONE_5 = False
+from Products.CMFPlone.interfaces import ILanguageSchema
 
 
 def assignTitles(portal):
@@ -62,23 +58,14 @@ def setupPortalContent(p):
     pprop = getToolByName(p, "portal_properties")
     sheet = pprop.site_properties
 
-    if PLONE_5:
-        registry = getUtility(IRegistry)
-        language_settings = registry.forInterface(
-            ILanguageSchema,
-            prefix='plone'
-        )
-        language_settings.use_combined_language_codes = use_combined
-        language_settings.default_language = language
-        language_settings.available_languages = [language]
-    else:
-        tool = getToolByName(p, "portal_languages")
-        tool.manage_setLanguageSettings(
-            language,
-            [language],
-            setUseCombinedLanguageCodes=use_combined,
-            startNeutral=False
-        )
+    registry = getUtility(IRegistry)
+    language_settings = registry.forInterface(
+        ILanguageSchema,
+        prefix='plone'
+    )
+    language_settings.use_combined_language_codes = use_combined
+    language_settings.default_language = language
+    language_settings.available_languages = [language]
 
     # Enable visible_ids for non-latin scripts
 
