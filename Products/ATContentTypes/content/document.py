@@ -9,7 +9,7 @@ from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
 
-from Products.CMFDefault.utils import SimpleHTMLParser
+from lxml import etree
 from Products.GenericSetup.interfaces import IDAVAware
 
 from Products.Archetypes.atapi import Schema
@@ -216,10 +216,11 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
             content = data
 
         if -1 != content.lower().find("<html"):
-            parser = SimpleHTMLParser()
-            parser.feed(content)
-            if parser.title:
-                self.setTitle(parser.title)
+            parser = etree.HTMLParser()
+            tree = etree.fromstring(content, parser=parser)
+            titletag = tree.xpath('//title')
+            if titletag:
+                self.setTitle(titletag[0].text)
             return
 
         ATCTContent.manage_afterPUT(self, data, marshall_data, file,
