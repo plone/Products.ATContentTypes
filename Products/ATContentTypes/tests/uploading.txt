@@ -30,7 +30,7 @@ Let's create a new document, ending up at its edit form.
     >>> browser.getControl('Page').click()
     >>> browser.getControl('Add').click()
     >>> browser.url
-    'http://nohost/plone/portal_factory/Document/document.../edit'
+    'http://nohost/plone/portal_factory/Document/document.../edit...'
     
 Now upload a file.  The uploaded file should take precedence over the
 contents of the text field, if any.
@@ -55,7 +55,7 @@ Let's create a new collection, ending up at its edit form.
     >>> browser.getControl('Collection', index=-1).click()
     >>> browser.getControl('Add').click()
     >>> browser.url
-    'http://nohost/plone/portal_factory/Topic/topic.../edit'
+    'http://nohost/plone/portal_factory/Topic/topic.../edit...'
     
 Now upload a file.  The uploaded file should take precedence over the
 contents of the text field, if any.

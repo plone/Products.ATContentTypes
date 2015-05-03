@@ -36,7 +36,7 @@ What we do next is we
     >>> browser.getControl('Add').click()
     >>> #'Edit Collection' in browser.contents # ouch, Plone has <span> around 'Collection'
     >>> browser.url
-    'http://nohost/plone/portal_factory/Topic/topic.../edit'
+    'http://nohost/plone/portal_factory/Topic/topic.../edit...'
 
 Now that the collection has been added, we can edit it, but we pretend
 we don't know better and forget to type in a Title:
