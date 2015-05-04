@@ -7,6 +7,9 @@ Changelog
 - Move tests from PloneTestCase to plone.app.testing.
   [tomgross,timo]
 
+- Set language settings in setupPortalContent on the new registry.
+  [timo]
+
 
 2.2.4 (2015-03-26)
 ------------------
