@@ -102,7 +102,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
                 self.obj_path, self.getAuthToken()),
             self.basic_auth)
         self.assertTrue(response.getBody().startswith('<!DOCTYPE html'))
-        self.assertEqual(response.getStatus(), 302)  # OK
+        self.assertTrue(response.getStatus() in (302, 200))  # OK
 
     def test_base_view(self):
         # base view should work
