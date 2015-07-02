@@ -414,10 +414,6 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         atct = self._ATCT
         self.assertEqual(atct.get_size(), 1)
 
-    def test_syndication_enabled_by_default(self):
-        syn = getToolByName(self.portal, 'portal_syndication')
-        self.assertTrue(syn.isSyndicationAllowed(self._ATCT))
-
     def test_schema_marshall(self):
         pass
 

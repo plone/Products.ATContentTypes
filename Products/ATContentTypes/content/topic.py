@@ -154,17 +154,6 @@ class ATTopic(ATCTFolder):
 
     security = ClassSecurityInfo()
 
-    # Override initializeArchetype to turn on syndication by default
-    def initializeArchetype(self, **kwargs):
-        ret_val = ATCTFolder.initializeArchetype(self, **kwargs)
-        # Enable topic syndication by default
-        syn_tool = getToolByName(self, 'portal_syndication', None)
-        if syn_tool is not None:
-            if (syn_tool.isSiteSyndicationAllowed() and
-                                    not syn_tool.isSyndicationAllowed(self)):
-                syn_tool.enableSyndication(self)
-        return ret_val
-
     security.declareProtected(ChangeTopics, 'validateAddCriterion')
     def validateAddCriterion(self, indexId, criteriaType):
         """Is criteriaType acceptable criteria for indexId
