@@ -1,4 +1,5 @@
 import unittest
+import re
 
 from Testing import ZopeTestCase  # side effect import. leave it here.
 from Products.ATContentTypes.tests import atcttestcase
@@ -9,6 +10,7 @@ from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
 
 tests = []
 
+RE_REMOVE_AUTHENTICATOR = re.compile(r'_authenticator=.*\"')
 
 # XXX: This should probably move to the new CMFDynamicViewFTI
 class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
@@ -43,7 +45,9 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         resolved = self.af.unrestrictedTraverse('folder_listing')()
         browserDefault = self.af.__browser_default__(None)[1][0]
         browserDefaultResolved = self.af.unrestrictedTraverse(browserDefault)()
-        self.assertEqual(resolved, browserDefaultResolved)
+        self.assertEqual(
+            RE_REMOVE_AUTHENTICATOR.sub('', resolved),
+            RE_REMOVE_AUTHENTICATOR.sub('', browserDefaultResolved))
 
     def test_canSetLayout(self):
         self.assertTrue(self.af.canSetLayout())
@@ -64,7 +68,9 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         resolved = self.af.unrestrictedTraverse('atct_album_view')()
         browserDefault = self.af.__browser_default__(None)[1][0]
         browserDefaultResolved = self.af.unrestrictedTraverse(browserDefault)()
-        self.assertEqual(resolved, browserDefaultResolved)
+        self.assertEqual(
+            RE_REMOVE_AUTHENTICATOR.sub('', resolved),
+            RE_REMOVE_AUTHENTICATOR.sub('', browserDefaultResolved))
 
     def test_canSetDefaultPage(self):
         self.assertTrue(self.af.canSetDefaultPage())
@@ -113,7 +119,9 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         resolved = self.af.unrestrictedTraverse(layout)()
         browserDefault = self.af.__browser_default__(None)[1][0]
         browserDefaultResolved = self.af.unrestrictedTraverse(browserDefault)()
-        self.assertEqual(resolved, browserDefaultResolved)
+        self.assertEqual(
+            RE_REMOVE_AUTHENTICATOR.sub('', resolved),
+            RE_REMOVE_AUTHENTICATOR.sub('', browserDefaultResolved))
 
     def test_inherit_parent_layout(self):
         # Check to see if subobjects of the same type inherit the layout set
