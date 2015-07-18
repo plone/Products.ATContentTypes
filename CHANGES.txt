@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.2.6 (unreleased)
+2.2.6 (2015-07-18)
 ------------------
 
 - createObject moved to Archetpyes.
