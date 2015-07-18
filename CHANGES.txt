@@ -4,6 +4,9 @@ Changelog
 2.2.6 (unreleased)
 ------------------
 
+- createObject moved to Archetpyes.
+  [tomgross]
+
 - Add CSRF authenticator in createObject script
   [ebrehault]
 
