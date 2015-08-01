@@ -74,6 +74,11 @@
       description=""
       handler=".setuphandlers.importContent" />
 
+  <genericsetup:importStep
+      name="atct_base"
+      title="ATContentTypes intid and zc.relation catalog"
+      description=""
+      handler=".setuphandlers.setup_base" />
 
   <adapter factory=".permission.ATFieldPermissionChecker" />
 

@@ -3,6 +3,8 @@ from Products.ATContentTypes.lib import constraintypes
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import bodyfinder
 from Products.CMFPlone.utils import _createObjectByType
+from plone.app.relationfield.setuphandlers import add_intids
+from plone.app.relationfield.setuphandlers import add_relations
 from plone.i18n.normalizer.interfaces import IURLNormalizer
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletManager
@@ -283,3 +285,13 @@ def importContent(context):
     site = context.getSite()
     setupPortalContent(site)
     assignTitles(site)
+
+
+def setup_base(context):
+    """intid- and zc.relation-catalog needed for linkintegrity
+    """
+    if context.readDataFile('atct-base.txt') is None:
+        return
+    portal = context.getSite()
+    add_intids(portal)
+    add_relations(portal)
