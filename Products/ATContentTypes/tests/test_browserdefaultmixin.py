@@ -6,7 +6,7 @@ from Products.ATContentTypes.tests import atcttestcase
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.ATContentTypes import permission
 from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault as ZopeTwoISelectableBrowserDefault
-from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
+from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
 
 tests = []
 
