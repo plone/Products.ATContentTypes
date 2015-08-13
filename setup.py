@@ -10,8 +10,13 @@ setup(name='Products.ATContentTypes',
       description="Default Content Types for Plone",
       long_description=long_description,
       classifiers=[
-        "Framework :: Plone",
-        ],
+          "Framework :: Plone",
+          "Framework :: Plone :: 4.2",
+          "Framework :: Plone :: 4.3",
+          "Programming Language :: Python",
+          "Programming Language :: Python :: 2.6",
+          "Programming Language :: Python :: 2.7",
+          ],
       keywords='Plone Content Types',
       author='AT Content Types development team',
       author_email='plone-developers@lists.sourceforge.net',
@@ -22,12 +27,12 @@ setup(name='Products.ATContentTypes',
       include_package_data=True,
       zip_safe=False,
       extras_require=dict(
-        test=[
-            'plone.app.blob',
-            'zope.annotation',
-            'zope.testing',
-            'Products.PloneTestCase',
-        ]
+          test=[
+              'plone.app.blob',
+              'zope.annotation',
+              'zope.testing',
+              'Products.PloneTestCase',
+          ]
       ),
       install_requires=[
           'archetypes.referencebrowserwidget',
