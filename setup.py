@@ -1,12 +1,14 @@
 from setuptools import setup, find_packages
 
 version = '2.1.16.dev0'
+long_description = open("README.rst").read()
+long_description += "\n"
+long_description += open("CHANGES.rst").read()
 
 setup(name='Products.ATContentTypes',
       version=version,
       description="Default Content Types for Plone",
-      long_description=open("README.txt").read() + "\n" + \
-                       open("CHANGES.txt").read(),
+      long_description=long_description,
       classifiers=[
         "Framework :: Plone",
         ],
