@@ -141,7 +141,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         self.assertEqual(response.getStatus(), 200)  # ok
 
         response = self.publish('%s/discussion_reply?subject=test&body_text=testbody'
-                                 % self.obj_path, self.basic_auth)
+                                 % self.obj_path, self.basic_auth, request_method='POST')
         self.assertEqual(response.getStatus(), 302)  # Redirect
 
         body = response.getBody()
