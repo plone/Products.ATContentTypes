@@ -4,9 +4,7 @@ Changelog
 2.2.7 (unreleased)
 ------------------
 
-- Add ATTopic-Criteria to types_not_searched.
-  Fixes https://github.com/plone/Products.CMFPlone/issues/872#issuecomment-139402534
-  [pbauer]
+- Nothing changed yet.
 
 
 2.2.6 (2015-07-18)
