@@ -4,7 +4,8 @@ Changelog
 2.2.7 (unreleased)
 ------------------
 
-- Pull value for link_redirect setting from the configuration registry.
+- Pull value for link_redirect, types_view_action_in_listings
+  settings from the configuration registry.
   [esteele]
 
 2.2.6 (2015-07-18)

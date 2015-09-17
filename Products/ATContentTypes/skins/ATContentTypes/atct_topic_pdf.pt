@@ -5,7 +5,7 @@
          xmlns:i18n="http://xml.zope.org/namespaces/i18n"
          filename="report.pdf"
          tal:define="portal python:here.portal_url.getPortalObject();
-                     use_view_action here/portal_properties/site_properties/typesUseViewActionInListings;
+                     use_view_action python:context.portal_registry.get('plone.types_view_action_in_listings', []);
                      toLocalizedTime nocall:here/toLocalizedTime;">
 
   <title tal:content="here/title | nothing">Default Topic</title>
