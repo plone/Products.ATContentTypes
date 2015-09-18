@@ -24,7 +24,7 @@ class ATFolderNextPrevious(object):
         self.context = context
         registry = getUtility(IRegistry)
         self.view_action_types = registry.get(
-            'plone.types_view_action_in_listings', [])
+            'plone.types_use_view_action_in_listings', [])
 
     def getNextItem(self, obj):
         relatives = self.itemRelatives(obj.getId())
