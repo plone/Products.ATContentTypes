@@ -39,9 +39,9 @@ class TestFormatCatalogMetadata(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(self.script('fkj dsh ekjhsdf kjer'), 'fkj dsh ekjhsdf kjer')
 
     def testFormatTruncates(self):
-        self.portal.portal_properties.site_properties.manage_changeProperties(
-                            search_results_description_length=12, ellipsis='???')
-        self.assertEqual(self.script('fkj dsh ekjhsdf kjer'), 'fkj dsh ekjh???')
+        registry = self.portal.portal_registry
+        registry['plone.search_results_description_length'] = 12
+        self.assertEqual(self.script('fkj dsh ekjhsdf kjer'), 'fkj dsh ekjh...')
 
     def testFormatStrange(self):
         self.assertEqual(self.script(None), '')
