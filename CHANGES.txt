@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.2.7 (unreleased)
+2.2.7 (2015-09-20)
 ------------------
 
 - Pull value for link_redirect, types_view_action_in_listings
