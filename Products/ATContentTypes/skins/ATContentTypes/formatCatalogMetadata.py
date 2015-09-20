@@ -54,14 +54,9 @@ if not same_type(value, u''):
     value = str(value)
 
 pt = context.portal_properties
-site_props = getattr(pt, 'site_properties', None)
-if site_props is not None:
-    max_length = site_props.getProperty(
-        'search_results_description_length', 160)
-    ellipsis = site_props.getProperty('ellipsis', '...')
-else:
-    max_length = 160
-    ellipsis = '...'
+registry = context.portal_registry
+max_length = registry['plone.search_results_description_length']
+ellipsis = '...'
 if len(value) < max_length:
     return value
 else:

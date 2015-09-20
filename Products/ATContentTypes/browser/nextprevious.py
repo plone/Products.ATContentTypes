@@ -1,10 +1,12 @@
 from zope.interface import implements
 from zope.component import adapts
+from zope.component import getUtility
 
 from plone.app.layout.nextprevious.interfaces import INextPreviousProvider
 from Products.ATContentTypes.interfaces.folder import IATFolder
 
 from plone.memoize.instance import memoize
+from plone.registry.interfaces import IRegistry
 
 from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
@@ -20,9 +22,9 @@ class ATFolderNextPrevious(object):
 
     def __init__(self, context):
         self.context = context
-
-        sp = getToolByName(self.context, 'portal_properties').site_properties
-        self.view_action_types = sp.getProperty('typesUseViewActionInListings', ())
+        registry = getUtility(IRegistry)
+        self.view_action_types = registry.get(
+            'plone.types_use_view_action_in_listings', [])
 
     def getNextItem(self, obj):
         relatives = self.itemRelatives(obj.getId())

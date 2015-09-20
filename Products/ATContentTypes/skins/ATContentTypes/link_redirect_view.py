@@ -14,10 +14,9 @@ Redirect to the Link target URL, if and only if:
 
 from Products.CMFCore.utils import getToolByName
 
-ptool = getToolByName(context, 'portal_properties')
 mtool = getToolByName(context, 'portal_membership')
 
-redirect_links = getattr(ptool.site_properties, 'redirect_links', False)
+redirect_links = context.portal_registry['plone.redirect_links']
 can_edit = mtool.checkPermission('Modify portal content', context)
 
 if redirect_links and not can_edit:
