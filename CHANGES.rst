@@ -4,7 +4,8 @@ Changelog
 2.1.17 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Tests: use POST for discussion_reply.
+  [maurits]
 
 
 2.1.16 (2015-08-14)
