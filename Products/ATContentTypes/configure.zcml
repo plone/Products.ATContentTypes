@@ -45,7 +45,7 @@
     />
 
   <genericsetup:registerProfile
-      name="default"
+      name="install"
       title="Archetypes Content Types for Plone"
       directory="profiles/default"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
