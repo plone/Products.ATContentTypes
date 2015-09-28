@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.17 (unreleased)
+2.1.17 (2015-09-28)
 -------------------
 
 - Tests: use POST for discussion_reply.
