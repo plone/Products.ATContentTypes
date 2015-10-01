@@ -1,20 +1,16 @@
-import unittest
-
-from Testing import ZopeTestCase  # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
-
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.Archetypes import atapi
-from Products.ATContentTypes.tests.utils import dcEdit
-
+from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.ATContentTypes.content.newsitem import ATNewsItem
-from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
-from Products.ATContentTypes.interfaces import ITextContent
-from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import IATNewsItem
+from Products.ATContentTypes.interfaces import IImageContent
+from Products.ATContentTypes.interfaces import ITextContent
+from Products.ATContentTypes.tests import atcttestcase, atctftestcase
+from Products.ATContentTypes.tests.utils import dcEdit
+from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
 from zope.interface.verify import verifyObject
+import unittest
 
 
 tests = []

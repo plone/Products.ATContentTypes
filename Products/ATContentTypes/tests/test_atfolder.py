@@ -1,17 +1,13 @@
-import unittest
-
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
-
-from Products.ATContentTypes.tests.utils import dcEdit
-from Products.ATContentTypes.content.folder import ATFolder
-from Products.ATContentTypes.content.folder import ATBTreeFolder
 from OFS.interfaces import IOrderedContainer as IOrderedContainer
-from Products.ATContentTypes.interfaces import IATFolder
-from Products.ATContentTypes.interfaces import IATBTreeFolder
 from plone.app.testing import SITE_OWNER_NAME as portal_owner
-
-from zope.interface.verify import verifyObject
+from Products.ATContentTypes.content.folder import ATBTreeFolder
+from Products.ATContentTypes.content.folder import ATFolder
+from Products.ATContentTypes.interfaces import IATBTreeFolder
+from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
+from Products.ATContentTypes.tests import atcttestcase, atctftestcase
+from Products.ATContentTypes.tests.utils import dcEdit
+from zope.interface.verify import verifyObject
 
 
 def editATCT(obj):

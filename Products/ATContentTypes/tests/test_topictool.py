@@ -1,12 +1,9 @@
-import unittest
-
-from Testing import ZopeTestCase  # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
-
-from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.interfaces import IATCTTopicsTool
+from Products.ATContentTypes.tests import atcttestcase
+from Products.CMFCore.utils import getToolByName
 from zope.interface.verify import verifyObject
+import unittest
 
 tests = []
 index_def = {'index': 'end',
@@ -98,14 +95,14 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         t.removeIndex(index_def['index'])
         error = None
         try:
-            index = t.topic_indexes[index_def['index']]
+            t.topic_indexes[index_def['index']]
         except KeyError:
             error = True
         self.assertTrue(error)
 
         error = True
         try:
-            index = t.getIndex(index_def['index'])
+            t.getIndex(index_def['index'])
         except AttributeError:
             error = False
         self.assertFalse(error)
@@ -220,14 +217,14 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         t.removeMetadata(meta_def['metadata'])
         error = None
         try:
-            meta = t.topic_metadata[meta_def['metadata']]
+            t.topic_metadata[meta_def['metadata']]
         except KeyError:
             error = True
         self.assertTrue(error)
 
         error = True
         try:
-            meta = t.getMetadata(meta_def['metadata'])
+            t.getMetadata(meta_def['metadata'])
         except AttributeError:
             error = False
         self.assertFalse(error)

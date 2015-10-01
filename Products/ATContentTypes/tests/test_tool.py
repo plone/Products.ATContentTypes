@@ -1,11 +1,9 @@
-import unittest
-
-from Testing import ZopeTestCase  # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.interfaces import IATCTTool
-from zope.interface.verify import verifyObject
+from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 from Products.CMFCore.utils import getToolByName
+from zope.interface.verify import verifyObject
+import unittest
 
 tests = []
 

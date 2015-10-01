@@ -1,20 +1,14 @@
-from zope.component import getUtility
-from plone.keyring.interfaces import IKeyManager
-
-from Products.ATContentTypes.tests import atcttestcase
-
-from Products.CMFCore.utils import getToolByName
-from plone.app.testing import TEST_USER_NAME
-from plone.app.testing import TEST_USER_ID
-from plone.app.testing import TEST_USER_PASSWORD
-from plone.app.testing import PLONE_SITE_ID as portal_name
+from hashlib import sha1 as sha
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
-
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
+from plone.app.testing import TEST_USER_PASSWORD
+from plone.keyring.interfaces import IKeyManager
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
-
+from Products.ATContentTypes.tests import atcttestcase
+from zope.component import getUtility
 import hmac
-from hashlib import sha1 as sha
 
 
 class IntegrationTestCase(atcttestcase.ATCTFunctionalSiteTestCase):
@@ -60,7 +54,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         # create test object
         self.obj_id = 'test_object'
         self.title = u'test \xf6bject'
-        if not self.obj_id in self.folder:
+        if self.obj_id not in self.folder:
             self.folder.invokeFactory(
                 self.portal_type, self.obj_id, title=self.title)
         self.obj = getattr(self.folder.aq_explicit, self.obj_id)

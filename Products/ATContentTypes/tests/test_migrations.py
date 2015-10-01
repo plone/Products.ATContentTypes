@@ -1,8 +1,6 @@
-from Testing import ZopeTestCase  # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
-
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.migration.v1_2 import upgradeATCTTool
+from Products.ATContentTypes.tests import atcttestcase
 from Products.CMFCore.utils import getToolByName
 
 

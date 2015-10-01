@@ -1,27 +1,20 @@
 # -*- coding: utf-8 -*-
-
-import unittest
-
 from cStringIO import StringIO
-import os
-
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes import atapi
 from plone.app.blob.content import ATBlob
-from Products.ATContentTypes.interfaces import IImageContent
+from plone.app.testing.bbb import PloneTestCase as FunctionalTestCase
+from plone.testing.z2 import Browser
+from Products.Archetypes import atapi
+from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.ATContentTypes.interfaces import IATImage
+from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
-from plone.app.testing.bbb import PloneTestCase as FunctionalTestCase
-from zope.interface.verify import verifyObject
-
-from plone.testing.z2 import Browser
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
 from transaction import commit
-
-# third party extension
+from zope.interface.verify import verifyObject
 import exif
+import os
 
 
 def loadImage(name, size=0):
@@ -189,7 +182,8 @@ class TestSiteATImage(atcttestcase.ATCTTypeTestCase):
         f = StringIO(TEST_EXIF_ERROR)
         exif_data = exif.process_file(f, debug=False)
         # probably want to add some tests on returned data. Currently gives
-        #  ValueError in process_file
+        #  ValueError in process_file.  Actually, no it does not.
+        self.assertEqual(exif_data.get('EXIF ColorSpace'), '1')
 
     def test_exif_upload(self):
         atct = self._ATCT
@@ -237,7 +231,7 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
-        self.assertTrue(field.default == None, 'Value is %s' %
+        self.assertTrue(field.default is None, 'Value is %s' %
                         str(field.default))
         self.assertTrue(field.searchable == 0, 'Value is %s' %
                         field.searchable)

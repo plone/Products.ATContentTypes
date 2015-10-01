@@ -1,25 +1,21 @@
-import unittest
-
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
-
-import transaction
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.Archetypes.interfaces.layer import ILayerContainer
+from cgi import FieldStorage
 from Products.Archetypes import atapi
-from Products.ATContentTypes.tests.utils import dcEdit
-
+from Products.Archetypes.interfaces.layer import ILayerContainer
+from Products.ATContentTypes import config as atct_config
 from Products.ATContentTypes.content.document import ATDocument
-from Products.ATContentTypes.lib.validators import TidyHtmlWithCleanupValidator
-from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
-from Products.ATContentTypes.tests.utils import input_file_path
+from Products.ATContentTypes.interfaces import IATDocument
 from Products.ATContentTypes.interfaces import IHistoryAware
 from Products.ATContentTypes.interfaces import ITextContent
-from Products.ATContentTypes.interfaces import IATDocument
+from Products.ATContentTypes.lib.validators import TidyHtmlWithCleanupValidator
+from Products.ATContentTypes.tests import atcttestcase, atctftestcase
+from Products.ATContentTypes.tests.utils import dcEdit
+from Products.ATContentTypes.tests.utils import input_file_path
+from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
 from zope.interface.verify import verifyObject
-from cgi import FieldStorage
-from Products.ATContentTypes import config as atct_config
 from ZPublisher.HTTPRequest import FileUpload
+import transaction
 
 example_stx = """
 Header
@@ -281,11 +277,9 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
         self.assertEqual(response.getStatus(), 200)  # OK
 
         # Change the title
-        temp_id = location.split('/')[-2]
         obj_title = "New Title for Object"
         new_id = "new-title-for-object"
         new_obj = self.folder.portal_factory._getTempFolder('Document')[new_id]
-        #new_obj = getattr(self.folder.aq_explicit, temp_id)
         new_obj_path = '/%s' % new_obj.absolute_url(1)
         # object is not yet edited
         self.assertEqual(new_obj.checkCreationFlag(), True)

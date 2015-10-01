@@ -1,23 +1,22 @@
+from DateTime import DateTime
+from Products.Archetypes import atapi
+from Products.Archetypes.interfaces.layer import ILayerContainer
+from Products.ATContentTypes.content.event import ATEvent
+from Products.ATContentTypes.interfaces import IATEvent
+from Products.ATContentTypes.interfaces import ICalendarSupport
+from Products.ATContentTypes.tests import atcttestcase, atctftestcase
+from Products.ATContentTypes.tests.utils import dcEdit
+from Products.ATContentTypes.tests.utils import EmailValidator
+from Products.ATContentTypes.tests.utils import EmptyValidator
+from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
+from Products.ATContentTypes.tests.utils import URLValidator
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from Testing import ZopeTestCase  # side effect import. leave it here.
+from zope.interface.verify import verifyObject
 import unittest
 
-from Testing import ZopeTestCase  # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
-
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes import atapi
-from Products.ATContentTypes.tests.utils import dcEdit
-
-from Products.ATContentTypes.content.event import ATEvent
-from Products.ATContentTypes.tests.utils import EmptyValidator
-from Products.ATContentTypes.tests.utils import EmailValidator
-from Products.ATContentTypes.tests.utils import URLValidator
-from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
-from DateTime import DateTime
-from Products.ATContentTypes.interfaces import ICalendarSupport
-from Products.ATContentTypes.interfaces import IATEvent
-from zope.interface.verify import verifyObject
+ZopeTestCase  # pyflakes
 
 
 LOCATION = 'my location'
@@ -273,11 +272,11 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
-        self.assertTrue(field.default == None, 'Value is %s' %
+        self.assertTrue(field.default is None, 'Value is %s' %
                         str(field.default))
         self.assertTrue(field.default_method == DateTime,
                         'Value is %s' % str(field.default_method))
-        self.assertTrue(field.searchable == False,
+        self.assertTrue(field.searchable is False,
                         'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
@@ -320,11 +319,11 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
-        self.assertTrue(field.default == None, 'Value is %s' %
+        self.assertTrue(field.default is None, 'Value is %s' %
                         str(field.default))
         self.assertTrue(field.default_method == DateTime,
                         'Value is %s' % str(field.default_method))
-        self.assertTrue(field.searchable == False,
+        self.assertTrue(field.searchable is False,
                         'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))

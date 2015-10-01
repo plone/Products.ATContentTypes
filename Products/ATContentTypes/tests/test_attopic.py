@@ -1,25 +1,19 @@
-import unittest
-
-from Testing import ZopeTestCase  # side effect import. leave it here.
+from OFS.interfaces import IOrderedContainer
+from Products.Archetypes import atapi
+from Products.Archetypes.Field import BooleanField
+from Products.Archetypes.interfaces.layer import ILayerContainer
+from Products.ATContentTypes.content.folder import ATFolder
+from Products.ATContentTypes.content.topic import ATTopic
+from Products.ATContentTypes.interfaces import IATTopic
+from Products.ATContentTypes.permission import ChangeTopics
 from Products.ATContentTypes.tests import atcttestcase, atctftestcase
 from Products.ATContentTypes.tests.utils import dcEdit
-
-from Products.CMFCore.permissions import View
-from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes import atapi
-
-from Products.Archetypes.Field import BooleanField
-from Products.CMFCore.utils import getToolByName
-
-from Products.ATContentTypes.permission import ChangeTopics
-from Products.ATContentTypes.content.topic import ATTopic
-from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.tests.utils import EmptyValidator
-from Products.ATContentTypes.interfaces import IATTopic
-from zope.interface.verify import verifyObject
-from OFS.interfaces import IOrderedContainer
-
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.PloneBatch import Batch
+from zope.interface.verify import verifyObject
+import unittest
 
 
 ACQUIRE = True
@@ -436,7 +430,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.assertTrue([i for i in topic.listAvailableFields()
                          if i[0] == 'created'])
         # Add a normal criteria for the same field
-        crit = topic.addCriterion('created', 'ATFriendlyDateCriteria')
+        topic.addCriterion('created', 'ATFriendlyDateCriteria')
         # It should no longer be available
         self.assertFalse([i for i in topic.listAvailableFields()
                           if i[0] == 'created'])
@@ -475,7 +469,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == False, 'Value is %s' %
+        self.assertFalse(field.default, 'Value is %s' %
                         str(field.default))
         self.assertTrue(field.searchable == 0, 'Value is %s' %
                         field.searchable)
@@ -520,7 +514,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == False, 'Value is %s' %
+        self.assertFalse(field.default, 'Value is %s' %
                         str(field.default))
         self.assertTrue(field.searchable == 0, 'Value is %s' %
                         field.searchable)
@@ -608,7 +602,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == False, 'Value is %s' %
+        self.assertFalse(field.default, 'Value is %s' %
                         str(field.default))
         self.assertTrue(field.searchable == 0, 'Value is %s' %
                         field.searchable)
@@ -659,7 +653,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
                         field.searchable)
         self.assertTrue(field.vocabulary == 'listMetaDataFields',
                         'Value is %s' % str(field.vocabulary))
-        self.assertTrue(field.enforceVocabulary == True,
+        self.assertTrue(field.enforceVocabulary,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)

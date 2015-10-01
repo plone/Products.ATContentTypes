@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-
 from plone.app.testing.bbb import PloneTestCase
 from Products.CMFCore.utils import getToolByName
-from Products.CMFDynamicViewFTI.interfaces import IDynamicViewTypeInformation
 
 
 class TestBaseProfile(PloneTestCase):

@@ -10,8 +10,8 @@ Those tests make sure that the catalog is only called as necessary.
   >>> from Products.Archetypes.utils import wrap_method
   >>> from Products.Archetypes.utils import unwrap_method
   >>> from Products.Archetypes.utils import call_original as call
-  >>> from Products.ATContentTypes.tests.atcttestcase import default_user
-  >>> from Products.ATContentTypes.tests.atcttestcase import portal_owner
+  >>> from plone.app.testing import TEST_USER_NAME as default_user
+  >>> from plone.app.testing import SITE_OWNER_NAME as portal_owner
   >>> import transaction
 
   >>> from plone.app.testing import TEST_USER_ID, setRoles

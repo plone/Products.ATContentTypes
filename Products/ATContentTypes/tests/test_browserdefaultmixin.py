@@ -1,12 +1,9 @@
-import unittest
-import re
-
-from Testing import ZopeTestCase  # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
-
-from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.ATContentTypes import permission
+from Products.ATContentTypes.tests import atcttestcase
+from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
+import re
+import unittest
 
 tests = []
 

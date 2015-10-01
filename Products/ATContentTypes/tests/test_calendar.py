@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
-
-from unittest import defaultTestLoader
-from zope.interface import classImplements
-from zope.component import getMultiAdapter
-from zope.publisher.browser import TestRequest
-from zope.annotation.interfaces import IAttributeAnnotatable
-
-from Products.ATContentTypes.tests.atcttestcase import ATCTSiteTestCase
-from Products.ATContentTypes.interfaces import ICalendarSupport
 from Products.ATContentTypes.browser.calendar import cachekey
+from Products.ATContentTypes.interfaces import ICalendarSupport
+from Products.ATContentTypes.tests.atcttestcase import ATCTSiteTestCase
+from unittest import defaultTestLoader
+from zope.annotation.interfaces import IAttributeAnnotatable
+from zope.component import getMultiAdapter
+from zope.interface import classImplements
+from zope.publisher.browser import TestRequest
 
 
 def makeResponse(request):
@@ -33,14 +31,16 @@ class EventCalendarTests(ATCTSiteTestCase):
     def afterSetUp(self):
         super(EventCalendarTests, self).afterSetUp()
         folder = self.folder
-        event1 = folder[folder.invokeFactory('Event',
-                                             id='ploneconf2007', title='Plone Conf 2007',
-                                             startDate='2007/10/10', endDate='2007/10/12', location='Naples',
-                                             eventUrl='http://plone.org/events/conferences/2007-naples')]
-        event2 = folder[folder.invokeFactory('Event',
-                                             id='ploneconf2008', title='Plone Conf 2008',
-                                             startDate='2008/10/08', endDate='2008/10/10', location='DC',
-                                             eventUrl='http://plone.org/events/conferences/2008-washington-dc')]
+        folder.invokeFactory(
+            'Event',
+            id='ploneconf2007', title='Plone Conf 2007',
+            startDate='2007/10/10', endDate='2007/10/12', location='Naples',
+            eventUrl='http://plone.org/events/conferences/2007-naples')
+        folder.invokeFactory(
+            'Event',
+            id='ploneconf2008', title='Plone Conf 2008',
+            startDate='2008/10/08', endDate='2008/10/10', location='DC',
+            eventUrl='http://plone.org/events/conferences/2008-washington-dc')
         classImplements(TestRequest, IAttributeAnnotatable)
 
     def testCalendarView(self):
@@ -61,9 +61,10 @@ class EventCalendarTests(ATCTSiteTestCase):
         self.assertEqual(len(view.events), 1)
         self.assertEqual(sorted([e.Title for e in view.events]),
                          ['Plone Conf 2008'])
-        folder[folder.invokeFactory('Event',
-                                    id='inaug09', title='Inauguration Day 2009',
-                                    startDate='2009/01/20', endDate='2009/01/20', location='DC')]
+        folder.invokeFactory(
+            'Event',
+            id='inaug09', title='Inauguration Day 2009',
+            startDate='2009/01/20', endDate='2009/01/20', location='DC')
         view.update()
         self.assertEqual(len(view.events), 2)
         self.assertEqual(sorted([e.Title for e in view.events]),
@@ -71,7 +72,6 @@ class EventCalendarTests(ATCTSiteTestCase):
 
     def testDuplicateQueryParameters(self):
         self.setRoles(('Manager',))
-        folder = self.folder
         topic = self.folder[self.folder.invokeFactory('Topic', id='dc')]
         crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
         crit.setValue('Event')
@@ -153,7 +153,6 @@ class EventCalendarTests(ATCTSiteTestCase):
 
     def testRenderingForTopic(self):
         self.setRoles(('Manager',))
-        folder = self.folder
         topic = self.folder[self.folder.invokeFactory('Topic', id='dc')]
         crit = topic.addCriterion('SearchableText', 'ATSimpleStringCriterion')
         crit.setValue('DC')

@@ -1,9 +1,7 @@
-import unittest
-
-from Testing import ZopeTestCase  # side effect import. leave it here.
-from Products.ATContentTypes.tests import atcttestcase
 from DateTime import DateTime
+from Products.ATContentTypes.tests import atcttestcase
 import Missing
+import unittest
 
 tests = []
 

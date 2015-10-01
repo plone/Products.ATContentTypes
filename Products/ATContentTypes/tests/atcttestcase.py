@@ -1,25 +1,11 @@
-from Testing import ZopeTestCase
-from plone.app.testing.bbb import PloneTestCase
+from plone.app.blob.markings import markAs
 from plone.app.testing import TEST_USER_ID as default_user
-from plone.app.testing import TEST_USER_PASSWORD as default_password
-from plone.app.testing import PLONE_SITE_ID as portal_name
-from plone.app.testing import SITE_OWNER_NAME as portal_owner
-
-import os
-
-from zope.interface.verify import verifyObject
-
-from Products.CMFCore.interfaces import IDublinCore
-from Products.CMFCore.interfaces import IMutableDublinCore
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.utils import getToolByName
-from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
+from plone.app.testing.bbb import PloneTestCase
 from Products.Archetypes.atapi import AttributeStorage
 from Products.Archetypes.atapi import DisplayList
 from Products.Archetypes.atapi import IdWidget
-from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import MetadataStorage
+from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import TextAreaWidget
 from Products.Archetypes.interfaces.base import IBaseContent
 from Products.Archetypes.interfaces.layer import ILayerContainer
@@ -27,14 +13,19 @@ from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.Archetypes.interfaces.templatemixin import ITemplateMixin
 from Products.Archetypes.tests.test_baseschema import BaseSchemaTest
 from Products.Archetypes.Widget import RelatedItemsWidget
-
-from plone.app.blob.markings import markAs
-
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.interfaces import IATContentType
 from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.ATContentTypes.tests.utils import idValidator
+from Products.CMFCore.interfaces import IDublinCore
+from Products.CMFCore.interfaces import IMutableDublinCore
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
+from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
+from zope.interface.verify import verifyObject
+import os
 
 test_home = os.path.dirname(__file__)
 
@@ -153,7 +144,7 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
     def compareDC(self, first, second=None, **kwargs):
         """
         """
-        if second != None:
+        if second is not None:
             title = second.Title()
             description = second.Description()
         else:
@@ -240,7 +231,7 @@ class ATCTFieldTestCase(ATCTSiteTestCase, BaseSchemaTest):
         self.assertEqual(field.read_permission, View)
         self.assertEqual(field.write_permission, ModifyPortalContent)
         self.assertEqual(field.generateMode, 'mVc')
-        #self.assertTrue(field.generateMode == 'veVc', field.generateMode)
+        # self.assertTrue(field.generateMode == 'veVc', field.generateMode)
         self.assertEqual(field.force, '')
         self.assertEqual(field.type, 'text')
         self.assertTrue(isinstance(field.storage, MetadataStorage))

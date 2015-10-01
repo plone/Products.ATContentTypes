@@ -1,9 +1,6 @@
-import unittest
-
-from Testing import ZopeTestCase  # side effect import. leave it here.
+from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.tests import atcttestcase
 from Products.validation.interfaces.IValidator import IValidationChain
-from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
 tests = []
 
