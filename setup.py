@@ -5,14 +5,14 @@ version = '2.2.8.dev0'
 setup(name='Products.ATContentTypes',
       version=version,
       description="Default Content Types for Plone",
-      long_description=open("README.txt").read() + "\n" + \
-                       open("CHANGES.txt").read(),
+      long_description=open("README.txt").read() + "\n" +
+      open("CHANGES.txt").read(),
       classifiers=[
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
-        "Framework :: Plone",
-        "Framework :: Plone :: 5.0",
-        ],
+          "Programming Language :: Python",
+          "Programming Language :: Python :: 2.7",
+          "Framework :: Plone",
+          "Framework :: Plone :: 5.0",
+      ],
       keywords='Plone Content Types',
       author='AT Content Types development team',
       author_email='plone-developers@lists.sourceforge.net',
@@ -23,11 +23,11 @@ setup(name='Products.ATContentTypes',
       include_package_data=True,
       zip_safe=False,
       extras_require=dict(
-        test=[
-            'zope.annotation',
-            'zope.testing',
-            'plone.app.testing',
-        ]
+          test=[
+              'zope.annotation',
+              'zope.testing',
+              'plone.app.testing',
+          ]
       ),
       install_requires=[
           'setuptools',

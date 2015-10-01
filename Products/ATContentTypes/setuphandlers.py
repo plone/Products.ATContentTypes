@@ -99,22 +99,22 @@ def setupPortalContent(p):
             util = queryUtility(ITranslationDomain, 'plonefrontpage')
             if util is not None:
                 front_title = util.translate(
-                                    u'front-title',
-                                    target_language=target_language,
-                                    default="Welcome to Plone")
+                    u'front-title',
+                    target_language=target_language,
+                    default="Welcome to Plone")
                 front_desc = util.translate(
                     u'front-description',
                     target_language=target_language,
                     default="Congratulations! You have successfully installed "
                             "Plone.")
                 translated_text = util.translate(u'front-text',
-                                   target_language=target_language)
+                                                 target_language=target_language)
                 if translated_text != u'front-text':
                     front_text = translated_text
 
         if front_text is None and request is not None:
             view = queryMultiAdapter((p, request),
-                name='plone-frontpage-setup')
+                                     name='plone-frontpage-setup')
             if view is not None:
                 front_text = bodyfinder(view.index()).strip()
 
@@ -141,11 +141,11 @@ def setupPortalContent(p):
             util = queryUtility(ITranslationDomain, 'plonefrontpage')
             if util is not None:
                 news_title = util.translate(u'news-title',
-                                       target_language=target_language,
-                                       default='News')
+                                            target_language=target_language,
+                                            default='News')
                 news_desc = util.translate(u'news-description',
-                                      target_language=target_language,
-                                      default='Site News')
+                                           target_language=target_language,
+                                           default='Site News')
 
         _createObjectByType('Folder', p, id='news',
                             title=news_title, description=news_desc)
@@ -191,11 +191,11 @@ def setupPortalContent(p):
             util = queryUtility(ITranslationDomain, 'plonefrontpage')
             if util is not None:
                 events_title = util.translate(u'events-title',
-                                       target_language=target_language,
-                                       default='Events')
+                                              target_language=target_language,
+                                              default='Events')
                 events_desc = util.translate(u'events-description',
-                                      target_language=target_language,
-                                      default='Site Events')
+                                             target_language=target_language,
+                                             default='Site Events')
 
         _createObjectByType('Folder', p, id='events',
                             title=events_title, description=events_desc)
@@ -246,11 +246,11 @@ def setupPortalContent(p):
             util = queryUtility(ITranslationDomain, 'plonefrontpage')
             if util is not None:
                 members_title = util.translate(u'members-title',
-                                       target_language=target_language,
-                                       default='Users')
+                                               target_language=target_language,
+                                               default='Users')
                 members_desc = util.translate(u'members-description',
-                                      target_language=target_language,
-                                      default="Site Users")
+                                              target_language=target_language,
+                                              default="Site Users")
 
         members = getattr(p, 'Members')
         members.setTitle(members_title)
@@ -269,8 +269,8 @@ def setupPortalContent(p):
         manager = queryUtility(IPortletManager, name='plone.rightcolumn')
         if manager is not None:
             assignable = queryMultiAdapter(
-                            (members, manager),
-                            ILocalPortletAssignmentManager)
+                (members, manager),
+                ILocalPortletAssignmentManager)
             assignable.setBlacklistStatus('context', True)
             assignable.setBlacklistStatus('group', True)
             assignable.setBlacklistStatus('content_type', True)

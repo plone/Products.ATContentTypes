@@ -22,7 +22,7 @@ DATE_INDICES = ('DateIndex', 'DateRangeIndex', 'FieldIndex')
 
 # Indices that can take a list of values
 LIST_INDICES = ('FieldIndex', 'KeywordIndex', 'PathIndex', 'NavtreeIndexNG',
-                  'ExtendedPathIndex', 'TopicIndex')
+                'ExtendedPathIndex', 'TopicIndex')
 
 TEXT_INDICES = ('TextIndex', 'TextIndexNG2', 'TextIndexNG3', 'ZCTextIndex')
 
@@ -79,11 +79,11 @@ class _CriterionRegistry(UserDict):
 
     def listSortTypes(self):
         return [key for key in self.keys()
-                    if IATTopicSortCriterion.implementedBy(self[key])]
+                if IATTopicSortCriterion.implementedBy(self[key])]
 
     def listSearchTypes(self):
         return [key for key in self.keys()
-                    if IATTopicSearchCriterion.implementedBy(self[key])]
+                if IATTopicSearchCriterion.implementedBy(self[key])]
 
     def listCriteria(self):
         return self.values()

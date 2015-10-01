@@ -22,18 +22,18 @@ from Products.ATContentTypes import ATCTMessageFactory as _
 
 ATLinkSchema = ATContentTypeSchema.copy() + Schema((
     StringField('remoteUrl',
-        required=True,
-        searchable=True,
-        primary=True,
-        default="http://",
-        # either mailto, absolute url or relative url
-        validators=(),
-        widget=StringWidget(
-            description='',
-            label=_(u'label_url', default=u'URL'),
-            maxlength='511',
-            )),
-    ))
+                required=True,
+                searchable=True,
+                primary=True,
+                default="http://",
+                # either mailto, absolute url or relative url
+                validators=(),
+                widget=StringWidget(
+                    description='',
+                    label=_(u'label_url', default=u'URL'),
+                    maxlength='511',
+                )),
+))
 finalizeATCTSchema(ATLinkSchema)
 
 
@@ -54,6 +54,7 @@ class ATLink(ATCTContent):
     security = ClassSecurityInfo()
 
     security.declareProtected(ModifyPortalContent, 'setRemoteUrl')
+
     def setRemoteUrl(self, value, **kwargs):
         """remute url mutator
 
@@ -65,23 +66,27 @@ class ATLink(ATCTContent):
         self.getField('remoteUrl').set(self, value, **kwargs)
 
     security.declareProtected(View, 'remote_url')
+
     def remote_url(self):
         """CMF compatibility method
         """
         return self.getRemoteUrl()
 
     security.declarePrivate('cmf_edit')
+
     def cmf_edit(self, remote_url=None, **kwargs):
         if not remote_url:
             remote_url = kwargs.get('remote_url', None)
         self.update(remoteUrl=remote_url, **kwargs)
 
     security.declareProtected(View, 'getRemoteUrl')
+
     def getRemoteUrl(self):
         """Sanitize output
         """
         value = self.Schema()['remoteUrl'].get(self)
-        if not value: value = ''  # ensure we have a string
+        if not value:
+            value = ''  # ensure we have a string
         return quote(value, safe='?$#@/:=+;$,&%')
 
 registerATCT(ATLink, PROJECTNAME)

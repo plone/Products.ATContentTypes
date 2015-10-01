@@ -24,35 +24,36 @@ DirectionOperations = DisplayList((
     ('min', _(u'Greater than')),
     ('max', _(u'Less than')),
     ('min:max', _(u'Between')),
-    ))
+))
 
 ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
     IntegerField('value',
-                required=1,
-                mode="rw",
-                write_permission=ChangeTopics,
-                accessor="Value",
-                mutator="setValue",
-                default=None,
-                widget=IntegerWidget(
-                    label=_(u'label_int_criteria_value', default=u'Value'),
-                    description=_(u'help_int_criteria_value',
-                                  default=u'An integer number.')
-                    ),
-                ),
+                 required=1,
+                 mode="rw",
+                 write_permission=ChangeTopics,
+                 accessor="Value",
+                 mutator="setValue",
+                 default=None,
+                 widget=IntegerWidget(
+                     label=_(u'label_int_criteria_value', default=u'Value'),
+                     description=_(u'help_int_criteria_value',
+                                   default=u'An integer number.')
+                 ),
+                 ),
     IntegerField('value2',
-                required=0,
-                mode="rw",
-                write_permission=ChangeTopics,
-                accessor="Value2",
-                mutator="setValue2",
-                default=None,
-                widget=IntegerWidget(
-                    label=_(u'label_int_criteria_value2', default=u'Second Value'),
-                    description=_(u'help_int_criteria_value2',
-                                  default=u'An integer number used as the maximum value if the between direction is selected.')
-                    ),
-                ),
+                 required=0,
+                 mode="rw",
+                 write_permission=ChangeTopics,
+                 accessor="Value2",
+                 mutator="setValue2",
+                 default=None,
+                 widget=IntegerWidget(
+                     label=_(u'label_int_criteria_value2',
+                             default=u'Second Value'),
+                     description=_(u'help_int_criteria_value2',
+                                   default=u'An integer number used as the maximum value if the between direction is selected.')
+                 ),
+                 ),
     StringField('direction',
                 required=0,
                 mode="rw",
@@ -61,12 +62,13 @@ ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
                 vocabulary=DirectionOperations,
                 enforceVocabulary=1,
                 widget=SelectionWidget(
-                    label=_(u'label_int_criteria_direction', default=u'Direction'),
+                    label=_(u'label_int_criteria_direction',
+                            default=u'Direction'),
                     description=_(u'help_int_criteria_direction',
                                   default=u'Specify whether you want to find values lesser than, greater than, equal to, or between the chosen value(s).')
-                    ),
                 ),
-    ))
+                ),
+))
 
 
 class ATSimpleIntCriterion(ATBaseCriterion):
@@ -81,6 +83,7 @@ class ATSimpleIntCriterion(ATBaseCriterion):
     shortDesc = 'Integer value or range'
 
     security.declareProtected(View, 'getCriteriaItems')
+
     def getCriteriaItems(self):
         result = []
         val = self.Value()
@@ -91,13 +94,15 @@ class ATSimpleIntCriterion(ATBaseCriterion):
             else:
                 val = int(val)
             if direction:
-                result.append((self.Field(), {'query': val, 'range': direction}))
+                result.append(
+                    (self.Field(), {'query': val, 'range': direction}))
             else:
                 result.append((self.Field(), {'query': val}))
 
         return tuple(result)
 
     security.declareProtected(View, 'post_validate')
+
     def post_validate(self, REQUEST, errors):
         """Check that Value2 is set if range is set to min:max"""
         direction = REQUEST.get('direction', self.getDirection())

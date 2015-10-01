@@ -73,15 +73,18 @@ class TestATNewsItemFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == '', 'Value is %s' %
+                        str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'getText',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setText',

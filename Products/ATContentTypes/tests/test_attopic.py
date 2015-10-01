@@ -29,25 +29,25 @@ CUSTOM = True
 FIELDS = ('start', 'end', 'Creator')
 
 CRITERIA_SETUP = {'Integer Criterion':  # Meta Type
-                        ('portal_type',  # Field
-                         '10 10',  # Value
-                         'min:max'),  # Direction
+                  ('portal_type',  # Field
+                   '10 10',  # Value
+                   'min:max'),  # Direction
                   'String Criterion':
-                        ('SearchableText',
-                         'portal'),
+                  ('SearchableText',
+                   'portal'),
                   'Friendly Date Criterion':
-                        ('start',
-                         '10',
-                         'within_day',  # Operation
-                         'ahead'),  # DateRange
+                  ('start',
+                   '10',
+                   'within_day',  # Operation
+                   'ahead'),  # DateRange
                   'List Criterion':
-                        ('Subject',
-                         "value1\nportal\ntest",
-                         'OR'),  # Operator
+                  ('Subject',
+                   "value1\nportal\ntest",
+                   'OR'),  # Operator
                   'Sort Criterion':
-                        ('getId',
-                         False),  # Reversed
-                }
+                  ('getId',
+                   False),  # Reversed
+                  }
 
 CRIT_MAP = {'Integer Criterion': 'ATSimpleIntCriterion',
             'String Criterion': 'ATSimpleStringCriterion',
@@ -63,8 +63,8 @@ def editATCT(obj):
     obj.setAcquireCriteria(ACQUIRE)
     obj.setLimitNumber(LIMIT)
     obj.setItemCount(COUNT)
-    #obj.setCustomView(CUSTOM)
-    #obj.setCustomViewFields(FIELDS)
+    # obj.setCustomView(CUSTOM)
+    # obj.setCustomViewFields(FIELDS)
     for meta in CRITERIA_SETUP.keys():
         AT_META = CRIT_MAP[meta]
         CRIT_FIELD = CRITERIA_SETUP[meta][0]
@@ -103,7 +103,8 @@ def convert_old_catalog_usage(criteria_items):
             extra_param = ':'.join(usage[1:]).strip()
         else:
             extra_type = criteria_items[1][0].replace('%s_' % field, '')
-        criteria_items = [(field, {'query': query_val, extra_type: extra_param})]
+        criteria_items = [
+            (field, {'query': query_val, extra_type: extra_param})]
     return tuple(criteria_items)
 
 
@@ -204,7 +205,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
 
         subtopic.setAcquireCriteria(True)
 
-        #Ensure an empty subtopic uses it's parents' queries
+        # Ensure an empty subtopic uses it's parents' queries
         self.assertEqual(subtopic.buildQuery(), topic.buildQuery())
 
         subtopic.addCriterion('baz', 'ATSimpleStringCriterion')
@@ -254,7 +255,8 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         # fetch the query
         query = subtopic.buildQuery()
         self.assertTrue(query['end'])
-        # query shouldn't have a start key https://dev.plone.org/plone/ticket/8827
+        # query shouldn't have a start key
+        # https://dev.plone.org/plone/ticket/8827
         self.assertFalse('start' in query)
 
     def test_nested_friendly_date_criteria_reverse(self):
@@ -312,7 +314,7 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         date_crit.setValue(31)  # 1 month
         date_crit.setDateRange('-')  # the opposite is marked '+'
         date_crit.setOperation('less')  # the opposite is marked 'more'
-        #not sur about this one
+        # not sur about this one
         subtopic.setAcquireCriteria(True)
         # fetch the query
         query = subtopic.buildQuery()
@@ -350,22 +352,25 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         num_items = len(topic.queryCatalog())
         # We better have some folders
         self.assertTrue(num_items >= 6)
-        self.assertEqual(topic.queryCatalog(batch=True).sequence_length, num_items)
+        self.assertEqual(topic.queryCatalog(
+            batch=True).sequence_length, num_items)
         # Set some limits
         topic.setLimitNumber(True)
         topic.setItemCount(2)
-        self.assertEqual(topic.queryCatalog(batch=True).sequence_length, num_items)
+        self.assertEqual(topic.queryCatalog(
+            batch=True).sequence_length, num_items)
 
     def test_queryCatalogBrains(self):
-        #Ensure that we feturn full objects when requested
+        # Ensure that we feturn full objects when requested
         topic = self._ATCT
         crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
         crit.setValue('Folder')
-        self.assertTrue(isinstance(topic.queryCatalog(full_objects=True)[0], ATFolder))
+        self.assertTrue(isinstance(
+            topic.queryCatalog(full_objects=True)[0], ATFolder))
         self.assertFalse(isinstance(topic.queryCatalog()[0], ATFolder))
 
     def test_queryCatalogLimitChangesBatchSize(self):
-        #Ensure that a set limit overrides batch size
+        # Ensure that a set limit overrides batch size
         topic = self._ATCT
         topic.setLimitNumber(True)
         topic.setItemCount(10)
@@ -379,29 +384,31 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         self.assertEqual(len(topic.queryCatalog(batch=True)), 10)
 
     def test_queryCatalogBSizeChangesBatchSize(self):
-        #Ensure that a set limit overrides batch size
+        # Ensure that a set limit overrides batch size
         topic = self._ATCT
         crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
         crit.setValue('Folder')
         # Add a bunch of folders.
         for i in range(1, 20):
             self.folder.invokeFactory('Folder', str(i))
-        self.assertTrue(isinstance(topic.queryCatalog(batch=True, b_size=5), Batch))
+        self.assertTrue(isinstance(
+            topic.queryCatalog(batch=True, b_size=5), Batch))
         # Check the batch length
         self.assertEqual(len(topic.queryCatalog(batch=True, b_size=5)), 5)
 
     def test_queryCatalogAddCriteria(self):
-        #Ensure that we can add params
+        # Ensure that we can add params
         topic = self._ATCT
         crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
         crit.setValue('Folder')
         # Add a bunch of folders.
         for i in range(1, 20):
             self.folder.invokeFactory('Folder', str(i))
-        self.assertEqual(len(topic.queryCatalog(sort_on='Date', sort_limit=5)), 5)
+        self.assertEqual(len(topic.queryCatalog(
+            sort_on='Date', sort_limit=5)), 5)
 
     def test_queryCatalogOverrideCriteria(self):
-        #Ensure that we can override params
+        # Ensure that we can override params
         topic = self._ATCT
         crit = topic.addCriterion('portal_type', 'ATSimpleStringCriterion')
         crit.setValue('Document')
@@ -432,10 +439,11 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
         crit = topic.addCriterion('created', 'ATFriendlyDateCriteria')
         # It should no longer be available
         self.assertFalse([i for i in topic.listAvailableFields()
-                     if i[0] == 'created'])
+                          if i[0] == 'created'])
 
     def test_album_images_collection(self):
-        # album view of a collection of Image objects display images in 'images' section
+        # album view of a collection of Image objects display images in
+        # 'images' section
         portal = self.portal
         self.loginAsPortalOwner()
         portal.invokeFactory('Image', 'image1')
@@ -467,15 +475,18 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == False, 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 0, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == False, 'Value is %s' %
+                        str(field.default))
+        self.assertTrue(field.searchable == 0, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == field_vocab,
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'getAcquireCriteria',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setAcquireCriteria',
@@ -509,15 +520,18 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == False, 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 0, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == False, 'Value is %s' %
+                        str(field.default))
+        self.assertTrue(field.searchable == 0, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == field_vocab,
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'getLimitNumber',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setLimitNumber',
@@ -551,14 +565,16 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
         self.assertTrue(field.default == 0, 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 0, 'Value is %s' % field.searchable)
+        self.assertTrue(field.searchable == 0, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'getItemCount',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setItemCount',
@@ -592,15 +608,18 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == False, 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 0, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == False, 'Value is %s' %
+                        str(field.default))
+        self.assertTrue(field.searchable == 0, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'getCustomView',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setCustomView',
@@ -634,15 +653,18 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == ('Title',), 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 0, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == ('Title',),
+                        'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 0, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == 'listMetaDataFields',
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == True,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'getCustomViewFields',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setCustomViewFields',

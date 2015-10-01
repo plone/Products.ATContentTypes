@@ -21,6 +21,7 @@ def editATCT(obj):
 class FolderTestMixin:
     """Contains some general tests for both ATFolder and ATBTreeFolder
     """
+
     def test_implementsConstrainTypes(self):
         self.assertTrue(ISelectableConstrainTypes.providedBy(self._ATCT))
         self.assertTrue(verifyObject(ISelectableConstrainTypes, self._ATCT))

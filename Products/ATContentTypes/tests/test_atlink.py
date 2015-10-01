@@ -52,12 +52,12 @@ class TestSiteATLink(atcttestcase.ATCTTypeTestCase):
         url = 'javascript:alert("test")'
         obj.setRemoteUrl(url)
         self.assertEqual(obj.getRemoteUrl(),
-                             'javascript:alert%28%22test%22%29')
+                         'javascript:alert%28%22test%22%29')
         # Keep question marks and ampersands intact, please.
         url = 'http://something.sane/f.php?p1=value&p2=value'
         obj.setRemoteUrl(url)
         self.assertEqual(obj.getRemoteUrl(),
-                             'http://something.sane/f.php?p1=value&p2=value')
+                         'http://something.sane/f.php?p1=value&p2=value')
         # already quoted values should also remain intact
         url = 'http://something.sane/except with spaces in it'
         expected = 'http://something.sane/except%20with%20spaces%20in%20it'
@@ -90,15 +90,18 @@ class TestATLinkFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
-        self.assertTrue(field.default == 'http://', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == 'http://',
+                        'Value is %s' % str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'getRemoteUrl',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setRemoteUrl',

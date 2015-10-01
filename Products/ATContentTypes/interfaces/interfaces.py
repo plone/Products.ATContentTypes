@@ -12,7 +12,8 @@ class IATContentType(ISelectableBrowserDefault, IBaseContent):
     """Marker interface for AT Content Types
     """
 
-    default_view = Attribute('''Default view template - used for dynamic view''')
+    default_view = Attribute(
+        '''Default view template - used for dynamic view''')
     suppl_views = Attribute('''Supplementary views - used for dynamic view''')
 
     _atct_newTypeFor = Attribute('''XXX''')

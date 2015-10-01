@@ -44,7 +44,8 @@ class PortalFactoryXMLAdapterTests(BodyAdapterTestCase):
         self.site = Folder('site')
         self.site.portal_types = DummyTypesTool()
         provideUtility(self.site.portal_types, ITypesTool)
-        provideAdapter(self._getTargetClass(), (IFactoryTool, ISetupEnviron), IBody)
+        provideAdapter(self._getTargetClass(),
+                       (IFactoryTool, ISetupEnviron), IBody)
         self.site.portal_factory = FactoryTool()
 
         self._obj = self.site.portal_factory

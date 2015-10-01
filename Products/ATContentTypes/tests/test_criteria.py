@@ -133,11 +133,11 @@ class TestATDateCriteria(CriteriaTest):
         query = items[0][1]
         field = items[0][0]
         self.assertEqual(field, 'created')
-        #range should start in past at the beginning of the day
+        # range should start in past at the beginning of the day
         self.assertEqual(query['query'][0], expected_begin)
         # range should end today
         self.assertEqual(query['query'][1].earliestTime(),
-                                                    DateTime().earliestTime())
+                         DateTime().earliestTime())
         self.assertEqual(query['range'], 'min:max')
 
     def test_LessThanFuture(self):
@@ -152,11 +152,11 @@ class TestATDateCriteria(CriteriaTest):
         items = self.dummy.getCriteriaItems()
         self.assertEqual(len(items), 1)
         query = items[0][1]
-        #Range should end on future date at the end of the day
+        # Range should end on future date at the end of the day
         self.assertEqual(query['query'][1], expected_end)
-        #Range should start today
+        # Range should start today
         self.assertEqual(query['query'][0].earliestTime(),
-                                                    DateTime().earliestTime())
+                         DateTime().earliestTime())
         self.assertEqual(query['range'], 'min:max')
 
     def test_MoreThanPast(self):
@@ -352,7 +352,7 @@ class TestATSelectionCriterion(CriteriaTest):
     meta_type = 'ATSelectionCriterion'
     portal_type = 'ATSelectionCriterion'
 
-    #Same as list criterion but without operator and with special vocabulary
+    # Same as list criterion but without operator and with special vocabulary
     def test_selection_query(self):
         self.dummy.Schema()['field'].set(self.dummy, 'Subject')
         self.dummy.setValue(('1', '2', '3'))
@@ -366,12 +366,12 @@ class TestATSelectionCriterion(CriteriaTest):
         self.assertEqual(query['operator'], 'and')
 
     def test_vocabulary(self):
-        #Should return some ids
+        # Should return some ids
         self.dummy.Schema()['field'].set(self.dummy, 'getId')
         self.assertTrue(self.dummy.getCurrentValues())
 
     def test_vocabulary_sorted(self):
-        #Should return sorted ids
+        # Should return sorted ids
         self.dummy.Schema()['field'].set(self.dummy, 'getId')
         orig_vocab = [a.lower() for a in list(self.dummy.getCurrentValues())]
         sorted_vocab = orig_vocab[:]
@@ -410,7 +410,7 @@ class TestATReferenceCriterion(CriteriaTest):
     meta_type = 'ATReferenceCriterion'
     portal_type = 'ATReferenceCriterion'
 
-    #Same as list criterion but without operator and with special vocabulary
+    # Same as list criterion but without operator and with special vocabulary
     def test_reference_query(self):
         self.dummy.Schema()['field'].set(self.dummy, 'getRawRelatedItems')
         self.folder.invokeFactory('Document', 'doc1')
@@ -481,7 +481,7 @@ class TestATPortalTypeCriterion(CriteriaTest):
     meta_type = 'ATPortalTypeCriterion'
     portal_type = 'ATPortalTypeCriterion'
 
-    #Same as list criterion but without operator and with special vocabulary
+    # Same as list criterion but without operator and with special vocabulary
     def test_portaltype_query(self):
         self.dummy.Schema()['field'].set(self.dummy, 'portal_type')
         self.dummy.setValue(('Document', 'Folder', 'Topic'))
@@ -493,13 +493,14 @@ class TestATPortalTypeCriterion(CriteriaTest):
         self.assertEqual(query, ('Document', 'Folder', 'Topic'))
 
     def test_vocabulary(self):
-        #Should return standard types, but not blacklisted types
+        # Should return standard types, but not blacklisted types
         self.dummy.Schema()['field'].set(self.dummy, 'portal_types')
         self.assertTrue('Document' in self.dummy.getCurrentValues().keys())
-        self.assertTrue('ATSimpleStringCriterion' not in self.dummy.getCurrentValues().keys())
+        self.assertTrue(
+            'ATSimpleStringCriterion' not in self.dummy.getCurrentValues().keys())
 
     def test_vocabulary_sorts_by_title(self):
-        #Should return standard types, but not blacklisted types
+        # Should return standard types, but not blacklisted types
         self.dummy.Schema()['field'].set(self.dummy, 'Type')
         type_names = self.dummy.getCurrentValues().values()
         self.assertTrue(type_names.index('Page') > type_names.index('Event'))
@@ -539,7 +540,8 @@ class TestATCurrentAuthorCriterion(CriteriaTest):
     def afterSetUp(self):
         CriteriaTest.afterSetUp(self)
         self.portal.acl_users._doAddUser('member', 'secret', ['Member'], [])
-        self.portal.acl_users._doAddUser('reviewer', 'secret', ['Reviewer'], [])
+        self.portal.acl_users._doAddUser(
+            'reviewer', 'secret', ['Reviewer'], [])
 
     def test_author_query(self):
         self.dummy.Schema()['field'].set(self.dummy, 'creator')
@@ -577,53 +579,71 @@ class TestATRelativePathCriterion(CriteriaTest):
         self.portal.folderB.invokeFactory('Folder', 'folderB1')
 
         # create topic in folderA1
-        self.portal.folderA.folderA1.invokeFactory('Topic', 'new_topic', title='New Topic')
+        self.portal.folderA.folderA1.invokeFactory(
+            'Topic', 'new_topic', title='New Topic')
 
         self.topic = self.portal.folderA.folderA1.new_topic
         # Add a path criterion
-        self.path_crit = self.topic.addCriterion('path', 'ATRelativePathCriterion')
+        self.path_crit = self.topic.addCriterion(
+            'path', 'ATRelativePathCriterion')
 
     def test_relative_path_query1(self):
-        self.path_crit.setRelativePath('..')  # should give the parent==folderA1
-        self.assertTrue(self.path_crit.getCriteriaItems() == (('path', {'query': '/plone/folderA/folderA1', 'depth': 1}),))
+        # should give the parent==folderA1
+        self.path_crit.setRelativePath('..')
+        self.assertTrue(self.path_crit.getCriteriaItems() == (
+            ('path', {'query': '/plone/folderA/folderA1', 'depth': 1}),))
 
     def test_relative_path_query2(self):
         self.path_crit.setRelativePath('../..')  # should give folderA
-        self.assertTrue(self.path_crit.getCriteriaItems() == (('path', {'query': '/plone/folderA', 'depth': 1}),))
+        self.assertTrue(self.path_crit.getCriteriaItems() == (
+            ('path', {'query': '/plone/folderA', 'depth': 1}),))
 
     def test_relative_path_query3(self):
-        self.path_crit.setRelativePath('../../..')  # should give the /plone (portal)
-        self.assertTrue(self.path_crit.getCriteriaItems() == (('path', {'query': '/plone', 'depth': 1}),))
+        # should give the /plone (portal)
+        self.path_crit.setRelativePath('../../..')
+        self.assertTrue(self.path_crit.getCriteriaItems() == (
+            ('path', {'query': '/plone', 'depth': 1}),))
 
     def test_relative_path_query4(self):
-        self.path_crit.setRelativePath('../../../../../../..')  # should give the /plone (portal): cannot go higher than the portal
-        self.assertTrue(self.path_crit.getCriteriaItems() == (('path', {'query': '/plone', 'depth': 1}),))
+        # should give the /plone (portal): cannot go higher than the portal
+        self.path_crit.setRelativePath('../../../../../../..')
+        self.assertTrue(self.path_crit.getCriteriaItems() == (
+            ('path', {'query': '/plone', 'depth': 1}),))
 
     def test_relative_path_query5(self):
-        self.path_crit.setRelativePath('../../../folderB')  # should give folderB
-        self.assertTrue(self.path_crit.getCriteriaItems() == (('path', {'query': '/plone/folderB', 'depth': 1}),))
+        self.path_crit.setRelativePath(
+            '../../../folderB')  # should give folderB
+        self.assertTrue(self.path_crit.getCriteriaItems() == (
+            ('path', {'query': '/plone/folderB', 'depth': 1}),))
 
     def test_relative_path_query6(self):
-        self.path_crit.setRelativePath('/folderB')  # should give folderB also (absolute paths are supported)
-        self.assertTrue(self.path_crit.getCriteriaItems() == (('path', {'query': '/plone/folderB', 'depth': 1}),))
+        # should give folderB also (absolute paths are supported)
+        self.path_crit.setRelativePath('/folderB')
+        self.assertTrue(self.path_crit.getCriteriaItems() == (
+            ('path', {'query': '/plone/folderB', 'depth': 1}),))
 
     def test_relative_path_query7(self):
-        self.path_crit.setRelativePath('../../folderA1/../../folderB/folderB1/..')   # should give folderB
-        self.assertTrue(self.path_crit.getCriteriaItems() == (('path', {'query': '/plone/folderB', 'depth': 1}),))
+        self.path_crit.setRelativePath(
+            '../../folderA1/../../folderB/folderB1/..')   # should give folderB
+        self.assertTrue(self.path_crit.getCriteriaItems() == (
+            ('path', {'query': '/plone/folderB', 'depth': 1}),))
 
     def test_relative_path_query8(self):
         self.path_crit.setRelativePath('.')  # should give the new_topic
-        self.assertTrue(self.path_crit.getCriteriaItems() == (('path', {'query': '/plone/folderA/folderA1/new_topic', 'depth': 1}),))
+        self.assertTrue(self.path_crit.getCriteriaItems() == (
+            ('path', {'query': '/plone/folderA/folderA1/new_topic', 'depth': 1}),))
 
     def test_relative_path_query9(self):
         # Acquisition can mess us up, for example when a BrowserView
         # is in the acquisition chain, like in
         # plone.app.content.browser.foldercontents
-        self.path_crit.setRelativePath('..')  # should give the parent==folderA1
+        # should give the parent==folderA1
+        self.path_crit.setRelativePath('..')
         from Products.Five import BrowserView
         view = BrowserView(self.topic, self.topic.REQUEST)
         criterion = view.context.getCriterion('path_ATRelativePathCriterion')
-        self.assertTrue(criterion.getCriteriaItems() == (('path', {'query': '/plone/folderA/folderA1', 'depth': 1}),))
+        self.assertTrue(criterion.getCriteriaItems() == (
+            ('path', {'query': '/plone/folderA/folderA1', 'depth': 1}),))
 
 
 tests.append(TestATRelativePathCriterion)
@@ -647,7 +667,8 @@ class TestATPathCriterion(CriteriaTest):
         query = items[0][1]
         field = items[0][0]
         self.assertEqual(field, 'path')
-        self.assertEqual(tuple(query['query']), ('/plone/Members/test_user_1_/doc1',))
+        self.assertEqual(tuple(query['query']),
+                         ('/plone/Members/test_user_1_/doc1',))
         self.assertEqual(query['depth'], -1)
         self.dummy.setRecurse(False)
         items = self.dummy.getCriteriaItems()
@@ -693,7 +714,8 @@ class TestCriterionRegistry(atcttestcase.ATCTSiteTestCase):
         # works as expected
         # check if the expected criteria is there
         self.assertTrue(ATDateCriteria in self.crit_registry.listCriteria())
-        self.assertTrue(self.crit_registry.indicesByCriterion('ATFriendlyDateCriteria'))
+        self.assertTrue(self.crit_registry.indicesByCriterion(
+            'ATFriendlyDateCriteria'))
         # remove and ensure that it was removed
         self.crit_registry.unregister(ATDateCriteria)
         self.assertFalse(ATDateCriteria in self.crit_registry.listCriteria())
@@ -701,7 +723,7 @@ class TestCriterionRegistry(atcttestcase.ATCTSiteTestCase):
         self.crit_registry.register(ATDateCriteria, ('Bogus Index',))
         self.assertTrue(ATDateCriteria in self.crit_registry.listCriteria())
         self.assertEqual(self.crit_registry.indicesByCriterion('ATFriendlyDateCriteria'),
-                                                        ('Bogus Index',))
+                         ('Bogus Index',))
 
     def testCriteriaIndexLookupOnBadIndex(self):
         # Make sure we don't throw errors when someone has a non-default index

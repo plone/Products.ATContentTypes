@@ -18,13 +18,14 @@ OPTIONFLAGS = (doctest.ELLIPSIS |
 from plone.testing import layered
 from plone.app.testing.bbb import PTC_FUNCTIONAL_TESTING
 
+
 def test_suite():
     import unittest
     suite = unittest.TestSuite()
     for testfile in FILES:
         suite.addTest(layered(doctest.DocFileSuite(testfile,
-                                optionflags=OPTIONFLAGS,
-                                package="Products.ATContentTypes.tests",),
-                      layer=PTC_FUNCTIONAL_TESTING)
-                     )
+                                                   optionflags=OPTIONFLAGS,
+                                                   package="Products.ATContentTypes.tests",),
+                              layer=PTC_FUNCTIONAL_TESTING)
+                      )
     return suite

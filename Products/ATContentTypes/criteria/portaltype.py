@@ -38,6 +38,7 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
     shortDesc = 'Select content types'
 
     security.declareProtected(View, 'getCurrentValues')
+
     def getCurrentValues(self):
         """Return enabled portal types"""
         vocab = queryUtility(IVocabularyFactory, name=VOCAB_ID)(self)
@@ -58,6 +59,7 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
         return DisplayList(result)
 
     security.declareProtected(View, 'getCriteriaItems')
+
     def getCriteriaItems(self):
         result = []
         if self.Value() is not '':

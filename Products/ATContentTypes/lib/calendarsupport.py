@@ -94,14 +94,14 @@ class CalendarSupportMixin:
         'action': 'string:${object_url}/ics_view',
         'permissions': (View, ),
         'category': 'document_actions',
-         },
-         {
+    },
+        {
         'id': 'vcs',
         'name': 'vCalendar',
         'action': 'string:${object_url}/vcs_view',
         'permissions': (View, ),
         'category': 'document_actions',
-         },
+    },
     )
 
     _at_action_icons = ({
@@ -110,17 +110,18 @@ class CalendarSupportMixin:
         'icon_expr': 'ical_icon.gif',
         'title': 'iCalendar export',
         'priority': 0,
-        },
+    },
         {
         'category': 'plone',
         'action_id': 'vcs',
         'icon_expr': 'vcal_icon.gif',
         'title': 'vCalendar export',
         'priority': 0,
-        },
-        )
+    },
+    )
 
     security.declareProtected(View, 'getICal')
+
     def getICal(self):
         """get iCal data
         """
@@ -133,7 +134,7 @@ class CalendarSupportMixin:
             'summary': vformat(self.Title()),
             'startdate': rfc2445dt(self.start()),
             'enddate': rfc2445dt(self.end()),
-            }
+        }
         out.write(ICS_EVENT_START % map)
 
         description = self.Description()
@@ -149,8 +150,8 @@ class CalendarSupportMixin:
             out.write('CATEGORIES:%s\n' % ', '.join(subject))
 
         # TODO  -- NO! see the RFC; ORGANIZER field is not to be used for non-group-scheduled entities
-        #ORGANIZER;CN=%(name):MAILTO=%(email)
-        #ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
+        # ORGANIZER;CN=%(name):MAILTO=%(email)
+        # ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
 
         cn = []
         contact = self.contact_name()
@@ -173,11 +174,13 @@ class CalendarSupportMixin:
         return out.getvalue()
 
     security.declareProtected(View, 'ics_view')
+
     def ics_view(self, REQUEST, RESPONSE):
         """iCalendar output
         """
         RESPONSE.setHeader('Content-Type', 'text/calendar')
-        RESPONSE.setHeader('Content-Disposition', 'attachment; filename="%s.ics"' % self.getId())
+        RESPONSE.setHeader('Content-Disposition',
+                           'attachment; filename="%s.ics"' % self.getId())
         out = StringIO()
         out.write(ICS_HEADER % {'prodid': PRODID})
         out.write(self.getICal())
@@ -185,6 +188,7 @@ class CalendarSupportMixin:
         return n2rn(out.getvalue())
 
     security.declareProtected(View, 'getVCal')
+
     def getVCal(self):
         """get vCal data
         """
@@ -197,7 +201,7 @@ class CalendarSupportMixin:
             'summary': vformat(self.Title()),
             'startdate': rfc2445dt(self.start()),
             'enddate': rfc2445dt(self.end()),
-            }
+        }
         out.write(VCS_EVENT_START % map)
         description = self.Description()
         if description:
@@ -211,11 +215,13 @@ class CalendarSupportMixin:
         return out.getvalue()
 
     security.declareProtected(View, 'vcs_view')
+
     def vcs_view(self, REQUEST, RESPONSE):
         """vCalendar output
         """
         RESPONSE.setHeader('Content-Type', 'text/x-vCalendar')
-        RESPONSE.setHeader('Content-Disposition', 'attachment; filename="%s.vcs"' % self.getId())
+        RESPONSE.setHeader('Content-Disposition',
+                           'attachment; filename="%s.vcs"' % self.getId())
         out = StringIO()
         out.write(VCS_HEADER % {'prodid': PRODID})
         out.write(self.getVCal())

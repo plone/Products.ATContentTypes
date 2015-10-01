@@ -30,7 +30,7 @@ ATSimpleStringCriterionSchema = ATBaseCriterionSchema + Schema((
                     description=_(u'help_string_criteria_value',
                                   default=u'A string value.'))
                 ),
-    ))
+))
 
 
 class ATSimpleStringCriterion(ATBaseCriterion):
@@ -45,6 +45,7 @@ class ATSimpleStringCriterion(ATBaseCriterion):
     shortDesc = 'Text'
 
     security.declareProtected(View, 'getCriteriaItems')
+
     def getCriteriaItems(self):
         result = []
 

@@ -13,6 +13,7 @@ def cachekey(fun, self):
           * fingerprint of the brains found in the query
         the returned key is suitable for usage with `memoize.ram.cache` """
     context = self.context
+
     def add(brain):
         path = brain.getPath().decode('ascii', 'replace').encode('utf-8')
         return '%s\n%s\n\n' % (path, brain.modified)
@@ -38,7 +39,8 @@ class CalendarView(BrowserView):
         request = self.request
         name = '%s.ics' % context.getId()
         request.RESPONSE.setHeader('Content-Type', 'text/calendar')
-        request.RESPONSE.setHeader('Content-Disposition', 'attachment; filename="%s"' % name)
+        request.RESPONSE.setHeader(
+            'Content-Disposition', 'attachment; filename="%s"' % name)
         request.RESPONSE.write(self.feeddata())
 
     @ram.cache(cachekey)

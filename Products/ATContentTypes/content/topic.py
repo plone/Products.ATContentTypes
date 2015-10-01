@@ -48,9 +48,9 @@ from Products.CMFPlone.PloneBatch import Batch
 # A couple of fields just don't make sense to sort (for a user),
 # some are just doubles.
 IGNORED_FIELDS = ['Date', 'allowedRolesAndUsers', 'getId', 'in_reply_to',
-    'meta_type',
-    # 'portal_type' # portal type and Type might differ!
-    ]
+                  'meta_type',
+                  # 'portal_type' # portal type and Type might differ!
+                  ]
 
 ATTopicSchema = ATContentTypeSchema.copy() + Schema((
     TextField('text',
@@ -59,77 +59,81 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
               primary=True,
               storage=AnnotationStorage(migrate=True),
               validators=('isTidyHtmlWithCleanup',),
-              #validators=('isTidyHtml',),
+              # validators=('isTidyHtml',),
               default_output_type='text/x-html-safe',
               write_permission=ChangeTopics,
               widget=TinyMCEWidget(
-                    description='',
-                    label=_(u'label_body_text', default=u'Body Text'),
-                    rows=25,
-                    allow_file_upload=zconf.ATDocument.allow_document_upload),
-    ),
+                  description='',
+                  label=_(u'label_body_text', default=u'Body Text'),
+                  rows=25,
+                  allow_file_upload=zconf.ATDocument.allow_document_upload),
+              ),
     BooleanField('acquireCriteria',
-                required=False,
-                mode="rw",
-                default=False,
-                write_permission=ChangeTopics,
-                widget=BooleanWidget(
-                        label=_(u'label_inherit_criteria', default=u'Inherit Criteria'),
-                        description=_(u'help_inherit_collection_criteria',
-                                      default=u"Narrow down the search results from the parent Collection(s) "
-                                               "by using the criteria from this Collection."),
-                        # Only show when the parent object is a Topic also,
-                        condition="python:object.aq_parent.portal_type == 'Topic'"),
-                ),
+                 required=False,
+                 mode="rw",
+                 default=False,
+                 write_permission=ChangeTopics,
+                 widget=BooleanWidget(
+                     label=_(u'label_inherit_criteria',
+                             default=u'Inherit Criteria'),
+                     description=_(u'help_inherit_collection_criteria',
+                                   default=u"Narrow down the search results from the parent Collection(s) "
+                                   "by using the criteria from this Collection."),
+                     # Only show when the parent object is a Topic also,
+                     condition="python:object.aq_parent.portal_type == 'Topic'"),
+                 ),
     BooleanField('limitNumber',
-                required=False,
-                mode="rw",
-                default=False,
-                write_permission=ChangeTopics,
-                widget=BooleanWidget(
-                        label=_(u'label_limit_number', default=u'Limit Search Results'),
-                        description=_(u'help_limit_number',
-                                      default=u"If selected, only the 'Number of Items' "
-                                               "indicated below will be displayed.")
-                        ),
-                ),
+                 required=False,
+                 mode="rw",
+                 default=False,
+                 write_permission=ChangeTopics,
+                 widget=BooleanWidget(
+                     label=_(u'label_limit_number',
+                             default=u'Limit Search Results'),
+                     description=_(u'help_limit_number',
+                                   default=u"If selected, only the 'Number of Items' "
+                                   "indicated below will be displayed.")
+                 ),
+                 ),
     IntegerField('itemCount',
-                required=False,
-                mode="rw",
-                default=0,
-                write_permission=ChangeTopics,
-                widget=IntegerWidget(
-                        label=_(u'label_item_count', default=u'Number of Items'),
-                        description=''
-                        ),
+                 required=False,
+                 mode="rw",
+                 default=0,
+                 write_permission=ChangeTopics,
+                 widget=IntegerWidget(
+                     label=_(u'label_item_count', default=u'Number of Items'),
+                     description=''
+                 ),
                  ),
     BooleanField('customView',
-                required=False,
-                mode="rw",
-                default=False,
-                write_permission=ChangeTopics,
-                widget=BooleanWidget(
-                        label=_(u'label_custom_view', default=u'Display as Table'),
-                        description=_(u'help_custom_view',
-                                      default=u"Columns in the table are controlled "
-                                               "by 'Table Columns' below.")
-                        ),
+                 required=False,
+                 mode="rw",
+                 default=False,
+                 write_permission=ChangeTopics,
+                 widget=BooleanWidget(
+                     label=_(u'label_custom_view',
+                             default=u'Display as Table'),
+                     description=_(u'help_custom_view',
+                                   default=u"Columns in the table are controlled "
+                                   "by 'Table Columns' below.")
+                 ),
                  ),
     LinesField('customViewFields',
-                required=False,
-                mode="rw",
-                default=('Title',),
-                vocabulary='listMetaDataFields',
-                enforceVocabulary=True,
-                write_permission=ChangeTopics,
-                widget=InAndOutWidget(
-                        label=_(u'label_custom_view_fields', default=u'Table Columns'),
-                        description=_(u'help_custom_view_fields',
-                                      default=u"Select which fields to display when "
-                                               "'Display as Table' is checked.")
-                        ),
-                 ),
-    ))
+               required=False,
+               mode="rw",
+               default=('Title',),
+               vocabulary='listMetaDataFields',
+               enforceVocabulary=True,
+               write_permission=ChangeTopics,
+               widget=InAndOutWidget(
+                    label=_(u'label_custom_view_fields',
+                            default=u'Table Columns'),
+                    description=_(u'help_custom_view_fields',
+                                  default=u"Select which fields to display when "
+                                  "'Display as Table' is checked.")
+               ),
+               ),
+))
 finalizeATCTSchema(ATTopicSchema, folderish=False, moveDiscussion=False)
 
 
@@ -140,7 +144,8 @@ class ATTopic(ATCTFolder):
 
     portal_type = 'Topic'
     archetype_name = 'Collection'
-    _atct_newTypeFor = {'portal_type': 'CMF Topic', 'meta_type': 'Portal Topic'}
+    _atct_newTypeFor = {'portal_type': 'CMF Topic',
+                        'meta_type': 'Portal Topic'}
     assocMimetypes = ()
     assocFileExt = ()
     cmf_edit_kws = ()
@@ -158,17 +163,19 @@ class ATTopic(ATCTFolder):
         syn_tool = getToolByName(self, 'portal_syndication', None)
         if syn_tool is not None:
             if (syn_tool.isSiteSyndicationAllowed() and
-                                    not syn_tool.isSyndicationAllowed(self)):
+                    not syn_tool.isSyndicationAllowed(self)):
                 syn_tool.enableSyndication(self)
         return ret_val
 
     security.declareProtected(ChangeTopics, 'validateAddCriterion')
+
     def validateAddCriterion(self, indexId, criteriaType):
         """Is criteriaType acceptable criteria for indexId
         """
         return criteriaType in self.criteriaByIndexId(indexId)
 
     security.declareProtected(ChangeTopics, 'criteriaByIndexId')
+
     def criteriaByIndexId(self, indexId):
         catalog_tool = getToolByName(self, 'portal_catalog')
         indexObj = catalog_tool.Indexes[indexId]
@@ -176,14 +183,16 @@ class ATTopic(ATCTFolder):
         return results
 
     security.declareProtected(ChangeTopics, 'listCriteriaTypes')
+
     def listCriteriaTypes(self):
         """List available criteria types as dict
         """
         return [{'name': ctype,
-                 'description':_criterionRegistry[ctype].shortDesc}
+                 'description': _criterionRegistry[ctype].shortDesc}
                 for ctype in self.listCriteriaMetaTypes()]
 
     security.declareProtected(ChangeTopics, 'listCriteriaMetaTypes')
+
     def listCriteriaMetaTypes(self):
         """List available criteria
         """
@@ -192,14 +201,16 @@ class ATTopic(ATCTFolder):
         return val
 
     security.declareProtected(ChangeTopics, 'listSearchCriteriaTypes')
+
     def listSearchCriteriaTypes(self):
         """List available search criteria types as dict
         """
         return [{'name': ctype,
-                 'description':_criterionRegistry[ctype].shortDesc}
+                 'description': _criterionRegistry[ctype].shortDesc}
                 for ctype in self.listSearchCriteriaMetaTypes()]
 
     security.declareProtected(ChangeTopics, 'listSearchCriteriaMetaTypes')
+
     def listSearchCriteriaMetaTypes(self):
         """List available search criteria
         """
@@ -208,14 +219,16 @@ class ATTopic(ATCTFolder):
         return val
 
     security.declareProtected(ChangeTopics, 'listSortCriteriaTypes')
+
     def listSortCriteriaTypes(self):
         """List available sort criteria types as dict
         """
         return [{'name': ctype,
-                 'description':_criterionRegistry[ctype].shortDesc}
+                 'description': _criterionRegistry[ctype].shortDesc}
                 for ctype in self.listSortCriteriaMetaTypes()]
 
     security.declareProtected(ChangeTopics, 'listSortCriteriaMetaTypes')
+
     def listSortCriteriaMetaTypes(self):
         """List available sort criteria
         """
@@ -224,6 +237,7 @@ class ATTopic(ATCTFolder):
         return val
 
     security.declareProtected(View, 'listCriteria')
+
     def listCriteria(self):
         """Return a list of our criteria objects.
         """
@@ -231,19 +245,22 @@ class ATTopic(ATCTFolder):
         return val
 
     security.declareProtected(View, 'listSearchCriteria')
+
     def listSearchCriteria(self):
         """Return a list of our search criteria objects.
         """
         return [val for val in self.listCriteria() if
-             IATTopicSearchCriterion.providedBy(val)]
+                IATTopicSearchCriterion.providedBy(val)]
 
     security.declareProtected(ChangeTopics, 'hasSortCriterion')
+
     def hasSortCriterion(self):
         """Tells if a sort criterai is already setup.
         """
         return not self.getSortCriterion() is None
 
     security.declareProtected(ChangeTopics, 'getSortCriterion')
+
     def getSortCriterion(self):
         """Return the Sort criterion if setup.
         """
@@ -253,6 +270,7 @@ class ATTopic(ATCTFolder):
         return None
 
     security.declareProtected(ChangeTopics, 'removeSortCriterion')
+
     def removeSortCriterion(self):
         """remove the Sort criterion.
         """
@@ -260,6 +278,7 @@ class ATTopic(ATCTFolder):
             self.deleteCriterion(self.getSortCriterion().getId())
 
     security.declareProtected(ChangeTopics, 'setSortCriterion')
+
     def setSortCriterion(self, field, reversed):
         """Set the Sort criterion.
         """
@@ -268,12 +287,14 @@ class ATTopic(ATCTFolder):
         self.getSortCriterion().setReversed(reversed)
 
     security.declareProtected(ChangeTopics, 'listIndicesByCriterion')
+
     def listIndicesByCriterion(self, criterion):
         """
         """
         return _criterionRegistry.indicesByCriterion(criterion)
 
     security.declareProtected(ChangeTopics, 'listFields')
+
     def listFields(self):
         """Return a list of fields from portal_catalog.
         """
@@ -281,27 +302,30 @@ class ATTopic(ATCTFolder):
         return tool.getEnabledFields()
 
     security.declareProtected(ChangeTopics, 'listSortFields')
+
     def listSortFields(self):
         """Return a list of available fields for sorting."""
         fields = [field
-                    for field in self.listFields()
-                    if self.validateAddCriterion(field[0], 'ATSortCriterion')]
+                  for field in self.listFields()
+                  if self.validateAddCriterion(field[0], 'ATSortCriterion')]
         return fields
 
     security.declareProtected(ChangeTopics, 'listAvailableFields')
+
     def listAvailableFields(self):
         """Return a list of available fields for new criteria.
         """
         current = [crit.Field() for crit in self.listCriteria()
-                      if not IATTopicSortCriterion.providedBy(crit)]
+                   if not IATTopicSortCriterion.providedBy(crit)]
         fields = self.listFields()
         val = [field
-                 for field in fields
-                 if field[0] not in current
-              ]
+               for field in fields
+               if field[0] not in current
+               ]
         return val
 
     security.declareProtected(View, 'listSubtopics')
+
     def listSubtopics(self):
         """Return a list of our subtopics.
         """
@@ -316,6 +340,7 @@ class ATTopic(ATCTFolder):
         return tops
 
     security.declareProtected(View, 'hasSubtopics')
+
     def hasSubtopics(self):
         """Returns true if subtopics have been created on this topic.
         """
@@ -323,6 +348,7 @@ class ATTopic(ATCTFolder):
         return not not val
 
     security.declareProtected(View, 'listMetaDataFields')
+
     def listMetaDataFields(self, exclude=True):
         """Return a list of metadata fields from portal_catalog.
         """
@@ -330,6 +356,7 @@ class ATTopic(ATCTFolder):
         return tool.getMetadataDisplay(exclude)
 
     security.declareProtected(View, 'allowedCriteriaForField')
+
     def allowedCriteriaForField(self, field, display_list=False):
         """ Return all valid criteria for a given field.  Optionally include
             descriptions in list in format [(desc1, val1) , (desc2, val2)] for
@@ -337,7 +364,7 @@ class ATTopic(ATCTFolder):
         tool = getToolByName(self, TOOLNAME)
         criteria = tool.getIndex(field).criteria
         allowed = [crit for crit in criteria
-                                if self.validateAddCriterion(field, crit)]
+                   if self.validateAddCriterion(field, crit)]
         if display_list:
             flat = []
             for a in allowed:
@@ -347,6 +374,7 @@ class ATTopic(ATCTFolder):
         return allowed
 
     security.declareProtected(View, 'buildQuery')
+
     def buildQuery(self):
         """Construct a catalog query using our criterion objects.
         """
@@ -365,7 +393,8 @@ class ATTopic(ATCTFolder):
                 clear_start = True
                 parent = aq_parent(aq_inner(self))
                 result.update(parent.buildQuery())
-            except (AttributeError, Unauthorized):  # oh well, can't find parent, or it isn't a Topic.
+            # oh well, can't find parent, or it isn't a Topic.
+            except (AttributeError, Unauthorized):
                 pass
 
         for criterion in criteria:
@@ -380,14 +409,15 @@ class ATTopic(ATCTFolder):
                 # - the date criteria is set to 'now' (0)
                 # - the end key is set
                 if clear_start and criterion.meta_type in ['ATFriendlyDateCriteria'] \
-                and not criterion.value and key == 'end' and 'start' in result:
+                        and not criterion.value and key == 'end' and 'start' in result:
                     del result['start']
                 result[key] = value
         return result
 
     security.declareProtected(View, 'queryCatalog')
+
     def queryCatalog(self, REQUEST=None, batch=False, b_size=None,
-                                                    full_objects=False, **kw):
+                     full_objects=False, **kw):
         # Invoke the catalog using our criteria to augment any passed
         # in query before calling the catalog.
         if REQUEST is None:
@@ -396,8 +426,8 @@ class ATTopic(ATCTFolder):
 
         pcatalog = getToolByName(self, 'portal_catalog')
         mt = getToolByName(self, 'portal_membership')
-        related = [i for i in self.getRelatedItems() \
-                        if mt.checkPermission(View, i)]
+        related = [i for i in self.getRelatedItems()
+                   if mt.checkPermission(View, i)]
         if not full_objects:
             uids = [r.UID() for r in related]
             query = dict(UID=uids)
@@ -429,7 +459,7 @@ class ATTopic(ATCTFolder):
         if limit and not batch:
             if full_objects:
                 return related[:max_items] + \
-                       [b.getObject() for b in results[:max_items - len(related)]]
+                    [b.getObject() for b in results[:max_items - len(related)]]
             return related[:max_items] + results[:max_items - len(related)]
         elif full_objects:
             results = related + LazyCat([[b.getObject() for b in results]])
@@ -441,6 +471,7 @@ class ATTopic(ATCTFolder):
         return results
 
     security.declareProtected(ChangeTopics, 'addCriterion')
+
     def addCriterion(self, field, criterion_type):
         """Add a new search criterion. Return the resulting object.
         """
@@ -452,6 +483,7 @@ class ATTopic(ATCTFolder):
         return self._getOb(newid)
 
     security.declareProtected(ChangeTopics, 'deleteCriterion')
+
     def deleteCriterion(self, criterion_id):
         """Delete selected criterion.
         """
@@ -462,6 +494,7 @@ class ATTopic(ATCTFolder):
                 self._delObject(cid)
 
     security.declareProtected(View, 'getCriterion')
+
     def getCriterion(self, criterion_id):
         """Get the criterion object.
         """
@@ -471,6 +504,7 @@ class ATTopic(ATCTFolder):
             return self._getOb(criterion_id)
 
     security.declareProtected(AddPortalContent, 'addSubtopic')
+
     def addSubtopic(self, id):
         """Add a new subtopic.
         """
@@ -479,6 +513,7 @@ class ATTopic(ATCTFolder):
         return self._getOb(id)
 
     security.declareProtected(View, 'synContentValues')
+
     def synContentValues(self):
         """Getter for syndacation support
         """
@@ -487,6 +522,7 @@ class ATTopic(ATCTFolder):
         return self.queryCatalog(sort_limit=limit)[:limit]
 
     security.declarePublic('canSetDefaultPage')
+
     def canSetDefaultPage(self):
         """
         Override BrowserDefaultMixin because default page stuff doesn't make
@@ -495,6 +531,7 @@ class ATTopic(ATCTFolder):
         return False
 
     security.declarePublic('getCriterionUniqueWidgetAttr')
+
     def getCriteriaUniqueWidgetAttr(self, attr):
         """Get a unique list values for a specific attribute for all widgets
            on all criteria"""
@@ -512,11 +549,13 @@ class ATTopic(ATCTFolder):
         return order
 
     security.declareProtected(View, 'HEAD')
+
     def HEAD(self, REQUEST, RESPONSE):
         """HTTP HEAD handler"""
         return WebdavResoure.HEAD(self, REQUEST, RESPONSE)
 
     security.declareProtected(ChangeTopics, 'setText')
+
     def setText(self, value, **kwargs):
         """Body text mutator
 
@@ -540,6 +579,7 @@ class ATTopic(ATCTFolder):
         field.set(self, value, **kwargs)  # set is ok
 
     security.declarePrivate('getTidyOutput')
+
     def getTidyOutput(self, field):
         """Get the tidied output for a specific field from the request
         if available

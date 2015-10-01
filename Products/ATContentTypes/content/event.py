@@ -36,7 +36,7 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 widget=StringWidget(
                     description='',
                     label=_(u'label_event_location', default=u'Event Location')
-                    )),
+                )),
 
     DateTimeField('startDate',
                   required=True,
@@ -46,9 +46,9 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   default_method=DateTime,
                   languageIndependent=True,
                   widget=DatetimeWidget(
-                        description='',
-                        label=_(u'label_event_start', default=u'Event Starts')
-                        )),
+                      description='',
+                      label=_(u'label_event_start', default=u'Event Starts')
+                  )),
 
     DateTimeField('endDate',
                   required=True,
@@ -58,9 +58,9 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                   default_method=DateTime,
                   languageIndependent=True,
                   widget=DatetimeWidget(
-                        description='',
-                        label=_(u'label_event_end', default=u'Event Ends')
-                        )),
+                      description='',
+                      label=_(u'label_event_end', default=u'Event Ends')
+                  )),
 
     TextField('text',
               required=False,
@@ -70,19 +70,20 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
               validators=('isTidyHtmlWithCleanup',),
               default_output_type='text/x-html-safe',
               widget=TinyMCEWidget(
-                        description='',
-                        label=_(u'label_event_announcement', default=u'Event body text'),
-                        rows=25,
-                        allow_file_upload=zconf.ATDocument.allow_document_upload)),
+                  description='',
+                  label=_(u'label_event_announcement',
+                          default=u'Event body text'),
+                  rows=25,
+                  allow_file_upload=zconf.ATDocument.allow_document_upload)),
 
     LinesField('attendees',
                languageIndependent=True,
                searchable=True,
                write_permission=ModifyPortalContent,
                widget=LinesWidget(
-                      description='',
-                      label=_(u'label_event_attendees', default=u'Attendees')
-                      )),
+                   description='',
+                   label=_(u'label_event_attendees', default=u'Attendees')
+               )),
 
     StringField('eventUrl',
                 required=False,
@@ -91,11 +92,11 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 write_permission=ModifyPortalContent,
                 validators=('isURL',),
                 widget=StringWidget(
-                        description=_(u'help_event_url',
-                                      default=u"Web address with more info about the event. "
-                                               "Add http:// for external links."),
-                        label=_(u'label_event_url', default=u'Event URL')
-                        )),
+                    description=_(u'help_event_url',
+                                  default=u"Web address with more info about the event. "
+                                  "Add http:// for external links."),
+                    label=_(u'label_event_url', default=u'Event URL')
+                )),
 
     StringField('contactName',
                 required=False,
@@ -103,9 +104,9 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 accessor='contact_name',
                 write_permission=ModifyPortalContent,
                 widget=StringWidget(
-                        description='',
-                        label=_(u'label_contact_name', default=u'Contact Name')
-                        )),
+                    description='',
+                    label=_(u'label_contact_name', default=u'Contact Name')
+                )),
 
     StringField('contactEmail',
                 required=False,
@@ -114,9 +115,9 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 write_permission=ModifyPortalContent,
                 validators=('isEmail',),
                 widget=StringWidget(
-                        description='',
-                        label=_(u'label_contact_email', default=u'Contact E-mail')
-                        )),
+                    description='',
+                    label=_(u'label_contact_email', default=u'Contact E-mail')
+                )),
 
     StringField('contactPhone',
                 required=False,
@@ -125,11 +126,11 @@ ATEventSchema = ATContentTypeSchema.copy() + Schema((
                 write_permission=ModifyPortalContent,
                 validators=(),
                 widget=StringWidget(
-                        description='',
-                        label=_(u'label_contact_phone', default=u'Contact Phone')
-                        )),
-    ), marshall=RFC822Marshaller()
-    )
+                    description='',
+                    label=_(u'label_contact_phone', default=u'Contact Phone')
+                )),
+), marshall=RFC822Marshaller()
+)
 
 # Repurpose the subject field for the event type
 ATEventSchema.moveField('subject', before='eventUrl')
@@ -156,28 +157,29 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
     assocMimetypes = ()
     assocFileExt = ('event', )
     cmf_edit_kws = ('effectiveDay', 'effectiveMo', 'effectiveYear',
-                      'expirationDay', 'expirationMo', 'expirationYear',
-                      'start_time', 'startAMPM', 'stop_time', 'stopAMPM',
-                      'start_date', 'end_date', 'contact_name', 'contact_email',
-                      'contact_phone', 'event_url')
+                    'expirationDay', 'expirationMo', 'expirationYear',
+                    'start_time', 'startAMPM', 'stop_time', 'stopAMPM',
+                    'start_date', 'end_date', 'contact_name', 'contact_email',
+                    'contact_phone', 'event_url')
 
     implements(IATEvent)
 
     security = ClassSecurityInfo()
 
     security.declarePrivate('cmf_edit')
+
     def cmf_edit(
-        self, title=None, description=None, effectiveDay=None,
-        effectiveMo=None, effectiveYear=None, expirationDay=None,
-        expirationMo=None, expirationYear=None, start_date=None,
-        start_time=None, startAMPM=None, end_date=None,
-        stop_time=None, stopAMPM=None, location=None,
-        contact_name=None, contact_email=None, contact_phone=None,
-        event_url=None):
+            self, title=None, description=None, effectiveDay=None,
+            effectiveMo=None, effectiveYear=None, expirationDay=None,
+            expirationMo=None, expirationYear=None, start_date=None,
+            start_time=None, startAMPM=None, end_date=None,
+            stop_time=None, stopAMPM=None, location=None,
+            contact_name=None, contact_email=None, contact_phone=None,
+            event_url=None):
 
         if effectiveDay and effectiveMo and effectiveYear and start_time:
             sdate = '%s-%s-%s %s %s' % (effectiveDay, effectiveMo, effectiveYear,
-                                         start_time, startAMPM)
+                                        start_time, startAMPM)
         elif start_date:
             if not start_time:
                 start_time = '00:00:00'
@@ -207,6 +209,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
             contactPhone=contact_phone, eventUrl=event_url)
 
     security.declareProtected(View, 'post_validate')
+
     def post_validate(self, REQUEST=None, errors=None):
         """Validates start and end date
 
@@ -293,6 +296,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
         return hash((self.start_date, self.duration, self.title))
 
     security.declareProtected(ModifyPortalContent, 'update')
+
     def update(self, event=None, **kwargs):
         # Clashes with BaseObject.update, so
         # we handle gracefully

@@ -40,9 +40,9 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
     implements(IATCTTool)
 
     manage_options = (
-            {'label': 'Overview', 'action': 'manage_overview'},
-            {'label': 'Image scales', 'action': 'manage_imageScales'}
-        ) + PropertyManager.manage_options
+        {'label': 'Overview', 'action': 'manage_overview'},
+        {'label': 'Image scales', 'action': 'manage_imageScales'}
+    ) + PropertyManager.manage_options
 
     # properties
 
@@ -54,7 +54,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
         {'id': 'album_batch_size', 'type': 'int', 'mode': 'w'},
         {'id': 'album_image_scale', 'type': 'string', 'mode': 'w'},
         {'id': 'single_image_scale', 'type': 'string', 'mode': 'w'},
-        )
+    )
 
     # templates
 
@@ -73,6 +73,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
     # image scales
 
     security.declareProtected(ManagePortal, 'recreateImageScales')
+
     def recreateImageScales(self, portal_type=None):
         """Recreates AT Image scales (doesn't remove unused!)
         """
@@ -109,6 +110,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
         return out.getvalue()
 
     security.declareProtected(ManagePortal, 'listContentTypes')
+
     def listContentTypes(self):
         """List all content types. Used for image/folder_types property.
         """

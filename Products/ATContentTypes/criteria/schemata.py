@@ -20,9 +20,9 @@ ATBaseCriterionSchema = Schema((
                     label=_(u'label_short_name', default=u'Short Name'),
                     description=_(u'help_shortname',
                                   default=u"Should not contain spaces, underscores or mixed case. "
-                                           "Short Name is part of the item's web address."),
+                                  "Short Name is part of the item's web address."),
                     visible={'view': 'invisible'}
-                    ),
+                ),
                 ),
     StringField('field',
                 required=1,
@@ -31,10 +31,11 @@ ATBaseCriterionSchema = Schema((
                 write_permission=ChangeTopics,
                 default=None,
                 widget=StringWidget(
-                    label=_(u'label_criteria_field_name', default=u'Field name'),
+                    label=_(u'label_criteria_field_name',
+                            default=u'Field name'),
                     description=_(u'help_shortname',
                                   default=u"Should not contain spaces, underscores or mixed case. "
-                                           "Short Name is part of the item's web address.")
-                    ),
+                                  "Short Name is part of the item's web address.")
                 ),
-    ))
+                ),
+))

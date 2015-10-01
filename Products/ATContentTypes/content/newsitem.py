@@ -36,51 +36,52 @@ validation.register(MaxSizeValidator('checkNewsImageMaxSize',
 
 ATNewsItemSchema = ATContentTypeSchema.copy() + Schema((
     TextField('text',
-        required=False,
-        searchable=True,
-        primary=True,
-        storage=AnnotationStorage(migrate=True),
-        validators=('isTidyHtmlWithCleanup',),
-        #validators=('isTidyHtml',),
-        default_output_type='text/x-html-safe',
-        widget=TinyMCEWidget(
-            description='',
-            label=_(u'label_body_text', u'Body Text'),
-            rows=25,
-            allow_file_upload=zconf.ATDocument.allow_document_upload)
-        ),
+              required=False,
+              searchable=True,
+              primary=True,
+              storage=AnnotationStorage(migrate=True),
+              validators=('isTidyHtmlWithCleanup',),
+              # validators=('isTidyHtml',),
+              default_output_type='text/x-html-safe',
+              widget=TinyMCEWidget(
+                  description='',
+                  label=_(u'label_body_text', u'Body Text'),
+                  rows=25,
+                  allow_file_upload=zconf.ATDocument.allow_document_upload)
+              ),
 
     ImageField('image',
-        required=False,
-        storage=AnnotationStorage(migrate=True),
-        languageIndependent=True,
-        max_size=zconf.ATNewsItem.max_image_dimension,
-        sizes={'large': (768, 768),
-               'preview': (400, 400),
-               'mini': (200, 200),
-               'thumb': (128, 128),
-               'tile': (64, 64),
-               'icon': (32, 32),
-               'listing': (16, 16),
-              },
-        validators=(('isNonEmptyFile', V_REQUIRED),
-                    ('checkNewsImageMaxSize', V_REQUIRED)),
-        widget=ImageWidget(
-            description=_(u'help_news_image', default=u'Will be shown in the news listing, and in the news item itself. Image will be scaled to a sensible size.'),
-            label=_(u'label_news_image', default=u'Image'),
-            show_content_type=False)
-        ),
+               required=False,
+               storage=AnnotationStorage(migrate=True),
+               languageIndependent=True,
+               max_size=zconf.ATNewsItem.max_image_dimension,
+               sizes={'large': (768, 768),
+                      'preview': (400, 400),
+                      'mini': (200, 200),
+                      'thumb': (128, 128),
+                      'tile': (64, 64),
+                      'icon': (32, 32),
+                      'listing': (16, 16),
+                      },
+               validators=(('isNonEmptyFile', V_REQUIRED),
+                           ('checkNewsImageMaxSize', V_REQUIRED)),
+               widget=ImageWidget(
+                   description=_(
+                       u'help_news_image', default=u'Will be shown in the news listing, and in the news item itself. Image will be scaled to a sensible size.'),
+                   label=_(u'label_news_image', default=u'Image'),
+                   show_content_type=False)
+               ),
 
     StringField('imageCaption',
-        required=False,
-        searchable=True,
-        widget=StringWidget(
-            description='',
-            label=_(u'label_image_caption', default=u'Image Caption'),
-            size=40)
-        ),
-    ), marshall=RFC822Marshaller()
-    )
+                required=False,
+                searchable=True,
+                widget=StringWidget(
+                    description='',
+                    label=_(u'label_image_caption', default=u'Image Caption'),
+                    size=40)
+                ),
+), marshall=RFC822Marshaller()
+)
 
 ATNewsItemSchema['description'].widget.label = \
     _(u'label_summary', default=u'Summary')
@@ -95,7 +96,8 @@ class ATNewsItem(ATDocumentBase, ATCTImageTransform):
 
     portal_type = 'News Item'
     archetype_name = 'News Item'
-    _atct_newTypeFor = {'portal_type': 'CMF News Item', 'meta_type': 'News Item'}
+    _atct_newTypeFor = {
+        'portal_type': 'CMF News Item', 'meta_type': 'News Item'}
     assocMimetypes = ()
     assocFileExt = ('news', )
     cmf_edit_kws = ATDocumentBase.cmf_edit_kws
@@ -105,6 +107,7 @@ class ATNewsItem(ATDocumentBase, ATCTImageTransform):
     security = ClassSecurityInfo()
 
     security.declareProtected(View, 'tag')
+
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
         """
@@ -113,6 +116,7 @@ class ATNewsItem(ATDocumentBase, ATCTImageTransform):
         return self.getField('image').tag(self, **kwargs)
 
     security.declarePrivate('cmf_edit')
+
     def cmf_edit(self, text, description=None, text_format=None, **kwargs):
         if description is not None:
             self.setDescription(description)

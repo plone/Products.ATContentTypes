@@ -20,20 +20,27 @@ class NonRefCatalogContent(BaseContentMixin):
 
     # reference register / unregister methods
     def _register(self, *args, **kwargs): pass
+
     def _unregister(self, *args, **kwargs): pass
+
     def _updateCatalog(self, *args, **kwargs): pass
+
     def _referenceApply(self, *args, **kwargs): pass
+
     def _uncatalogUID(self, *args, **kwargs): pass
+
     def _uncatalogRefs(self, *args, **kwargs): pass
 
     # catalog methods
     def indexObject(self, *args, **kwargs): pass
+
     def unindexObject(self, *args, **kwargs): pass
+
     def reindexObject(self, *args, **kwargs): pass
 
 classImplementsOnly(NonRefCatalogContent,
-                    *(iface for iface in implementedBy(NonRefCatalogContent)\
-                    if iface is not IReferenceable))
+                    *(iface for iface in implementedBy(NonRefCatalogContent)
+                      if iface is not IReferenceable))
 
 
 class ATBaseCriterion(NonRefCatalogContent):
@@ -58,6 +65,7 @@ class ATBaseCriterion(NonRefCatalogContent):
         self.getField('field').set(self, field)
 
     security.declareProtected(View, 'getId')
+
     def getId(self):
         """Get the object id"""
         return str(self.id)
@@ -68,15 +76,18 @@ class ATBaseCriterion(NonRefCatalogContent):
         assert value == self.getId(), 'You are not allowed to change the id'
 
     security.declareProtected(View, 'Type')
+
     def Type(self):
         return self.archetype_name
 
     security.declareProtected(View, 'Description')
+
     def Description(self):
         lines = [line.strip() for line in self.__doc__.splitlines()]
         return ' '.join([line for line in lines if line])
 
     security.declareProtected(View, 'getCriteriaItems')
+
     def getCriteriaItems(self):
         """Return a sequence of items to be used to build the catalog query.
         """

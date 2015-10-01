@@ -37,14 +37,14 @@ TRANSPOSE_MAP = {
     ROTATE_270: _(u'Rotate 90 clockwise'),
     ROTATE_180: _(u'Rotate 180'),
     ROTATE_90: _(u'Rotate 90 counterclockwise'),
-   }
+}
 
 AUTO_ROTATE_MAP = {
     0: None,
     90: ROTATE_270,
     180: ROTATE_180,
     270: ROTATE_90,
-    }
+}
 
 
 class ATCTImageTransform(Base):
@@ -57,6 +57,7 @@ class ATCTImageTransform(Base):
     security = ClassSecurityInfo()
 
     security.declarePrivate('getImageAsFile')
+
     def getImageAsFile(self, img=None, scale=None):
         """Get the img as file like object
         """
@@ -72,7 +73,7 @@ class ATCTImageTransform(Base):
         elif isinstance(img, str):
             data = img
         elif isinstance(img, file) or (hasattr(img, 'read') and
-          hasattr(img, 'seek')):
+                                       hasattr(img, 'seek')):
             img.seek(0)
             return img
         if data:
@@ -84,6 +85,7 @@ class ATCTImageTransform(Base):
     # partly based on CMFPhoto
 
     security.declareProtected(View, 'getEXIF')
+
     def getEXIF(self, img=None, refresh=False):
         """Get the exif informations of the file
 
@@ -104,7 +106,8 @@ class ATCTImageTransform(Base):
                     io.seek(0)
                     exif_data = exif.process_file(io, debug=False)
                 except:
-                    LOG.error('Failed to process EXIF information', exc_info=True)
+                    LOG.error('Failed to process EXIF information',
+                              exc_info=True)
                     exif_data = {}
                 # seek to 0 and do NOT close because we might work
                 # on a file upload which is required later
@@ -125,6 +128,7 @@ class ATCTImageTransform(Base):
         return exif_data
 
     security.declareProtected(View, 'getEXIFOrientation')
+
     def getEXIFOrientation(self):
         """Get the rotation and mirror orientation from the EXIF data
 
@@ -158,6 +162,7 @@ class ATCTImageTransform(Base):
         return (mirror, rotation)
 
     security.declareProtected(View, 'getEXIFOrigDate')
+
     def getEXIFOrigDate(self):
         """Get the EXIF DateTimeOriginal from the image (or None)
         """
@@ -168,10 +173,12 @@ class ATCTImageTransform(Base):
             try:
                 return DateTime(str(raw_date))
             except:
-                LOG.error('Failed to parse exif date %s' % raw_date, exc_info=True)
+                LOG.error('Failed to parse exif date %s' %
+                          raw_date, exc_info=True)
         return None
 
     security.declareProtected(ModifyPortalContent, 'transformImage')
+
     def transformImage(self, method, REQUEST=None):
         """
         Transform an Image:
@@ -218,6 +225,7 @@ class ATCTImageTransform(Base):
             REQUEST.RESPONSE.redirect(target)
 
     security.declareProtected(ModifyPortalContent, 'autoTransformImage')
+
     def autoTransformImage(self, REQUEST=None):
         """Auto transform image according to EXIF data
 
@@ -236,12 +244,14 @@ class ATCTImageTransform(Base):
             return mirror, rotation, transform
 
     security.declareProtected(View, 'getTransformMap')
+
     def getTransformMap(self):
         """Get map for tranforming the image
         """
         return [{'name': n, 'value': v} for v, n in TRANSPOSE_MAP.items()]
 
     security.declareProtected(View, 'hasPIL')
+
     def hasPIL(self):
         """Is PIL installed?
         """

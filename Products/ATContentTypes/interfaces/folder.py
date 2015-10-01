@@ -7,6 +7,7 @@ except ImportError:
 
 
 class IFilterFolder(Interface):
+
     def listObjects():
         """
         """

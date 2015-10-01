@@ -22,35 +22,37 @@ from Products.ATContentTypes import ATCTMessageFactory as _
 
 ATPathCriterionSchema = ATBaseCriterionSchema + Schema((
     ReferenceField('value',
-                required=1,
-                mode="rw",
-                write_permission=ChangeTopics,
-                accessor="Value",
-                mutator="setValue",
-                allowed_types_method="getNavTypes",
-                multiValued=True,
-                keepReferencesOnCopy=True,
-                relationship="paths",
-                widget=RelatedItemsWidget(
-                    allow_search=1,
-                    label=_(u'label_path_criteria_value', default=u'Folders'),
-                    description=_(u'help_path_criteria_value',
-                                  default=u'Folders to search in.'),
-                    base_query={'is_folderish': True},
-                    restrict_browse=True,
-                    startup_directory='../')
-                ),
+                   required=1,
+                   mode="rw",
+                   write_permission=ChangeTopics,
+                   accessor="Value",
+                   mutator="setValue",
+                   allowed_types_method="getNavTypes",
+                   multiValued=True,
+                   keepReferencesOnCopy=True,
+                   relationship="paths",
+                   widget=RelatedItemsWidget(
+                       allow_search=1,
+                       label=_(u'label_path_criteria_value',
+                               default=u'Folders'),
+                       description=_(u'help_path_criteria_value',
+                                     default=u'Folders to search in.'),
+                       base_query={'is_folderish': True},
+                       restrict_browse=True,
+                       startup_directory='../')
+                   ),
     BooleanField('recurse',
-                mode="rw",
-                write_permission=ChangeTopics,
-                accessor="Recurse",
-                default=False,
-                widget=BooleanWidget(
-                    label=_(u'label_path_criteria_recurse', default=u'Search Sub-Folders'),
-                    description='',
-                    ),
-                ),
-    ))
+                 mode="rw",
+                 write_permission=ChangeTopics,
+                 accessor="Recurse",
+                 default=False,
+                 widget=BooleanWidget(
+                     label=_(u'label_path_criteria_recurse',
+                             default=u'Search Sub-Folders'),
+                     description='',
+                 ),
+                 ),
+))
 
 
 class ATPathCriterion(ATBaseCriterion):
@@ -75,10 +77,12 @@ class ATPathCriterion(ATBaseCriterion):
         self.reindexObject()
 
     security.declareProtected(View, 'getCriteriaItems')
+
     def getCriteriaItems(self):
         result = []
         depth = (not self.Recurse() and 1) or -1
-        paths = ['/'.join(o.getPhysicalPath()) for o in self.Value() if o is not None]
+        paths = ['/'.join(o.getPhysicalPath())
+                 for o in self.Value() if o is not None]
 
         if paths is not '':
             result.append((self.Field(), {'query': paths, 'depth': depth}))

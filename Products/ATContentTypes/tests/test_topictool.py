@@ -13,11 +13,11 @@ index_def = {'index': 'end',
              'friendlyName': 'End Date For Test',
              'description': 'This is an end Date',
              'criteria': ['ATDateCriteria', 'ATDateRangeCriteria']
-            }
+             }
 meta_def = {'metadata': 'ModificationDate',
             'friendlyName': 'Modification Date For Test',
             'description': ''
-           }
+            }
 
 
 class TestTool(atcttestcase.ATCTSiteTestCase):
@@ -29,7 +29,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.assertTrue(IATCTTopicsTool.providedBy(self.tool))
         self.assertTrue(verifyObject(IATCTTopicsTool, self.tool))
 
-    #Index tests
+    # Index tests
     def test_add_index(self):
         t = self.tool
         t.addIndex(enabled=True, **index_def)
@@ -42,9 +42,11 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(index.criteria, tuple(index_def['criteria']))
 
         self.assertTrue(index in t.getEnabledIndexes())
-        self.assertTrue(index_def['index'] in [a[0] for a in t.getEnabledFields()])
+        self.assertTrue(index_def['index'] in [a[0]
+                                               for a in t.getEnabledFields()])
         self.assertTrue(index_def['index'] in t.getIndexDisplay(True).keys())
-        self.assertTrue(index_def['friendlyName'] in t.getIndexDisplay(True).values())
+        self.assertTrue(index_def['friendlyName']
+                        in t.getIndexDisplay(True).values())
         self.assertTrue(index_def['index'] in t.getIndexes(1))
 
     def test_disable_index(self):
@@ -59,13 +61,16 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(index.criteria, tuple(index_def['criteria']))
 
         self.assertFalse(index in t.getEnabledIndexes())
-        self.assertFalse(index_def['index'] in [a[0] for a in t.getEnabledFields()])
+        self.assertFalse(index_def['index'] in [a[0]
+                                                for a in t.getEnabledFields()])
         self.assertFalse(index_def['index'] in t.getIndexes(1))
         self.assertFalse(index_def['index'] in t.getIndexDisplay(True).keys())
-        self.assertTrue(index_def['friendlyName'] not in t.getIndexDisplay(True).values())
+        self.assertTrue(index_def['friendlyName']
+                        not in t.getIndexDisplay(True).values())
         # Make sure it's still in the un-limited list
         self.assertTrue(index_def['index'] in t.getIndexDisplay(False).keys())
-        self.assertTrue(index_def['friendlyName'] in t.getIndexDisplay(False).values())
+        self.assertTrue(index_def['friendlyName']
+                        in t.getIndexDisplay(False).values())
         self.assertTrue(index_def['index'] in t.getIndexes())
 
     def test_add_bogus_index(self):
@@ -74,16 +79,16 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         t.addIndex('bogosity', enabled=True)
         self.assertTrue(t.getIndex('bogosity'))
 
-        #Add
+        # Add
         t.addIndex('bogosity', enabled=True)
         self.assertTrue('bogosity' in [a[0] for a in t.getEnabledFields()])
-        #Add
+        # Add
         t.addIndex('bogosity', enabled=True)
         self.assertTrue('bogosity' in t.getIndexDisplay(True).keys())
-        #Add
+        # Add
         t.addIndex('bogosity', enabled=True)
         self.assertTrue('bogosity' in t.getIndexes(1))
-        #Add
+        # Add
         t.addIndex('bogosity', enabled=True)
         self.assertTrue('bogosity' in [i.index for i in t.getEnabledIndexes()])
 
@@ -127,13 +132,14 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         indexes = [field for field in cat.indexes()]
         init_indexes = list(t.getIndexes())
         unique_indexes = [i for i in indexes if i not in init_indexes]
-        unique_indexes = unique_indexes + [i for i in init_indexes if i not in indexes]
+        unique_indexes = unique_indexes + \
+            [i for i in init_indexes if i not in indexes]
         self.assertFalse(unique_indexes)
 
     def test_change_catalog_index(self):
         t = self.tool
         cat = getToolByName(self.tool, 'portal_catalog')
-        #add
+        # add
         error = True
         cat.manage_addIndex('nonsense', 'FieldIndex')
         try:
@@ -141,7 +147,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         except AttributeError:
             error = False
         self.assertFalse(error)
-        #remove
+        # remove
         error = False
         cat.delIndex('nonsense')
         try:
@@ -150,7 +156,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
             error = True
         self.assertTrue(error)
 
-    #Metadata tests
+    # Metadata tests
     def test_add_metadata(self):
         t = self.tool
         t.addMetadata(enabled=True, **meta_def)
@@ -162,8 +168,10 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         self.assertTrue(meta.enabled)
 
         self.assertTrue(meta in t.getEnabledMetadata())
-        self.assertTrue(meta_def['metadata'] in t.getMetadataDisplay(True).keys())
-        self.assertTrue(meta_def['friendlyName'] in t.getMetadataDisplay(True).values())
+        self.assertTrue(meta_def['metadata']
+                        in t.getMetadataDisplay(True).keys())
+        self.assertTrue(meta_def['friendlyName']
+                        in t.getMetadataDisplay(True).values())
         self.assertTrue(meta_def['metadata'] in t.getAllMetadata(1))
 
     def test_disable_metadata(self):
@@ -178,11 +186,15 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
 
         self.assertTrue(meta not in t.getEnabledMetadata())
         self.assertFalse(meta_def['metadata'] in t.getAllMetadata(1))
-        self.assertFalse(meta_def['metadata'] in t.getMetadataDisplay(True).keys())
-        self.assertFalse(meta_def['friendlyName'] in t.getMetadataDisplay(True).values())
+        self.assertFalse(meta_def['metadata']
+                         in t.getMetadataDisplay(True).keys())
+        self.assertFalse(meta_def['friendlyName']
+                         in t.getMetadataDisplay(True).values())
         # Make sure it's still in the un-limited list
-        self.assertTrue(meta_def['metadata'] in t.getMetadataDisplay(False).keys())
-        self.assertTrue(meta_def['friendlyName'] in t.getMetadataDisplay(False).values())
+        self.assertTrue(meta_def['metadata']
+                        in t.getMetadataDisplay(False).keys())
+        self.assertTrue(meta_def['friendlyName']
+                        in t.getMetadataDisplay(False).values())
         self.assertTrue(meta_def['metadata'] in t.getAllMetadata())
 
     def test_add_bogus_metadata(self):
@@ -191,15 +203,16 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         t.addMetadata('bogosity', enabled=True)
         self.assertTrue(t.getMetadata('bogosity'))
 
-        #Add
+        # Add
         t.addMetadata('bogosity', enabled=True)
         self.assertTrue('bogosity' in t.getMetadataDisplay(True).keys())
-        #Add
+        # Add
         t.addMetadata('bogosity', enabled=True)
         self.assertTrue('bogosity' in t.getAllMetadata(1))
-        #Add
+        # Add
         t.addMetadata('bogosity', enabled=True)
-        self.assertTrue('bogosity' in [i.index for i in t.getEnabledMetadata()])
+        self.assertTrue(
+            'bogosity' in [i.index for i in t.getEnabledMetadata()])
 
     def test_remove_metadata(self):
         t = self.tool
@@ -236,13 +249,14 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         metadata = [field for field in cat.schema()]
         init_metadata = list(t.getAllMetadata())
         unique_metadata = [i for i in metadata if i not in init_metadata]
-        unique_metadata = unique_metadata + [i for i in init_metadata if i not in metadata]
+        unique_metadata = unique_metadata + \
+            [i for i in init_metadata if i not in metadata]
         self.assertFalse(unique_metadata)
 
     def test_change_catalog_schema(self):
         t = self.tool
         cat = getToolByName(self.tool, 'portal_catalog')
-        #add
+        # add
         error = True
         cat.manage_addColumn('nonsense')
         try:
@@ -250,7 +264,7 @@ class TestTool(atcttestcase.ATCTSiteTestCase):
         except AttributeError:
             error = False
         self.assertFalse(error)
-        #remove
+        # remove
         error = False
         cat.delColumn('nonsense')
         try:

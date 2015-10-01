@@ -7,7 +7,8 @@ class TestContentProfile(PloneTestCase):
 
     def afterSetUp(self):
         portal_setup = self.portal.portal_setup
-        portal_setup.runAllImportStepsFromProfile('profile-Products.ATContentTypes:content')
+        portal_setup.runAllImportStepsFromProfile(
+            'profile-Products.ATContentTypes:content')
 
     def testPortalContentLanguage(self):
         from zope.component import provideUtility

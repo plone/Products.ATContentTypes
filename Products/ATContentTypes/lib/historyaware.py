@@ -36,10 +36,11 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
         'action': 'string:${object_url}/atct_history',
         'permissions': (ATCTPermissions.ViewHistory, ),
         'visible': False,
-         },
+    },
     )
 
     security.declarePrivate('getHistorySource')
+
     def getHistorySource(self):
         """get source for HistoryAwareMixin
 
@@ -52,6 +53,7 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
             return ''
 
     security.declareProtected(View, 'getLastEditor')
+
     def getLastEditor(self):
         """Returns the user name of the last editor.
 
@@ -61,9 +63,11 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
         if not histories:
             return None
         user = histories[0][3].split(" ")[-1].strip()
-        return  user
+        return user
 
-    security.declareProtected(ATCTPermissions.ViewHistory, 'getDocumentComparisons')
+    security.declareProtected(
+        ATCTPermissions.ViewHistory, 'getDocumentComparisons')
+
     def getDocumentComparisons(self, max=10, filterComment=0):
         """Get history as unified diff
         """
@@ -86,9 +90,9 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
             member = mTool.getMemberById(newUser.split(' ')[-1])
 
             lines = [
-                     html_quote(line)
-                     for line in difflib.unified_diff(oldText, newText)
-                    ][3:]
+                html_quote(line)
+                for line in difflib.unified_diff(oldText, newText)
+            ][3:]
 
             description = newDesc
             if filterComment:
@@ -97,19 +101,19 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
                               [line
                                for line in description.split('\n')
                                if line.find(relativUrl) != -1]
-                              )
+                )
             else:
                 description.replace('\n', '<br />\n')
 
             if lines:
                 lst.append({
-                            'lines': lines,
-                            'oldTime': oldTime,
-                            'newTime': newTime,
-                            'description': description,
-                            'user': newUser,
-                            'member': member
-                           })
+                    'lines': lines,
+                    'oldTime': oldTime,
+                    'newTime': newTime,
+                    'description': description,
+                    'user': newUser,
+                    'member': member
+                })
         return lst
 
 InitializeClass(HistoryAwareMixin)

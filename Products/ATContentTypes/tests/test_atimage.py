@@ -37,7 +37,8 @@ TEST_EXIF_ERROR = loadImage('canoneye.jpg')
 TEST_GIF = loadImage('test.gif')
 TEST_GIF_LEN = len(TEST_GIF)
 TEST_DIV_ERROR = loadImage('divisionerror.jpg')
-TEST_JPEG_FILE = open(os.path.join(PACKAGE_HOME, 'input', 'canoneye.jpg'), 'rb')
+TEST_JPEG_FILE = open(os.path.join(
+    PACKAGE_HOME, 'input', 'canoneye.jpg'), 'rb')
 # XXX replace it by an image with exif informations but w/o
 # the nasty error ...
 TEST_JPEG = loadImage('canoneye.jpg')
@@ -56,7 +57,8 @@ class TestIDFromTitle(FunctionalTestCase):
     def afterSetUp(self):
         self.userId = 'fred'
         self.password = 'secret'
-        self.portal.acl_users.userFolderAddUser(self.userId, self.password, ['Manager'], [])
+        self.portal.acl_users.userFolderAddUser(
+            self.userId, self.password, ['Manager'], [])
         commit()
         self.browser = Browser(self.layer['app'])
         self._log_in()
@@ -71,7 +73,8 @@ class TestIDFromTitle(FunctionalTestCase):
 
     def _make_image(self, title, filename='canoneye.jpg'):
         """Add a new Image at the root of the Plone site."""
-        self.browser.open(self.portal.absolute_url() + '/createObject?type_name=Image')
+        self.browser.open(self.portal.absolute_url() +
+                          '/createObject?type_name=Image')
         self.browser.getControl('Title').value = title
         image = self.browser.getControl(name='image_file')
         image.filename = filename
@@ -234,15 +237,18 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
-        self.assertTrue(field.default == None, 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 0, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == None, 'Value is %s' %
+                        str(field.default))
+        self.assertTrue(field.searchable == 0, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'getImage',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setImage',

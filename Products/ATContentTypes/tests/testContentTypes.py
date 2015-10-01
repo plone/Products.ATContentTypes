@@ -7,7 +7,7 @@ AddPortalTopics = 'Add portal topics'
 
 atct_types = ('Document', 'Event', 'File', 'Folder',
               'Image', 'Link', 'News Item',
-             )
+              )
 
 
 class TestATContentTypes(PloneTestCase):
@@ -67,9 +67,9 @@ class TestContentTypes(PloneTestCase):
                                start_date='2003-09-18',
                                end_date='2003-09-19')
         self.assertEqual(self.folder.event.Title(), 'Foo')
-        self.assertTrue(self.folder.event.start().ISO8601() \
+        self.assertTrue(self.folder.event.start().ISO8601()
                             .startswith('2003-09-18T00:00:00'))
-        self.assertTrue(self.folder.event.end().ISO8601() \
+        self.assertTrue(self.folder.event.end().ISO8601()
                             .startswith('2003-09-19T00:00:00'))
 
     def testFileEdit(self):

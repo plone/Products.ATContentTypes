@@ -35,7 +35,7 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
     def test_installedAllTypes(self):
         # test that all types are installed well
         ids = ('Document', 'File', 'Folder', 'Image', 'Link',
-            'News Item', 'Topic', 'Event')
+               'News Item', 'Topic', 'Event')
         for i in ids:
             self.assertTrue(i in self.ttool)
 
@@ -59,9 +59,9 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         # a rought guess
         self.assertFalse(len(ids) < 5)
         for id in ids:
-                result = cat(id=id)
-                l = len(result)
-                self.assertEqual(l, 0, (id, l, result))
+            result = cat(id=id)
+            l = len(result)
+            self.assertEqual(l, 0, (id, l, result))
 
     def test_adds_related_items_catalog_index(self):
         self.assertEqual(self.cat.Indexes['getRawRelatedItems'].__class__.__name__,

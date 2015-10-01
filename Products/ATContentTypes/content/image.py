@@ -49,16 +49,16 @@ ATImageSchema = ATContentTypeSchema.copy() + Schema((
                       'tile': (64, 64),
                       'icon': (32, 32),
                       'listing': (16, 16),
-                     },
+                      },
                validators=(('isNonEmptyFile', V_REQUIRED),
                            ('checkImageMaxSize', V_REQUIRED)),
                widget=ImageWidget(
-                        description='',
-                        label=_(u'label_image', default=u'Image'),
-                        show_content_type=False,)),
+                   description='',
+                   label=_(u'label_image', default=u'Image'),
+                   show_content_type=False,)),
 
-    ), marshall=PrimaryFieldMarshaller()
-    )
+), marshall=PrimaryFieldMarshaller()
+)
 
 # Title is pulled from the file name if we don't specify anything,
 # so it's not strictly required, unlike in the rest of ATCT.
@@ -74,7 +74,8 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
 
     portal_type = 'Image'
     archetype_name = 'Image'
-    _atct_newTypeFor = {'portal_type': 'CMF Image', 'meta_type': 'Portal Image'}
+    _atct_newTypeFor = {'portal_type': 'CMF Image',
+                        'meta_type': 'Portal Image'}
     assocMimetypes = ('image/*', )
     assocFileExt = ('jpg', 'jpeg', 'png', 'gif', )
     cmf_edit_kws = ('file', )
@@ -87,6 +88,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         return '', ''
 
     security.declareProtected(ModifyPortalContent, 'setImage')
+
     def setImage(self, value, refresh_exif=True, **kwargs):
         """Set ID to uploaded file name if Title is empty."""
         # set exif first because rotation might screw up the exif data
@@ -97,10 +99,12 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
 
     def _should_set_id_to_filename(self, filename, title):
         """If title is blank, have the caller set my ID to the uploaded file's name."""
-        # When the title is blank, sometimes the filename is returned as the title.
+        # When the title is blank, sometimes the filename is returned as the
+        # title.
         return filename == title or not title
 
     security.declareProtected(View, 'tag')
+
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
         """
@@ -112,6 +116,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         return self.tag()
 
     security.declareProtected(View, 'get_size')
+
     def get_size(self):
         """ZMI / Plone get size method
 
@@ -124,15 +129,18 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         return img.get_size()
 
     security.declareProtected(View, 'getSize')
+
     def getSize(self, scale=None):
         field = self.getField('image')
         return field.getSize(self, scale=scale)
 
     security.declareProtected(View, 'getWidth')
+
     def getWidth(self, scale=None):
         return self.getSize(scale)[0]
 
     security.declareProtected(View, 'getHeight')
+
     def getHeight(self, scale=None):
         return self.getSize(scale)[1]
 
@@ -140,6 +148,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     height = ComputedAttribute(getHeight, 1)
 
     security.declarePrivate('cmf_edit')
+
     def cmf_edit(self, precondition='', file=None, title=None):
         if file is not None:
             self.setImage(file)

@@ -17,14 +17,14 @@ from Products.ATContentTypes import ATCTMessageFactory as _
 
 ATSortCriterionSchema = ATBaseCriterionSchema + Schema((
     BooleanField('reversed',
-                required=0,
-                mode="rw",
-                write_permission=ChangeTopics,
-                default=0,
-                widget=BooleanWidget(label=_(u'Reverse')),
-                ),
+                 required=0,
+                 mode="rw",
+                 write_permission=ChangeTopics,
+                 default=0,
+                 widget=BooleanWidget(label=_(u'Reverse')),
+                 ),
 
-    ))
+))
 
 
 class ATSortCriterion(ATBaseCriterion):
@@ -38,6 +38,7 @@ class ATSortCriterion(ATBaseCriterion):
     shortDesc = 'Sort'
 
     security.declareProtected(View, 'getCriteriaItems')
+
     def getCriteriaItems(self):
         result = [('sort_on', self.Field())]
 

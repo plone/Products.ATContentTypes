@@ -39,9 +39,9 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.af.setImmediatelyAddableTypes(['Folder'])
 
         self.assertEqual(self.af.getLocallyAllowedTypes(),
-                                ('Folder', 'Image',))
+                         ('Folder', 'Image',))
         self.assertEqual(self.af.getImmediatelyAddableTypes(),
-                                ('Folder',))
+                         ('Folder',))
 
         self.assertRaises(ValueError, self.af.invokeFactory, 'Document', 'a')
         try:
@@ -57,9 +57,9 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         # We can still set and persist, even though it is disabled - must
         # remember!
         self.assertEqual(self.af.getRawLocallyAllowedTypes(),
-                                ('Folder', 'Image',))
+                         ('Folder', 'Image',))
         self.assertEqual(self.af.getRawImmediatelyAddableTypes(),
-                                ('Folder',))
+                         ('Folder',))
 
         try:
             self.af.invokeFactory('Document', 'whatever', title='life')
@@ -88,9 +88,9 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         inner.setImmediatelyAddableTypes(['Document'])
 
         self.assertEqual(inner.getRawLocallyAllowedTypes(),
-                                ('Document', 'Event',))
+                         ('Document', 'Event',))
         self.assertEqual(inner.getRawImmediatelyAddableTypes(),
-                                ('Document',))
+                         ('Document',))
 
         self.assertRaises(ValueError, inner.invokeFactory, 'Event', 'a')
         try:
@@ -100,16 +100,17 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
 
         # Make sure immediately-addable are inherited
         self.assertEqual(inner.getImmediatelyAddableTypes(),
-                                self.af.getImmediatelyAddableTypes())
+                         self.af.getImmediatelyAddableTypes())
 
         # Create a new unprivileged user who can only access the inner folder
-        self.portal.acl_users._doAddUser('restricted', 'secret', ['Member'], [])
+        self.portal.acl_users._doAddUser(
+            'restricted', 'secret', ['Member'], [])
         inner.manage_addLocalRoles('restricted', ('Manager',))
         # Login the new user
         user = self.portal.acl_users.getUserById('restricted')
         newSecurityManager(None, user)
         self.assertEqual(inner.getLocallyAllowedTypes(),
-                        ('Folder', 'Image'))
+                         ('Folder', 'Image'))
 
     def test_acquireFromHetereogenousParent(self):
 
@@ -137,9 +138,9 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         inner.setImmediatelyAddableTypes(['Document'])
 
         self.assertEqual(inner.getRawLocallyAllowedTypes(),
-                                ('Document', 'Event',))
+                         ('Document', 'Event',))
         self.assertEqual(inner.getRawImmediatelyAddableTypes(),
-                                ('Document',))
+                         ('Document',))
 
         # Fail - we didn't acquire this, really, since we can't acquire
         # from parent folder of different type
@@ -148,13 +149,14 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
 
         # Make sure immediately-addable are set to default
         self.assertEqual(inner.getImmediatelyAddableTypes(),
-                                inner.getLocallyAllowedTypes())
+                         inner.getLocallyAllowedTypes())
 
     def test_acquireFromCustomHetereogenousParent(self):
         self.loginAsPortalOwner()
         cp = self.portal.portal_types.manage_copyObjects(['Folder'])
         self.portal.portal_types.manage_pasteObjects(cp)
-        self.portal.portal_types.manage_renameObject('copy_of_Folder', 'Folder2')
+        self.portal.portal_types.manage_renameObject(
+            'copy_of_Folder', 'Folder2')
 
         # Let folder use a restricted set of types
         self.portal.portal_types.Folder.filter_content_types = 1
@@ -176,9 +178,10 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         folder2.setConstrainTypesMode(constraintypes.ACQUIRE)
 
         # News item is not in addable types because it is globally forbidden in Folder2 type
-        # and Folder is not in addable types because it is locally forbidden in folder2 parent
+        # and Folder is not in addable types because it is locally forbidden in
+        # folder2 parent
         self.assertEqual([fti.getId() for fti in folder2.allowedContentTypes()],
-                             ['Image'])
+                         ['Image'])
         self.assertEqual(folder2.getImmediatelyAddableTypes(), ['Image'])
 
 tests.append(TestConstrainTypes)

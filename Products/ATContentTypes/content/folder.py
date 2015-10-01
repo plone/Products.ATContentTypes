@@ -19,7 +19,8 @@ from Products.CMFCore.permissions import View
 from plone.app.folder import folder
 
 ATFolderSchema = folder.ATFolderSchema
-ObsoleteATFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema + NextPreviousAwareSchema
+ObsoleteATFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema + \
+    NextPreviousAwareSchema
 ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 
 finalizeATCTSchema(folder.ATFolderSchema, folderish=True, moveDiscussion=False)
@@ -39,7 +40,8 @@ class ObsoleteATFolder(ATCTOrderedFolder):
 
     portal_type = 'Folder'
     archetype_name = 'Folder'
-    _atct_newTypeFor = {'portal_type': 'CMF Folder', 'meta_type': 'Plone Folder'}
+    _atct_newTypeFor = {'portal_type': 'CMF Folder',
+                        'meta_type': 'Plone Folder'}
     assocMimetypes = ()
     assocFileExt = ()
     cmf_edit_kws = ()
@@ -52,6 +54,7 @@ class ObsoleteATFolder(ATCTOrderedFolder):
     security = ClassSecurityInfo()
 
     security.declareProtected(View, 'getNextPreviousParentValue')
+
     def getNextPreviousParentValue(self):
         """If the parent node is also an IATFolder and has next/previous
         navigation enabled, then let this folder have it enabled by
@@ -68,9 +71,9 @@ registerATCT(ObsoleteATFolder, PROJECTNAME)
 
 
 FOLDER_MANAGE_OPTIONS = (
- {'action': 'manage_main', 'label': 'Contents'},
- {'action': '', 'label': 'View'},
- {'action': 'manage_interfaces', 'label': 'Interfaces'},
+    {'action': 'manage_main', 'label': 'Contents'},
+    {'action': '', 'label': 'View'},
+    {'action': 'manage_interfaces', 'label': 'Interfaces'},
 )
 
 
@@ -82,6 +85,7 @@ if HAS_LINGUAPLONE:
         security = ClassSecurityInfo()
 
         security.declarePrivate('manage_beforeDelete')
+
         def manage_beforeDelete(self, item, container):
             I18NOnlyBaseBTreeFolder.manage_beforeDelete(self, item, container)
             folder.ATFolder.manage_beforeDelete(self, item, container)

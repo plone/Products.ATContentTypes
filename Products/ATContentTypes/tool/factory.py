@@ -165,8 +165,8 @@ class TempFolder(TempFolderBase):
                  getSecurityManager=getSecurityManager,
                  ):
         return aq_parent(
-                    aq_parent(self)).getOwner(
-                        info, aq_get, UnownableOwner, getSecurityManager)
+            aq_parent(self)).getOwner(
+            info, aq_get, UnownableOwner, getSecurityManager)
 
     def userCanTakeOwnership(self):
         return aq_parent(aq_parent(self)).userCanTakeOwnership()
@@ -196,7 +196,7 @@ class TempFolder(TempFolderBase):
 
         if id in self:
             return (aq_base(self._getOb(id)).__of__(temp_folder)) \
-                        .__of__(intended_parent)
+                .__of__(intended_parent)
         else:
             type_name = self.getId()
             try:
@@ -204,7 +204,7 @@ class TempFolder(TempFolderBase):
                 # object to be indexed in to avoid it showing up in the catalog
                 # in the first place.
                 self.archetype_tool = FauxArchetypeTool(
-                                        getToolByName(self, 'archetype_tool'))
+                    getToolByName(self, 'archetype_tool'))
                 _createObjectByType(type_name, self, id)
             except ConflictError:
                 raise
@@ -276,6 +276,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
     _docs = stx2html(_docs)
 
     security.declarePublic('docs')
+
     def docs(self):
         """Returns FactoryTool docs formatted as HTML"""
         return self._docs
@@ -286,6 +287,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         return self._factory_types
 
     security.declareProtected(ManagePortal, 'manage_setPortalFactoryTypes')
+
     def manage_setPortalFactoryTypes(self, REQUEST=None, listOfTypeIds=None):
         """Set the portal types that should use the factory."""
         if listOfTypeIds is not None:
@@ -363,7 +365,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         """Check to see if an object is temporary"""
         ob = aq_base(aq_parent(aq_inner(obj)))
         return hasattr(ob, 'meta_type') \
-                and ob.meta_type == TempFolder.meta_type
+            and ob.meta_type == TempFolder.meta_type
 
     def __before_publishing_traverse__(self, other, REQUEST):
 
@@ -440,6 +442,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         return self._getTempFolder(str(name))
 
     security.declarePublic('__call__')
+
     def __call__(self, *args, **kwargs):
         """call method"""
         self._fixRequest()
@@ -451,7 +454,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         # do a passthrough if parent contains the id
         if id in aq_parent(self):
             return aq_parent(self).restrictedTraverse(
-                        '/'.join(stack[1:]))(*args, **kwargs)
+                '/'.join(stack[1:]))(*args, **kwargs)
 
         tempFolder = self._getTempFolder(type_name)
         # Mysterious hack that fixes some problematic interactions with
@@ -474,8 +477,8 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         else:
             obj = temp_obj
         return mapply(obj, self.REQUEST.args, self.REQUEST,
-                               call_object, 1, missing_name,
-                               dont_publish_class, self.REQUEST, bind=1)
+                      call_object, 1, missing_name,
+                      dont_publish_class, self.REQUEST, bind=1)
 
     index_html = None  # call __call__, not index_html
 

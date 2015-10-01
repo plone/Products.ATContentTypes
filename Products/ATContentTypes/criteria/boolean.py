@@ -20,17 +20,17 @@ from Products.ATContentTypes import ATCTMessageFactory as _
 
 ATBooleanCriterionSchema = ATBaseCriterionSchema + Schema((
     BooleanField('bool',
-                required=1,
-                mode="rw",
-                write_permission=ChangeTopics,
-                default=None,
-                widget=BooleanWidget(
-                    label=_(u'label_boolean_criteria_bool', default=u'Value'),
-                    description=_(u'help_boolean_criteria_bool',
-                                  default=u'True or false')
-                    ),
-                ),
-    ))
+                 required=1,
+                 mode="rw",
+                 write_permission=ChangeTopics,
+                 default=None,
+                 widget=BooleanWidget(
+                     label=_(u'label_boolean_criteria_bool', default=u'Value'),
+                     description=_(u'help_boolean_criteria_bool',
+                                   default=u'True or false')
+                 ),
+                 ),
+))
 
 
 class ATBooleanCriterion(ATBaseCriterion):
@@ -45,6 +45,7 @@ class ATBooleanCriterion(ATBaseCriterion):
     shortDesc = 'Boolean (True/False)'
 
     security.declareProtected(View, 'getCriteriaItems')
+
     def getCriteriaItems(self):
         result = []
         if self.getBool():

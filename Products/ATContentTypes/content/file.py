@@ -46,11 +46,11 @@ ATFileSchema = ATContentTypeSchema.copy() + Schema((
               validators=(('isNonEmptyFile', V_REQUIRED),
                           ('checkFileMaxSize', V_REQUIRED)),
               widget=FileWidget(
-                        description='',
-                        label=_(u'label_file', default=u'File'),
-                        show_content_type=False,)),
-    ), marshall=PrimaryFieldMarshaller()
-    )
+                  description='',
+                  label=_(u'label_file', default=u'File'),
+                  show_content_type=False,)),
+), marshall=PrimaryFieldMarshaller()
+)
 
 # Title is pulled from the file name if we don't specify anything,
 # so it's not strictly required, unlike in the rest of ATCT.
@@ -82,6 +82,7 @@ class ATFile(ATCTFileContent):
     security = ClassSecurityInfo()
 
     security.declareProtected(View, 'index_html')
+
     def index_html(self, REQUEST=None, RESPONSE=None):
         """Download the file
         """
@@ -96,6 +97,7 @@ class ATFile(ATCTFileContent):
         return field.download(self)
 
     security.declareProtected(ModifyPortalContent, 'setFile')
+
     def setFile(self, value, **kwargs):
         """Set id to uploaded id
         """
@@ -107,6 +109,7 @@ class ATFile(ATCTFileContent):
         return self.get_data()
 
     security.declarePublic('getIcon')
+
     def getIcon(self, relative_to_portal=0):
         """Calculate the icon using the mime type of the file
         """
@@ -130,7 +133,8 @@ class ATFile(ATCTFileContent):
             try:
                 mimetypeitem = mtr.lookup(contenttype)
             except MimeTypeException, msg:
-                LOG.error('MimeTypeException for %s. Error is: %s' % (self.absolute_url(), str(msg)))
+                LOG.error('MimeTypeException for %s. Error is: %s' %
+                          (self.absolute_url(), str(msg)))
             if not mimetypeitem:
                 return BaseContent.getIcon(self, relative_to_portal)
             icon = mimetypeitem[0].icon_path
@@ -145,12 +149,14 @@ class ATFile(ATCTFileContent):
             return res
 
     security.declareProtected(View, 'icon')
+
     def icon(self):
         """for ZMI
         """
         return self.getIcon()
 
     security.declarePrivate('cmf_edit')
+
     def cmf_edit(self, precondition='', file=None):
         if file is not None:
             self.setFile(file)

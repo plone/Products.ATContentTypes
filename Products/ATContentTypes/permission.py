@@ -25,7 +25,8 @@ ChangeEvents = 'Change portal events'
 setDefaultRoles(ChangeEvents, ('Manager', 'Site Administrator', 'Owner',))
 
 ModifyConstrainTypes = "Modify constrain types"
-setDefaultRoles(ModifyConstrainTypes, ('Manager', 'Site Administrator', 'Owner'))
+setDefaultRoles(ModifyConstrainTypes,
+                ('Manager', 'Site Administrator', 'Owner'))
 
 ModifyViewTemplate = "Modify view template"
 setDefaultRoles(ModifyViewTemplate, ('Manager', 'Site Administrator', 'Owner'))
@@ -50,7 +51,8 @@ def wireAddPermissions():
         if IATTopic.implementedBy(atct['klass']):
             permission = AddTopics
         elif IATTopicCriterion.implementedBy(atct['klass']):
-            permission = "%s Topic: Add %s" % (PROJECTNAME, atct['portal_type'])
+            permission = "%s Topic: Add %s" % (
+                PROJECTNAME, atct['portal_type'])
             setDefaultRoles(permission, CRITERION_ROLES)
         else:
             permission = "%s: Add %s" % (PROJECTNAME, atct['portal_type'])

@@ -23,22 +23,23 @@ from Products.ATContentTypes import ATCTMessageFactory as _
 CompareOperators = DisplayList((
     ('and', _(u'and')),
     ('or', _(u'or')),
-    ))
+))
 
 ATSelectionCriterionSchema = ATBaseCriterionSchema + Schema((
     LinesField('value',
-                required=1,
-                mode="rw",
-                write_permission=ChangeTopics,
-                accessor="Value",
-                mutator="setValue",
-                default=[],
-                vocabulary="getCurrentValues",
-                widget=MultiSelectionWidget(
+               required=1,
+               mode="rw",
+               write_permission=ChangeTopics,
+               accessor="Value",
+               mutator="setValue",
+               default=[],
+               vocabulary="getCurrentValues",
+               widget=MultiSelectionWidget(
                     label=_(u'label_criteria_values', default=u'Values'),
-                    description=_(u'help_criteria_values', default=u'Existing values.')
-                    ),
-                ),
+                    description=_(u'help_criteria_values',
+                                  default=u'Existing values.')
+               ),
+               ),
     StringField('operator',
                 required=1,
                 mode="rw",
@@ -46,12 +47,13 @@ ATSelectionCriterionSchema = ATBaseCriterionSchema + Schema((
                 default='or',
                 vocabulary=CompareOperators,
                 widget=SelectionWidget(
-                    label=_(u'label_list_criteria_operator', default=u'operator name'),
+                    label=_(u'label_list_criteria_operator',
+                            default=u'operator name'),
                     description=_(u'help_list_criteria_operator',
                                   default=u'Operator used to join the tests on each value.')
-                    ),
                 ),
-    ))
+                ),
+))
 
 
 class ATSelectionCriterion(ATBaseCriterion):
@@ -72,11 +74,13 @@ class ATSelectionCriterion(ATBaseCriterion):
         # DisplayList keys though it is supposed to (it should
         # probably accept Booleans as well) so we only accept strings
         # for now
-        options = [(o.lower(), o) for o in options if isinstance(o, basestring)]
+        options = [(o.lower(), o)
+                   for o in options if isinstance(o, basestring)]
         options.sort()
         return [o[1] for o in options]
 
     security.declareProtected(View, 'getCriteriaItems')
+
     def getCriteriaItems(self):
         # filter out empty strings
         result = []
@@ -84,7 +88,8 @@ class ATSelectionCriterion(ATBaseCriterion):
         value = tuple([value for value in self.Value() if value])
         if not value:
             return ()
-        result.append((self.Field(), {'query': value, 'operator': self.getOperator()}),)
+        result.append(
+            (self.Field(), {'query': value, 'operator': self.getOperator()}),)
 
         return tuple(result)
 

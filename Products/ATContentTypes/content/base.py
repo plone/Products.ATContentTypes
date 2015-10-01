@@ -80,6 +80,7 @@ def translateMimetypeAlias(alias):
 
 class ReplaceableWrapper:
     """A wrapper around an object to make it replaceable."""
+
     def __init__(self, ob):
         self.__ob = ob
 
@@ -110,6 +111,7 @@ class ATCTMixin(BrowserDefaultMixin):
 
     security.declareProtected(ModifyPortalContent,
                               'initializeArchetype')
+
     def initializeArchetype(self, **kwargs):
         """called by the generated add* factory in types tool
 
@@ -135,6 +137,7 @@ class ATCTMixin(BrowserDefaultMixin):
                 raise
 
     security.declarePrivate('copyLayoutFromParent')
+
     def copyLayoutFromParent(self):
         """Copies the layout from the parent object if it's of the same type."""
         parent = aq_parent(aq_inner(self))
@@ -150,6 +153,7 @@ class ATCTMixin(BrowserDefaultMixin):
                     self.setLayout(parent_layout)
 
     security.declareProtected(ModifyPortalContent, 'edit')
+
     def edit(self, *args, **kwargs):
         """Reimplementing edit() to have a compatibility method for the old
         cmf edit() method
@@ -174,6 +178,7 @@ class ATCTMixin(BrowserDefaultMixin):
         return self.update(**kwargs)
 
     security.declarePrivate('cmf_edit')
+
     def cmf_edit(self, *args, **kwargs):
         """Overwrite this method to make AT compatible with the crappy
         CMF edit()
@@ -190,6 +195,7 @@ class ATCTMixin(BrowserDefaultMixin):
             return False
 
     security.declareProtected(View, 'get_size')
+
     def get_size(self):
         """ZMI / Plone get size method
         """
@@ -207,6 +213,7 @@ class ATCTContent(ATCTMixin, BaseContent):
     security = ClassSecurityInfo()
 
     security.declarePrivate('manage_afterPUT')
+
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
                         filename, REQUEST, RESPONSE):
         """After webdav/ftp PUT method
@@ -243,6 +250,7 @@ class ATCTFileContent(ATCTContent):
     security = ClassSecurityInfo()
 
     security.declareProtected(View, 'download')
+
     def download(self, REQUEST=None, RESPONSE=None):
         """Download the file (use default index_html)
         """
@@ -254,6 +262,7 @@ class ATCTFileContent(ATCTContent):
         return field.download(self, REQUEST, RESPONSE)
 
     security.declareProtected(View, 'index_html')
+
     def index_html(self, REQUEST=None, RESPONSE=None):
         """Make it directly viewable when entering the objects URL
         """
@@ -268,6 +277,7 @@ class ATCTFileContent(ATCTContent):
         # XXX what should be returned if no data is present?
 
     security.declareProtected(View, 'get_data')
+
     def get_data(self):
         """CMF compatibility method
         """
@@ -277,12 +287,14 @@ class ATCTFileContent(ATCTContent):
     data = ComputedAttribute(get_data, 1)
 
     security.declareProtected(View, 'size')
+
     def size(self):
         """Get size (image_view.pt)
         """
         return self.get_size()
 
     security.declareProtected(View, 'get_content_type')
+
     def get_content_type(self):
         """CMF compatibility method
         """
@@ -292,6 +304,7 @@ class ATCTFileContent(ATCTContent):
     content_type = ComputedAttribute(get_content_type, 1)
 
     security.declarePrivate('update_data')
+
     def update_data(self, data, content_type=None, size='ignored'):
         kwargs = {}
         if content_type is not None:
@@ -300,6 +313,7 @@ class ATCTFileContent(ATCTContent):
         mutator(data, **kwargs)
 
     security.declareProtected(ModifyPortalContent, 'manage_edit')
+
     def manage_edit(self, title, content_type, precondition='',
                     filedata=None, REQUEST=None):
         """
@@ -343,7 +357,7 @@ class ATCTFileContent(ATCTContent):
                 # the user has disabled "short name editing".
                 pass
             elif clean_filename and \
-                 self._should_set_id_to_filename(filename, self.Title()):
+                    self._should_set_id_to_filename(filename, self.Title()):
                 # If the user doesn't fill the Title field, Title() returns the
                 # uploaded file's name.
 
@@ -357,6 +371,7 @@ class ATCTFileContent(ATCTContent):
             # it does if we don't setId() here).
 
     security.declarePrivate('_should_set_id_to_filename')
+
     def _should_set_id_to_filename(self, filename, title):
         """Given the name of the uploaded file and my title, return whether the filename should be used as my ID.
 
@@ -366,6 +381,7 @@ class ATCTFileContent(ATCTContent):
         return filename != self.getId()
 
     security.declareProtected(View, 'post_validate')
+
     def post_validate(self, REQUEST=None, errors=None):
         """Validates upload file and id
         """
@@ -397,7 +413,7 @@ class ATCTFileContent(ATCTContent):
             # If check_id is not available just look for conflicting ids
             parent = aq_parent(aq_inner(self))
             check_id = used_id in parent and \
-                       'Id %s conflicts with an existing item' % used_id or False
+                'Id %s conflicts with an existing item' % used_id or False
         if check_id and used_id == id:
             errors['id'] = check_id
             REQUEST.form['id'] = used_id
@@ -405,6 +421,7 @@ class ATCTFileContent(ATCTContent):
             errors[f_name] = check_id
 
     security.declarePrivate('manage_afterPUT')
+
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
                         filename, REQUEST, RESPONSE):
         """After webdav/ftp PUT method
@@ -441,6 +458,7 @@ class ATCTFolder(ATCTMixin, BaseFolder):
     security = ClassSecurityInfo()
 
     security.declareProtected(View, 'get_size')
+
     def get_size(self):
         """Returns 1 as folders have no size."""
         return 1
@@ -461,11 +479,13 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
         return getToolByName(self, 'plone_utils').browserDefault(self)
 
     security.declareProtected(View, 'get_size')
+
     def get_size(self):
         """Returns 1 as folders have no size."""
         return 1
 
     security.declarePrivate('manage_afterMKCOL')
+
     def manage_afterMKCOL(self, id, result, REQUEST=None, RESPONSE=None):
         """After MKCOL handler
 
@@ -487,6 +507,7 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
             new.update(title=id)
 
     security.declareProtected(View, 'HEAD')
+
     def HEAD(self, REQUEST, RESPONSE):
         """HTTP HEAD handler"""
         return WebdavResoure.HEAD(self, REQUEST, RESPONSE)
@@ -500,6 +521,7 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
     security = ClassSecurityInfo()
 
     security.declareProtected(View, 'index_html')
+
     def index_html(self, REQUEST=None, RESPONSE=None):
         """Special case index_html"""
         request = REQUEST
@@ -526,7 +548,8 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
         """Rename a particular sub-object without changing its position.
         """
         old_position = self.getObjectPosition(id)
-        result = OrderedBaseFolder.manage_renameObject(self, id, new_id, REQUEST)
+        result = OrderedBaseFolder.manage_renameObject(
+            self, id, new_id, REQUEST)
         self.moveObjectToPosition(new_id, old_position)
         putils = getToolByName(self, 'plone_utils')
         putils.reindexOnReorder(self)
@@ -541,6 +564,7 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
     security = ClassSecurityInfo()
 
     security.declareProtected(View, 'index_html')
+
     def index_html(self, REQUEST=None, RESPONSE=None):
         """
         BTree folders don't store objects as attributes, the

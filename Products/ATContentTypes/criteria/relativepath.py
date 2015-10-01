@@ -27,18 +27,18 @@ ATRelativePathCriterionSchema = ATBaseCriterionSchema + Schema((
                                     i18n_domain="plone",
                                     description="Enter a relative path e.g.: <br /> '..' for the parent folder <br /> '../..' for the parent's parent <br />'../somefolder' for a sibling folder")),
     BooleanField('recurse',
-                mode="rw",
-                write_permission=ChangeTopics,
-                accessor="Recurse",
-                default=False,
-                widget=BooleanWidget(
-                    label="Search Sub-Folders",
-                    label_msgid="label_path_criteria_recurse",
-                    description="",
-                    description_msgid="help_path_criteria_recurse",
-                    i18n_domain="plone"),
-                ),
-    ))
+                 mode="rw",
+                 write_permission=ChangeTopics,
+                 accessor="Recurse",
+                 default=False,
+                 widget=BooleanWidget(
+                     label="Search Sub-Folders",
+                     label_msgid="label_path_criteria_recurse",
+                     description="",
+                     description_msgid="help_path_criteria_recurse",
+                     i18n_domain="plone"),
+                 ),
+))
 
 
 class ATRelativePathCriterion(ATBaseCriterion):
@@ -58,16 +58,19 @@ class ATRelativePathCriterion(ATBaseCriterion):
         return nav_types
 
     security.declareProtected(View, 'getCriteriaItems')
+
     def getCriteriaItems(self):
         result = []
         depth = (not self.Recurse() and 1) or -1
         relPath = self.getRelativePath()
 
-        # sanitize a bit: you never know, with all those windoze users out there
+        # sanitize a bit: you never know, with all those windoze users out
+        # there
         relPath = relPath.replace("\\", "/")
 
         # get the path to the portal object
-        portalPath = list(getToolByName(self, 'portal_url').getPortalObject().getPhysicalPath())
+        portalPath = list(getToolByName(
+            self, 'portal_url').getPortalObject().getPhysicalPath())
 
         if relPath[0] == '/':
             # someone didn't enter a relative path.

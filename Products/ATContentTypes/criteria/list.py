@@ -22,22 +22,22 @@ from Products.ATContentTypes import ATCTMessageFactory as _
 CompareOperators = DisplayList((
     ('and', _(u'and')),
     ('or', _(u'or')),
-    ))
+))
 
 ATListCriterionSchema = ATBaseCriterionSchema + Schema((
     LinesField('value',
-                required=1,
-                mode="rw",
-                write_permission=ChangeTopics,
-                accessor="Value",
-                mutator="setValue",
-                default=[],
-                widget=LinesWidget(
+               required=1,
+               mode="rw",
+               write_permission=ChangeTopics,
+               accessor="Value",
+               mutator="setValue",
+               default=[],
+               widget=LinesWidget(
                     label=_(u'label_list_criteria_value', default=u'Values'),
                     description=_(u'help_list_criteria_value',
                                   default=u'Values, each on its own line.')
-                    ),
-                ),
+               ),
+               ),
     StringField('operator',
                 required=1,
                 mode="rw",
@@ -49,9 +49,9 @@ ATListCriterionSchema = ATBaseCriterionSchema + Schema((
                             default=u'operator name'),
                     description=_(u'help_list_criteria_operator',
                                   default=u'Operator used to join the tests on each value.')
-                    ),
                 ),
-    ))
+                ),
+))
 
 
 class ATListCriterion(ATBaseCriterion):
@@ -66,6 +66,7 @@ class ATListCriterion(ATBaseCriterion):
     shortDesc = 'List of values'
 
     security.declareProtected(View, 'getCriteriaItems')
+
     def getCriteriaItems(self):
         # filter out empty strings
         result = []
@@ -73,7 +74,8 @@ class ATListCriterion(ATBaseCriterion):
         value = tuple([value for value in self.Value() if value])
         if not value:
             return ()
-        result.append((self.Field(), {'query': value, 'operator': self.getOperator()}),)
+        result.append(
+            (self.Field(), {'query': value, 'operator': self.getOperator()}),)
 
         return tuple(result)
 

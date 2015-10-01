@@ -13,6 +13,8 @@ tests = []
 RE_REMOVE_AUTHENTICATOR = re.compile(r'_authenticator=.*\"')
 
 # XXX: This should probably move to the new CMFDynamicViewFTI
+
+
 class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
     folder_type = 'Folder'
     image_type = 'Image'
@@ -98,14 +100,16 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         cat = self.portal.portal_catalog
         self.af.invokeFactory('Document', 'ad')
         self.af.invokeFactory('Document', 'other')
-        self.assertEqual(len(cat(getId=['ad', 'other'], is_default_page=True)), 0)
+        self.assertEqual(
+            len(cat(getId=['ad', 'other'], is_default_page=True)), 0)
         self.af.setDefaultPage('ad')
         self.assertEqual(len(cat(getId='ad', is_default_page=True)), 1)
         self.af.setDefaultPage('other')
         self.assertEqual(len(cat(getId='other', is_default_page=True)), 1)
         self.assertEqual(len(cat(getId='ad', is_default_page=True)), 0)
         self.af.setDefaultPage(None)
-        self.assertEqual(len(cat(getId=['ad', 'other'], is_default_page=True)), 0)
+        self.assertEqual(
+            len(cat(getId=['ad', 'other'], is_default_page=True)), 0)
 
     def test_setLayoutUnsetsDefaultPage(self):
         layout = 'atct_album_view'

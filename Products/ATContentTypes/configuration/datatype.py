@@ -40,7 +40,7 @@ def permission_handler(value):
         permission = _getValueFromDottedName(value)
     if not isinstance(permission, basestring):
         raise ValueError, 'Permission %s is not a string: %s' % (permission,
-            type(permission))
+                                                                 type(permission))
     return permission
 
 
@@ -113,7 +113,7 @@ class BaseFactory(object):
         self._names = {}
         self._parse()
 
-    #def __call__(self):
+    # def __call__(self):
     #    if not self._parsed:
     #        self._parse()
     #    return self
@@ -137,8 +137,8 @@ class MxTidy(BaseFactory):
         self.set('enable', sec.enable)
         cfg = {}
         for id in ('char_encoding', 'drop_empty_paras', 'drop_font_tags',
-          'indent_spaces', 'input_xml', 'output_xhtml', 'quiet', 'show_warnings',
-          'tab_size', 'word_2000', 'wrap'):
+                   'indent_spaces', 'input_xml', 'output_xhtml', 'quiet', 'show_warnings',
+                   'tab_size', 'word_2000', 'wrap'):
             cfg[id] = getattr(sec, id)
         self.set('options', cfg)
 

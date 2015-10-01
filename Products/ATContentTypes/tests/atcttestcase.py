@@ -46,7 +46,8 @@ class ATCTSiteTestCase(PloneTestCase):
         #  - Large Plone Folder
         #  - Topic
         user = self.portal.acl_users.getUserById(default_user)
-        orig_roles = self.portal.acl_users.portal_role_manager.getRolesForPrincipal(user)
+        orig_roles = self.portal.acl_users.portal_role_manager.getRolesForPrincipal(
+            user)
         self.setRoles(['Manager'])
         ttool = self.portal.portal_types
         cb_copy_data = ttool.manage_copyObjects(['Folder'])
@@ -172,10 +173,11 @@ class ATCTTypeTestCase(ATCTSiteTestCase):
 
         # invalid ids
         ids = ['asdf2', '???', '/asdf2', ' asdf2', 'portal_workflow',
-            'portal_url']
+               'portal_url']
         for id in ids:
             request.form = {'id': id, 'fieldset': 'default'}
-            self.assertNotEquals(asdf.validate(REQUEST=request), {}, "Not catched id: %s" % id)
+            self.assertNotEquals(asdf.validate(
+                REQUEST=request), {}, "Not catched id: %s" % id)
 
         # valid ids
         ids = ['', 'abcd', 'blafasel']
@@ -305,8 +307,10 @@ class ATCTFieldTestCase(ATCTSiteTestCase, BaseSchemaTest):
         self.assertTrue(field.getLayerImpl('storage') == AttributeStorage())
         self.assertEqual(field.validators, EmptyValidator)
         self.assertTrue(isinstance(field.widget, RelatedItemsWidget))
-        self.assertTrue(field.widget.allow_sorting, u'field and widget need to enable sorting')
-        self.assertTrue(field.referencesSortable, u'field and widget need to enable sorting')
+        self.assertTrue(field.widget.allow_sorting,
+                        u'field and widget need to enable sorting')
+        self.assertTrue(field.referencesSortable,
+                        u'field and widget need to enable sorting')
 
         vocab = field.Vocabulary(dummy)
         self.assertTrue(isinstance(vocab, DisplayList))

@@ -4,6 +4,9 @@ Changelog
 2.2.8 (unreleased)
 ------------------
 
+- White space only pep8 cleanup.  Not in the skins.
+  [maurits]
+
 - Removed use_folder_tabs from Topic.
   [maurits]
 

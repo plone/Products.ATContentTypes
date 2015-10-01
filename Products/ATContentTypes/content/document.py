@@ -39,29 +39,29 @@ ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
               primary=True,
               storage=AnnotationStorage(migrate=True),
               validators=('isTidyHtmlWithCleanup',),
-              #validators=('isTidyHtml',),
+              # validators=('isTidyHtml',),
               default_output_type='text/x-html-safe',
               widget=TinyMCEWidget(
-                        description='',
-                        label=_(u'label_body_text', default=u'Body Text'),
-                        rows=25,
-                        allow_file_upload=zconf.ATDocument.allow_document_upload),
-    ),
+                  description='',
+                  label=_(u'label_body_text', default=u'Body Text'),
+                  rows=25,
+                  allow_file_upload=zconf.ATDocument.allow_document_upload),
+              ),
 
     BooleanField('tableContents',
-        required=False,
-        languageIndependent=True,
-        widget=BooleanWidget(
-            label=_(
-                u'help_enable_table_of_contents',
-                default=u'Table of contents'),
-            description=_(
-                u'help_enable_table_of_contents_description',
-                default=u'If selected, this will show a table of contents at the top of the page.')
-            ),
-    )),
+                 required=False,
+                 languageIndependent=True,
+                 widget=BooleanWidget(
+                     label=_(
+                         u'help_enable_table_of_contents',
+                         default=u'Table of contents'),
+                     description=_(
+                         u'help_enable_table_of_contents_description',
+                         default=u'If selected, this will show a table of contents at the top of the page.')
+                 ),
+                 )),
     marshall=RFC822Marshaller()
-    )
+)
 
 ATDocumentSchema['description'].widget.label = \
     _(u'label_summary', default=u'Summary')
@@ -79,18 +79,21 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
     cmf_edit_kws = ('text_format',)
 
     security.declareProtected(View, 'CookedBody')
+
     def CookedBody(self, stx_level='ignored'):
         """CMF compatibility method
         """
         return self.getText()
 
     security.declareProtected(ModifyPortalContent, 'EditableBody')
+
     def EditableBody(self):
         """CMF compatibility method
         """
         return self.getRawText()
 
     security.declareProtected(ModifyPortalContent, 'setFormat')
+
     def setFormat(self, value):
         """CMF compatibility method
 
@@ -109,6 +112,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
         ATCTContent.setFormat(self, value)
 
     security.declareProtected(ModifyPortalContent, 'setText')
+
     def setText(self, value, **kwargs):
         """Body text mutator
 
@@ -134,6 +138,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
     text_format = ComputedAttribute(ATCTContent.getContentType, 1)
 
     security.declarePrivate('guessMimetypeOfText')
+
     def guessMimetypeOfText(self):
         """For ftp/webdav upload: get the mimetype from the id and data
         """
@@ -157,6 +162,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
         return mimetype.normalized()
 
     security.declarePrivate('getTidyOutput')
+
     def getTidyOutput(self, field):
         """Get the tidied output for a specific field from the request
         if available
@@ -175,6 +181,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
         return ATCTContent._notifyOfCopyTo(self, container, op=op)
 
     security.declarePrivate('manage_afterAdd')
+
     def manage_afterAdd(self, item, container):
         """Fix text when created througt webdav
         Guess the right mimetype from the id/data
@@ -196,12 +203,14 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
                 field.set(self, tidyOutput)  # set is ok
 
     security.declarePrivate('cmf_edit')
+
     def cmf_edit(self, text_format, text, file='', safety_belt='', **kwargs):
         assert file == '', 'file currently not supported'  # XXX
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
 
     security.declarePrivate('manage_afterPUT')
+
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
                         filename, REQUEST, RESPONSE):
         """After webdav/ftp PUT method

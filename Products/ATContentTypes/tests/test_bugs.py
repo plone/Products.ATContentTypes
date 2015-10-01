@@ -22,7 +22,7 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
             'Link': default,
             'News Item': default,
             'Collection': default,
-            }
+        }
 
         for pt, wf in mapping.items():
             pwf = self.portal.portal_workflow.getChainFor(pt)
@@ -33,7 +33,8 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
         self.folder.invokeFactory('Document', 'document')
         d = getattr(self.folder, 'document')
         d.setTitle("HTML end tags start with </ and end with >")
-        self.assertEqual(d.Title(), "HTML end tags start with </ and end with >")
+        self.assertEqual(
+            d.Title(), "HTML end tags start with </ and end with >")
 
     def test_validation_layer_from_id_field_from_base_schema_was_initialized(self):
         field = ATContentTypeSchema['id']

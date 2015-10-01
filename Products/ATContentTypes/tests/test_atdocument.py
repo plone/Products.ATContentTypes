@@ -79,8 +79,9 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
     def test_rename_keeps_contenttype(self):
         doc = self._ATCT
         doc.setText(example_rest, mimetype="text/x-rst")
-        self.assertTrue(str(doc.getField('text').getContentType(doc)) == "text/x-rst")
-        #make sure we have _p_jar
+        self.assertTrue(
+            str(doc.getField('text').getContentType(doc)) == "text/x-rst")
+        # make sure we have _p_jar
         transaction.savepoint(optimistic=True)
 
         cur_id = 'ATCT'
@@ -97,7 +98,7 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
             # MTR doens't know about text/stx, and transforming
             # doubles the tags. Yuck.
             ('text/structured', '<p><p>test</p></p>\n'),
-           )
+        )
         for mimetype, expected in mimetypes:
             # scrub html is removing unallowed tags
             text = "<p>test</p><script>I'm a nasty boy<p>nested</p></script>"
@@ -207,15 +208,18 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == '', 'Value is %s' %
+                        str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'getText',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setText',
@@ -276,24 +280,28 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
         response = self.publish(edit_form_path, self.basic_auth)
         self.assertEqual(response.getStatus(), 200)  # OK
 
-        #Change the title
+        # Change the title
         temp_id = location.split('/')[-2]
         obj_title = "New Title for Object"
         new_id = "new-title-for-object"
         new_obj = self.folder.portal_factory._getTempFolder('Document')[new_id]
         #new_obj = getattr(self.folder.aq_explicit, temp_id)
         new_obj_path = '/%s' % new_obj.absolute_url(1)
-        self.assertEqual(new_obj.checkCreationFlag(), True)  # object is not yet edited
+        # object is not yet edited
+        self.assertEqual(new_obj.checkCreationFlag(), True)
 
         from plone.protect import auto
         auto.CSRF_DISABLED = True
-        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank&_authenticator=%s' % (new_obj_path, obj_title, auth), self.basic_auth)  # Edit object
+        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank&_authenticator=%s' %
+                                (new_obj_path, obj_title, auth), self.basic_auth)  # Edit object
         self.assertEqual(response.getStatus(), 302)  # OK
         new_obj = self.folder[new_id]
         self.assertEqual(new_obj.getId(), new_id)  # does id match
-        self.assertEqual(new_obj.checkCreationFlag(), False)  # object is fully created
+        self.assertEqual(new_obj.checkCreationFlag(),
+                         False)  # object is fully created
         new_title = "Second Title"
-        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank&_authenticator=%s' % ('/%s' % new_obj.absolute_url(1), new_title, auth), self.basic_auth)  # Edit object
+        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank&_authenticator=%s' % (
+            '/%s' % new_obj.absolute_url(1), new_title, auth), self.basic_auth)  # Edit object
         self.assertEqual(response.getStatus(), 302)  # OK
         self.assertEqual(new_obj.getId(), new_id)  # id shouldn't have changed
         auto.CSRF_DISABLED = False

@@ -11,7 +11,8 @@ class TestBaseProfile(PloneTestCase):
         qi = self.portal.portal_quickinstaller
         qi.uninstallProducts(['ATContentTypes'])
         portal_setup = self.portal.portal_setup
-        portal_setup.runAllImportStepsFromProfile('profile-Products.ATContentTypes:base')
+        portal_setup.runAllImportStepsFromProfile(
+            'profile-Products.ATContentTypes:base')
 
     def test_attypes_not_installed(self):
         tt = getToolByName(self.portal, 'portal_types')

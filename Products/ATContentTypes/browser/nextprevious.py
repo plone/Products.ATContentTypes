@@ -74,7 +74,7 @@ class ATFolderNextPrevious(object):
         nextPrevious = {
             'next': next,
             'previous': previous,
-            }
+        }
 
         return nextPrevious
 

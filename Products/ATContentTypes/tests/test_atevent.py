@@ -147,15 +147,18 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == '', 'Value is %s' %
+                        str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'getLocation',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setLocation',
@@ -187,13 +190,16 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         field = dummy.getField('subject')
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == (), 'Value is %s' % str(str(field.default)))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == (), 'Value is %s' %
+                        str(str(field.default)))
+        self.assertTrue(field.searchable == 1, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 1,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 1, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 1, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'Subject',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setSubject',
@@ -223,15 +229,18 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == '', 'Value is %s' %
+                        str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'event_url',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setEventUrl',
@@ -264,16 +273,20 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
-        self.assertTrue(field.default == None, 'Value is %s' % str(field.default))
-        self.assertTrue(field.default_method == DateTime, 'Value is %s' % str(field.default_method))
-        self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == None, 'Value is %s' %
+                        str(field.default))
+        self.assertTrue(field.default_method == DateTime,
+                        'Value is %s' % str(field.default_method))
+        self.assertTrue(field.searchable == False,
+                        'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'start',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setStartDate',
@@ -307,16 +320,20 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
-        self.assertTrue(field.default == None, 'Value is %s' % str(field.default))
-        self.assertTrue(field.default_method == DateTime, 'Value is %s' % str(field.default_method))
-        self.assertTrue(field.searchable == False, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == None, 'Value is %s' %
+                        str(field.default))
+        self.assertTrue(field.default_method == DateTime,
+                        'Value is %s' % str(field.default_method))
+        self.assertTrue(field.searchable == False,
+                        'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'end',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setEndDate',
@@ -350,15 +367,18 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == '', 'Value is %s' %
+                        str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'contact_name',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setContactName',
@@ -392,15 +412,18 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == '', 'Value is %s' %
+                        str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'contact_email',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setContactEmail',
@@ -434,15 +457,18 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == '', 'Value is %s' %
+                        str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'contact_phone',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setContactPhone',
@@ -475,15 +501,18 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == (), 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == (), 'Value is %s' %
+                        str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'getAttendees',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setAttendees',
@@ -515,15 +544,18 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
 
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
-        self.assertTrue(field.default == '', 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == 1, 'Value is %s' % field.searchable)
+        self.assertTrue(field.default == '', 'Value is %s' %
+                        str(field.default))
+        self.assertTrue(field.searchable == 1, 'Value is %s' %
+                        field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
         self.assertTrue(field.enforceVocabulary == 0,
                         'Value is %s' % field.enforceVocabulary)
         self.assertTrue(field.multiValued == 0,
                         'Value is %s' % field.multiValued)
-        self.assertTrue(field.isMetadata == 0, 'Value is %s' % field.isMetadata)
+        self.assertTrue(field.isMetadata == 0, 'Value is %s' %
+                        field.isMetadata)
         self.assertTrue(field.accessor == 'getText',
                         'Value is %s' % field.accessor)
         self.assertTrue(field.mutator == 'setText',

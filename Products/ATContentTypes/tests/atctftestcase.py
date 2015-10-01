@@ -61,7 +61,8 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         self.obj_id = 'test_object'
         self.title = u'test \xf6bject'
         if not self.obj_id in self.folder:
-            self.folder.invokeFactory(self.portal_type, self.obj_id, title=self.title)
+            self.folder.invokeFactory(
+                self.portal_type, self.obj_id, title=self.title)
         self.obj = getattr(self.folder.aq_explicit, self.obj_id)
         self.obj_url = self.obj.absolute_url()
         self.obj_path = '/%s' % self.obj.absolute_url(1)
@@ -88,12 +89,15 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         self.assertEqual(response.getStatus(), 200)  # OK
         temp_id = body.split('/')[-2]
 
-        new_obj = self.folder.portal_factory._getTempFolder(self.portal_type)[temp_id]
-        self.assertEqual(new_obj.checkCreationFlag(), True)  # object is not yet edited
+        new_obj = self.folder.portal_factory._getTempFolder(self.portal_type)[
+            temp_id]
+        # object is not yet edited
+        self.assertEqual(new_obj.checkCreationFlag(), True)
 
     def check_newly_created(self):
         """Objects created programmatically should not have the creation flag set"""
-        self.assertEqual(self.obj.checkCreationFlag(), False)  # object is fully created
+        self.assertEqual(self.obj.checkCreationFlag(),
+                         False)  # object is fully created
 
     def test_edit_view(self):
         # edit should work
@@ -106,7 +110,8 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
     def test_base_view(self):
         # base view should work
-        response = self.publish('%s/base_view' % self.obj_path, self.basic_auth)
+        response = self.publish('%s/base_view' %
+                                self.obj_path, self.basic_auth)
         self.assertEqual(response.getStatus(), 200)  # OK
 
     def test_dynamic_view(self):
@@ -123,15 +128,17 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
     if HAS_LINGUA_PLONE:
 
         def test_linguaplone_views(self):
-            response = self.publish('%s/translate_item' % self.obj_path, self.basic_auth)
+            response = self.publish('%s/translate_item' %
+                                    self.obj_path, self.basic_auth)
             self.assertEqual(response.getStatus(), 200)  # OK
-            response = self.publish('%s/manage_translations_form' % self.obj_path, self.basic_auth)
+            response = self.publish(
+                '%s/manage_translations_form' % self.obj_path, self.basic_auth)
             self.assertEqual(response.getStatus(), 200)  # OK
 
         def test_linguaplone_create_translation(self):
             # create translation creates a new object
             response = self.publish('%s/createTranslation?language=de&set_language=de'
-                                     % self.obj_path, self.basic_auth)
+                                    % self.obj_path, self.basic_auth)
             self.assertEqual(response.getStatus(), 302)  # Redirect
 
             body = response.getBody()
@@ -150,9 +157,10 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
     def test_additional_view(self):
         # additional views:
         for view in self.views:
-            response = self.publish('%s/%s' % (self.obj_path, view), self.basic_auth)
+            response = self.publish(
+                '%s/%s' % (self.obj_path, view), self.basic_auth)
             self.assertEqual(response.getStatus(), 200,
-                "%s: %s" % (view, response.getStatus()))  # OK
+                             "%s: %s" % (view, response.getStatus()))  # OK
 
     def test_dynamicViewContext(self):
         # register and add a testing template (it's a script)
@@ -160,7 +168,8 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
         ttool = self.portal.portal_types
         fti = getattr(ttool, self.portal_type)
-        view_methods = fti.getAvailableViewMethods(self.obj) + ('unittestGetTitleOf',)
+        view_methods = fti.getAvailableViewMethods(
+            self.obj) + ('unittestGetTitleOf',)
         fti.manage_changeProperties(view_methods=view_methods)
 
         self.obj.setLayout('unittestGetTitleOf')
@@ -175,4 +184,5 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         output = response.getBody().split(',')
         self.assertEqual(len(output), 4, output)
 
-        self.assertEqual(output, ['the obj', 'the folder', 'the obj', 'the folder'])
+        self.assertEqual(
+            output, ['the obj', 'the folder', 'the obj', 'the folder'])

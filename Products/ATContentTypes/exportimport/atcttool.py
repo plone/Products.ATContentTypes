@@ -66,28 +66,30 @@ class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
                         except AttributeError:
                             self.context.addIndex(name)
 
-                        description = safeGetAttribute(indexNode, 'description')
+                        description = safeGetAttribute(
+                            indexNode, 'description')
                         enabled = safeGetAttribute(indexNode, 'enabled')
                         if enabled is not None:
                             enabled = self._convertToBoolean(enabled)
-                        friendlyName = safeGetAttribute(indexNode, 'friendlyName')
+                        friendlyName = safeGetAttribute(
+                            indexNode, 'friendlyName')
 
                         criteria = None
                         for critNode in indexNode.childNodes:
                             if critNode.nodeName == 'criteria':
                                 for textNode in critNode.childNodes:
                                     if textNode.nodeName != '#text' or \
-                                        not textNode.nodeValue.strip():
+                                            not textNode.nodeValue.strip():
                                         continue
                                     if criteria is None:
                                         criteria = []
                                     criteria.append(str(textNode.nodeValue))
 
                         self.context.updateIndex(name,
-                                              friendlyName=friendlyName,
-                                              description=description,
-                                              enabled=enabled,
-                                              criteria=criteria)
+                                                 friendlyName=friendlyName,
+                                                 description=description,
+                                                 enabled=enabled,
+                                                 criteria=criteria)
 
             if child.nodeName == 'topic_metadata':
                 for metadataNode in child.childNodes:
@@ -102,15 +104,17 @@ class ATCTToolXMLAdapter(XMLAdapterBase, PropertyManagerHelpers):
                         except AttributeError:
                             self.context.addMetadata(name)
 
-                        description = safeGetAttribute(metadataNode, 'description')
+                        description = safeGetAttribute(
+                            metadataNode, 'description')
                         enabled = safeGetAttribute(metadataNode, 'enabled')
                         if enabled is not None:
                             enabled = self._convertToBoolean(enabled)
-                        friendlyName = safeGetAttribute(metadataNode, 'friendlyName')
+                        friendlyName = safeGetAttribute(
+                            metadataNode, 'friendlyName')
                         self.context.updateMetadata(name,
-                                                 friendlyName=friendlyName,
-                                                 description=description,
-                                                 enabled=enabled)
+                                                    friendlyName=friendlyName,
+                                                    description=description,
+                                                    enabled=enabled)
 
     def _extractSettings(self):
         fragment = self._doc.createDocumentFragment()

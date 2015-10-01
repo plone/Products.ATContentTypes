@@ -10,13 +10,13 @@ import pkg_resources
 import os
 from Products.ATContentTypes.configuration import zconf
 
-## options for mx tidy
-## read http://www.egenix.com/files/python/mxTidy.html for more informations
+# options for mx tidy
+# read http://www.egenix.com/files/python/mxTidy.html for more informations
 MX_TIDY_ENABLED = zconf.mxtidy.enable
 MX_TIDY_OPTIONS = zconf.mxtidy.options
 
 ###############################################################################
-## private options
+# private options
 
 PROJECTNAME = "ATContentTypes"
 TOOLNAME = "portal_atct"
@@ -27,10 +27,10 @@ WWW_DIR = os.path.join(ATCT_DIR, 'www')
 
 GLOBALS = globals()
 
-## swallow PIL exceptions when resizing the image?
+# swallow PIL exceptions when resizing the image?
 SWALLOW_IMAGE_RESIZE_EXCEPTIONS = zconf.swallowImageResizeExceptions.enable
 
-## mxTidy available?
+# mxTidy available?
 try:
     # I am not sure, which pkg should contain mx.Tidy
     from mx import Tidy
@@ -43,12 +43,12 @@ else:
     except AttributeError:
         pass
 
-## tidy only these document types
+# tidy only these document types
 MX_TIDY_MIMETYPES = (
     'text/html',
-     )
+)
 
-## ExternalStorage available?
+# ExternalStorage available?
 try:
     pkg_resources.get_distribution('Products.ExternalStorage')
 except pkg_resources.DistributionNotFound:
@@ -56,7 +56,7 @@ except pkg_resources.DistributionNotFound:
 else:
     HAS_EXT_STORAGE = True
 
-## LinguaPlone addon?
+# LinguaPlone addon?
 try:
     pkg_resources.get_distribution('Products.LinguaPlone')
 except pkg_resources.DistributionNotFound:
@@ -73,13 +73,13 @@ else:
     HAS_PIL = True
 
 
-## workflow mapping for the installer
+# workflow mapping for the installer
 WORKFLOW_DEFAULT = '(Default)'
 WORKFLOW_FOLDER = 'folder_workflow'
 WORKFLOW_TOPIC = 'folder_workflow'
 WORKFLOW_CRITERIA = ''
 
-## icon map used for overwriting ATFile icons
+# icon map used for overwriting ATFile icons
 ICONMAP = {'application/pdf': 'pdf_icon.png',
            'image': 'image_icon.png'}
 
@@ -92,4 +92,4 @@ MIME_ALIAS = {
     'structured-text': 'text/structured',
     'restructuredtext': 'text/x-rst',
     'text/restructured': 'text/x-rst',
-    }
+}

@@ -39,7 +39,7 @@ class PortalFactoryXMLAdapter(XMLAdapterBase):
                 for type in child.getElementsByTagName("type"):
                     types.add(type.getAttribute("portal_type"))
                 self.context.manage_setPortalFactoryTypes(
-                                    listOfTypeIds=list(types))
+                    listOfTypeIds=list(types))
 
     def _extractFactoryToolSettings(self):
         node = self._doc.createElement("factorytypes")

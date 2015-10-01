@@ -20,7 +20,8 @@ from Products.CMFCore.DirectoryView import registerDirectory
 # Import "ATCTMessageFactory as _" to create messages in atcontenttypes domain
 from zope.i18nmessageid import MessageFactory
 ATCTMessageFactory = MessageFactory('atcontenttypes')
-ModuleSecurityInfo('Products.ATContentTypes').declarePublic('ATCTMessageFactory')
+ModuleSecurityInfo('Products.ATContentTypes').declarePublic(
+    'ATCTMessageFactory')
 
 # first level imports: configuration and validation
 import Products.ATContentTypes.configuration
@@ -74,4 +75,4 @@ def initialize(context):
             content_types=(atype,),
             permission=permissions[atype.portal_type],
             extra_constructors=(constructor,),
-            ).initialize(context)
+        ).initialize(context)

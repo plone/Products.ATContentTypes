@@ -116,7 +116,7 @@ FIELD_TYPES = (
     (2, 'SS', 'Signed Short'),
     (4, 'SL', 'Signed Long'),
     (8, 'SR', 'Signed Ratio')
-    )
+)
 
 # dictionary of main EXIF tag names
 # first element of tuple is tag name, optional second element is
@@ -268,7 +268,7 @@ EXIF_TAGS = {
     0xA301: ('SceneType',
              {1: 'Directly Photographed'}),
     0xA302: ('CVAPattern',),
-    }
+}
 
 # interoperability tags
 INTR_TAGS = {
@@ -277,7 +277,7 @@ INTR_TAGS = {
     0x1000: ('RelatedImageFileFormat', ),
     0x1001: ('RelatedImageWidth', ),
     0x1002: ('RelatedImageLength', ),
-    }
+}
 
 # GPS tags (not used yet, haven't seen camera with GPS)
 GPS_TAGS = {
@@ -308,7 +308,7 @@ GPS_TAGS = {
     0x0018: ('GPSDestBearing', ),
     0x0019: ('GPSDestDistanceRef', ),
     0x001A: ('GPSDestDistance', )
-    }
+}
 
 # Nikon E99x MakerNote Tags
 # http://members.tripod.com/~tawba/990exif.htm
@@ -369,7 +369,7 @@ MAKERNOTE_NIKON_NEWER_TAGS = {
     0x00AA: ('Saturation', ),
     0x00AB: ('DigitalVariProgram', ),
     0x0010: ('DataDump', )
-    }
+}
 
 MAKERNOTE_NIKON_OLDER_TAGS = {
     0x0003: ('Quality',
@@ -401,7 +401,7 @@ MAKERNOTE_NIKON_OLDER_TAGS = {
               4: 'Fluorescent',
               5: 'Cloudy',
               6: 'Speed Light'})
-    }
+}
 
 
 # decode Olympus SpecialMode tag in MakerNote
@@ -437,7 +437,7 @@ MAKERNOTE_OLYMPUS_TAGS = {
     # print as string
     0x0209: ('CameraID', lambda x: ''.join(map(chr, x))),
     0x0F00: ('DataDump', )
-    }
+}
 
 MAKERNOTE_CASIO_TAGS = {
     0x0001: ('RecordingMode',
@@ -491,7 +491,7 @@ MAKERNOTE_CASIO_TAGS = {
               125: '+1.0',
               244: '+3.0',
               250: '+2.0'})
-    }
+}
 
 MAKERNOTE_FUJIFILM_TAGS = {
     0x0000: ('NoteVersion', lambda x: ''.join(map(chr, x))),
@@ -556,14 +556,14 @@ MAKERNOTE_FUJIFILM_TAGS = {
     0x1302: ('AEWarning',
              {0: 'Off',
               1: 'On'})
-    }
+}
 
 MAKERNOTE_CANON_TAGS = {
     0x0006: ('ImageType', ),
     0x0007: ('FirmwareVersion', ),
     0x0008: ('ImageNumber', ),
     0x0009: ('OwnerName', )
-    }
+}
 
 # see http://www.burren.cx/david/canon.html by David Burren
 # this is in element offset, name, optional value dictionary format
@@ -673,7 +673,7 @@ MAKERNOTE_CANON_TAG_0x001 = {
     32: ('FocusMode',
          {0: 'Single',
           1: 'Continuous'})
-    }
+}
 
 MAKERNOTE_CANON_TAG_0x004 = {
     7: ('WhiteBalance',
@@ -687,25 +687,25 @@ MAKERNOTE_CANON_TAG_0x004 = {
     9: ('SequenceNumber', ),
     14: ('AFPointUsed', ),
     15: ('FlashBias',
-        {0XFFC0: '-2 EV',
-         0XFFCC: '-1.67 EV',
-         0XFFD0: '-1.50 EV',
-         0XFFD4: '-1.33 EV',
-         0XFFE0: '-1 EV',
-         0XFFEC: '-0.67 EV',
-         0XFFF0: '-0.50 EV',
-         0XFFF4: '-0.33 EV',
-         0X0000: '0 EV',
-         0X000C: '0.33 EV',
-         0X0010: '0.50 EV',
-         0X0014: '0.67 EV',
-         0X0020: '1 EV',
-         0X002C: '1.33 EV',
-         0X0030: '1.50 EV',
-         0X0034: '1.67 EV',
-         0X0040: '2 EV'}),
+         {0XFFC0: '-2 EV',
+          0XFFCC: '-1.67 EV',
+          0XFFD0: '-1.50 EV',
+          0XFFD4: '-1.33 EV',
+          0XFFE0: '-1 EV',
+          0XFFEC: '-0.67 EV',
+          0XFFF0: '-0.50 EV',
+          0XFFF4: '-0.33 EV',
+          0X0000: '0 EV',
+          0X000C: '0.33 EV',
+          0X0010: '0.50 EV',
+          0X0014: '0.67 EV',
+          0X0020: '1 EV',
+          0X002C: '1.33 EV',
+          0X0030: '1.50 EV',
+          0X0034: '1.67 EV',
+          0X0040: '2 EV'}),
     19: ('SubjectDistance', )
-    }
+}
 
 
 # extract multibyte integer in Motorola format (little endian)
@@ -737,6 +737,7 @@ def gcd(a, b):
 
 # class that handles an EXIF header
 class EXIF_header:
+
     def __init__(self, file, endian, offset, fake_exif, debug=0):
         self.file = file
         self.endian = endian
@@ -809,7 +810,7 @@ class EXIF_header:
             if not 0 < field_type < len(FIELD_TYPES):
                 # unknown field type
                 raise ValueError, \
-                      'unknown type %d in tag 0x%04X' % (field_type, tag)
+                    'unknown type %d in tag 0x%04X' % (field_type, tag)
 
             typelen = FIELD_TYPES[field_type][0]
             count = self.s2n(entry + 4, 4)
@@ -876,7 +877,8 @@ class EXIF_header:
                             printable += tag_entry[1].get(i, repr(i))
             printable = printable.strip().replace('\x00', '')
             if(values):
-                self.tags[ifd_name + ' ' + tag_name] = (values[0], printable, field_offset)
+                self.tags[ifd_name + ' ' +
+                          tag_name] = (values[0], printable, field_offset)
             if self.debug:
                 print ' debug:   %s: %s' % (tag_name,
                                             repr(self.tags[ifd_name + ' ' + tag_name]))

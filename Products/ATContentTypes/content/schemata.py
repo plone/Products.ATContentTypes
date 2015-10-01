@@ -12,17 +12,19 @@ from Products.Archetypes.Widget import RelatedItemsWidget
 # just like CMF
 ATContentTypeSchema = BaseSchema.copy() + MetadataSchema((
     BooleanField('excludeFromNav',
-        required=False,
-        languageIndependent=True,
-        schemata='metadata',  # moved to 'default' for folders
-        widget=BooleanWidget(
-            description=_(u'help_exclude_from_nav', default=u'If selected, this item will not appear in the navigation tree'),
-            label=_(u'label_exclude_from_nav', default=u'Exclude from navigation'),
-            visible={'view': 'hidden',
-                     'edit': 'visible'},
-            ),
-        ),
-    ),)
+                 required=False,
+                 languageIndependent=True,
+                 schemata='metadata',  # moved to 'default' for folders
+                 widget=BooleanWidget(
+                     description=_(u'help_exclude_from_nav',
+                                   default=u'If selected, this item will not appear in the navigation tree'),
+                     label=_(u'label_exclude_from_nav',
+                             default=u'Exclude from navigation'),
+                     visible={'view': 'hidden',
+                              'edit': 'visible'},
+                 ),
+                 ),
+),)
 
 ATContentTypeSchema['id'].searchable = True
 ATContentTypeSchema['id'].validators = ('isValidId',)
@@ -36,38 +38,42 @@ ATContentTypeSchema['description'].schemata = 'default'
 ATContentTypeBaseSchema = ATContentTypeSchema
 
 relatedItemsField = ReferenceField('relatedItems',
-        relationship='relatesTo',
-        multiValued=True,
-        isMetadata=True,
-        languageIndependent=False,
-        index='KeywordIndex',
-        referencesSortable=True,
-        keepReferencesOnCopy=True,
-        write_permission=ModifyPortalContent,
-        widget=RelatedItemsWidget(
-            label=_(u'label_related_items', default=u'Related Items'),
-            description='',
-            visible={'edit': 'visible', 'view': 'invisible'}
-            )
-        )
+                                   relationship='relatesTo',
+                                   multiValued=True,
+                                   isMetadata=True,
+                                   languageIndependent=False,
+                                   index='KeywordIndex',
+                                   referencesSortable=True,
+                                   keepReferencesOnCopy=True,
+                                   write_permission=ModifyPortalContent,
+                                   widget=RelatedItemsWidget(
+                                       label=_(u'label_related_items',
+                                               default=u'Related Items'),
+                                       description='',
+                                       visible={'edit': 'visible',
+                                                'view': 'invisible'}
+                                   )
+                                   )
 ATContentTypeSchema.addField(relatedItemsField.copy())
 
-#Enabling next / previous navigation
+# Enabling next / previous navigation
 
 NextPreviousAwareSchema = MetadataSchema((
     BooleanField('nextPreviousEnabled',
-        #required=False,
-        languageIndependent=True,
-        schemata='metadata',
-        widget=BooleanWidget(
-            description=_(u'help_nextprevious', default=u'This enables next/previous widget on content items contained in this folder.'),
-            label=_(u'label_nextprevious', default=u'Enable next previous navigation'),
-            visible={'view': 'hidden',
-                     'edit': 'visible'},
-            ),
-        default_method="getNextPreviousParentValue"
-        ),
-    ),)
+                 # required=False,
+                 languageIndependent=True,
+                 schemata='metadata',
+                 widget=BooleanWidget(
+                     description=_(
+                         u'help_nextprevious', default=u'This enables next/previous widget on content items contained in this folder.'),
+                     label=_(u'label_nextprevious',
+                             default=u'Enable next previous navigation'),
+                     visible={'view': 'hidden',
+                              'edit': 'visible'},
+                 ),
+                 default_method="getNextPreviousParentValue"
+                 ),
+),)
 
 
 def marshall_register(schema):

@@ -54,17 +54,19 @@ class ATTopicsTool(Base):
             indexObj = catalog_tool.Indexes[index]
         except KeyError:
             return ()
-        criteria = tuple(_criterionRegistry.criteriaByIndex(indexObj.meta_type))
+        criteria = tuple(
+            _criterionRegistry.criteriaByIndex(indexObj.meta_type))
         search_criteria = _criterionRegistry.listSearchTypes()
         if as_dict:
             criteria = [{'name': a, 'description': _criterionRegistry[a].shortDesc}
-                                for a in criteria if a in search_criteria]
+                        for a in criteria if a in search_criteria]
         else:
             criteria = [a for a in criteria if a in search_criteria]
         criteria.sort()
         return criteria
 
     security.declareProtected(ManagePortal, 'addIndex')
+
     def addIndex(self, index, friendlyName='', description='', enabled=False, criteria=None):
         """ Add a new index along with descriptive information to the index
             registry """
@@ -77,12 +79,14 @@ class ATTopicsTool(Base):
             objIndex.enabled = enabled
             objIndex.criteria = tuple(criteria)
         else:
-            objIndex = TopicIndex(index, friendlyName, description, enabled, criteria)
+            objIndex = TopicIndex(index, friendlyName,
+                                  description, enabled, criteria)
 
         self.topic_indexes[index] = objIndex
         self._p_changed = True
 
     security.declareProtected(ManagePortal, 'addMetadata')
+
     def addMetadata(self, metadata, friendlyName='', description='', enabled=False):
         """ Add a new metadata field along with descriptive information to the
             metadata registry """
@@ -98,6 +102,7 @@ class ATTopicsTool(Base):
         self._p_changed = True
 
     security.declareProtected(ManagePortal, 'updateIndex')
+
     def updateIndex(self, index, friendlyName=None, description=None, enabled=None, criteria=None):
         """ Updates an existing index in the registry, unrecognized values are
             added """
@@ -114,6 +119,7 @@ class ATTopicsTool(Base):
         self.addIndex(index, friendlyName, description, enabled, criteria)
 
     security.declareProtected(ManagePortal, 'updateMetadata')
+
     def updateMetadata(self, metadata, friendlyName=None, description=None, enabled=None):
         """ Updates an existing metadata field in the registry, unrecognized values are
             added """
@@ -127,6 +133,7 @@ class ATTopicsTool(Base):
         self.addMetadata(metadata, friendlyName, description, enabled)
 
     security.declareProtected(ManagePortal, 'removeIndex')
+
     def removeIndex(self, index):
         """ Removes an existing index from the registry """
         if index in self.topic_indexes:
@@ -134,6 +141,7 @@ class ATTopicsTool(Base):
             self._p_changed = True
 
     security.declareProtected(ManagePortal, 'removeMetadata')
+
     def removeMetadata(self, metadata):
         """ Removes an existing metadata field from the registry """
         if metadata in self.topic_metadata:
@@ -141,6 +149,7 @@ class ATTopicsTool(Base):
             self._p_changed = True
 
     security.declareProtected(ManagePortal, 'createInitialIndexes')
+
     def createInitialIndexes(self):
         """ create indexes for all indexes in the catalog """
         indexes = self.listCatalogFields()
@@ -151,6 +160,7 @@ class ATTopicsTool(Base):
         return True
 
     security.declareProtected(ManagePortal, 'createInitialMetadata')
+
     def createInitialMetadata(self):
         """ create metadata for all indexes in the catalog """
         metas = self.listCatalogMetadata()
@@ -161,6 +171,7 @@ class ATTopicsTool(Base):
         return True
 
     security.declarePrivate('listCatalogFields')
+
     def listCatalogFields(self):
         """ Return a list of fields from portal_catalog. """
         pcatalog = getToolByName(self, 'portal_catalog')
@@ -170,6 +181,7 @@ class ATTopicsTool(Base):
         return val
 
     security.declarePrivate('listCatalogMetadata')
+
     def listCatalogMetadata(self):
         """ Return a list of columns from portal_catalog. """
         pcatalog = getToolByName(self, 'portal_catalog')
@@ -192,13 +204,15 @@ class ATTopicsTool(Base):
         all_types = self.getAllPortalTypes()
 
         if populate_for_end_usage == 0:
-            # return whatever is in self.allowed_portal_types and make it a (id, title) tuple
+            # return whatever is in self.allowed_portal_types and make it a
+            # (id, title) tuple
             return [t for t in all_types if t[0] in self.allowed_portal_types]
 
         if self.allowed_portal_types == []:
             filtered_types = all_types
         else:
-            filtered_types = [type for type in all_types if type[0] in self.allowed_portal_types]
+            filtered_types = [type for type in all_types if type[
+                0] in self.allowed_portal_types]
 
         return filtered_types
 
@@ -240,8 +254,8 @@ class ATTopicsTool(Base):
         """ Returns a list of tuples containing the index name, friendly name,
             and description for each enabled index. """
         enabledIndexes = self.getEnabledIndexes()
-        dec_fields = [(i.friendlyName.lower() or \
-                       i.index.lower(), i.index, i.friendlyName or \
+        dec_fields = [(i.friendlyName.lower() or
+                       i.index.lower(), i.index, i.friendlyName or
                        i.index, i.description) for i in enabledIndexes]
         dec_fields.sort()
         fields = [(a[1], a[2], a[3]) for a in dec_fields]
@@ -257,11 +271,13 @@ class ATTopicsTool(Base):
             return index
 
     security.declareProtected(ManagePortal, 'getIndexes')
+
     def getIndexes(self, enabledOnly=False):
         """ Returns the full list of available indexes, optionally filtering
             out those that are not marked enabled """
         if enabledOnly:
-            indexes_dec = [(i.index.lower(), i.index) for i in self.getEnabledIndexes()]
+            indexes_dec = [(i.index.lower(), i.index)
+                           for i in self.getEnabledIndexes()]
         else:
             self.createInitialIndexes()  # update in case of new catalogue indexes
             indexes_dec = [(i.lower(), i) for i in self.topic_indexes.keys()]
@@ -271,11 +287,13 @@ class ATTopicsTool(Base):
         return indexes
 
     security.declareProtected(ManagePortal, 'getAllMetadata')
+
     def getAllMetadata(self, enabledOnly=False):
         """ Returns the full list of available metadata fields, optionally
             filtering out those that are not marked enabled """
         if enabledOnly:
-            meta_dec = [(i.index.lower(), i.index) for i in self.getEnabledMetadata()]
+            meta_dec = [(i.index.lower(), i.index)
+                        for i in self.getEnabledMetadata()]
         else:
             self.createInitialMetadata()  # update in case of new catalogue metadata
             meta_dec = [(i.lower(), i) for i in self.topic_metadata.keys()]
@@ -299,28 +317,32 @@ class ATTopicsTool(Base):
             raise AttributeError('Metadata ' + str(metadata) + ' not found')
 
     security.declareProtected(ManagePortal, 'manage_saveTopicSetup')
+
     def manage_saveTopicSetup(self, REQUEST=None):
         """ Set indexes and metadata from form """
         if REQUEST == None:
-            return  'Nothing saved.'
+            return 'Nothing saved.'
 
         data = REQUEST.get('index', [])
         for index in data:
             enabled = 'enabled' in index
             criteria = index.get('criteria', ())
-            self.updateIndex(index['index'], index['friendlyName'], index['description'], enabled, criteria)
+            self.updateIndex(index['index'], index['friendlyName'], index[
+                             'description'], enabled, criteria)
 
         meta = REQUEST.get('metadata', [])
         for metadata in meta:
             enabled = 'enabled' in metadata
-            self.updateMetadata(metadata['index'], metadata['friendlyName'], metadata['description'], enabled)
+            self.updateMetadata(metadata['index'], metadata[
+                                'friendlyName'], metadata['description'], enabled)
         return True
 
     security.declareProtected(ManagePortal, 'manage_saveTopicSetupTypes')
+
     def manage_saveTopicSetupTypes(self, REQUEST=None):
         """ Set portal types from form """
         if REQUEST == None:
-            return  'Nothing saved.'
+            return 'Nothing saved.'
 
         self.allowed_portal_types = REQUEST.get('allowed_types', [])
         return True

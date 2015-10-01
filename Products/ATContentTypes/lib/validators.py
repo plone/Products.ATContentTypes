@@ -40,7 +40,8 @@ RE_BODY = re.compile('<body[^>]*?>(.*)</body>', re.DOTALL)
 # get the encoding from an uploaded html-page
 # e.g. <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 # we get ISO-8859-1 into the second match, the rest into the first and third.
-RE_GET_HTML_ENCODING = re.compile('(<meta.*?content-type.*?charset[\s]*=[\s]*)([^"]*?)("[^>]*?>)', re.S | re.I)
+RE_GET_HTML_ENCODING = re.compile(
+    '(<meta.*?content-type.*?charset[\s]*=[\s]*)([^"]*?)("[^>]*?>)', re.S | re.I)
 
 # subtract 11 line numbers from the warning/error
 SUBTRACT_LINES = 11
@@ -151,7 +152,8 @@ class TidyHtmlWithCleanupValidator:
         else:
             return 1
 
-validatorList.append(TidyHtmlWithCleanupValidator('isTidyHtmlWithCleanup', title='', description=''))
+validatorList.append(TidyHtmlWithCleanupValidator(
+    'isTidyHtmlWithCleanup', title='', description=''))
 
 
 class NonEmptyFileValidator:
@@ -171,7 +173,7 @@ class NonEmptyFileValidator:
 
         # calculate size
         if isinstance(value, FileUpload) or type(value) is FileType \
-          or hasattr(aq_base(value), 'tell'):
+                or hasattr(aq_base(value), 'tell'):
             value.seek(0, 2)  # eof
             size = value.tell()
             value.seek(0)
@@ -187,7 +189,8 @@ class NonEmptyFileValidator:
             return True
 
 
-validatorList.append(NonEmptyFileValidator('isNonEmptyFile', title='', description=''))
+validatorList.append(NonEmptyFileValidator(
+    'isNonEmptyFile', title='', description=''))
 
 for validator in validatorList:
     # register the validators
@@ -265,16 +268,16 @@ def unwrapValueFromHTML(value):
     else:
         raise ValueError('%s is not a html string' % value)
 
-##    # remove 2 spaces from the beginning of each line
+# remove 2 spaces from the beginning of each line
 ##    nlines = []
-##    for line in body.split('\n'):
-##        print line
-##        if line[:2] == '  ':
-##            nlines.append(line[2:])
-##        else:
-##            nlines.append(line)
+# for line in body.split('\n'):
+# print line
+# if line[:2] == '  ':
+# nlines.append(line[2:])
+# else:
+# nlines.append(line)
 ##
-##    return '\n'.join(nlines)
+# return '\n'.join(nlines)
     return body
 
 
@@ -286,7 +289,7 @@ def correctEncoding(value):
     # we have nothing to do if mxTidy has no
     # fixed char_encoding
     if 'char_encoding' not in MX_TIDY_OPTIONS  \
-           or (MX_TIDY_OPTIONS['char_encoding'] == 'raw'):
+            or (MX_TIDY_OPTIONS['char_encoding'] == 'raw'):
         return value
 
     match = RE_GET_HTML_ENCODING.search(value)
@@ -302,13 +305,14 @@ def correctEncoding(value):
         c_enc = encodings.search_function(char_encoding)
 
         # one encoding is missing or they are equal
-        if not (h_enc and c_enc) or  h_enc == c_enc:
+        if not (h_enc and c_enc) or h_enc == c_enc:
             return value
         else:
             try:
                 return unicode(value, html_encoding).encode(char_encoding)
             except:
-                logger.info("Error correcting encoding from %s to %s" % (html_encoding, char_encoding))
+                logger.info("Error correcting encoding from %s to %s" %
+                            (html_encoding, char_encoding))
     return value
 
 

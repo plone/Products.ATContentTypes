@@ -23,7 +23,7 @@ if not os.path.isfile(ATCT_CONFIG):
     ATCT_CONFIG = None
 if not os.path.isfile(ATCT_CONFIG_IN):
     raise RuntimeError("Unable to find configuration file at %s" %
-                        ATCT_CONFIG_IN)
+                       ATCT_CONFIG_IN)
 FILES = (INSTANCE_CONFIG, ATCT_CONFIG, ATCT_CONFIG_IN,)
 
 # config

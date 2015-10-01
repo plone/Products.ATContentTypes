@@ -8,13 +8,14 @@ class JSONCriteriaForField(BrowserView):
 
     def __call__(self):
         vocab = self.context.allowedCriteriaForField(self.request['field'],
-            display_list=True)
+                                                     display_list=True)
 
         self.request.response.setHeader(
             'Content-Type', 'application/json; charset=utf-8')
         return json.dumps([
             dict(
                 value=item,
-                label=translate(vocab.getValue(item), domain="plone", context=self.request)
+                label=translate(vocab.getValue(item),
+                                domain="plone", context=self.request)
             ) for item in vocab
         ])

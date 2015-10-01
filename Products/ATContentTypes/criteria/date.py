@@ -32,34 +32,35 @@ DateOptions = IntDisplayList((
     (31 * 6, _(u'6 Months')),
     (365, _(u'1 Year')),
     (365 * 2, _(u'2 Years')),
-    ))
+))
 
 CompareOperations = DisplayList((
     ('more', _(u'More than')),
     ('less', _(u'Less than')),
     ('within_day', _(u'On the day')),
-    ))
+))
 
 RangeOperations = DisplayList((
     ('-', _(u'in the past')),
     ('+', _(u'in the future')),
-    ))
+))
 
 ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
     IntegerField('value',
-                required=1,
-                mode="rw",
-                accessor="Value",
-                mutator="setValue",
-                write_permission=ChangeTopics,
-                default=None,
-                vocabulary=DateOptions,
-                widget=SelectionWidget(
-                    label=_(u'label_date_criteria_value', default=u'Which day'),
-                    description=_(u'help_date_criteria_value',
-                                  default=u'Select the date criteria value.')
-                    ),
-                ),
+                 required=1,
+                 mode="rw",
+                 accessor="Value",
+                 mutator="setValue",
+                 write_permission=ChangeTopics,
+                 default=None,
+                 vocabulary=DateOptions,
+                 widget=SelectionWidget(
+                     label=_(u'label_date_criteria_value',
+                             default=u'Which day'),
+                     description=_(u'help_date_criteria_value',
+                                   default=u'Select the date criteria value.')
+                 ),
+                 ),
     StringField('dateRange',
                 required=1,
                 mode="rw",
@@ -82,12 +83,13 @@ ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
                 vocabulary=CompareOperations,
                 enforceVocabulary=1,
                 widget=SelectionWidget(
-                    label=_(u'label_date_criteria_operation', default=u'More or less'),
+                    label=_(u'label_date_criteria_operation',
+                            default=u'More or less'),
                     description=_(u'help_date_criteria_operation',
                                   default=u'Select the date criteria operation.'),
                     format="select"),
                 ),
-    ))
+))
 
 
 class ATDateCriteria(ATBaseCriterion):
@@ -102,6 +104,7 @@ class ATDateCriteria(ATBaseCriterion):
     shortDesc = 'Relative date'
 
     security.declareProtected(View, 'getCriteriaItems')
+
     def getCriteriaItems(self):
         """Return a sequence of items to be used to build the catalog query.
         """
