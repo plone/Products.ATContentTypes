@@ -5,8 +5,8 @@ version = '2.2.8.dev0'
 setup(name='Products.ATContentTypes',
       version=version,
       description="Default Content Types for Plone",
-      long_description=open("README.txt").read() + "\n" +
-      open("CHANGES.txt").read(),
+      long_description=(open("README.rst").read() + "\n" +
+                        open("CHANGES.rst").read()),
       classifiers=[
           "Programming Language :: Python",
           "Programming Language :: Python :: 2.7",
