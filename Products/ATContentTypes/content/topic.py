@@ -144,9 +144,6 @@ class ATTopic(ATCTFolder):
     assocMimetypes = ()
     assocFileExt = ()
     cmf_edit_kws = ()
-
-    use_folder_tabs = 0
-
     implements(IATTopic, IDisabledExport)
 
     # Enable marshalling via WebDAV/FTP
