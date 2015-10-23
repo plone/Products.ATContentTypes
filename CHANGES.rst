@@ -4,8 +4,8 @@ Changelog
 2.1.18 (unreleased)
 -------------------
 
-- Nothing changed yet.
-
+- Backport CSRF fixes.
+  [vangheem] [gforcada]
 
 2.1.17 (2015-09-28)
 -------------------

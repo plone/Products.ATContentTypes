@@ -9,6 +9,7 @@ from Products.ATContentTypes.content.folder import ATBTreeFolder
 from OFS.interfaces import IOrderedContainer as IOrderedContainer
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.interfaces import IATBTreeFolder
+from Products.PloneTestCase.setup import portal_owner
 
 from zope.interface.verify import verifyObject
 from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
@@ -175,9 +176,10 @@ class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
 
     def test_selectViewTemplate(self):
         # create an object using the createObject script
-        self.publish(self.obj_path +
-                     '/selectViewTemplate?templateId=atct_album_view',
-                     self.owner_auth)
+        self.publish(
+            '%s/selectViewTemplate?templateId=atct_album_view&_authenticator=%s' % (
+                self.obj_path, self.getAuthToken(portal_owner)),
+            self.owner_auth)
         self.assertEqual(self.obj.getLayout(), 'atct_album_view')
 
 tests.append(TestATFolderFunctional)
