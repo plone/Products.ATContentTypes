@@ -4,6 +4,8 @@ Changelog
 2.2.8 (unreleased)
 ------------------
 
+Fixes:
+
 - White space only pep8 cleanup.  Not in the skins.
   [maurits]
 
