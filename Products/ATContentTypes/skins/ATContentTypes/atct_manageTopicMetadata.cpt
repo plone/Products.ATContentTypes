@@ -27,7 +27,6 @@
                  i18n:translate="label_collection_metadata">Collection Metadata</a>
             </li>
         </ul>
-
         <div class="contentActions">&nbsp;</div>
     </div>
 
@@ -46,9 +45,8 @@
         </div>
 
         <div id="content-core">
-            <a href=""
-               class="link-parent"
-               tal:attributes="href string:$portal_url/plone_control_panel"
+            <a id="setup-link" class="link-parent"
+               tal:attributes="href string:$portal_url/@@overview-controlpanel"
                i18n:translate="label_up_to_plone_setup">
                 Up to Site Setup
             </a>
@@ -102,8 +100,7 @@
                     <tbody>
                     <tal:indexes tal:repeat="index metadata">
                         <tal:object tal:define="indexObj python:atct_tool.getMetadata(index);
-                                                oddrow repeat/index/odd;">
-
+                                                oddrow repeat/index/odd">
                         <tr class="" tal:attributes="class python:test(oddrow, 'even', 'odd')">
                             <td class="listingCheckbox">
                                 <input type="hidden"
@@ -136,9 +133,7 @@
                                        tal:attributes="name string:metadata.description:records;"
                                        tal:content="indexObj/description"></textarea>
                             </td>
-
                         </tr>
-
                         </tal:object>
                     </tal:indexes>
                     </tbody>
