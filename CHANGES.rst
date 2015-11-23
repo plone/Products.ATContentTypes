@@ -13,6 +13,10 @@ Fixes:
 - Update Site Setup link in all control panels (fixes https://github.com/plone/Products.CMFPlone/issues/1255)
   [davilima6]
 
+- Create standard news/events collections with ``selection.any``.
+  Issue https://github.com/plone/Products.CMFPlone/issues/1040
+  [maurits]
+
 
 2.2.8 (2015-10-28)
 ------------------
