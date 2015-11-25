@@ -168,10 +168,10 @@ def setupPortalContent(p):
         topic.setLanguage(language)
 
         query = [{'i': 'portal_type',
-                  'o': 'plone.app.querystring.operation.selection.is',
+                  'o': 'plone.app.querystring.operation.selection.any',
                   'v': ['News Item']},
                  {'i': 'review_state',
-                  'o': 'plone.app.querystring.operation.selection.is',
+                  'o': 'plone.app.querystring.operation.selection.any',
                   'v': ['published']}]
         topic.setQuery(query)
 
@@ -218,13 +218,13 @@ def setupPortalContent(p):
         topic.setLanguage(language)
 
         query = [{'i': 'portal_type',
-                  'o': 'plone.app.querystring.operation.selection.is',
+                  'o': 'plone.app.querystring.operation.selection.any',
                   'v': ['Event']},
                  {'i': 'start',
                   'o': 'plone.app.querystring.operation.date.afterToday',
                   'v': ''},
                  {'i': 'review_state',
-                  'o': 'plone.app.querystring.operation.selection.is',
+                  'o': 'plone.app.querystring.operation.selection.any',
                   'v': ['published']}]
         topic.setQuery(query)
         topic.setSort_on('start')
