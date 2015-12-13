@@ -275,17 +275,16 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
     def test_id_change_on_initial_edit(self):
         """Make sure Id is taken from title on initial edit and not otherwise"""
         # first create an object using the createObject script
-        auth = self.getAuthToken()
-        response = self.publish(
-            '%s/createObject?type_name=%s&_authenticator=%s' % (
-                self.folder_path, self.portal_type, auth),
-            self.basic_auth)
+
+        response = self.publish(self.folder_path +
+                                '/createObject?type_name=%s' % self.portal_type,
+                                self.basic_auth)
 
         self.assertEqual(response.getStatus(), 302)  # Redirect to edit
 
         location = response.getHeader('Location')
         self.assertTrue(location.startswith(self.folder_url), location)
-        self.assertTrue('edit' in location, location)
+        self.assertTrue(location.endswith('edit'), location)
 
         # Perform the redirect
         edit_form_path = location[len(self.app.REQUEST.SERVER_URL):]
@@ -300,12 +299,12 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
         new_obj_path = '/%s' % new_obj.absolute_url(1)
         self.assertEqual(new_obj.checkCreationFlag(), True)  # object is not yet edited
 
-        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank&_authenticator=%s' % (new_obj_path, obj_title, auth), self.basic_auth)  # Edit object
+        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank' % (new_obj_path, obj_title,), self.basic_auth)  # Edit object
         self.assertEqual(response.getStatus(), 302)  # OK
         self.assertEqual(new_obj.getId(), new_id)  # does id match
         self.assertEqual(new_obj.checkCreationFlag(), False)  # object is fully created
         new_title = "Second Title"
-        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank&_authenticator=%s' % ('/%s' % new_obj.absolute_url(1), new_title, auth), self.basic_auth)  # Edit object
+        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank' % ('/%s' % new_obj.absolute_url(1), new_title,), self.basic_auth)  # Edit object
         self.assertEqual(response.getStatus(), 302)  # OK
         self.assertEqual(new_obj.getId(), new_id)  # id shouldn't have changed
 

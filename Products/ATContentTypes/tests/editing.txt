@@ -37,8 +37,7 @@ We'll try and set the title (a required field) to the empty string:
   
   >>> document.Schema().getField('title').required
   1
-  >>> browser.open(url)
-  >>> browser.getLink('Edit').click()
+  >>> browser.open(url+'/edit')
   >>> browser.getControl('Title').value = ''
   >>> browser.getControl('Save').click()
 
@@ -57,8 +56,7 @@ we want to make sure all of them are validated.
 
   >>> document.Schema().getField('title').schemata
   'categorization'
-  >>> browser.open(url)
-  >>> browser.getLink('Edit').click()
+  >>> browser.open(url+'/edit')
   >>> browser.getControl('Title').value = ''
   >>> browser.getControl('Save').click()
   >>> document.title_or_id()
@@ -72,8 +70,7 @@ Buttons name verification
 
 Let's verify that the buttons have the correct name:
   
-  >>> browser.open(url)
-  >>> browser.getLink('Edit').click()
+  >>> browser.open(url+'/edit')
   >>> browser.getControl('Save').name
   'form.button.save'
   
@@ -98,8 +95,7 @@ and change the schemata of one of its fields
   >>> document.Schema().getField('text').schemata
   'someschemata'
   
-  >>> browser.open(url)
-  >>> browser.getLink('Edit').click()
+  >>> browser.open(url+'/edit')
   >>> browser.getControl('Next').name
   'form.button.next'
   

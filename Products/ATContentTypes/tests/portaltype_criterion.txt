@@ -52,7 +52,7 @@ We edit the criteria:
 
     >>> browser.getLink('Criteria').click()
     >>> browser.url
-    'http://nohost/plone/my-collection/criterion_edit_form?_auth...'
+    'http://nohost/plone/my-collection/criterion_edit_form'
     >>> 'Add New Search Criteria' in browser.contents
     True
 
@@ -103,7 +103,7 @@ We now view the collection.
 
     >>> browser.getLink('View').click()
     >>> browser.url
-    'http://nohost/plone/my-collection/?_auth...'
+    'http://nohost/plone/my-collection/'
 
 The test document should be in the collection.
 
