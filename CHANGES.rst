@@ -4,10 +4,6 @@ Changelog
 2.2.10 (unreleased)
 -------------------
 
-New:
-
-- *add item here*
-
 Fixes:
 
 - Fixed Unauthorized error causing a redirect loop in old style
