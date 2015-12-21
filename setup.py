@@ -4,7 +4,7 @@ version = '2.2.10.dev0'
 
 setup(name='Products.ATContentTypes',
       version=version,
-      description="Default Content Types for Plone",
+      description="Default Content Types for Plone 2.1-4.3",
       long_description=(open("README.rst").read() + "\n" +
                         open("CHANGES.rst").read()),
       classifiers=[
