@@ -10,7 +10,10 @@ New:
 
 Fixes:
 
-- *add item here*
+- Fixed Unauthorized error causing a redirect loop in old style
+  Topics.  This only happened for anonymous users.
+  Fixes issue https://github.com/plone/Products.CMFPlone/issues/1292
+  [maurits]
 
 
 2.2.9 (2015-11-26)

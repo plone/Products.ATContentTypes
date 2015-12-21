@@ -5,7 +5,7 @@
          xmlns:i18n="http://xml.zope.org/namespaces/i18n"
          filename="report.pdf"
          tal:define="portal python:here.portal_url.getPortalObject();
-                     use_view_action python:context.portal_registry.get('plone.types_use_view_action_in_listings', []);
+                     use_view_action python:context.portal_registry['plone.types_use_view_action_in_listings'];
                      toLocalizedTime nocall:here/toLocalizedTime;">
 
   <title tal:content="here/title | nothing">Default Topic</title>
@@ -77,7 +77,7 @@
                                 August 16, 2001 at 23:35:59
                             </span>
                         </tal:modified>
-    
+
                         <metal:description define-slot="description_slot">
                             <tal:comment replace="nothing">
                                 Place custom listing info for custom types here
@@ -86,7 +86,7 @@
                     </para>
                     <para style="Table">
                        <span tal:omit-tag="python:1" tal:content="item_description|nothing">
-                            description 
+                            description
                         </span>
                     </para>
                 </td>
@@ -146,4 +146,3 @@
         </tal:topiccontents>
     </content>
 </document>
-
