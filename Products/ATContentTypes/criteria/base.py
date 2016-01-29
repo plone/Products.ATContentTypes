@@ -61,7 +61,8 @@ class ATBaseCriterion(NonRefCatalogContent):
             id = oid
         assert id
         NonRefCatalogContent.__init__(self, id)
-        self.getField('id').set(self, id)
+        if not self.id == id:
+            self.id = id
         self.getField('field').set(self, field)
 
     security.declareProtected(View, 'getId')
