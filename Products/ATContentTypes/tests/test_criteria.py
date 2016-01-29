@@ -21,6 +21,7 @@ from Products.ATContentTypes.criteria.sort import ATSortCriterion
 from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes.tests import atcttestcase
 from zope.interface.verify import verifyObject
+from Products.CMFCore.indexing import processQueue
 
 import unittest
 
@@ -430,6 +431,7 @@ class TestATReferenceCriterion(CriteriaTest):
         self.folder.doc2.setRelatedItems([uid1])
         self.folder.doc1.reindexObject()
         self.folder.doc2.reindexObject()
+        processQueue()
         vocab = self.dummy.getCurrentValues()
         self.assertEqual(len(vocab), 2)
         self.assertTrue(uid1 in vocab.keys())

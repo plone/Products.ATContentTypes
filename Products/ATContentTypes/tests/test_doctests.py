@@ -12,7 +12,6 @@ FILES = [
     'portaltype_criterion.txt',
     'webdav.txt',
     'http_access.txt',
-    'reindex_sanity.txt',
     'uploading.txt',
     'browser_collection_views.txt',
     # traversal.txt registers the browser page "document_view", and this
