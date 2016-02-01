@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 from plone.app.testing.bbb import PloneTestCase
 from Products.CMFCore.utils import getToolByName
 
