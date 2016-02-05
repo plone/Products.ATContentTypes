@@ -41,8 +41,7 @@ class ATSimpleStringCriterion(ATBaseCriterion):
     archetype_name = 'Simple String Criterion'
     shortDesc = 'Text'
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         result = []
 

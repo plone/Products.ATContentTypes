@@ -41,8 +41,7 @@ class ATBooleanCriterion(ATBaseCriterion):
     archetype_name = 'Boolean Criterion'
     shortDesc = 'Boolean (True/False)'
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         result = []
         if self.getBool():

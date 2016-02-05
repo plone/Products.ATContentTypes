@@ -37,8 +37,7 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
     },
     )
 
-    security.declarePrivate('getHistorySource')
-
+    @security.private
     def getHistorySource(self):
         """get source for HistoryAwareMixin
 
@@ -50,8 +49,7 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
         else:
             return ''
 
-    security.declareProtected(View, 'getLastEditor')
-
+    @security.protected(View)
     def getLastEditor(self):
         """Returns the user name of the last editor.
 
@@ -63,9 +61,7 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
         user = histories[0][3].split(" ")[-1].strip()
         return user
 
-    security.declareProtected(
-        ATCTPermissions.ViewHistory, 'getDocumentComparisons')
-
+    @security.protected(ATCTPermissions.ViewHistory)
     def getDocumentComparisons(self, max=10, filterComment=0):
         """Get history as unified diff
         """

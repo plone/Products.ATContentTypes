@@ -187,8 +187,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
 
     security = ClassSecurityInfo()
 
-    security.declarePrivate('cmf_edit')
-
+    @security.private
     def cmf_edit(
             self, title=None, description=None, effectiveDay=None,
             effectiveMo=None, effectiveYear=None, expirationDay=None,
@@ -230,8 +229,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
             contactName=contact_name, contactEmail=contact_email,
             contactPhone=contact_phone, eventUrl=event_url)
 
-    security.declareProtected(View, 'post_validate')
-
+    @security.protected(View)
     def post_validate(self, REQUEST=None, errors=None):
         """Validates start and end date
 
@@ -320,8 +318,7 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
     def __hash__(self):
         return hash((self.start_date, self.duration, self.title))
 
-    security.declareProtected(ModifyPortalContent, 'update')
-
+    @security.protected(ModifyPortalContent)
     def update(self, event=None, **kwargs):
         # Clashes with BaseObject.update, so
         # we handle gracefully

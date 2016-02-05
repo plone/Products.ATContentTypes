@@ -55,8 +55,7 @@ class MetadataElementPolicy(SimpleItem):
     #
     #   Mutator.
     #
-    security.declareProtected(ManagePortal, 'edit')
-
+    @security.protected(ManagePortal)
     def edit(self, is_required, supply_default, default_value,
              enforce_vocabulary, allowed_vocabulary):
         self.is_required = bool(is_required)
@@ -68,43 +67,37 @@ class MetadataElementPolicy(SimpleItem):
     #
     #   Query interface
     #
-    security.declareProtected(View, 'isMultiValued')
-
+    @security.protected(View)
     def isMultiValued(self):
         """ Can this element hold multiple values?
         """
         return self.is_multi_valued
 
-    security.declareProtected(View, 'isRequired')
-
+    @security.protected(View)
     def isRequired(self):
         """ Must this element be supplied?
         """
         return self.is_required
 
-    security.declareProtected(View, 'supplyDefault')
-
+    @security.protected(View)
     def supplyDefault(self):
         """ Should the tool supply a default?
         """
         return self.supply_default
 
-    security.declareProtected(View, 'defaultValue')
-
+    @security.protected(View)
     def defaultValue(self):
         """ If so, what is the default?
         """
         return self.default_value
 
-    security.declareProtected(View, 'enforceVocabulary')
-
+    @security.protected(View)
     def enforceVocabulary(self):
         """ Should the tool enforce the policy's vocabulary?
         """
         return self.enforce_vocabulary
 
-    security.declareProtected(View, 'allowedVocabulary')
-
+    @security.protected(View)
     def allowedVocabulary(self):
         """ What are the allowed values?
         """
@@ -130,21 +123,18 @@ class ElementSpec(SimpleItem):
         self.policies = PersistentMapping()
         self.policies[None] = self._makePolicy()  # set default policy
 
-    security.declarePrivate('_makePolicy')
-
+    @security.private
     def _makePolicy(self):
         return MetadataElementPolicy(self.is_multi_valued)
 
-    security.declareProtected(View, 'isMultiValued')
-
+    @security.protected(View)
     def isMultiValued(self):
         """
             Is this element multi-valued?
         """
         return self.is_multi_valued
 
-    security.declareProtected(View, 'getPolicy')
-
+    @security.protected(View)
     def getPolicy(self, typ=None):
         """ Find the policy for this element for objects of the given type.
 
@@ -155,8 +145,7 @@ class ElementSpec(SimpleItem):
         except KeyError:
             return self.policies[None].__of__(self)
 
-    security.declareProtected(View, 'listPolicies')
-
+    @security.protected(View)
     def listPolicies(self):
         """ Return a list of all policies for this element.
         """
@@ -165,8 +154,7 @@ class ElementSpec(SimpleItem):
             res.append((k, v.__of__(self)))
         return res
 
-    security.declareProtected(ManagePortal, 'addPolicy')
-
+    @security.protected(ManagePortal)
     def addPolicy(self, typ):
         """ Add a policy to this element for objects of the given type.
         """
@@ -178,8 +166,7 @@ class ElementSpec(SimpleItem):
 
         self.policies[typ] = self._makePolicy()
 
-    security.declareProtected(ManagePortal, 'removePolicy')
-
+    @security.protected(ManagePortal)
     def removePolicy(self, typ):
         """ Remove the policy from this element for objects of the given type.
 
@@ -218,8 +205,7 @@ class MetadataSchema(SimpleItem):
     security.declareProtected(ManagePortal, 'elementPoliciesForm')
     elementPoliciesForm = DTMLFile('metadataElementPolicies', WWW_DIR)
 
-    security.declareProtected(ManagePortal, 'addElementPolicy')
-
+    @security.protected(ManagePortal)
     def addElementPolicy(self, element, content_type, is_required,
                          supply_default, default_value, enforce_vocabulary,
                          allowed_vocabulary, REQUEST=None):
@@ -239,8 +225,7 @@ class MetadataSchema(SimpleItem):
                 '/elementPoliciesForm?element=' + element +
                 '&manage_tabs_message=Policy+added.')
 
-    security.declareProtected(ManagePortal, 'removeElementPolicy')
-
+    @security.protected(ManagePortal)
     def removeElementPolicy(self, element, content_type, REQUEST=None
                             ):
         """ Remvoe a type-specific policy for one of our elements.
@@ -256,8 +241,7 @@ class MetadataSchema(SimpleItem):
                 '/elementPoliciesForm?element=' + element +
                 '&manage_tabs_message=Policy+removed.')
 
-    security.declareProtected(ManagePortal, 'updateElementPolicy')
-
+    @security.protected(ManagePortal)
     def updateElementPolicy(self, element, content_type, is_required,
                             supply_default, default_value, enforce_vocabulary,
                             allowed_vocabulary, REQUEST=None):
@@ -280,8 +264,7 @@ class MetadataSchema(SimpleItem):
     #
     #   Element spec manipulation.
     #
-    security.declareProtected(ManagePortal, 'listElementSpecs')
-
+    @security.protected(ManagePortal)
     def listElementSpecs(self):
         """ Return a list of ElementSpecs representing the elements we manage.
         """
@@ -290,15 +273,13 @@ class MetadataSchema(SimpleItem):
             res.append((k, v.__of__(self)))
         return res
 
-    security.declareProtected(ManagePortal, 'getElementSpec')
-
+    @security.protected(ManagePortal)
     def getElementSpec(self, element):
         """ Return an ElementSpec for the given 'element'.
         """
         return self.element_specs[element].__of__(self)
 
-    security.declareProtected(ManagePortal, 'addElementSpec')
-
+    @security.protected(ManagePortal)
     def addElementSpec(self, element, is_multi_valued, REQUEST=None):
         """ Add 'element' to our list of managed elements.
         """
@@ -314,8 +295,7 @@ class MetadataSchema(SimpleItem):
                 '/propertiesForm?manage_tabs_message=Element+' + element +
                 '+added.')
 
-    security.declareProtected(ManagePortal, 'removeElementSpec')
-
+    @security.protected(ManagePortal)
     def removeElementSpec(self, element, REQUEST=None):
         """ Remove 'element' from our list of managed elements.
         """
@@ -327,8 +307,7 @@ class MetadataSchema(SimpleItem):
                 '/propertiesForm?manage_tabs_message=Element+' + element +
                 '+removed.')
 
-    security.declareProtected(ManagePortal, 'listPolicies')
-
+    @security.protected(ManagePortal)
     def listPolicies(self, typ=None):
         """ Show all policies for a given content type
 
@@ -386,10 +365,8 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
     security.declareProtected(ManagePortal, 'propertiesForm')
     propertiesForm = DTMLFile('metadataProperties', WWW_DIR)
 
-    security.declareProtected(ManagePortal, 'editProperties')
-
-    def editProperties(self, publisher=None, REQUEST=None
-                       ):
+    @security.protected(ManagePortal)
+    def editProperties(self, publisher=None, REQUEST=None):
         """ Form handler for "tool-wide" properties
         """
         if publisher is not None:
@@ -400,8 +377,7 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
                 self.absolute_url() +
                 '/propertiesForm?manage_tabs_message=Tool+updated.')
 
-    security.declareProtected(ManagePortal, 'manage_addSchema')
-
+    @security.protected(ManagePortal)
     def manage_addSchema(self, schema_id, elements, REQUEST):
         """ ZMI wrapper around addSchema
         """
@@ -418,8 +394,7 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
             self.absolute_url() +
             '/propertiesForm?manage_tabs_message=Schema+added.')
 
-    security.declareProtected(ManagePortal, 'manage_removeSchemas')
-
+    @security.protected(ManagePortal)
     def manage_removeSchemas(self, schema_ids, REQUEST):
         """ ZMI wrapper around removeSchema
         """
@@ -433,54 +408,47 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
             self.absolute_url() +
             '/propertiesForm?manage_tabs_message=Schemas+removed.')
 
-    security.declarePrivate('getFullName')
-
+    @security.private
     def getFullName(self, userid):
         """ See IMetadataTool.
         """
         return userid   # TODO: do lookup here
 
-    security.declarePublic('getPublisher')
-
+    @security.public
     def getPublisher(self):
         """ See IMetadataTool.
         """
         return self.publisher
 
-    security.declarePublic('listAllowedSubjects')
-
+    @security.public
     def listAllowedSubjects(self, content=None, content_type=None):
         """ See IMetadataTool.
         """
         return self.listAllowedVocabulary(
             'DCMI', 'Subject', content, content_type)
 
-    security.declarePublic('listAllowedFormats')
-
+    @security.public
     def listAllowedFormats(self, content=None, content_type=None):
         """ See IMetadataTool.
         """
         return self.listAllowedVocabulary(
             'DCMI', 'Format', content, content_type)
 
-    security.declarePublic('listAllowedLanguages')
-
+    @security.public
     def listAllowedLanguages(self, content=None, content_type=None):
         """ See IMetadataTool.
         """
         return self.listAllowedVocabulary(
             'DCMI', 'Language', content, content_type)
 
-    security.declarePublic('listAllowedRights')
-
+    @security.public
     def listAllowedRights(self, content=None, content_type=None):
         """ See IMetadata Tool.
         """
         return self.listAllowedVocabulary(
             'DCMI', 'Rights', content, content_type)
 
-    security.declarePublic('listAllowedVocabulary')
-
+    @security.public
     def listAllowedVocabulary(self, schema, element, content=None,
                               content_type=None):
         """ See IMetadataTool.
@@ -491,8 +459,7 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
             content_type = content.getPortalTypeName()
         return spec.getPolicy(content_type).allowedVocabulary()
 
-    security.declarePublic('listSchemas')
-
+    @security.public
     def listSchemas(self):
         """ See IMetadataTool.
         """
@@ -500,8 +467,7 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
         result.extend(self.objectItems([MetadataSchema.meta_type]))
         return result
 
-    security.declareProtected(ModifyPortalContent, 'addSchema')
-
+    @security.protected(ModifyPortalContent)
     def addSchema(self, schema_id, elements=()):
         """ See IMetadataTool.
         """
@@ -513,8 +479,7 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
 
         return self._getOb(schema_id)
 
-    security.declareProtected(ModifyPortalContent, 'removeSchema')
-
+    @security.protected(ModifyPortalContent)
     def removeSchema(self, schema_id):
         """ See IMetadataTool.
         """
@@ -523,8 +488,7 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
 
         self._delObject(schema_id)
 
-    security.declareProtected(ModifyPortalContent, 'setInitialMetadata')
-
+    @security.protected(ModifyPortalContent)
     def setInitialMetadata(self, content):
         """ See IMetadataTool.
         """
@@ -543,8 +507,7 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
 
         # TODO:  Call initial_values_hook, if present
 
-    security.declareProtected(View, 'validateMetadata')
-
+    @security.protected(View)
     def validateMetadata(self, content):
         """ See IMetadataTool.
         """

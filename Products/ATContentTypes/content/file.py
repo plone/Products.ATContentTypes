@@ -78,8 +78,7 @@ class ATFile(ATCTFileContent):
 
     security = ClassSecurityInfo()
 
-    security.declareProtected(View, 'index_html')
-
+    @security.protected(View)
     def index_html(self, REQUEST=None, RESPONSE=None):
         """Download the file
         """
@@ -93,8 +92,7 @@ class ATFile(ATCTFileContent):
         # this is a security risk (IE renders anything as HTML).
         return field.download(self)
 
-    security.declareProtected(ModifyPortalContent, 'setFile')
-
+    @security.protected(ModifyPortalContent)
     def setFile(self, value, **kwargs):
         """Set id to uploaded id
         """
@@ -105,8 +103,7 @@ class ATFile(ATCTFileContent):
         """
         return self.get_data()
 
-    security.declarePublic('getIcon')
-
+    @security.public
     def getIcon(self, relative_to_portal=0):
         """Calculate the icon using the mime type of the file
         """
@@ -145,15 +142,13 @@ class ATFile(ATCTFileContent):
                 res = res[1:]
             return res
 
-    security.declareProtected(View, 'icon')
-
+    @security.protected(View)
     def icon(self):
         """for ZMI
         """
         return self.getIcon()
 
-    security.declarePrivate('cmf_edit')
-
+    @security.private
     def cmf_edit(self, precondition='', file=None):
         if file is not None:
             self.setFile(file)

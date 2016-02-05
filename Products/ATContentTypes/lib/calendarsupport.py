@@ -119,8 +119,7 @@ class CalendarSupportMixin:
     },
     )
 
-    security.declareProtected(View, 'getICal')
-
+    @security.protected(View)
     def getICal(self):
         """get iCal data
         """
@@ -173,8 +172,7 @@ class CalendarSupportMixin:
         out.write(ICS_EVENT_END)
         return out.getvalue()
 
-    security.declareProtected(View, 'ics_view')
-
+    @security.protected(View)
     def ics_view(self, REQUEST, RESPONSE):
         """iCalendar output
         """
@@ -187,8 +185,7 @@ class CalendarSupportMixin:
         out.write(ICS_FOOTER)
         return n2rn(out.getvalue())
 
-    security.declareProtected(View, 'getVCal')
-
+    @security.protected(View)
     def getVCal(self):
         """get vCal data
         """
@@ -214,8 +211,7 @@ class CalendarSupportMixin:
         # Insert missing code here :]
         return out.getvalue()
 
-    security.declareProtected(View, 'vcs_view')
-
+    @security.protected(View)
     def vcs_view(self, REQUEST, RESPONSE):
         """vCalendar output
         """

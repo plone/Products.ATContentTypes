@@ -108,8 +108,7 @@ class ATDateCriteria(ATBaseCriterion):
     archetype_name = 'Friendly Date Criteria'
     shortDesc = 'Relative date'
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         """Return a sequence of items to be used to build the catalog query.
         """

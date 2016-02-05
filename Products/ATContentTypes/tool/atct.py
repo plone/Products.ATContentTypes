@@ -71,8 +71,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
 
     # image scales
 
-    security.declareProtected(ManagePortal, 'recreateImageScales')
-
+    @security.protected(ManagePortal)
     def recreateImageScales(self, portal_type=None):
         """Recreates AT Image scales (doesn't remove unused!)
         """
@@ -108,8 +107,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
         print >> out, "Updated AT Image scales"
         return out.getvalue()
 
-    security.declareProtected(ManagePortal, 'listContentTypes')
-
+    @security.protected(ManagePortal)
     def listContentTypes(self):
         """List all content types. Used for image/folder_types property.
         """

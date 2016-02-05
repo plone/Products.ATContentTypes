@@ -110,8 +110,7 @@ class ATNewsItem(ATDocumentBase, ATCTImageTransform):
 
     security = ClassSecurityInfo()
 
-    security.declareProtected(View, 'tag')
-
+    @security.protected(View)
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
         """
@@ -119,8 +118,7 @@ class ATNewsItem(ATDocumentBase, ATCTImageTransform):
             kwargs['title'] = self.getImageCaption()
         return self.getField('image').tag(self, **kwargs)
 
-    security.declarePrivate('cmf_edit')
-
+    @security.private
     def cmf_edit(self, text, description=None, text_format=None, **kwargs):
         if description is not None:
             self.setDescription(description)

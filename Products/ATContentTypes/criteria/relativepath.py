@@ -63,8 +63,7 @@ class ATRelativePathCriterion(ATBaseCriterion):
         nav_types = ptool.typesToList()
         return nav_types
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         result = []
         depth = (not self.Recurse() and 1) or -1

@@ -80,8 +80,7 @@ class ATSelectionCriterion(ATBaseCriterion):
                           for o in options if isinstance(o, basestring)])
         return [o[1] for o in options]
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         # filter out empty strings
         result = []

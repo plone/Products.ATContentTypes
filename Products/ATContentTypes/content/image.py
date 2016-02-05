@@ -88,8 +88,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     def exportImage(self, format, width, height):
         return '', ''
 
-    security.declareProtected(ModifyPortalContent, 'setImage')
-
+    @security.protected(ModifyPortalContent)
     def setImage(self, value, refresh_exif=True, **kwargs):
         """Set ID to uploaded file name if Title is empty."""
         # set exif first because rotation might screw up the exif data
@@ -104,8 +103,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         # title.
         return filename == title or not title
 
-    security.declareProtected(View, 'tag')
-
+    @security.protected(View)
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
         """
@@ -116,8 +114,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         """
         return self.tag()
 
-    security.declareProtected(View, 'get_size')
-
+    @security.protected(View)
     def get_size(self):
         """ZMI / Plone get size method
 
@@ -129,27 +126,23 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
             return 0
         return img.get_size()
 
-    security.declareProtected(View, 'getSize')
-
+    @security.protected(View)
     def getSize(self, scale=None):
         field = self.getField('image')
         return field.getSize(self, scale=scale)
 
-    security.declareProtected(View, 'getWidth')
-
+    @security.protected(View)
     def getWidth(self, scale=None):
         return self.getSize(scale)[0]
 
-    security.declareProtected(View, 'getHeight')
-
+    @security.protected(View)
     def getHeight(self, scale=None):
         return self.getSize(scale)[1]
 
     width = ComputedAttribute(getWidth, 1)
     height = ComputedAttribute(getHeight, 1)
 
-    security.declarePrivate('cmf_edit')
-
+    @security.private
     def cmf_edit(self, precondition='', file=None, title=None):
         if file is not None:
             self.setImage(file)

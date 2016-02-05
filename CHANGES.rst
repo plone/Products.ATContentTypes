@@ -10,6 +10,8 @@ New:
 
 Fixes:
 
+- Added security decorators.  [maurits]
+
 - Removed double line from simpleint criterion.  This had the effect
   that post_validate always gave an error for value2.  Possibly this
   is used nowhere, because this has been in there for years.  [maurits]

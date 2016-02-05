@@ -78,22 +78,19 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
     security = ClassSecurityInfo()
     cmf_edit_kws = ('text_format',)
 
-    security.declareProtected(View, 'CookedBody')
-
+    @security.protected(View)
     def CookedBody(self, stx_level='ignored'):
         """CMF compatibility method
         """
         return self.getText()
 
-    security.declareProtected(ModifyPortalContent, 'EditableBody')
-
+    @security.protected(ModifyPortalContent)
     def EditableBody(self):
         """CMF compatibility method
         """
         return self.getRawText()
 
-    security.declareProtected(ModifyPortalContent, 'setFormat')
-
+    @security.protected(ModifyPortalContent)
     def setFormat(self, value):
         """CMF compatibility method
 
@@ -111,8 +108,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
             value = translateMimetypeAlias(value)
         ATCTContent.setFormat(self, value)
 
-    security.declareProtected(ModifyPortalContent, 'setText')
-
+    @security.protected(ModifyPortalContent)
     def setText(self, value, **kwargs):
         """Body text mutator
 
@@ -137,8 +133,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
 
     text_format = ComputedAttribute(ATCTContent.getContentType, 1)
 
-    security.declarePrivate('guessMimetypeOfText')
-
+    @security.private
     def guessMimetypeOfText(self):
         """For ftp/webdav upload: get the mimetype from the id and data
         """
@@ -162,8 +157,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
             mimetype = mimetype[0]
         return mimetype.normalized()
 
-    security.declarePrivate('getTidyOutput')
-
+    @security.private
     def getTidyOutput(self, field):
         """Get the tidied output for a specific field from the request
         if available
@@ -181,8 +175,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
         self._v_renamed = 1
         return ATCTContent._notifyOfCopyTo(self, container, op=op)
 
-    security.declarePrivate('manage_afterAdd')
-
+    @security.private
     def manage_afterAdd(self, item, container):
         """Fix text when created througt webdav
         Guess the right mimetype from the id/data
@@ -203,15 +196,13 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
             elif tidyOutput:
                 field.set(self, tidyOutput)  # set is ok
 
-    security.declarePrivate('cmf_edit')
-
+    @security.private
     def cmf_edit(self, text_format, text, file='', safety_belt='', **kwargs):
         assert file == '', 'file currently not supported'  # XXX
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
 
-    security.declarePrivate('manage_afterPUT')
-
+    @security.private
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
                         filename, REQUEST, RESPONSE):
         """After webdav/ftp PUT method

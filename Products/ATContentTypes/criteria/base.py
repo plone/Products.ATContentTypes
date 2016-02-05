@@ -64,8 +64,7 @@ class ATBaseCriterion(NonRefCatalogContent):
             self.id = id
         self.getField('field').set(self, field)
 
-    security.declareProtected(View, 'getId')
-
+    @security.protected(View)
     def getId(self):
         """Get the object id"""
         return str(self.id)
@@ -75,19 +74,16 @@ class ATBaseCriterion(NonRefCatalogContent):
         """
         assert value == self.getId(), 'You are not allowed to change the id'
 
-    security.declareProtected(View, 'Type')
-
+    @security.protected(View)
     def Type(self):
         return self.archetype_name
 
-    security.declareProtected(View, 'Description')
-
+    @security.protected(View)
     def Description(self):
         lines = [line.strip() for line in self.__doc__.splitlines()]
         return ' '.join([line for line in lines if line])
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         """Return a sequence of items to be used to build the catalog query.
         """

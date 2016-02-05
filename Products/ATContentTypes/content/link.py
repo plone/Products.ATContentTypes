@@ -51,8 +51,7 @@ class ATLink(ATCTContent):
 
     security = ClassSecurityInfo()
 
-    security.declareProtected(ModifyPortalContent, 'setRemoteUrl')
-
+    @security.protected(ModifyPortalContent)
     def setRemoteUrl(self, value, **kwargs):
         """remute url mutator
 
@@ -63,22 +62,19 @@ class ATLink(ATCTContent):
             value = urlparse.urlunparse(urlparse.urlparse(value))
         self.getField('remoteUrl').set(self, value, **kwargs)
 
-    security.declareProtected(View, 'remote_url')
-
+    @security.protected(View)
     def remote_url(self):
         """CMF compatibility method
         """
         return self.getRemoteUrl()
 
-    security.declarePrivate('cmf_edit')
-
+    @security.private
     def cmf_edit(self, remote_url=None, **kwargs):
         if not remote_url:
             remote_url = kwargs.get('remote_url', None)
         self.update(remoteUrl=remote_url, **kwargs)
 
-    security.declareProtected(View, 'getRemoteUrl')
-
+    @security.protected(View)
     def getRemoteUrl(self):
         """Sanitize output
         """

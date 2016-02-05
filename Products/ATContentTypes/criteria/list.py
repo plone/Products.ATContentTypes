@@ -67,8 +67,7 @@ class ATListCriterion(ATBaseCriterion):
     archetype_name = 'List Criterion'
     shortDesc = 'List of values'
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         # filter out empty strings
         result = []

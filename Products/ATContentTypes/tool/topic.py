@@ -68,8 +68,7 @@ class ATTopicsTool(Base):
         criteria.sort()
         return criteria
 
-    security.declareProtected(ManagePortal, 'addIndex')
-
+    @security.protected(ManagePortal)
     def addIndex(self, index, friendlyName='', description='',
                  enabled=False, criteria=None):
         """ Add a new index along with descriptive information to the index
@@ -89,8 +88,7 @@ class ATTopicsTool(Base):
         self.topic_indexes[index] = objIndex
         self._p_changed = True
 
-    security.declareProtected(ManagePortal, 'addMetadata')
-
+    @security.protected(ManagePortal)
     def addMetadata(self, metadata, friendlyName='',
                     description='', enabled=False):
         """ Add a new metadata field along with descriptive information to the
@@ -106,8 +104,7 @@ class ATTopicsTool(Base):
         self.topic_metadata[metadata] = objMeta
         self._p_changed = True
 
-    security.declareProtected(ManagePortal, 'updateIndex')
-
+    @security.protected(ManagePortal)
     def updateIndex(self, index, friendlyName=None,
                     description=None, enabled=None, criteria=None):
         """ Updates an existing index in the registry, unrecognized values are
@@ -124,8 +121,7 @@ class ATTopicsTool(Base):
 
         self.addIndex(index, friendlyName, description, enabled, criteria)
 
-    security.declareProtected(ManagePortal, 'updateMetadata')
-
+    @security.protected(ManagePortal)
     def updateMetadata(self, metadata, friendlyName=None,
                        description=None, enabled=None):
         """ Updates an existing metadata field in the registry, unrecognized values are
@@ -139,24 +135,21 @@ class ATTopicsTool(Base):
             enabled = meta[metadata].enabled
         self.addMetadata(metadata, friendlyName, description, enabled)
 
-    security.declareProtected(ManagePortal, 'removeIndex')
-
+    @security.protected(ManagePortal)
     def removeIndex(self, index):
         """ Removes an existing index from the registry """
         if index in self.topic_indexes:
             del self.topic_indexes[index]
             self._p_changed = True
 
-    security.declareProtected(ManagePortal, 'removeMetadata')
-
+    @security.protected(ManagePortal)
     def removeMetadata(self, metadata):
         """ Removes an existing metadata field from the registry """
         if metadata in self.topic_metadata:
             del self.topic_metadata[metadata]
             self._p_changed = True
 
-    security.declareProtected(ManagePortal, 'createInitialIndexes')
-
+    @security.protected(ManagePortal)
     def createInitialIndexes(self):
         """ create indexes for all indexes in the catalog """
         indexes = self.listCatalogFields()
@@ -166,8 +159,7 @@ class ATTopicsTool(Base):
                 self.addIndex(i, friendlyName='', enabled=enabled)
         return True
 
-    security.declareProtected(ManagePortal, 'createInitialMetadata')
-
+    @security.protected(ManagePortal)
     def createInitialMetadata(self):
         """ create metadata for all indexes in the catalog """
         metas = self.listCatalogMetadata()
@@ -177,8 +169,7 @@ class ATTopicsTool(Base):
                 self.addMetadata(i, friendlyName='', enabled=enabled)
         return True
 
-    security.declarePrivate('listCatalogFields')
-
+    @security.private
     def listCatalogFields(self):
         """ Return a list of fields from portal_catalog. """
         pcatalog = getToolByName(self, 'portal_catalog')
@@ -186,8 +177,7 @@ class ATTopicsTool(Base):
         val = sorted([field for field in available])
         return val
 
-    security.declarePrivate('listCatalogMetadata')
-
+    @security.private
     def listCatalogMetadata(self):
         """ Return a list of columns from portal_catalog. """
         pcatalog = getToolByName(self, 'portal_catalog')
@@ -274,8 +264,7 @@ class ATTopicsTool(Base):
         else:
             return index
 
-    security.declareProtected(ManagePortal, 'getIndexes')
-
+    @security.protected(ManagePortal)
     def getIndexes(self, enabledOnly=False):
         """ Returns the full list of available indexes, optionally filtering
             out those that are not marked enabled """
@@ -291,8 +280,7 @@ class ATTopicsTool(Base):
         indexes = [i[1] for i in indexes_dec]
         return indexes
 
-    security.declareProtected(ManagePortal, 'getAllMetadata')
-
+    @security.protected(ManagePortal)
     def getAllMetadata(self, enabledOnly=False):
         """ Returns the full list of available metadata fields, optionally
             filtering out those that are not marked enabled """
@@ -322,8 +310,7 @@ class ATTopicsTool(Base):
         else:
             raise AttributeError('Metadata ' + str(metadata) + ' not found')
 
-    security.declareProtected(ManagePortal, 'manage_saveTopicSetup')
-
+    @security.protected(ManagePortal)
     def manage_saveTopicSetup(self, REQUEST=None):
         """ Set indexes and metadata from form """
         if REQUEST is None:
@@ -346,8 +333,7 @@ class ATTopicsTool(Base):
                 enabled)
         return True
 
-    security.declareProtected(ManagePortal, 'manage_saveTopicSetupTypes')
-
+    @security.protected(ManagePortal)
     def manage_saveTopicSetupTypes(self, REQUEST=None):
         """ Set portal types from form """
         if REQUEST is None:

@@ -24,8 +24,7 @@ class ATCurrentAuthorCriterion(ATBaseCriterion):
     archetype_name = 'Current Author Criterion'
     shortDesc = 'Restrict to current user'
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         result = []
 

@@ -52,8 +52,7 @@ class ObsoleteATFolder(ATCTOrderedFolder):
 
     security = ClassSecurityInfo()
 
-    security.declareProtected(View, 'getNextPreviousParentValue')
-
+    @security.protected(View)
     def getNextPreviousParentValue(self):
         """If the parent node is also an IATFolder and has next/previous
         navigation enabled, then let this folder have it enabled by
@@ -83,8 +82,7 @@ if HAS_LINGUAPLONE:
         manage_options = FOLDER_MANAGE_OPTIONS
         security = ClassSecurityInfo()
 
-        security.declarePrivate('manage_beforeDelete')
-
+        @security.private
         def manage_beforeDelete(self, item, container):
             I18NOnlyBaseBTreeFolder.manage_beforeDelete(self, item, container)
             folder.ATFolder.manage_beforeDelete(self, item, container)

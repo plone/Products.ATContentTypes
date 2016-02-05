@@ -56,8 +56,7 @@ class ATCTImageTransform(Base):
 
     security = ClassSecurityInfo()
 
-    security.declarePrivate('getImageAsFile')
-
+    @security.private
     def getImageAsFile(self, img=None, scale=None):
         """Get the img as file like object
         """
@@ -84,8 +83,7 @@ class ATCTImageTransform(Base):
     # image related code like exif and rotation
     # partly based on CMFPhoto
 
-    security.declareProtected(View, 'getEXIF')
-
+    @security.protected(View)
     def getEXIF(self, img=None, refresh=False):
         """Get the exif informations of the file
 
@@ -127,8 +125,7 @@ class ATCTImageTransform(Base):
         setattr(self, cache, exif_data)
         return exif_data
 
-    security.declareProtected(View, 'getEXIFOrientation')
-
+    @security.protected(View)
     def getEXIFOrientation(self):
         """Get the rotation and mirror orientation from the EXIF data
 
@@ -161,8 +158,7 @@ class ATCTImageTransform(Base):
 
         return (mirror, rotation)
 
-    security.declareProtected(View, 'getEXIFOrigDate')
-
+    @security.protected(View)
     def getEXIFOrigDate(self):
         """Get the EXIF DateTimeOriginal from the image (or None)
         """
@@ -177,8 +173,7 @@ class ATCTImageTransform(Base):
                           raw_date, exc_info=True)
         return None
 
-    security.declareProtected(ModifyPortalContent, 'transformImage')
-
+    @security.protected(ModifyPortalContent)
     def transformImage(self, method, REQUEST=None):
         """
         Transform an Image:
@@ -224,8 +219,7 @@ class ATCTImageTransform(Base):
         if REQUEST:
             REQUEST.RESPONSE.redirect(target)
 
-    security.declareProtected(ModifyPortalContent, 'autoTransformImage')
-
+    @security.protected(ModifyPortalContent)
     def autoTransformImage(self, REQUEST=None):
         """Auto transform image according to EXIF data
 
@@ -243,15 +237,13 @@ class ATCTImageTransform(Base):
         else:
             return mirror, rotation, transform
 
-    security.declareProtected(View, 'getTransformMap')
-
+    @security.protected(View)
     def getTransformMap(self):
         """Get map for tranforming the image
         """
         return [{'name': n, 'value': v} for v, n in TRANSPOSE_MAP.items()]
 
-    security.declareProtected(View, 'hasPIL')
-
+    @security.protected(View)
     def hasPIL(self):
         """Is PIL installed?
         """

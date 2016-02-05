@@ -153,8 +153,7 @@ class ConstrainTypesMixin:
     #
     # Sanity validator
     #
-    security.declareProtected(ModifyPortalContent, 'validate_preferredTypes')
-
+    @security.protected(ModifyPortalContent)
     def validate_preferredTypes(self, value):
         """Ensure that the preferred types is a subset of the allowed types.
         """
@@ -174,8 +173,7 @@ class ConstrainTypesMixin:
     # Overrides + supplements for CMF types machinery
     #
 
-    security.declareProtected(View, 'getLocallyAllowedTypes')
-
+    @security.protected(View)
     def getLocallyAllowedTypes(self, context=None):
         """If enableTypeRestrictions is ENABLE, return the list of types
         set. If it is ACQUIRE, get the types set on the parent so long
@@ -215,8 +213,7 @@ class ConstrainTypesMixin:
         else:
             raise ValueError("Invalid value for enableAddRestriction")
 
-    security.declareProtected(View, 'getImmediatelyAddableTypes')
-
+    @security.protected(View)
     def getImmediatelyAddableTypes(self, context=None):
         """Get the list of type ids which should be immediately addable.
         If enableTypeRestrictions is ENABLE, return the list set; if it is
@@ -276,8 +273,7 @@ class ConstrainTypesMixin:
             return ftis
 
     # overrides CMFCore's PortalFolder invokeFactory
-    security.declareProtected(AddPortalContent, 'invokeFactory')
-
+    @security.protected(AddPortalContent)
     def invokeFactory(self, type_name, id, RESPONSE=None, *args, **kw):
         """Invokes the portal_types tool
         """
@@ -301,8 +297,7 @@ class ConstrainTypesMixin:
         args = (type_name, self, id, RESPONSE) + args
         return pt.constructContent(*args, **kw)
 
-    security.declareProtected(View, 'getDefaultAddableTypes')
-
+    @security.protected(View)
     def getDefaultAddableTypes(self, context=None):
         """returns a list of normally allowed objects as ftis.
         Exactly like PortalFolder.allowedContentTypes except this
@@ -325,8 +320,7 @@ class ConstrainTypesMixin:
 
         return [t for t in result if t.isConstructionAllowed(context)]
 
-    security.declarePublic('canSetConstrainTypes')
-
+    @security.public
     def canSetConstrainTypes(self):
         """Find out if the current user is allowed to set the allowable types
         """
@@ -340,8 +334,7 @@ class ConstrainTypesMixin:
     #
 
     # Vocab for type lists
-    security.declarePrivate('_ct_vocabularyPossibleTypes')
-
+    @security.private
     def _ct_vocabularyPossibleTypes(self):
         """Get a DisplayList of types which may be added (id -> title)
         """
@@ -350,8 +343,7 @@ class ConstrainTypesMixin:
         return DisplayList([(id, title) for title, id in typelist])
 
     # Default method for type lists
-    security.declarePrivate('_ct_defaultAddableTypeIds')
-
+    @security.private
     def _ct_defaultAddableTypeIds(self):
         """Get a list of types which are addable in the ordinary case w/o the
         constraint machinery.

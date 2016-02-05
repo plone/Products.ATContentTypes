@@ -88,8 +88,7 @@ class ATSimpleIntCriterion(ATBaseCriterion):
     archetype_name = 'Simple Int Criterion'
     shortDesc = 'Integer value or range'
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         result = []
         val = self.Value()
@@ -107,8 +106,7 @@ class ATSimpleIntCriterion(ATBaseCriterion):
 
         return tuple(result)
 
-    security.declareProtected(View, 'post_validate')
-
+    @security.protected(View)
     def post_validate(self, REQUEST, errors):
         """Check that Value2 is set if range is set to min:max"""
         direction = REQUEST.get('direction', self.getDirection())

@@ -36,8 +36,7 @@ class ATSortCriterion(ATBaseCriterion):
     archetype_name = 'Sort Criterion'
     shortDesc = 'Sort'
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         result = [('sort_on', self.Field())]
 

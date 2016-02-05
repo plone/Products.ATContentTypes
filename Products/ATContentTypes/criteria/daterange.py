@@ -63,13 +63,11 @@ class ATDateRangeCriterion(ATBaseCriterion):
     archetype_name = 'Date Range Criterion'
     shortDesc = 'Date range'
 
-    security.declareProtected(View, 'Value')
-
+    @security.protected(View)
     def Value(self):
         return (self.getStart(), self.getEnd())
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         field = self.Field()
         value = self.Value()

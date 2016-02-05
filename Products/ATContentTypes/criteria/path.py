@@ -73,8 +73,7 @@ class ATPathCriterion(ATBaseCriterion):
         self.getField('value').set(self, value)
         self.reindexObject()
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         result = []
         depth = (not self.Recurse() and 1) or -1

@@ -177,23 +177,20 @@ class ATTopic(ATCTFolder):
                 syn_tool.enableSyndication(self)
         return ret_val
 
-    security.declareProtected(ChangeTopics, 'validateAddCriterion')
-
+    @security.protected(ChangeTopics)
     def validateAddCriterion(self, indexId, criteriaType):
         """Is criteriaType acceptable criteria for indexId
         """
         return criteriaType in self.criteriaByIndexId(indexId)
 
-    security.declareProtected(ChangeTopics, 'criteriaByIndexId')
-
+    @security.protected(ChangeTopics)
     def criteriaByIndexId(self, indexId):
         catalog_tool = getToolByName(self, 'portal_catalog')
         indexObj = catalog_tool.Indexes[indexId]
         results = _criterionRegistry.criteriaByIndex(indexObj.meta_type)
         return results
 
-    security.declareProtected(ChangeTopics, 'listCriteriaTypes')
-
+    @security.protected(ChangeTopics)
     def listCriteriaTypes(self):
         """List available criteria types as dict
         """
@@ -201,16 +198,14 @@ class ATTopic(ATCTFolder):
                  'description': _criterionRegistry[ctype].shortDesc}
                 for ctype in self.listCriteriaMetaTypes()]
 
-    security.declareProtected(ChangeTopics, 'listCriteriaMetaTypes')
-
+    @security.protected(ChangeTopics)
     def listCriteriaMetaTypes(self):
         """List available criteria
         """
         val = sorted(_criterionRegistry.listTypes())
         return val
 
-    security.declareProtected(ChangeTopics, 'listSearchCriteriaTypes')
-
+    @security.protected(ChangeTopics)
     def listSearchCriteriaTypes(self):
         """List available search criteria types as dict
         """
@@ -218,16 +213,14 @@ class ATTopic(ATCTFolder):
                  'description': _criterionRegistry[ctype].shortDesc}
                 for ctype in self.listSearchCriteriaMetaTypes()]
 
-    security.declareProtected(ChangeTopics, 'listSearchCriteriaMetaTypes')
-
+    @security.protected(ChangeTopics)
     def listSearchCriteriaMetaTypes(self):
         """List available search criteria
         """
         val = sorted(_criterionRegistry.listSearchTypes())
         return val
 
-    security.declareProtected(ChangeTopics, 'listSortCriteriaTypes')
-
+    @security.protected(ChangeTopics)
     def listSortCriteriaTypes(self):
         """List available sort criteria types as dict
         """
@@ -235,39 +228,34 @@ class ATTopic(ATCTFolder):
                  'description': _criterionRegistry[ctype].shortDesc}
                 for ctype in self.listSortCriteriaMetaTypes()]
 
-    security.declareProtected(ChangeTopics, 'listSortCriteriaMetaTypes')
-
+    @security.protected(ChangeTopics)
     def listSortCriteriaMetaTypes(self):
         """List available sort criteria
         """
         val = sorted(_criterionRegistry.listSortTypes())
         return val
 
-    security.declareProtected(View, 'listCriteria')
-
+    @security.protected(View)
     def listCriteria(self):
         """Return a list of our criteria objects.
         """
         val = self.objectValues(self.listCriteriaMetaTypes())
         return val
 
-    security.declareProtected(View, 'listSearchCriteria')
-
+    @security.protected(View)
     def listSearchCriteria(self):
         """Return a list of our search criteria objects.
         """
         return [val for val in self.listCriteria() if
                 IATTopicSearchCriterion.providedBy(val)]
 
-    security.declareProtected(ChangeTopics, 'hasSortCriterion')
-
+    @security.protected(ChangeTopics)
     def hasSortCriterion(self):
         """Tells if a sort criterai is already setup.
         """
         return not self.getSortCriterion() is None
 
-    security.declareProtected(ChangeTopics, 'getSortCriterion')
-
+    @security.protected(ChangeTopics)
     def getSortCriterion(self):
         """Return the Sort criterion if setup.
         """
@@ -276,16 +264,14 @@ class ATTopic(ATCTFolder):
                 return criterion
         return None
 
-    security.declareProtected(ChangeTopics, 'removeSortCriterion')
-
+    @security.protected(ChangeTopics)
     def removeSortCriterion(self):
         """remove the Sort criterion.
         """
         if self.hasSortCriterion():
             self.deleteCriterion(self.getSortCriterion().getId())
 
-    security.declareProtected(ChangeTopics, 'setSortCriterion')
-
+    @security.protected(ChangeTopics)
     def setSortCriterion(self, field, reversed):
         """Set the Sort criterion.
         """
@@ -293,23 +279,20 @@ class ATTopic(ATCTFolder):
         self.addCriterion(field, 'ATSortCriterion')
         self.getSortCriterion().setReversed(reversed)
 
-    security.declareProtected(ChangeTopics, 'listIndicesByCriterion')
-
+    @security.protected(ChangeTopics)
     def listIndicesByCriterion(self, criterion):
         """
         """
         return _criterionRegistry.indicesByCriterion(criterion)
 
-    security.declareProtected(ChangeTopics, 'listFields')
-
+    @security.protected(ChangeTopics)
     def listFields(self):
         """Return a list of fields from portal_catalog.
         """
         tool = getToolByName(self, TOOLNAME)
         return tool.getEnabledFields()
 
-    security.declareProtected(ChangeTopics, 'listSortFields')
-
+    @security.protected(ChangeTopics)
     def listSortFields(self):
         """Return a list of available fields for sorting."""
         fields = [field
@@ -317,8 +300,7 @@ class ATTopic(ATCTFolder):
                   if self.validateAddCriterion(field[0], 'ATSortCriterion')]
         return fields
 
-    security.declareProtected(ChangeTopics, 'listAvailableFields')
-
+    @security.protected(ChangeTopics)
     def listAvailableFields(self):
         """Return a list of available fields for new criteria.
         """
@@ -331,8 +313,7 @@ class ATTopic(ATCTFolder):
                ]
         return val
 
-    security.declareProtected(View, 'listSubtopics')
-
+    @security.protected(View)
     def listSubtopics(self):
         """Return a list of our subtopics.
         """
@@ -346,24 +327,21 @@ class ATTopic(ATCTFolder):
         tops = [t[1] for t in tops]
         return tops
 
-    security.declareProtected(View, 'hasSubtopics')
-
+    @security.protected(View)
     def hasSubtopics(self):
         """Returns true if subtopics have been created on this topic.
         """
         val = self.objectIds(self.meta_type)
         return not not val
 
-    security.declareProtected(View, 'listMetaDataFields')
-
+    @security.protected(View)
     def listMetaDataFields(self, exclude=True):
         """Return a list of metadata fields from portal_catalog.
         """
         tool = getToolByName(self, TOOLNAME)
         return tool.getMetadataDisplay(exclude)
 
-    security.declareProtected(View, 'allowedCriteriaForField')
-
+    @security.protected(View)
     def allowedCriteriaForField(self, field, display_list=False):
         """ Return all valid criteria for a given field.  Optionally include
             descriptions in list in format [(desc1, val1) , (desc2, val2)] for
@@ -380,8 +358,7 @@ class ATTopic(ATCTFolder):
             allowed = DisplayList(flat)
         return allowed
 
-    security.declareProtected(View, 'buildQuery')
-
+    @security.protected(View)
     def buildQuery(self):
         """Construct a catalog query using our criterion objects.
         """
@@ -424,8 +401,7 @@ class ATTopic(ATCTFolder):
                 result[key] = value
         return result
 
-    security.declareProtected(View, 'queryCatalog')
-
+    @security.protected(View)
     def queryCatalog(self, REQUEST=None, batch=False, b_size=None,
                      full_objects=False, **kw):
         # Invoke the catalog using our criteria to augment any passed
@@ -480,8 +456,7 @@ class ATTopic(ATCTFolder):
             return batch
         return results
 
-    security.declareProtected(ChangeTopics, 'addCriterion')
-
+    @security.protected(ChangeTopics)
     def addCriterion(self, field, criterion_type):
         """Add a new search criterion. Return the resulting object.
         """
@@ -492,8 +467,7 @@ class ATTopic(ATCTFolder):
         self._setObject(newid, crit)
         return self._getOb(newid)
 
-    security.declareProtected(ChangeTopics, 'deleteCriterion')
-
+    @security.protected(ChangeTopics)
     def deleteCriterion(self, criterion_id):
         """Delete selected criterion.
         """
@@ -503,8 +477,7 @@ class ATTopic(ATCTFolder):
             for cid in criterion_id:
                 self._delObject(cid)
 
-    security.declareProtected(View, 'getCriterion')
-
+    @security.protected(View)
     def getCriterion(self, criterion_id):
         """Get the criterion object.
         """
@@ -513,8 +486,7 @@ class ATTopic(ATCTFolder):
         except AttributeError:
             return self._getOb(criterion_id)
 
-    security.declareProtected(AddPortalContent, 'addSubtopic')
-
+    @security.protected(AddPortalContent)
     def addSubtopic(self, id):
         """Add a new subtopic.
         """
@@ -522,8 +494,7 @@ class ATTopic(ATCTFolder):
         ti.constructInstance(self, id)
         return self._getOb(id)
 
-    security.declareProtected(View, 'synContentValues')
-
+    @security.protected(View)
     def synContentValues(self):
         """Getter for syndacation support
         """
@@ -531,8 +502,7 @@ class ATTopic(ATCTFolder):
         limit = int(syn_tool.getMaxItems(self))
         return self.queryCatalog(sort_limit=limit)[:limit]
 
-    security.declarePublic('canSetDefaultPage')
-
+    @security.public
     def canSetDefaultPage(self):
         """
         Override BrowserDefaultMixin because default page stuff doesn't make
@@ -540,8 +510,7 @@ class ATTopic(ATCTFolder):
         """
         return False
 
-    security.declarePublic('getCriterionUniqueWidgetAttr')
-
+    @security.public
     def getCriteriaUniqueWidgetAttr(self, attr):
         """Get a unique list values for a specific attribute for all widgets
            on all criteria"""
@@ -558,14 +527,12 @@ class ATTopic(ATCTFolder):
                         if item not in order]
         return order
 
-    security.declareProtected(View, 'HEAD')
-
+    @security.protected(View)
     def HEAD(self, REQUEST, RESPONSE):
         """HTTP HEAD handler"""
         return WebdavResoure.HEAD(self, REQUEST, RESPONSE)
 
-    security.declareProtected(ChangeTopics, 'setText')
-
+    @security.protected(ChangeTopics)
     def setText(self, value, **kwargs):
         """Body text mutator
 
@@ -588,8 +555,7 @@ class ATTopic(ATCTFolder):
 
         field.set(self, value, **kwargs)  # set is ok
 
-    security.declarePrivate('getTidyOutput')
-
+    @security.private
     def getTidyOutput(self, field):
         """Get the tidied output for a specific field from the request
         if available

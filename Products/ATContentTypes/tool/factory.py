@@ -289,8 +289,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
     f.close()
     _docs = stx2html(_docs)
 
-    security.declarePublic('docs')
-
+    @security.public
     def docs(self):
         """Returns FactoryTool docs formatted as HTML"""
         return self._docs
@@ -300,8 +299,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
             self._factory_types = {}
         return self._factory_types
 
-    security.declareProtected(ManagePortal, 'manage_setPortalFactoryTypes')
-
+    @security.protected(ManagePortal)
     def manage_setPortalFactoryTypes(self, REQUEST=None, listOfTypeIds=None):
         """Set the portal types that should use the factory."""
         if listOfTypeIds is not None:
@@ -455,8 +453,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         # a type name -- return a temp folder
         return self._getTempFolder(str(name))
 
-    security.declarePublic('__call__')
-
+    @security.public
     def __call__(self, *args, **kwargs):
         """call method"""
         self._fixRequest()
