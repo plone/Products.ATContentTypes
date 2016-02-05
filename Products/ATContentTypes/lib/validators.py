@@ -1,25 +1,25 @@
-from types import FileType
 from Acquisition import aq_base
-
 from Products.ATContentTypes.config import HAS_MX_TIDY
 from Products.ATContentTypes.config import MX_TIDY_ENABLED
 from Products.ATContentTypes.config import MX_TIDY_MIMETYPES
 from Products.ATContentTypes.config import MX_TIDY_OPTIONS
-
+from Products.PageTemplates.Expressions import getEngine
 from Products.validation.config import validation
 from Products.validation.interfaces.IValidator import IValidator
-
-import re
-import encodings
-import logging
-logger = logging.getLogger('ATCT')
-
-from ZPublisher.HTTPRequest import FileUpload
-
+from types import FileType
+from zope.interface import implements
 from zope.tal.htmltalparser import HTMLTALParser
 from zope.tal.talgenerator import TALGenerator
-from Products.PageTemplates.Expressions import getEngine
-from zope.interface import implements
+from ZPublisher.HTTPRequest import FileUpload
+
+import encodings
+import logging
+import re
+
+
+logger = logging.getLogger('ATCT')
+
+
 
 if HAS_MX_TIDY:
     from mx.Tidy import tidy as mx_tidy

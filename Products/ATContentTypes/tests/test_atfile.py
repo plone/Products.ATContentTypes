@@ -1,21 +1,25 @@
 # -*- coding: utf-8 -*-
 
-import unittest
-from Testing import ZopeTestCase  # side effect import. leave it here.
-ZopeTestCase  # pyflakes
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
-
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes import atapi
-from Products.ATContentTypes.tests.utils import dcEdit
-import StringIO
-
 from plone.app.blob.content import ATBlob
+from Products.Archetypes import atapi
+from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.interfaces import IFileContent
+from Products.ATContentTypes.tests import atctftestcase
+from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.tests.utils import dcEdit
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from zope.interface.verify import verifyObject
+
+import StringIO
+import unittest
+
+
+ZopeTestCase  # pyflakes
+
+
 
 
 file_text = """

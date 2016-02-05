@@ -7,12 +7,15 @@ from Products.Archetypes import atapi
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.interfaces import IImageContent
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
-from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
+from Products.ATContentTypes.tests import atctftestcase
+from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.tests.utils import dcEdit
+from Products.ATContentTypes.tests.utils import PACKAGE_HOME
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
 from transaction import commit
 from zope.interface.verify import verifyObject
+
 import exif
 import os
 

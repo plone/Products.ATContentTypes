@@ -1,7 +1,7 @@
 from OFS.Folder import Folder
 from Products.CMFPlone.exportimport.tests.base import BodyAdapterTestCase
-from zope.component import provideUtility
 from zope.component import provideAdapter
+from zope.component import provideUtility
 
 
 _FACTORYTOOL_XML = """\

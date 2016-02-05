@@ -2,7 +2,9 @@ from AccessControl.SecurityManagement import newSecurityManager
 from Products.ATContentTypes.lib import constraintypes
 from Products.ATContentTypes.tests import atcttestcase
 from Products.CMFPlone.interfaces import ISelectableConstrainTypes
+
 import unittest
+
 
 tests = []
 

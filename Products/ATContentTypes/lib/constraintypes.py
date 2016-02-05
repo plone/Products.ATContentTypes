@@ -1,28 +1,24 @@
-from zope.interface import implements
-
 from AccessControl import ClassSecurityInfo
-from App.class_init import InitializeClass
-from Acquisition import aq_parent
 from Acquisition import aq_inner
-
-from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.permissions import AddPortalContent
-from Products.CMFCore.PortalFolder import PortalFolderBase as PortalFolder
-
-from Products.Archetypes.atapi import Schema
-from Products.Archetypes.atapi import LinesField
-from Products.Archetypes.atapi import IntegerField
-from Products.Archetypes.atapi import MultiSelectionWidget
-from Products.Archetypes.atapi import SelectionWidget
-from Products.Archetypes.atapi import IntDisplayList
+from Acquisition import aq_parent
+from App.class_init import InitializeClass
 from Products.Archetypes.atapi import DisplayList
-
+from Products.Archetypes.atapi import IntDisplayList
+from Products.Archetypes.atapi import IntegerField
+from Products.Archetypes.atapi import LinesField
+from Products.Archetypes.atapi import MultiSelectionWidget
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import SelectionWidget
 from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes import permission as ATCTPermissions
-
 from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
+from Products.CMFCore.permissions import AddPortalContent
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from Products.CMFCore.PortalFolder import PortalFolderBase as PortalFolder
+from Products.CMFCore.utils import getToolByName
+from zope.interface import implements
+
 
 # constants for enableConstrainMixin
 ACQUIRE = -1  # acquire locallyAllowedTypes from parent (default)

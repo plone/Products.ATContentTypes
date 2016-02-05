@@ -1,17 +1,15 @@
-from zope.interface import implements
-
-from App.class_init import InitializeClass
-from Products.CMFCore.utils import getToolByName
-from Products.ATContentTypes.criteria import _criterionRegistry
 from AccessControl import ClassSecurityInfo
-from Persistence import Persistent
-from OFS.SimpleItem import SimpleItem
+from App.class_init import InitializeClass
 from ExtensionClass import Base
-
-from Products.ATContentTypes.config import TOOLNAME
-from Products.ATContentTypes.interfaces import IATCTTopicsTool
+from OFS.SimpleItem import SimpleItem
+from Persistence import Persistent
 from Products.Archetypes.atapi import DisplayList
+from Products.ATContentTypes.config import TOOLNAME
+from Products.ATContentTypes.criteria import _criterionRegistry
+from Products.ATContentTypes.interfaces import IATCTTopicsTool
 from Products.CMFCore.permissions import ManagePortal
+from Products.CMFCore.utils import getToolByName
+from zope.interface import implements
 
 
 class TopicIndex(SimpleItem, Persistent):

@@ -2,9 +2,12 @@ from AccessControl import ClassSecurityInfo
 from App.class_init import InitializeClass
 from App.Common import package_home
 from DateTime import DateTime
+from Products.validation import ValidationChain
 from UserDict import UserDict
+
 import ExtensionClass
 import os
+
 
 PACKAGE_HOME = package_home(globals())
 
@@ -45,7 +48,6 @@ def dcEdit(obj):
     obj.setLanguage('de')
     obj.setRights('GPL')
 
-from Products.validation import ValidationChain
 EmptyValidator = ValidationChain('isEmpty')
 EmptyValidator.appendSufficient('isEmpty')
 idValidator = ValidationChain('isValidId')

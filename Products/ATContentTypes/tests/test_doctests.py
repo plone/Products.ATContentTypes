@@ -9,14 +9,17 @@ FILES = [
     'traversal.txt',
 ]
 
+from plone.app.testing.bbb import PTC_FUNCTIONAL_TESTING
+from plone.testing import layered
+
 import doctest
+
+
 OPTIONFLAGS = (doctest.ELLIPSIS |
                doctest.NORMALIZE_WHITESPACE |
                doctest.REPORT_NDIFF |
                doctest.REPORT_ONLY_FIRST_FAILURE)
 
-from plone.testing import layered
-from plone.app.testing.bbb import PTC_FUNCTIONAL_TESTING
 
 
 def test_suite():

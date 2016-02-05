@@ -5,25 +5,25 @@ from Products.Archetypes.interfaces.base import IBaseContent
 from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.boolean import ATBooleanCriterion
-from Products.ATContentTypes.criteria.currentauthor import \
-    ATCurrentAuthorCriterion
+from Products.ATContentTypes.criteria.currentauthor import ATCurrentAuthorCriterion
 from Products.ATContentTypes.criteria.date import ATDateCriteria
 from Products.ATContentTypes.criteria.daterange import ATDateRangeCriterion
 from Products.ATContentTypes.criteria.list import ATListCriterion
 from Products.ATContentTypes.criteria.path import ATPathCriterion
 from Products.ATContentTypes.criteria.portaltype import ATPortalTypeCriterion
 from Products.ATContentTypes.criteria.reference import ATReferenceCriterion
-from Products.ATContentTypes.criteria.relativepath import \
-    ATRelativePathCriterion
+from Products.ATContentTypes.criteria.relativepath import ATRelativePathCriterion
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
 from Products.ATContentTypes.criteria.simpleint import ATSimpleIntCriterion
-from Products.ATContentTypes.criteria.simplestring import \
-    ATSimpleStringCriterion
+from Products.ATContentTypes.criteria.simplestring import ATSimpleStringCriterion
 from Products.ATContentTypes.criteria.sort import ATSortCriterion
 from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes.tests import atcttestcase
 from zope.interface.verify import verifyObject
+
 import unittest
+
+
 tests = []
 
 

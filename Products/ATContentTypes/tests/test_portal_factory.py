@@ -1,5 +1,5 @@
-from AccessControl import Permissions
 from AccessControl import getSecurityManager
+from AccessControl import Permissions
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
@@ -7,6 +7,7 @@ from Products.CMFCore.permissions import AddPortalContent
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFPlone.tests import PloneTestCase
 from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
+
 import urlparse
 
 

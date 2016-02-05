@@ -1,10 +1,11 @@
-import unittest
-from Products.ATContentTypes.tests import atcttestcase
-from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
+from Products.ATContentTypes.config import TOOLNAME
+from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.tool.atct import ATCTTool
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import getFSVersionTuple
+
+import unittest
 
 
 PLONE5 = getFSVersionTuple()[0] >= 5

@@ -2,6 +2,7 @@ from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.tests import atcttestcase
 from Products.validation.interfaces.IValidator import IValidationChain
 
+
 tests = []
 
 

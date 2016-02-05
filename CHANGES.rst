@@ -10,6 +10,8 @@ New:
 
 Fixes:
 
+- Sorted imports with isort.  [maurits]
+
 - Fixed pep8 errors.  [maurits]
 
 - Prevent topic-criteria from having unicode as id. A unicode-id broke

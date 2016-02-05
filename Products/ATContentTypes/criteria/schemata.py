@@ -1,10 +1,10 @@
+from Products.Archetypes.atapi import IdWidget
 from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import StringField
-from Products.Archetypes.atapi import IdWidget
 from Products.Archetypes.atapi import StringWidget
+from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes.permission import ChangeTopics
 
-from Products.ATContentTypes import ATCTMessageFactory as _
 
 ###
 # AT Base Criterion

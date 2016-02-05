@@ -1,49 +1,44 @@
-from types import ListType
-from types import TupleType
-from types import StringType
-
-from zope.interface import implements
-
-from ZPublisher.HTTPRequest import HTTPRequest
-from Products.ZCatalog.Lazy import LazyCat
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import AddPortalContent
-from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
-from Acquisition import aq_parent
 from Acquisition import aq_inner
-from webdav.Resource import Resource as WebdavResoure
-
+from Acquisition import aq_parent
+from Products.Archetypes.atapi import AnnotationStorage
+from Products.Archetypes.atapi import BooleanField
+from Products.Archetypes.atapi import BooleanWidget
+from Products.Archetypes.atapi import DisplayList
+from Products.Archetypes.atapi import InAndOutWidget
+from Products.Archetypes.atapi import IntegerField
+from Products.Archetypes.atapi import IntegerWidget
+from Products.Archetypes.atapi import LinesField
 from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import TextField
-from Products.Archetypes.atapi import BooleanField
-from Products.Archetypes.atapi import IntegerField
-from Products.Archetypes.atapi import LinesField
-from Products.Archetypes.atapi import BooleanWidget
-from Products.Archetypes.atapi import IntegerWidget
-from Products.Archetypes.atapi import InAndOutWidget
 from Products.Archetypes.atapi import TinyMCEWidget
-from Products.Archetypes.atapi import DisplayList
-from Products.Archetypes.atapi import AnnotationStorage
-
-from Products.ATContentTypes.configuration import zconf
+from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.content.base import registerATCT
+from Products.ATContentTypes.config import TOOLNAME
+from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import ATCTFolder
-from Products.ATContentTypes.criteria import _criterionRegistry
-from Products.ATContentTypes.exportimport.content import IDisabledExport
+from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.criteria import _criterionRegistry
+from Products.ATContentTypes.exportimport.content import IDisabledExport
 from Products.ATContentTypes.interfaces import IATTopic
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 from Products.ATContentTypes.permission import ChangeTopics
-
-from Products.ATContentTypes.config import TOOLNAME
-
-from Products.ATContentTypes import ATCTMessageFactory as _
+from Products.CMFCore.permissions import AddPortalContent
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.PloneBatch import Batch
+from Products.ZCatalog.Lazy import LazyCat
+from types import ListType
+from types import StringType
+from types import TupleType
+from webdav.Resource import Resource as WebdavResoure
+from zope.interface import implements
+from ZPublisher.HTTPRequest import HTTPRequest
+
 
 # A couple of fields just don't make sense to sort (for a user),
 # some are just doubles.

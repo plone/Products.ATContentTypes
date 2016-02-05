@@ -1,9 +1,9 @@
 from Products.ATContentTypes.interfaces import IATCTTool
-from Products.GenericSetup.utils import PropertyManagerHelpers
-from Products.GenericSetup.utils import XMLAdapterBase
+from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.utils import exportObjects
 from Products.GenericSetup.utils import importObjects
-from Products.CMFCore.utils import getToolByName
+from Products.GenericSetup.utils import PropertyManagerHelpers
+from Products.GenericSetup.utils import XMLAdapterBase
 
 
 def safeGetAttribute(node, attribute):

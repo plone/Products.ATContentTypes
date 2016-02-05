@@ -1,15 +1,12 @@
-from zope.interface import implements
-from zope.component import adapts
-from zope.component import getUtility
-
+from Acquisition import aq_base
 from plone.app.layout.nextprevious.interfaces import INextPreviousProvider
-from Products.ATContentTypes.interfaces.folder import IATFolder
-
 from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
-
-from Acquisition import aq_base
+from Products.ATContentTypes.interfaces.folder import IATFolder
 from Products.CMFCore.utils import getToolByName
+from zope.component import adapts
+from zope.component import getUtility
+from zope.interface import implements
 
 
 class ATFolderNextPrevious(object):

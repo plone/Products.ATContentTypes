@@ -18,8 +18,6 @@ from App.special_dtml import DTMLFile
 from OFS.Folder import Folder
 from OFS.SimpleItem import SimpleItem
 from Persistence import PersistentMapping
-from zope.interface import implements
-
 from Products.ATContentTypes.config import WWW_DIR
 from Products.CMFCore.interfaces import IMetadataTool
 from Products.CMFCore.utils import registerToolInterface
@@ -28,6 +26,7 @@ from Products.CMFPlone.permissions import ManagePortal
 from Products.CMFPlone.permissions import ModifyPortalContent
 from Products.CMFPlone.permissions import View
 from Products.CMFPlone.PloneBaseTool import PloneBaseTool
+from zope.interface import implements
 
 
 class MetadataError(Exception):

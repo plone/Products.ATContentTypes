@@ -7,7 +7,8 @@ from Products.ATContentTypes.interfaces import IATDocument
 from Products.ATContentTypes.interfaces import IHistoryAware
 from Products.ATContentTypes.interfaces import ITextContent
 from Products.ATContentTypes.lib.validators import TidyHtmlWithCleanupValidator
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
+from Products.ATContentTypes.tests import atctftestcase
+from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests.utils import input_file_path
 from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
@@ -15,7 +16,9 @@ from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
 from zope.interface.verify import verifyObject
 from ZPublisher.HTTPRequest import FileUpload
+
 import transaction
+
 
 example_stx = """
 Header

@@ -4,7 +4,8 @@ from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.ATContentTypes.content.event import ATEvent
 from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.interfaces import ICalendarSupport
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
+from Products.ATContentTypes.tests import atctftestcase
+from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests.utils import EmailValidator
 from Products.ATContentTypes.tests.utils import EmptyValidator
@@ -14,7 +15,9 @@ from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
 from Testing import ZopeTestCase  # side effect import. leave it here.
 from zope.interface.verify import verifyObject
+
 import unittest
+
 
 ZopeTestCase  # pyflakes
 

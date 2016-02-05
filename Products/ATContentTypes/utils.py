@@ -1,5 +1,6 @@
-import datetime
 from DateTime import DateTime
+
+import datetime
 
 
 def dt2DT(date):

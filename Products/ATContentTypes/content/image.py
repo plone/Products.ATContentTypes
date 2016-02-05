@@ -1,32 +1,27 @@
-from zope.interface import implements
-
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_base
 from ComputedAttribute import ComputedAttribute
-
-from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import AnnotationStorage
 from Products.Archetypes.atapi import ImageField
 from Products.Archetypes.atapi import ImageWidget
 from Products.Archetypes.atapi import PrimaryFieldMarshaller
-from Products.Archetypes.atapi import AnnotationStorage
-
+from Products.Archetypes.atapi import Schema
+from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.configuration import zconf
-from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
+from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATImage
-
 from Products.ATContentTypes.lib.imagetransform import ATCTImageTransform
-
-from Products.ATContentTypes import ATCTMessageFactory as _
-
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from Products.validation import V_REQUIRED
 from Products.validation.config import validation
 from Products.validation.validators.SupplValidators import MaxSizeValidator
-from Products.validation import V_REQUIRED
+from zope.interface import implements
+
 
 validation.register(MaxSizeValidator('checkImageMaxSize',
                                      maxsize=zconf.ATImage.max_file_size))

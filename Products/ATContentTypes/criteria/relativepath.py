@@ -1,22 +1,20 @@
-from zope.interface import implements
-
-from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_parent
-
+from Products.Archetypes.atapi import BooleanField
+from Products.Archetypes.atapi import BooleanWidget
 from Products.Archetypes.atapi import Schema
-from Products.Archetypes.atapi import BooleanField, StringField
-from Products.Archetypes.atapi import BooleanWidget, StringWidget
-
-from Products.ATContentTypes.criteria import registerCriterion
+from Products.Archetypes.atapi import StringField
+from Products.Archetypes.atapi import StringWidget
 from Products.ATContentTypes.criteria import PATH_INDICES
+from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
-
-
+from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
+from zope.interface import implements
+
 
 ATRelativePathCriterionSchema = ATBaseCriterionSchema + Schema((
     StringField('relativePath',

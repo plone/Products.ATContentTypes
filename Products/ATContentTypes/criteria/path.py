@@ -1,24 +1,20 @@
-from zope.interface import implements
-
-from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
-
-from Products.Archetypes.atapi import Schema
 from Products.Archetypes.atapi import BooleanField
 from Products.Archetypes.atapi import BooleanWidget
 from Products.Archetypes.atapi import ReferenceField
+from Products.Archetypes.atapi import Schema
 from Products.Archetypes.Referenceable import Referenceable
-
-from Products.ATContentTypes.criteria import registerCriterion
+from Products.Archetypes.Widget import RelatedItemsWidget
+from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes.criteria import PATH_INDICES
+from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
+from Products.CMFCore.permissions import View
+from zope.interface import implements
 
-from Products.Archetypes.Widget import RelatedItemsWidget
-
-from Products.ATContentTypes import ATCTMessageFactory as _
 
 ATPathCriterionSchema = ATBaseCriterionSchema + Schema((
     ReferenceField('value',

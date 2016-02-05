@@ -1,7 +1,9 @@
 from DateTime import DateTime
 from Products.ATContentTypes.tests import atcttestcase
+
 import Missing
 import unittest
+
 
 tests = []
 

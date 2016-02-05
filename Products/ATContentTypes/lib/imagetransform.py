@@ -1,21 +1,20 @@
-import logging
-from cStringIO import StringIO
-
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
 from AccessControl import ClassSecurityInfo
-from ExtensionClass import Base
-from DateTime import DateTime
 from App.class_init import InitializeClass
+from cStringIO import StringIO
+from DateTime import DateTime
+from ExtensionClass import Base
 from OFS.Image import Image as OFSImage
 from OFS.Image import Pdata
-
-from Products.ATContentTypes.configuration import zconf
-from Products.ATContentTypes.config import HAS_PIL
 from Products.ATContentTypes import ATCTMessageFactory as _
+from Products.ATContentTypes.config import HAS_PIL
+from Products.ATContentTypes.configuration import zconf
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
 
 # third party extension
 import exif
+import logging
+
 
 # the following code is based on the rotation code of Photo
 if HAS_PIL:

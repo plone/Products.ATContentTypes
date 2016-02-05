@@ -8,6 +8,7 @@ from plone.keyring.interfaces import IKeyManager
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.tests import atcttestcase
 from zope.component import getUtility
+
 import hmac
 
 

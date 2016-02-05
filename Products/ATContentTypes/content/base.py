@@ -1,11 +1,33 @@
-import os
-import posixpath
-import logging
-import transaction
-
+from AccessControl import ClassSecurityInfo
+from Acquisition import aq_base
+from Acquisition import aq_inner
+from Acquisition import aq_parent
+from App.class_init import InitializeClass
+from ComputedAttribute import ComputedAttribute
+from OFS.ObjectManager import REPLACEABLE
+from plone.i18n.normalizer.interfaces import IUserPreferredFileNameNormalizer
+from Products.ATContentTypes.config import HAS_LINGUA_PLONE
+from Products.ATContentTypes.config import MIME_ALIAS
+from Products.ATContentTypes.content.schemata import ATContentTypeSchema
+from Products.ATContentTypes.interfaces import IATContentType
+from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
+from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixin
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
+from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
+from webdav.Lockable import ResourceLockedError
+from webdav.NullResource import NullResource
+from webdav.Resource import Resource as WebdavResoure
+from ZODB.POSException import ConflictError
 from zope.interface import implements
 
-from Products.ATContentTypes.config import HAS_LINGUA_PLONE
+import logging
+import os
+import posixpath
+import transaction
+
+
 if HAS_LINGUA_PLONE:
     from Products.LinguaPlone.public import BaseContent
     from Products.LinguaPlone.public import BaseFolder
@@ -19,30 +41,9 @@ else:
     from Products.Archetypes.atapi import BaseBTreeFolder
     from Products.Archetypes.atapi import registerType
 
-from AccessControl import ClassSecurityInfo
-from ComputedAttribute import ComputedAttribute
-from App.class_init import InitializeClass
-from Acquisition import aq_base
-from Acquisition import aq_inner
-from Acquisition import aq_parent
-from OFS.ObjectManager import REPLACEABLE
-from webdav.Lockable import ResourceLockedError
-from webdav.NullResource import NullResource
-from ZODB.POSException import ConflictError
-from webdav.Resource import Resource as WebdavResoure
 
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.utils import getToolByName
-from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 
-from Products.ATContentTypes.config import MIME_ALIAS
-from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixin
-from Products.ATContentTypes.interfaces import IATContentType
-from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
-from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 
-from plone.i18n.normalizer.interfaces import IUserPreferredFileNameNormalizer
 
 DEBUG = True
 LOG = logging.getLogger('ATCT')

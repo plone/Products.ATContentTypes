@@ -1,13 +1,11 @@
+from AccessControl import ClassSecurityInfo
+from App.class_init import InitializeClass
 from cStringIO import StringIO
+from DateTime import DateTime
+from Products.ATContentTypes.interfaces import ICalendarSupport
+from Products.CMFCore.permissions import View
 from zope.interface import implements
 
-from DateTime import DateTime
-from App.class_init import InitializeClass
-
-from Products.CMFCore.permissions import View
-from AccessControl import ClassSecurityInfo
-
-from Products.ATContentTypes.interfaces import ICalendarSupport
 
 PRODID = "-//AT Content Types//AT Event//EN"
 

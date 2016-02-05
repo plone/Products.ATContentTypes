@@ -1,7 +1,7 @@
+from Products.GenericSetup.interfaces import IFilesystemExporter
 from zope.interface import implements
 from zope.interface import Interface
 
-from Products.GenericSetup.interfaces import IFilesystemExporter
 
 # TODO: This is a temporary hack to allow disabling exporting of some
 # content types until all of them support proper exporting

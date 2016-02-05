@@ -6,9 +6,11 @@ Use ZConfig to configure ATCT
 """
 __docformat__ = 'restructuredtext'
 
-import pkg_resources
-import os
 from Products.ATContentTypes.configuration import zconf
+
+import os
+import pkg_resources
+
 
 # options for mx tidy
 # read http://www.egenix.com/files/python/mxTidy.html for more informations

@@ -1,35 +1,31 @@
-import logging
-from urllib import quote
-
-from zope.interface import implements
-
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
-
-from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import AnnotationStorage
 from Products.Archetypes.atapi import FileField
 from Products.Archetypes.atapi import FileWidget
 from Products.Archetypes.atapi import PrimaryFieldMarshaller
-from Products.Archetypes.atapi import AnnotationStorage
+from Products.Archetypes.atapi import Schema
 from Products.Archetypes.BaseContent import BaseContent
-from Products.MimetypesRegistry.common import MimeTypeException
-
+from Products.ATContentTypes import ATCTMessageFactory as _
+from Products.ATContentTypes.config import ICONMAP
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.configuration import zconf
-from Products.ATContentTypes.config import ICONMAP
-from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
+from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATFile
-
-from Products.ATContentTypes import ATCTMessageFactory as _
-
-from Products.validation.validators.SupplValidators import MaxSizeValidator
-from Products.validation.config import validation
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
+from Products.MimetypesRegistry.common import MimeTypeException
 from Products.validation import V_REQUIRED
+from Products.validation.config import validation
+from Products.validation.validators.SupplValidators import MaxSizeValidator
+from urllib import quote
+from zope.interface import implements
+
+import logging
+
 
 LOG = logging.getLogger('ATCT')
 

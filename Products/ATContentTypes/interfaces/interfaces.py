@@ -1,11 +1,10 @@
-from zope.interface import Interface
-from zope.interface import Attribute
-
+from Products.Archetypes.interfaces import IATHistoryAware
 from Products.Archetypes.interfaces import IBaseContent
 from Products.Archetypes.interfaces import IBaseFolder
 from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
-from Products.Archetypes.interfaces import IATHistoryAware
 from Products.CMFPlone.interfaces import ISelectableConstrainTypes
+from zope.interface import Attribute
+from zope.interface import Interface
 
 
 class IATContentType(ISelectableBrowserDefault, IBaseContent):

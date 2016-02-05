@@ -1,9 +1,12 @@
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.interfaces import IATCTTool
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
+from Products.ATContentTypes.tests import atctftestcase
+from Products.ATContentTypes.tests import atcttestcase
 from Products.CMFCore.utils import getToolByName
 from zope.interface.verify import verifyObject
+
 import unittest
+
 
 tests = []
 

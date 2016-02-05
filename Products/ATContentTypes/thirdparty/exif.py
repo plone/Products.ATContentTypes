@@ -101,6 +101,8 @@ class IFD_Tag:
     pass
 
 import logging
+
+
 LOG = logging.getLogger('exif')
 
 # field type descriptions as (length, abbreviation, full name) tuples

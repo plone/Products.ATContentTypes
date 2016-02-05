@@ -25,7 +25,9 @@ from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
 from zope.interface.verify import verifyObject
+
 import os
+
 
 test_home = os.path.dirname(__file__)
 

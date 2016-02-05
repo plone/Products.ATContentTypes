@@ -1,16 +1,14 @@
-from zope.interface import implements, classImplementsOnly, implementedBy
-
-from Products.Archetypes.atapi import BaseContentMixin
-
-from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
 from App.class_init import InitializeClass
-
+from Products.Archetypes.atapi import BaseContentMixin
 from Products.Archetypes.ClassGen import generateClass
+from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicCriterion
-
-from Products.Archetypes.interfaces.referenceable import IReferenceable
+from Products.CMFCore.permissions import View
+from zope.interface import classImplementsOnly
+from zope.interface import implementedBy
+from zope.interface import implements
 
 
 class NonRefCatalogContent(BaseContentMixin):

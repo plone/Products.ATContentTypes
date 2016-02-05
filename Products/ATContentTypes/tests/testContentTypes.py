@@ -3,6 +3,7 @@ from Products.ATContentTypes.interfaces import IATContentType
 from Products.CMFPlone.tests import dummy
 from zope.i18nmessageid.message import Message
 
+
 AddPortalTopics = 'Add portal topics'
 
 atct_types = ('Document', 'Event', 'File', 'Folder',

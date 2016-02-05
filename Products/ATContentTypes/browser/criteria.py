@@ -1,6 +1,7 @@
-import json
 from zope.i18n import translate
 from zope.publisher.browser import BrowserView
+
+import json
 
 
 class JSONCriteriaForField(BrowserView):

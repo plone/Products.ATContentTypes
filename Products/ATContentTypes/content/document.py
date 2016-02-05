@@ -1,36 +1,31 @@
-from types import TupleType
-
-from zope.interface import implements
-
-from ZPublisher.HTTPRequest import HTTPRequest
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
-
 from lxml import etree
-from Products.GenericSetup.interfaces import IDAVAware
-
-from Products.Archetypes.atapi import Schema
-from Products.Archetypes.atapi import TextField
+from Products.Archetypes.atapi import AnnotationStorage
 from Products.Archetypes.atapi import BooleanField
-from Products.Archetypes.atapi import TinyMCEWidget
 from Products.Archetypes.atapi import BooleanWidget
 from Products.Archetypes.atapi import RFC822Marshaller
-from Products.Archetypes.atapi import AnnotationStorage
-
-from Products.ATContentTypes.configuration import zconf
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import TextField
+from Products.Archetypes.atapi import TinyMCEWidget
+from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.content.base import registerATCT
+from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import ATCTContent
+from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument
+from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
+from Products.GenericSetup.interfaces import IDAVAware
+from types import TupleType
+from zope.interface import implements
+from ZPublisher.HTTPRequest import HTTPRequest
 
-from Products.ATContentTypes import ATCTMessageFactory as _
 
 ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
     TextField('text',

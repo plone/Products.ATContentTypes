@@ -6,9 +6,10 @@
 ##bind subpath=traverse_subpath
 ##parameters=value,long_format=True
 ##title=Determine whether the input is a DateTime or ISO date and localize it if so, also convert lists and dicts into reasonable strings.
+from AccessControl import Unauthorized
 from DateTime import DateTime
 from ZODB.POSException import ConflictError
-from AccessControl import Unauthorized
+
 
 if value is None:
     return ''

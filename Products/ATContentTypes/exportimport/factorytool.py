@@ -1,8 +1,8 @@
 from Products.ATContentTypes.interfaces import IFactoryTool
-from Products.GenericSetup.utils import XMLAdapterBase
-from Products.GenericSetup.utils import importObjects
-from Products.GenericSetup.utils import exportObjects
 from Products.CMFCore.utils import getToolByName
+from Products.GenericSetup.utils import exportObjects
+from Products.GenericSetup.utils import importObjects
+from Products.GenericSetup.utils import XMLAdapterBase
 
 
 class PortalFactoryXMLAdapter(XMLAdapterBase):

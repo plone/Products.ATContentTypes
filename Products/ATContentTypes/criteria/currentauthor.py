@@ -1,14 +1,13 @@
-from zope.interface import implements
-
-from Products.CMFCore.permissions import View
-from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
-
-from Products.ATContentTypes.criteria import registerCriterion, \
-    LIST_INDICES
+from Products.ATContentTypes.criteria import LIST_INDICES
+from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
+from zope.interface import implements
+
 
 ATCurrentAuthorSchema = ATBaseCriterionSchema
 

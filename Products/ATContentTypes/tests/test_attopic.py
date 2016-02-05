@@ -6,13 +6,15 @@ from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.topic import ATTopic
 from Products.ATContentTypes.interfaces import IATTopic
 from Products.ATContentTypes.permission import ChangeTopics
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
+from Products.ATContentTypes.tests import atctftestcase
+from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests.utils import EmptyValidator
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.PloneBatch import Batch
 from zope.interface.verify import verifyObject
+
 import unittest
 
 

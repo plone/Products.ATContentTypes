@@ -1,8 +1,9 @@
-import os
-
-from ZConfig.loader import ConfigLoader
 from Globals import INSTANCE_HOME
 from Products.ATContentTypes.configuration.schema import atctSchema
+from ZConfig.loader import ConfigLoader
+
+import os
+
 
 # directories
 INSTANCE_ETC = os.path.join(INSTANCE_HOME, 'etc')

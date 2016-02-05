@@ -1,13 +1,12 @@
-from zope.interface import implements
-
-from Products.CMFCore.utils import getToolByName
 from AccessControl import ClassSecurityInfo
-
-from Products.ATContentTypes.criteria import registerCriterion
+from Products.Archetypes.atapi import DisplayList
 from Products.ATContentTypes.criteria import REFERENCE_INDICES
+from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
-from Products.Archetypes.atapi import DisplayList
+from Products.CMFCore.utils import getToolByName
+from zope.interface import implements
+
 
 ATReferenceCriterionSchema = ATSelectionCriterion.schema
 

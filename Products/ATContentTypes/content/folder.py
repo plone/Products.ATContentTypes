@@ -1,22 +1,19 @@
-from zope.interface import implements
-
 from AccessControl import ClassSecurityInfo
 from OFS.interfaces import IOrderedContainer
-
-from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.content.base import registerATCT
-from Products.ATContentTypes.content.base import ATCTOrderedFolder
-from Products.ATContentTypes.content.base import ATCTBTreeFolder
-from Products.ATContentTypes.interfaces import IATFolder
-from Products.ATContentTypes.interfaces import IATBTreeFolder
-from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import NextPreviousAwareSchema
-from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
-
-from Products.CMFCore.permissions import View
-
 from plone.app.folder import folder
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.content.base import ATCTBTreeFolder
+from Products.ATContentTypes.content.base import ATCTOrderedFolder
+from Products.ATContentTypes.content.base import registerATCT
+from Products.ATContentTypes.content.schemata import ATContentTypeSchema
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.content.schemata import NextPreviousAwareSchema
+from Products.ATContentTypes.interfaces import IATBTreeFolder
+from Products.ATContentTypes.interfaces import IATFolder
+from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
+from Products.CMFCore.permissions import View
+from zope.interface import implements
+
 
 ATFolderSchema = folder.ATFolderSchema
 ObsoleteATFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema + \

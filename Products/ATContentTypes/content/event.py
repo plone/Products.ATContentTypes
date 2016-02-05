@@ -1,33 +1,31 @@
-from zope.interface import implements
-
-from Products.CMFCore.permissions import ModifyPortalContent, View
 from AccessControl import ClassSecurityInfo
-from DateTime import DateTime
 from ComputedAttribute import ComputedAttribute
-
-from Products.Archetypes.atapi import Schema
-from Products.Archetypes.atapi import DateTimeField
-from Products.Archetypes.atapi import LinesField
-from Products.Archetypes.atapi import StringField
-from Products.Archetypes.atapi import TextField
-from Products.Archetypes.atapi import DatetimeWidget
-from Products.Archetypes.atapi import LinesWidget
-from Products.Archetypes.atapi import TinyMCEWidget
-from Products.Archetypes.atapi import StringWidget
-from Products.Archetypes.atapi import RFC822Marshaller
+from DateTime import DateTime
 from Products.Archetypes.atapi import AnnotationStorage
-
-from Products.ATContentTypes.configuration import zconf
+from Products.Archetypes.atapi import DateTimeField
+from Products.Archetypes.atapi import DatetimeWidget
+from Products.Archetypes.atapi import LinesField
+from Products.Archetypes.atapi import LinesWidget
+from Products.Archetypes.atapi import RFC822Marshaller
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import StringField
+from Products.Archetypes.atapi import StringWidget
+from Products.Archetypes.atapi import TextField
+from Products.Archetypes.atapi import TinyMCEWidget
+from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.content.base import registerATCT
+from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import ATCTContent
+from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATEvent
 from Products.ATContentTypes.lib.calendarsupport import CalendarSupportMixin
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from zope.interface import implements
 
-from Products.ATContentTypes import ATCTMessageFactory as _
 
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
     StringField('location',

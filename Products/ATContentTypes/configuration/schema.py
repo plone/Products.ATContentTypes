@@ -1,8 +1,9 @@
-import os
-
+from Products.ATContentTypes.configuration import datatype
 from ZConfig.datatypes import Registry
 from ZConfig.loader import SchemaLoader
-from Products.ATContentTypes.configuration import datatype
+
+import os
+
 
 # schema file
 DIR = os.path.dirname(os.path.abspath(__file__))

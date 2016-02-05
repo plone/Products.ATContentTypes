@@ -1,29 +1,36 @@
-import logging
-import os
-
-from zope.interface import implements
-from zope.structuredtext import stx2html
-
-from AccessControl import Owned, ClassSecurityInfo, getSecurityManager
-from Acquisition import aq_parent, aq_base, aq_inner, aq_get
+from AccessControl import ClassSecurityInfo
+from AccessControl import getSecurityManager
+from AccessControl import Owned
+from Acquisition import aq_base
+from Acquisition import aq_get
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from App.class_init import InitializeClass
 from App.Common import package_home
 from OFS.SimpleItem import SimpleItem
-from zExceptions import NotFound
-from ZPublisher.Publish import call_object, missing_name, dont_publish_class
-from ZPublisher.mapply import mapply
 from Products.ATContentTypes.config import GLOBALS
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.CMFCore.permissions import ManagePortal
-from Products.CMFCore.utils import UniqueObject
-from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.interfaces import IFactoryTool
+from Products.CMFCore.permissions import ManagePortal
+from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.utils import UniqueObject
 from Products.CMFPlone.interfaces import IHideFromBreadcrumbs
-from Products.CMFPlone.PloneFolder import PloneFolder as TempFolderBase
 from Products.CMFPlone.PloneBaseTool import PloneBaseTool
+from Products.CMFPlone.PloneFolder import PloneFolder as TempFolderBase
 from Products.CMFPlone.utils import base_hasattr
 from Products.CMFPlone.utils import log_exc
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from zExceptions import NotFound
 from ZODB.POSException import ConflictError
+from zope.interface import implements
+from zope.structuredtext import stx2html
+from ZPublisher.mapply import mapply
+from ZPublisher.Publish import call_object
+from ZPublisher.Publish import dont_publish_class
+from ZPublisher.Publish import missing_name
+
+import logging
+import os
+
 
 FACTORY_INFO = '__factory__info__'
 

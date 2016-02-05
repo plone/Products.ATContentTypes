@@ -1,17 +1,14 @@
-import difflib
-
-from zope.interface import implements
-
-from DocumentTemplate.DT_Util import html_quote
-from App.class_init import InitializeClass
-
-from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.permissions import View
 from AccessControl import ClassSecurityInfo
-
+from App.class_init import InitializeClass
+from DocumentTemplate.DT_Util import html_quote
 from Products.Archetypes.atapi import ATHistoryAwareMixin
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.interfaces import IHistoryAware
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
+from zope.interface import implements
+
+import difflib
 
 
 class HistoryAwareMixin(ATHistoryAwareMixin):

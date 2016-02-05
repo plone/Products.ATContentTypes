@@ -1,7 +1,12 @@
-from Products.ATContentTypes.tool.factory import FactoryTool, TempFolder
+from Products.ATContentTypes.tool.factory import FactoryTool
+from Products.ATContentTypes.tool.factory import TempFolder
 from Products.ATContentTypes.tool.metadata import MetadataTool
-from Products.CMFPlone.tests.testInterfaces import (className, InterfaceTest,
-                                                    zope_interface_test)
+from Products.CMFPlone.tests.testInterfaces import className
+from Products.CMFPlone.tests.testInterfaces import InterfaceTest
+from Products.CMFPlone.tests.testInterfaces import zope_interface_test
+
+import unittest
+
 
 ###############################################################################
 ###                         testing starts here                             ###
@@ -38,7 +43,6 @@ for testClass in testClasses:
     setattr(KlassInterfaceTest, funcName, lambda self: self._testStuff())
     tests.append(KlassInterfaceTest)
 
-import unittest
 
 
 def test_suite():

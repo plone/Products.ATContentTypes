@@ -1,17 +1,14 @@
-from zope.interface import implements
-
 from AccessControl import ClassSecurityInfo
-
-from Products.Archetypes.atapi import Schema
-from Products.Archetypes.atapi import ImageField
-from Products.Archetypes.atapi import StringField
-from Products.Archetypes.atapi import TextField
-from Products.Archetypes.atapi import ImageWidget
-from Products.Archetypes.atapi import TinyMCEWidget
-from Products.Archetypes.atapi import StringWidget
-from Products.Archetypes.atapi import RFC822Marshaller
 from Products.Archetypes.atapi import AnnotationStorage
-
+from Products.Archetypes.atapi import ImageField
+from Products.Archetypes.atapi import ImageWidget
+from Products.Archetypes.atapi import RFC822Marshaller
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import StringField
+from Products.Archetypes.atapi import StringWidget
+from Products.Archetypes.atapi import TextField
+from Products.Archetypes.atapi import TinyMCEWidget
+from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import registerATCT
@@ -21,14 +18,12 @@ from Products.ATContentTypes.content.image import ATCTImageTransform
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATNewsItem
-
-from Products.ATContentTypes import ATCTMessageFactory as _
-
 from Products.CMFCore.permissions import View
-
+from Products.validation import V_REQUIRED
 from Products.validation.config import validation
 from Products.validation.validators.SupplValidators import MaxSizeValidator
-from Products.validation import V_REQUIRED
+from zope.interface import implements
+
 
 validation.register(MaxSizeValidator('checkNewsImageMaxSize',
                                      maxsize=zconf.ATNewsItem.max_file_size))
