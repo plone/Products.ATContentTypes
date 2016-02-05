@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Acquisition import aq_base
 from Products.ATContentTypes.config import HAS_MX_TIDY
 from Products.ATContentTypes.config import MX_TIDY_ENABLED

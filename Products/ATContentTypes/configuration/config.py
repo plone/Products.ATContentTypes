@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Globals import INSTANCE_HOME
 from Products.ATContentTypes.configuration.schema import atctSchema
 from ZConfig.loader import ConfigLoader

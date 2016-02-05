@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Products.ATContentTypes import permission
 from Products.ATContentTypes.tests import atcttestcase
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin

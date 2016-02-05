@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from plone.i18n.normalizer.interfaces import IFileNameNormalizer
 from Products.Archetypes.event import ObjectInitializedEvent
 from Products.Archetypes.interfaces import IATCTFileFactory

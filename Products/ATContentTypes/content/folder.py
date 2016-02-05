@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from OFS.interfaces import IOrderedContainer
 from plone.app.folder import folder

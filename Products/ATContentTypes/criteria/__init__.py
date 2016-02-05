@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from UserDict import UserDict
 from Products.Archetypes.atapi import registerType
 from Products.Archetypes.ClassGen import generateClass

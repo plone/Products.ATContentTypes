@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from AccessControl.SecurityManagement import newSecurityManager
 from Products.ATContentTypes.lib import constraintypes
 from Products.ATContentTypes.tests import atcttestcase

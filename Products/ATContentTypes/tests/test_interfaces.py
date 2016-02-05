@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Products.ATContentTypes.tool.factory import FactoryTool
 from Products.ATContentTypes.tool.factory import TempFolder
 from Products.ATContentTypes.tool.metadata import MetadataTool

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import CalendarWidget
 from Products.Archetypes.atapi import DateTimeField

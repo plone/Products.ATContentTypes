@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
 from lxml import etree

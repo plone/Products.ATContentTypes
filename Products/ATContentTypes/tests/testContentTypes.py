@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from plone.app.testing.bbb import PloneTestCase
 from Products.ATContentTypes.interfaces import IATContentType
 from Products.CMFPlone.tests import dummy

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from OFS.interfaces import IOrderedContainer as IOrderedContainer
 from plone.app.testing import SITE_OWNER_NAME as portal_owner
 from Products.ATContentTypes.content.folder import ATBTreeFolder

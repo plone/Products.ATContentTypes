@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """AT Content Types configuration file
 
 DO NOT CHANGE THIS FILE!

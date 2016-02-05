@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from AccessControl import Permissions as ZopePermissions
 from Products.CMFCore import permissions as CMFCorePermissions
 from ZConfig.datatypes import IdentifierConversion

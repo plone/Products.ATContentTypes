@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import DisplayList
 from Products.ATContentTypes.criteria import REFERENCE_INDICES

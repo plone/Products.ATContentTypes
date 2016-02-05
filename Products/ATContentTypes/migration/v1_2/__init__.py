@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Migration functions for ATContentTypes 1.2. These are called during the
    usual CMFPlone migration.
 """

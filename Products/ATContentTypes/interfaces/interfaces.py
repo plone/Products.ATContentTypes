@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Products.Archetypes.interfaces import IATHistoryAware
 from Products.Archetypes.interfaces import IBaseContent
 from Products.Archetypes.interfaces import IBaseFolder

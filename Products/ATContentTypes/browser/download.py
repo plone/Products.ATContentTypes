@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from AccessControl import Unauthorized
 from Products.Five import BrowserView
 from zope.interface import implements

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from cgi import FieldStorage
 from Products.Archetypes import atapi
 from Products.Archetypes.interfaces.layer import ILayerContainer

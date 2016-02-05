@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from DateTime import DateTime
 from Products.Archetypes.atapi import DisplayList

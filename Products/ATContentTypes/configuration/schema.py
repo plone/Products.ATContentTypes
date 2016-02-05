@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Products.ATContentTypes.configuration import datatype
 from ZConfig.datatypes import Registry
 from ZConfig.loader import SchemaLoader

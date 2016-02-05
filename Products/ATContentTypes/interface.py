@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """AT Content Types general interfaces
 
 BBB: We used to have all interfaces specified in "interface". "interfaces" is

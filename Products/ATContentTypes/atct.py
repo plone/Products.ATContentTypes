@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Products.ATContentTypes.content.base import ATCTBTreeFolder
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import ATCTFileContent

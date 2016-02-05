@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from plone.memoize import ram
 from Products.ATContentTypes.interfaces import ICalendarSupport
 from Products.ATContentTypes.lib import calendarsupport as cs

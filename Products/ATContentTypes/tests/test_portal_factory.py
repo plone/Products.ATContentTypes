@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from AccessControl import getSecurityManager
 from AccessControl import Permissions
 from plone.app.testing import TEST_USER_ID

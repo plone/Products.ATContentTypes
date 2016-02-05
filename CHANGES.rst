@@ -10,6 +10,8 @@ New:
 
 Fixes:
 
+- Added utf-8 coding magic comment.  [maurits]
+
 - Sorted imports with isort.  [maurits]
 
 - Fixed pep8 errors.  [maurits]

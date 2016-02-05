@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import Products.ATContentTypes.content.link
 import Products.ATContentTypes.content.image
 import Products.ATContentTypes.content.document

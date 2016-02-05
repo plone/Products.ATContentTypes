@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Products.ATContentTypes.interfaces import IATCTTool
 from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.utils import exportObjects

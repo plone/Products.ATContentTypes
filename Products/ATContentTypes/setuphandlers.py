@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Acquisition import aq_base
 from plone.i18n.normalizer.interfaces import IURLNormalizer
 from plone.portlets.interfaces import ILocalPortletAssignmentManager

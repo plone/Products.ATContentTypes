@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from hashlib import sha1 as sha
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD

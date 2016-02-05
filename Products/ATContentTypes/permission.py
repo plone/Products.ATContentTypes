@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from plone.app.widgets.interfaces import IFieldPermissionChecker
 from Products.Archetypes.atapi import listTypes
 from Products.Archetypes.interfaces import IBaseObject

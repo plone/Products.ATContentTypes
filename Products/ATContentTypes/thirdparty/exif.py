@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Library to extract EXIF information in digital camera image files
 #
 # To use this library call with:

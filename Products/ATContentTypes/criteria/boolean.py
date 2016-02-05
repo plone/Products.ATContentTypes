@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from Missing import MV
 from Products.Archetypes.atapi import BooleanField

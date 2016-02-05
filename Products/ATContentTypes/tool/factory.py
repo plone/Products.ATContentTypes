@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from AccessControl import getSecurityManager
 from AccessControl import Owned

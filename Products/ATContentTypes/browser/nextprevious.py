@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Acquisition import aq_base
 from plone.app.layout.nextprevious.interfaces import INextPreviousProvider
 from plone.memoize.instance import memoize

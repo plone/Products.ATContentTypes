@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Products.GenericSetup.interfaces import IFilesystemExporter
 from zope.interface import implements
 from zope.interface import Interface

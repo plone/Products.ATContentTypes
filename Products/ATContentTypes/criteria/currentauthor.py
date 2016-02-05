@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from Products.ATContentTypes.criteria import LIST_INDICES
 from Products.ATContentTypes.criteria import registerCriterion

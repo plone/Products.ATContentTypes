@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from OFS.interfaces import IOrderedContainer
 from Products.Archetypes import atapi
 from Products.Archetypes.Field import BooleanField

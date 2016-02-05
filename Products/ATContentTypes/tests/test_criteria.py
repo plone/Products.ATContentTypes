@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from DateTime import DateTime
 from Missing import MV
 from Products.Archetypes.interfaces import IExtensibleMetadata
