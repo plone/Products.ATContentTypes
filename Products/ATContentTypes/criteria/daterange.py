@@ -27,8 +27,9 @@ ATDateRangeCriterionSchema = ATBaseCriterionSchema + Schema((
                   widget=CalendarWidget(
                       label=_(u'label_date_range_criteria_start',
                               default=u'Start Date'),
-                      description=_(u'help_date_range_criteria_start',
-                                    default=u'The beginning of the date range to search')
+                      description=_(
+                          u'help_date_range_criteria_start',
+                          default=u'The beginning of the date range to search')
                   ),
                   ),
     DateTimeField('end',
@@ -39,8 +40,9 @@ ATDateRangeCriterionSchema = ATBaseCriterionSchema + Schema((
                   widget=CalendarWidget(
                       label=_(u'label_date_range_criteria_end',
                               default=u'End Date'),
-                      description=_(u'help_date_range_criteria_end',
-                                    default=u'The ending of the date range to search.')
+                      description=_(
+                          u'help_date_range_criteria_end',
+                          default=u'The ending of the date range to search.')
 
                   ),
                   ),
@@ -66,8 +68,6 @@ class ATDateRangeCriterion(ATBaseCriterion):
     security.declareProtected(View, 'getCriteriaItems')
 
     def getCriteriaItems(self):
-        result = []
-
         field = self.Field()
         value = self.Value()
 

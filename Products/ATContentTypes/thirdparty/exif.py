@@ -91,6 +91,8 @@
 # 04-DEC-05 JFROCHE Reduce number of objects created.
 #
 
+import logging
+
 
 # XXX: These are here because removing them broke existing ZODB instances.
 # we should remove them completely and have migrations to fix them up instead.
@@ -100,9 +102,6 @@ class Ratio:
 
 class IFD_Tag:
     pass
-
-import logging
-
 
 LOG = logging.getLogger('exif')
 
@@ -248,7 +247,8 @@ EXIF_TAGS = {
     0x920A: ('FocalLength', ),
     0x927C: ('MakerNote', ),
     # print as string
-    0x9286: ('UserComment', lambda x: isinstance(x, str) and x or ''.join(map(chr, x))),
+    0x9286: ('UserComment', lambda x: isinstance(x, str) and x or ''.join(map(
+        chr, x))),
     0x9290: ('SubSecTime', ),
     0x9291: ('SubSecTimeOriginal', ),
     0x9292: ('SubSecTimeDigitized', ),
@@ -884,8 +884,8 @@ class EXIF_header:
                 self.tags[ifd_name + ' ' +
                           tag_name] = (values[0], printable, field_offset)
             if self.debug:
-                print ' debug:   %s: %s' % (tag_name,
-                                            repr(self.tags[ifd_name + ' ' + tag_name]))
+                print ' debug:   %s: %s' % (
+                    tag_name, repr(self.tags[ifd_name + ' ' + tag_name]))
 
     # decode all the camera-specific MakerNote formats
 
@@ -909,7 +909,7 @@ class EXIF_header:
     def decode_maker_note(self):
         note = self.tags['EXIF MakerNote']
         make = self.tags['Image Make'][1]
-        model = self.tags['Image Model'][1]
+        # model = self.tags['Image Model'][1]
 
         # Nikon
         # The maker note usually starts with the word Nikon, followed by the
@@ -1036,7 +1036,7 @@ def process_file(file, debug=0):
             IFD_name = 'Image'
         elif ctr == 1:
             IFD_name = 'Thumbnail'
-            thumb_ifd = i
+            # thumb_ifd = i
         else:
             IFD_name = 'IFD %d' % ctr
         if debug:
@@ -1070,7 +1070,6 @@ def process_file(file, debug=0):
         except:
             pass
         del hdr.tags['EXIF MakerNote']
-    dict = {}
     tags = sorted(hdr.tags.keys())
     for tag in tags:
         hdr.tags[tag] = hdr.tags[tag][1]
