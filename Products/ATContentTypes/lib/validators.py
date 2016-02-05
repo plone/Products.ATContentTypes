@@ -20,8 +20,6 @@ import re
 
 logger = logging.getLogger('ATCT')
 
-
-
 if HAS_MX_TIDY:
     from mx.Tidy import tidy as mx_tidy
 
@@ -33,16 +31,17 @@ WARNING_LINE = 'line %d column %d - Warning: %s'
 RE_MATCH_ERROR = re.compile('^line (\d+) column (\d+) - Error: (.*)$')
 ERROR_LINE = 'line %d column %d - Error: %s'
 
-# the following regex is safe because *? matches the minimal text in the body tag
-# and .* matches the maximum text between two body tags including other body tags
-# if they exists
+# The following regex is safe because *? matches the minimal text in the body
+# tag and .* matches the maximum text between two body tags including other
+# body tags if they exists
 RE_BODY = re.compile('<body[^>]*?>(.*)</body>', re.DOTALL)
 
 # get the encoding from an uploaded html-page
 # e.g. <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 # we get ISO-8859-1 into the second match, the rest into the first and third.
 RE_GET_HTML_ENCODING = re.compile(
-    '(<meta.*?content-type.*?charset[\s]*=[\s]*)([^"]*?)("[^>]*?>)', re.S | re.I)
+    '(<meta.*?content-type.*?charset[\s]*=[\s]*)([^"]*?)("[^>]*?>)',
+    re.S | re.I)
 
 # subtract 11 line numbers from the warning/error
 SUBTRACT_LINES = 11

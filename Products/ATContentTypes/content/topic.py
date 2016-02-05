@@ -49,92 +49,106 @@ IGNORED_FIELDS = ['Date', 'allowedRolesAndUsers', 'getId', 'in_reply_to',
                   ]
 
 ATTopicSchema = ATContentTypeSchema.copy() + Schema((
-    TextField('text',
-              required=False,
-              searchable=True,
-              primary=True,
-              storage=AnnotationStorage(migrate=True),
-              validators=('isTidyHtmlWithCleanup',),
-              # validators=('isTidyHtml',),
-              default_output_type='text/x-html-safe',
-              write_permission=ChangeTopics,
-              widget=TinyMCEWidget(
-                  description='',
-                  label=_(u'label_body_text', default=u'Body Text'),
-                  rows=25,
-                  allow_file_upload=zconf.ATDocument.allow_document_upload),
-              ),
-    BooleanField('acquireCriteria',
-                 required=False,
-                 mode="rw",
-                 default=False,
-                 write_permission=ChangeTopics,
-                 widget=BooleanWidget(
-                     label=_(u'label_inherit_criteria',
-                             default=u'Inherit Criteria'),
-                     description=_(u'help_inherit_collection_criteria',
-                                   default=u"Narrow down the search results from the parent Collection(s) "
-                                   "by using the criteria from this Collection."),
-                     # Only show when the parent object is a Topic also,
-                     condition="python:object.aq_parent.portal_type == 'Topic'"),
-                 ),
-    BooleanField('limitNumber',
-                 required=False,
-                 mode="rw",
-                 default=False,
-                 write_permission=ChangeTopics,
-                 widget=BooleanWidget(
-                     label=_(u'label_limit_number',
-                             default=u'Limit Search Results'),
-                     description=_(u'help_limit_number',
-                                   default=u"If selected, only the 'Number of Items' "
-                                   "indicated below will be displayed.")
-                 ),
-                 ),
-    IntegerField('itemCount',
-                 required=False,
-                 mode="rw",
-                 default=0,
-                 write_permission=ChangeTopics,
-                 widget=IntegerWidget(
-                     label=_(u'label_item_count', default=u'Number of Items'),
-                     description=''
-                 ),
-                 ),
-    BooleanField('customView',
-                 required=False,
-                 mode="rw",
-                 default=False,
-                 write_permission=ChangeTopics,
-                 widget=BooleanWidget(
-                     label=_(u'label_custom_view',
-                             default=u'Display as Table'),
-                     description=_(u'help_custom_view',
-                                   default=u"Columns in the table are controlled "
-                                   "by 'Table Columns' below.")
-                 ),
-                 ),
-    LinesField('customViewFields',
-               required=False,
-               mode="rw",
-               default=('Title',),
-               vocabulary='listMetaDataFields',
-               enforceVocabulary=True,
-               write_permission=ChangeTopics,
-               widget=InAndOutWidget(
-                    label=_(u'label_custom_view_fields',
-                            default=u'Table Columns'),
-                    description=_(u'help_custom_view_fields',
-                                  default=u"Select which fields to display when "
-                                  "'Display as Table' is checked.")
-               ),
-               ),
+    TextField(
+        'text',
+        required=False,
+        searchable=True,
+        primary=True,
+        storage=AnnotationStorage(migrate=True),
+        validators=('isTidyHtmlWithCleanup',),
+        # validators=('isTidyHtml',),
+        default_output_type='text/x-html-safe',
+        write_permission=ChangeTopics,
+        widget=TinyMCEWidget(
+            description='',
+            label=_(u'label_body_text', default=u'Body Text'),
+            rows=25,
+            allow_file_upload=zconf.ATDocument.allow_document_upload),
+    ),
+
+    BooleanField(
+        'acquireCriteria',
+        required=False,
+        mode="rw",
+        default=False,
+        write_permission=ChangeTopics,
+        widget=BooleanWidget(
+            label=_(u'label_inherit_criteria',
+                    default=u'Inherit Criteria'),
+            description=_(
+                u'help_inherit_collection_criteria',
+                default=u"Narrow down the search results from the parent "
+                u"Collection(s) by using the criteria from this Collection."),
+            # Only show when the parent object is a Topic also.
+            condition="python:object.aq_parent.portal_type == 'Topic'"),
+    ),
+
+    BooleanField(
+        'limitNumber',
+        required=False,
+        mode="rw",
+        default=False,
+        write_permission=ChangeTopics,
+        widget=BooleanWidget(
+            label=_(u'label_limit_number',
+                    default=u'Limit Search Results'),
+            description=_(u'help_limit_number',
+                          default=u"If selected, only the 'Number of Items' "
+                          "indicated below will be displayed.")
+        ),
+    ),
+
+    IntegerField(
+        'itemCount',
+        required=False,
+        mode="rw",
+        default=0,
+        write_permission=ChangeTopics,
+        widget=IntegerWidget(
+            label=_(u'label_item_count', default=u'Number of Items'),
+            description=''),
+    ),
+
+    BooleanField(
+        'customView',
+        required=False,
+        mode="rw",
+        default=False,
+        write_permission=ChangeTopics,
+        widget=BooleanWidget(
+            label=_(u'label_custom_view',
+                    default=u'Display as Table'),
+            description=_(u'help_custom_view',
+                          default=u"Columns in the table are controlled "
+                          "by 'Table Columns' below.")
+        ),
+    ),
+
+    LinesField(
+        'customViewFields',
+        required=False,
+        mode="rw",
+        default=('Title',),
+        vocabulary='listMetaDataFields',
+        enforceVocabulary=True,
+        write_permission=ChangeTopics,
+        widget=InAndOutWidget(
+             label=_(u'label_custom_view_fields',
+                     default=u'Table Columns'),
+             description=_(u'help_custom_view_fields',
+                           default=u"Select which fields to display when "
+                           "'Display as Table' is checked.")
+        ),
+    ),
 ))
 finalizeATCTSchema(ATTopicSchema, folderish=False, moveDiscussion=False)
 
 
 class ATTopic(ATCTFolder):
-    """An automatically updated stored search that can be used to display items matching criteria you specify."""
+    """An automatically updated stored search.
+
+    This can be used to display items matching criteria you specify.
+    """
 
     schema = ATTopicSchema
 
@@ -393,16 +407,19 @@ class ATTopic(ATCTFolder):
         for criterion in criteria:
             for key, value in criterion.getCriteriaItems():
                 # Ticket: https://dev.plone.org/plone/ticket/8827
-                # If a sub topic is set to acquire then the 'start' key have to
-                # be deleted to get ATFriendlyDateCriteria to work properly (the 'end' key) -
-                # so the 'start' key should be deleted.
+                # If a sub topic is set to acquire then the 'start' key has to
+                # be deleted to get ATFriendlyDateCriteria to work properly
+                # (the 'end' key) - so the 'start' key should be deleted.
                 # But only when:
                 # - a subtopic with acquire enabled
                 # - its a ATFriendlyDateCriteria
                 # - the date criteria is set to 'now' (0)
                 # - the end key is set
-                if clear_start and criterion.meta_type in ['ATFriendlyDateCriteria'] \
-                        and not criterion.value and key == 'end' and 'start' in result:
+                if (clear_start and
+                        criterion.meta_type in ['ATFriendlyDateCriteria'] and
+                        not criterion.value and
+                        key == 'end' and
+                        'start' in result):
                     del result['start']
                 result[key] = value
         return result

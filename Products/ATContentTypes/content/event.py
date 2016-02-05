@@ -29,105 +29,124 @@ from zope.interface import implements
 
 
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
-    StringField('location',
-                searchable=True,
-                write_permission=ModifyPortalContent,
-                widget=StringWidget(
-                    description='',
-                    label=_(u'label_event_location', default=u'Event Location')
-                )),
+    StringField(
+        'location',
+        searchable=True,
+        write_permission=ModifyPortalContent,
+        widget=StringWidget(
+            description='',
+            label=_(u'label_event_location', default=u'Event Location')
+        )
+    ),
 
-    DateTimeField('startDate',
-                  required=True,
-                  searchable=False,
-                  accessor='start',
-                  write_permission=ModifyPortalContent,
-                  default_method=DateTime,
-                  languageIndependent=True,
-                  widget=DatetimeWidget(
-                      description='',
-                      label=_(u'label_event_start', default=u'Event Starts')
-                  )),
+    DateTimeField(
+        'startDate',
+        required=True,
+        searchable=False,
+        accessor='start',
+        write_permission=ModifyPortalContent,
+        default_method=DateTime,
+        languageIndependent=True,
+        widget=DatetimeWidget(
+            description='',
+            label=_(u'label_event_start', default=u'Event Starts')
+        )
+    ),
 
-    DateTimeField('endDate',
-                  required=True,
-                  searchable=False,
-                  accessor='end',
-                  write_permission=ModifyPortalContent,
-                  default_method=DateTime,
-                  languageIndependent=True,
-                  widget=DatetimeWidget(
-                      description='',
-                      label=_(u'label_event_end', default=u'Event Ends')
-                  )),
+    DateTimeField(
+        'endDate',
+        required=True,
+        searchable=False,
+        accessor='end',
+        write_permission=ModifyPortalContent,
+        default_method=DateTime,
+        languageIndependent=True,
+        widget=DatetimeWidget(
+            description='',
+            label=_(u'label_event_end', default=u'Event Ends')
+        )
+    ),
 
-    TextField('text',
-              required=False,
-              searchable=True,
-              primary=True,
-              storage=AnnotationStorage(migrate=True),
-              validators=('isTidyHtmlWithCleanup',),
-              default_output_type='text/x-html-safe',
-              widget=TinyMCEWidget(
-                  description='',
-                  label=_(u'label_event_announcement',
-                          default=u'Event body text'),
-                  rows=25,
-                  allow_file_upload=zconf.ATDocument.allow_document_upload)),
+    TextField(
+        'text',
+        required=False,
+        searchable=True,
+        primary=True,
+        storage=AnnotationStorage(migrate=True),
+        validators=('isTidyHtmlWithCleanup',),
+        default_output_type='text/x-html-safe',
+        widget=TinyMCEWidget(
+            description='',
+            label=_(u'label_event_announcement',
+                    default=u'Event body text'),
+            rows=25,
+            allow_file_upload=zconf.ATDocument.allow_document_upload)
+    ),
 
-    LinesField('attendees',
-               languageIndependent=True,
-               searchable=True,
-               write_permission=ModifyPortalContent,
-               widget=LinesWidget(
-                   description='',
-                   label=_(u'label_event_attendees', default=u'Attendees')
-               )),
+    LinesField(
+        'attendees',
+        languageIndependent=True,
+        searchable=True,
+        write_permission=ModifyPortalContent,
+        widget=LinesWidget(
+            description='',
+            label=_(u'label_event_attendees', default=u'Attendees')
+        )
+    ),
 
-    StringField('eventUrl',
-                required=False,
-                searchable=True,
-                accessor='event_url',
-                write_permission=ModifyPortalContent,
-                validators=('isURL',),
-                widget=StringWidget(
-                    description=_(u'help_event_url',
-                                  default=u"Web address with more info about the event. "
-                                  "Add http:// for external links."),
-                    label=_(u'label_event_url', default=u'Event URL')
-                )),
+    StringField(
+        'eventUrl',
+        required=False,
+        searchable=True,
+        accessor='event_url',
+        write_permission=ModifyPortalContent,
+        validators=('isURL',),
+        widget=StringWidget(
+            description=_(
+                u'help_event_url',
+                default=u"Web address with more info about the event. "
+                u"Add http:// for external links."),
+            label=_(u'label_event_url', default=u'Event URL')
+        )
+    ),
 
-    StringField('contactName',
-                required=False,
-                searchable=True,
-                accessor='contact_name',
-                write_permission=ModifyPortalContent,
-                widget=StringWidget(
-                    description='',
-                    label=_(u'label_contact_name', default=u'Contact Name')
-                )),
+    StringField(
+        'contactName',
+        required=False,
+        searchable=True,
+        accessor='contact_name',
+        write_permission=ModifyPortalContent,
+        widget=StringWidget(
+            description='',
+            label=_(u'label_contact_name', default=u'Contact Name')
+        )
+    ),
 
-    StringField('contactEmail',
-                required=False,
-                searchable=True,
-                accessor='contact_email',
-                write_permission=ModifyPortalContent,
-                validators=('isEmail',),
-                widget=StringWidget(
-                    description='',
-                    label=_(u'label_contact_email', default=u'Contact E-mail')
-                )),
+    StringField(
+        'contactEmail',
+        required=False,
+        searchable=True,
+        accessor='contact_email',
+        write_permission=ModifyPortalContent,
+        validators=('isEmail',),
+        widget=StringWidget(
+            description='',
+            label=_(u'label_contact_email', default=u'Contact E-mail')
+        )
+    ),
 
-    StringField('contactPhone',
-                required=False,
-                searchable=True,
-                accessor='contact_phone',
-                write_permission=ModifyPortalContent,
-                validators=(),
-                widget=StringWidget(
-                    description='',
-                    label=_(u'label_contact_phone', default=u'Contact Phone')
-                )),
+    StringField(
+        'contactPhone',
+        required=False,
+        searchable=True,
+        accessor='contact_phone',
+        write_permission=ModifyPortalContent,
+        validators=(),
+        widget=StringWidget(
+            description='',
+            label=_(u'label_contact_phone', default=u'Contact Phone')
+        )
+    ),
 ), marshall=RFC822Marshaller()
 )
 
@@ -146,7 +165,10 @@ ATEventSchema.moveField('location', before='startDate')
 
 
 class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
-    """Information about an upcoming event, which can be displayed in the calendar."""
+    """Information about an upcoming event.
+
+    This can be displayed in the calendar.
+    """
 
     schema = ATEventSchema
 
@@ -177,8 +199,9 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
             event_url=None):
 
         if effectiveDay and effectiveMo and effectiveYear and start_time:
-            sdate = '%s-%s-%s %s %s' % (effectiveDay, effectiveMo, effectiveYear,
-                                        start_time, startAMPM)
+            sdate = '%s-%s-%s %s %s' % (
+                effectiveDay, effectiveMo, effectiveYear,
+                start_time, startAMPM)
         elif start_date:
             if not start_time:
                 start_time = '00:00:00'
@@ -225,16 +248,18 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
             try:
                 end = DateTime(rendDate)
             except:
-                errors['endDate'] = _(u'error_invalid_end_date',
-                                      default=u'End date is not valid.')
+                errors['endDate'] = _(
+                    u'error_invalid_end_date',
+                    default=u'End date is not valid.')
         else:
             end = self.end()
         if rstartDate:
             try:
                 start = DateTime(rstartDate)
             except:
-                errors['startDate'] = _(u'error_invalid_start_date',
-                                        default=u'Start date is not valid.')
+                errors['startDate'] = _(
+                    u'error_invalid_start_date',
+                    default=u'Start date is not valid.')
         else:
             start = self.start()
 
@@ -243,8 +268,9 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
             return
 
         if start > end:
-            errors['endDate'] = _(u'error_end_must_be_after_start_date',
-                                  default=u'End date must be after start date.')
+            errors['endDate'] = _(
+                u'error_end_must_be_after_start_date',
+                default=u'End date must be after start date.')
 
     def _start_date(self):
         value = self['startDate']

@@ -221,17 +221,23 @@ class TestSiteATTopic(atcttestcase.ATCTTypeTestCase):
 
     def test_nested_friendly_date_criteria(self):
         """
-        The queries before adding fix for https://dev.plone.org/plone/ticket/8827
+        The queries before adding fix for
+        https://dev.plone.org/plone/ticket/8827
         where subtopics should inhert start / end keys
         topic query: {
-        'start': {'query': DateTime('2009/01/30 21:54:27.370 GMT+1'), 'range': 'min'}
+          'start': {'query': DateTime('2009/01/30 21:54:27.370 GMT+1'),
+          'range': 'min'}
         }
         subtopic query: {
-        'start': {'query': DateTime('2009/01/30 21:54:27.444 GMT+1'), 'range': 'min'},
-        'end': {'query': DateTime('2009/01/30 21:54:27.445 GMT+1'), 'range': 'max'}
+          'start': {'query': DateTime('2009/01/30 21:54:27.444 GMT+1'),
+                    'range': 'min'},
+          'end': {'query': DateTime('2009/01/30 21:54:27.445 GMT+1'),
+                  'range': 'max'}
         }
-        ^^ the 'start' key in the subtopic query is odd and results in combination
-        with the 'end' key in zero results even if there is old/past items.
+
+        ^^ the 'start' key in the subtopic query is odd and results in
+        combination with the 'end' key in zero results even if there is
+        old/past items.
         """
         # Add topic - future items
         topic = self._ATCT
@@ -498,8 +504,9 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'boolean', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.BooleanWidget),
@@ -543,8 +550,9 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'boolean', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.BooleanWidget),
@@ -586,8 +594,9 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'integer', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.IntegerWidget),
@@ -631,8 +640,9 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'boolean', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.BooleanWidget),
@@ -676,8 +686,9 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'lines', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.InAndOutWidget),

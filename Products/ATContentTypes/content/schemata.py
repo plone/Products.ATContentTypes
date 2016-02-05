@@ -12,19 +12,22 @@ from Products.CMFCore.permissions import ModifyPortalContent
 # for ATContentTypes we want to have the description in the edit view
 # just like CMF
 ATContentTypeSchema = BaseSchema.copy() + MetadataSchema((
-    BooleanField('excludeFromNav',
-                 required=False,
-                 languageIndependent=True,
-                 schemata='metadata',  # moved to 'default' for folders
-                 widget=BooleanWidget(
-                     description=_(u'help_exclude_from_nav',
-                                   default=u'If selected, this item will not appear in the navigation tree'),
-                     label=_(u'label_exclude_from_nav',
-                             default=u'Exclude from navigation'),
-                     visible={'view': 'hidden',
-                              'edit': 'visible'},
-                 ),
-                 ),
+    BooleanField(
+        'excludeFromNav',
+        required=False,
+        languageIndependent=True,
+        schemata='metadata',  # moved to 'default' for folders
+        widget=BooleanWidget(
+            label=_(u'label_exclude_from_nav',
+                    default=u'Exclude from navigation'),
+            description=_(
+                u'help_exclude_from_nav',
+                default=u'If selected, this item will not appear in the '
+                u'navigation tree'),
+            visible={'view': 'hidden',
+                     'edit': 'visible'},
+        ),
+    ),
 ),)
 
 ATContentTypeSchema['id'].searchable = True
@@ -60,20 +63,23 @@ ATContentTypeSchema.addField(relatedItemsField.copy())
 # Enabling next / previous navigation
 
 NextPreviousAwareSchema = MetadataSchema((
-    BooleanField('nextPreviousEnabled',
-                 # required=False,
-                 languageIndependent=True,
-                 schemata='metadata',
-                 widget=BooleanWidget(
-                     description=_(
-                         u'help_nextprevious', default=u'This enables next/previous widget on content items contained in this folder.'),
-                     label=_(u'label_nextprevious',
-                             default=u'Enable next previous navigation'),
-                     visible={'view': 'hidden',
-                              'edit': 'visible'},
-                 ),
-                 default_method="getNextPreviousParentValue"
-                 ),
+    BooleanField(
+        'nextPreviousEnabled',
+        # required=False,
+        languageIndependent=True,
+        schemata='metadata',
+        widget=BooleanWidget(
+            description=_(
+                u'help_nextprevious',
+                default=u'This enables next/previous widget on '
+                u'content items contained in this folder.'),
+            label=_(u'label_nextprevious',
+                    default=u'Enable next previous navigation'),
+            visible={'view': 'hidden',
+                     'edit': 'visible'},
+        ),
+        default_method="getNextPreviousParentValue"
+        ),
 ),)
 
 

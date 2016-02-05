@@ -121,10 +121,10 @@ class TempFolder(TempFolderBase):
                     lr = lr()
                 lr = lr or {}
                 for k, v in lr.items():
-                    if not k in local_roles:
+                    if k not in local_roles:
                         local_roles[k] = []
                     for role in v:
-                        if not role in local_roles[k]:
+                        if role not in local_roles[k]:
                             local_roles[k].append(role)
 
             # Check if local role has to be acquired (PLIP 16)
@@ -185,9 +185,15 @@ class TempFolder(TempFolderBase):
 
     def __getitem__(self, id):
         # Zope's inner acquisition chain for objects returned by __getitem__
-        # will be portal -> portal_factory -> temporary_folder -> object
-        # What we really want is for the inner acquisition chain to be
-        # intended_parent_folder -> portal_factory -> temporary_folder -> object
+        # will be:
+        #
+        # portal -> portal_factory -> temporary_folder -> object
+        #
+        # What we really want is for the inner acquisition chain to be:
+        #
+        # intended_parent_folder -> portal_factory -> temporary_folder ->
+        # object
+        #
         # So we need to rewrap...
         portal_factory = aq_parent(aq_inner(self))
         intended_parent = aq_parent(portal_factory)
@@ -397,7 +403,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         type_name = stack[-1]
         types_tool = getToolByName(self, 'portal_types')
         # make sure this is really a type name
-        if not type_name in types_tool.listContentTypes():
+        if type_name not in types_tool.listContentTypes():
             return  # nope -- do nothing
 
         gobbled_length += 1
@@ -443,7 +449,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         # cleared by __before_publishing_traverse__
         name = str(name)  # fix unicode weirdness
         types_tool = getToolByName(self, 'portal_types')
-        if not name in types_tool.listContentTypes():
+        if name not in types_tool.listContentTypes():
             # not a type name -- do the standard thing
             return getattr(self, name)
         # a type name -- return a temp folder
@@ -499,7 +505,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
 
         # make sure we can add an object of this type to the temp folder
         types_tool = getToolByName(self, 'portal_types')
-        if not type_name in types_tool.TempFolder.allowed_content_types:
+        if type_name not in types_tool.TempFolder.allowed_content_types:
             # update allowed types for tempfolder
             types_tool.TempFolder.allowed_content_types = \
                 (types_tool.listContentTypes())

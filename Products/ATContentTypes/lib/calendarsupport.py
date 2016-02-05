@@ -41,8 +41,8 @@ DTEND:%(enddate)s
 # blocking of the time slot. That's not appropriate for an event
 # calendar.
 # Also, previous version set "PRIORITY:3", which the RFC interprets as a high
-# priority. In absence of a priority field in the event, there's no justification
-# for that.
+# priority. In absence of a priority field in the event, there is no
+# justification for that.
 
 ICS_EVENT_END = """\
 CLASS:PUBLIC
@@ -148,7 +148,8 @@ class CalendarSupportMixin:
         if subject:
             out.write('CATEGORIES:%s\n' % ', '.join(subject))
 
-        # TODO  -- NO! see the RFC; ORGANIZER field is not to be used for non-group-scheduled entities
+        # TODO -- NO! see the RFC; ORGANIZER field is not to be used for
+        # non-group-scheduled entities.
         # ORGANIZER;CN=%(name):MAILTO=%(email)
         # ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
 

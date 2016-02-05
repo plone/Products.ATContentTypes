@@ -21,10 +21,13 @@ from Products.CMFCore.utils import getToolByName
 from zope.interface import implements
 
 
-# constants for enableConstrainMixin
-ACQUIRE = -1  # acquire locallyAllowedTypes from parent (default)
-DISABLED = 0  # use default behavior of PortalFolder which uses the FTI information
-ENABLED = 1  # allow types from locallyAllowedTypes only
+# Constants for enableConstrainMixin.
+# Acquire locallyAllowedTypes from parent (default):
+ACQUIRE = -1
+# Use default behavior of PortalFolder which uses the FTI information:
+DISABLED = 0
+# Allow types from locallyAllowedTypes only:
+ENABLED = 1
 
 # Note: ACQUIRED means get allowable types from parent (regardless of
 #  whether it supports IConstrainTypes) but only if parent is the same
@@ -34,71 +37,78 @@ ENABLED = 1  # allow types from locallyAllowedTypes only
 enableDisplayList = IntDisplayList((
     (ACQUIRE, _(u'constraintypes_acquire_label',
                 default=u'Use parent folder settings')),
-    (DISABLED, _(u'constraintypes_disable_label', default=u'Use portal default')),
-    (ENABLED, _(u'constraintypes_enable_label', default=u'Select manually')),
+    (DISABLED, _(u'constraintypes_disable_label',
+                 default=u'Use portal default')),
+    (ENABLED, _(u'constraintypes_enable_label',
+                default=u'Select manually')),
 ))
 
 ConstrainTypesMixinSchema = Schema((
-    IntegerField('constrainTypesMode',
-                 required=False,
-                 default_method="_ct_defaultConstrainTypesMode",
-                 vocabulary=enableDisplayList,
-                 languageIndependent=True,
-                 write_permission=ATCTPermissions.ModifyConstrainTypes,
-                 widget=SelectionWidget(
-                     label=_(u'label_contrain_types_mode',
-                             default=u'Constrain types mode'),
-                     description=_(u'description_constrain_types_mode',
-                                   default=u'Select the constraint type mode for this folder.'),
-                     visible={'view': 'invisible',
-                              'edit': 'invisible',
-                              },
-                 ),
-                 ),
+    IntegerField(
+        'constrainTypesMode',
+        required=False,
+        default_method="_ct_defaultConstrainTypesMode",
+        vocabulary=enableDisplayList,
+        languageIndependent=True,
+        write_permission=ATCTPermissions.ModifyConstrainTypes,
+        widget=SelectionWidget(
+            label=_(u'label_contrain_types_mode',
+                    default=u'Constrain types mode'),
+            description=_(
+                u'description_constrain_types_mode',
+                default=u'Select the constraint type mode for this folder.'),
+            visible={'view': 'invisible',
+                     'edit': 'invisible'},
+        ),
+    ),
 
-    LinesField('locallyAllowedTypes',
-               vocabulary='_ct_vocabularyPossibleTypes',
-               enforceVocabulary=False,
-               languageIndependent=True,
-               default_method='_ct_defaultAddableTypeIds',
-               accessor='getLocallyAllowedTypes',  # Respects ENABLE/DISABLE/ACQUIRE
-               write_permission=ATCTPermissions.ModifyConstrainTypes,
-               multiValued=True,
-               widget=MultiSelectionWidget(
-                   size=10,
-                   label=_(u'label_constrain_allowed_types',
-                           default=u'Permitted types'),
-                   description=_(u'description_constrain_allowed_types',
-                                 default=u'Select the types which will be addable inside this folder.'
-                                 ),
-                   visible={'view': 'invisible',
-                            'edit': 'invisible',
-                            },
-               ),
-               ),
+    LinesField(
+        'locallyAllowedTypes',
+        vocabulary='_ct_vocabularyPossibleTypes',
+        enforceVocabulary=False,
+        languageIndependent=True,
+        default_method='_ct_defaultAddableTypeIds',
+        accessor='getLocallyAllowedTypes',  # Respects ENABLE/DISABLE/ACQUIRE
+        write_permission=ATCTPermissions.ModifyConstrainTypes,
+        multiValued=True,
+        widget=MultiSelectionWidget(
+            size=10,
+            label=_(u'label_constrain_allowed_types',
+                    default=u'Permitted types'),
+            description=_(
+                u'description_constrain_allowed_types',
+                default=u'Select the types which will be addable '
+                        u'inside this folder.'
+            ),
+            visible={'view': 'invisible',
+                     'edit': 'invisible'},
+        ),
+    ),
 
-    LinesField('immediatelyAddableTypes',
-               vocabulary='_ct_vocabularyPossibleTypes',
-               enforceVocabulary=False,
-               languageIndependent=True,
-               default_method='_ct_defaultAddableTypeIds',
-               accessor='getImmediatelyAddableTypes',  # Respects ENABLE/DISABLE/ACQUIRE
-               write_permission=ATCTPermissions.ModifyConstrainTypes,
-               multiValued=True,
-               widget=MultiSelectionWidget(
-                   size=10,
-                   label=_(u'label_constrain_preferred_types',
-                           u'Preferred types'),
-                   description=_(u'description_constrain_preferred_types',
-                                 default=u'Select the types which will be addable '
-                                 'from the "Add new item" menu. Any '
-                                 'additional types set in the list above '
-                                 'will be addable from a separate form.'),
-                   visible={'view': 'invisible',
-                            'edit': 'invisible',
-                            },
-               ),
-               ),
+    LinesField(
+        'immediatelyAddableTypes',
+        vocabulary='_ct_vocabularyPossibleTypes',
+        enforceVocabulary=False,
+        languageIndependent=True,
+        default_method='_ct_defaultAddableTypeIds',
+        # Respects ENABLE/DISABLE/ACQUIRE:
+        accessor='getImmediatelyAddableTypes',
+        write_permission=ATCTPermissions.ModifyConstrainTypes,
+        multiValued=True,
+        widget=MultiSelectionWidget(
+            size=10,
+            label=_(u'label_constrain_preferred_types',
+                    u'Preferred types'),
+            description=_(
+                u'description_constrain_preferred_types',
+                default=u'Select the types which will be addable '
+                u'from the "Add new item" menu. Any '
+                u'additional types set in the list above '
+                u'will be addable from a separate form.'),
+            visible={'view': 'invisible',
+                     'edit': 'invisible'},
+        ),
+    ),
 ))
 
 
@@ -153,7 +163,7 @@ class ConstrainTypesMixin:
 
         disallowed = []
         for p in preferred:
-            if not p in allowed:
+            if p not in allowed:
                 disallowed.append(p)
 
         if disallowed:
@@ -189,7 +199,8 @@ class ConstrainTypesMixin:
             elif not parentPortalTypeEqual(self):
                 # if parent.portal_type != self.portal_type:
                 default_addable_types = [
-                    fti.getId() for fti in self.getDefaultAddableTypes(context)]
+                    fti.getId() for fti in
+                    self.getDefaultAddableTypes(context)]
                 if ISelectableConstrainTypes.providedBy(parent):
                     return [t for t in parent.getLocallyAllowedTypes(context)
                             if t in default_addable_types]
@@ -282,7 +293,7 @@ class ConstrainTypesMixin:
             return PortalFolder.invokeFactory(self, type_name, id,
                                               RESPONSE=None, *args, **kw)
 
-        if not type_name in [fti.getId()
+        if type_name not in [fti.getId()
                              for fti in self.allowedContentTypes()]:
             raise ValueError('Disallowed subobject type: %s' % type_name)
 

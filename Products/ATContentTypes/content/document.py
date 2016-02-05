@@ -29,33 +29,37 @@ from ZPublisher.HTTPRequest import HTTPRequest
 
 
 ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
-    TextField('text',
-              required=False,
-              searchable=True,
-              primary=True,
-              storage=AnnotationStorage(migrate=True),
-              validators=('isTidyHtmlWithCleanup',),
-              # validators=('isTidyHtml',),
-              default_output_type='text/x-html-safe',
-              widget=TinyMCEWidget(
-                  description='',
-                  label=_(u'label_body_text', default=u'Body Text'),
-                  rows=25,
-                  allow_file_upload=zconf.ATDocument.allow_document_upload),
-              ),
+    TextField(
+        'text',
+        required=False,
+        searchable=True,
+        primary=True,
+        storage=AnnotationStorage(migrate=True),
+        validators=('isTidyHtmlWithCleanup',),
+        # validators=('isTidyHtml',),
+        default_output_type='text/x-html-safe',
+        widget=TinyMCEWidget(
+            description='',
+            label=_(u'label_body_text', default=u'Body Text'),
+            rows=25,
+            allow_file_upload=zconf.ATDocument.allow_document_upload),
+    ),
 
-    BooleanField('tableContents',
-                 required=False,
-                 languageIndependent=True,
-                 widget=BooleanWidget(
-                     label=_(
-                         u'help_enable_table_of_contents',
-                         default=u'Table of contents'),
-                     description=_(
-                         u'help_enable_table_of_contents_description',
-                         default=u'If selected, this will show a table of contents at the top of the page.')
-                 ),
-                 )),
+    BooleanField(
+        'tableContents',
+        required=False,
+        languageIndependent=True,
+        widget=BooleanWidget(
+            label=_(
+                u'help_enable_table_of_contents',
+                default=u'Table of contents'),
+            description=_(
+                u'help_enable_table_of_contents_description',
+                default=u'If selected, this will show a table of contents '
+                u'at the top of the page.')
+        ),
+    )),
+
     marshall=RFC822Marshaller()
 )
 
@@ -95,8 +99,8 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
 
         The default mutator is overwritten to:
 
-          o add a conversion from stupid CMF content type (e.g. structured-text)
-            to real mime types used by MTR.
+          o add a conversion from stupid CMF content type
+            (e.g. structured-text) to real mime types used by MTR.
 
           o Set format to default format if value is empty
 
@@ -149,8 +153,8 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
             # no extension
             mimetype = mtr.classify(data)
 
-        if not mimetype or (isinstance(mimetype, TupleType)
-                            and not len(mimetype)):
+        if not mimetype or (
+                isinstance(mimetype, TupleType) and not len(mimetype)):
             # nothing found
             return None
 

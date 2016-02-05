@@ -12,6 +12,7 @@ class TestControlPanel(PloneTestCase):
 
     def testDefaultConfiglets(self):
         for title in self.configlets:
-            self.assertTrue(title in [a.getAction(self)['id']
-                                      for a in self.controlpanel.listActions()],
-                            "Missing configlet with id '%s'" % title)
+            self.assertTrue(
+                title in [a.getAction(self)['id']
+                          for a in self.controlpanel.listActions()],
+                "Missing configlet with id '%s'" % title)

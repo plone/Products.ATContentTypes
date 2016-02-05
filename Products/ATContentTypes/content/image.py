@@ -29,29 +29,31 @@ validation.register(MaxSizeValidator('checkImageMaxSize',
 
 
 ATImageSchema = ATContentTypeSchema.copy() + Schema((
-    ImageField('image',
-               required=True,
-               primary=True,
-               languageIndependent=True,
-               storage=AnnotationStorage(migrate=True),
-               swallowResizeExceptions=zconf.swallowImageResizeExceptions.enable,
-               pil_quality=zconf.pil_config.quality,
-               pil_resize_algo=zconf.pil_config.resize_algo,
-               max_size=zconf.ATImage.max_image_dimension,
-               sizes={'large': (768, 768),
-                      'preview': (400, 400),
-                      'mini': (200, 200),
-                      'thumb': (128, 128),
-                      'tile': (64, 64),
-                      'icon': (32, 32),
-                      'listing': (16, 16),
-                      },
-               validators=(('isNonEmptyFile', V_REQUIRED),
-                           ('checkImageMaxSize', V_REQUIRED)),
-               widget=ImageWidget(
-                   description='',
-                   label=_(u'label_image', default=u'Image'),
-                   show_content_type=False,)),
+    ImageField(
+        'image',
+        required=True,
+        primary=True,
+        languageIndependent=True,
+        storage=AnnotationStorage(migrate=True),
+        swallowResizeExceptions=zconf.swallowImageResizeExceptions.enable,
+        pil_quality=zconf.pil_config.quality,
+        pil_resize_algo=zconf.pil_config.resize_algo,
+        max_size=zconf.ATImage.max_image_dimension,
+        sizes={'large': (768, 768),
+               'preview': (400, 400),
+               'mini': (200, 200),
+               'thumb': (128, 128),
+               'tile': (64, 64),
+               'icon': (32, 32),
+               'listing': (16, 16),
+               },
+        validators=(('isNonEmptyFile', V_REQUIRED),
+                    ('checkImageMaxSize', V_REQUIRED)),
+        widget=ImageWidget(
+            description='',
+            label=_(u'label_image', default=u'Image'),
+            show_content_type=False,)
+    ),
 
 ), marshall=PrimaryFieldMarshaller()
 )
@@ -64,7 +66,10 @@ finalizeATCTSchema(ATImageSchema)
 
 
 class ATImage(ATCTFileContent, ATCTImageTransform):
-    """An image, which can be referenced in documents or displayed in an album."""
+    """An image, which can be referenced in documents.
+
+    Or displayed in an album.
+    """
 
     schema = ATImageSchema
 
@@ -94,7 +99,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         self._setATCTFileContent(value, **kwargs)
 
     def _should_set_id_to_filename(self, filename, title):
-        """If title is blank, have the caller set my ID to the uploaded file's name."""
+        """If title is blank, have the caller set my ID to the file's name."""
         # When the title is blank, sometimes the filename is returned as the
         # title.
         return filename == title or not title

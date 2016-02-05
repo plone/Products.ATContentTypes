@@ -33,8 +33,9 @@ class ATTopicsTool(Base):
 
     security = ClassSecurityInfo()
 
-    # is used in ATPortalTypeCriterion to control which types are allowed to search with
-    # until this is fixed in CMF or whatever, this is the way to go.
+    # This is used in ATPortalTypeCriterion to control which types are allowed
+    # to search with until this is fixed in CMF or whatever, this is the way to
+    # go.
     allowed_portal_types = []
 
     id = TOOLNAME
@@ -58,8 +59,10 @@ class ATTopicsTool(Base):
             _criterionRegistry.criteriaByIndex(indexObj.meta_type))
         search_criteria = _criterionRegistry.listSearchTypes()
         if as_dict:
-            criteria = [{'name': a, 'description': _criterionRegistry[a].shortDesc}
-                        for a in criteria if a in search_criteria]
+            criteria = [{
+                'name': a,
+                'description': _criterionRegistry[a].shortDesc,
+                } for a in criteria if a in search_criteria]
         else:
             criteria = [a for a in criteria if a in search_criteria]
         criteria.sort()
@@ -280,7 +283,8 @@ class ATTopicsTool(Base):
             indexes_dec = [(i.index.lower(), i.index)
                            for i in self.getEnabledIndexes()]
         else:
-            self.createInitialIndexes()  # update in case of new catalogue indexes
+            # update in case of new catalog indexes
+            self.createInitialIndexes()
             indexes_dec = [(i.lower(), i) for i in self.topic_indexes.keys()]
 
         indexes_dec.sort()
@@ -296,7 +300,8 @@ class ATTopicsTool(Base):
             meta_dec = [(i.index.lower(), i.index)
                         for i in self.getEnabledMetadata()]
         else:
-            self.createInitialMetadata()  # update in case of new catalogue metadata
+            # update in case of new catalog indexes
+            self.createInitialMetadata()
             meta_dec = [(i.lower(), i) for i in self.topic_metadata.keys()]
 
         meta_dec.sort()
@@ -334,8 +339,11 @@ class ATTopicsTool(Base):
         meta = REQUEST.get('metadata', [])
         for metadata in meta:
             enabled = 'enabled' in metadata
-            self.updateMetadata(metadata['index'], metadata[
-                                'friendlyName'], metadata['description'], enabled)
+            self.updateMetadata(
+                metadata['index'],
+                metadata['friendlyName'],
+                metadata['description'],
+                enabled)
         return True
 
     security.declareProtected(ManagePortal, 'manage_saveTopicSetupTypes')

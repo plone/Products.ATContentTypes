@@ -11,14 +11,14 @@ from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.content.schemata import NextPreviousAwareSchema
 from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.interfaces import IATFolder
-from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
+from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema  # noqa
 from Products.CMFCore.permissions import View
 from zope.interface import implements
 
 
 ATFolderSchema = folder.ATFolderSchema
-ObsoleteATFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema + \
-    NextPreviousAwareSchema
+ObsoleteATFolderSchema = ATContentTypeSchema.copy() + \
+  ConstrainTypesMixinSchema + NextPreviousAwareSchema
 ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 
 finalizeATCTSchema(folder.ATFolderSchema, folderish=True, moveDiscussion=False)
@@ -26,7 +26,8 @@ finalizeATCTSchema(ATBTreeFolderSchema, folderish=True, moveDiscussion=False)
 
 HAS_LINGUAPLONE = True
 try:
-    from Products.LinguaPlone.I18NBaseBTreeFolder import I18NOnlyBaseBTreeFolder
+    from Products.LinguaPlone.I18NBaseBTreeFolder import \
+        I18NOnlyBaseBTreeFolder
 except ImportError:
     HAS_LINGUAPLONE = False
 

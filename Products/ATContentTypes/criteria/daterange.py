@@ -19,33 +19,36 @@ RELEVANT_INDICES.remove('DateRangeIndex')
 RELEVANT_INDICES = tuple(RELEVANT_INDICES)
 
 ATDateRangeCriterionSchema = ATBaseCriterionSchema + Schema((
-    DateTimeField('start',
-                  required=1,
-                  mode="rw",
-                  write_permission=ChangeTopics,
-                  default=None,
-                  widget=CalendarWidget(
-                      label=_(u'label_date_range_criteria_start',
-                              default=u'Start Date'),
-                      description=_(
-                          u'help_date_range_criteria_start',
-                          default=u'The beginning of the date range to search')
-                  ),
-                  ),
-    DateTimeField('end',
-                  required=1,
-                  mode="rw",
-                  write_permission=ChangeTopics,
-                  default=None,
-                  widget=CalendarWidget(
-                      label=_(u'label_date_range_criteria_end',
-                              default=u'End Date'),
-                      description=_(
-                          u'help_date_range_criteria_end',
-                          default=u'The ending of the date range to search.')
+    DateTimeField(
+        'start',
+        required=1,
+        mode="rw",
+        write_permission=ChangeTopics,
+        default=None,
+        widget=CalendarWidget(
+            label=_(u'label_date_range_criteria_start',
+                    default=u'Start Date'),
+            description=_(
+                u'help_date_range_criteria_start',
+                default=u'The beginning of the date range to search')
+        ),
+    ),
 
-                  ),
-                  ),
+    DateTimeField(
+        'end',
+        required=1,
+        mode="rw",
+        write_permission=ChangeTopics,
+        default=None,
+        widget=CalendarWidget(
+            label=_(u'label_date_range_criteria_end',
+                    default=u'End Date'),
+            description=_(
+                u'help_date_range_criteria_end',
+                default=u'The ending of the date range to search.')
+
+        ),
+    ),
 ))
 
 

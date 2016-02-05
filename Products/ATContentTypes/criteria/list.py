@@ -23,32 +23,36 @@ CompareOperators = DisplayList((
 ))
 
 ATListCriterionSchema = ATBaseCriterionSchema + Schema((
-    LinesField('value',
-               required=1,
-               mode="rw",
-               write_permission=ChangeTopics,
-               accessor="Value",
-               mutator="setValue",
-               default=[],
-               widget=LinesWidget(
-                    label=_(u'label_list_criteria_value', default=u'Values'),
-                    description=_(u'help_list_criteria_value',
-                                  default=u'Values, each on its own line.')
-               ),
-               ),
-    StringField('operator',
-                required=1,
-                mode="rw",
-                write_permission=ChangeTopics,
-                default='or',
-                vocabulary=CompareOperators,
-                widget=SelectionWidget(
-                    label=_(u'label_list_criteria_operator',
-                            default=u'operator name'),
-                    description=_(u'help_list_criteria_operator',
-                                  default=u'Operator used to join the tests on each value.')
-                ),
-                ),
+    LinesField(
+        'value',
+        required=1,
+        mode="rw",
+        write_permission=ChangeTopics,
+        accessor="Value",
+        mutator="setValue",
+        default=[],
+        widget=LinesWidget(
+             label=_(u'label_list_criteria_value', default=u'Values'),
+             description=_(u'help_list_criteria_value',
+                           default=u'Values, each on its own line.')
+        ),
+    ),
+
+    StringField(
+        'operator',
+        required=1,
+        mode="rw",
+        write_permission=ChangeTopics,
+        default='or',
+        vocabulary=CompareOperators,
+        widget=SelectionWidget(
+            label=_(u'label_list_criteria_operator',
+                    default=u'operator name'),
+            description=_(
+                u'help_list_criteria_operator',
+                default=u'Operator used to join the tests on each value.')
+        ),
+    ),
 ))
 
 

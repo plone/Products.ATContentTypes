@@ -176,8 +176,9 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
@@ -218,8 +219,9 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'lines', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.MetadataStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.MetadataStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.MetadataStorage(),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % repr(field.validators))
@@ -259,8 +261,9 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertEqual(field.validators, URLValidator)
         self.assertTrue(isinstance(field.widget, atapi.StringWidget),
@@ -305,8 +308,9 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'datetime', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))
@@ -352,8 +356,9 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'datetime', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))
@@ -397,8 +402,9 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == EmptyValidator,
                         'Value is %s' % str(field.validators))
@@ -442,8 +448,9 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == EmailValidator,
                         'Value is %s' % str(field.validators))
@@ -487,8 +494,9 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertEqual(field.validators, EmptyValidator)
         self.assertTrue(isinstance(field.widget, atapi.StringWidget),
@@ -531,8 +539,9 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'lines', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(isinstance(field.widget, atapi.LinesWidget),
                         'Value is %s' % id(field.widget))
@@ -574,8 +583,10 @@ class TestATEventFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'text', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(migrate=True),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') ==
+            atapi.AnnotationStorage(migrate=True),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))

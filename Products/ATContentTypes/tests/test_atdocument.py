@@ -123,9 +123,11 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
             input_file_name = 'tidy1-in.html'
             in_file = open(input_file_path(input_file_name))
             env = {'REQUEST_METHOD': 'PUT'}
-            headers = {'content-type': 'text/html',
-                       'content-length': len(in_file.read()),
-                       'content-disposition': 'attachment; filename=%s' % input_file_name}
+            headers = {
+                'content-type': 'text/html',
+                'content-length': len(in_file.read()),
+                'content-disposition': 'attachment; filename={}'.format(
+                    input_file_name)}
             in_file.seek(0)
             fs = FieldStorage(fp=in_file, environ=env, headers=headers)
             f = FileUpload(fs)
@@ -234,8 +236,10 @@ class TestATDocumentFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'text', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(migrate=True),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') ==
+            atapi.AnnotationStorage(migrate=True),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))
@@ -261,7 +265,8 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
     views = ('document_view', )
 
     def test_id_change_on_initial_edit(self):
-        """Make sure Id is taken from title on initial edit and not otherwise"""
+        """Make sure Id is taken from title on initial edit and not otherwise.
+        """
         # first create an object using the createObject script
         auth = self.getAuthToken()
         response = self.publish(
@@ -290,16 +295,22 @@ class TestATDocumentFunctional(atctftestcase.ATCTIntegrationTestCase):
 
         from plone.protect import auto
         auto.CSRF_DISABLED = True
-        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank&_authenticator=%s' %
-                                (new_obj_path, obj_title, auth), self.basic_auth)  # Edit object
+        # Edit object
+        response = self.publish(
+            '{}/atct_edit?form.submitted=1&title={}&text=Blank'
+            '&_authenticator={}'.format(
+                new_obj_path, obj_title, auth), self.basic_auth)
         self.assertEqual(response.getStatus(), 302)  # OK
         new_obj = self.folder[new_id]
         self.assertEqual(new_obj.getId(), new_id)  # does id match
         self.assertEqual(new_obj.checkCreationFlag(),
                          False)  # object is fully created
         new_title = "Second Title"
-        response = self.publish('%s/atct_edit?form.submitted=1&title=%s&text=Blank&_authenticator=%s' % (
-            '/%s' % new_obj.absolute_url(1), new_title, auth), self.basic_auth)  # Edit object
+        # Edit object
+        response = self.publish(
+            '/{}/atct_edit?form.submitted=1&title={}&text=Blank'
+            '&_authenticator={}'.format(
+                new_obj.absolute_url(1), new_title, auth), self.basic_auth)
         self.assertEqual(response.getStatus(), 302)  # OK
         self.assertEqual(new_obj.getId(), new_id)  # id shouldn't have changed
         auto.CSRF_DISABLED = False

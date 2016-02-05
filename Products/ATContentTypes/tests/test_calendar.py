@@ -161,14 +161,15 @@ class EventCalendarTests(ATCTSiteTestCase):
         view.render()
         self.assertEqual(len(headers), 2)
         self.assertEqual(headers['Content-Type'], 'text/calendar')
-        self.checkOrder(''.join(output),
-                        'BEGIN:VCALENDAR',
-                        'BEGIN:VEVENT',
-                        'SUMMARY:Plone Conf 2008',
-                        'LOCATION:DC',
-                        'URL:http://plone.org/events/conferences/2008-washington-dc',
-                        'END:VEVENT',
-                        'END:VCALENDAR')
+        self.checkOrder(
+            ''.join(output),
+            'BEGIN:VCALENDAR',
+            'BEGIN:VEVENT',
+            'SUMMARY:Plone Conf 2008',
+            'LOCATION:DC',
+            'URL:http://plone.org/events/conferences/2008-washington-dc',
+            'END:VEVENT',
+            'END:VCALENDAR')
         lines = ''.join(output).splitlines()
         self.assertEqual(len([l for l in lines if l == 'BEGIN:VEVENT']), 1)
 
@@ -195,10 +196,11 @@ class EventCalendarTests(ATCTSiteTestCase):
         key4 = cachekey(None, view)
         self.assertNotEqual(key1, key4)
         # the same goes if another one is added
-        self.folder[self.folder.invokeFactory('Event',
-                                              id='ploneconf2009', title='Plone Conf 2009',
-                                              startDate='2008/10/28', endDate='2008/10/30', location='Budapest',
-                                              eventUrl='http://plone.org/events/conferences/2009')]
+        self.folder[self.folder.invokeFactory(
+            'Event',
+            id='ploneconf2009', title='Plone Conf 2009',
+            startDate='2008/10/28', endDate='2008/10/30', location='Budapest',
+            eventUrl='http://plone.org/events/conferences/2009')]
         view.update()
         key5 = cachekey(None, view)
         self.assertNotEqual(key1, key5)

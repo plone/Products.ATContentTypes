@@ -40,8 +40,8 @@ class ATCTSiteTestCase(PloneTestCase):
         #  - Large Plone Folder
         #  - Topic
         user = self.portal.acl_users.getUserById(default_user)
-        orig_roles = self.portal.acl_users.portal_role_manager.getRolesForPrincipal(
-            user)
+        role_manager = self.portal.acl_users.portal_role_manager
+        orig_roles = role_manager.getRolesForPrincipal(user)
         self.setRoles(['Manager'])
         ttool = self.portal.portal_types
         cb_copy_data = ttool.manage_copyObjects(['Folder'])

@@ -25,47 +25,55 @@ DirectionOperations = DisplayList((
 ))
 
 ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
-    IntegerField('value',
-                 required=1,
-                 mode="rw",
-                 write_permission=ChangeTopics,
-                 accessor="Value",
-                 mutator="setValue",
-                 default=None,
-                 widget=IntegerWidget(
-                     label=_(u'label_int_criteria_value', default=u'Value'),
-                     description=_(u'help_int_criteria_value',
-                                   default=u'An integer number.')
-                 ),
-                 ),
-    IntegerField('value2',
-                 required=0,
-                 mode="rw",
-                 write_permission=ChangeTopics,
-                 accessor="Value2",
-                 mutator="setValue2",
-                 default=None,
-                 widget=IntegerWidget(
-                     label=_(u'label_int_criteria_value2',
-                             default=u'Second Value'),
-                     description=_(u'help_int_criteria_value2',
-                                   default=u'An integer number used as the maximum value if the between direction is selected.')
-                 ),
-                 ),
-    StringField('direction',
-                required=0,
-                mode="rw",
-                write_permission=ChangeTopics,
-                default='',
-                vocabulary=DirectionOperations,
-                enforceVocabulary=1,
-                widget=SelectionWidget(
-                    label=_(u'label_int_criteria_direction',
-                            default=u'Direction'),
-                    description=_(u'help_int_criteria_direction',
-                                  default=u'Specify whether you want to find values lesser than, greater than, equal to, or between the chosen value(s).')
-                ),
-                ),
+    IntegerField(
+        'value',
+        required=1,
+        mode="rw",
+        write_permission=ChangeTopics,
+        accessor="Value",
+        mutator="setValue",
+        default=None,
+        widget=IntegerWidget(
+            label=_(u'label_int_criteria_value', default=u'Value'),
+            description=_(u'help_int_criteria_value',
+                          default=u'An integer number.')
+        ),
+    ),
+    IntegerField(
+        'value2',
+        required=0,
+        mode="rw",
+        write_permission=ChangeTopics,
+        accessor="Value2",
+        mutator="setValue2",
+        default=None,
+        widget=IntegerWidget(
+            label=_(u'label_int_criteria_value2',
+                    default=u'Second Value'),
+            description=_(
+                u'help_int_criteria_value2',
+                default=u'An integer number used as the maximum value if '
+                u'the between direction is selected.')
+        ),
+    ),
+    StringField(
+        'direction',
+        required=0,
+        mode="rw",
+        write_permission=ChangeTopics,
+        default='',
+        vocabulary=DirectionOperations,
+        enforceVocabulary=1,
+        widget=SelectionWidget(
+            label=_(u'label_int_criteria_direction',
+                    default=u'Direction'),
+            description=_(
+                u'help_int_criteria_direction',
+                default=u'Specify whether you want to find values lesser '
+                u'than, greater than, equal to, or between the chosen '
+                u'value(s).')
+        ),
+    ),
 ))
 
 
@@ -106,8 +114,10 @@ class ATSimpleIntCriterion(ATBaseCriterion):
         direction = REQUEST.get('direction', self.getDirection())
         val2 = REQUEST.get('value2', self.Value2())
         if direction == 'min:max' and not val2 and not val2 == 0:
-            errors['value2'] = 'You must enter a second value to do a "Between" search.'
-        errors['value2'] = 'You must enter a second value to do a "Between" search.'
+            errors['value2'] = (
+                'You must enter a second value to do a "Between" search.')
+        errors['value2'] = (
+            'You must enter a second value to do a "Between" search.')
         return errors
 
 registerCriterion(ATSimpleIntCriterion, LIST_INDICES)

@@ -107,8 +107,8 @@ def setupPortalContent(p):
                     target_language=target_language,
                     default="Congratulations! You have successfully installed "
                             "Plone.")
-                translated_text = util.translate(u'front-text',
-                                                 target_language=target_language)
+                translated_text = util.translate(
+                    u'front-text', target_language=target_language)
                 if translated_text != u'front-text':
                     front_text = translated_text
 

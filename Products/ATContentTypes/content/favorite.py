@@ -5,9 +5,11 @@ import logging
 
 
 logger = logging.getLogger('ATContentTypes')
-logger.log(logging.INFO, 'Warning: You have content instances of the '
-           'ATFavorite type in your site. This type is no longer available. Please '
-           'remove all remaining instances of this type or migrate them to links.')
+
+logger.warn(
+    'You have content instances of the ATFavorite type in your site. '
+    'This type is no longer available. Please remove all remaining instances '
+    'of this type or migrate them to links.')
 
 
 class ATFavorite(link.ATLink):

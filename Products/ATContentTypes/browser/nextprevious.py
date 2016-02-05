@@ -49,9 +49,8 @@ class ATFolderNextPrevious(object):
 
         # Get the previous item
         if position - 1 >= 0:
-            prev_brain = catalog(self.buildNextPreviousQuery(position=position - 1,
-                                                             range='max',
-                                                             sort_order='reverse'))
+            prev_brain = catalog(self.buildNextPreviousQuery(
+                position=position - 1, range='max', sort_order='reverse'))
             if prev_brain and len(prev_brain) > 0:
                 previous = self.buildNextPreviousItem(prev_brain[0])
 
@@ -63,8 +62,8 @@ class ATFolderNextPrevious(object):
             count = len(folder)
 
         if (position + 1) < count:
-            next_brain = catalog(self.buildNextPreviousQuery(position=position + 1,
-                                                             range='min'))
+            next_brain = catalog(self.buildNextPreviousQuery(
+                position=position + 1, range='min'))
 
             if next_brain and len(next_brain) > 0:
                 next = self.buildNextPreviousItem(next_brain[0])

@@ -104,8 +104,14 @@ _criterionRegistry = _CriterionRegistry()
 registerCriterion = _criterionRegistry.register
 unregisterCriterion = _criterionRegistry.unregister
 
-__all__ = ('registerCriterion', 'ALL_INDICES', 'DATE_INDICES', 'STRING_INDICES',
-           'LIST_INDICES', 'SORT_INDICES', )
+__all__ = (
+    'registerCriterion',
+    'ALL_INDICES',
+    'DATE_INDICES',
+    'STRING_INDICES',
+    'LIST_INDICES',
+    'SORT_INDICES',
+)
 
 # criteria
 from Products.ATContentTypes.criteria.boolean import ATBooleanCriterion  # noqa

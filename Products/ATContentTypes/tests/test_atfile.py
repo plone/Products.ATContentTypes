@@ -19,9 +19,6 @@ import unittest
 
 ZopeTestCase  # pyflakes
 
-
-
-
 file_text = """
 foooooo
 """
@@ -160,7 +157,7 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
         self.assertFalse(field.default, 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == True,
+        self.assertTrue(field.searchable,
                         'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
@@ -184,11 +181,16 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'blob', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(migrate=True),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') ==
+            atapi.AnnotationStorage(migrate=True),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(field.validators == "(('isNonEmptyFile', V_REQUIRED), ('checkFileMaxSize', V_REQUIRED))",
-                        'Value is %s' % str(field.validators))
+        self.assertTrue(
+            field.validators ==
+            "(('isNonEmptyFile', V_REQUIRED), " +
+            "('checkFileMaxSize', V_REQUIRED))",
+            'Value is %s' % str(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.FileWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)

@@ -122,7 +122,8 @@ class TestSiteATBTreeFolder(atcttestcase.ATCTTypeTestCase, FolderTestMixin):
         try:
             self.assertEqual(['d1'], list(f1))  # iter
         except (KeyError, AttributeError):
-            print '\nKnown failure: please see comments in `test_dictBehavior`!'
+            print('\nKnown failure: please see comments in '
+                  '`test_dictBehavior`!')
         self.assertEqual(['d1'], list(f1.aq_base))  # iter (this works, weird!)
         self.assertTrue(f1.values()[0].aq_base is new_doc.aq_base)  # values
         self.assertTrue(f1.get('d1').aq_base is new_doc.aq_base)  # get
@@ -155,7 +156,8 @@ class TestATFolderFunctional(atctftestcase.ATCTIntegrationTestCase):
     def test_selectViewTemplate(self):
         # create an object using the createObject script
         self.publish(
-            '%s/selectViewTemplate?templateId=atct_album_view&_authenticator=%s' % (
+            '{}/selectViewTemplate?templateId=atct_album_view'
+            '&_authenticator={}'.format(
                 self.obj_path, self.getAuthToken(portal_owner)),
             self.owner_auth)
         self.assertEqual(self.obj.getLayout(), 'atct_album_view')
