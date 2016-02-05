@@ -116,8 +116,6 @@ class ATSimpleIntCriterion(ATBaseCriterion):
         if direction == 'min:max' and not val2 and not val2 == 0:
             errors['value2'] = (
                 'You must enter a second value to do a "Between" search.')
-        errors['value2'] = (
-            'You must enter a second value to do a "Between" search.')
         return errors
 
 registerCriterion(ATSimpleIntCriterion, LIST_INDICES)

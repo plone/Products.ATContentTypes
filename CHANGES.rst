@@ -10,6 +10,10 @@ New:
 
 Fixes:
 
+- Removed double line from simpleint criterion.  This had the effect
+  that post_validate always gave an error for value2.  Possibly this
+  is used nowhere, because this has been in there for years.  [maurits]
+
 - Added utf-8 coding magic comment.  [maurits]
 
 - Sorted imports with isort.  [maurits]
