@@ -37,7 +37,7 @@ def loadSchema(file, registry=atctRegistry, overwrite=False):
     """
     global atctSchema
     if atctSchema is not None and not overwrite:
-        raise RuntimeError, 'Schema is already loaded'
+        raise RuntimeError('Schema is already loaded')
     schemaLoader = SchemaLoader(registry=registry)
     atctSchema = schemaLoader.loadURL(file)
     return atctSchema

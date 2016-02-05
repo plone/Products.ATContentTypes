@@ -39,11 +39,11 @@ def loadConfig(files, schema=atctSchema, overwrite=False):
     if not isinstance(files, (tuple, list)):
         files = (files, )
     if zconf is not None and not overwrite:
-        raise RuntimeError, 'Configuration is already loaded'
+        raise RuntimeError('Configuration is already loaded')
     for file in files:
         if file is not None:
             if not os.path.exists(file):
-                raise RuntimeError, '%s does not exist' % file
+                raise RuntimeError('%s does not exist' % file)
             conf_file = file
             zconf, handler = ConfigLoader(schema).loadURL(conf_file)
             break

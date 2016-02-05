@@ -255,7 +255,13 @@ def foldLine(s):
 
     lineLen = 70
 
-    workStr = s.strip().replace('\r\n', '\n').replace('\r', '\n').replace('\n', '\\n')
+    workStr = s.strip().replace(
+        '\r\n',
+        '\n').replace(
+        '\r',
+        '\n').replace(
+            '\n',
+        '\\n')
     numLinesToBeProcessed = len(workStr) / lineLen
     startingChar = 0
     res = ''

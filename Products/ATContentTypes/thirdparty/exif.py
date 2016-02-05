@@ -809,8 +809,9 @@ class EXIF_header:
             field_type = self.s2n(entry + 2, 2)
             if not 0 < field_type < len(FIELD_TYPES):
                 # unknown field type
-                raise ValueError, \
-                    'unknown type %d in tag 0x%04X' % (field_type, tag)
+                raise ValueError(
+                    'unknown type %d in tag 0x%04X' %
+                    (field_type, tag))
 
             typelen = FIELD_TYPES[field_type][0]
             count = self.s2n(entry + 4, 4)
@@ -922,7 +923,7 @@ class EXIF_header:
                 if self.debug:
                     print "Looks like a labeled type 2 Nikon MakerNote"
                 if note[0][12:14] != [0, 42] and note[0][12:14] != [42L, 0L]:
-                    raise ValueError, "Missing marker tag '42' in MakerNote."
+                    raise ValueError("Missing marker tag '42' in MakerNote.")
                 # skip the Makernote label and the TIFF header
                 self.dump_IFD(note[2] + 10 + 8, 'MakerNote',
                               dict=MAKERNOTE_NIKON_NEWER_TAGS, relative=1)

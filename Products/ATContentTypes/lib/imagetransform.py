@@ -193,7 +193,7 @@ class ATCTImageTransform(Base):
         except ValueError:
             method = int(REQUEST.form.get('method'))
         if method not in TRANSPOSE_MAP:
-            raise RuntimeError, "Unknown method %s" % method
+            raise RuntimeError("Unknown method %s" % method)
 
         target = self.absolute_url() + '/atct_image_transform'
 

@@ -9,7 +9,7 @@ _marker = object()
 def _getValueFromModule(module, key):
     var = getattr(module, key, _marker)
     if key is _marker:
-        raise ValueError, "%s doesn't have an attribute %s" % (module, key)
+        raise ValueError("%s doesn't have an attribute %s" % (module, key))
     return var
 
 
@@ -20,7 +20,7 @@ def _getValueFromDottedName(dotted_name):
     try:
         module = __import__(module_name, globals(), locals(), [key])
     except ImportError, msg:
-        raise ValueError, str(msg)
+        raise ValueError(str(msg))
     return _getValueFromModule(module, key)
 
 
@@ -39,8 +39,8 @@ def permission_handler(value):
     else:
         permission = _getValueFromDottedName(value)
     if not isinstance(permission, basestring):
-        raise ValueError, 'Permission %s is not a string: %s' % (permission,
-                                                                 type(permission))
+        raise ValueError('Permission %s is not a string: %s' % (permission,
+                                                                type(permission)))
     return permission
 
 
@@ -66,7 +66,7 @@ def image_dimension(value):
     Splits a value of "200, 400" into two ints of (200, 400)
     """
     if value.count(',') != 1:
-        raise ValueError, "Width and height must be seperated by a comma"
+        raise ValueError("Width and height must be seperated by a comma")
     w, h = value.split(',')
     w = int(w)
     h = int(h)
@@ -97,7 +97,7 @@ def pil_algo(value):
     value = value.upper()
     available = ('NEAREST', 'BILINEAR', 'BICUBIC', 'ANTIALIAS')
     if value not in available:
-        raise ValueError, "unknown algo %s" % value
+        raise ValueError("unknown algo %s" % value)
     import PIL.Image
     return getattr(PIL.Image, value)
 
@@ -159,7 +159,7 @@ class Archetype(BaseFactory):
             default = ct.default_content_type
 
             if default not in allowed:
-                raise ValueError, "Default %s is not in %s" % (default, ct)
+                raise ValueError("Default %s is not in %s" % (default, ct))
 
             self.set('default_content_type', default)
             self.set('allowed_content_types', allowed)

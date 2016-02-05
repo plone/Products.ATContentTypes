@@ -171,10 +171,10 @@ class ElementSpec(SimpleItem):
         """ Add a policy to this element for objects of the given type.
         """
         if typ is None:
-            raise MetadataError, "Can't replace default policy."
+            raise MetadataError("Can't replace default policy.")
 
-        if self.policies.has_key(typ):
-            raise MetadataError, "Existing policy for content type:" + typ
+        if typ in self.policies:
+            raise MetadataError("Existing policy for content type:" + typ)
 
         self.policies[typ] = self._makePolicy()
 
@@ -186,7 +186,7 @@ class ElementSpec(SimpleItem):
         o Do *not* remvoe the default, however.
         """
         if typ is None:
-            raise MetadataError, "Can't remove default policy."
+            raise MetadataError("Can't remove default policy.")
         del self.policies[typ]
 
 InitializeClass(ElementSpec)
@@ -306,7 +306,7 @@ class MetadataSchema(SimpleItem):
         """ Add 'element' to our list of managed elements.
         """
         # Don't replace.
-        if self.element_specs.has_key(element):
+        if element in self.element_specs:
             return
 
         self.element_specs[element] = ElementSpec(is_multi_valued)
@@ -425,7 +425,7 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
         """ ZMI wrapper around removeSchema
         """
         if not schema_ids:
-            raise ValueError, 'No schemas selected!'
+            raise ValueError('No schemas selected!')
 
         for schema_id in schema_ids:
             self.removeSchema(schema_id)
@@ -508,7 +508,7 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
         """ See IMetadataTool.
         """
         if schema_id == 'DCMI' or schema_id in self.objectIds():
-            raise KeyError, 'Duplicate schema ID: %s' % schema_id
+            raise KeyError('Duplicate schema ID: %s' % schema_id)
 
         schema = MetadataSchema(schema_id, elements)
         self._setObject(schema_id, schema)
@@ -521,7 +521,7 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
         """ See IMetadataTool.
         """
         if schema_id == 'DCMI' or schema_id not in self.objectIds():
-            raise KeyError, 'Invalid schema ID: %s' % schema_id
+            raise KeyError('Invalid schema ID: %s' % schema_id)
 
         self._delObject(schema_id)
 
@@ -540,8 +540,8 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
                         setter = getattr(content, 'set%s' % element)
                         setter(policy.defaultValue())
                     elif policy.isRequired():
-                        raise MetadataError, \
-                            'Metadata element %s is required.' % element
+                        raise MetadataError(
+                            'Metadata element %s is required.' % element)
 
         # TODO:  Call initial_values_hook, if present
 
@@ -556,16 +556,16 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
 
                 value = getattr(content, element)()
                 if not value and policy.isRequired():
-                    raise MetadataError, \
-                        'Metadata element %s is required.' % element
+                    raise MetadataError(
+                        'Metadata element %s is required.' %
+                        element)
 
                 if value and policy.enforceVocabulary():
                     values = policy.isMultiValued() and value or [value]
                     for value in values:
                         if not value in policy.allowedVocabulary():
-                            raise MetadataError, \
-                                'Value %s is not in allowed vocabulary for ' \
-                                'metadata element %s.' % (value, element)
+                            raise MetadataError('Value %s is not in allowed vocabulary for '
+                                                'metadata element %s.' % (value, element))
 
 InitializeClass(MetadataTool)
 registerToolInterface('portal_metadata', IMetadataTool)

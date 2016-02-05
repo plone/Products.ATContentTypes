@@ -16,7 +16,8 @@ from Products.CMFCore.permissions import ManagePortal
 
 class TopicIndex(SimpleItem, Persistent):
 
-    def __init__(self, index, friendlyName='', description='', enabled=False, criteria=()):
+    def __init__(self, index, friendlyName='',
+                 description='', enabled=False, criteria=()):
         self.index = index
         self.friendlyName = friendlyName
         self.description = description
@@ -67,7 +68,8 @@ class ATTopicsTool(Base):
 
     security.declareProtected(ManagePortal, 'addIndex')
 
-    def addIndex(self, index, friendlyName='', description='', enabled=False, criteria=None):
+    def addIndex(self, index, friendlyName='', description='',
+                 enabled=False, criteria=None):
         """ Add a new index along with descriptive information to the index
             registry """
         if criteria is None:
@@ -87,7 +89,8 @@ class ATTopicsTool(Base):
 
     security.declareProtected(ManagePortal, 'addMetadata')
 
-    def addMetadata(self, metadata, friendlyName='', description='', enabled=False):
+    def addMetadata(self, metadata, friendlyName='',
+                    description='', enabled=False):
         """ Add a new metadata field along with descriptive information to the
             metadata registry """
         if metadata in self.topic_metadata:
@@ -103,7 +106,8 @@ class ATTopicsTool(Base):
 
     security.declareProtected(ManagePortal, 'updateIndex')
 
-    def updateIndex(self, index, friendlyName=None, description=None, enabled=None, criteria=None):
+    def updateIndex(self, index, friendlyName=None,
+                    description=None, enabled=None, criteria=None):
         """ Updates an existing index in the registry, unrecognized values are
             added """
         indexes = self.topic_indexes
@@ -120,7 +124,8 @@ class ATTopicsTool(Base):
 
     security.declareProtected(ManagePortal, 'updateMetadata')
 
-    def updateMetadata(self, metadata, friendlyName=None, description=None, enabled=None):
+    def updateMetadata(self, metadata, friendlyName=None,
+                       description=None, enabled=None):
         """ Updates an existing metadata field in the registry, unrecognized values are
             added """
         meta = self.topic_metadata

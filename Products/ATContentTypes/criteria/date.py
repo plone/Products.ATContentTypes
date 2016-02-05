@@ -126,7 +126,8 @@ class ATDateCriteria(ATBaseCriterion):
             elif operation == 'more':
                 if value != 0:
                     range_op = (self.getDateRange() == '-' and 'max') or 'min'
-                    return ((field, {'query': date.earliestTime(), 'range': range_op}),)
+                    return (
+                        (field, {'query': date.earliestTime(), 'range': range_op}),)
                 else:
                     return ((field, {'query': date, 'range': 'min'}),)
             elif operation == 'less':
@@ -134,7 +135,8 @@ class ATDateCriteria(ATBaseCriterion):
                     date_range = (self.getDateRange() == '-' and
                                   (date.earliestTime(), current_date)
                                   ) or (current_date, date.latestTime())
-                    return ((field, {'query': date_range, 'range': 'min:max'}),)
+                    return (
+                        (field, {'query': date_range, 'range': 'min:max'}),)
                 else:
                     return ((field, {'query': date, 'range': 'max'}),)
         else:

@@ -180,13 +180,15 @@ class ConstrainTypesMixin:
         mode = self.getConstrainTypesMode()
 
         if mode == DISABLED:
-            return [fti.getId() for fti in self.getDefaultAddableTypes(context)]
+            return [fti.getId()
+                    for fti in self.getDefaultAddableTypes(context)]
         elif mode == ENABLED:
             return self.getField('locallyAllowedTypes').get(self)
         elif mode == ACQUIRE:
             parent = getParent(self)
             if not parent or parent.portal_type == 'Plone Site':
-                return [fti.getId() for fti in self.getDefaultAddableTypes(context)]
+                return [fti.getId()
+                        for fti in self.getDefaultAddableTypes(context)]
             elif not parentPortalTypeEqual(self):
                 # if parent.portal_type != self.portal_type:
                 default_addable_types = [
@@ -203,7 +205,7 @@ class ConstrainTypesMixin:
                 else:
                     return parent.getLocallyAllowedTypes()
         else:
-            raise ValueError, "Invalid value for enableAddRestriction"
+            raise ValueError("Invalid value for enableAddRestriction")
 
     security.declareProtected(View, 'getImmediatelyAddableTypes')
 
@@ -236,7 +238,7 @@ class ConstrainTypesMixin:
                 parent = aq_parent(aq_inner(self))
                 return parent.getImmediatelyAddableTypes(context)
         else:
-            raise ValueError, "Invalid value for enableAddRestriction"
+            raise ValueError("Invalid value for enableAddRestriction")
 
     # overrides CMFCore's PortalFolder allowedTypes
     def allowedContentTypes(self, context=None):
@@ -283,7 +285,8 @@ class ConstrainTypesMixin:
             return PortalFolder.invokeFactory(self, type_name, id,
                                               RESPONSE=None, *args, **kw)
 
-        if not type_name in [fti.getId() for fti in self.allowedContentTypes()]:
+        if not type_name in [fti.getId()
+                             for fti in self.allowedContentTypes()]:
             raise ValueError('Disallowed subobject type: %s' % type_name)
 
         pt = getToolByName(self, 'portal_types')
@@ -321,7 +324,8 @@ class ConstrainTypesMixin:
         """
         mtool = getToolByName(self, 'portal_membership')
         member = mtool.getAuthenticatedMember()
-        return member.has_permission(ATCTPermissions.ModifyConstrainTypes, self)
+        return member.has_permission(
+            ATCTPermissions.ModifyConstrainTypes, self)
 
     #
     # Helper methods
@@ -360,7 +364,8 @@ class ConstrainTypesMixin:
         else:
             parent = aq_parent(aq_inner(self))
 
-        if ISelectableConstrainTypes.providedBy(parent) and parentPortalTypeEqual(self):
+        if ISelectableConstrainTypes.providedBy(
+                parent) and parentPortalTypeEqual(self):
             return ACQUIRE
         else:
             return DISABLED

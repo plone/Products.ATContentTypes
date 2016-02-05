@@ -320,7 +320,7 @@ class ATCTFileContent(ATCTContent):
         Changes the title and content type attributes of the File or Image.
         """
         if self.wl_isLocked():
-            raise ResourceLockedError, "File is locked via WebDAV"
+            raise ResourceLockedError("File is locked via WebDAV")
 
         self.setTitle(title)
         if filedata is not None:
@@ -403,7 +403,8 @@ class ATCTFileContent(ATCTContent):
             # former method
             upload.seek(0)
 
-        if not used_id or not self._should_set_id_to_filename(filename, REQUEST.form.get('title')):
+        if not used_id or not self._should_set_id_to_filename(
+                filename, REQUEST.form.get('title')):
             # Set ID in whatever way the base classes usually do.
             return
 
@@ -537,7 +538,7 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
                     # Do nothing, let it go and acquire.
                     pass
                 else:
-                    raise AttributeError, 'index_html'
+                    raise AttributeError('index_html')
         # Acquire from parent
         _target = aq_parent(aq_inner(self)).aq_acquire('index_html')
         return ReplaceableWrapper(aq_base(_target).__of__(self))
