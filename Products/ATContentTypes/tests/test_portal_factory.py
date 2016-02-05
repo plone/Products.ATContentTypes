@@ -11,8 +11,7 @@ import urlparse
 
 
 def sortTuple(t):
-    l = list(t)
-    l.sort()
+    l = sorted(t)
     return tuple(l)
 
 ADD_DOC_PERM = 'ATContentTypes: Add Document'

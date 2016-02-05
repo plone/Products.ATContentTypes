@@ -65,7 +65,7 @@ class TALValidator:
         parser = HTMLTALParser(gen)
         try:
             parser.parseString(value)
-        except Exception, err:
+        except Exception as err:
             return ("Validation Failed(%s): \n %s" % (self.name, err))
         return 1
 
@@ -169,7 +169,7 @@ class NonEmptyFileValidator:
 
     def __call__(self, value, *args, **kwargs):
         # calculate size
-        if isinstance(value, FileUpload) or type(value) is FileType \
+        if isinstance(value, FileUpload) or isinstance(value, FileType) \
                 or hasattr(aq_base(value), 'tell'):
             value.seek(0, 2)  # eof
             size = value.tell()

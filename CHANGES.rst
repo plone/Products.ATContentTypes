@@ -10,6 +10,8 @@ New:
 
 Fixes:
 
+- Fixed pep8 errors.  [maurits]
+
 - Prevent topic-criteria from having unicode as id. A unicode-id broke
   indexing the criteria in ZCatalog since obj.getPhysicalPath() prefers
   obj.id over obj.getId() in zope4.

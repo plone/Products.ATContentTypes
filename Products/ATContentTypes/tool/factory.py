@@ -105,7 +105,7 @@ class TempFolder(TempFolderBase):
         their walking from TempFolder to portal_factory to the portal root."""
         object = aq_parent(aq_parent(self))
         local_roles = {}
-        while 1:
+        while True:
             # Get local roles for this user
             lr = getattr(object, '__ac_local_roles__', None)
             if lr:

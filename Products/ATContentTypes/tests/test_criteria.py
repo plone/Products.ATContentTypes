@@ -369,8 +369,7 @@ class TestATSelectionCriterion(CriteriaTest):
         # Should return sorted ids
         self.dummy.Schema()['field'].set(self.dummy, 'getId')
         orig_vocab = [a.lower() for a in list(self.dummy.getCurrentValues())]
-        sorted_vocab = orig_vocab[:]
-        sorted_vocab.sort()
+        sorted_vocab = sorted(orig_vocab[:])
         self.assertEqual(orig_vocab, sorted_vocab)
 
 tests.append(TestATSelectionCriterion)

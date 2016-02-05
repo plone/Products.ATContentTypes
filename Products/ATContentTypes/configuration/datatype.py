@@ -19,7 +19,7 @@ def _getValueFromDottedName(dotted_name):
     key = parts[-1]
     try:
         module = __import__(module_name, globals(), locals(), [key])
-    except ImportError, msg:
+    except ImportError as msg:
         raise ValueError(str(msg))
     return _getValueFromModule(module, key)
 

@@ -153,11 +153,12 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
             # no extension
             mimetype = mtr.classify(data)
 
-        if not mimetype or (type(mimetype) is TupleType and not len(mimetype)):
+        if not mimetype or (isinstance(mimetype, TupleType)
+                            and not len(mimetype)):
             # nothing found
             return None
 
-        if type(mimetype) is TupleType and len(mimetype):
+        if isinstance(mimetype, TupleType) and len(mimetype):
             mimetype = mimetype[0]
         return mimetype.normalized()
 

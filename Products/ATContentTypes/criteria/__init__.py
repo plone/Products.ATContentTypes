@@ -45,7 +45,7 @@ class _CriterionRegistry(UserDict):
         self.portaltypes = {}
 
     def register(self, criterion, indices):
-        if type(indices) is StringType:
+        if isinstance(indices, StringType):
             indices = (indices,)
         indices = tuple(indices)
 

@@ -337,9 +337,8 @@ class ConstrainTypesMixin:
     def _ct_vocabularyPossibleTypes(self):
         """Get a DisplayList of types which may be added (id -> title)
         """
-        typelist = [(fti.title_or_id(), fti.getId())
-                    for fti in self.getDefaultAddableTypes()]
-        typelist.sort()
+        typelist = sorted([(fti.title_or_id(), fti.getId())
+                           for fti in self.getDefaultAddableTypes()])
         return DisplayList([(id, title) for title, id in typelist])
 
     # Default method for type lists

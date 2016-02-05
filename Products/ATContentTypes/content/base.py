@@ -130,7 +130,7 @@ class ATCTMixin(BrowserDefaultMixin):
                 self.copyLayoutFromParent()
         except ConflictError:
             raise
-        except Exception, msg:
+        except Exception as msg:
             LOG.warn('Exception in initializeArchetype', exc_info=True)
             if DEBUG and str(msg) not in ('SESSION',):
                 # debug code

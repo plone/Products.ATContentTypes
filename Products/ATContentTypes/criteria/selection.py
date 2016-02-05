@@ -74,9 +74,8 @@ class ATSelectionCriterion(ATBaseCriterion):
         # DisplayList keys though it is supposed to (it should
         # probably accept Booleans as well) so we only accept strings
         # for now
-        options = [(o.lower(), o)
-                   for o in options if isinstance(o, basestring)]
-        options.sort()
+        options = sorted([(o.lower(), o)
+                          for o in options if isinstance(o, basestring)])
         return [o[1] for o in options]
 
     security.declareProtected(View, 'getCriteriaItems')

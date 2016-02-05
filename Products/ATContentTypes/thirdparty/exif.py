@@ -719,7 +719,7 @@ def s2n_motorola(str):
 # extract multibyte integer in Intel format (big endian)
 def s2n_intel(str):
     x = 0
-    y = 0L
+    y = 0
     for c in str:
         x = x | (ord(c) << y)
         y = y + 8
@@ -759,7 +759,7 @@ class EXIF_header:
             val = s2n_motorola(slice)
         # Sign extension ?
         if signed:
-            msb = 1L << (8 * length - 1)
+            msb = 1 << (8 * length - 1)
             if val & msb:
                 val = val - (msb << 1)
         return val
@@ -914,15 +914,15 @@ class EXIF_header:
         # not at the start of the makernote, it's probably type 2, since some
         # cameras work that way.
         if make in ('NIKON', 'NIKON CORPORATION'):
-            if note.values[0:7] == [78, 105, 107, 111, 110, 00, 01]:
+            if note.values[0:7] == [78, 105, 107, 111, 110, 00, 0o1]:
                 if self.debug:
                     print "Looks like a type 1 Nikon MakerNote."
                 self.dump_IFD(note[2] + 8, 'MakerNote',
                               dict=MAKERNOTE_NIKON_OLDER_TAGS)
-            elif note.values[0:7] == [78, 105, 107, 111, 110, 00, 02]:
+            elif note.values[0:7] == [78, 105, 107, 111, 110, 00, 0o2]:
                 if self.debug:
                     print "Looks like a labeled type 2 Nikon MakerNote"
-                if note[0][12:14] != [0, 42] and note[0][12:14] != [42L, 0L]:
+                if note[0][12:14] != [0, 42] and note[0][12:14] != [42, 0]:
                     raise ValueError("Missing marker tag '42' in MakerNote.")
                 # skip the Makernote label and the TIFF header
                 self.dump_IFD(note[2] + 10 + 8, 'MakerNote',
@@ -1068,8 +1068,7 @@ def process_file(file, debug=0):
             pass
         del hdr.tags['EXIF MakerNote']
     dict = {}
-    tags = hdr.tags.keys()
-    tags.sort()
+    tags = sorted(hdr.tags.keys())
     for tag in tags:
         hdr.tags[tag] = hdr.tags[tag][1]
     return hdr.tags
@@ -1102,8 +1101,7 @@ if __name__ == '__main__':
             print 'No EXIF information found'
             continue
 
-        x = data.keys()
-        x.sort()
+        x = sorted(data.keys())
         for i in x:
             print "   %s: %s" % (i, data[i])
     end_time = time.clock()

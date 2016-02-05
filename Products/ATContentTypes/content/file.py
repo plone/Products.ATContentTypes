@@ -132,7 +132,7 @@ class ATFile(ATCTFileContent):
             mimetypeitem = None
             try:
                 mimetypeitem = mtr.lookup(contenttype)
-            except MimeTypeException, msg:
+            except MimeTypeException as msg:
                 LOG.error('MimeTypeException for %s. Error is: %s' %
                           (self.absolute_url(), str(msg)))
             if not mimetypeitem:

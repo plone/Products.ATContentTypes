@@ -111,13 +111,13 @@ class ATTopicsTool(Base):
         """ Updates an existing index in the registry, unrecognized values are
             added """
         indexes = self.topic_indexes
-        if friendlyName == None:
+        if friendlyName is None:
             friendlyName = indexes[index].friendlyName
-        if description == None:
+        if description is None:
             description = indexes[index].description
-        if enabled == None:
+        if enabled is None:
             enabled = indexes[index].enabled
-        if criteria == None:
+        if criteria is None:
             criteria = indexes[index].criteria
 
         self.addIndex(index, friendlyName, description, enabled, criteria)
@@ -129,11 +129,11 @@ class ATTopicsTool(Base):
         """ Updates an existing metadata field in the registry, unrecognized values are
             added """
         meta = self.topic_metadata
-        if friendlyName == None:
+        if friendlyName is None:
             friendlyName = meta[metadata].friendlyName
-        if description == None:
+        if description is None:
             description = meta[metadata].description
-        if enabled == None:
+        if enabled is None:
             enabled = meta[metadata].enabled
         self.addMetadata(metadata, friendlyName, description, enabled)
 
@@ -181,8 +181,7 @@ class ATTopicsTool(Base):
         """ Return a list of fields from portal_catalog. """
         pcatalog = getToolByName(self, 'portal_catalog')
         available = pcatalog.indexes()
-        val = [field for field in available]
-        val.sort()
+        val = sorted([field for field in available])
         return val
 
     security.declarePrivate('listCatalogMetadata')
@@ -191,8 +190,7 @@ class ATTopicsTool(Base):
         """ Return a list of columns from portal_catalog. """
         pcatalog = getToolByName(self, 'portal_catalog')
         available = pcatalog.schema()
-        val = [field for field in available]
-        val.sort()
+        val = sorted([field for field in available])
         return val
 
     def getAllPortalTypes(self):
@@ -259,10 +257,9 @@ class ATTopicsTool(Base):
         """ Returns a list of tuples containing the index name, friendly name,
             and description for each enabled index. """
         enabledIndexes = self.getEnabledIndexes()
-        dec_fields = [(i.friendlyName.lower() or
-                       i.index.lower(), i.index, i.friendlyName or
-                       i.index, i.description) for i in enabledIndexes]
-        dec_fields.sort()
+        dec_fields = sorted([(i.friendlyName.lower() or
+                              i.index.lower(), i.index, i.friendlyName or
+                              i.index, i.description) for i in enabledIndexes])
         fields = [(a[1], a[2], a[3]) for a in dec_fields]
         return fields
 
@@ -325,7 +322,7 @@ class ATTopicsTool(Base):
 
     def manage_saveTopicSetup(self, REQUEST=None):
         """ Set indexes and metadata from form """
-        if REQUEST == None:
+        if REQUEST is None:
             return 'Nothing saved.'
 
         data = REQUEST.get('index', [])
@@ -346,7 +343,7 @@ class ATTopicsTool(Base):
 
     def manage_saveTopicSetupTypes(self, REQUEST=None):
         """ Set portal types from form """
-        if REQUEST == None:
+        if REQUEST is None:
             return 'Nothing saved.'
 
         self.allowed_portal_types = REQUEST.get('allowed_types', [])

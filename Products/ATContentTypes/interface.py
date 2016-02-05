@@ -18,5 +18,5 @@ from Products.ATContentTypes.interfaces import *
 from types import ModuleType
 from sys import modules
 for name, obj in globals().items():
-    if type(obj) is ModuleType:
+    if isinstance(obj, ModuleType):
         modules['%s.%s' % (__name__, name)] = obj

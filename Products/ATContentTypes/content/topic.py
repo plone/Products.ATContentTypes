@@ -196,8 +196,7 @@ class ATTopic(ATCTFolder):
     def listCriteriaMetaTypes(self):
         """List available criteria
         """
-        val = _criterionRegistry.listTypes()
-        val.sort()
+        val = sorted(_criterionRegistry.listTypes())
         return val
 
     security.declareProtected(ChangeTopics, 'listSearchCriteriaTypes')
@@ -214,8 +213,7 @@ class ATTopic(ATCTFolder):
     def listSearchCriteriaMetaTypes(self):
         """List available search criteria
         """
-        val = _criterionRegistry.listSearchTypes()
-        val.sort()
+        val = sorted(_criterionRegistry.listSearchTypes())
         return val
 
     security.declareProtected(ChangeTopics, 'listSortCriteriaTypes')
@@ -232,8 +230,7 @@ class ATTopic(ATCTFolder):
     def listSortCriteriaMetaTypes(self):
         """List available sort criteria
         """
-        val = _criterionRegistry.listSortTypes()
-        val.sort()
+        val = sorted(_criterionRegistry.listSortTypes())
         return val
 
     security.declareProtected(View, 'listCriteria')
@@ -487,7 +484,7 @@ class ATTopic(ATCTFolder):
     def deleteCriterion(self, criterion_id):
         """Delete selected criterion.
         """
-        if type(criterion_id) is StringType:
+        if isinstance(criterion_id, StringType):
             self._delObject(criterion_id)
         elif type(criterion_id) in (ListType, TupleType):
             for cid in criterion_id:
