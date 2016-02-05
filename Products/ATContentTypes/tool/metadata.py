@@ -263,7 +263,7 @@ class MetadataSchema(SimpleItem):
 
     def updateElementPolicy(self, element, content_type, is_required, supply_default, default_value, enforce_vocabulary, allowed_vocabulary, REQUEST=None
                             ):
-        """ Update a policy for one of our elements 
+        """ Update a policy for one of our elements
 
         o 'content_type' will be '<default>' when we edit the default.
         """
@@ -389,7 +389,7 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
 
     def editProperties(self, publisher=None, REQUEST=None
                        ):
-        """ Form handler for "tool-wide" properties 
+        """ Form handler for "tool-wide" properties
         """
         if publisher is not None:
             self.publisher = publisher

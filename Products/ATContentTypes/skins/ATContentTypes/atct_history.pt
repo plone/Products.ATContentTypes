@@ -66,9 +66,9 @@
               </p>
             </tal:nohistories>
         </div>
-        
+
     </tal:main-macro>
-</metal:main>        
+</metal:main>
 
 </body>
 </html>
