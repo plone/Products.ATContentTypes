@@ -470,7 +470,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
         self.assertFalse(field.default, 'Value is %s' %
-                        str(field.default))
+                         str(field.default))
         self.assertTrue(field.searchable == 0, 'Value is %s' %
                         field.searchable)
         self.assertTrue(field.vocabulary == field_vocab,
@@ -515,7 +515,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
         self.assertFalse(field.default, 'Value is %s' %
-                        str(field.default))
+                         str(field.default))
         self.assertTrue(field.searchable == 0, 'Value is %s' %
                         field.searchable)
         self.assertTrue(field.vocabulary == field_vocab,
@@ -603,7 +603,7 @@ class TestATTopicFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 0, 'Value is %s' % field.required)
         self.assertFalse(field.default, 'Value is %s' %
-                        str(field.default))
+                         str(field.default))
         self.assertTrue(field.searchable == 0, 'Value is %s' %
                         field.searchable)
         self.assertTrue(field.vocabulary == (),
