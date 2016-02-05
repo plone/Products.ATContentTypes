@@ -9,10 +9,6 @@ from Products.CMFPlone.tests.testInterfaces import zope_interface_test
 import unittest
 
 
-###############################################################################
-###                         testing starts here                             ###
-###############################################################################
-
 tests = []
 # format: (class object, (list interface objects))
 testClasses = [
@@ -43,7 +39,6 @@ for testClass in testClasses:
     # add the testing method to the class to get a nice name
     setattr(KlassInterfaceTest, funcName, lambda self: self._testStuff())
     tests.append(KlassInterfaceTest)
-
 
 
 def test_suite():
