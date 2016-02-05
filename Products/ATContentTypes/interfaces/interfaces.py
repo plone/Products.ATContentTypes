@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from Products.Archetypes.interfaces import IATHistoryAware
 from Products.Archetypes.interfaces import IBaseContent
-from Products.Archetypes.interfaces import IBaseFolder
+# Keep import for backwards compatibility:
+from Products.Archetypes.interfaces import IBaseFolder  # noqa
 from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
-from Products.CMFPlone.interfaces import ISelectableConstrainTypes
+# Keep import for backwards compatibility:
+from Products.CMFPlone.interfaces import ISelectableConstrainTypes  # noqa
 from zope.interface import Attribute
 from zope.interface import Interface
 

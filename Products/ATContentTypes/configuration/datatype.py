@@ -41,8 +41,8 @@ def permission_handler(value):
     else:
         permission = _getValueFromDottedName(value)
     if not isinstance(permission, basestring):
-        raise ValueError('Permission %s is not a string: %s' % (permission,
-                                                                type(permission)))
+        raise ValueError('Permission %s is not a string: %s' % (
+            permission, type(permission)))
     return permission
 
 
@@ -100,7 +100,6 @@ def pil_algo(value):
     available = ('NEAREST', 'BILINEAR', 'BICUBIC', 'ANTIALIAS')
     if value not in available:
         raise ValueError("unknown algo %s" % value)
-    import PIL.Image
     return getattr(PIL.Image, value)
 
 
@@ -110,7 +109,7 @@ class BaseFactory(object):
 
     def __init__(self, section):
         self.name = section.getSectionName()
-        #self._parsed = False
+        # self._parsed = False
         self._section = section
         self._names = {}
         self._parse()
@@ -139,7 +138,8 @@ class MxTidy(BaseFactory):
         self.set('enable', sec.enable)
         cfg = {}
         for id in ('char_encoding', 'drop_empty_paras', 'drop_font_tags',
-                   'indent_spaces', 'input_xml', 'output_xhtml', 'quiet', 'show_warnings',
+                   'indent_spaces', 'input_xml', 'output_xhtml', 'quiet',
+                   'show_warnings',
                    'tab_size', 'word_2000', 'wrap'):
             cfg[id] = getattr(sec, id)
         self.set('options', cfg)

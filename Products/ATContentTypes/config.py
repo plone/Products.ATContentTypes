@@ -5,7 +5,6 @@ DO NOT CHANGE THIS FILE!
 
 Use ZConfig to configure ATCT
 """
-__docformat__ = 'restructuredtext'
 
 from Products.ATContentTypes.configuration import zconf
 
@@ -69,7 +68,7 @@ else:
 
 try:
     # Won't use pkg_resources because of the packaging issue
-    from PIL import Image
+    from PIL import Image  # noqa
 except ImportError:
     HAS_PIL = False
 else:
