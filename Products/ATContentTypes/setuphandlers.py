@@ -1,19 +1,19 @@
+# -*- coding: utf-8 -*-
 from Acquisition import aq_base
-from Products.ATContentTypes.lib import constraintypes
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.utils import bodyfinder
-from Products.CMFPlone.utils import _createObjectByType
 from plone.i18n.normalizer.interfaces import IURLNormalizer
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletManager
+from plone.registry.interfaces import IRegistry
+from Products.ATContentTypes.lib import constraintypes
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces import ILanguageSchema
+from Products.CMFPlone.utils import _createObjectByType
+from Products.CMFPlone.utils import bodyfinder
+from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.component import queryUtility
 from zope.i18n.interfaces import ITranslationDomain
 from zope.i18n.locales import locales
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility
-
-from Products.CMFPlone.interfaces import ILanguageSchema
 
 
 def assignTitles(portal):
@@ -107,8 +107,8 @@ def setupPortalContent(p):
                     target_language=target_language,
                     default="Congratulations! You have successfully installed "
                             "Plone.")
-                translated_text = util.translate(u'front-text',
-                                                 target_language=target_language)
+                translated_text = util.translate(
+                    u'front-text', target_language=target_language)
                 if translated_text != u'front-text':
                     front_text = translated_text
 

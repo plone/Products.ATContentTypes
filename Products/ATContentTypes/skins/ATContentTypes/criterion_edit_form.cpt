@@ -36,10 +36,10 @@ var cache = {}
 function selectField() {
     var field = $(this).val()
     if (cache[field] == undefined)
-        $.getJSON('@@jsoncriteria', { field: field }, 
-            function(data) { 
-                cache[field] = data; 
-                updateCriterionType(data) 
+        $.getJSON('@@jsoncriteria', { field: field },
+            function(data) {
+                cache[field] = data;
+                updateCriterionType(data)
             });
     else updateCriterionType(cache[field]);
 };

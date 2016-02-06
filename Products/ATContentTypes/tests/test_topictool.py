@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.interfaces import IATCTTopicsTool
 from Products.ATContentTypes.tests import atcttestcase
 from Products.CMFCore.utils import getToolByName
 from zope.interface.verify import verifyObject
+
 import unittest
+
 
 tests = []
 index_def = {'index': 'end',

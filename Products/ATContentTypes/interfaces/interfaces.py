@@ -1,11 +1,13 @@
-from zope.interface import Interface
-from zope.interface import Attribute
-
-from Products.Archetypes.interfaces import IBaseContent
-from Products.Archetypes.interfaces import IBaseFolder
-from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
+# -*- coding: utf-8 -*-
 from Products.Archetypes.interfaces import IATHistoryAware
-from Products.CMFPlone.interfaces import ISelectableConstrainTypes
+from Products.Archetypes.interfaces import IBaseContent
+# Keep import for backwards compatibility:
+from Products.Archetypes.interfaces import IBaseFolder  # noqa
+from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
+# Keep import for backwards compatibility:
+from Products.CMFPlone.interfaces import ISelectableConstrainTypes  # noqa
+from zope.interface import Attribute
+from zope.interface import Interface
 
 
 class IATContentType(ISelectableBrowserDefault, IBaseContent):

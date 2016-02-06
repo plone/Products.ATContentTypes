@@ -8,7 +8,7 @@
 ##parameters=
 ##title=Save topic setup modifications
 
-from Products.ATContentTypes import ATCTMessageFactory as _ 
+from Products.ATContentTypes import ATCTMessageFactory as _
 
 if state.button == 'index_save':
     next_page = 'atct_manageTopicIndex'

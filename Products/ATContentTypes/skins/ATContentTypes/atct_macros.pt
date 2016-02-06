@@ -20,15 +20,15 @@
 
       <td style="padding: 0.5em; align: center;">
         <input class="noborder"
-               type="checkbox" 
-               value="" 
-               name="criterion_ids:list" 
+               type="checkbox"
+               value=""
+               name="criterion_ids:list"
                id=""
-               tal:attributes="value criterionid; 
+               tal:attributes="value criterionid;
                                id string:cb_${criterionid}"
                />
       </td>
-      
+
       <td style="padding: 0.5em;">
          <span tal:content="python:index.friendlyName or index.index" i18n:translate="" />
          <div class="formHelp" tal:content="index/description" i18n:translate="" />
@@ -37,9 +37,9 @@
 
         <div i18n:translate="" tal:content="criterion/Description" />
 
-        <div id="" 
+        <div id=""
              i18n:translate=""
-             class="formHelp" 
+             class="formHelp"
              style="visibility:hidden"
              tal:content="criterion/Description"
              tal:attributes="id string:${criterionid}_help;"
@@ -47,8 +47,8 @@
         String
         </div>
 
-        <input type="hidden" 
-               name="criteria.id:records" 
+        <input type="hidden"
+               name="criteria.id:records"
                value=""
                tal:attributes="value criterionid"
                />

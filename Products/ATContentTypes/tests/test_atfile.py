@@ -1,22 +1,23 @@
 # -*- coding: utf-8 -*-
 
-import unittest
-from Testing import ZopeTestCase  # side effect import. leave it here.
-ZopeTestCase  # pyflakes
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
-
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.Archetypes.interfaces.layer import ILayerContainer
-from Products.Archetypes import atapi
-from Products.ATContentTypes.tests.utils import dcEdit
-import StringIO
-
 from plone.app.blob.content import ATBlob
+from Products.Archetypes import atapi
+from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.ATContentTypes.interfaces import IATFile
 from Products.ATContentTypes.interfaces import IFileContent
+from Products.ATContentTypes.tests import atctftestcase
+from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.tests.utils import dcEdit
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from Testing import ZopeTestCase  # side effect import. leave it here.
 from zope.interface.verify import verifyObject
 
+import StringIO
+import unittest
+
+
+ZopeTestCase  # pyflakes
 
 file_text = """
 foooooo
@@ -156,7 +157,7 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.required == 1, 'Value is %s' % field.required)
         self.assertFalse(field.default, 'Value is %s' % str(field.default))
-        self.assertTrue(field.searchable == True,
+        self.assertTrue(field.searchable,
                         'Value is %s' % field.searchable)
         self.assertTrue(field.vocabulary == (),
                         'Value is %s' % str(field.vocabulary))
@@ -180,11 +181,16 @@ class TestATFileFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'blob', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(migrate=True),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') ==
+            atapi.AnnotationStorage(migrate=True),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(field.validators == "(('isNonEmptyFile', V_REQUIRED), ('checkFileMaxSize', V_REQUIRED))",
-                        'Value is %s' % str(field.validators))
+        self.assertTrue(
+            field.validators ==
+            "(('isNonEmptyFile', V_REQUIRED), " +
+            "('checkFileMaxSize', V_REQUIRED))",
+            'Value is %s' % str(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.FileWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)

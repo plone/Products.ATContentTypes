@@ -1,61 +1,59 @@
-from zope.interface import implements
-
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_base
 from ComputedAttribute import ComputedAttribute
-
-from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import AnnotationStorage
 from Products.Archetypes.atapi import ImageField
 from Products.Archetypes.atapi import ImageWidget
 from Products.Archetypes.atapi import PrimaryFieldMarshaller
-from Products.Archetypes.atapi import AnnotationStorage
-
+from Products.Archetypes.atapi import Schema
+from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.configuration import zconf
-from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
+from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATImage
-
 from Products.ATContentTypes.lib.imagetransform import ATCTImageTransform
-
-from Products.ATContentTypes import ATCTMessageFactory as _
-
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from Products.validation import V_REQUIRED
 from Products.validation.config import validation
 from Products.validation.validators.SupplValidators import MaxSizeValidator
-from Products.validation import V_REQUIRED
+from zope.interface import implements
+
 
 validation.register(MaxSizeValidator('checkImageMaxSize',
                                      maxsize=zconf.ATImage.max_file_size))
 
 
 ATImageSchema = ATContentTypeSchema.copy() + Schema((
-    ImageField('image',
-               required=True,
-               primary=True,
-               languageIndependent=True,
-               storage=AnnotationStorage(migrate=True),
-               swallowResizeExceptions=zconf.swallowImageResizeExceptions.enable,
-               pil_quality=zconf.pil_config.quality,
-               pil_resize_algo=zconf.pil_config.resize_algo,
-               max_size=zconf.ATImage.max_image_dimension,
-               sizes={'large': (768, 768),
-                      'preview': (400, 400),
-                      'mini': (200, 200),
-                      'thumb': (128, 128),
-                      'tile': (64, 64),
-                      'icon': (32, 32),
-                      'listing': (16, 16),
-                      },
-               validators=(('isNonEmptyFile', V_REQUIRED),
-                           ('checkImageMaxSize', V_REQUIRED)),
-               widget=ImageWidget(
-                   description='',
-                   label=_(u'label_image', default=u'Image'),
-                   show_content_type=False,)),
+    ImageField(
+        'image',
+        required=True,
+        primary=True,
+        languageIndependent=True,
+        storage=AnnotationStorage(migrate=True),
+        swallowResizeExceptions=zconf.swallowImageResizeExceptions.enable,
+        pil_quality=zconf.pil_config.quality,
+        pil_resize_algo=zconf.pil_config.resize_algo,
+        max_size=zconf.ATImage.max_image_dimension,
+        sizes={'large': (768, 768),
+               'preview': (400, 400),
+               'mini': (200, 200),
+               'thumb': (128, 128),
+               'tile': (64, 64),
+               'icon': (32, 32),
+               'listing': (16, 16),
+               },
+        validators=(('isNonEmptyFile', V_REQUIRED),
+                    ('checkImageMaxSize', V_REQUIRED)),
+        widget=ImageWidget(
+            description='',
+            label=_(u'label_image', default=u'Image'),
+            show_content_type=False,)
+    ),
 
 ), marshall=PrimaryFieldMarshaller()
 )
@@ -68,7 +66,10 @@ finalizeATCTSchema(ATImageSchema)
 
 
 class ATImage(ATCTFileContent, ATCTImageTransform):
-    """An image, which can be referenced in documents or displayed in an album."""
+    """An image, which can be referenced in documents.
+
+    Or displayed in an album.
+    """
 
     schema = ATImageSchema
 
@@ -87,8 +88,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     def exportImage(self, format, width, height):
         return '', ''
 
-    security.declareProtected(ModifyPortalContent, 'setImage')
-
+    @security.protected(ModifyPortalContent)
     def setImage(self, value, refresh_exif=True, **kwargs):
         """Set ID to uploaded file name if Title is empty."""
         # set exif first because rotation might screw up the exif data
@@ -98,13 +98,12 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         self._setATCTFileContent(value, **kwargs)
 
     def _should_set_id_to_filename(self, filename, title):
-        """If title is blank, have the caller set my ID to the uploaded file's name."""
+        """If title is blank, have the caller set my ID to the file's name."""
         # When the title is blank, sometimes the filename is returned as the
         # title.
         return filename == title or not title
 
-    security.declareProtected(View, 'tag')
-
+    @security.protected(View)
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
         """
@@ -115,8 +114,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         """
         return self.tag()
 
-    security.declareProtected(View, 'get_size')
-
+    @security.protected(View)
     def get_size(self):
         """ZMI / Plone get size method
 
@@ -128,27 +126,23 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
             return 0
         return img.get_size()
 
-    security.declareProtected(View, 'getSize')
-
+    @security.protected(View)
     def getSize(self, scale=None):
         field = self.getField('image')
         return field.getSize(self, scale=scale)
 
-    security.declareProtected(View, 'getWidth')
-
+    @security.protected(View)
     def getWidth(self, scale=None):
         return self.getSize(scale)[0]
 
-    security.declareProtected(View, 'getHeight')
-
+    @security.protected(View)
     def getHeight(self, scale=None):
         return self.getSize(scale)[1]
 
     width = ComputedAttribute(getWidth, 1)
     height = ComputedAttribute(getHeight, 1)
 
-    security.declarePrivate('cmf_edit')
-
+    @security.private
     def cmf_edit(self, precondition='', file=None, title=None):
         if file is not None:
             self.setImage(file)

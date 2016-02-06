@@ -1,8 +1,11 @@
+# -*- coding: utf-8 -*-
 from AccessControl.SecurityManagement import newSecurityManager
 from Products.ATContentTypes.lib import constraintypes
 from Products.ATContentTypes.tests import atcttestcase
 from Products.CMFPlone.interfaces import ISelectableConstrainTypes
+
 import unittest
+
 
 tests = []
 
@@ -23,11 +26,12 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         self.at = self.tt.getTypeInfo(self.af)
 
     def test_isMixedIn(self):
-        self.assertTrue(isinstance(self.af,
-                                   constraintypes.ConstrainTypesMixin),
-                        "ConstrainTypesMixin was not mixed in to ATFolder")
-        self.assertTrue(ISelectableConstrainTypes.providedBy(self.af),
-                        "ISelectableConstrainTypes not implemented by ATFolder instance")
+        self.assertTrue(
+            isinstance(self.af, constraintypes.ConstrainTypesMixin),
+            "ConstrainTypesMixin was not mixed in to ATFolder")
+        self.assertTrue(
+            ISelectableConstrainTypes.providedBy(self.af),
+            "ISelectableConstrainTypes not implemented by ATFolder instance")
 
     def test_enabled(self):
         self.af.setConstrainTypesMode(constraintypes.ENABLED)
@@ -173,11 +177,12 @@ class TestConstrainTypes(atcttestcase.ATCTSiteTestCase):
         folder2 = self.af.folder2
         folder2.setConstrainTypesMode(constraintypes.ACQUIRE)
 
-        # News item is not in addable types because it is globally forbidden in Folder2 type
-        # and Folder is not in addable types because it is locally forbidden in
-        # folder2 parent
-        self.assertEqual([fti.getId() for fti in folder2.allowedContentTypes()],
-                         ['Image'])
+        # News item is not in addable types because it is globally forbidden in
+        # Folder2 type and Folder is not in addable types because it is locally
+        # forbidden in folder2 parent
+        self.assertEqual(
+            [fti.getId() for fti in folder2.allowedContentTypes()],
+            ['Image'])
         self.assertEqual(folder2.getImmediatelyAddableTypes(), ['Image'])
 
 tests.append(TestConstrainTypes)

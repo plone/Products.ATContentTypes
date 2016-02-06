@@ -1,25 +1,24 @@
-import logging
-from cStringIO import StringIO
-from zope.interface import implements
-
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from App.class_init import InitializeClass
-from OFS.SimpleItem import SimpleItem
+from cStringIO import StringIO
 from OFS.PropertyManager import PropertyManager
-from ZODB.POSException import ConflictError
-
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-from Products.CMFCore.utils import registerToolInterface
-from Products.CMFCore.utils import UniqueObject
-from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.permissions import ManagePortal
-
-from Products.ATContentTypes.interfaces import IImageContent
-from Products.ATContentTypes.interfaces import IATCTTool
+from OFS.SimpleItem import SimpleItem
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.config import WWW_DIR
+from Products.ATContentTypes.interfaces import IATCTTool
+from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.tool.topic import ATTopicsTool
+from Products.CMFCore.permissions import ManagePortal
+from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.utils import registerToolInterface
+from Products.CMFCore.utils import UniqueObject
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from ZODB.POSException import ConflictError
+from zope.interface import implements
+
+import logging
+
 
 LOG = logging.getLogger('ATCT')
 
@@ -72,8 +71,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
 
     # image scales
 
-    security.declareProtected(ManagePortal, 'recreateImageScales')
-
+    @security.protected(ManagePortal)
     def recreateImageScales(self, portal_type=None):
         """Recreates AT Image scales (doesn't remove unused!)
         """
@@ -109,8 +107,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
         print >> out, "Updated AT Image scales"
         return out.getvalue()
 
-    security.declareProtected(ManagePortal, 'listContentTypes')
-
+    @security.protected(ManagePortal)
     def listContentTypes(self):
         """List all content types. Used for image/folder_types property.
         """

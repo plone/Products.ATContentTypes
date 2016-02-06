@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
 from Products.ATContentTypes import permission
 from Products.ATContentTypes.tests import atcttestcase
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
+
 import re
 import unittest
+
 
 tests = []
 
@@ -27,10 +30,12 @@ class TestBrowserDefaultMixin(atcttestcase.ATCTSiteTestCase):
         self.app.REQUEST.set('PARENTS', [self.app])
 
     def test_isMixedIn(self):
-        self.assertTrue(isinstance(self.af, BrowserDefaultMixin),
-                        "ISelectableBrowserDefault was not mixed in to ATFolder")
-        self.assertTrue(ISelectableBrowserDefault.providedBy(self.af),
-                        "ISelectableBrowserDefault not implemented by ATFolder instance")
+        self.assertTrue(
+            isinstance(self.af, BrowserDefaultMixin),
+            "ISelectableBrowserDefault was not mixed in to ATFolder")
+        self.assertTrue(
+            ISelectableBrowserDefault.providedBy(self.af),
+            "ISelectableBrowserDefault not implemented by ATFolder instance")
 
     def test_defaultFolderViews(self):
         self.assertEqual(self.af.getLayout(), 'folder_listing')

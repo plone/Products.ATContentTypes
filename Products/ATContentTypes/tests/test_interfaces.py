@@ -1,11 +1,13 @@
-from Products.ATContentTypes.tool.factory import FactoryTool, TempFolder
+# -*- coding: utf-8 -*-
+from Products.ATContentTypes.tool.factory import FactoryTool
+from Products.ATContentTypes.tool.factory import TempFolder
 from Products.ATContentTypes.tool.metadata import MetadataTool
-from Products.CMFPlone.tests.testInterfaces import (className, InterfaceTest,
-                                                    zope_interface_test)
+from Products.CMFPlone.tests.testInterfaces import className
+from Products.CMFPlone.tests.testInterfaces import InterfaceTest
+from Products.CMFPlone.tests.testInterfaces import zope_interface_test
 
-###############################################################################
-###                         testing starts here                             ###
-###############################################################################
+import unittest
+
 
 tests = []
 # format: (class object, (list interface objects))
@@ -37,8 +39,6 @@ for testClass in testClasses:
     # add the testing method to the class to get a nice name
     setattr(KlassInterfaceTest, funcName, lambda self: self._testStuff())
     tests.append(KlassInterfaceTest)
-
-import unittest
 
 
 def test_suite():

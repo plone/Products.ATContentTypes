@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Products.ATContentTypes.config import TOOLNAME
 from Products.ATContentTypes.migration.v1_2 import upgradeATCTTool
 from Products.ATContentTypes.tests import atcttestcase

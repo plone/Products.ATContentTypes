@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from hashlib import sha1 as sha
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
@@ -8,6 +9,7 @@ from plone.keyring.interfaces import IKeyManager
 from Products.ATContentTypes.config import HAS_LINGUA_PLONE
 from Products.ATContentTypes.tests import atcttestcase
 from zope.component import getUtility
+
 import hmac
 
 
@@ -89,7 +91,8 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         self.assertEqual(new_obj.checkCreationFlag(), True)
 
     def check_newly_created(self):
-        """Objects created programmatically should not have the creation flag set"""
+        """Objects created programmatically should not have creation flag set.
+        """
         self.assertEqual(self.obj.checkCreationFlag(),
                          False)  # object is fully created
 
@@ -131,8 +134,9 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
         def test_linguaplone_create_translation(self):
             # create translation creates a new object
-            response = self.publish('%s/createTranslation?language=de&set_language=de'
-                                    % self.obj_path, self.basic_auth)
+            response = self.publish(
+                '{}/createTranslation?language=de&set_language=de'.format(
+                    self.obj_path), self.basic_auth)
             self.assertEqual(response.getStatus(), 302)  # Redirect
 
             body = response.getBody()

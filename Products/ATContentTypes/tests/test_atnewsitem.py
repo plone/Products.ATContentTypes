@@ -1,15 +1,18 @@
+# -*- coding: utf-8 -*-
 from Products.Archetypes import atapi
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.ATContentTypes.content.newsitem import ATNewsItem
 from Products.ATContentTypes.interfaces import IATNewsItem
 from Products.ATContentTypes.interfaces import IImageContent
 from Products.ATContentTypes.interfaces import ITextContent
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
+from Products.ATContentTypes.tests import atctftestcase
+from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.tests.utils import dcEdit
 from Products.ATContentTypes.tests.utils import NotRequiredTidyHTMLValidator
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
 from zope.interface.verify import verifyObject
+
 import unittest
 
 
@@ -95,8 +98,10 @@ class TestATNewsItemFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'text', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(migrate=True),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') ==
+            atapi.AnnotationStorage(migrate=True),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == NotRequiredTidyHTMLValidator,
                         'Value is %s' % repr(field.validators))

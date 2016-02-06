@@ -1,8 +1,10 @@
-import os
-
-from ZConfig.loader import ConfigLoader
+# -*- coding: utf-8 -*-
 from Globals import INSTANCE_HOME
 from Products.ATContentTypes.configuration.schema import atctSchema
+from ZConfig.loader import ConfigLoader
+
+import os
+
 
 # directories
 INSTANCE_ETC = os.path.join(INSTANCE_HOME, 'etc')
@@ -39,11 +41,11 @@ def loadConfig(files, schema=atctSchema, overwrite=False):
     if not isinstance(files, (tuple, list)):
         files = (files, )
     if zconf is not None and not overwrite:
-        raise RuntimeError, 'Configuration is already loaded'
+        raise RuntimeError('Configuration is already loaded')
     for file in files:
         if file is not None:
             if not os.path.exists(file):
-                raise RuntimeError, '%s does not exist' % file
+                raise RuntimeError('%s does not exist' % file)
             conf_file = file
             zconf, handler = ConfigLoader(schema).loadURL(conf_file)
             break

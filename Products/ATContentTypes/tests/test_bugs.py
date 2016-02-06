@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.tests import atcttestcase
 from Products.validation.interfaces.IValidator import IValidationChain
+
 
 tests = []
 
@@ -33,6 +35,7 @@ class TestBugs(atcttestcase.ATCTSiteTestCase):
         self.assertEqual(
             d.Title(), "HTML end tags start with </ and end with >")
 
-    def test_validation_layer_from_id_field_from_base_schema_was_initialized(self):
+    def test_validation_layer_from_id_field_from_base_schema_was_initialized(
+            self):
         field = ATContentTypeSchema['id']
         self.assertTrue(IValidationChain.providedBy(field.validators))

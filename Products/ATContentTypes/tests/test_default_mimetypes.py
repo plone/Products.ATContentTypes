@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 # test initialisation and setup
 
 from Products.ATContentTypes.tests.atcttestcase import ATCTSiteTestCase
-from unittest import TestSuite, makeSuite
+from unittest import makeSuite
+from unittest import TestSuite
 
 
 class TestDefaultMimeTypes(ATCTSiteTestCase):

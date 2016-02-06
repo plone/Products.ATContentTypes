@@ -1,14 +1,16 @@
+# -*- coding: utf-8 -*-
 """AT Content Types configuration file
 
 DO NOT CHANGE THIS FILE!
 
 Use ZConfig to configure ATCT
 """
-__docformat__ = 'restructuredtext'
 
-import pkg_resources
-import os
 from Products.ATContentTypes.configuration import zconf
+
+import os
+import pkg_resources
+
 
 # options for mx tidy
 # read http://www.egenix.com/files/python/mxTidy.html for more informations
@@ -66,7 +68,7 @@ else:
 
 try:
     # Won't use pkg_resources because of the packaging issue
-    from PIL import Image
+    from PIL import Image  # noqa
 except ImportError:
     HAS_PIL = False
 else:

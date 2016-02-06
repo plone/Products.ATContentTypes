@@ -1,20 +1,20 @@
-import transaction
-from thread import allocate_lock
-
-from zope.component import getUtility
-from zope.component import adapts
-from zope.container.interfaces import INameChooser
-from zope.lifecycleevent import ObjectModifiedEvent
-from zope.event import notify
-from zope.interface import implements
-
+# -*- coding: utf-8 -*-
+from plone.i18n.normalizer.interfaces import IFileNameNormalizer
 from Products.Archetypes.event import ObjectInitializedEvent
 from Products.Archetypes.interfaces import IATCTFileFactory
-from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.interfaces._content import IFolderish
+from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import utils as ploneutils
+from thread import allocate_lock
+from zope.component import adapts
+from zope.component import getUtility
+from zope.container.interfaces import INameChooser
+from zope.event import notify
+from zope.interface import implements
+from zope.lifecycleevent import ObjectModifiedEvent
 
-from plone.i18n.normalizer.interfaces import IFileNameNormalizer
+import transaction
+
 
 upload_lock = allocate_lock()
 

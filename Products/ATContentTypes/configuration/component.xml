@@ -58,12 +58,12 @@
       <description>
         XXX
       </description>
-    </key> 
+    </key>
     <key name="char_encoding" datatype="string" required="no" default="raw">
       <description>
         XXX
       </description>
-    </key> 
+    </key>
   </sectiontype>
 
   <sectiontype name="feature" keytype="identifier" datatype=".Feature">
@@ -76,7 +76,7 @@
       </description>
     </key>
   </sectiontype>
-  
+
   <sectiontype name="contenttypes">
     <description format="plain">
       Section content types of an archetype
@@ -104,14 +104,14 @@
     </description>
     <section name="*" attribute="contenttypes" type="contenttypes"
        required="no" />
-       
+
     <key name="max_file_size" attribute="max_file_size" datatype="byte-size-in-mb"
          default="0" required="no" />
     <key name="max_image_dimension" attribute="max_image_dimension"
          datatype="image-dimension-or-no" default="no" required="no" />
     <key name="allow_document_upload" attribute="allow_document_upload"
-         datatype="boolean" default="yes" required="no" /> 
-    
+         datatype="boolean" default="yes" required="no" />
+
   </sectiontype>
 
   <sectiontype name="pil_config" attribute="pil_config" keytype="identifier">

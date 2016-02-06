@@ -1,25 +1,24 @@
-from types import FileType
+# -*- coding: utf-8 -*-
 from Acquisition import aq_base
-
 from Products.ATContentTypes.config import HAS_MX_TIDY
 from Products.ATContentTypes.config import MX_TIDY_ENABLED
 from Products.ATContentTypes.config import MX_TIDY_MIMETYPES
 from Products.ATContentTypes.config import MX_TIDY_OPTIONS
-
+from Products.PageTemplates.Expressions import getEngine
 from Products.validation.config import validation
 from Products.validation.interfaces.IValidator import IValidator
-
-import re
-import encodings
-import logging
-logger = logging.getLogger('ATCT')
-
-from ZPublisher.HTTPRequest import FileUpload
-
+from types import FileType
+from zope.interface import implements
 from zope.tal.htmltalparser import HTMLTALParser
 from zope.tal.talgenerator import TALGenerator
-from Products.PageTemplates.Expressions import getEngine
-from zope.interface import implements
+from ZPublisher.HTTPRequest import FileUpload
+
+import encodings
+import logging
+import re
+
+
+logger = logging.getLogger('ATCT')
 
 if HAS_MX_TIDY:
     from mx.Tidy import tidy as mx_tidy
@@ -32,16 +31,17 @@ WARNING_LINE = 'line %d column %d - Warning: %s'
 RE_MATCH_ERROR = re.compile('^line (\d+) column (\d+) - Error: (.*)$')
 ERROR_LINE = 'line %d column %d - Error: %s'
 
-# the following regex is safe because *? matches the minimal text in the body tag
-# and .* matches the maximum text between two body tags including other body tags
-# if they exists
+# The following regex is safe because *? matches the minimal text in the body
+# tag and .* matches the maximum text between two body tags including other
+# body tags if they exists
 RE_BODY = re.compile('<body[^>]*?>(.*)</body>', re.DOTALL)
 
 # get the encoding from an uploaded html-page
 # e.g. <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 # we get ISO-8859-1 into the second match, the rest into the first and third.
 RE_GET_HTML_ENCODING = re.compile(
-    '(<meta.*?content-type.*?charset[\s]*=[\s]*)([^"]*?)("[^>]*?>)', re.S | re.I)
+    '(<meta.*?content-type.*?charset[\s]*=[\s]*)([^"]*?)("[^>]*?>)',
+    re.S | re.I)
 
 # subtract 11 line numbers from the warning/error
 SUBTRACT_LINES = 11
@@ -65,7 +65,7 @@ class TALValidator:
         parser = HTMLTALParser(gen)
         try:
             parser.parseString(value)
-        except Exception, err:
+        except Exception as err:
             return ("Validation Failed(%s): \n %s" % (self.name, err))
         return 1
 
@@ -169,7 +169,7 @@ class NonEmptyFileValidator:
 
     def __call__(self, value, *args, **kwargs):
         # calculate size
-        if isinstance(value, FileUpload) or type(value) is FileType \
+        if isinstance(value, FileUpload) or isinstance(value, FileType) \
                 or hasattr(aq_base(value), 'tell'):
             value.seek(0, 2)  # eof
             size = value.tell()

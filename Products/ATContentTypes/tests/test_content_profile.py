@@ -1,5 +1,6 @@
-from Products.ATContentTypes import setuphandlers
+# -*- coding: utf-8 -*-
 from plone.app.testing.bbb import PloneTestCase
+from Products.ATContentTypes import setuphandlers
 
 
 # No sense to check this in Plone 5, frontpage is DX

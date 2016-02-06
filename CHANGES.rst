@@ -10,6 +10,18 @@ New:
 
 Fixes:
 
+- Added security decorators.  [maurits]
+
+- Removed double line from simpleint criterion.  This had the effect
+  that post_validate always gave an error for value2.  Possibly this
+  is used nowhere, because this has been in there for years.  [maurits]
+
+- Added utf-8 coding magic comment.  [maurits]
+
+- Sorted imports with isort.  [maurits]
+
+- Fixed pep8 errors.  [maurits]
+
 - Prevent topic-criteria from having unicode as id. A unicode-id broke
   indexing the criteria in ZCatalog since obj.getPhysicalPath() prefers
   obj.id over obj.getId() in zope4.

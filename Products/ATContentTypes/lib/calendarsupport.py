@@ -1,13 +1,12 @@
+# -*- coding: utf-8 -*-
+from AccessControl import ClassSecurityInfo
+from App.class_init import InitializeClass
 from cStringIO import StringIO
+from DateTime import DateTime
+from Products.ATContentTypes.interfaces import ICalendarSupport
+from Products.CMFCore.permissions import View
 from zope.interface import implements
 
-from DateTime import DateTime
-from App.class_init import InitializeClass
-
-from Products.CMFCore.permissions import View
-from AccessControl import ClassSecurityInfo
-
-from Products.ATContentTypes.interfaces import ICalendarSupport
 
 PRODID = "-//AT Content Types//AT Event//EN"
 
@@ -42,8 +41,8 @@ DTEND:%(enddate)s
 # blocking of the time slot. That's not appropriate for an event
 # calendar.
 # Also, previous version set "PRIORITY:3", which the RFC interprets as a high
-# priority. In absence of a priority field in the event, there's no justification
-# for that.
+# priority. In absence of a priority field in the event, there is no
+# justification for that.
 
 ICS_EVENT_END = """\
 CLASS:PUBLIC
@@ -120,8 +119,7 @@ class CalendarSupportMixin:
     },
     )
 
-    security.declareProtected(View, 'getICal')
-
+    @security.protected(View)
     def getICal(self):
         """get iCal data
         """
@@ -149,7 +147,8 @@ class CalendarSupportMixin:
         if subject:
             out.write('CATEGORIES:%s\n' % ', '.join(subject))
 
-        # TODO  -- NO! see the RFC; ORGANIZER field is not to be used for non-group-scheduled entities
+        # TODO -- NO! see the RFC; ORGANIZER field is not to be used for
+        # non-group-scheduled entities.
         # ORGANIZER;CN=%(name):MAILTO=%(email)
         # ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
 
@@ -173,8 +172,7 @@ class CalendarSupportMixin:
         out.write(ICS_EVENT_END)
         return out.getvalue()
 
-    security.declareProtected(View, 'ics_view')
-
+    @security.protected(View)
     def ics_view(self, REQUEST, RESPONSE):
         """iCalendar output
         """
@@ -187,8 +185,7 @@ class CalendarSupportMixin:
         out.write(ICS_FOOTER)
         return n2rn(out.getvalue())
 
-    security.declareProtected(View, 'getVCal')
-
+    @security.protected(View)
     def getVCal(self):
         """get vCal data
         """
@@ -214,8 +211,7 @@ class CalendarSupportMixin:
         # Insert missing code here :]
         return out.getvalue()
 
-    security.declareProtected(View, 'vcs_view')
-
+    @security.protected(View)
     def vcs_view(self, REQUEST, RESPONSE):
         """vCalendar output
         """
@@ -255,7 +251,13 @@ def foldLine(s):
 
     lineLen = 70
 
-    workStr = s.strip().replace('\r\n', '\n').replace('\r', '\n').replace('\n', '\\n')
+    workStr = s.strip().replace(
+        '\r\n',
+        '\n').replace(
+        '\r',
+        '\n').replace(
+            '\n',
+        '\\n')
     numLinesToBeProcessed = len(workStr) / lineLen
     startingChar = 0
     res = ''

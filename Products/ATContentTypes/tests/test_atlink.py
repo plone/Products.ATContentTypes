@@ -1,12 +1,16 @@
+# -*- coding: utf-8 -*-
 from Products.Archetypes import atapi
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.ATContentTypes.content.link import ATLink
 from Products.ATContentTypes.interfaces import IATLink
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
+from Products.ATContentTypes.tests import atctftestcase
+from Products.ATContentTypes.tests import atcttestcase
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
 from zope.interface.verify import verifyObject
+
 import unittest
+
 
 URL = 'http://www.example.org/'
 
@@ -112,8 +116,9 @@ class TestATLinkFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'string', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AttributeStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AttributeStorage(),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') == atapi.AttributeStorage(),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
         self.assertTrue(field.validators == (),
                         'Value is %s' % str(field.validators))

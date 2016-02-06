@@ -1,24 +1,22 @@
-from zope.interface import implements
-
-from DateTime import DateTime
-from Products.CMFCore.permissions import View
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
-
-from Products.Archetypes.atapi import Schema
-from Products.Archetypes.atapi import IntegerField
-from Products.Archetypes.atapi import StringField
-from Products.Archetypes.atapi import SelectionWidget
+from DateTime import DateTime
 from Products.Archetypes.atapi import DisplayList
 from Products.Archetypes.atapi import IntDisplayList
-
-from Products.ATContentTypes.criteria import registerCriterion
+from Products.Archetypes.atapi import IntegerField
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import SelectionWidget
+from Products.Archetypes.atapi import StringField
+from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes.criteria import DATE_INDICES
+from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
+from Products.CMFCore.permissions import View
+from zope.interface import implements
 
-from Products.ATContentTypes import ATCTMessageFactory as _
 
 DateOptions = IntDisplayList((
     (0, _(u'Now')),
@@ -46,49 +44,56 @@ RangeOperations = DisplayList((
 ))
 
 ATDateCriteriaSchema = ATBaseCriterionSchema + Schema((
-    IntegerField('value',
-                 required=1,
-                 mode="rw",
-                 accessor="Value",
-                 mutator="setValue",
-                 write_permission=ChangeTopics,
-                 default=None,
-                 vocabulary=DateOptions,
-                 widget=SelectionWidget(
-                     label=_(u'label_date_criteria_value',
-                             default=u'Which day'),
-                     description=_(u'help_date_criteria_value',
-                                   default=u'Select the date criteria value.')
-                 ),
-                 ),
-    StringField('dateRange',
-                required=1,
-                mode="rw",
-                write_permission=ChangeTopics,
-                default=None,
-                vocabulary=RangeOperations,
-                enforceVocabulary=1,
-                widget=SelectionWidget(
-                    label=_(u'label_date_criteria_range',
-                            default=u'In the past or future'),
-                    description=_(u'help_date_criteria_range',
-                                  default=u"Select the date criteria range. Ignore this if you selected 'Now' above."),
-                    format="select"),
-                ),
-    StringField('operation',
-                required=1,
-                mode="rw",
-                default=None,
-                write_permission=ChangeTopics,
-                vocabulary=CompareOperations,
-                enforceVocabulary=1,
-                widget=SelectionWidget(
-                    label=_(u'label_date_criteria_operation',
-                            default=u'More or less'),
-                    description=_(u'help_date_criteria_operation',
-                                  default=u'Select the date criteria operation.'),
-                    format="select"),
-                ),
+    IntegerField(
+        'value',
+        required=1,
+        mode="rw",
+        accessor="Value",
+        mutator="setValue",
+        write_permission=ChangeTopics,
+        default=None,
+        vocabulary=DateOptions,
+        widget=SelectionWidget(
+            label=_(u'label_date_criteria_value',
+                    default=u'Which day'),
+            description=_(u'help_date_criteria_value',
+                          default=u'Select the date criteria value.')
+        ),
+    ),
+
+    StringField(
+        'dateRange',
+        required=1,
+        mode="rw",
+        write_permission=ChangeTopics,
+        default=None,
+        vocabulary=RangeOperations,
+        enforceVocabulary=1,
+        widget=SelectionWidget(
+            label=_(u'label_date_criteria_range',
+                    default=u'In the past or future'),
+            description=_(
+                u'help_date_criteria_range',
+                default=u"Select the date criteria range. "
+                u"Ignore this if you selected 'Now' above."),
+            format="select"),
+    ),
+
+    StringField(
+        'operation',
+        required=1,
+        mode="rw",
+        default=None,
+        write_permission=ChangeTopics,
+        vocabulary=CompareOperations,
+        enforceVocabulary=1,
+        widget=SelectionWidget(
+            label=_(u'label_date_criteria_operation',
+                    default=u'More or less'),
+            description=_(u'help_date_criteria_operation',
+                          default=u'Select the date criteria operation.'),
+            format="select"),
+    ),
 ))
 
 
@@ -103,8 +108,7 @@ class ATDateCriteria(ATBaseCriterion):
     archetype_name = 'Friendly Date Criteria'
     shortDesc = 'Relative date'
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         """Return a sequence of items to be used to build the catalog query.
         """
@@ -126,7 +130,9 @@ class ATDateCriteria(ATBaseCriterion):
             elif operation == 'more':
                 if value != 0:
                     range_op = (self.getDateRange() == '-' and 'max') or 'min'
-                    return ((field, {'query': date.earliestTime(), 'range': range_op}),)
+                    return (
+                        (field, {'query': date.earliestTime(),
+                                 'range': range_op}),)
                 else:
                     return ((field, {'query': date, 'range': 'min'}),)
             elif operation == 'less':
@@ -134,7 +140,8 @@ class ATDateCriteria(ATBaseCriterion):
                     date_range = (self.getDateRange() == '-' and
                                   (date.earliestTime(), current_date)
                                   ) or (current_date, date.latestTime())
-                    return ((field, {'query': date_range, 'range': 'min:max'}),)
+                    return (
+                        (field, {'query': date_range, 'range': 'min:max'}),)
                 else:
                     return ((field, {'query': date, 'range': 'max'}),)
         else:

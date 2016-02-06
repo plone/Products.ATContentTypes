@@ -1,10 +1,12 @@
-import unittest
-from Products.ATContentTypes.tests import atcttestcase
-from Products.ATContentTypes.config import TOOLNAME
+# -*- coding: utf-8 -*-
 from Products.ATContentTypes.config import SWALLOW_IMAGE_RESIZE_EXCEPTIONS
+from Products.ATContentTypes.config import TOOLNAME
+from Products.ATContentTypes.tests import atcttestcase
 from Products.ATContentTypes.tool.atct import ATCTTool
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import getFSVersionTuple
+
+import unittest
 
 
 PLONE5 = getFSVersionTuple()[0] >= 5
@@ -61,8 +63,9 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
             self.assertEqual(l, 0, (id, l, result))
 
     def test_adds_related_items_catalog_index(self):
-        self.assertEqual(self.cat.Indexes['getRawRelatedItems'].__class__.__name__,
-                         'KeywordIndex')
+        self.assertEqual(
+            self.cat.Indexes['getRawRelatedItems'].__class__.__name__,
+            'KeywordIndex')
 
     def test_api_import(self):
         import Products.ATContentTypes.atct

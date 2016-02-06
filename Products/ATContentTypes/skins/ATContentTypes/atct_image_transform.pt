@@ -11,10 +11,10 @@
     <h1 class="documentFirstHeading" tal:content="here/pretty_title_or_id">Title or id</h1>
     <div class="documentDescription" tal:content="here/Description">
         Description
-    </div>    
+    </div>
 
     <div id="content-core">
-        
+
         <img src="#" alt="" tal:replace="structure python:here.tag(scale='mini')" />
 
         <div>

@@ -1,35 +1,32 @@
-import logging
-from urllib import quote
-
-from zope.interface import implements
-
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.utils import getToolByName
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
-
-from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import AnnotationStorage
 from Products.Archetypes.atapi import FileField
 from Products.Archetypes.atapi import FileWidget
 from Products.Archetypes.atapi import PrimaryFieldMarshaller
-from Products.Archetypes.atapi import AnnotationStorage
+from Products.Archetypes.atapi import Schema
 from Products.Archetypes.BaseContent import BaseContent
-from Products.MimetypesRegistry.common import MimeTypeException
-
+from Products.ATContentTypes import ATCTMessageFactory as _
+from Products.ATContentTypes.config import ICONMAP
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.configuration import zconf
-from Products.ATContentTypes.config import ICONMAP
-from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import ATCTFileContent
+from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.interfaces import IATFile
-
-from Products.ATContentTypes import ATCTMessageFactory as _
-
-from Products.validation.validators.SupplValidators import MaxSizeValidator
-from Products.validation.config import validation
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
+from Products.MimetypesRegistry.common import MimeTypeException
 from Products.validation import V_REQUIRED
+from Products.validation.config import validation
+from Products.validation.validators.SupplValidators import MaxSizeValidator
+from urllib import quote
+from zope.interface import implements
+
+import logging
+
 
 LOG = logging.getLogger('ATCT')
 
@@ -81,8 +78,7 @@ class ATFile(ATCTFileContent):
 
     security = ClassSecurityInfo()
 
-    security.declareProtected(View, 'index_html')
-
+    @security.protected(View)
     def index_html(self, REQUEST=None, RESPONSE=None):
         """Download the file
         """
@@ -96,8 +92,7 @@ class ATFile(ATCTFileContent):
         # this is a security risk (IE renders anything as HTML).
         return field.download(self)
 
-    security.declareProtected(ModifyPortalContent, 'setFile')
-
+    @security.protected(ModifyPortalContent)
     def setFile(self, value, **kwargs):
         """Set id to uploaded id
         """
@@ -108,8 +103,7 @@ class ATFile(ATCTFileContent):
         """
         return self.get_data()
 
-    security.declarePublic('getIcon')
-
+    @security.public
     def getIcon(self, relative_to_portal=0):
         """Calculate the icon using the mime type of the file
         """
@@ -132,7 +126,7 @@ class ATFile(ATCTFileContent):
             mimetypeitem = None
             try:
                 mimetypeitem = mtr.lookup(contenttype)
-            except MimeTypeException, msg:
+            except MimeTypeException as msg:
                 LOG.error('MimeTypeException for %s. Error is: %s' %
                           (self.absolute_url(), str(msg)))
             if not mimetypeitem:
@@ -148,15 +142,13 @@ class ATFile(ATCTFileContent):
                 res = res[1:]
             return res
 
-    security.declareProtected(View, 'icon')
-
+    @security.protected(View)
     def icon(self):
         """for ZMI
         """
         return self.getIcon()
 
-    security.declarePrivate('cmf_edit')
-
+    @security.private
     def cmf_edit(self, precondition='', file=None):
         if file is not None:
             self.setFile(file)

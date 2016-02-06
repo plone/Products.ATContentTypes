@@ -14,6 +14,7 @@ Redirect to the Link target URL, if and only if:
 
 from Products.CMFCore.utils import getToolByName
 
+
 mtool = getToolByName(context, 'portal_membership')
 
 redirect_links = context.portal_registry['plone.redirect_links']

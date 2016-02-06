@@ -1,17 +1,15 @@
-import difflib
-
-from zope.interface import implements
-
-from DocumentTemplate.DT_Util import html_quote
-from App.class_init import InitializeClass
-
-from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.permissions import View
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
-
+from App.class_init import InitializeClass
+from DocumentTemplate.DT_Util import html_quote
 from Products.Archetypes.atapi import ATHistoryAwareMixin
 from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.interfaces import IHistoryAware
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
+from zope.interface import implements
+
+import difflib
 
 
 class HistoryAwareMixin(ATHistoryAwareMixin):
@@ -39,8 +37,7 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
     },
     )
 
-    security.declarePrivate('getHistorySource')
-
+    @security.private
     def getHistorySource(self):
         """get source for HistoryAwareMixin
 
@@ -52,8 +49,7 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
         else:
             return ''
 
-    security.declareProtected(View, 'getLastEditor')
-
+    @security.protected(View)
     def getLastEditor(self):
         """Returns the user name of the last editor.
 
@@ -65,9 +61,7 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
         user = histories[0][3].split(" ")[-1].strip()
         return user
 
-    security.declareProtected(
-        ATCTPermissions.ViewHistory, 'getDocumentComparisons')
-
+    @security.protected(ATCTPermissions.ViewHistory)
     def getDocumentComparisons(self, max=10, filterComment=0):
         """Get history as unified diff
         """

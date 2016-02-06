@@ -29,7 +29,7 @@
         <a tal:condition="image/size" tal:attributes="href string:${image/absolute_url}/view">
             <img src="#" alt="" tal:replace="structure python:image.tag(scale=photo_display)" />
         </a>
-        
+
         <div tal:define="b_start python:request.get('b_start', 0)">
           <a href="" tal:attributes="href string:${request/URL1}/view?b_start=$b_start">
             <img src="#" alt="Back to album"

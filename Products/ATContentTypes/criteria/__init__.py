@@ -1,6 +1,6 @@
+# -*- coding: utf-8 -*-
 from UserDict import UserDict
 from Products.Archetypes.atapi import registerType
-from Products.Archetypes.ClassGen import generateClass
 from Products.ATContentTypes.config import PROJECTNAME
 from types import StringType
 
@@ -45,7 +45,7 @@ class _CriterionRegistry(UserDict):
         self.portaltypes = {}
 
     def register(self, criterion, indices):
-        if type(indices) is StringType:
+        if isinstance(indices, StringType):
             indices = (indices,)
         indices = tuple(indices)
 
@@ -104,20 +104,26 @@ _criterionRegistry = _CriterionRegistry()
 registerCriterion = _criterionRegistry.register
 unregisterCriterion = _criterionRegistry.unregister
 
-__all__ = ('registerCriterion', 'ALL_INDICES', 'DATE_INDICES', 'STRING_INDICES',
-           'LIST_INDICES', 'SORT_INDICES', )
+__all__ = (
+    'registerCriterion',
+    'ALL_INDICES',
+    'DATE_INDICES',
+    'STRING_INDICES',
+    'LIST_INDICES',
+    'SORT_INDICES',
+)
 
 # criteria
-from Products.ATContentTypes.criteria.boolean import ATBooleanCriterion
-from Products.ATContentTypes.criteria.date import ATDateCriteria
-from Products.ATContentTypes.criteria.daterange import ATDateRangeCriterion
-from Products.ATContentTypes.criteria.list import ATListCriterion
-from Products.ATContentTypes.criteria.portaltype import ATPortalTypeCriterion
-from Products.ATContentTypes.criteria.reference import ATReferenceCriterion
-from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
-from Products.ATContentTypes.criteria.simpleint import ATSimpleIntCriterion
-from Products.ATContentTypes.criteria.simplestring import ATSimpleStringCriterion
-from Products.ATContentTypes.criteria.sort import ATSortCriterion
-from Products.ATContentTypes.criteria.currentauthor import ATCurrentAuthorCriterion
-from Products.ATContentTypes.criteria.path import ATPathCriterion
-from Products.ATContentTypes.criteria.relativepath import ATRelativePathCriterion
+from Products.ATContentTypes.criteria.boolean import ATBooleanCriterion  # noqa
+from Products.ATContentTypes.criteria.date import ATDateCriteria  # noqa
+from Products.ATContentTypes.criteria.daterange import ATDateRangeCriterion  # noqa
+from Products.ATContentTypes.criteria.list import ATListCriterion  # noqa
+from Products.ATContentTypes.criteria.portaltype import ATPortalTypeCriterion  # noqa
+from Products.ATContentTypes.criteria.reference import ATReferenceCriterion  # noqa
+from Products.ATContentTypes.criteria.selection import ATSelectionCriterion  # noqa
+from Products.ATContentTypes.criteria.simpleint import ATSimpleIntCriterion  # noqa
+from Products.ATContentTypes.criteria.simplestring import ATSimpleStringCriterion  # noqa
+from Products.ATContentTypes.criteria.sort import ATSortCriterion  # noqa
+from Products.ATContentTypes.criteria.currentauthor import ATCurrentAuthorCriterion  # noqa
+from Products.ATContentTypes.criteria.path import ATPathCriterion  # noqa
+from Products.ATContentTypes.criteria.relativepath import ATRelativePathCriterion  # noqa

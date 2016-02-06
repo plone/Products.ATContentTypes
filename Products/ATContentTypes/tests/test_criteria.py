@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from DateTime import DateTime
 from Missing import MV
 from Products.Archetypes.interfaces import IExtensibleMetadata
@@ -5,25 +6,25 @@ from Products.Archetypes.interfaces.base import IBaseContent
 from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.boolean import ATBooleanCriterion
-from Products.ATContentTypes.criteria.currentauthor import \
-    ATCurrentAuthorCriterion
+from Products.ATContentTypes.criteria.currentauthor import ATCurrentAuthorCriterion  # noqa
 from Products.ATContentTypes.criteria.date import ATDateCriteria
 from Products.ATContentTypes.criteria.daterange import ATDateRangeCriterion
 from Products.ATContentTypes.criteria.list import ATListCriterion
 from Products.ATContentTypes.criteria.path import ATPathCriterion
 from Products.ATContentTypes.criteria.portaltype import ATPortalTypeCriterion
 from Products.ATContentTypes.criteria.reference import ATReferenceCriterion
-from Products.ATContentTypes.criteria.relativepath import \
-    ATRelativePathCriterion
+from Products.ATContentTypes.criteria.relativepath import ATRelativePathCriterion  # noqa
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
 from Products.ATContentTypes.criteria.simpleint import ATSimpleIntCriterion
-from Products.ATContentTypes.criteria.simplestring import \
-    ATSimpleStringCriterion
+from Products.ATContentTypes.criteria.simplestring import ATSimpleStringCriterion  # noqa
 from Products.ATContentTypes.criteria.sort import ATSortCriterion
 from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes.tests import atcttestcase
 from zope.interface.verify import verifyObject
+
 import unittest
+
+
 tests = []
 
 
@@ -369,8 +370,7 @@ class TestATSelectionCriterion(CriteriaTest):
         # Should return sorted ids
         self.dummy.Schema()['field'].set(self.dummy, 'getId')
         orig_vocab = [a.lower() for a in list(self.dummy.getCurrentValues())]
-        sorted_vocab = orig_vocab[:]
-        sorted_vocab.sort()
+        sorted_vocab = sorted(orig_vocab[:])
         self.assertEqual(orig_vocab, sorted_vocab)
 
 tests.append(TestATSelectionCriterion)
@@ -492,7 +492,8 @@ class TestATPortalTypeCriterion(CriteriaTest):
         self.dummy.Schema()['field'].set(self.dummy, 'portal_types')
         self.assertTrue('Document' in self.dummy.getCurrentValues().keys())
         self.assertTrue(
-            'ATSimpleStringCriterion' not in self.dummy.getCurrentValues().keys())
+            'ATSimpleStringCriterion' not in
+            self.dummy.getCurrentValues().keys())
 
     def test_vocabulary_sorts_by_title(self):
         # Should return standard types, but not blacklisted types
@@ -626,7 +627,8 @@ class TestATRelativePathCriterion(CriteriaTest):
     def test_relative_path_query8(self):
         self.path_crit.setRelativePath('.')  # should give the new_topic
         self.assertTrue(self.path_crit.getCriteriaItems() == (
-            ('path', {'query': '/plone/folderA/folderA1/new_topic', 'depth': 1}),))
+            ('path', {'query': '/plone/folderA/folderA1/new_topic',
+                      'depth': 1}),))
 
     def test_relative_path_query9(self):
         # Acquisition can mess us up, for example when a BrowserView
@@ -717,8 +719,9 @@ class TestCriterionRegistry(atcttestcase.ATCTSiteTestCase):
         # add and ensure that it was added
         self.crit_registry.register(ATDateCriteria, ('Bogus Index',))
         self.assertTrue(ATDateCriteria in self.crit_registry.listCriteria())
-        self.assertEqual(self.crit_registry.indicesByCriterion('ATFriendlyDateCriteria'),
-                         ('Bogus Index',))
+        self.assertEqual(
+            self.crit_registry.indicesByCriterion('ATFriendlyDateCriteria'),
+            ('Bogus Index',))
 
     def testCriteriaIndexLookupOnBadIndex(self):
         # Make sure we don't throw errors when someone has a non-default index

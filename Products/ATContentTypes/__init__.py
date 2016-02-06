@@ -1,21 +1,22 @@
+# -*- coding: utf-8 -*-
 import os.path
 import sys
-import logging
-logger = logging.getLogger('ATCT')
 
+# This must be at the top, because the exif module is needed in
+# lib/imagetransform.py.
 ATCT_DIR = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(3, os.path.join(ATCT_DIR, 'thirdparty'))
 
 from AccessControl import ModuleSecurityInfo
 
-from Products.ATContentTypes.config import HAS_LINGUA_PLONE
-from Products.ATContentTypes.config import SKINS_DIR
-from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.config import GLOBALS
+from Products.ATContentTypes.config import HAS_LINGUA_PLONE
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.config import SKINS_DIR
 
+from Products.CMFCore.DirectoryView import registerDirectory
 from Products.CMFCore.utils import ContentInit
 from Products.CMFCore.utils import ToolInit
-from Products.CMFCore.DirectoryView import registerDirectory
 
 # Import "ATCTMessageFactory as _" to create messages in atcontenttypes domain
 from zope.i18nmessageid import MessageFactory
@@ -27,10 +28,10 @@ ModuleSecurityInfo('Products.ATContentTypes').declarePublic(
 import Products.ATContentTypes.configuration
 import Products.ATContentTypes.lib.validators
 
-# second leven imports: content types, criteria
+# second level imports: content types, criteria
 # the content types are depending on the validators and configuration
-import Products.ATContentTypes.content
-import Products.ATContentTypes.criteria
+import Products.ATContentTypes.content  # noqa
+import Products.ATContentTypes.criteria  # noqa
 
 # misc imports
 from Products.ATContentTypes.tool.atct import ATCTTool

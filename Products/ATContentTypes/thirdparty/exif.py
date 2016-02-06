@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Library to extract EXIF information in digital camera image files
 #
 # To use this library call with:
@@ -90,6 +91,8 @@
 # 04-DEC-05 JFROCHE Reduce number of objects created.
 #
 
+import logging
+
 
 # XXX: These are here because removing them broke existing ZODB instances.
 # we should remove them completely and have migrations to fix them up instead.
@@ -100,7 +103,6 @@ class Ratio:
 class IFD_Tag:
     pass
 
-import logging
 LOG = logging.getLogger('exif')
 
 # field type descriptions as (length, abbreviation, full name) tuples
@@ -245,7 +247,8 @@ EXIF_TAGS = {
     0x920A: ('FocalLength', ),
     0x927C: ('MakerNote', ),
     # print as string
-    0x9286: ('UserComment', lambda x: isinstance(x, str) and x or ''.join(map(chr, x))),
+    0x9286: ('UserComment', lambda x: isinstance(x, str) and x or ''.join(map(
+        chr, x))),
     0x9290: ('SubSecTime', ),
     0x9291: ('SubSecTimeOriginal', ),
     0x9292: ('SubSecTimeDigitized', ),
@@ -719,7 +722,7 @@ def s2n_motorola(str):
 # extract multibyte integer in Intel format (big endian)
 def s2n_intel(str):
     x = 0
-    y = 0L
+    y = 0
     for c in str:
         x = x | (ord(c) << y)
         y = y + 8
@@ -759,7 +762,7 @@ class EXIF_header:
             val = s2n_motorola(slice)
         # Sign extension ?
         if signed:
-            msb = 1L << (8 * length - 1)
+            msb = 1 << (8 * length - 1)
             if val & msb:
                 val = val - (msb << 1)
         return val
@@ -809,8 +812,9 @@ class EXIF_header:
             field_type = self.s2n(entry + 2, 2)
             if not 0 < field_type < len(FIELD_TYPES):
                 # unknown field type
-                raise ValueError, \
-                    'unknown type %d in tag 0x%04X' % (field_type, tag)
+                raise ValueError(
+                    'unknown type %d in tag 0x%04X' %
+                    (field_type, tag))
 
             typelen = FIELD_TYPES[field_type][0]
             count = self.s2n(entry + 4, 4)
@@ -880,8 +884,8 @@ class EXIF_header:
                 self.tags[ifd_name + ' ' +
                           tag_name] = (values[0], printable, field_offset)
             if self.debug:
-                print ' debug:   %s: %s' % (tag_name,
-                                            repr(self.tags[ifd_name + ' ' + tag_name]))
+                print ' debug:   %s: %s' % (
+                    tag_name, repr(self.tags[ifd_name + ' ' + tag_name]))
 
     # decode all the camera-specific MakerNote formats
 
@@ -905,7 +909,7 @@ class EXIF_header:
     def decode_maker_note(self):
         note = self.tags['EXIF MakerNote']
         make = self.tags['Image Make'][1]
-        model = self.tags['Image Model'][1]
+        # model = self.tags['Image Model'][1]
 
         # Nikon
         # The maker note usually starts with the word Nikon, followed by the
@@ -913,16 +917,16 @@ class EXIF_header:
         # not at the start of the makernote, it's probably type 2, since some
         # cameras work that way.
         if make in ('NIKON', 'NIKON CORPORATION'):
-            if note.values[0:7] == [78, 105, 107, 111, 110, 00, 01]:
+            if note.values[0:7] == [78, 105, 107, 111, 110, 00, 0o1]:
                 if self.debug:
                     print "Looks like a type 1 Nikon MakerNote."
                 self.dump_IFD(note[2] + 8, 'MakerNote',
                               dict=MAKERNOTE_NIKON_OLDER_TAGS)
-            elif note.values[0:7] == [78, 105, 107, 111, 110, 00, 02]:
+            elif note.values[0:7] == [78, 105, 107, 111, 110, 00, 0o2]:
                 if self.debug:
                     print "Looks like a labeled type 2 Nikon MakerNote"
-                if note[0][12:14] != [0, 42] and note[0][12:14] != [42L, 0L]:
-                    raise ValueError, "Missing marker tag '42' in MakerNote."
+                if note[0][12:14] != [0, 42] and note[0][12:14] != [42, 0]:
+                    raise ValueError("Missing marker tag '42' in MakerNote.")
                 # skip the Makernote label and the TIFF header
                 self.dump_IFD(note[2] + 10 + 8, 'MakerNote',
                               dict=MAKERNOTE_NIKON_NEWER_TAGS, relative=1)
@@ -1032,7 +1036,7 @@ def process_file(file, debug=0):
             IFD_name = 'Image'
         elif ctr == 1:
             IFD_name = 'Thumbnail'
-            thumb_ifd = i
+            # thumb_ifd = i
         else:
             IFD_name = 'IFD %d' % ctr
         if debug:
@@ -1066,9 +1070,7 @@ def process_file(file, debug=0):
         except:
             pass
         del hdr.tags['EXIF MakerNote']
-    dict = {}
-    tags = hdr.tags.keys()
-    tags.sort()
+    tags = sorted(hdr.tags.keys())
     for tag in tags:
         hdr.tags[tag] = hdr.tags[tag][1]
     return hdr.tags
@@ -1101,8 +1103,7 @@ if __name__ == '__main__':
             print 'No EXIF information found'
             continue
 
-        x = data.keys()
-        x.sort()
+        x = sorted(data.keys())
         for i in x:
             print "   %s: %s" % (i, data[i])
     end_time = time.clock()

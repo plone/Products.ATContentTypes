@@ -1,29 +1,37 @@
-import logging
-import os
-
-from zope.interface import implements
-from zope.structuredtext import stx2html
-
-from AccessControl import Owned, ClassSecurityInfo, getSecurityManager
-from Acquisition import aq_parent, aq_base, aq_inner, aq_get
+# -*- coding: utf-8 -*-
+from AccessControl import ClassSecurityInfo
+from AccessControl import getSecurityManager
+from AccessControl import Owned
+from Acquisition import aq_base
+from Acquisition import aq_get
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from App.class_init import InitializeClass
 from App.Common import package_home
 from OFS.SimpleItem import SimpleItem
-from zExceptions import NotFound
-from ZPublisher.Publish import call_object, missing_name, dont_publish_class
-from ZPublisher.mapply import mapply
 from Products.ATContentTypes.config import GLOBALS
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.CMFCore.permissions import ManagePortal
-from Products.CMFCore.utils import UniqueObject
-from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.interfaces import IFactoryTool
+from Products.CMFCore.permissions import ManagePortal
+from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.utils import UniqueObject
 from Products.CMFPlone.interfaces import IHideFromBreadcrumbs
-from Products.CMFPlone.PloneFolder import PloneFolder as TempFolderBase
 from Products.CMFPlone.PloneBaseTool import PloneBaseTool
+from Products.CMFPlone.PloneFolder import PloneFolder as TempFolderBase
 from Products.CMFPlone.utils import base_hasattr
 from Products.CMFPlone.utils import log_exc
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from zExceptions import NotFound
 from ZODB.POSException import ConflictError
+from zope.interface import implements
+from zope.structuredtext import stx2html
+from ZPublisher.mapply import mapply
+from ZPublisher.Publish import call_object
+from ZPublisher.Publish import dont_publish_class
+from ZPublisher.Publish import missing_name
+
+import logging
+import os
+
 
 FACTORY_INFO = '__factory__info__'
 
@@ -105,7 +113,7 @@ class TempFolder(TempFolderBase):
         their walking from TempFolder to portal_factory to the portal root."""
         object = aq_parent(aq_parent(self))
         local_roles = {}
-        while 1:
+        while True:
             # Get local roles for this user
             lr = getattr(object, '__ac_local_roles__', None)
             if lr:
@@ -113,10 +121,10 @@ class TempFolder(TempFolderBase):
                     lr = lr()
                 lr = lr or {}
                 for k, v in lr.items():
-                    if not k in local_roles:
+                    if k not in local_roles:
                         local_roles[k] = []
                     for role in v:
-                        if not role in local_roles[k]:
+                        if role not in local_roles[k]:
                             local_roles[k].append(role)
 
             # Check if local role has to be acquired (PLIP 16)
@@ -177,9 +185,15 @@ class TempFolder(TempFolderBase):
 
     def __getitem__(self, id):
         # Zope's inner acquisition chain for objects returned by __getitem__
-        # will be portal -> portal_factory -> temporary_folder -> object
-        # What we really want is for the inner acquisition chain to be
-        # intended_parent_folder -> portal_factory -> temporary_folder -> object
+        # will be:
+        #
+        # portal -> portal_factory -> temporary_folder -> object
+        #
+        # What we really want is for the inner acquisition chain to be:
+        #
+        # intended_parent_folder -> portal_factory -> temporary_folder ->
+        # object
+        #
         # So we need to rewrap...
         portal_factory = aq_parent(aq_inner(self))
         intended_parent = aq_parent(portal_factory)
@@ -275,8 +289,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
     f.close()
     _docs = stx2html(_docs)
 
-    security.declarePublic('docs')
-
+    @security.public
     def docs(self):
         """Returns FactoryTool docs formatted as HTML"""
         return self._docs
@@ -286,8 +299,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
             self._factory_types = {}
         return self._factory_types
 
-    security.declareProtected(ManagePortal, 'manage_setPortalFactoryTypes')
-
+    @security.protected(ManagePortal)
     def manage_setPortalFactoryTypes(self, REQUEST=None, listOfTypeIds=None):
         """Set the portal types that should use the factory."""
         if listOfTypeIds is not None:
@@ -389,7 +401,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         type_name = stack[-1]
         types_tool = getToolByName(self, 'portal_types')
         # make sure this is really a type name
-        if not type_name in types_tool.listContentTypes():
+        if type_name not in types_tool.listContentTypes():
             return  # nope -- do nothing
 
         gobbled_length += 1
@@ -435,14 +447,13 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         # cleared by __before_publishing_traverse__
         name = str(name)  # fix unicode weirdness
         types_tool = getToolByName(self, 'portal_types')
-        if not name in types_tool.listContentTypes():
+        if name not in types_tool.listContentTypes():
             # not a type name -- do the standard thing
             return getattr(self, name)
         # a type name -- return a temp folder
         return self._getTempFolder(str(name))
 
-    security.declarePublic('__call__')
-
+    @security.public
     def __call__(self, *args, **kwargs):
         """call method"""
         self._fixRequest()
@@ -491,7 +502,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
 
         # make sure we can add an object of this type to the temp folder
         types_tool = getToolByName(self, 'portal_types')
-        if not type_name in types_tool.TempFolder.allowed_content_types:
+        if type_name not in types_tool.TempFolder.allowed_content_types:
             # update allowed types for tempfolder
             types_tool.TempFolder.allowed_content_types = \
                 (types_tool.listContentTypes())

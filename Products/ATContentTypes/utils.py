@@ -1,5 +1,7 @@
-import datetime
+# -*- coding: utf-8 -*-
 from DateTime import DateTime
+
+import datetime
 
 
 def dt2DT(date):

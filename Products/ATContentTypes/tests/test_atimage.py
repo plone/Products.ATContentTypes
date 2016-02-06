@@ -7,12 +7,15 @@ from Products.Archetypes import atapi
 from Products.Archetypes.interfaces.layer import ILayerContainer
 from Products.ATContentTypes.interfaces import IATImage
 from Products.ATContentTypes.interfaces import IImageContent
-from Products.ATContentTypes.tests import atcttestcase, atctftestcase
-from Products.ATContentTypes.tests.utils import dcEdit, PACKAGE_HOME
+from Products.ATContentTypes.tests import atctftestcase
+from Products.ATContentTypes.tests import atcttestcase
+from Products.ATContentTypes.tests.utils import dcEdit
+from Products.ATContentTypes.tests.utils import PACKAGE_HOME
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
 from transaction import commit
 from zope.interface.verify import verifyObject
+
 import exif
 import os
 
@@ -44,8 +47,10 @@ def editATCT(obj):
 
 
 class TestIDFromTitle(FunctionalTestCase):
-    """Browsertests to make sure ATImages derive their default IDs from their titles"""
-    # TODO: Merge into TestATImageFunctional, below.
+    """Browsertests to make sure ATImages derive default IDs from titles.
+
+    TODO: Merge into TestATImageFunctional, below.
+    """
 
     def afterSetUp(self):
         self.userId = 'fred'
@@ -257,11 +262,16 @@ class TestATImageFields(atcttestcase.ATCTFieldTestCase):
         self.assertTrue(field.type == 'blob', 'Value is %s' % field.type)
         self.assertTrue(isinstance(field.storage, atapi.AnnotationStorage),
                         'Value is %s' % type(field.storage))
-        self.assertTrue(field.getLayerImpl('storage') == atapi.AnnotationStorage(migrate=True),
-                        'Value is %s' % field.getLayerImpl('storage'))
+        self.assertTrue(
+            field.getLayerImpl('storage') ==
+            atapi.AnnotationStorage(migrate=True),
+            'Value is %s' % field.getLayerImpl('storage'))
         self.assertTrue(ILayerContainer.providedBy(field))
-        self.assertTrue(field.validators == "(('isNonEmptyFile', V_REQUIRED), ('checkImageMaxSize', V_REQUIRED))",
-                        'Value is %s' % str(field.validators))
+        self.assertTrue(
+            field.validators ==
+            "(('isNonEmptyFile', V_REQUIRED), " +
+            "('checkImageMaxSize', V_REQUIRED))",
+            'Value is %s' % str(field.validators))
         self.assertTrue(isinstance(field.widget, atapi.ImageWidget),
                         'Value is %s' % id(field.widget))
         vocab = field.Vocabulary(dummy)

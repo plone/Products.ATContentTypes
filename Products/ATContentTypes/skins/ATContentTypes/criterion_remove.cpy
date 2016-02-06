@@ -18,8 +18,8 @@ for crit in criteria:
     id  = crit.getId()
 
     if id in criterion_ids:
-        remove.append(id) 
-        
+        remove.append(id)
+
 context.deleteCriterion(remove)
 
 msg = _(u'Removed criteria ${criteria}.',

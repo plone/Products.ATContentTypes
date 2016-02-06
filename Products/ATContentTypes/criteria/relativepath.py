@@ -1,43 +1,49 @@
-from zope.interface import implements
-
-from Products.CMFCore.permissions import View
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_parent
-
+from Products.Archetypes.atapi import BooleanField
+from Products.Archetypes.atapi import BooleanWidget
 from Products.Archetypes.atapi import Schema
-from Products.Archetypes.atapi import BooleanField, StringField
-from Products.Archetypes.atapi import BooleanWidget, StringWidget
-
-from Products.ATContentTypes.criteria import registerCriterion
+from Products.Archetypes.atapi import StringField
+from Products.Archetypes.atapi import StringWidget
 from Products.ATContentTypes.criteria import PATH_INDICES
+from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria.base import ATBaseCriterion
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
-
-
+from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
+from zope.interface import implements
+
 
 ATRelativePathCriterionSchema = ATBaseCriterionSchema + Schema((
-    StringField('relativePath',
-                default='..',
-                widget=StringWidget(label='Relative path',
-                                    label_msgid="label_relativepath_criteria_customrelativepath",
-                                    description_msgid="help_relativepath_criteria_customrelativepath",
-                                    i18n_domain="plone",
-                                    description="Enter a relative path e.g.: <br /> '..' for the parent folder <br /> '../..' for the parent's parent <br />'../somefolder' for a sibling folder")),
-    BooleanField('recurse',
-                 mode="rw",
-                 write_permission=ChangeTopics,
-                 accessor="Recurse",
-                 default=False,
-                 widget=BooleanWidget(
-                     label="Search Sub-Folders",
-                     label_msgid="label_path_criteria_recurse",
-                     description="",
-                     description_msgid="help_path_criteria_recurse",
-                     i18n_domain="plone"),
-                 ),
+    StringField(
+        'relativePath',
+        default='..',
+        widget=StringWidget(
+            label='Relative path',
+            label_msgid="label_relativepath_criteria_customrelativepath",
+            description_msgid="help_relativepath_criteria_customrelativepath",
+            i18n_domain="plone",
+            description=u"Enter a relative path e.g.: <br /> '..' for the "
+            u"parent folder <br /> '../..' for the parent's parent <br />"
+            u"'../somefolder' for a sibling folder")
+    ),
+
+    BooleanField(
+        'recurse',
+        mode="rw",
+        write_permission=ChangeTopics,
+        accessor="Recurse",
+        default=False,
+        widget=BooleanWidget(
+            label="Search Sub-Folders",
+            label_msgid="label_path_criteria_recurse",
+            description="",
+            description_msgid="help_path_criteria_recurse",
+            i18n_domain="plone"),
+    ),
 ))
 
 
@@ -57,8 +63,7 @@ class ATRelativePathCriterion(ATBaseCriterion):
         nav_types = ptool.typesToList()
         return nav_types
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         result = []
         depth = (not self.Recurse() and 1) or -1
@@ -82,9 +87,9 @@ class ATRelativePathCriterion(ATBaseCriterion):
             # set the path to the collections path
             path = list(aq_parent(self).getPhysicalPath())
 
-            # now construct an aboslute path based on the relative custom path
-            # eat away from 'path' whenever we encounter a '..' in the relative path
-            # apend all other elements other than ..
+            # Now construct an absolute path based on the relative custom path.
+            # Eat away from 'path' whenever we encounter a '..' in the relative
+            # path.  Append all other elements other than '..'.
             for folder in folders:
                 if folder == '..':
                     # chop off one level from path

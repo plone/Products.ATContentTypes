@@ -1,5 +1,6 @@
-from AccessControl import Permissions
+# -*- coding: utf-8 -*-
 from AccessControl import getSecurityManager
+from AccessControl import Permissions
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
@@ -7,12 +8,12 @@ from Products.CMFCore.permissions import AddPortalContent
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFPlone.tests import PloneTestCase
 from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
+
 import urlparse
 
 
 def sortTuple(t):
-    l = list(t)
-    l.sort()
+    l = sorted(t)
     return tuple(l)
 
 ADD_DOC_PERM = 'ATContentTypes: Add Document'

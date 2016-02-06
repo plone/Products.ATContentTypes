@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from plone.app.blob.markings import markAs
 from plone.app.testing import TEST_USER_ID as default_user
 from plone.app.testing.bbb import PloneTestCase
@@ -25,7 +26,9 @@ from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
 from zope.interface.verify import verifyObject
+
 import os
+
 
 test_home = os.path.dirname(__file__)
 
@@ -37,8 +40,8 @@ class ATCTSiteTestCase(PloneTestCase):
         #  - Large Plone Folder
         #  - Topic
         user = self.portal.acl_users.getUserById(default_user)
-        orig_roles = self.portal.acl_users.portal_role_manager.getRolesForPrincipal(
-            user)
+        role_manager = self.portal.acl_users.portal_role_manager
+        orig_roles = role_manager.getRolesForPrincipal(user)
         self.setRoles(['Manager'])
         ttool = self.portal.portal_types
         cb_copy_data = ttool.manage_copyObjects(['Folder'])

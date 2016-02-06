@@ -17,7 +17,7 @@
                  getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
                  templateId template/getId;
                  batch python:Batch(images, 12, int(b_start), orphan=1)">
-    
+
     <div metal:define-macro="text-field-view"
          id="parent-fieldname-text" class="stx"
          tal:define="kss_class python:getKssClasses('text',

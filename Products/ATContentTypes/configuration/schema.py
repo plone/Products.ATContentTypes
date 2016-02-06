@@ -1,8 +1,10 @@
-import os
-
+# -*- coding: utf-8 -*-
+from Products.ATContentTypes.configuration import datatype
 from ZConfig.datatypes import Registry
 from ZConfig.loader import SchemaLoader
-from Products.ATContentTypes.configuration import datatype
+
+import os
+
 
 # schema file
 DIR = os.path.dirname(os.path.abspath(__file__))
@@ -37,7 +39,7 @@ def loadSchema(file, registry=atctRegistry, overwrite=False):
     """
     global atctSchema
     if atctSchema is not None and not overwrite:
-        raise RuntimeError, 'Schema is already loaded'
+        raise RuntimeError('Schema is already loaded')
     schemaLoader = SchemaLoader(registry=registry)
     atctSchema = schemaLoader.loadURL(file)
     return atctSchema

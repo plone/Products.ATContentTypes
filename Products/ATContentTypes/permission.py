@@ -1,12 +1,13 @@
-from Products.CMFCore.permissions import setDefaultRoles
+# -*- coding: utf-8 -*-
+from plone.app.widgets.interfaces import IFieldPermissionChecker
 from Products.Archetypes.atapi import listTypes
+from Products.Archetypes.interfaces import IBaseObject
 from Products.ATContentTypes.config import PROJECTNAME
 from Products.ATContentTypes.interfaces import IATTopic
 from Products.ATContentTypes.interfaces import IATTopicCriterion
-from Products.Archetypes.interfaces import IBaseObject
-from plone.app.widgets.interfaces import IFieldPermissionChecker
-from zope.interface import implements
+from Products.CMFCore.permissions import setDefaultRoles
 from zope.component import adapts
+from zope.interface import implements
 
 
 TYPE_ROLES = ('Manager', 'Site Administrator', 'Owner')

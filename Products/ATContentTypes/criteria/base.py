@@ -1,16 +1,15 @@
-from zope.interface import implements, classImplementsOnly, implementedBy
-
-from Products.Archetypes.atapi import BaseContentMixin
-
-from Products.CMFCore.permissions import View
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from App.class_init import InitializeClass
-
+from Products.Archetypes.atapi import BaseContentMixin
 from Products.Archetypes.ClassGen import generateClass
+from Products.Archetypes.interfaces.referenceable import IReferenceable
 from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicCriterion
-
-from Products.Archetypes.interfaces.referenceable import IReferenceable
+from Products.CMFCore.permissions import View
+from zope.interface import classImplementsOnly
+from zope.interface import implementedBy
+from zope.interface import implements
 
 
 class NonRefCatalogContent(BaseContentMixin):
@@ -65,8 +64,7 @@ class ATBaseCriterion(NonRefCatalogContent):
             self.id = id
         self.getField('field').set(self, field)
 
-    security.declareProtected(View, 'getId')
-
+    @security.protected(View)
     def getId(self):
         """Get the object id"""
         return str(self.id)
@@ -76,19 +74,16 @@ class ATBaseCriterion(NonRefCatalogContent):
         """
         assert value == self.getId(), 'You are not allowed to change the id'
 
-    security.declareProtected(View, 'Type')
-
+    @security.protected(View)
     def Type(self):
         return self.archetype_name
 
-    security.declareProtected(View, 'Description')
-
+    @security.protected(View)
     def Description(self):
         lines = [line.strip() for line in self.__doc__.splitlines()]
         return ' '.join([line for line in lines if line])
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         """Return a sequence of items to be used to build the catalog query.
         """

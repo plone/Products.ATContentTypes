@@ -1,17 +1,17 @@
+# -*- coding: utf-8 -*-
+from AccessControl import ClassSecurityInfo
+from Products.Archetypes.atapi import DisplayList
+from Products.ATContentTypes import ATCTMessageFactory as _
+from Products.ATContentTypes.criteria import FIELD_INDICES
+from Products.ATContentTypes.criteria import registerCriterion
+from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
+from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
 from zope.component import queryUtility
 from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
 
-from AccessControl import ClassSecurityInfo
-from Products.Archetypes.atapi import DisplayList
-from Products.CMFCore.permissions import View
-from Products.CMFCore.utils import getToolByName
-from Products.ATContentTypes.criteria import registerCriterion
-from Products.ATContentTypes.criteria import FIELD_INDICES
-from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
-from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
-
-from Products.ATContentTypes import ATCTMessageFactory as _
 
 ATPortalTypeCriterionSchema = ATSelectionCriterion.schema.copy()
 # and/or operator makes no sense for type selection, as no item can ever be
@@ -37,8 +37,7 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
     archetype_name = 'Portal Types Criterion'
     shortDesc = 'Select content types'
 
-    security.declareProtected(View, 'getCurrentValues')
-
+    @security.protected(View)
     def getCurrentValues(self):
         """Return enabled portal types"""
         vocab = queryUtility(IVocabularyFactory, name=VOCAB_ID)(self)
@@ -58,8 +57,7 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
 
         return DisplayList(result)
 
-    security.declareProtected(View, 'getCriteriaItems')
-
+    @security.protected(View)
     def getCriteriaItems(self):
         result = []
         if self.Value() is not '':

@@ -1,26 +1,24 @@
-from zope.interface import implements
-
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from OFS.interfaces import IOrderedContainer
-
-from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.content.base import registerATCT
-from Products.ATContentTypes.content.base import ATCTOrderedFolder
-from Products.ATContentTypes.content.base import ATCTBTreeFolder
-from Products.ATContentTypes.interfaces import IATFolder
-from Products.ATContentTypes.interfaces import IATBTreeFolder
-from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-from Products.ATContentTypes.content.schemata import NextPreviousAwareSchema
-from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema
-
-from Products.CMFCore.permissions import View
-
 from plone.app.folder import folder
+from Products.ATContentTypes.config import PROJECTNAME
+from Products.ATContentTypes.content.base import ATCTBTreeFolder
+from Products.ATContentTypes.content.base import ATCTOrderedFolder
+from Products.ATContentTypes.content.base import registerATCT
+from Products.ATContentTypes.content.schemata import ATContentTypeSchema
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.content.schemata import NextPreviousAwareSchema
+from Products.ATContentTypes.interfaces import IATBTreeFolder
+from Products.ATContentTypes.interfaces import IATFolder
+from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema  # noqa
+from Products.CMFCore.permissions import View
+from zope.interface import implements
+
 
 ATFolderSchema = folder.ATFolderSchema
-ObsoleteATFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema + \
-    NextPreviousAwareSchema
+ObsoleteATFolderSchema = ATContentTypeSchema.copy() + \
+  ConstrainTypesMixinSchema + NextPreviousAwareSchema
 ATBTreeFolderSchema = ATContentTypeSchema.copy() + ConstrainTypesMixinSchema
 
 finalizeATCTSchema(folder.ATFolderSchema, folderish=True, moveDiscussion=False)
@@ -28,7 +26,8 @@ finalizeATCTSchema(ATBTreeFolderSchema, folderish=True, moveDiscussion=False)
 
 HAS_LINGUAPLONE = True
 try:
-    from Products.LinguaPlone.I18NBaseBTreeFolder import I18NOnlyBaseBTreeFolder
+    from Products.LinguaPlone.I18NBaseBTreeFolder import \
+        I18NOnlyBaseBTreeFolder
 except ImportError:
     HAS_LINGUAPLONE = False
 
@@ -53,8 +52,7 @@ class ObsoleteATFolder(ATCTOrderedFolder):
 
     security = ClassSecurityInfo()
 
-    security.declareProtected(View, 'getNextPreviousParentValue')
-
+    @security.protected(View)
     def getNextPreviousParentValue(self):
         """If the parent node is also an IATFolder and has next/previous
         navigation enabled, then let this folder have it enabled by
@@ -84,8 +82,7 @@ if HAS_LINGUAPLONE:
         manage_options = FOLDER_MANAGE_OPTIONS
         security = ClassSecurityInfo()
 
-        security.declarePrivate('manage_beforeDelete')
-
+        @security.private
         def manage_beforeDelete(self, item, container):
             I18NOnlyBaseBTreeFolder.manage_beforeDelete(self, item, container)
             folder.ATFolder.manage_beforeDelete(self, item, container)

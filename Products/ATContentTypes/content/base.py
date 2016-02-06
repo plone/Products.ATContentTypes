@@ -1,11 +1,34 @@
-import os
-import posixpath
-import logging
-import transaction
-
+# -*- coding: utf-8 -*-
+from AccessControl import ClassSecurityInfo
+from Acquisition import aq_base
+from Acquisition import aq_inner
+from Acquisition import aq_parent
+from App.class_init import InitializeClass
+from ComputedAttribute import ComputedAttribute
+from OFS.ObjectManager import REPLACEABLE
+from plone.i18n.normalizer.interfaces import IUserPreferredFileNameNormalizer
+from Products.ATContentTypes.config import HAS_LINGUA_PLONE
+from Products.ATContentTypes.config import MIME_ALIAS
+from Products.ATContentTypes.content.schemata import ATContentTypeSchema
+from Products.ATContentTypes.interfaces import IATContentType
+from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
+from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixin
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
+from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
+from webdav.Lockable import ResourceLockedError
+from webdav.NullResource import NullResource
+from webdav.Resource import Resource as WebdavResoure
+from ZODB.POSException import ConflictError
 from zope.interface import implements
 
-from Products.ATContentTypes.config import HAS_LINGUA_PLONE
+import logging
+import os
+import posixpath
+import transaction
+
+
 if HAS_LINGUA_PLONE:
     from Products.LinguaPlone.public import BaseContent
     from Products.LinguaPlone.public import BaseFolder
@@ -18,31 +41,6 @@ else:
     from Products.Archetypes.atapi import OrderedBaseFolder
     from Products.Archetypes.atapi import BaseBTreeFolder
     from Products.Archetypes.atapi import registerType
-
-from AccessControl import ClassSecurityInfo
-from ComputedAttribute import ComputedAttribute
-from App.class_init import InitializeClass
-from Acquisition import aq_base
-from Acquisition import aq_inner
-from Acquisition import aq_parent
-from OFS.ObjectManager import REPLACEABLE
-from webdav.Lockable import ResourceLockedError
-from webdav.NullResource import NullResource
-from ZODB.POSException import ConflictError
-from webdav.Resource import Resource as WebdavResoure
-
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.utils import getToolByName
-from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
-
-from Products.ATContentTypes.config import MIME_ALIAS
-from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixin
-from Products.ATContentTypes.interfaces import IATContentType
-from Products.ATContentTypes.interfaces import ISelectableConstrainTypes
-from Products.ATContentTypes.content.schemata import ATContentTypeSchema
-
-from plone.i18n.normalizer.interfaces import IUserPreferredFileNameNormalizer
 
 DEBUG = True
 LOG = logging.getLogger('ATCT')
@@ -109,9 +107,7 @@ class ATCTMixin(BrowserDefaultMixin):
 
     security = ClassSecurityInfo()
 
-    security.declareProtected(ModifyPortalContent,
-                              'initializeArchetype')
-
+    @security.protected(ModifyPortalContent)
     def initializeArchetype(self, **kwargs):
         """called by the generated add* factory in types tool
 
@@ -130,16 +126,16 @@ class ATCTMixin(BrowserDefaultMixin):
                 self.copyLayoutFromParent()
         except ConflictError:
             raise
-        except Exception, msg:
+        except Exception as msg:
             LOG.warn('Exception in initializeArchetype', exc_info=True)
             if DEBUG and str(msg) not in ('SESSION',):
                 # debug code
                 raise
 
-    security.declarePrivate('copyLayoutFromParent')
-
+    @security.private
     def copyLayoutFromParent(self):
-        """Copies the layout from the parent object if it's of the same type."""
+        """Copies the layout from the parent object if it's of the same type.
+        """
         parent = aq_parent(aq_inner(self))
         if parent is not None:
             # Only set the layout if we are the same type as out parent object
@@ -152,8 +148,7 @@ class ATCTMixin(BrowserDefaultMixin):
                 if parent_layout in [l[0] for l in self.getAvailableLayouts()]:
                     self.setLayout(parent_layout)
 
-    security.declareProtected(ModifyPortalContent, 'edit')
-
+    @security.protected(ModifyPortalContent)
     def edit(self, *args, **kwargs):
         """Reimplementing edit() to have a compatibility method for the old
         cmf edit() method
@@ -177,8 +172,7 @@ class ATCTMixin(BrowserDefaultMixin):
             kwargs['_initializing_'] = True
         return self.update(**kwargs)
 
-    security.declarePrivate('cmf_edit')
-
+    @security.private
     def cmf_edit(self, *args, **kwargs):
         """Overwrite this method to make AT compatible with the crappy
         CMF edit()
@@ -194,8 +188,7 @@ class ATCTMixin(BrowserDefaultMixin):
         else:
             return False
 
-    security.declareProtected(View, 'get_size')
-
+    @security.protected(View)
     def get_size(self):
         """ZMI / Plone get size method
         """
@@ -212,8 +205,7 @@ class ATCTContent(ATCTMixin, BaseContent):
 
     security = ClassSecurityInfo()
 
-    security.declarePrivate('manage_afterPUT')
-
+    @security.private
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
                         filename, REQUEST, RESPONSE):
         """After webdav/ftp PUT method
@@ -249,8 +241,7 @@ class ATCTFileContent(ATCTContent):
 
     security = ClassSecurityInfo()
 
-    security.declareProtected(View, 'download')
-
+    @security.protected(View)
     def download(self, REQUEST=None, RESPONSE=None):
         """Download the file (use default index_html)
         """
@@ -261,8 +252,7 @@ class ATCTFileContent(ATCTContent):
         field = self.getPrimaryField()
         return field.download(self, REQUEST, RESPONSE)
 
-    security.declareProtected(View, 'index_html')
-
+    @security.protected(View)
     def index_html(self, REQUEST=None, RESPONSE=None):
         """Make it directly viewable when entering the objects URL
         """
@@ -276,8 +266,7 @@ class ATCTFileContent(ATCTContent):
             return data.index_html(REQUEST, RESPONSE)
         # XXX what should be returned if no data is present?
 
-    security.declareProtected(View, 'get_data')
-
+    @security.protected(View)
     def get_data(self):
         """CMF compatibility method
         """
@@ -286,25 +275,23 @@ class ATCTFileContent(ATCTContent):
 
     data = ComputedAttribute(get_data, 1)
 
-    security.declareProtected(View, 'size')
-
+    @security.protected(View)
     def size(self):
         """Get size (image_view.pt)
         """
         return self.get_size()
 
-    security.declareProtected(View, 'get_content_type')
-
+    @security.protected(View)
     def get_content_type(self):
         """CMF compatibility method
         """
         f = self.getPrimaryField().getAccessor(self)()
-        return f and f.getContentType() or 'text/plain'  # 'application/octet-stream'
+        # 'application/octet-stream'
+        return f and f.getContentType() or 'text/plain'
 
     content_type = ComputedAttribute(get_content_type, 1)
 
-    security.declarePrivate('update_data')
-
+    @security.private
     def update_data(self, data, content_type=None, size='ignored'):
         kwargs = {}
         if content_type is not None:
@@ -312,15 +299,14 @@ class ATCTFileContent(ATCTContent):
         mutator = self.getPrimaryField().getMutator(self)
         mutator(data, **kwargs)
 
-    security.declareProtected(ModifyPortalContent, 'manage_edit')
-
+    @security.protected(ModifyPortalContent)
     def manage_edit(self, title, content_type, precondition='',
                     filedata=None, REQUEST=None):
         """
         Changes the title and content type attributes of the File or Image.
         """
         if self.wl_isLocked():
-            raise ResourceLockedError, "File is locked via WebDAV"
+            raise ResourceLockedError("File is locked via WebDAV")
 
         self.setTitle(title)
         if filedata is not None:
@@ -340,7 +326,10 @@ class ATCTFileContent(ATCTContent):
         return filename and filename.encode(encoding) or None
 
     def _setATCTFileContent(self, value, **kwargs):
-        """Set ID based on name of uploaded file, Title, or possibly other conditions."""
+        """Set ID based on name of uploaded file, Title.
+
+        Or possibly other conditions.
+        """
         field = self.getPrimaryField()
         # set first then get the filename
         field.set(self, value, **kwargs)  # set is ok
@@ -365,23 +354,24 @@ class ATCTFileContent(ATCTContent):
                 # fails when the type is created using portal_factory.
                 transaction.savepoint(optimistic=True)
                 self.setId(clean_filename)
-            # Else, fall through to BaseObject._renameAfterCreation(),
-            # which Archetypes calls after all the fields have been set. It will
+            # Else, fall through to BaseObject._renameAfterCreation(), which
+            # Archetypes calls after all the fields have been set.  It will
             # rename me based on my Title iff my ID looks autogenerated (which
             # it does if we don't setId() here).
 
-    security.declarePrivate('_should_set_id_to_filename')
-
+    @security.private
     def _should_set_id_to_filename(self, filename, title):
-        """Given the name of the uploaded file and my title, return whether the filename should be used as my ID.
+        """Should the filename should be used as my ID?
+
+        Given the name of the uploaded file and my title, return whether
+        the filename should be used as my ID.
 
         Default implementation: if the filename changed, say that we should set
         my ID to it.
         """
         return filename != self.getId()
 
-    security.declareProtected(View, 'post_validate')
-
+    @security.protected(View)
     def post_validate(self, REQUEST=None, errors=None):
         """Validates upload file and id
         """
@@ -403,7 +393,8 @@ class ATCTFileContent(ATCTContent):
             # former method
             upload.seek(0)
 
-        if not used_id or not self._should_set_id_to_filename(filename, REQUEST.form.get('title')):
+        if not used_id or not self._should_set_id_to_filename(
+                filename, REQUEST.form.get('title')):
             # Set ID in whatever way the base classes usually do.
             return
 
@@ -420,8 +411,7 @@ class ATCTFileContent(ATCTContent):
         elif check_id:
             errors[f_name] = check_id
 
-    security.declarePrivate('manage_afterPUT')
-
+    @security.private
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
                         filename, REQUEST, RESPONSE):
         """After webdav/ftp PUT method
@@ -457,8 +447,7 @@ class ATCTFolder(ATCTMixin, BaseFolder):
 
     security = ClassSecurityInfo()
 
-    security.declareProtected(View, 'get_size')
-
+    @security.protected(View)
     def get_size(self):
         """Returns 1 as folders have no size."""
         return 1
@@ -478,14 +467,12 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
         of index_html """
         return getToolByName(self, 'plone_utils').browserDefault(self)
 
-    security.declareProtected(View, 'get_size')
-
+    @security.protected(View)
     def get_size(self):
         """Returns 1 as folders have no size."""
         return 1
 
-    security.declarePrivate('manage_afterMKCOL')
-
+    @security.private
     def manage_afterMKCOL(self, id, result, REQUEST=None, RESPONSE=None):
         """After MKCOL handler
 
@@ -506,8 +493,7 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
                     id = posixpath.basename(path_info)
             new.update(title=id)
 
-    security.declareProtected(View, 'HEAD')
-
+    @security.protected(View)
     def HEAD(self, REQUEST, RESPONSE):
         """HTTP HEAD handler"""
         return WebdavResoure.HEAD(self, REQUEST, RESPONSE)
@@ -520,8 +506,7 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
 
     security = ClassSecurityInfo()
 
-    security.declareProtected(View, 'index_html')
-
+    @security.protected(View)
     def index_html(self, REQUEST=None, RESPONSE=None):
         """Special case index_html"""
         request = REQUEST
@@ -537,7 +522,7 @@ class ATCTOrderedFolder(ATCTFolderMixin, OrderedBaseFolder):
                     # Do nothing, let it go and acquire.
                     pass
                 else:
-                    raise AttributeError, 'index_html'
+                    raise AttributeError('index_html')
         # Acquire from parent
         _target = aq_parent(aq_inner(self)).aq_acquire('index_html')
         return ReplaceableWrapper(aq_base(_target).__of__(self))
@@ -563,8 +548,7 @@ class ATCTBTreeFolder(ATCTFolderMixin, BaseBTreeFolder):
 
     security = ClassSecurityInfo()
 
-    security.declareProtected(View, 'index_html')
-
+    @security.protected(View)
     def index_html(self, REQUEST=None, RESPONSE=None):
         """
         BTree folders don't store objects as attributes, the

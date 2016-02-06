@@ -1,65 +1,65 @@
-from types import TupleType
-
-from zope.interface import implements
-
-from ZPublisher.HTTPRequest import HTTPRequest
-from Products.CMFCore.permissions import View
-from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFCore.utils import getToolByName
+# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from ComputedAttribute import ComputedAttribute
-
 from lxml import etree
-from Products.GenericSetup.interfaces import IDAVAware
-
-from Products.Archetypes.atapi import Schema
-from Products.Archetypes.atapi import TextField
+from Products.Archetypes.atapi import AnnotationStorage
 from Products.Archetypes.atapi import BooleanField
-from Products.Archetypes.atapi import TinyMCEWidget
 from Products.Archetypes.atapi import BooleanWidget
 from Products.Archetypes.atapi import RFC822Marshaller
-from Products.Archetypes.atapi import AnnotationStorage
-
-from Products.ATContentTypes.configuration import zconf
+from Products.Archetypes.atapi import Schema
+from Products.Archetypes.atapi import TextField
+from Products.Archetypes.atapi import TinyMCEWidget
+from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.ATContentTypes.config import PROJECTNAME
-from Products.ATContentTypes.content.base import registerATCT
+from Products.ATContentTypes.configuration import zconf
 from Products.ATContentTypes.content.base import ATCTContent
+from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument
+from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
+from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
+from Products.GenericSetup.interfaces import IDAVAware
+from types import TupleType
+from zope.interface import implements
+from ZPublisher.HTTPRequest import HTTPRequest
 
-from Products.ATContentTypes import ATCTMessageFactory as _
 
 ATDocumentSchema = ATContentTypeSchema.copy() + Schema((
-    TextField('text',
-              required=False,
-              searchable=True,
-              primary=True,
-              storage=AnnotationStorage(migrate=True),
-              validators=('isTidyHtmlWithCleanup',),
-              # validators=('isTidyHtml',),
-              default_output_type='text/x-html-safe',
-              widget=TinyMCEWidget(
-                  description='',
-                  label=_(u'label_body_text', default=u'Body Text'),
-                  rows=25,
-                  allow_file_upload=zconf.ATDocument.allow_document_upload),
-              ),
+    TextField(
+        'text',
+        required=False,
+        searchable=True,
+        primary=True,
+        storage=AnnotationStorage(migrate=True),
+        validators=('isTidyHtmlWithCleanup',),
+        # validators=('isTidyHtml',),
+        default_output_type='text/x-html-safe',
+        widget=TinyMCEWidget(
+            description='',
+            label=_(u'label_body_text', default=u'Body Text'),
+            rows=25,
+            allow_file_upload=zconf.ATDocument.allow_document_upload),
+    ),
 
-    BooleanField('tableContents',
-                 required=False,
-                 languageIndependent=True,
-                 widget=BooleanWidget(
-                     label=_(
-                         u'help_enable_table_of_contents',
-                         default=u'Table of contents'),
-                     description=_(
-                         u'help_enable_table_of_contents_description',
-                         default=u'If selected, this will show a table of contents at the top of the page.')
-                 ),
-                 )),
+    BooleanField(
+        'tableContents',
+        required=False,
+        languageIndependent=True,
+        widget=BooleanWidget(
+            label=_(
+                u'help_enable_table_of_contents',
+                default=u'Table of contents'),
+            description=_(
+                u'help_enable_table_of_contents_description',
+                default=u'If selected, this will show a table of contents '
+                u'at the top of the page.')
+        ),
+    )),
+
     marshall=RFC822Marshaller()
 )
 
@@ -78,29 +78,26 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
     security = ClassSecurityInfo()
     cmf_edit_kws = ('text_format',)
 
-    security.declareProtected(View, 'CookedBody')
-
+    @security.protected(View)
     def CookedBody(self, stx_level='ignored'):
         """CMF compatibility method
         """
         return self.getText()
 
-    security.declareProtected(ModifyPortalContent, 'EditableBody')
-
+    @security.protected(ModifyPortalContent)
     def EditableBody(self):
         """CMF compatibility method
         """
         return self.getRawText()
 
-    security.declareProtected(ModifyPortalContent, 'setFormat')
-
+    @security.protected(ModifyPortalContent)
     def setFormat(self, value):
         """CMF compatibility method
 
         The default mutator is overwritten to:
 
-          o add a conversion from stupid CMF content type (e.g. structured-text)
-            to real mime types used by MTR.
+          o add a conversion from stupid CMF content type
+            (e.g. structured-text) to real mime types used by MTR.
 
           o Set format to default format if value is empty
 
@@ -111,8 +108,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
             value = translateMimetypeAlias(value)
         ATCTContent.setFormat(self, value)
 
-    security.declareProtected(ModifyPortalContent, 'setText')
-
+    @security.protected(ModifyPortalContent)
     def setText(self, value, **kwargs):
         """Body text mutator
 
@@ -137,8 +133,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
 
     text_format = ComputedAttribute(ATCTContent.getContentType, 1)
 
-    security.declarePrivate('guessMimetypeOfText')
-
+    @security.private
     def guessMimetypeOfText(self):
         """For ftp/webdav upload: get the mimetype from the id and data
         """
@@ -153,16 +148,16 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
             # no extension
             mimetype = mtr.classify(data)
 
-        if not mimetype or (type(mimetype) is TupleType and not len(mimetype)):
+        if not mimetype or (
+                isinstance(mimetype, TupleType) and not len(mimetype)):
             # nothing found
             return None
 
-        if type(mimetype) is TupleType and len(mimetype):
+        if isinstance(mimetype, TupleType) and len(mimetype):
             mimetype = mimetype[0]
         return mimetype.normalized()
 
-    security.declarePrivate('getTidyOutput')
-
+    @security.private
     def getTidyOutput(self, field):
         """Get the tidied output for a specific field from the request
         if available
@@ -180,8 +175,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
         self._v_renamed = 1
         return ATCTContent._notifyOfCopyTo(self, container, op=op)
 
-    security.declarePrivate('manage_afterAdd')
-
+    @security.private
     def manage_afterAdd(self, item, container):
         """Fix text when created througt webdav
         Guess the right mimetype from the id/data
@@ -202,15 +196,13 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
             elif tidyOutput:
                 field.set(self, tidyOutput)  # set is ok
 
-    security.declarePrivate('cmf_edit')
-
+    @security.private
     def cmf_edit(self, text_format, text, file='', safety_belt='', **kwargs):
         assert file == '', 'file currently not supported'  # XXX
         self.setText(text, mimetype=translateMimetypeAlias(text_format))
         self.update(**kwargs)
 
-    security.declarePrivate('manage_afterPUT')
-
+    @security.private
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
                         filename, REQUEST, RESPONSE):
         """After webdav/ftp PUT method
