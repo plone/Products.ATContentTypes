@@ -24,6 +24,10 @@ New features:
 
 - Make tests work with old and new safe HTML cleaner (PLIP 1441)
   [tomgross]
+- Added uninstall profile.  This profile belongs to the 'base'
+  profile, which is the one that gets applied when you install
+  ATContentTypes.  [maurits]
+
 - No longer register the archetypes skin, because Products.Archetypes
   does that itself.  [maurits]
 

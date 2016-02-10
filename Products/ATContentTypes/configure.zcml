@@ -68,6 +68,15 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="Uninstall Archetypes Content Types for Plone"
+      directory="profiles/uninstall"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      post_handler="Products.ATContentTypes.setuphandlers.cleanup_after_uninstall"
+      />
+
   <genericsetup:importStep
       name="atct_content"
       title="ATContentTypes default content"

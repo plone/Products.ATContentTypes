@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tool-setup>
+ <forbidden tool_id="portal_atct" />
+ <forbidden tool_id="portal_factory" />
+ <forbidden tool_id="portal_metadata" />
+</tool-setup>

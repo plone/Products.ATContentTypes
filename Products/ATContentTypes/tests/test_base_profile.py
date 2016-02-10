@@ -7,8 +7,14 @@ class TestBaseProfile(PloneTestCase):
 
     def afterSetUp(self):
         self.loginAsPortalOwner()
-        qi = self.portal.portal_quickinstaller
-        qi.uninstallProducts(['ATContentTypes'])
+        try:
+            from Products.CMFPlone.utils import get_installer
+        except ImportError:
+            qi = getattr(self.portal, 'portal_quickinstaller')
+            qi.uninstallProducts(['ATContentTypes'])
+        else:
+            qi = get_installer(self.portal)
+            qi.uninstall_product('Products.ATContentTypes')
         portal_setup = self.portal.portal_setup
         portal_setup.runAllImportStepsFromProfile(
             'profile-Products.ATContentTypes:base')
