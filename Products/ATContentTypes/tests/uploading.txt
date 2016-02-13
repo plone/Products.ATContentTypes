@@ -20,7 +20,7 @@ Log in.
     >>> browser.getControl('Login Name').value = portal_owner
     >>> browser.getControl('Password').value = default_password
     >>> browser.getControl('Log in').click()
-    
+
 Let's create a new document, ending up at its edit form.
 
     >>> browser.open('http://nohost/plone')
@@ -31,7 +31,7 @@ Let's create a new document, ending up at its edit form.
     >>> browser.getControl('Add').click()
     >>> browser.url
     'http://nohost/plone/portal_factory/Document/document.../edit...'
-    
+
 Now upload a file.  The uploaded file should take precedence over the
 contents of the text field, if any.
 
@@ -56,7 +56,7 @@ Let's create a new collection, ending up at its edit form.
     >>> browser.getControl('Add').click()
     >>> browser.url
     'http://nohost/plone/portal_factory/Topic/topic.../edit...'
-    
+
 Now upload a file.  The uploaded file should take precedence over the
 contents of the text field, if any.
 
@@ -75,7 +75,7 @@ Now try to empty value of the text field (#7324)
 
     >>> browser.getLink('Edit').click()
     >>> browser.url
-    'http://nohost/plone/test-collection/edit?_auth...'
+    'http://nohost/plone/test-collection/edit...'
     >>> browser.getControl(name='text').value = ''
     >>> browser.getControl('Save').click()
     >>> 'file contents' in browser.contents
