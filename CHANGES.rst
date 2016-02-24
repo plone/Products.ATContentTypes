@@ -1,8 +1,10 @@
 Changelog
 =========
 
-2.1.18 (unreleased)
+2.1.18 (2016-02-24)
 -------------------
+
+Fixes:
 
 - Backport CSRF fixes.
   [vangheem] [gforcada]
