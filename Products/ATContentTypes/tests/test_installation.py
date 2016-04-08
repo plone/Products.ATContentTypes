@@ -86,6 +86,19 @@ class TestUninstallation(atcttestcase.ATCTSiteTestCase):
         else:
             qi = get_installer(self.portal)
             qi.uninstall_product('Products.ATContentTypes')
+        # It looks like the hiddenprofile utility from CMFPlone is not loaded
+        # in these tests.  So our default profile is installed, instead of only
+        # our base profile.  This explains why our portal_types are available
+        # at all.  This means we need to manually apply the fullinstall
+        # profile.
+        self.portal.portal_setup.runAllImportStepsFromProfile(
+            'Products.ATContentTypes:fulluninstall')
+
+    def test_double_uninstall(self):
+        # In afterSetUp we apply the fulluninstall profile.  Check that nothing
+        # goes wrong when we apply it again.
+        self.portal.portal_setup.runAllImportStepsFromProfile(
+            'Products.ATContentTypes:fulluninstall')
 
     def test_tool_uninstalled(self):
         t = getToolByName(self.portal, TOOLNAME, None)

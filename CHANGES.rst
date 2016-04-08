@@ -24,6 +24,12 @@ New features:
 
 - Make tests work with old and new safe HTML cleaner (PLIP 1441)
   [tomgross]
+- Do not try to install p.a.imaging/widgets.  Their default profiles
+  are dummies in Plone 5.  [maurits]
+
+- Added fulluninstall profile.  This profile belongs to the 'default'
+  profile, which can only be installed through portal_setup.  [maurits]
+
 - Added uninstall profile.  This profile belongs to the 'base'
   profile, which is the one that gets applied when you install
   ATContentTypes.  [maurits]

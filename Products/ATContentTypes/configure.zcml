@@ -2,13 +2,13 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:five="http://namespaces.zope.org/five"
-    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="atcontenttypes">
 
   <include zcml:condition="installed Products.LinguaPlone"
            package="Products.LinguaPlone" />
 
   <include file="browser.zcml"/>
+  <include file="profiles.zcml"/>
 
   <include package=".exportimport" />
   <include package="plone.i18n.normalizer" />
@@ -43,46 +43,6 @@
     provides="plone.uuid.interfaces.IUUID"
     for=".criteria.path.ATPathCriterion"
     />
-
-  <genericsetup:registerProfile
-      name="default"
-      title="Archetypes Content Types for Plone"
-      directory="profiles/default"
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <genericsetup:registerProfile
-      name="content"
-      title="Archetypes-based default content for Plone"
-      directory="profiles/content"
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <genericsetup:registerProfile
-      name="base"
-      title="Archetypes-tools without content-types"
-      directory="profiles/base"
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <genericsetup:registerProfile
-      name="uninstall"
-      title="Uninstall Archetypes Content Types for Plone"
-      directory="profiles/uninstall"
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      post_handler="Products.ATContentTypes.setuphandlers.cleanup_after_uninstall"
-      />
-
-  <genericsetup:importStep
-      name="atct_content"
-      title="ATContentTypes default content"
-      description=""
-      handler=".setuphandlers.importContent" />
-
 
   <adapter factory=".permission.ATFieldPermissionChecker" />
 

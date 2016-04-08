@@ -1,0 +1,62 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="atcontenttypes">
+
+  <!-- Note that our 'default' profile is listed as uninstallable in
+       Products.CMFPlone.factory.  This means that when you install
+       ATContentTypes you get our 'base' profile because that one is
+       alphabetically the first. -->
+
+  <genericsetup:registerProfile
+      name="base"
+      title="Archetypes-tools without content-types"
+      directory="profiles/base"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="content"
+      title="Archetypes-based default content for Plone"
+      directory="profiles/content"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="Archetypes Content Types for Plone"
+      directory="profiles/default"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <!-- fulluninstall belongs to the default profile. -->
+  <genericsetup:registerProfile
+      name="fulluninstall"
+      title="Uninstall Archetypes Content Types for Plone fully "
+      directory="profiles/fulluninstall"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      post_handler="Products.ATContentTypes.setuphandlers.cleanup_after_uninstall"
+      />
+
+  <!-- uninstall belongs to the base profile.
+       This is what gets applied when you uninstall ATContentTypes. -->
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="Uninstall Archetypes-based default content for Plone"
+      directory="profiles/uninstall"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      post_handler="Products.ATContentTypes.setuphandlers.cleanup_after_uninstall"
+      />
+
+  <genericsetup:importStep
+      name="atct_content"
+      title="ATContentTypes default content"
+      description=""
+      handler=".setuphandlers.importContent" />
+
+</configure>
