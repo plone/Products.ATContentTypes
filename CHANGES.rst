@@ -10,6 +10,9 @@ New:
 
 Fixes:
 
+- Removed docstrings from some methods to avoid publishing them.  From
+  Products.PloneHotfix20160419.  [maurits]
+
 - Fixed AttributeError ``unmarkCreationFlag`` during installation.
   This could happen when there was already a Members folder from
   ``plone.app.contenttypes``.  Fixes issue

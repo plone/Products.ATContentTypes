@@ -94,11 +94,12 @@ class TempFolder(TempFolderBase):
     # that includes the acquisition parent of portal_factory (otherwise we get
     # portal_root/portal_factory/... no matter where the object will reside)
     def getPhysicalPath(self):
-        '''Returns a path (an immutable sequence of strings)
-        that can be used to access this object again
-        later, for example in a copy/paste operation.  getPhysicalRoot()
-        and getPhysicalPath() are designed to operate together.
-        '''
+        # Get the physical path of the object.
+        #
+        # Returns a path (an immutable sequence of strings) that can be used to
+        # access this object again later, for example in a copy/paste
+        # operation.  getPhysicalRoot() and getPhysicalPath() are designed to
+        # operate together.
         portal_factory = aq_parent(aq_inner(self))
         path = aq_parent(portal_factory).getPhysicalPath() + \
             (portal_factory.getId(), self.getId(), )
