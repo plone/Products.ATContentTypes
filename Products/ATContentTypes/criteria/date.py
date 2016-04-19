@@ -110,8 +110,7 @@ class ATDateCriteria(ATBaseCriterion):
 
     @security.protected(View)
     def getCriteriaItems(self):
-        """Return a sequence of items to be used to build the catalog query.
-        """
+        # Return a sequence of items to be used to build the catalog query.
         if self.value is not None:
             field = self.Field()
             value = self.Value()
