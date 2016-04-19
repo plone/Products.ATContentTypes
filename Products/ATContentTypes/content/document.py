@@ -94,28 +94,24 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
 
     security.declareProtected(View, 'CookedBody')
     def CookedBody(self, stx_level='ignored'):
-        """CMF compatibility method
-        """
+        # CMF compatibility method.
         return self.getText()
 
     security.declareProtected(ModifyPortalContent, 'EditableBody')
     def EditableBody(self):
-        """CMF compatibility method
-        """
+        # CMF compatibility method.
         return self.getRawText()
 
     security.declareProtected(ModifyPortalContent, 'setFormat')
     def setFormat(self, value):
-        """CMF compatibility method
-
-        The default mutator is overwritten to:
-
-          o add a conversion from stupid CMF content type (e.g. structured-text)
-            to real mime types used by MTR.
-
-          o Set format to default format if value is empty
-
-        """
+        # CMF compatibility method.
+        #
+        # The default mutator is overwritten to:
+        #
+        #   o add a conversion from stupid CMF content type
+        #     (e.g. structured-text) to real mime types used by MTR.
+        #
+        #   o Set format to default format if value is empty
         if not value:
             value = zconf.ATDocument.default_content_type
         else:
@@ -124,10 +120,8 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
 
     security.declareProtected(ModifyPortalContent, 'setText')
     def setText(self, value, **kwargs):
-        """Body text mutator
-
-        * hook into mxTidy an replace the value with the tidied value
-        """
+        # Body text mutator.
+        # hook into mxTidy an replace the value with the tidied value
         field = self.getField('text')
 
         # When an object is initialized the first time we have to
@@ -149,8 +143,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
 
     security.declarePrivate('guessMimetypeOfText')
     def guessMimetypeOfText(self):
-        """For ftp/webdav upload: get the mimetype from the id and data
-        """
+        # For ftp/webdav upload: get the mimetype from the id and data.
         mtr = getToolByName(self, 'mimetypes_registry')
         id = self.getId()
         data = self.getRawText()
@@ -172,9 +165,8 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
 
     security.declarePrivate('getTidyOutput')
     def getTidyOutput(self, field):
-        """Get the tidied output for a specific field from the request
-        if available
-        """
+        # Get the tidied output for a specific field from the request
+        # if available.
         request = getattr(self, 'REQUEST', None)
         if request is not None and isinstance(request, HTTPRequest):
             tidyAttribute = '%s_tidier_data' % field.getName()
@@ -190,9 +182,8 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
 
     security.declarePrivate('manage_afterAdd')
     def manage_afterAdd(self, item, container):
-        """Fix text when created througt webdav
-        Guess the right mimetype from the id/data
-        """
+        # Fix text when created through webdav.
+        # Guess the right mimetype from the id/data.
         ATCTContent.manage_afterAdd(self, item, container)
         field = self.getField('text')
 
@@ -218,11 +209,8 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
     security.declarePrivate('manage_afterPUT')
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
                         filename, REQUEST, RESPONSE):
-        """After webdav/ftp PUT method
-
-        Set title according to the id on webdav/ftp PUTs.
-        """
-
+        # After webdav/ftp PUT method.
+        # Set title according to the id on webdav/ftp PUTs.
         if '' == data:
             file.seek(0)
             content = file.read(65536)

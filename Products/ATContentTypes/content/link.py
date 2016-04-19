@@ -55,19 +55,16 @@ class ATLink(ATCTContent):
 
     security.declareProtected(ModifyPortalContent, 'setRemoteUrl')
     def setRemoteUrl(self, value, **kwargs):
-        """remute url mutator
-
-        Use urlparse to sanify the url
-        Also see http://dev.plone.org/plone/ticket/3296
-        """
+        # Remute url mutator.
+        # Use urlparse to sanify the url
+        # Also see http://dev.plone.org/plone/ticket/3296
         if value:
             value = urlparse.urlunparse(urlparse.urlparse(value))
         self.getField('remoteUrl').set(self, value, **kwargs)
 
     security.declareProtected(View, 'remote_url')
     def remote_url(self):
-        """CMF compatibility method
-        """
+        # CMF compatibility method.
         return self.getRemoteUrl()
 
     security.declarePrivate('cmf_edit')
@@ -78,8 +75,7 @@ class ATLink(ATCTContent):
 
     security.declareProtected(View, 'getRemoteUrl')
     def getRemoteUrl(self):
-        """Sanitize output
-        """
+        # Sanitize output.
         value = self.Schema()['remoteUrl'].get(self)
         if not value: value = ''  # ensure we have a string
         return quote(value, safe='?$#@/:=+;$,&%')

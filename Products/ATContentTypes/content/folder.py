@@ -53,10 +53,9 @@ class ObsoleteATFolder(ATCTOrderedFolder):
 
     security.declareProtected(View, 'getNextPreviousParentValue')
     def getNextPreviousParentValue(self):
-        """If the parent node is also an IATFolder and has next/previous
-        navigation enabled, then let this folder have it enabled by
-        default as well.
-        """
+        # If the parent node is also an IATFolder and has next/previous
+        # navigation enabled, then let this folder have it enabled by
+        # default as well.
         parent = self.__parent__
         if IATFolder.providedBy(parent):
             return parent.getNextPreviousEnabled()

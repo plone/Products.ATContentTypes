@@ -97,8 +97,7 @@ class ATFile(ATCTFileContent):
 
     security.declareProtected(ModifyPortalContent, 'setFile')
     def setFile(self, value, **kwargs):
-        """Set id to uploaded id
-        """
+        # Set id to uploaded id.
         self._setATCTFileContent(value, **kwargs)
 
     def __str__(self):
@@ -108,8 +107,7 @@ class ATFile(ATCTFileContent):
 
     security.declarePublic('getIcon')
     def getIcon(self, relative_to_portal=0):
-        """Calculate the icon using the mime type of the file
-        """
+        # Calculate the icon using the mime type of the file.
         field = self.getField('file')
         if not field or not self.get_size():
             # field is empty
@@ -146,8 +144,7 @@ class ATFile(ATCTFileContent):
 
     security.declareProtected(View, 'icon')
     def icon(self):
-        """for ZMI
-        """
+        # for ZMI
         return self.getIcon()
 
     security.declarePrivate('cmf_edit')

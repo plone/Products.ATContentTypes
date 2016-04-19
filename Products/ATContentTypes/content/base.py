@@ -111,11 +111,10 @@ class ATCTMixin(BrowserDefaultMixin):
     security.declareProtected(ModifyPortalContent,
                               'initializeArchetype')
     def initializeArchetype(self, **kwargs):
-        """called by the generated add* factory in types tool
-
-        Overwritten to call edit() instead of update() to have the cmf
-        compatibility method.
-        """
+        # Called by the generated add* factory in types tool.
+        #
+        # Overwritten to call edit() instead of update() to have the cmf
+        # compatibility method.
         try:
             self.initializeLayers()
             self.markCreationFlag()
@@ -136,7 +135,7 @@ class ATCTMixin(BrowserDefaultMixin):
 
     security.declarePrivate('copyLayoutFromParent')
     def copyLayoutFromParent(self):
-        """Copies the layout from the parent object if it's of the same type."""
+        # Copies the layout from the parent object if it's of the same type.
         parent = aq_parent(aq_inner(self))
         if parent is not None:
             # Only set the layout if we are the same type as out parent object
@@ -151,9 +150,8 @@ class ATCTMixin(BrowserDefaultMixin):
 
     security.declareProtected(ModifyPortalContent, 'edit')
     def edit(self, *args, **kwargs):
-        """Reimplementing edit() to have a compatibility method for the old
-        cmf edit() method
-        """
+        # Reimplementing edit() to have a compatibility method for the old
+        # cmf edit() method
         initializing = kwargs.get('_initializing_', False)
         if initializing:
             del kwargs['_initializing_']
@@ -175,14 +173,12 @@ class ATCTMixin(BrowserDefaultMixin):
 
     security.declarePrivate('cmf_edit')
     def cmf_edit(self, *args, **kwargs):
-        """Overwrite this method to make AT compatible with the crappy
-        CMF edit()
-        """
+        # Overwrite this method to make AT compatible with the crappy
+        # CMF edit()
         raise NotImplementedError("cmf_edit method isn't implemented")
 
     def exclude_from_nav(self):
-        """Accessor for excludeFromNav field
-        """
+        # Accessor for excludeFromNav field.
         field = self.getField('excludeFromNav')
         if field is not None:
             return field.get(self)
@@ -191,8 +187,7 @@ class ATCTMixin(BrowserDefaultMixin):
 
     security.declareProtected(View, 'get_size')
     def get_size(self):
-        """ZMI / Plone get size method
-        """
+        # ZMI / Plone get size method.
         f = self.getPrimaryField()
         if f is None:
             return 0
@@ -209,10 +204,8 @@ class ATCTContent(ATCTMixin, BaseContent):
     security.declarePrivate('manage_afterPUT')
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
                         filename, REQUEST, RESPONSE):
-        """After webdav/ftp PUT method
-
-        Set title according to the id on webdav/ftp PUTs.
-        """
+        # After webdav/ftp PUT method.
+        # Set title according to the id on webdav/ftp PUTs.
         id = self.getId()
         title = self.Title()
         if not title:
@@ -269,8 +262,7 @@ class ATCTFileContent(ATCTContent):
 
     security.declareProtected(View, 'get_data')
     def get_data(self):
-        """CMF compatibility method
-        """
+        # CMF compatibility method.
         data = aq_base(self.getPrimaryField().getAccessor(self)())
         return str(getattr(data, 'data', data))
 
@@ -278,14 +270,12 @@ class ATCTFileContent(ATCTContent):
 
     security.declareProtected(View, 'size')
     def size(self):
-        """Get size (image_view.pt)
-        """
+        # Get size (image_view.pt).
         return self.get_size()
 
     security.declareProtected(View, 'get_content_type')
     def get_content_type(self):
-        """CMF compatibility method
-        """
+        # CMF compatibility method.
         f = self.getPrimaryField().getAccessor(self)()
         return f and f.getContentType() or 'text/plain'  # 'application/octet-stream'
 
@@ -316,8 +306,7 @@ class ATCTFileContent(ATCTContent):
             return self.manage_main(self, REQUEST, manage_tabs_message=message)
 
     def _cleanupFilename(self, filename, request=None):
-        """Cleans the filename from unwanted or evil chars
-        """
+        # Cleans the filename from unwanted or evil chars.
         if filename and not isinstance(filename, unicode):
             encoding = self.getCharset()
             filename = unicode(filename, encoding)
@@ -326,7 +315,9 @@ class ATCTFileContent(ATCTContent):
         return filename and filename.encode(encoding) or None
 
     def _setATCTFileContent(self, value, **kwargs):
-        """Set ID based on name of uploaded file, Title, or possibly other conditions."""
+        # Set ID based on name of uploaded file, Title.
+        # Or possibly other conditions.
+        # Set ID based on name of uploaded file, Title, or possibly other conditions.
         field = self.getPrimaryField()
         # set first then get the filename
         field.set(self, value, **kwargs)  # set is ok
@@ -367,8 +358,7 @@ class ATCTFileContent(ATCTContent):
 
     security.declareProtected(View, 'post_validate')
     def post_validate(self, REQUEST=None, errors=None):
-        """Validates upload file and id
-        """
+        # Validates upload file and id.
         id = REQUEST.form.get('id')
         field = self.getPrimaryField()
         f_name = field.getName()
@@ -407,11 +397,9 @@ class ATCTFileContent(ATCTContent):
     security.declarePrivate('manage_afterPUT')
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
                         filename, REQUEST, RESPONSE):
-        """After webdav/ftp PUT method
-
-        Set the title according to the uploaded filename if the title
-        is empty or set it to the id if no filename is given.
-        """
+        # After webdav/ftp PUT method.
+        # Set the title according to the uploaded filename if the title
+        # is empty or set it to the id if no filename is given.
         id = self.getId()
         title = self.Title()
         if not title:
@@ -442,7 +430,7 @@ class ATCTFolder(ATCTMixin, BaseFolder):
 
     security.declareProtected(View, 'get_size')
     def get_size(self):
-        """Returns 1 as folders have no size."""
+        # Returns 1 as folders have no size.
         return 1
 
 InitializeClass(ATCTFolder)
@@ -462,15 +450,13 @@ class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
 
     security.declareProtected(View, 'get_size')
     def get_size(self):
-        """Returns 1 as folders have no size."""
+        # Returns 1 as folders have no size.
         return 1
 
     security.declarePrivate('manage_afterMKCOL')
     def manage_afterMKCOL(self, id, result, REQUEST=None, RESPONSE=None):
-        """After MKCOL handler
-
-        Set title according to the id
-        """
+        # After MKCOL handler.
+        # Set title according to the id.
         # manage_afterMKCOL is called in the context of the parent
         # folder, *not* in the context of the new folder!
         new = getattr(self, id)

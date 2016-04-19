@@ -99,7 +99,7 @@ class ATSimpleIntCriterion(ATBaseCriterion):
 
     security.declareProtected(View, 'post_validate')
     def post_validate(self, REQUEST, errors):
-        """Check that Value2 is set if range is set to min:max"""
+        # Check that Value2 is set if range is set to min:max.
         direction = REQUEST.get('direction', self.getDirection())
         val2 = REQUEST.get('value2', self.Value2())
         if direction == 'min:max' and not val2 and not val2 == 0:

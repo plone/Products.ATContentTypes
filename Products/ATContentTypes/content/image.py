@@ -88,7 +88,7 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
 
     security.declareProtected(ModifyPortalContent, 'setImage')
     def setImage(self, value, refresh_exif=True, **kwargs):
-        """Set ID to uploaded file name if Title is empty."""
+        # Set ID to uploaded file name if Title is empty.
         # set exif first because rotation might screw up the exif data
         # the exif methods can handle str, Pdata, OFSImage and file
         # like objects
@@ -96,14 +96,14 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
         self._setATCTFileContent(value, **kwargs)
 
     def _should_set_id_to_filename(self, filename, title):
-        """If title is blank, have the caller set my ID to the uploaded file's name."""
-        # When the title is blank, sometimes the filename is returned as the title.
+        # If title is blank, have the caller set my ID to the file's name.
+        # When the title is blank, sometimes the filename is returned as the
+        # title.
         return filename == title or not title
 
     security.declareProtected(View, 'tag')
     def tag(self, **kwargs):
-        """Generate image tag using the api of the ImageField
-        """
+        # Generate image tag using the api of the ImageField.
         return self.getField('image').tag(self, **kwargs)
 
     def __str__(self):
@@ -113,11 +113,9 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
 
     security.declareProtected(View, 'get_size')
     def get_size(self):
-        """ZMI / Plone get size method
-
-        BBB: ImageField.get_size() returns the size of the original image + all
-        scales but we want only the size of the original image.
-        """
+        # ZMI / Plone get size method.
+        # BBB: ImageField.get_size() returns the size of the original image +
+        # all scales but we want only the size of the original image.
         img = self.getImage()
         if not getattr(aq_base(img), 'get_size', False):
             return 0

@@ -208,10 +208,8 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
 
     security.declareProtected(View, 'post_validate')
     def post_validate(self, REQUEST=None, errors=None):
-        """Validates start and end date
-
-        End date must be after start date
-        """
+        # Validates start and end date.
+        # End date must be after start date.
         if 'startDate' in errors or 'endDate' in errors:
             # No point in validating bad input
             return

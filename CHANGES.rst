@@ -10,7 +10,7 @@ New:
 
 Fixes:
 
-- *add item here*
+- Removed docstrings from some methods to avoid publishing them.  [maurits]
 
 
 2.1.18 (2016-02-24)

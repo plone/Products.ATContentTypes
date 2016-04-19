@@ -106,8 +106,7 @@ class ATNewsItem(ATDocumentBase, ATCTImageTransform):
 
     security.declareProtected(View, 'tag')
     def tag(self, **kwargs):
-        """Generate image tag using the api of the ImageField
-        """
+        # Generate image tag using the api of the ImageField.
         if 'title' not in kwargs:
             kwargs['title'] = self.getImageCaption()
         return self.getField('image').tag(self, **kwargs)
