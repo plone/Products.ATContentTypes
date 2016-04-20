@@ -256,7 +256,11 @@ def setupPortalContent(p):
         members.setTitle(members_title)
         members.setDescription(members_desc)
         members.setOrdering('unordered')
-        members.unmarkCreationFlag()
+        if getattr(members, 'unmarkCreationFlag', None) is not None:
+            # An Archetypes object that we have just created.  If the attribute
+            # is not there, members is probably a plone.app.contenttypes
+            # folder, which does not need this.
+            members.unmarkCreationFlag()
         members.setLanguage(language)
         members.reindexObject()
 

@@ -10,7 +10,10 @@ New:
 
 Fixes:
 
-- *add item here*
+- Fixed AttributeError ``unmarkCreationFlag`` during installation.
+  This could happen when there was already a Members folder from
+  ``plone.app.contenttypes``.  Fixes issue
+  https://github.com/plone/Products.CMFPlone/issues/1519 [maurits]
 
 
 2.2.11 (2016-02-14)
