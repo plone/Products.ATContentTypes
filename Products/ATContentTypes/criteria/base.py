@@ -66,12 +66,11 @@ class ATBaseCriterion(NonRefCatalogContent):
 
     @security.protected(View)
     def getId(self):
-        """Get the object id"""
+        # Get the object id.
         return str(self.id)
 
     def setId(self, value, *kw):
-        """Setting a new ID isn't allowed
-        """
+        # Setting a new ID isn't allowed.
         assert value == self.getId(), 'You are not allowed to change the id'
 
     @security.protected(View)
@@ -85,8 +84,7 @@ class ATBaseCriterion(NonRefCatalogContent):
 
     @security.protected(View)
     def getCriteriaItems(self):
-        """Return a sequence of items to be used to build the catalog query.
-        """
+        # Return a sequence of items to be used to build the catalog query.
         return ()
 
 # because I don't register the class I've to generator it on my own. Otherwise

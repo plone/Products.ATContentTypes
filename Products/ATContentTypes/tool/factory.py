@@ -94,11 +94,12 @@ class TempFolder(TempFolderBase):
     # that includes the acquisition parent of portal_factory (otherwise we get
     # portal_root/portal_factory/... no matter where the object will reside)
     def getPhysicalPath(self):
-        '''Returns a path (an immutable sequence of strings)
-        that can be used to access this object again
-        later, for example in a copy/paste operation.  getPhysicalRoot()
-        and getPhysicalPath() are designed to operate together.
-        '''
+        # Get the physical path of the object.
+        #
+        # Returns a path (an immutable sequence of strings) that can be used to
+        # access this object again later, for example in a copy/paste
+        # operation.  getPhysicalRoot() and getPhysicalPath() are designed to
+        # operate together.
         portal_factory = aq_parent(aq_inner(self))
         path = aq_parent(portal_factory).getPhysicalPath() + \
             (portal_factory.getId(), self.getId(), )
@@ -320,7 +321,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
             REQUEST.RESPONSE.redirect('manage_main')
 
     def doCreate(self, obj, id=None, **kw):
-        """Create a real object from a temporary object."""
+        # Create a real object from a temporary object.
         if self.isTemporary(obj=obj):
             if id is not None:
                 id = id.strip()
@@ -346,8 +347,8 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         return obj
 
     def _fixRequest(self):
-        """Our before_publishing_traverse call mangles URL0.  This fixes up
-        the REQUEST."""
+        # Our before_publishing_traverse call mangles URL0.
+        # This fixes up the REQUEST.
         # Everything seems to work without this method being called at all...
         factory_info = self.REQUEST.get(FACTORY_INFO, None)
         if not factory_info:
@@ -374,7 +375,7 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         # TODO fix URLPATHn, BASEPATHn here too
 
     def isTemporary(self, obj):
-        """Check to see if an object is temporary"""
+        # Check to see if an object is temporary.
         ob = aq_base(aq_parent(aq_inner(obj)))
         return hasattr(ob, 'meta_type') \
             and ob.meta_type == TempFolder.meta_type

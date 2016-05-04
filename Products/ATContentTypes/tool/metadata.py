@@ -69,38 +69,32 @@ class MetadataElementPolicy(SimpleItem):
     #
     @security.protected(View)
     def isMultiValued(self):
-        """ Can this element hold multiple values?
-        """
+        # Can this element hold multiple values?
         return self.is_multi_valued
 
     @security.protected(View)
     def isRequired(self):
-        """ Must this element be supplied?
-        """
+        # Must this element be supplied?
         return self.is_required
 
     @security.protected(View)
     def supplyDefault(self):
-        """ Should the tool supply a default?
-        """
+        # Should the tool supply a default?
         return self.supply_default
 
     @security.protected(View)
     def defaultValue(self):
-        """ If so, what is the default?
-        """
+        # If so, what is the default?
         return self.default_value
 
     @security.protected(View)
     def enforceVocabulary(self):
-        """ Should the tool enforce the policy's vocabulary?
-        """
+        # Should the tool enforce the policy's vocabulary?
         return self.enforce_vocabulary
 
     @security.protected(View)
     def allowedVocabulary(self):
-        """ What are the allowed values?
-        """
+        # What are the allowed values?
         return self.allowed_vocabulary
 
 InitializeClass(MetadataElementPolicy)
@@ -129,17 +123,13 @@ class ElementSpec(SimpleItem):
 
     @security.protected(View)
     def isMultiValued(self):
-        """
-            Is this element multi-valued?
-        """
+        # Is this element multi-valued?
         return self.is_multi_valued
 
     @security.protected(View)
     def getPolicy(self, typ=None):
-        """ Find the policy for this element for objects of the given type.
-
-        o Return a default, if none found.
-        """
+        # Find the policy for this element for objects of the given type.
+        # Return a default, if none found.
         try:
             return self.policies[typ].__of__(self)
         except KeyError:
@@ -147,8 +137,7 @@ class ElementSpec(SimpleItem):
 
     @security.protected(View)
     def listPolicies(self):
-        """ Return a list of all policies for this element.
-        """
+        # Return a list of all policies for this element.
         res = []
         for k, v in self.policies.items():
             res.append((k, v.__of__(self)))
@@ -156,8 +145,7 @@ class ElementSpec(SimpleItem):
 
     @security.protected(ManagePortal)
     def addPolicy(self, typ):
-        """ Add a policy to this element for objects of the given type.
-        """
+        # Add a policy to this element for objects of the given type.
         if typ is None:
             raise MetadataError("Can't replace default policy.")
 
@@ -168,10 +156,8 @@ class ElementSpec(SimpleItem):
 
     @security.protected(ManagePortal)
     def removePolicy(self, typ):
-        """ Remove the policy from this element for objects of the given type.
-
-        o Do *not* remvoe the default, however.
-        """
+        # Remove the policy from this element for objects of the given type.
+        # Do *not* remove the default, however.
         if typ is None:
             raise MetadataError("Can't remove default policy.")
         del self.policies[typ]
@@ -209,8 +195,7 @@ class MetadataSchema(SimpleItem):
     def addElementPolicy(self, element, content_type, is_required,
                          supply_default, default_value, enforce_vocabulary,
                          allowed_vocabulary, REQUEST=None):
-        """ Add a type-specific policy for one of our elements.
-        """
+        # Add a type-specific policy for one of our elements.
         if content_type == '<default>':
             content_type = None
 
@@ -228,8 +213,7 @@ class MetadataSchema(SimpleItem):
     @security.protected(ManagePortal)
     def removeElementPolicy(self, element, content_type, REQUEST=None
                             ):
-        """ Remvoe a type-specific policy for one of our elements.
-        """
+        # Remove a type-specific policy for one of our elements.
         if content_type == '<default>':
             content_type = None
 
@@ -245,10 +229,8 @@ class MetadataSchema(SimpleItem):
     def updateElementPolicy(self, element, content_type, is_required,
                             supply_default, default_value, enforce_vocabulary,
                             allowed_vocabulary, REQUEST=None):
-        """ Update a policy for one of our elements
-
-        o 'content_type' will be '<default>' when we edit the default.
-        """
+        # Update a policy for one of our elements.
+        # 'content_type' will be '<default>' when we edit the default.
         if content_type == '<default>':
             content_type = None
         spec = self.getElementSpec(element)
@@ -266,8 +248,7 @@ class MetadataSchema(SimpleItem):
     #
     @security.protected(ManagePortal)
     def listElementSpecs(self):
-        """ Return a list of ElementSpecs representing the elements we manage.
-        """
+        # Return a list of ElementSpecs representing the elements we manage.
         res = []
         for k, v in self.element_specs.items():
             res.append((k, v.__of__(self)))
@@ -275,14 +256,12 @@ class MetadataSchema(SimpleItem):
 
     @security.protected(ManagePortal)
     def getElementSpec(self, element):
-        """ Return an ElementSpec for the given 'element'.
-        """
+        # Return an ElementSpec for the given 'element'.
         return self.element_specs[element].__of__(self)
 
     @security.protected(ManagePortal)
     def addElementSpec(self, element, is_multi_valued, REQUEST=None):
-        """ Add 'element' to our list of managed elements.
-        """
+        # Add 'element' to our list of managed elements.
         # Don't replace.
         if element in self.element_specs:
             return
@@ -297,8 +276,7 @@ class MetadataSchema(SimpleItem):
 
     @security.protected(ManagePortal)
     def removeElementSpec(self, element, REQUEST=None):
-        """ Remove 'element' from our list of managed elements.
-        """
+        # Remove 'element' from our list of managed elements.
         del self.element_specs[element]
 
         if REQUEST is not None:
@@ -309,10 +287,8 @@ class MetadataSchema(SimpleItem):
 
     @security.protected(ManagePortal)
     def listPolicies(self, typ=None):
-        """ Show all policies for a given content type
-
-        o If 'typ' is none, return the list of default policies.
-        """
+        # Show all policies for a given content type.
+        # If 'typ' is none, return the list of default policies.
         result = []
         for element, spec in self.listElementSpecs():
             result.append((element, spec.getPolicy(typ)))
@@ -410,49 +386,42 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
 
     @security.private
     def getFullName(self, userid):
-        """ See IMetadataTool.
-        """
+        # See IMetadataTool.
         return userid   # TODO: do lookup here
 
     @security.public
     def getPublisher(self):
-        """ See IMetadataTool.
-        """
+        # See IMetadataTool.
         return self.publisher
 
     @security.public
     def listAllowedSubjects(self, content=None, content_type=None):
-        """ See IMetadataTool.
-        """
+        # See IMetadataTool.
         return self.listAllowedVocabulary(
             'DCMI', 'Subject', content, content_type)
 
     @security.public
     def listAllowedFormats(self, content=None, content_type=None):
-        """ See IMetadataTool.
-        """
+        # See IMetadataTool.
         return self.listAllowedVocabulary(
             'DCMI', 'Format', content, content_type)
 
     @security.public
     def listAllowedLanguages(self, content=None, content_type=None):
-        """ See IMetadataTool.
-        """
+        # See IMetadataTool.
         return self.listAllowedVocabulary(
             'DCMI', 'Language', content, content_type)
 
     @security.public
     def listAllowedRights(self, content=None, content_type=None):
-        """ See IMetadata Tool.
-        """
+        # See IMetadata Tool.
         return self.listAllowedVocabulary(
             'DCMI', 'Rights', content, content_type)
 
     @security.public
     def listAllowedVocabulary(self, schema, element, content=None,
                               content_type=None):
-        """ See IMetadataTool.
-        """
+        # See IMetadataTool.
         schema_def = getattr(self, schema)
         spec = schema_def.getElementSpec(element)
         if content_type is None and content:
@@ -461,16 +430,14 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
 
     @security.public
     def listSchemas(self):
-        """ See IMetadataTool.
-        """
+        # See IMetadataTool.
         result = [('DCMI', self.DCMI)]
         result.extend(self.objectItems([MetadataSchema.meta_type]))
         return result
 
     @security.protected(ModifyPortalContent)
     def addSchema(self, schema_id, elements=()):
-        """ See IMetadataTool.
-        """
+        # See IMetadataTool.
         if schema_id == 'DCMI' or schema_id in self.objectIds():
             raise KeyError('Duplicate schema ID: %s' % schema_id)
 
@@ -481,8 +448,7 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
 
     @security.protected(ModifyPortalContent)
     def removeSchema(self, schema_id):
-        """ See IMetadataTool.
-        """
+        # See IMetadataTool.
         if schema_id == 'DCMI' or schema_id not in self.objectIds():
             raise KeyError('Invalid schema ID: %s' % schema_id)
 
@@ -490,8 +456,7 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
 
     @security.protected(ModifyPortalContent)
     def setInitialMetadata(self, content):
-        """ See IMetadataTool.
-        """
+        # See IMetadataTool.
         for schema_id, schema in self.listSchemas():
             for element, policy in schema.listPolicies(
                     content.getPortalTypeName()):
@@ -509,8 +474,7 @@ class MetadataTool(PloneBaseTool, UniqueObject, Folder):
 
     @security.protected(View)
     def validateMetadata(self, content):
-        """ See IMetadataTool.
-        """
+        # See IMetadataTool.
         for schema_id, schema in self.listSchemas():
             for element, policy in schema.listPolicies(
                     content.getPortalTypeName()):

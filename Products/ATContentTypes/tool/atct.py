@@ -73,8 +73,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
 
     @security.protected(ManagePortal)
     def recreateImageScales(self, portal_type=None):
-        """Recreates AT Image scales (doesn't remove unused!)
-        """
+        # Recreates AT Image scales (doesn't remove unused!)
         if portal_type is None:
             portal_type = tuple(self.image_types)
         out = StringIO()
@@ -109,8 +108,7 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
 
     @security.protected(ManagePortal)
     def listContentTypes(self):
-        """List all content types. Used for image/folder_types property.
-        """
+        # List all content types. Used for image/folder_types property.
         ttool = getToolByName(self, 'portal_types')
         return ttool.listContentTypes()
 

@@ -39,7 +39,7 @@ class ATPortalTypeCriterion(ATSelectionCriterion):
 
     @security.protected(View)
     def getCurrentValues(self):
-        """Return enabled portal types"""
+        # Return enabled portal types.
         vocab = queryUtility(IVocabularyFactory, name=VOCAB_ID)(self)
         portal_types = getToolByName(self, 'portal_types', None)
         result = []
