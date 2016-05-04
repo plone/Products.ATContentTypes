@@ -4,10 +4,6 @@ Changelog
 2.1.19 (unreleased)
 -------------------
 
-New:
-
-- *add item here*
-
 Fixes:
 
 - Removed docstrings from some methods to avoid publishing them.  [maurits]
