@@ -34,20 +34,14 @@ class TestInstallation(atcttestcase.ATCTSiteTestCase):
         for i in ids:
             self.assertTrue(i in self.ttool)
 
-    def test_quickinstallable(self):
-        # Test, if the Product is available in Quickinstaller.  For Plone < 5
+    def test_is_installed(self):
+        # Test, if the Product is listed as installed.  For Plone < 5
         # it shouldn't (since it's a core dependency), for Plone >= 5 it should
         # (where plone.app.contenttypes is installed by default instead).
-        # Only Plone 5 is supported here.
-        try:
-            from Products.CMFPlone.utils import get_installer
-        except ImportError:
-            qi = getattr(self.portal, 'portal_quickinstaller')
-            products = [prod['id'] for prod in qi.listInstalledProducts()]
-            self.assertTrue('ATContentTypes' in products)
-        else:
-            qi = get_installer(self.portal)
-            self.assertTrue(qi.is_product_installed('Products.ATContentTypes'))
+        # Only Plone 5.1 is supported here.
+        from Products.CMFPlone.utils import get_installer
+        qi = get_installer(self.portal)
+        self.assertTrue(qi.is_product_installed('Products.ATContentTypes'))
 
     def test_release_settings_SAVE_TO_FAIL_FOR_DEVELOPMENT(self):
         self.assertEqual(SWALLOW_IMAGE_RESIZE_EXCEPTIONS, True)
@@ -78,14 +72,9 @@ class TestUninstallation(atcttestcase.ATCTSiteTestCase):
 
     def afterSetUp(self):
         self.cat = getattr(self.portal.aq_explicit, 'portal_catalog')
-        try:
-            from Products.CMFPlone.utils import get_installer
-        except ImportError:
-            qi = getattr(self.portal, 'portal_quickinstaller')
-            qi.uninstallProducts(['ATContentTypes'])
-        else:
-            qi = get_installer(self.portal)
-            qi.uninstall_product('Products.ATContentTypes')
+        from Products.CMFPlone.utils import get_installer
+        qi = get_installer(self.portal)
+        qi.uninstall_product('Products.ATContentTypes')
         # It looks like the hiddenprofile utility from CMFPlone is not loaded
         # in these tests.  So our default profile is installed, instead of only
         # our base profile.  This explains why our portal_types are available
@@ -116,25 +105,17 @@ class TestUninstallation(atcttestcase.ATCTSiteTestCase):
         for i in ids:
             self.assertFalse(i in ttool, i)
 
-    def test_quickinstallable(self):
-        # Test, if the Product is available in Quickinstaller.  For Plone < 5
+    def test_is_installable(self):
+        # Test, if the Product is available for installation.  For Plone < 5
         # it shouldn't (since it's a core dependency), for Plone >= 5 it should
         # (where plone.app.contenttypes is installed by default instead).
-        # Only Plone 5 is supported here.
-        try:
-            from Products.CMFPlone.utils import get_installer
-        except ImportError:
-            qi = getattr(self.portal, 'portal_quickinstaller')
-            products = [prod['id'] for prod in qi.listInstalledProducts()]
-            self.assertFalse('ATContentTypes' in products)
-            products = [prod['id'] for prod in qi.listInstallableProducts()]
-            self.assertTrue('ATContentTypes' in products)
-        else:
-            qi = get_installer(self.portal)
-            self.assertFalse(
-                qi.is_product_installed('Products.ATContentTypes'))
-            self.assertTrue(
-                qi.is_product_installable('Products.ATContentTypes'))
+        # Only Plone 5.1 is supported here.
+        from Products.CMFPlone.utils import get_installer
+        qi = get_installer(self.portal)
+        self.assertFalse(
+            qi.is_product_installed('Products.ATContentTypes'))
+        self.assertTrue(
+            qi.is_product_installable('Products.ATContentTypes'))
 
     def test_removes_related_items_catalog_index(self):
         self.assertNotIn('getRawRelatedItems', self.cat.Indexes)

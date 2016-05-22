@@ -7,14 +7,9 @@ class TestBaseProfile(PloneTestCase):
 
     def afterSetUp(self):
         self.loginAsPortalOwner()
-        try:
-            from Products.CMFPlone.utils import get_installer
-        except ImportError:
-            qi = getattr(self.portal, 'portal_quickinstaller')
-            qi.uninstallProducts(['ATContentTypes'])
-        else:
-            qi = get_installer(self.portal)
-            qi.uninstall_product('Products.ATContentTypes')
+        from Products.CMFPlone.utils import get_installer
+        qi = get_installer(self.portal)
+        qi.uninstall_product('Products.ATContentTypes')
         portal_setup = self.portal.portal_setup
         # It looks like the hiddenprofile utility from CMFPlone is not loaded
         # in these tests.  So our default profile is installed, instead of only
