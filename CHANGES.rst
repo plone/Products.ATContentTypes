@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Make tests work with old and new safe HTML cleaner (PLIP 1441)
+  [tomgross]
 
 Bug fixes:
 
