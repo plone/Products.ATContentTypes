@@ -104,6 +104,12 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
             text = "<p>test</p><script>I'm a nasty boy<p>nested</p></script>"
             doc.setText(text, mimetype=mimetype)
             txt = doc.getText()
+            # fix for lxml based safe HTML cleaner
+            # nested p-tags are not allowed and therefore removed
+            # put expected string to mimetypes tuple above and remove condition
+            # once PLIP 1441 is merged.
+            if '<p/>' in txt:
+                expected = '<p/><p>test</p>\n'
             self.assertEqual(txt, expected, (txt, expected, mimetype))
 
     def test_get_size(self):
