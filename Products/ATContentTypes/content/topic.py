@@ -37,7 +37,7 @@ from types import ListType
 from types import StringType
 from types import TupleType
 from webdav.Resource import Resource as WebdavResoure
-from zope.interface import implements
+from zope.interface import implementer
 from ZPublisher.HTTPRequest import HTTPRequest
 
 
@@ -144,6 +144,7 @@ ATTopicSchema = ATContentTypeSchema.copy() + Schema((
 finalizeATCTSchema(ATTopicSchema, folderish=False, moveDiscussion=False)
 
 
+@implementer(IATTopic, IDisabledExport)
 class ATTopic(ATCTFolder):
     """An automatically updated stored search.
 
@@ -159,7 +160,6 @@ class ATTopic(ATCTFolder):
     assocMimetypes = ()
     assocFileExt = ()
     cmf_edit_kws = ()
-    implements(IATTopic, IDisabledExport)
 
     # Enable marshalling via WebDAV/FTP
     __dav_marshall__ = True

@@ -7,15 +7,14 @@ from Products.ATContentTypes.interfaces.folder import IATFolder
 from Products.CMFCore.utils import getToolByName
 from zope.component import adapts
 from zope.component import getUtility
-from zope.interface import implements
+from zope.interface import implementer
 
 
+@implementer(INextPreviousProvider)
 class ATFolderNextPrevious(object):
     """Let a folder act as a next/previous provider. This will be
     automatically found by the @@plone_nextprevious_view and viewlet.
     """
-
-    implements(INextPreviousProvider)
     adapts(IATFolder)
 
     def __init__(self, context):

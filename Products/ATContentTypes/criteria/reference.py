@@ -6,16 +6,15 @@ from Products.ATContentTypes.criteria import registerCriterion
 from Products.ATContentTypes.criteria.selection import ATSelectionCriterion
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.CMFCore.utils import getToolByName
-from zope.interface import implements
+from zope.interface import implementer
 
 
 ATReferenceCriterionSchema = ATSelectionCriterion.schema
 
 
+@implementer(IATTopicSearchCriterion)
 class ATReferenceCriterion(ATSelectionCriterion):
     """A reference criterion"""
-
-    implements(IATTopicSearchCriterion)
 
     security = ClassSecurityInfo()
     meta_type = 'ATReferenceCriterion'

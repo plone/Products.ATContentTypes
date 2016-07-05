@@ -12,7 +12,7 @@ from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.CMFCore.permissions import View
-from zope.interface import implements
+from zope.interface import implementer
 
 
 ATBooleanCriterionSchema = ATBaseCriterionSchema + Schema((
@@ -30,10 +30,9 @@ ATBooleanCriterionSchema = ATBaseCriterionSchema + Schema((
 ))
 
 
+@implementer(IATTopicSearchCriterion)
 class ATBooleanCriterion(ATBaseCriterion):
     """A boolean criterion"""
-
-    implements(IATTopicSearchCriterion)
 
     security = ClassSecurityInfo()
     schema = ATBooleanCriterionSchema

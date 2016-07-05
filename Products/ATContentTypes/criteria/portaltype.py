@@ -9,7 +9,7 @@ from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 from zope.component import queryUtility
-from zope.interface import implements
+from zope.interface import implementer
 from zope.schema.interfaces import IVocabularyFactory
 
 
@@ -26,10 +26,9 @@ ATPortalTypeCriterionSchema['value'].widget = val_widget
 VOCAB_ID = u'plone.app.vocabularies.ReallyUserFriendlyTypes'
 
 
+@implementer(IATTopicSearchCriterion)
 class ATPortalTypeCriterion(ATSelectionCriterion):
     """A portal_types criterion"""
-
-    implements(IATTopicSearchCriterion)
 
     security = ClassSecurityInfo()
     schema = ATPortalTypeCriterionSchema

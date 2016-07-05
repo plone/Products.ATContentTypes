@@ -13,7 +13,7 @@ from Products.ATContentTypes.interfaces import IATBTreeFolder
 from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.lib.constraintypes import ConstrainTypesMixinSchema  # noqa
 from Products.CMFCore.permissions import View
-from zope.interface import implements
+from zope.interface import implementer
 
 
 ATFolderSchema = folder.ATFolderSchema
@@ -32,6 +32,7 @@ except ImportError:
     HAS_LINGUAPLONE = False
 
 
+@implementer(IATFolder, IOrderedContainer)
 class ObsoleteATFolder(ATCTOrderedFolder):
     """A folder which can contain other items."""
 
@@ -44,8 +45,6 @@ class ObsoleteATFolder(ATCTOrderedFolder):
     assocMimetypes = ()
     assocFileExt = ()
     cmf_edit_kws = ()
-
-    implements(IATFolder, IOrderedContainer)
 
     # Enable marshalling via WebDAV/FTP.
     __dav_marshall__ = True
@@ -96,6 +95,7 @@ else:
 registerATCT(ATFolder, PROJECTNAME)
 
 
+@implementer(IATBTreeFolder)
 class ATBTreeFolder(ATCTBTreeFolder):
     """A folder suitable for holding a very large number of items.
 
@@ -114,8 +114,6 @@ class ATBTreeFolder(ATCTBTreeFolder):
     assocMimetypes = ()
     assocFileExt = ()
     cmf_edit_kws = ()
-
-    implements(IATBTreeFolder)
 
     # Enable marshalling via WebDAV/FTP.
     __dav_marshall__ = True

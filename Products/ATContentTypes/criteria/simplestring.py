@@ -11,7 +11,7 @@ from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.CMFCore.permissions import View
-from zope.interface import implements
+from zope.interface import implementer
 
 
 ATSimpleStringCriterionSchema = ATBaseCriterionSchema + Schema((
@@ -30,10 +30,9 @@ ATSimpleStringCriterionSchema = ATBaseCriterionSchema + Schema((
 ))
 
 
+@implementer(IATTopicSearchCriterion)
 class ATSimpleStringCriterion(ATBaseCriterion):
     """A simple string criterion"""
-
-    implements(IATTopicSearchCriterion)
 
     security = ClassSecurityInfo()
     schema = ATSimpleStringCriterionSchema

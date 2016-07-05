@@ -21,7 +21,7 @@ from webdav.Lockable import ResourceLockedError
 from webdav.NullResource import NullResource
 from webdav.Resource import Resource as WebdavResoure
 from ZODB.POSException import ConflictError
-from zope.interface import implements
+from zope.interface import implementer
 
 import logging
 import os
@@ -88,6 +88,7 @@ class ReplaceableWrapper:
         return getattr(self.__ob, name)
 
 
+@implementer(IATContentType)
 class ATCTMixin(BrowserDefaultMixin):
     """Mixin class for AT Content Types"""
 
@@ -102,8 +103,6 @@ class ATCTMixin(BrowserDefaultMixin):
     # flag to show that the object is a temporary object
     isDocTemp = False
     _at_rename_after_creation = True  # rename object according to the title?
-
-    implements(IATContentType)
 
     security = ClassSecurityInfo()
 
@@ -438,10 +437,9 @@ class ATCTFolder(ATCTMixin, BaseFolder):
 InitializeClass(ATCTFolder)
 
 
+@implementer(ISelectableConstrainTypes)
 class ATCTFolderMixin(ConstrainTypesMixin, ATCTMixin):
     """ Constrained folderish type """
-
-    implements(ISelectableConstrainTypes)
 
     security = ClassSecurityInfo()
 

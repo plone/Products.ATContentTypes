@@ -10,7 +10,7 @@ from Products.ATContentTypes.criteria import _criterionRegistry
 from Products.ATContentTypes.interfaces import IATCTTopicsTool
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.utils import getToolByName
-from zope.interface import implements
+from zope.interface import implementer
 
 
 class TopicIndex(SimpleItem, Persistent):
@@ -24,12 +24,12 @@ class TopicIndex(SimpleItem, Persistent):
         self.criteria = tuple(criteria)
 
 
+@implementer(IATCTTopicsTool)
 class ATTopicsTool(Base):
     """This tool makes it possible to manage the indexes that are used
        inside topics and allows you to enter a friendly name instead of
        cryptic indexes.
     """
-    implements(IATCTTopicsTool)
 
     security = ClassSecurityInfo()
 

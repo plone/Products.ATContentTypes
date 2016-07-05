@@ -25,7 +25,7 @@ from Products.ATContentTypes.lib.calendarsupport import CalendarSupportMixin
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
-from zope.interface import implements
+from zope.interface import implementer
 
 
 ATEventSchema = ATContentTypeSchema.copy() + Schema((
@@ -164,6 +164,7 @@ ATEventSchema.changeSchemataForField('location', 'default')
 ATEventSchema.moveField('location', before='startDate')
 
 
+@implementer(IATEvent)
 class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
     """Information about an upcoming event.
 
@@ -182,8 +183,6 @@ class ATEvent(ATCTContent, CalendarSupportMixin, HistoryAwareMixin):
                     'start_time', 'startAMPM', 'stop_time', 'stopAMPM',
                     'start_date', 'end_date', 'contact_name', 'contact_email',
                     'contact_phone', 'event_url')
-
-    implements(IATEvent)
 
     security = ClassSecurityInfo()
 

@@ -8,7 +8,7 @@ from Products.PageTemplates.Expressions import getEngine
 from Products.validation.config import validation
 from Products.validation.interfaces.IValidator import IValidator
 from types import FileType
-from zope.interface import implements
+from zope.interface import implementer
 from zope.tal.htmltalparser import HTMLTALParser
 from zope.tal.talgenerator import TALGenerator
 from ZPublisher.HTTPRequest import FileUpload
@@ -49,11 +49,11 @@ SUBTRACT_LINES = 11
 validatorList = []
 
 
+@implementer(IValidator)
 class TALValidator:
     """Validates a text to be valid TAL code
 
     """
-    implements(IValidator)
 
     def __init__(self, name, title='', description=''):
         self.name = name
@@ -72,14 +72,13 @@ class TALValidator:
 validatorList.append(TALValidator('isTAL', title='', description=''))
 
 
+@implementer(IValidator)
 class TidyHtmlValidator:
     """use mxTidy to check HTML
 
     Fail on errors and warnings
     Do not clean up the value
     """
-
-    implements(IValidator)
 
     def __init__(self, name, title='', description=''):
         self.name = name
@@ -109,14 +108,13 @@ class TidyHtmlValidator:
 validatorList.append(TidyHtmlValidator('isTidyHtml', title='', description=''))
 
 
+@implementer(IValidator)
 class TidyHtmlWithCleanupValidator:
     """use mxTidy to check HTML
 
     Fail only on errors
     Clean up
     """
-
-    implements(IValidator)
 
     def __init__(self, name, title='', description=''):
         self.name = name
@@ -156,11 +154,10 @@ validatorList.append(TidyHtmlWithCleanupValidator(
     'isTidyHtmlWithCleanup', title='', description=''))
 
 
+@implementer(IValidator)
 class NonEmptyFileValidator:
     """Fails on empty non-existant files
     """
-
-    implements(IValidator)
 
     def __init__(self, name, title='', description=''):
         self.name = name

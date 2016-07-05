@@ -21,7 +21,7 @@ from Products.CMFCore.permissions import View
 from Products.validation import V_REQUIRED
 from Products.validation.config import validation
 from Products.validation.validators.SupplValidators import MaxSizeValidator
-from zope.interface import implements
+from zope.interface import implementer
 
 
 validation.register(MaxSizeValidator('checkImageMaxSize',
@@ -65,6 +65,7 @@ ATImageSchema['title'].required = False
 finalizeATCTSchema(ATImageSchema)
 
 
+@implementer(IATImage)
 class ATImage(ATCTFileContent, ATCTImageTransform):
     """An image, which can be referenced in documents.
 
@@ -80,8 +81,6 @@ class ATImage(ATCTFileContent, ATCTImageTransform):
     assocMimetypes = ('image/*', )
     assocFileExt = ('jpg', 'jpeg', 'png', 'gif', )
     cmf_edit_kws = ('file', )
-
-    implements(IATImage)
 
     security = ClassSecurityInfo()
 

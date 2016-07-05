@@ -22,7 +22,7 @@ from Products.CMFPlone.utils import log_exc
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zExceptions import NotFound
 from ZODB.POSException import ConflictError
-from zope.interface import implements
+from zope.interface import implementer
 from zope.structuredtext import stx2html
 from ZPublisher.mapply import mapply
 from ZPublisher.Publish import call_object
@@ -83,12 +83,11 @@ def _createObjectByType(type_name, container, id, *args, **kw):
 # we can add all types to types_tool's allowed_content_types
 # for the class without having side effects in the rest of
 # the portal.
+@implementer(IHideFromBreadcrumbs)
 class TempFolder(TempFolderBase):
 
     portal_type = meta_type = 'TempFolder'
     isPrincipiaFolderish = 0
-
-    implements(IHideFromBreadcrumbs)
 
     # override getPhysicalPath so that temporary objects return a full path
     # that includes the acquisition parent of portal_factory (otherwise we get
@@ -248,6 +247,7 @@ class TempFolder(TempFolderBase):
 
 
 # #############################################################################
+@implementer(IFactoryTool, IHideFromBreadcrumbs)
 class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
     """ """
     id = 'portal_factory'
@@ -255,8 +255,6 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
     toolicon = 'skins/plone_images/add_icon.png'
     security = ClassSecurityInfo()
     isPrincipiaFolderish = 0
-
-    implements(IFactoryTool, IHideFromBreadcrumbs)
 
     manage_options = (
         ({'label': 'Overview', 'action': 'manage_overview'},

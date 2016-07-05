@@ -7,16 +7,15 @@ from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
-from zope.interface import implements
+from zope.interface import implementer
 
 
 ATCurrentAuthorSchema = ATBaseCriterionSchema
 
 
+@implementer(IATTopicSearchCriterion)
 class ATCurrentAuthorCriterion(ATBaseCriterion):
     """A criterion that searches for the currently logged in user's id"""
-
-    implements(IATTopicSearchCriterion)
 
     security = ClassSecurityInfo()
     schema = ATCurrentAuthorSchema

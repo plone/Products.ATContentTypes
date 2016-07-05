@@ -7,11 +7,12 @@ from Products.ATContentTypes import permission as ATCTPermissions
 from Products.ATContentTypes.interfaces import IHistoryAware
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
-from zope.interface import implements
+from zope.interface import implementer
 
 import difflib
 
 
+@implementer(IHistoryAware)
 class HistoryAwareMixin(ATHistoryAwareMixin):
     """History aware mixin class
 
@@ -23,8 +24,6 @@ class HistoryAwareMixin(ATHistoryAwareMixin):
     functionality. It's more a gimmick and nice helper to reviewers and site
     managers.
     """
-
-    implements(IHistoryAware)
 
     security = ClassSecurityInfo()
 
