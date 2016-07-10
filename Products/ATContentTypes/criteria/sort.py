@@ -11,7 +11,7 @@ from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicSortCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.CMFCore.permissions import View
-from zope.interface import implements
+from zope.interface import implementer
 
 
 ATSortCriterionSchema = ATBaseCriterionSchema + Schema((
@@ -26,10 +26,9 @@ ATSortCriterionSchema = ATBaseCriterionSchema + Schema((
 ))
 
 
+@implementer(IATTopicSortCriterion)
 class ATSortCriterion(ATBaseCriterion):
     """A sort criterion"""
-
-    implements(IATTopicSortCriterion)
     security = ClassSecurityInfo()
     schema = ATSortCriterionSchema
     meta_type = 'ATSortCriterion'

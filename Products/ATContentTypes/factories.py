@@ -10,7 +10,7 @@ from zope.component import adapts
 from zope.component import getUtility
 from zope.container.interfaces import INameChooser
 from zope.event import notify
-from zope.interface import implements
+from zope.interface import implementer
 from zope.lifecycleevent import ObjectModifiedEvent
 
 import transaction
@@ -19,11 +19,11 @@ import transaction
 upload_lock = allocate_lock()
 
 
+@implementer(IATCTFileFactory)
 class ATCTFileFactory(object):
     """
     ripped out of collective.uploadify
     """
-    implements(IATCTFileFactory)
     adapts(IFolderish)
 
     def __init__(self, context):

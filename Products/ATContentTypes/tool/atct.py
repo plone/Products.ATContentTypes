@@ -15,7 +15,7 @@ from Products.CMFCore.utils import registerToolInterface
 from Products.CMFCore.utils import UniqueObject
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZODB.POSException import ConflictError
-from zope.interface import implements
+from zope.interface import implementer
 
 import logging
 
@@ -27,6 +27,7 @@ def log(message, summary='', severity=logging.DEBUG):
     LOG.log(severity, 'ATCT: %s \n%s', summary, message)
 
 
+@implementer(IATCTTool)
 class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
     """ATContentTypes tool
     """
@@ -35,8 +36,6 @@ class ATCTTool(UniqueObject, SimpleItem, PropertyManager, ATTopicsTool):
     id = TOOLNAME
     meta_type = 'ATCT Tool'
     title = 'Collection and image scales settings'
-
-    implements(IATCTTool)
 
     manage_options = (
         {'label': 'Overview', 'action': 'manage_overview'},

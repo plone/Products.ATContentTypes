@@ -5,7 +5,7 @@ from cStringIO import StringIO
 from DateTime import DateTime
 from Products.ATContentTypes.interfaces import ICalendarSupport
 from Products.CMFCore.permissions import View
-from zope.interface import implements
+from zope.interface import implementer
 
 
 PRODID = "-//AT Content Types//AT Event//EN"
@@ -79,11 +79,10 @@ END:VEVENT
 """
 
 
+@implementer(ICalendarSupport)
 class CalendarSupportMixin:
     """Mixin class for iCal/vCal support
     """
-
-    implements(ICalendarSupport)
 
     security = ClassSecurityInfo()
 

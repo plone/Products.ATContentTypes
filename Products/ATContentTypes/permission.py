@@ -7,7 +7,7 @@ from Products.ATContentTypes.interfaces import IATTopic
 from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.CMFCore.permissions import setDefaultRoles
 from zope.component import adapts
-from zope.interface import implements
+from zope.interface import implementer
 
 
 TYPE_ROLES = ('Manager', 'Site Administrator', 'Owner')
@@ -63,8 +63,8 @@ def wireAddPermissions():
     return permissions
 
 
+@implementer(IFieldPermissionChecker)
 class ATFieldPermissionChecker(object):
-    implements(IFieldPermissionChecker)
     adapts(IBaseObject)
 
     def __init__(self, context):

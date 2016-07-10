@@ -23,7 +23,7 @@ from Products.CMFCore.permissions import View
 from Products.validation import V_REQUIRED
 from Products.validation.config import validation
 from Products.validation.validators.SupplValidators import MaxSizeValidator
-from zope.interface import implements
+from zope.interface import implementer
 
 
 validation.register(MaxSizeValidator('checkNewsImageMaxSize',
@@ -90,6 +90,7 @@ ATNewsItemSchema['description'].widget.label = \
 finalizeATCTSchema(ATNewsItemSchema)
 
 
+@implementer(IATNewsItem)
 class ATNewsItem(ATDocumentBase, ATCTImageTransform):
     """An announcement that will show up on the news portlet.
 
@@ -105,8 +106,6 @@ class ATNewsItem(ATDocumentBase, ATCTImageTransform):
     assocMimetypes = ()
     assocFileExt = ('news', )
     cmf_edit_kws = ATDocumentBase.cmf_edit_kws
-
-    implements(IATNewsItem)
 
     security = ClassSecurityInfo()
 

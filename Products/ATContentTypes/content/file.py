@@ -23,7 +23,7 @@ from Products.validation import V_REQUIRED
 from Products.validation.config import validation
 from Products.validation.validators.SupplValidators import MaxSizeValidator
 from urllib import quote
-from zope.interface import implements
+from zope.interface import implementer
 
 import logging
 
@@ -56,6 +56,7 @@ ATFileSchema['title'].required = False
 finalizeATCTSchema(ATFileSchema)
 
 
+@implementer(IATFile)
 class ATFile(ATCTFileContent):
     """An external file uploaded to the site."""
 
@@ -73,8 +74,6 @@ class ATFile(ATCTFileContent):
                        'application/vnd.ms-powerpoint',
                        'application/pdf',
                        'application/x-shockwave-flash',)
-
-    implements(IATFile)
 
     security = ClassSecurityInfo()
 

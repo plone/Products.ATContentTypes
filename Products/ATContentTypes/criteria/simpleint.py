@@ -14,7 +14,7 @@ from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.CMFCore.permissions import View
-from zope.interface import implements
+from zope.interface import implementer
 
 
 DirectionOperations = DisplayList((
@@ -77,10 +77,9 @@ ATSimpleIntCriterionSchema = ATBaseCriterionSchema + Schema((
 ))
 
 
+@implementer(IATTopicSearchCriterion)
 class ATSimpleIntCriterion(ATBaseCriterion):
     """A simple int criterion"""
-
-    implements(IATTopicSearchCriterion)
 
     security = ClassSecurityInfo()
     schema = ATSimpleIntCriterionSchema

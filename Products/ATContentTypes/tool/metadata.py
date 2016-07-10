@@ -27,7 +27,7 @@ from Products.CMFPlone.permissions import ManagePortal
 from Products.CMFPlone.permissions import ModifyPortalContent
 from Products.CMFPlone.permissions import View
 from Products.CMFPlone.PloneBaseTool import PloneBaseTool
-from zope.interface import implements
+from zope.interface import implementer
 
 
 class MetadataError(Exception):
@@ -307,9 +307,8 @@ _DCMI_ELEMENT_SPECS = (
 )
 
 
+@implementer(IMetadataTool)
 class MetadataTool(PloneBaseTool, UniqueObject, Folder):
-
-    implements(IMetadataTool)
 
     id = 'portal_metadata'
     meta_type = 'Default Metadata Tool'

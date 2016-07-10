@@ -24,7 +24,7 @@ from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.interfaces import IDAVAware
 from types import TupleType
-from zope.interface import implements
+from zope.interface import implementer
 from ZPublisher.HTTPRequest import HTTPRequest
 
 
@@ -217,6 +217,7 @@ class ATDocumentBase(ATCTContent, HistoryAwareMixin):
                                     RESPONSE)
 
 
+@implementer(IATDocument, IDAVAware)
 class ATDocument(ATDocumentBase):
     """A page in the site. Can contain rich text."""
 
@@ -227,7 +228,5 @@ class ATDocument(ATDocumentBase):
     _atct_newTypeFor = {'portal_type': 'CMF Document', 'meta_type': 'Document'}
     assocMimetypes = ('application/xhtml+xml', 'message/rfc822', 'text/*',)
     assocFileExt = ('txt', 'stx', 'rst', 'rest', 'py',)
-
-    implements(IATDocument, IDAVAware)
 
 registerATCT(ATDocument, PROJECTNAME)

@@ -13,7 +13,7 @@ from Products.ATContentTypes.interfaces import IATLink
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
 from urllib import quote
-from zope.interface import implements
+from zope.interface import implementer
 
 import urlparse
 
@@ -35,6 +35,7 @@ ATLinkSchema = ATContentTypeSchema.copy() + Schema((
 finalizeATCTSchema(ATLinkSchema)
 
 
+@implementer(IATLink)
 class ATLink(ATCTContent):
     """A link to an internal or external resource."""
 
@@ -46,8 +47,6 @@ class ATLink(ATCTContent):
     assocMimetypes = ()
     assocFileExt = ('link', 'url', )
     cmf_edit_kws = ('remote_url', )
-
-    implements(IATLink)
 
     security = ClassSecurityInfo()
 
