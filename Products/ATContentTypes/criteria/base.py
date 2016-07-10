@@ -9,7 +9,7 @@ from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.CMFCore.permissions import View
 from zope.interface import classImplementsOnly
 from zope.interface import implementedBy
-from zope.interface import implements
+from zope.interface import implementer
 
 
 class NonRefCatalogContent(BaseContentMixin):
@@ -42,12 +42,11 @@ classImplementsOnly(NonRefCatalogContent,
                       if iface is not IReferenceable))
 
 
+@implementer(IATTopicCriterion)
 class ATBaseCriterion(NonRefCatalogContent):
     """A basic criterion"""
 
     security = ClassSecurityInfo()
-
-    implements(IATTopicCriterion)
 
     schema = ATBaseCriterionSchema
     meta_type = 'ATBaseCriterion'

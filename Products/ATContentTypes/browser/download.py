@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 from AccessControl import Unauthorized
 from Products.Five import BrowserView
-from zope.interface import implements
+from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces import NotFound as pNotFound
 
 
+@implementer(IPublishTraverse)
 class DownloadArchetypeFile(BrowserView):
     """Basically, straight copy from plone.namedfile
     """
-    implements(IPublishTraverse)
 
     def __init__(self, context, request):
         super(DownloadArchetypeFile, self).__init__(context, request)

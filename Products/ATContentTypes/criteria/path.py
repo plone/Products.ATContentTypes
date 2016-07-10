@@ -14,7 +14,7 @@ from Products.ATContentTypes.criteria.schemata import ATBaseCriterionSchema
 from Products.ATContentTypes.interfaces import IATTopicSearchCriterion
 from Products.ATContentTypes.permission import ChangeTopics
 from Products.CMFCore.permissions import View
-from zope.interface import implements
+from zope.interface import implementer
 
 
 ATPathCriterionSchema = ATBaseCriterionSchema + Schema((
@@ -52,10 +52,9 @@ ATPathCriterionSchema = ATBaseCriterionSchema + Schema((
 ))
 
 
+@implementer(IATTopicSearchCriterion)
 class ATPathCriterion(ATBaseCriterion):
     """A path criterion"""
-
-    implements(IATTopicSearchCriterion)
 
     security = ClassSecurityInfo()
     schema = ATPathCriterionSchema

@@ -18,7 +18,7 @@ from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
 from Products.CMFCore.PortalFolder import PortalFolderBase as PortalFolder
 from Products.CMFCore.utils import getToolByName
-from zope.interface import implements
+from zope.interface import implementer
 
 
 # Constants for enableConstrainMixin.
@@ -141,12 +141,11 @@ def parentPortalTypeEqual(obj):
     return False
 
 
+@implementer(ISelectableConstrainTypes)
 class ConstrainTypesMixin:
     """ Gives the user with given rights the possibility to
         constrain the addable types on a per-folder basis.
     """
-
-    implements(ISelectableConstrainTypes)
 
     security = ClassSecurityInfo()
 
