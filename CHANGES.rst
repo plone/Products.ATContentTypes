@@ -20,6 +20,10 @@ Bug fixes:
 2.3.0 (2016-07-29)
 ------------------
 
+Breaking changes:
+
+- *add item here*
+
 New features:
 
 - Make tests work with old and new safe HTML cleaner (PLIP 1441)
