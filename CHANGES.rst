@@ -1,22 +1,6 @@
 Changelog
 =========
 
-2.3.1 (unreleased)
-------------------
-
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
-Bug fixes:
-
-- *add item here*
-
-
 2.3.0 (2016-07-29)
 ------------------
 2.2.13 (unreleased)
