@@ -4,10 +4,6 @@ Changelog
 2.2.13 (unreleased)
 -------------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - Make tests work with old and new safe HTML cleaner (PLIP 1441)
