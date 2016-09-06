@@ -4,7 +4,17 @@ Changelog
 2.2.14 (unreleased)
 -------------------
 
-- Nothing changed yet.
+Breaking changes:
+
+- *add item here*
+
+New features:
+
+- *add item here*
+
+Bug fixes:
+
+- *add item here*
 
 
 2.2.13 (2016-07-29)
