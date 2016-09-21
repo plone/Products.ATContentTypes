@@ -10,7 +10,18 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Do not try to install p.a.imaging/widgets.  Their default profiles
+  are dummies in Plone 5.  [maurits]
+
+- Added fulluninstall profile.  This profile belongs to the 'default'
+  profile, which can only be installed through portal_setup.  [maurits]
+
+- Added uninstall profile.  This profile belongs to the 'base'
+  profile, which is the one that gets applied when you install
+  ATContentTypes.  [maurits]
+
+- No longer register the archetypes skin, because Products.Archetypes
+  does that itself.  [maurits]
 
 Bug fixes:
 

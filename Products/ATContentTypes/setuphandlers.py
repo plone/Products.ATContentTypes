@@ -16,6 +16,12 @@ from zope.i18n.interfaces import ITranslationDomain
 from zope.i18n.locales import locales
 
 
+def cleanup_after_uninstall(context):
+    cat = getToolByName(context, 'portal_catalog')
+    if 'getRawRelatedItems' in cat.indexes():
+        cat.delIndex('getRawRelatedItems')
+
+
 def assignTitles(portal):
     ''' Check for those objects inside portal.
     If they are found we assign title to them.

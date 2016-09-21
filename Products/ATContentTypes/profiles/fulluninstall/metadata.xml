@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<metadata>
+  <version>1</version>
+  <dependencies>
+    <dependency>profile-Products.ATContentTypes:uninstall</dependency>
+    <dependency>profile-plone.app.collection:uninstall</dependency>
+  </dependencies>
+</metadata>
