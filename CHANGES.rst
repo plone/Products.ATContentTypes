@@ -4,10 +4,6 @@ Changelog
 2.3 (unreleased)
 ----------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - Do not try to install p.a.imaging/widgets.  Their default profiles
@@ -22,10 +18,6 @@ New features:
 
 - No longer register the archetypes skin, because Products.Archetypes
   does that itself.  [maurits]
-
-Bug fixes:
-
-- *add item here*
 
 
 2.2.13 (2016-07-29)
