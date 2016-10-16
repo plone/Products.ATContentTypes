@@ -16,6 +16,7 @@
   <include package="Products.Archetypes" />
   <include package="plone.app.blob" />
   <include package="plone.app.collection" />
+  <include package="plone.app.imaging" />
 
   <five:deprecatedManageAddDelete
       class=".content.document.ATDocument" />
