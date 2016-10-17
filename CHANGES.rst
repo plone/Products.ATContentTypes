@@ -14,7 +14,7 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Require plone.app.imaging even if Plone itself does not. [davisagli]
 
 
 2.3 (2016-10-03)
