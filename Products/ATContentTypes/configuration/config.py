@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from Globals import INSTANCE_HOME
 from Products.ATContentTypes.configuration.schema import atctSchema
 from ZConfig.loader import ConfigLoader
 
@@ -7,7 +6,7 @@ import os
 
 
 # directories
-INSTANCE_ETC = os.path.join(INSTANCE_HOME, 'etc')
+INSTANCE_ETC = os.path.join(os.environ.get('INSTANCE_HOME'), 'etc')
 _here = os.path.dirname(__file__)
 ATCT_HOME = os.path.dirname(os.path.abspath(os.path.join(_here)))
 ATCT_ETC = os.path.join(ATCT_HOME, 'etc')
