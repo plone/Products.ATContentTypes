@@ -2,11 +2,13 @@ Changelog
 =========
 
 3.0 (unreleased)
+2.4 (unreleased)
 ----------------
 
 Breaking changes:
 
-- *add item here*
+- Removed ``Products.ATContentTypes.interface`` which was left only for BBB compatibility.
+  [thet]
 
 New features:
 
