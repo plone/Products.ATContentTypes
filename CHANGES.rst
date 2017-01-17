@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Move plone_content skin templates from Products.CMFPlone here.
+  [gforcada]
 
 Bug fixes:
 
