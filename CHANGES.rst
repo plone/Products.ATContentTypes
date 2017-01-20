@@ -1,21 +1,13 @@
 Changelog
 =========
 
-2.3.2 (unreleased)
+2.3.2 (2017-01-20)
 ------------------
-
-Breaking changes:
-
-- *add item here*
 
 New features:
 
 - Move plone_content skin templates from Products.CMFPlone here.
   [gforcada]
-
-Bug fixes:
-
-- *add item here*
 
 
 2.3.1 (2016-11-17)
