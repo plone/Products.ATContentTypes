@@ -17,6 +17,7 @@ from transaction import commit
 from zope.interface.verify import verifyObject
 
 import exif
+import io
 import os
 
 
@@ -74,10 +75,9 @@ class TestIDFromTitle(FunctionalTestCase):
         self.browser.open(self.portal.absolute_url() +
                           '/createObject?type_name=Image')
         self.browser.getControl('Title').value = title
-        image = self.browser.getControl(name='image_file')
-        image.filename = filename
         TEST_JPEG_FILE.seek(0)
-        image.value = TEST_JPEG_FILE
+        self.browser.getControl(name='image_file').add_file(
+            io.BytesIO(TEST_JPEG_FILE.read()), 'image/jpeg', filename)
         self.browser.getControl('Save').click()
 
     def test_image_id_from_filename_and_title(self):
@@ -307,6 +307,4 @@ class TestATImageFunctional(atctftestcase.ATCTIntegrationTestCase):
         self.assertEqual(response2.getStatus(), 200)  # OK
         # Should fail for anonymous
         response3 = self.publish(self.obj_path + '/image')
-        self.assertEqual(response3.getStatus(), 302)
-        bobo_exception = response3.getHeader('bobo-exception-type')
-        self.assertTrue('Unauthorized' in bobo_exception)
+        self.assertIn('require_login', response3.headers['location'])

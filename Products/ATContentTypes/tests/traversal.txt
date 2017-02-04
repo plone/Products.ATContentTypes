@@ -52,7 +52,7 @@ be allowed to acquire content from higher-level hierarchies:
   ...
   ... </methodCall>
   ... """ % (portal_name, default_user, default_password))
-  HTTP/1.0 200 OK
+  HTTP/1... 200 OK
   ...Plone site...
 
   >>> print portal.test_document.getPortalTypeName()
@@ -74,7 +74,7 @@ be allowed to acquire content from higher-level hierarchies:
   ...
   ... </methodCall>
   ... """ % (portal_name, default_user, default_password))
-  HTTP/1.0 200 OK
+  HTTP/1... 200 OK
   ...Root Document...
 
   >>> 'test_document' in portal.simple_folder
@@ -93,7 +93,7 @@ be allowed to acquire content from higher-level hierarchies:
   ...
   ... </methodCall>
   ... """ % (portal_name, default_user, default_password))
-  HTTP/1.0 200 OK
+  HTTP/1... 200 OK
   ...Root Document...
 
 Browser
@@ -109,7 +109,7 @@ method instead.
   ... GET /%s/title_or_id HTTP/1.0
   ... Authorization: Basic %s:%s
   ... """ % (portal_name, default_user, default_password))
-  HTTP/1.0 200 OK
+  HTTP/1... 200 OK
   ...Plone site...
 
   >>> print portal.test_document.getPortalTypeName()
@@ -122,7 +122,7 @@ method instead.
   ... GET /%s/test_document/title_or_id HTTP/1.0
   ... Authorization: Basic %s:%s
   ... """ % (portal_name, default_user, default_password))
-  HTTP/1.0 200 OK
+  HTTP/1... 200 OK
   ...Root Document...
 
   >>> 'test_document' in portal.simple_folder
@@ -132,7 +132,7 @@ method instead.
   ... GET /%s/simple_folder/test_document/title_or_id HTTP/1.0
   ... Authorization: Basic %s:%s
   ... """ % (portal_name, default_user, default_password))
-  HTTP/1.0 200 OK
+  HTTP/1... 200 OK
   ...Root Document...
 
 Lets make sure view lookup takes precedence over acquired views.
