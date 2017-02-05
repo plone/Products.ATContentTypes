@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- Fix tests on Zope 4. [davisagli]
+- Fix tests on Zope 4. 
+  [davisagli, pbauer, mauritsvanrees]
 
 
 2.3.2 (2017-01-20)

@@ -317,14 +317,14 @@ class ATTopicsTool(Base):
 
         data = REQUEST.get('index', [])
         for index in data:
-            enabled = 'enabled' in index
+            enabled = 'enabled' in index.keys()
             criteria = index.get('criteria', ())
             self.updateIndex(index['index'], index['friendlyName'], index[
                              'description'], enabled, criteria)
 
         meta = REQUEST.get('metadata', [])
         for metadata in meta:
-            enabled = 'enabled' in metadata
+            enabled = 'enabled' in metadata.keys()
             self.updateMetadata(
                 metadata['index'],
                 metadata['friendlyName'],
