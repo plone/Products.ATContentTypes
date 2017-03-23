@@ -22,8 +22,6 @@ setDefaultRoles(AddTopics, TOPIC_ROLES)
 ChangeTopics = 'Change portal topics'
 setDefaultRoles(ChangeTopics, CHANGE_TOPIC_ROLES)
 
-ChangeEvents = 'Change portal events'
-setDefaultRoles(ChangeEvents, ('Manager', 'Site Administrator', 'Owner',))
 
 ModifyConstrainTypes = "Modify constrain types"
 setDefaultRoles(ModifyConstrainTypes,
