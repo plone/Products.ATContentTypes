@@ -4,14 +4,6 @@ Changelog
 2.3.4 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Adapt tests to the new indexing operations queueing.
