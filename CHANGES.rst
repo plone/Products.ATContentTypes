@@ -14,7 +14,9 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Adapt tests to the new indexing operations queueing.
+  Part of PLIP 1343: https://github.com/plone/Products.CMFPlone/issues/1343
+  [gforcada]
 
 
 2.3.3 (2017-02-12)
@@ -22,7 +24,7 @@ Bug fixes:
 
 Bug fixes:
 
-- Fix tests on Zope 4. 
+- Fix tests on Zope 4.
   [davisagli, pbauer, mauritsvanrees]
 
 
@@ -44,10 +46,6 @@ Bug fixes:
   [pbauer]
 
 - Require plone.app.imaging even if Plone itself does not. [davisagli]
-
-- Adapt tests to the new indexing operations queueing.
-  Part of PLIP 1343: https://github.com/plone/Products.CMFPlone/issues/1343
-  [gforcada]
 
 
 2.3 (2016-10-03)
