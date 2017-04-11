@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- removed "change portal events" permission
+  [kakshay21]
 
 
 2.3.4 (2017-04-01)
