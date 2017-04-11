@@ -17,6 +17,9 @@ Bug fixes:
 - Add a conditional import of ``processQueue`` as this package is still used on 5.0.
   [gforcada]
 
+- removed "change portal events" permission
+  [kakshay21]
+
 
 2.3.4 (2017-04-01)
 ------------------
