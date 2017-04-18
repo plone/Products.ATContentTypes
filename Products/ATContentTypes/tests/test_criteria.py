@@ -21,9 +21,14 @@ from Products.ATContentTypes.criteria.sort import ATSortCriterion
 from Products.ATContentTypes.interfaces import IATTopicCriterion
 from Products.ATContentTypes.tests import atcttestcase
 from zope.interface.verify import verifyObject
-from Products.CMFCore.indexing import processQueue
 
 import unittest
+
+try:
+    from Products.CMFCore.indexing import processQueue
+except ImportError:
+    def processQueue():
+        pass
 
 
 tests = []

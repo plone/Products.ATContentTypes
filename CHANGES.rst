@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Add a conditional import of ``processQueue`` as this package is still used on 5.0.
+  [gforcada]
 
 
 2.3.4 (2017-04-01)
