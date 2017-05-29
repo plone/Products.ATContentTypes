@@ -4,14 +4,6 @@ Changelog
 2.3.5 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Add a conditional import of ``processQueue`` as this package is still used on 5.0.
