@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '2.2.14.dev0'
+version = '2.2.14'
 
 setup(name='Products.ATContentTypes',
       version=version,
