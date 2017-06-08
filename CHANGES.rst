@@ -1,6 +1,22 @@
 Changelog
 =========
 
+2.2.15 (unreleased)
+-------------------
+
+Breaking changes:
+
+- *add item here*
+
+New features:
+
+- *add item here*
+
+Bug fixes:
+
+- *add item here*
+
+
 2.2.14 (2017-06-08)
 -------------------
 
