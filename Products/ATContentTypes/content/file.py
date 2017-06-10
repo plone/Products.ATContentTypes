@@ -18,7 +18,6 @@ from Products.ATContentTypes.interfaces import IATFile
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
-from Products.MimetypesRegistry.common import MimeTypeException
 from Products.validation import V_REQUIRED
 from Products.validation.config import validation
 from Products.validation.validators.SupplValidators import MaxSizeValidator
@@ -26,6 +25,13 @@ from urllib import quote
 from zope.interface import implementer
 
 import logging
+
+
+try:
+    from Products.MimetypesRegistry.interfaces import MimeTypeException
+except ImportError:
+    # Products.MimetypesRegistry < 2.1
+    from Products.MimetypesRegistry.common import MimeTypeException
 
 
 LOG = logging.getLogger('ATCT')

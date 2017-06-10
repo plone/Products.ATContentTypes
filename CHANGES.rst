@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fix MimeTypeException deprecation warnings
+  [ale-rt]
 
 
 2.3.5 (2017-05-29)
