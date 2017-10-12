@@ -14,7 +14,10 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Added verbosity to the multiple GS profiles popping up.
+  Mark all as ``old`` and ``backward compatibility``.
+  This hopefully reduces the error rate in site setup.
+  [jensens]
 
 
 2.3.6 (2017-06-26)
