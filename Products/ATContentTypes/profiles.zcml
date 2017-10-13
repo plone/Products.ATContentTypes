@@ -10,7 +10,8 @@
 
   <genericsetup:registerProfile
       name="base"
-      title="Archetypes-tools without content-types"
+      title="Archetypes-tools without Content Types (backward compatibility)"
+      description="Needed only in special cases, like using Addons dependent on certain parts of Archetypes based content types."
       directory="profiles/base"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       provides="Products.GenericSetup.interfaces.EXTENSION"
@@ -18,7 +19,8 @@
 
   <genericsetup:registerProfile
       name="content"
-      title="Archetypes-based default content for Plone"
+      title="Archetypes-based default content for Plone (backward compatibility)"
+      description="Default (or example) content based on the standard content types of the old framework Archetypes. Rarely needed in Plone 5"
       directory="profiles/content"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       provides="Products.GenericSetup.interfaces.EXTENSION"
@@ -26,7 +28,8 @@
 
   <genericsetup:registerProfile
       name="default"
-      title="Archetypes Content Types for Plone"
+      title="Archetypes Content Types for Plone (backward compatibility)"
+      description="Standard content types based on the old framework Archetypes. Usually only needed for backward compatibility with migrated sites or old addons."
       directory="profiles/default"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       provides="Products.GenericSetup.interfaces.EXTENSION"
@@ -35,7 +38,8 @@
   <!-- fulluninstall belongs to the default profile. -->
   <genericsetup:registerProfile
       name="fulluninstall"
-      title="Uninstall Archetypes Content Types for Plone fully "
+      title="Uninstall Archetypes Content Types for Plone fully (backward compatibility)"
+      description="Complete uninstall of the old content type framework Archetypes. Usually needed after successful migrations from Plone 4."
       directory="profiles/fulluninstall"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       provides="Products.GenericSetup.interfaces.EXTENSION"
@@ -46,7 +50,8 @@
        This is what gets applied when you uninstall ATContentTypes. -->
   <genericsetup:registerProfile
       name="uninstall"
-      title="Uninstall Archetypes-based default content for Plone"
+      title="Uninstall Archetypes-based default content for Plone (backward compatibility)"
+      description="Uninstalls the default (or example) content based on the old content type framework Archetypes. Rarely needed in Plone 5.1"
       directory="profiles/uninstall"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       provides="Products.GenericSetup.interfaces.EXTENSION"
