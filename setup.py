@@ -1,17 +1,17 @@
 from setuptools import setup, find_packages
 
-version = '2.3.7.dev0'
+version = '3.0.dev0'
 
 setup(name='Products.ATContentTypes',
       version=version,
-      description="Default Content Types for Plone 2.1-4.3",
+      description="BBB: Default Content Types for Plone 2.1-4.3",
       long_description=(open("README.rst").read() + "\n" +
                         open("CHANGES.rst").read()),
       classifiers=[
           "Programming Language :: Python",
           "Programming Language :: Python :: 2.7",
           "Framework :: Plone",
-          "Framework :: Plone :: 5.1",
+          "Framework :: Plone :: 5.2",
       ],
       keywords='Plone Content Types',
       author='AT Content Types development team',
