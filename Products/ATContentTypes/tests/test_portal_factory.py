@@ -168,9 +168,8 @@ class TestCreateObject(PloneTestCase.PloneTestCase):
         pm = self.portal.portal_membership
         pm.addMember('editor', 'secret', ['Editor'], [])
         self.login('editor')
-        member = pm.getMemberById('editor')
-        self.assertTrue(member.checkPermission(Permissions.copy_or_move,
-                                               self.portal))
+        self.assertTrue(
+            pm.checkPermission(Permissions.copy_or_move, self.portal))
         security = getSecurityManager()
         self.assertTrue(security.validate(
             self.portal, self.portal, 'manage_copyObjects'))
@@ -182,9 +181,8 @@ class TestCreateObject(PloneTestCase.PloneTestCase):
         pm = self.portal.portal_membership
         pm.addMember('editor', 'secret', ['Editor'], [])
         self.login('editor')
-        member = pm.getMemberById('editor')
-        self.assertTrue(member.checkPermission(ModifyPortalContent,
-                                               self.portal))
+        self.assertTrue(
+            pm.checkPermission(ModifyPortalContent, self.portal))
         security = getSecurityManager()
         self.assertTrue(security.validate(
             self.portal, self.portal, 'manage_renameObjects'))

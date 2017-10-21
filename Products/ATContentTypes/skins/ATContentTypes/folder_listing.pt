@@ -39,8 +39,8 @@
                         toLocalizedTime nocall: context/@@plone/toLocalizedTime;
                         show_about python:not isAnon or context.portal_registry['plone.allow_anon_views_about'];
                         navigation_root_url context/@@plone_portal_state/navigation_root_url;
-                        pas_member context/@@pas_member;
-                        layout_view context/@@plone_layout;">
+                        pas_member nocall:context/@@pas_member;
+                        layout_view nocall:context/@@plone_layout;">
     <tal:listing condition="batch">
 
         <div metal:define-slot="entries">
@@ -52,7 +52,7 @@
                                    item_type item/portal_type;
                                    item_type_title item/Type;
                                    item_modified item/ModificationDate;
-                                   item_created item/CreationDate;                                   
+                                   item_created item/CreationDate;
                                    item_type_class python:'contenttype-' + normalizeString(item_type);
                                    item_wf_state item/review_state|python: context.portal_workflow.getInfoFor(item, 'review_state', '');
                                    item_wf_state_class python:'state-' + normalizeString(item_wf_state);

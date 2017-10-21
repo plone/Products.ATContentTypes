@@ -249,12 +249,11 @@ ATImage
   ... """ % (imgpath, user_name, user_password))
   HTTP/1.1 200 OK
   Accept-Ranges: none
-  Connection: close
   Content-Length: 105
   Content-Type: image/gif
-  Date: ...
   Etag: ts...
   Last-Modified: ...
+  ...
   <BLANKLINE>
 
 HTTP Range request
