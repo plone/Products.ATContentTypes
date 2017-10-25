@@ -14,19 +14,21 @@ New features:
 
 Bug fixes:
 
-- Zope4 compatibility: 
-   
+- Zope4 compatibility:
+
   - Do not call views in TAL.
 
   - Fix checkPermission call (it was acquired from portal_membership until CMF 2.3).
 
   [davisagli, pbauer]
-  
+
 - Added verbosity to the multiple GS profiles popping up.
   Mark all as ``old`` and ``backward compatibility``.
   This hopefully reduces the error rate in site setup.
   [jensens]
 
+- Fix doctests to adapt to changes in http-headers.
+  [pbauer]
 
 2.3.6 (2017-06-26)
 ------------------

@@ -248,13 +248,10 @@ ATImage
   ... Authorization: Basic %s:%s
   ... """ % (imgpath, user_name, user_password))
   HTTP/1.1 200 OK
-  Accept-Ranges: none
-  Content-Length: 105
-  Content-Type: image/gif
-  Etag: ts...
-  Last-Modified: ...
   ...
-  <BLANKLINE>
+  Etag: ts...
+  Content-Type: image/gif
+  Content-Length: 105
 
 HTTP Range request
 ==================
@@ -275,12 +272,11 @@ HTTP Range request
   ... Range: bytes=0-4
   ... """ % (imgpath, user_name, user_password))
   HTTP/1.1 206 Partial Content
-  Accept-Ranges: bytes
-  Content-Disposition: inline; filename="test-image"
+  ...
   Content-Length: 5
-  Content-Range: bytes 0-4/105
+  Content-Disposition: inline; filename="test-image"
+  ...
   Content-Type: image/gif
-  Last-Modified: ...
   <BLANKLINE>
   GIF87
 
@@ -295,13 +291,15 @@ HTTP Range request
   ... Range: bytes=0-4
   ... """ % (imgpath, user_name, user_password, rfc1123_date(past)))
   HTTP/1.1 200 OK
-  Accept-Ranges: bytes
-  Content-Disposition: inline; filename="test-image"
-  Content-Length: 105
-  Content-Type: image/gif...
   ...
+  Content-Length: 105
+  Content-Disposition: inline; filename="test-image"
+  Accept-Ranges: bytes
+  ...
+  Content-Type: image/gif
   <BLANKLINE>
   GIF87...
+  ...
 
   It can also contain an etag. Etags are starting with ts. In order to change
   the etag I'm altering the title. update() calls reindexObject() which calls
@@ -319,13 +317,10 @@ HTTP Range request
   ... Range: bytes=0-4
   ... """ % (imgpath, user_name, user_password, etag))
   HTTP/1.1 200 OK
-  Accept-Ranges: bytes
-  Content-Disposition: inline; filename="test-image"
-  Content-Length: 105
-  Content-Type: image/gif...
   ...
   <BLANKLINE>
   GIF87...
+  ...
 
 
 HTTP If modified since
@@ -343,10 +338,11 @@ HTTP If modified since
   ... If-Modified-Since: %s
   ... """ % (imgpath, user_name, user_password, rfc1123_date(future)))
   HTTP/1.1 304 Not Modified
-  Accept-Ranges: bytes
-  Content-Length: 0
-  Content-Type: image/gif...
   ...
+  Accept-Ranges: bytes
+  Content-Type: image/gif
+  X-Frame-Options: SAMEORIGIN
+  Content-Length: 0
 
   The image wasn't there in the past. If modified since returns the
   image with a response code of 200.
@@ -357,12 +353,13 @@ HTTP If modified since
   ... If-Modified-Since: %s
   ... """ % (imgpath, user_name, user_password, rfc1123_date(past)))
   HTTP/1.1 200 OK
-  Accept-Ranges: bytes
-  Content-Disposition: inline; filename="test-image"
-  Content-Length: 105
-  Content-Type: image/gif...
   ...
+  Content-Length: 105
+  Content-Disposition: inline; filename="test-image"
+  Accept-Ranges: bytes
+  ...
+  Content-Type: image/gif...
   <BLANKLINE>
-  GIF87...
+  GIF87a...
 
   >>> AppZapper().clear()

@@ -1,8 +1,8 @@
 Collection (Topic) views
 ------------------------
 
-Ensure Title, description and text are actually shown at the various views for 
-a Collection - http://dev.plone.org/plone/ticket/10226: 
+Ensure Title, description and text are actually shown at the various views for
+a Collection - http://dev.plone.org/plone/ticket/10226:
 
 atct_album_view (Thumbnail view)
 atct_topic_view (Collection, the default view)
@@ -15,7 +15,7 @@ First create a folder and a demo collection:
     >>> setRoles(portal, TEST_USER_ID, ['Manager'])
     >>> folder = portal[portal.invokeFactory('Folder', 'folder')]
     >>> folder.setTitle('Folder title')
-    >>> folder.setDescription('Folder description')    
+    >>> folder.setDescription('Folder description')
     >>> collection = folder[folder.invokeFactory('Topic', 'collection')]
     >>> collection_title = 'Title. Lorem ipsum dolor sit amet'
     >>> collection.setTitle(collection_title)
@@ -32,6 +32,7 @@ Now let's login and visit the collection in the test browser:
     >>> from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 
     >>> browser = Browser(layer['app'])
+    >>> browser.handleErrors = False
     >>> browser.open('http://nohost/plone/login_form')
     >>> browser.getControl('Login Name').value = TEST_USER_NAME
     >>> browser.getControl('Password').value = TEST_USER_PASSWORD
