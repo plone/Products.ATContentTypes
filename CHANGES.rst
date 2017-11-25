@@ -4,14 +4,6 @@ Changelog
 2.3.7 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Added verbosity to the multiple GS profiles popping up.
