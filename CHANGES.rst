@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Handle no content icon in folder_tabular_view
+  [davisagli]
 
 
 2.3.7 (2017-11-24)
