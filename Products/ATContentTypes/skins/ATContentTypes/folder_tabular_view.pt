@@ -43,7 +43,7 @@
                             <td>
                                 <img width="16" height="16"
                                      src="" alt=""
-                                     tal:condition="item_icon/url"
+                                     tal:condition="item_icon/url|nothing"
                                      tal:attributes="src item_icon/url;
                                                      alt item_icon/description;
                                                      title item_icon/title;
