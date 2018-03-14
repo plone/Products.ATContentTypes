@@ -30,6 +30,9 @@ Bug fixes:
 - Fix doctests to adapt to changes in http-headers.
   [pbauer]
 
+- Handle no content icon in folder_tabular_view
+  [davisagli]
+
 2.3.6 (2017-06-26)
 ------------------
 
