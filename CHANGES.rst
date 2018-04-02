@@ -17,6 +17,10 @@ Bug fixes:
 - Handle no content icon in folder_tabular_view
   [davisagli]
 
+- Fix `AttributeError: 'Plone' object has no attribute 'mark_view'`
+  in folder_full_view
+  [davisagli]
+
 
 2.3.7 (2017-11-24)
 ------------------
