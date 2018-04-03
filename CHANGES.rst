@@ -4,14 +4,6 @@ Changelog
 2.3.8 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Handle no content icon in folder_tabular_view
