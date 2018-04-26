@@ -249,9 +249,9 @@ ATImage
   ... """ % (imgpath, user_name, user_password))
   HTTP/1.1 200 OK
   ...
-  Etag: ts...
-  Content-Type: image/gif
   Content-Length: 105
+  Content-Type: image/gif
+  Etag: ts...
 
 HTTP Range request
 ==================
@@ -273,10 +273,11 @@ HTTP Range request
   ... """ % (imgpath, user_name, user_password))
   HTTP/1.1 206 Partial Content
   ...
-  Content-Length: 5
   Content-Disposition: inline; filename="test-image"
-  ...
+  Content-Length: 5
+  Content-Range: bytes 0-4/105
   Content-Type: image/gif
+  ...
   <BLANKLINE>
   GIF87
 
@@ -291,12 +292,11 @@ HTTP Range request
   ... Range: bytes=0-4
   ... """ % (imgpath, user_name, user_password, rfc1123_date(past)))
   HTTP/1.1 200 OK
-  ...
-  Content-Length: 105
-  Content-Disposition: inline; filename="test-image"
   Accept-Ranges: bytes
-  ...
+  Content-Disposition: inline; filename="test-image"
+  Content-Length: 105
   Content-Type: image/gif
+  ...
   <BLANKLINE>
   GIF87...
   ...
@@ -338,11 +338,11 @@ HTTP If modified since
   ... If-Modified-Since: %s
   ... """ % (imgpath, user_name, user_password, rfc1123_date(future)))
   HTTP/1.1 304 Not Modified
-  ...
   Accept-Ranges: bytes
-  Content-Type: image/gif
-  X-Frame-Options: SAMEORIGIN
   Content-Length: 0
+  Content-Type: image/gif
+  ...
+  X-Frame-Options: SAMEORIGIN
 
   The image wasn't there in the past. If modified since returns the
   image with a response code of 200.
@@ -353,11 +353,9 @@ HTTP If modified since
   ... If-Modified-Since: %s
   ... """ % (imgpath, user_name, user_password, rfc1123_date(past)))
   HTTP/1.1 200 OK
-  ...
-  Content-Length: 105
-  Content-Disposition: inline; filename="test-image"
   Accept-Ranges: bytes
-  ...
+  Content-Disposition: inline; filename="test-image"
+  Content-Length: 105
   Content-Type: image/gif...
   <BLANKLINE>
   GIF87a...

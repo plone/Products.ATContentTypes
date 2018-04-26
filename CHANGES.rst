@@ -14,6 +14,8 @@ New features:
 
 Bug fixes:
 
+- Fixed tests in combination with Zope 4.0b4.  [maurits]
+
 - Zope4 compatibility:
 
   - Do not call views in TAL.
