@@ -6,7 +6,7 @@ from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
 from Products.CMFCore.permissions import AddPortalContent
 from Products.CMFCore.permissions import ModifyPortalContent
-from Products.CMFPlone.tests import PloneTestCase
+from plone.app.testing.bbb_at import PloneTestCase
 from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
 
 import urlparse
@@ -19,7 +19,7 @@ def sortTuple(t):
 ADD_DOC_PERM = 'ATContentTypes: Add Document'
 
 
-class TestPortalFactory(PloneTestCase.PloneTestCase):
+class TestPortalFactory(PloneTestCase):
 
     def afterSetUp(self):
         self.membership = self.portal.portal_membership
@@ -141,7 +141,7 @@ class TestPortalFactory(PloneTestCase.PloneTestCase):
         self.assertEqual(temp_roles, new_roles)
 
 
-class TestCreateObject(PloneTestCase.PloneTestCase):
+class TestCreateObject(PloneTestCase):
 
     def testCreateObjectByDoCreate(self):
         # doCreate should create the real object
@@ -188,7 +188,7 @@ class TestCreateObject(PloneTestCase.PloneTestCase):
             self.portal, self.portal, 'manage_renameObjects'))
 
 
-class TestCreateObjectByURL(PloneTestCase.FunctionalTestCase):
+class TestCreateObjectByURL(PloneTestCase):
     '''Weeee, functional tests'''
 
     def afterSetUp(self):
@@ -273,7 +273,7 @@ class TestCreateObjectByURL(PloneTestCase.FunctionalTestCase):
         self.assertEqual(response.getStatus(), 401)  # Unauthorized
 
 
-class TestPortalFactoryTraverseByURL(PloneTestCase.FunctionalTestCase):
+class TestPortalFactoryTraverseByURL(PloneTestCase):
     '''Weeee, functional tests'''
 
     def afterSetUp(self):

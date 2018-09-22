@@ -35,6 +35,10 @@ Bug fixes:
 - Handle no content icon in folder_tabular_view
   [davisagli]
 
+- Switch to new TestCase using AT after PloneTestcase is now DX.
+  [pbauer]
+
+
 2.3.6 (2017-06-26)
 ------------------
 
