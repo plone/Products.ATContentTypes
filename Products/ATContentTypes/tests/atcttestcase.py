@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from plone.app.blob.markings import markAs
 from plone.app.testing import TEST_USER_ID as default_user
-from plone.app.testing.bbb import PloneTestCase
+from plone.app.testing.bbb_at import PloneTestCase
 from Products.Archetypes.atapi import AttributeStorage
 from Products.Archetypes.atapi import DisplayList
 from Products.Archetypes.atapi import IdWidget

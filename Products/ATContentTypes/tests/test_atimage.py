@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from cStringIO import StringIO
 from plone.app.blob.content import ATBlob
-from plone.app.testing.bbb import PloneTestCase as FunctionalTestCase
+from plone.app.testing.bbb_at import PloneTestCase as FunctionalTestCase
 from plone.testing.z2 import Browser
 from Products.Archetypes import atapi
 from Products.Archetypes.interfaces.layer import ILayerContainer

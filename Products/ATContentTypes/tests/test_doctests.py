@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from plone.app.testing.bbb import PTC_FUNCTIONAL_TESTING
+from plone.app.testing.bbb_at import PTC_FUNCTIONAL_TESTING
 from plone.testing import layered
 
 import doctest
