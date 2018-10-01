@@ -1,0 +1,5 @@
+Added verbosity to the multiple GS profiles popping up.
+
+Mark all as ``old`` and ``backward compatibility``.
+This hopefully reduces the error rate in site setup.
+[jensens]

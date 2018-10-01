@@ -1,42 +1,12 @@
 Changelog
 =========
 
-3.0 (unreleased)
-----------------
+.. You should *NOT* be adding new change log entries to this file.
+   You should create a file in the news directory instead.
+   For helpful instructions, please see:
+   https://github.com/plone/plone.releaser/blob/master/ADD-A-NEWS-ITEM.rst
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
-Bug fixes:
-
-- Fixed tests in combination with Zope 4.0b4.  [maurits]
-
-- Zope4 compatibility:
-
-  - Do not call views in TAL.
-
-  - Fix checkPermission call (it was acquired from portal_membership until CMF 2.3).
-
-  [davisagli, pbauer]
-
-- Added verbosity to the multiple GS profiles popping up.
-  Mark all as ``old`` and ``backward compatibility``.
-  This hopefully reduces the error rate in site setup.
-  [jensens]
-
-- Fix doctests to adapt to changes in http-headers.
-  [pbauer]
-
-- Handle no content icon in folder_tabular_view
-  [davisagli]
-
-- Switch to new TestCase using AT after PloneTestcase is now DX.
-  [pbauer]
+.. towncrier release notes start
 
 
 2.3.6 (2017-06-26)
