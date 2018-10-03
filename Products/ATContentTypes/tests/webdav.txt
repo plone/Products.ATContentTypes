@@ -41,7 +41,7 @@ Document
 
   Create object by content type
 
-  >>> from Testing.ZopeTestCase.zopedoctest.functional import http
+  >>> from ZServer.Testing.doctest_functional import http
   >>> from Testing.ZopeTestCase.sandbox import AppZapper
   >>> AppZapper().set(layer['app'])
 
