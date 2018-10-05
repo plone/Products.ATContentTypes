@@ -17,6 +17,7 @@ from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
+from Products.CMFPlone.utils import check_id
 from webdav.Lockable import ResourceLockedError
 from webdav.NullResource import NullResource
 from webdav.Resource import Resource as WebdavResoure
@@ -382,18 +383,13 @@ class ATCTFileContent(ATCTContent):
             # Set ID in whatever way the base classes usually do.
             return
 
-        if getattr(self, 'check_id', None) is not None:
-            check_id = self.check_id(used_id, required=1)
-        else:
-            # If check_id is not available just look for conflicting ids
-            parent = aq_parent(aq_inner(self))
-            check_id = used_id in parent and \
-                'Id %s conflicts with an existing item' % used_id or False
-        if check_id and used_id == id:
-            errors['id'] = check_id
-            REQUEST.form['id'] = used_id
-        elif check_id:
-            errors[f_name] = check_id
+        check_id_result = check_id(self, used_id, required=1)
+        if check_id_result:
+            if used_id == id:
+                errors['id'] = check_id_result
+                REQUEST.form['id'] = used_id
+            else:
+                errors[f_name] = check_id_result
 
     @security.private
     def manage_afterPUT(self, data, marshall_data, file, context, mimetype,
