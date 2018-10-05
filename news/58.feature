@@ -1,1 +1,1 @@
-Added isExpired.py skin script as it will be removed from CMFPlone.
+Added isExpired.py and getObjSize.py skin scripts as they will be removed from CMFPlone.
