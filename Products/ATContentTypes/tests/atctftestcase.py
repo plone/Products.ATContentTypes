@@ -69,7 +69,7 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
         response = self.publish(
             '%s/createObject?type_name=%s&_authenticator=%s' % (
                 self.folder_path, self.portal_type, auth),
-            self.basic_auth)
+            self.basic_auth, handle_errors=False)
 
         self.assertEqual(response.getStatus(), 302)  # Redirect to edit
 
@@ -81,7 +81,8 @@ class ATCTIntegrationTestCase(IntegrationTestCase):
 
         # Perform the redirect
         edit_form_path = body[len(self.layer['request'].SERVER_URL):]
-        response = self.publish(edit_form_path, self.basic_auth)
+        response = self.publish(
+            edit_form_path, self.basic_auth, handle_errors=False)
         self.assertEqual(response.getStatus(), 200)  # OK
         temp_id = body.split('/')[-2]
 

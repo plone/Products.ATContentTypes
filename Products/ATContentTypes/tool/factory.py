@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from six.moves.urllib.parse import unquote
+
 from AccessControl import ClassSecurityInfo
 from AccessControl import getSecurityManager
 from AccessControl import Owned
@@ -445,6 +447,11 @@ class FactoryTool(PloneBaseTool, UniqueObject, SimpleItem):
         # method call in which case the traversal stack will not have been
         # cleared by __before_publishing_traverse__
         name = str(name)  # fix unicode weirdness
+        # In Zope4 the url is url-quoted during redirects so " " becomes "%20"
+        # Since we have "News Item" this fails when looking for "News%20Item".
+        if '%' in name:
+            name = unquote(name)
+
         types_tool = getToolByName(self, 'portal_types')
         if name not in types_tool.listContentTypes():
             # not a type name -- do the standard thing
