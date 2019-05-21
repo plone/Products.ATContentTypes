@@ -8,6 +8,38 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.0 (2018-10-30)
+------------------
+
+New features:
+
+
+- Added isExpired.py and getObjSize.py skin scripts as they will be removed from CMFPlone. (#58)
+
+
+Bug fixes:
+
+
+- Zope4 compatibility.
+  Fixed tests in combination with Zope 4.0b4.
+  Do not call views in TAL.
+  Fix checkPermission call (it was acquired from portal_membership until CMF 2.3).
+  Fix doctests to adapt to changes in http-headers.
+  [davisagli, pbauer, maurits] (#50)
+
+- Added verbosity to the multiple GS profiles popping up.
+  Mark all as ``old`` and ``backward compatibility``.
+  This hopefully reduces the error rate in site setup.
+  [jensens] (#51)
+
+- Handle no content icon in folder_tabular_view
+  [davisagli] (#53)
+
+- Switch to new TestCase using AT after PloneTestcase is now DX.
+  [pbauer] (#56)
+
+- Use new utils.check_id from CMFPlone.  [maurits] (#60)
+
 
 2.3.6 (2017-06-26)
 ------------------

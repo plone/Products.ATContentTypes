@@ -1,8 +1,0 @@
-Zope4 compatibility.
-
-Fixed tests in combination with Zope 4.0b4.
-Do not call views in TAL.
-Fix checkPermission call (it was acquired from portal_membership until CMF 2.3).
-Fix doctests to adapt to changes in http-headers.
-
-[davisagli, pbauer, maurits]
