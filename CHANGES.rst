@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.1 (2019-05-21)
+------------------
+
+Bug fixes:
+
+
+- Fix traversing in portal_factory with url-quoted type-name. During redirecting in Zope4 spaces in the URL (e.g. in "News Item") get quoted to `%20`. This prevented finding the portal_type in `__bobo_traverse__`. See https://github.com/plone/buildout.coredev/pull/586
+  [pbauer] (#63)
+
+
 3.0.0 (2018-10-30)
 ------------------
 
