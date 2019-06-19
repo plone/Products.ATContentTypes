@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.2 (2019-06-19)
+------------------
+
+Bug fixes:
+
+
+- Fix full_folder_view view in Plone 5.2
+  [pbauer] (#64)
+
+
 3.0.1 (2019-05-21)
 ------------------
 
