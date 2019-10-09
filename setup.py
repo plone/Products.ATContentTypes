@@ -8,6 +8,7 @@ setup(name='Products.ATContentTypes',
       long_description=(open("README.rst").read() + "\n" +
                         open("CHANGES.rst").read()),
       classifiers=[
+          "Development Status :: 6 - Mature",
           "Programming Language :: Python",
           "Programming Language :: Python :: 2.7",
           "Framework :: Plone",
