@@ -108,7 +108,6 @@ folder.
   ... Authorization: Basic %s:%s
   ... """ % (fpath, user_name, user_password))
   HTTP/1.1 200 OK
-  ...
   Content-Length: 1
   ...
 
@@ -125,7 +124,6 @@ folder.
   ... Authorization: Basic %s:%s
   ... """ % (fpath, user_name, user_password))
   HTTP/1.1 200 OK
-  ...
   Content-Length: 1
   ...
 
@@ -159,7 +157,6 @@ folder.
   ... Authorization: Basic %s:%s
   ... """ % (fpath, user_name, user_password))
   HTTP/1.1 200 OK
-  ...
   Content-Length: 1
   ...
 
@@ -185,7 +182,6 @@ Collections
   ... Authorization: Basic %s:%s
   ... """ % (tpath, user_name, user_password))
   HTTP/1.1 200 OK
-  ...
   Content-Length: 1
   ...
 
@@ -202,7 +198,6 @@ Collections
   ... Authorization: Basic %s:%s
   ... """ % (tpath, user_name, user_password))
   HTTP/1.1 200 OK
-  ...
   Content-Length: 1
   ...
 
