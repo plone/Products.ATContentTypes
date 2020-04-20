@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.3 (2020-04-20)
+------------------
+
+Bug fixes:
+
+
+- Updated tests to work on Zope 4.2.1/4.2.  [maurits] (#644)
+
+
 3.0.2 (2019-06-19)
 ------------------
 
