@@ -103,7 +103,7 @@ $(function() {
                 <tbody>
                     <tal:criteria repeat="criterion criteria">
                         <tr tal:define="oddrow repeat/criterion/odd;"
-                            tal:attributes="class python:test(oddrow, 'even', 'odd')"
+                            tal:attributes="class python:'even' if oddrow else 'odd'"
                             style="vertical-align: top;">
                           <td metal:use-macro="context/atct_macros/macros/criterion_edit" />
                         </tr>

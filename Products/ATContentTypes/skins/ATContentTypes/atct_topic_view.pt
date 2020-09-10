@@ -34,8 +34,7 @@
                          templateId=templateId, macro='text-field-view');
                          text here/getText|nothing"
              tal:condition="text"
-             tal:attributes="class python:test(here.Format() in ('text/structured',
-                                                   'text/x-rst', ), 'stx' + kss_class, 'plain' + kss_class)">
+             tal:attributes="class python:'stx' + kss_class if here.Format() in ('text/structured', 'text/x-rst', ) else 'plain' + kss_class">
             <div metal:define-slot="inside" tal:replace="structure text">The body</div>
         </div>
 
@@ -64,7 +63,7 @@
                      <tbody>
                         <tal:brain tal:repeat="obj topicContents">
                         <tr tal:define="oddrow repeat/obj/odd;"
-                            tal:attributes="class python:test(oddrow, 'even', 'odd')">
+                            tal:attributes="class python:'even' if oddrow else 'odd'">
                             <tal:fields repeat="field here/getCustomViewFields"
                                         define="normalizeString nocall:context/@@plone/normalizeString;
                                                 url obj/getURL;
@@ -75,7 +74,7 @@
                                                 obj_wf_state obj/review_state|python: wtool.getInfoFor(obj, 'review_state', '');
                                                 obj_wf_state_class python:'state-' + normalizeString(obj_wf_state);
                                                 obj_ct_class python:'contenttype-' + normalizeString(obj_type);
-                                                obj_url python:test(obj_type in use_view_action, url+'/view', url);
+                                                obj_url python:url+'/view' if obj_type in use_view_action else url;
                                                 title_or_id obj/pretty_title_or_id">
                             <tal:block define="value python: getattr(obj, field, None)">
                                 <td tal:condition="python: field != 'Title'"

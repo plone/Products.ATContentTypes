@@ -19,7 +19,7 @@
 
                     <a href="#"
                        tal:condition="exists:item_object/image_thumb"
-                       tal:attributes="href python:test(item_type in use_view_action, item_url+'/view', item_url)">
+                       tal:attributes="href python:item_url+'/view' if item_type in use_view_action else item_url">
                         <img src="" alt=""
                              tal:replace="structure python: path('nocall:item_object/tag')(scale='thumb', css_class='tileImage')" />
                     </a>
@@ -29,7 +29,7 @@
 
                         <a href="#"
                            class="summary url"
-                           tal:attributes="href python:test(item_type in use_view_action, item_url+'/view', item_url);"
+                           tal:attributes="href python:item_url+'/view' if item_type in use_view_action else item_url;"
                            tal:content="item_title_or_id">
                             Item Title
                         </a>
@@ -100,7 +100,7 @@
 
                     <p class="tileFooter">
                         <a href=""
-                           tal:attributes="href python:test(item_type in use_view_action, item_url+'/view', item_url);">
+                           tal:attributes="href python:item_url+'/view' if item_type in use_view_action else item_url;">
                            <span class="hiddenStructure"><span tal:replace="item_title_or_id" /> - </span>
                            <span i18n:translate="read_more">Read More&hellip;</span>
                         </a>

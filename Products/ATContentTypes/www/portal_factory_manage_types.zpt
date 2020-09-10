@@ -12,7 +12,7 @@ creation.</p>
     <tr tal:repeat="type_name python:context.portal_types.listContentTypes()" >
       <td><input type="checkbox"
                  tal:attributes="name python:type_name;
-                                 checked python:test(type_name in factory_types, '1', '')" /></td>
+                                 checked python:'1' if type_name in factory_types else ''" /></td>
       <td tal:content="type_name" />
     </tr>
   </table>
