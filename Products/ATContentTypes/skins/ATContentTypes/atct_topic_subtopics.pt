@@ -98,7 +98,7 @@
                                              browserDefaultResult context/browserDefault;
                                              isBrowserDefault     python:len(browserDefaultResult[1]) == 1 and item.id == context.browserDefault()[1][0];
                                              item_folderish       item/is_folderish|nothing"
-                                 tal:attributes="class python:test(oddrow, 'draggable even', 'draggable odd');
+                                 tal:attributes="class python:'draggable even' if oddrow else 'draggable odd';
                                                  id string:folder-contents-item-${item_id};" >
 
                                  <td class="notDraggable">
@@ -108,15 +108,14 @@
                                             value="#"
                                             tal:attributes="value   item_path;
                                                             id      string:cb_$item_id;
-                                                            checked python:test(request.get('ids_checked', False), 'checked', None);
+                                                            checked python:'checked' if request.get('ids_checked', False) else None;
                                                             alt     string:Select $item_title_or_id;
                                                             title   string:Select $item_title_or_id" />
                                 <input type="hidden" name="obj_paths:list" value="#"
                                        tal:attributes="value item_rel_url" />
 
                               </td>
-                              <td tal:define="url python:test(item_use_view, item_url+'/view',
-                                              test(item_folderish, item_url+'/folder_contents', item_url+'/'));">
+                              <td tal:define="url python:item_url+'/view' if item_use_view else item_url+'/folder_contents' if item_folderish else item_url+'/';">
                                   <span tal:attributes="class item_type_class">
                                       <img tal:replace="structure item_icon/html_tag" />
                                       <a href="#" tal:attributes="href  url;
@@ -178,7 +177,7 @@
                              i18n:attributes="value"
                              tal:attributes="value button/title;
                                              name button/url;
-                                             class python:test((button['id'] == 'paste'), 'standalone', 'context')" />
+                                             class python:'standalone' if button['id'] == 'paste' else 'context'" />
                     </tal:buttons>
                 </metal:buttons>
             </form>

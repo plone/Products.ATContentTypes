@@ -101,7 +101,7 @@
                     <tal:indexes tal:repeat="index metadata">
                         <tal:object tal:define="indexObj python:atct_tool.getMetadata(index);
                                                 oddrow repeat/index/odd">
-                        <tr class="" tal:attributes="class python:test(oddrow, 'even', 'odd')">
+                        <tr class="" tal:attributes="class python:'even' if oddrow else 'odd'">
                             <td class="listingCheckbox">
                                 <input type="hidden"
                                        value=""
@@ -113,8 +113,8 @@
                                        value=""
                                        name=""
                                        tal:attributes="name string:metadata.enabled:records;
-                                                       value python:test(indexObj.enabled, '1', '0');
-                                                       checked python:test(indexObj.enabled, 'checked', None)"/>
+                                                       value python:'1' if indexObj.enabled else '0';
+                                                       checked python:'checked' if indexObj.enabled else None"/>
                             </td>
                             <td>
                                 <span tal:content="indexObj/index"/>

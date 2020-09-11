@@ -105,7 +105,7 @@
                         <tal:object tal:define="indexObj python:atct_tool.getIndex(index);
                                                 oddrow repeat/index/odd;">
 
-                        <tr class="" tal:attributes="class python:test(oddrow, 'even', 'odd')">
+                        <tr class="" tal:attributes="class python:'even' if oddrow else 'odd'">
                             <td class="listingCheckbox">
                                 <input type="hidden"
                                        value=""
@@ -119,9 +119,9 @@
                                        name=""
                                        id=""
                                        tal:attributes="name string:index.enabled:records;
-                                                       value python:test(indexObj.enabled, '1', '0');
+                                                       value python:'1' if indexObj.enabled else '0';
                                                        id string:${indexObj/index}_enabled;
-                                                       checked python:test(indexObj.enabled, 'checked', None)"/>
+                                                       checked python:'checked' if indexObj.enabled else None"/>
                             </td>
                             <td>
                                 <span tal:content="indexObj/index"/>
@@ -148,7 +148,7 @@
                                        tal:attributes="id string:${indexObj/index}_criteria;">
                                     <option tal:repeat="criterion python:atct_tool.getCriteriaForIndex(indexObj.index, as_dict= True)"
                                             tal:attributes="value criterion/name;
-                                                            selected python:test(criterion['name'] in indexObj.criteria, 'selected', None);"
+                                                            selected python:'selected' if criterion['name'] in indexObj.criteria else None;"
                                             tal:content="criterion/description"/>
                                 </select>
                                 <br />
