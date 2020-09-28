@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.4 (2020-09-28)
+------------------
+
+Bug fixes:
+
+
+- Drop use of test() in templates [pbauer] (#24)
+
+
 3.0.3 (2020-04-20)
 ------------------
 
