@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.5 (2021-10-07)
+------------------
+
+Bug fixes:
+
+
+- Prevent installation on Python 3, as we know Archetypes does not work there.
+  [maurits] (#3330)
+
+
 3.0.4 (2020-09-28)
 ------------------
 
