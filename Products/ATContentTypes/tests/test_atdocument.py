@@ -95,21 +95,15 @@ class TestSiteATDocument(atcttestcase.ATCTTypeTestCase):
         doc = self._ATCT
         mimetypes = (
             ('text/html', '<p>test</p>'),
-            # MTR doens't know about text/stx, and transforming
+            # MTR does not know about text/stx, and transforming
             # doubles the tags. Yuck.
-            ('text/structured', '<p><p>test</p></p>\n'),
+            ('text/structured', '<p></p><p>test</p>\n'),
         )
         for mimetype, expected in mimetypes:
             # scrub html is removing unallowed tags
             text = "<p>test</p><script>I'm a nasty boy<p>nested</p></script>"
             doc.setText(text, mimetype=mimetype)
             txt = doc.getText()
-            # fix for lxml based safe HTML cleaner
-            # nested p-tags are not allowed and therefore removed
-            # put expected string to mimetypes tuple above and remove condition
-            # once PLIP 1441 is merged.
-            if '<p/>' in txt:
-                expected = '<p/><p>test</p>\n'
             self.assertEqual(txt, expected, (txt, expected, mimetype))
 
     def test_get_size(self):
