@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.7 (2022-03-16)
+------------------
+
+Bug fixes:
+
+
+- Fix test after PortalTransforms uses lxml html method to serialize (instead of xml method).
+  [gotcha] (#68)
+
+
 3.0.6 (2022-01-28)
 ------------------
 
