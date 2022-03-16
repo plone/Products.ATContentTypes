@@ -7,7 +7,7 @@ if sys.version_info[0] != 2:
     # Prevent creating or installing a distribution with Python 3.
     raise ValueError("Products.ATContentTypes is based on Archetypes, which is Python 2 only.")
 
-version = '3.0.7'
+version = '3.0.8.dev0'
 
 setup(name='Products.ATContentTypes',
       version=version,
